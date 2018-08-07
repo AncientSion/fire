@@ -18,8 +18,9 @@ class Launcher extends Weapon {
 
 	public function getValidEffects(){
 		return array(// attr, %-tresh, duration, modifier
-			array("Placeholder1", 30, 0, 0),
-			array("Placeholder2", 30, 0, 0)
+			array("Placeholder1", 60, 0, 0),
+			array("Placeholder2", 80, 0, 0),
+			array("Destroyed", 180, 0, 1),
 		);
 	}
 
@@ -44,10 +45,6 @@ class Launcher extends Weapon {
 		else if ($w <= 180){$this->armourMod =  0.6; $this->mount = "Canister";}
 		else {$this->armourMod =  0.3; $this->mount = "Arm Rail";}
 		$this->armour = floor($rem * $this->armourMod);
-	}
-
-	public function doCritTestSelf($turn, $extra){
-		return;
 	}
 }
 

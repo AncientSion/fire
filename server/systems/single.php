@@ -167,7 +167,7 @@ class Single {
 		return $this->negation;
 	}
 
-	public function getCritDamages($turn, $add){
+	public function getCritDamages($turn, $multi = 1){
 		//Debug::log("getCritDamages ".get_class($this)." #".$this->id);
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
@@ -177,7 +177,7 @@ class Single {
 			} else $old += $this->damages[$i]->overkill;
 		}
 
-		return new RelDmg($new, $old, $this->integrity);
+		return new RelDmg($new*$multi, $old*$multi, $this->integrity);
 	}
 	
 	public function getValidEffects(){

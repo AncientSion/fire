@@ -22,10 +22,6 @@ class Missile extends Single {
 			$this->baseHitChance = 5;
 		}
 	}
-
-	public function doCritTestSelf($turn, $extra){
-		return;
-	}
 }
 
 class Torpedo extends Missile {

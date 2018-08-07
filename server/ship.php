@@ -1352,13 +1352,19 @@ class Ship {
 		Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
 
 		if (1){
-			$potential = array();
 
+			for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+				if ($this->primary->systems[$i]->destroyed){continue;}
+				$dmg = $this->primary->systems[$i]->getCritDamages($turn);
+				if ($dmg->new){$this->primary->systems[$i]->determineCrit($dmg, $turn);}
+			}
+
+			$potential = array();
 			for ($i = 0; $i < sizeof($this->structures); $i++){
 				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 					if (!$this->structures[$i]->systems[$j]->destroyed){
-						$dmg = $this->structures[$i]->systems[$j]->getCritDamages($turn, 0);
-						$this->structures[$i]->systems[$j]->determineCrit($dmg, $turn);
+						$dmg = $this->structures[$i]->systems[$j]->getCritDamages($turn);
+						if ($dmg->new){$this->structures[$i]->systems[$j]->determineCrit($dmg, $turn);}
 					}
 					else if ($this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){
 						$usage = $this->structures[$i]->systems[$j]->getPowerUsage($turn);
@@ -1367,12 +1373,6 @@ class Ship {
 						$this->structures[$i]->systems[$j]->damages[sizeof($this->structures[$i]->systems[$j]->damages)-1]->notes .= "o".$usage.";";
 					}
 				}
-			}
-
-			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
-				if ($this->primary->systems[$j]->destroyed){continue;}
-				$this->primary->systems[$j]->getCritDamages($turn, 0);
-				$this->primary->systems[$j]->determineCrit($dmg, $turn);
 			}
 
 

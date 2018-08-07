@@ -128,19 +128,6 @@ class Squaddie extends Single {
 		}
 		return $crits;
 	}
-	
-	public function getCritDamages($turn, $add){
-		//Debug::log("getCritDamages ".get_class($this)." #".$this->id);
-		$old = 0; $new = 0;
-		for ($i = 0; $i < sizeof($this->damages); $i++){
-			if ($this->damages[$i]->turn == $turn){
-				$new += $this->damages[$i]->overkill;
-				$new += $this->damages[$i]->emDmg*2;
-			} else $old += $this->damages[$i]->overkill;
-		}
-
-		return new RelDmg($new, $old, $this->integrity);
-	}
 
 	public function getName(){
 		return "Main";

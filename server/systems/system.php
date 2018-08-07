@@ -210,7 +210,7 @@ class System {
 		return $dmg;
 	}
 
-	public function getCritDamages($turn, $add){
+	public function getCritDamages($turn, $multi = 1){
 		//Debug::log("getCritDamages ".get_class($this)." #".$this->id);
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
@@ -220,7 +220,9 @@ class System {
 			} else $old += $this->damages[$i]->structDmg;
 		}
 
-		return new RelDmg($new, $old, $this->integrity);
+		//Debug::log("new: ".$new."/".$old);
+
+		return new RelDmg($new*$multi, $old*$multi, $this->integrity);
 	}
 
 	public function getValidEffects(){
@@ -229,23 +231,13 @@ class System {
 			array("Damage", 120, 0, 0),
 			array("Destroyed", 180, 0, 1),
 		);
-	}
-	
-	public function dfgdfg(){
-		return array( // type, min%, null, effect
-			array("Accuracy", 0, 0, 25),
-			array("Damage", 70, 0, 15),
-			array("Destroyed", 110, 0, 0.00),
-		);
-	}
-	
+	}	
 
 	public function determineCrit($dmg, $turn){
 		if ($this->destroyed){return;}
+		if (!$dmg->new){return;}
 
 		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old);
-
-		if (!$dmg->new){return;}
 
 		$effects = $this->getValidEffects();
 
@@ -257,9 +249,10 @@ class System {
 		$chance = round((1 - ($newRelDmg*$newRelDmg))*100);
 		$roll = mt_rand(0, 100);
 
-		if ($roll > $chance){
-			Debug::log("SUCCESS, roll: ".$roll.", chance: ".$chance); return;
-		} else Debug::log("FAIL, roll: ".$roll.", chance: ".$chance);
+		if ($roll > $chance){return;}
+		//if ($roll > $chance){
+		//	Debug::log("SUCCESS, roll: ".$roll.", chance: ".$chance); return;
+		//} else Debug::log("FAIL, roll: ".$roll.", chance: ".$chance);
 
 		$roll = mt_rand(0, 100);
 		$magnitude = $roll + ($dmg->new + $dmg->old)*100;
@@ -287,13 +280,11 @@ class System {
 	}
 
 	public function getCritModMax($dmg){
-		return min(30, floor($dmg*100));
+		return min(30, floor(round((1-$dmg)*10)*10));
 	}
 
 	public function addDamage($dmg){
-		if ($dmg->new){
-			$this->emDmg += $dmg->emDmg;
-		}
+		if ($dmg->new){$this->emDmg += $dmg->emDmg;}
 
 		$this->damages[] = $dmg;
 		

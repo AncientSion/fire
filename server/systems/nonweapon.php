@@ -109,14 +109,16 @@ class Command extends PrimarySystem {
 	}
 
 	public function getCritModMax($dmg){
-		return min(6, round($dmg*100/2));
+		return min(6, round((1-$dmg)*100/2));
 	}
 
 	public function determineCrit($dmg, $turn){
-		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId);
-		//$value = $this->getCritModMax($new);
+		if ($this->destroyed){return;}
+		if ($dmg->new <= 0.05){return;}
+
+		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old);
+
 		$value = 10;
-		if ($dmg->new <= 3){Debug::log("no COMMAND crit, dmg < 3"); return;}
 
         $options = array("Morale", "Focus", "Engine", "Sensor", "Reactor");
         $multi = array(1, 1, 0.75, 1, 0.75);
@@ -148,7 +150,7 @@ class Reactor extends PrimarySystem {
     }
 
 	public function getCritModMax($dmg){
-		return min(10, round($dmg/2));
+		return min(10, round((1-$dmg)/2));
 	}
 
 	public function applyPowerSpike($turn, $potential, $em){
@@ -307,12 +309,12 @@ class Bulkhead extends System {
         parent::__construct($id, $parentId, $output, $width);
 	}
 
-	public function doCritTestSelf($turn, $extra){
-		return;
-	}
-
 	public function getHitChance(){
 		return $this->integrity*4;
+	}
+
+	public function determineCrit($dmg, $turn){
+		return;
 	}
 }
 

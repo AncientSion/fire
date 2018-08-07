@@ -80,8 +80,8 @@ class Mixed extends Ship {
 		//Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
-			$dmg = $this->structures[$i]->getCritDamages($turn, 0);
-			$this->structures[$i]->determineCrit($dmg, $turn);
+			$dmg = $this->structures[$i]->getCritDamages($turn);
+			if ($dmg->new){$this->structures[$i]->determineCrit($dmg, $turn);}
 		}
 	}
 

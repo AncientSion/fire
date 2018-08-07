@@ -2813,6 +2813,7 @@ Laser.prototype.getAnimation = function(fire){
 	var fraction = 1;
 	var t = fire.target.getPlannedPos();
 		t = fire.target.getDrawPos();
+	var devi = fire.weapon.output * 3;
 
 	if (fire.shooter.squad){
 		delay = 40; shotDelay = 5;
@@ -2853,7 +2854,7 @@ Laser.prototype.getAnimation = function(fire){
 				//if (range(0, 1)){ // swipe outwards
 					tx = t.x + dest.x;
 					ty = t.y + dest.y;
-					tb = getPointInDir(fire.weapon.output*5, range(0, 360), tx, ty);
+					tb = getPointInDir(devi, range(0, 360), tx, ty);
 				//}
 				/*else { // swipe inwards
 					tx = t.x + dest.x + (range(-20, 20));
@@ -2866,7 +2867,7 @@ Laser.prototype.getAnimation = function(fire){
 				ty = fire.target.drawY + range(fire.target.size/2, fire.target.size/2) * (1-(range(0, 1)*2))
 				a = getAngleFromTo( {x: fire.target.drawX, y: fire.target.drawY}, {x: tx, y: ty} );
 				//a = addToDirection(a, range(-40, 40));
-				tb = getPointInDir(fire.target.size/10*fire.weapon.output, a, tx, ty); // BEAM swipe END on MISS	
+				tb = getPointInDir(devi, a, tx, ty); // BEAM swipe END on MISS	
 				//tx = fire.target.drawX + range(-fire.target.size * 0.7, fire.target.size * 0.7); // BEAM swipe begin on MISS
 				//ty = fire.target.drawY + range(-fire.target.size * 0.7, fire.target.size * 0.7);
 				//a = getAngleFromTo( {x: tx, y: ty}, {x: fire.target.drawX, y: fire.target.drawY} );
