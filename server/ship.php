@@ -108,16 +108,6 @@ class Ship {
 		return sizeof($this->actions);
 	}
 
-	public function setPreviewState($turn, $phase){
-		$this->curImp = $this->baseImpulse;
-		$this->morale = new Morale(0, 0, 0, 0);
-		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
-
-		for ($j = 0; $j < sizeof($this->structures); $j++){
-			$this->structures[$j]->remNegation = $this->structures[$j]->negation;
-		}
-	}
-
 	public function setInternalHitChance(){
 		$main = $this->primary->getHitChance();
 		$all = $main;
@@ -1092,21 +1082,6 @@ class Ship {
 		return $locs[mt_rand(0, sizeof($locs)-1)];
 	}
 
-	public function doTestCrits($turn){
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->destroyed){continue;}
-			$this->structures[$i]->singleCritTest($turn, 0);
-		}
-	}
-	
-	public function getValidEffects(){
-		return array( // type, min%, null, effect
-			array("Morale", 50, -1, 5.00),
-			array("Morale", 100, -1, 10.00),
-			array("Route", 150, -1, 0.00),
-		);
-	}
-
 	public function getNewRelDmgPct($turn){
 		return 1 - ($this->primary->remaining / ($this->primary->remaining + $this->primary->newDmg));
 	}
@@ -1121,7 +1096,12 @@ class Ship {
 
 		if ($new < 0.15){return;}
 
-		$effects = $this->getValidEffects();
+		$effects = 
+			array( // type, min%, dura, effect
+				array("Morale", 50, -1, 5.00),
+				array("Morale", 100, -1, 10.00),
+				array("Route", 150, -1, 0.00),
+			);
 
 		$new = 1-$new;
 		$chance = round((1 - ($new*$new))*100);
@@ -1367,21 +1347,9 @@ class Ship {
 	public function addMission($data, $userid, $turn, $phase){
 		return;
 	}
-}
-
-class Medium extends Ship {
-	public $baseImpulse = 165;
-	public $traverse = 4;
-	public $slipAngle = 15;
-	public $baseImpulseCost = 30;
-	public $baseFocusRate = 10;
-
-	function __construct($data){
-		parent::__construct($data);
-	}
 
 	public function doTestCrits($turn){
-		//Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
+		Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
 
 		if (1){
 			$potential = array();
@@ -1389,9 +1357,9 @@ class Medium extends Ship {
 			for ($i = 0; $i < sizeof($this->structures); $i++){
 				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 					if (!$this->structures[$i]->systems[$j]->destroyed){
-						$this->structures[$i]->systems[$j]->singleCritTest($turn, 0);
+						$dmg = $this->structures[$i]->systems[$j]->getCritDamages($turn, 0);
+						$this->structures[$i]->systems[$j]->determineCrit($dmg, $turn);
 					}
-					//else if (mt_rand(0, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){
 					else if ($this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){
 						$usage = $this->structures[$i]->systems[$j]->getPowerUsage($turn);
 						if (!$usage){continue;}
@@ -1403,7 +1371,8 @@ class Medium extends Ship {
 
 			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 				if ($this->primary->systems[$j]->destroyed){continue;}
-				$this->primary->systems[$j]->singleCritTest($turn, 0);
+				$this->primary->systems[$j]->getCritDamages($turn, 0);
+				$this->primary->systems[$j]->determineCrit($dmg, $turn);
 			}
 
 
@@ -1416,6 +1385,18 @@ class Medium extends Ship {
 				}
 			}
 		}
+	}
+}
+
+class Medium extends Ship {
+	public $baseImpulse = 165;
+	public $traverse = 4;
+	public $slipAngle = 15;
+	public $baseImpulseCost = 30;
+	public $baseFocusRate = 10;
+
+	function __construct($data){
+		parent::__construct($data);
 	}
 }
 

@@ -114,10 +114,13 @@ function setFPS(fps){
 
 
 function initUnit(data){
-	if (data.ship){return window.initShip(data);}
-	else if (data.squad){return window.initSquadron(data);}
-	else if (data.flight){return window.initFlight(data);}
-	else if (data.salvo){return window.initSalvo(data);}
+	var unit;
+	if (data.ship){unit = window.initShip(data);}
+	else if (data.squad){unit = window.initSquadron(data);}
+	else if (data.flight){unit = window.initFlight(data);}
+	else if (data.salvo){unit = window.initSalvo(data);}
+	return unit;
+
 }
 
 function initSalvo(data){
@@ -136,7 +139,11 @@ function initFlight(data){
 	return flight;	
 }
 
+
+
+
 function initFighter(data){return new Fighter(data);}
+
 function initBallistic(data){return new Ballistic(data);}
 
 function initSquadron(data){
@@ -146,6 +153,9 @@ function initSquadron(data){
 
 		for (var j = 0; j < data.primary.systems[i].powers.length; j++){
 			primSystem.powers.push(new Power(data.primary.systems[i].powers[j]));
+		}
+		for (var j = 0; j < data.primary.systems[i].crits.length; j++){
+			primSystem.crits.push(new Crit(data.primary.systems[i].crits[j]));
 		}
 		squadron.primary.systems.push(primSystem);
 	}

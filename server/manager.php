@@ -87,7 +87,7 @@
 		//$this->testMorale();
 		//return;
 
-		if (!$this->settings){return false;}
+		if (!$this->settings->turn){return false;}
 		
 		$data = array(
 			"id" => $this->gameid,
@@ -311,12 +311,14 @@
 					"notes" => $possible[$i]["notes"]
 					)
 				);
-
-				$unit->addAllSystems();
+				$unit->cost = $possible[$i]["delay"];
+				$unit->curImp = $unit->baseImpulse;
 				if (!$unit->ship){$unit->addSubUnits($possible[$i]["subunits"]);}
 
-				$unit->setPreviewState($this->turn, $this->phase);	
-				$unit->cost = $possible[$i]["delay"];
+				$unit->addAllSystems();
+				$unit->setUnitState($this->turn, $this->phase);
+
+
 				$data[] = $unit;
 			}
 		}
@@ -334,6 +336,7 @@
 		$units = array();
 
 		for ($i = 0; $i < sizeof($db); $i++){
+			//Debug::log($db[$i]["name"]);
 			$unit = new $db[$i]["name"]($db[$i]);
 			$unit->addAllSystems();
 
@@ -1788,7 +1791,7 @@
 		switch ($faction){
 			case "Earth Alliance";
 				$units = array(
-					array("Omega", 5, 6),
+					array("Omega", 3, 6),
 					array("Hyperion", 7, 5),
 					array("Avenger", 3, 6),
 					array("Artemis", 10, 3),
@@ -1798,12 +1801,12 @@
 				break;
 			case "Centauri Republic";
 				$units = array(
-					array("Primus", 5, 6),
+					array("Primus", 3, 6),
 					array("Centurion", 7, 6),
-					array("Kutai", 15, 3),
-					array("Altarian", 15, 3),
-					array("Demos", 15, 3),
-					array("Squadron", 20, 2),
+					array("Kutai", 10, 3),
+					array("Altarian", 10, 3),
+					array("Demos", 10, 3),
+					array("Squadron", 15, 2),
 				);
 				break;
 			case "Minbari Federation";
@@ -1816,12 +1819,12 @@
 				break;
 			case "Narn Regime";
 				$units = array(
-					array("GQuan", 6, 2),
+					array("GQuan", 3, 2),
 					array("GSten", 6, 3),
 					array("KaToc", 8, 3),
 					array("Rongoth", 8, 3),
 					array("DagKar", 4, 3),
-					array("Squadron", 20, 2),
+					array("Squadron", 15, 2),
 				);
 
 				break;

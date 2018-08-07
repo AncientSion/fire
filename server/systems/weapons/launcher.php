@@ -16,6 +16,13 @@ class Launcher extends Weapon {
 	public $shots = 0;
 	public $accDecay = 0;
 
+	public function getValidEffects(){
+		return array(// attr, %-tresh, duration, modifier
+			array("Placeholder1", 30, 0, 0),
+			array("Placeholder2", 30, 0, 0)
+		);
+	}
+
 	function __construct($id, $parentId, $start, $end, $integrity, $width){
         parent::__construct($id, $parentId, $start, $end, 0, $width);
         $this->integrity = $integrity;
@@ -39,7 +46,7 @@ class Launcher extends Weapon {
 		$this->armour = floor($rem * $this->armourMod);
 	}
 
-	public function singleCritTest($turn, $extra){
+	public function doCritTestSelf($turn, $extra){
 		return;
 	}
 }

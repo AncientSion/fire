@@ -24,7 +24,7 @@ class Olympus extends Medium {
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 350, 14, 3);
 		$front->systems[] = new MediumLaser($this->getId(), $this->id, 315, 45);
-		$front->systems[] = new Dual($this->getId(), $this->id, 300, 60, 28, array("LightPulse", "LightParticleBeam"));
+		//$front->systems[] = new Dual($this->getId(), $this->id, 300, 60, 28, array("LightPulse", "LightParticleBeam"));
 		$front->systems[] = new MediumLaser($this->getId(), $this->id, 315, 45);
 		$structs[] = $front;
 
@@ -65,13 +65,13 @@ class Olympus extends Medium {
 					"loads" => 
 					array(
 						array(
-							"systemid" => 13,
+							"systemid" => 12,
 							"display" => "Port Missile Launcher",
 							"name" => "Naga",
 							"amount" => 4
 						),
 						array(
-							"systemid" => 17,
+							"systemid" => 16,
 							"display" => "Starboard Missile Launcher",
 							"name" => "Naga",
 							"amount" => 4
@@ -87,13 +87,13 @@ class Olympus extends Medium {
 					"loads" => 
 					array(
 						array(
-							"systemid" => 13,
+							"systemid" => 12,
 							"display" => "Port Missile Launcher",
 							"name" => "Needle",
 							"amount" => 10
 						),
 						array(
-							"systemid" => 17,
+							"systemid" => 16,
 							"display" => "Starboard Missile Launcher",
 							"name" => "Needle",
 							"amount" => 10

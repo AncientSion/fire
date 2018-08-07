@@ -9,7 +9,6 @@
 	if (isset($_SESSION["userid"])) {
 		$userid = $_SESSION["userid"];
 	} else $userid = 0;
-	//if (!$manager->turn){header("Location: lobby.php");}
 	echo "<script> window.gameid = ".$gameid."; window.userid = ".$userid.";</script>";
 ?>
 
@@ -327,7 +326,7 @@
 				</tr>
 			</table>
 		</div>
-		<div id="deployWrapper">
+		<div id="leftUnitWrapper">
 			<table id="deployTable">
 				<thead>
 					<tr>

@@ -48,14 +48,22 @@ class LightPlasmaShredder extends Plasma {
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
+
+	public function getValidEffects(){
+		return array( // type, mag, dura, effect
+			array("Damage Loss", 80, 0, 0),
+			array("Accuracy", 100, 0, 0),
+			array("Destroyed", 180, 0, 1),
+		);
+	}
 }
 
 class LightPlasma extends Plasma {
 	public $name = "LightPlasma";
 	public $display = "Light Plasma Cannon";
 	public static $prio = 0;
-	public $minDmg = 36;
-	public $maxDmg = 47;
+	public $minDmg = 56;
+	public $maxDmg = 77;
 	public $accDecay = 120;
 	public $dmgLoss = 10;
 	public $shots = 1;

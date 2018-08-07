@@ -167,8 +167,8 @@ class Single {
 		return $this->negation;
 	}
 
-	public function singleCritTest($turn, $extra){
-		//Debug::log("singleCritTest ".get_class($this)." #".$this->id);
+	public function getCritDamages($turn, $add){
+		//Debug::log("getCritDamages ".get_class($this)." #".$this->id);
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->turn == $turn){
@@ -177,22 +177,16 @@ class Single {
 			} else $old += $this->damages[$i]->overkill;
 		}
 
-		if ($new){
-			$new = round($new / $this->integrity, 2);
-			$old = round($old / $this->integrity, 2);
-			$this->checkDropoutCrits($new, $old, $turn);
-			$this->checkSystemCrits($new, $old, $turn);
-		}
+		return new RelDmg($new, $old, $this->integrity);
 	}
-
 	
 	public function getValidEffects(){
-		return array( // type, min%, null, effect
-			array("Disabled", 120, 0, 0.00),
+		return array( // type, mag, duration, effect
+			array("Disabled", 130, 0, 0.00),
 		);
 	}
 
-	public function checkDropoutCrits($new, $old, $turn){
+	public function determineCrit($new, $old, $turn){
 		if ($this->destroyed){return;}
 
 		Debug::log("checkDropoutCrits ".get_class($this)." #".$this->id.", new: ".$new.", old: ".$old);
@@ -220,31 +214,15 @@ class Single {
 
 		for ($i = sizeof($effects)-1; $i >= 0; $i--){
 			if ($magnitude < $effects[$i][1]){continue;}
+			$value = 0.00;
 
 			Debug::log("roll: ".$roll.", total magnitude: ".$magnitude.", crit: ".$effects[$i][0]);
 			$this->crits[] = new Crit(
 				sizeof($this->crits)+1, $this->parentId, $this->id, $turn,
-				$effects[$i][0], $effects[$i][2], $effects[$i][3], 1
+				$effects[$i][0], $effects[$i][2], $value, 1
 			);
 			$this->destroyed = 1;
 			break;
-		}
-	}
-
-	
-	public function checkDropoutCritso($new, $old, $turn){
-		$trigger = $this->dropout[0];
-		$baseChance = $this->dropout[1];
-		$current = 100-floor($new + $old);
-
-		if ($current >= $trigger){return;}
-
-		$effChance = floor(100*($baseChance * (1+($trigger-$current)/100) / (100 - $trigger/100)));
-		$roll = mt_rand(0, 100);
-
-		Debug::log("dropout chance: ".get_class($this).", trigger: <".$trigger."%, hp: ".$current."%, eff: ".$effChance.", roll: ".$roll);
-		if ($roll < $effChance){
-			$this->doDropout($turn);
 		}
 	}
 
@@ -255,11 +233,6 @@ class Single {
 		);
 		$this->destroyed = 1;
 	}
-	
-	public function checkSystemCrits($new, $old, $turn){
-		return;
-	}
 }
-
 
 ?>

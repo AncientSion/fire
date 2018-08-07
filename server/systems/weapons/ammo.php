@@ -23,7 +23,7 @@ class Missile extends Single {
 		}
 	}
 
-	public function singleCritTest($turn, $extra){
+	public function doCritTestSelf($turn, $extra){
 		return;
 	}
 }

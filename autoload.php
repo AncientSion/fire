@@ -197,6 +197,7 @@ spl_autoload_register(
                 'crit' => '/server/classes.php',
                 'effect' => '/server/classes.php',
                 'divider' => '/server/classes.php',
+                'reldmg' => '/server/classes.php',
                 'manager' => '/server/manager.php',
                 'dbmanager' => '/server/dbManager.php',
                 'gd' => '/server/classes.php',

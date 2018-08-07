@@ -11,6 +11,10 @@ class PrimarySystem extends System {
 	public $hitChance = 0;
 	public $hitPct = 0;
 
+	public function getCritTresh(){
+		return 0.05;
+	}
+
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $output, $width);
 		$this->integrity = floor($integrity*0.85);
@@ -61,37 +65,9 @@ class PrimarySystem extends System {
 	}
 
 	public function getValidEffects(){
-		return array(
+		return array( // type, mag, dur, effect
 			array("Output", 0, 0, 0)
 		);
-	}
-
-	public function determineCrit($new, $old, $turn){
-		$new = round($new / $this->integrity * 100);
-		$old = round($old / $this->integrity * 100);
-		$possible = $this->getValidEffects();
-
-		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", newDmg: ".$new.", oldDmg: ".$old);
-
-		$mod = $this->getCritModMax($new);
-		if ($mod < 2){return;}
-
-		$trigger =  ($new*2 + $old/2);
-
-		for ($i = 0; $i < sizeof($possible); $i++){
-			$roll = mt_rand(0, 100);
-			if ($roll > $trigger){Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$trigger); continue;}
-			Debug::log("CRIT: ".$mod.", roll: ".$roll.", tresh: ".$trigger);
-
-			//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
-			$this->crits[] = new Crit(
-				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $possible[$i][0], 0, $mod, 1
-			);
-		}
-	}
-
-	public function getCritModMax($dmg){
-		return min(20, round($dmg/2));
 	}
 }
 
@@ -133,26 +109,26 @@ class Command extends PrimarySystem {
 	}
 
 	public function getCritModMax($dmg){
-		return min(6, round($dmg/2));
+		return min(6, round($dmg*100/2));
 	}
 
-	public function determineCrit($new, $old, $turn){
-		$new = round($new / $this->integrity * 100);
+	public function determineCrit($dmg, $turn){
 		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId);
-		$mod = $this->getCritModMax($new);
-		if ($new <= 3){Debug::log("no BRIDGE crit, dmg < 3"); return;}
+		//$value = $this->getCritModMax($new);
+		$value = 10;
+		if ($dmg->new <= 3){Debug::log("no COMMAND crit, dmg < 3"); return;}
 
         $options = array("Morale", "Focus", "Engine", "Sensor", "Reactor");
         $multi = array(1, 1, 0.75, 1, 0.75);
 		$roll = mt_rand(0, sizeof($options)-1);
 		$roll = 0;
 		$pick = $options[$roll];
-		$mod = round($mod * $multi[$roll], 2);
+		$value = round($mod * $multi[$roll], 2);
 
-		Debug::log("BRIDGE CRIT: on ".$pick." for :".$mod."%");
+		Debug::log("BRIDGE CRIT: on ".$pick." for :".$value."%");
 
 		$this->crits[] = new Crit(
-			sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $pick, 0, $mod, 1
+			sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $pick, 0, $value, 1
 		);
 	}
 }
@@ -314,7 +290,7 @@ class Hangar extends Weapon {
 		}
 	}
 
-	public function singleCritTest($turn, $extra){
+	public function doCritTestSelf($turn, $extra){
 		return;
 	}
 }
@@ -331,7 +307,7 @@ class Bulkhead extends System {
         parent::__construct($id, $parentId, $output, $width);
 	}
 
-	public function singleCritTest($turn, $extra){
+	public function doCritTestSelf($turn, $extra){
 		return;
 	}
 

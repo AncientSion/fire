@@ -27,6 +27,7 @@ class Squaddie extends Single {
 	public $parentPow;
 
 	public $slots = 0;
+	public $squaddie = 1;
 	//public $dropout = array(0, 0);
 	
 	function __construct($id, $parentId){
@@ -128,92 +129,18 @@ class Squaddie extends Single {
 		return $crits;
 	}
 	
-	public function getValidEffects(){
-		return array( // type, min%, null, effect
-			array("Accuracy", 0, 0, 25),
-			array("Damage", 70, 0, 15),
-			array("Destroyed", 110, 0, 0.00),
-		);
-	}
-
-	public function checkDropoutCrits($new, $old, $turn){
-		return;
-	}
-
-	public function checkSystemCrits($new, $old, $turn){
-		if ($this->destroyed){return;}
-		if (!$new){return;}
-
-		$effects = $this->getValidEffects();
-
-		$newRelDmg = round($new/(1-$old), 2);
-		Debug::log("___Unit ".$this->name." #".$this->parentId."/".$this->id.", newRelDmg: ".$newRelDmg);
-
-		if ($newRelDmg < 0.15){return;}
-		$newRelDmg = 1-$newRelDmg;
-		$chance = round((1 - ($newRelDmg*$newRelDmg))*100);
-
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
-				//Debug::log("system scope crit test!");
-
-				$roll = mt_rand(0, 100);
-
-				if ($roll > $chance){
-					Debug::log("SUCCESS, roll: ".$roll.", chance: ".$chance); return;
-				} else Debug::log("FAIL, roll: ".$roll.", chance: ".$chance);
-
-				$roll = mt_rand(0, 100);
-				$magnitude = $roll + ($new + $old)*100;
-
-				if ($magnitude < $effects[0][1]){continue;}
-
-				for ($k = sizeof($effects)-1; $k >= 0; $k--){
-					if ($magnitude < $effects[$k][1]){continue;}
-
-					Debug::log("roll: ".$roll.", total magnitude: ".$magnitude.", crit: ".$effects[$k][0]);
-					$this->structures[$i]->systems[$j]->crits[] = new Crit(
-						0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,
-						 $effects[$k][0],  $effects[$k][2],  $effects[$k][3], 1
-					);
-					break;
-				}
-			}
+	public function getCritDamages($turn, $add){
+		//Debug::log("getCritDamages ".get_class($this)." #".$this->id);
+		$old = 0; $new = 0;
+		for ($i = 0; $i < sizeof($this->damages); $i++){
+			if ($this->damages[$i]->turn == $turn){
+				$new += $this->damages[$i]->overkill;
+				$new += $this->damages[$i]->emDmg*2;
+			} else $old += $this->damages[$i]->overkill;
 		}
+
+		return new RelDmg($new, $old, $this->integrity);
 	}
-
-	public function checkSystemCritso($new, $old, $turn){
-		Debug::log("checkSystemCrits .".get_class($this)." #".$this->id);
-		if ($this->destroyed){return;}
-		$effects = $this->getValidEffects();
-		$penalty =  round($new + $old/4);
-		Debug::log("determine effect, new/old ".$new."%/".$old."%, increaseToRoll: ".$penalty);
-
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
-				if ($new < 15 &&  mt_rand(0, 1)){Debug::log("lucky skip, new below 15 % and rand(0,1)!"); continue;}
-
-				$roll = mt_rand(0, 20) + $penalty + sizeof($this->structures[$i]->systems[$j]->crits)*30;
-
-				if ($roll < $effects[0][1]){continue;}
-
-				for ($k = sizeof($effects)-1; $k >= 0; $k--){
-					if ($roll < $effects[$k][1]){continue;}
-
-					Debug::log("roll: ".$roll.", crit: ".$effects[$k][0]);
-					$this->structures[$i]->systems[$j]->crits[] = new Crit(
-						0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,
-						 $effects[$k][0],  $effects[$k][2],  $effects[$k][3], 1
-					);
-					$penalty -= 20;
-					break;
-				}
-			}
-		}
-	}
-
 
 	public function getName(){
 		return "Main";

@@ -1119,7 +1119,7 @@
 				$stmt->bindParam(":turn", $turn);
 				$stmt->bindParam(":phase", $phase);
 				$stmt->bindParam(":status", $states[$i]["status"]);
-				$stmt->bindParam(":notes", $notes);
+				$stmt->bindParam(":notes", $states[$i]["notes"]);
 				$stmt->bindParam(":id",  $states[$i]["id"]);
 				$stmt->execute();
 

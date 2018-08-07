@@ -46,10 +46,6 @@ class Weapon extends System {
 		else if ($w <= 360){$this->armourMod = 0.45; $this->mount = "Turret";}
 		$this->armour = floor($rem * $this->armourMod);
 	}
-
-	public function getCritModMax($dmg){
-		return min(20, (round($dmg/20)*10));
-	}
 	
 	public function getTraverseMod($fire){
 		//Debug::log("this: ".$this->traverse);

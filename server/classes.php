@@ -25,6 +25,16 @@ class Morale {
 	}
 }
 
+class RelDmg {
+	public $new = 0.00;
+	public $old = 0.00;
+
+	function __construct($new, $old, $integrity){
+		$this->new = round($new / $integrity, 2);
+		$this->old = round($old / $integrity, 2);
+	}
+}
+
 class Shared {
 	public $systems = array();
 }

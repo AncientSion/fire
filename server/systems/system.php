@@ -210,7 +210,8 @@ class System {
 		return $dmg;
 	}
 
-	public function singleCritTest($turn, $extra){
+	public function getCritDamages($turn, $add){
+		//Debug::log("getCritDamages ".get_class($this)." #".$this->id);
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->turn == $turn){
@@ -219,54 +220,74 @@ class System {
 			} else $old += $this->damages[$i]->structDmg;
 		}
 
-		if ($new){
-			$this->determineCrit($new, $old, $turn);
-		}
+		return new RelDmg($new, $old, $this->integrity);
 	}
 
 	public function getValidEffects(){
-		return array(// attr, %-tresh, duration, modifier
-			array("Damage", 30, 0, 0),
-			array("Accuracy", 30, 0, 0)
+		return array( // type, mag, dura, effect
+			array("Accuracy", 100, 0, 0),
+			array("Damage", 120, 0, 0),
+			array("Destroyed", 180, 0, 1),
 		);
 	}
+	
+	public function dfgdfg(){
+		return array( // type, min%, null, effect
+			array("Accuracy", 0, 0, 25),
+			array("Damage", 70, 0, 15),
+			array("Destroyed", 110, 0, 0.00),
+		);
+	}
+	
 
-	public function determineCrit($new, $old, $turn){
-		$new = round($new / $this->integrity * 100);
-		$old = round($old / $this->integrity * 100);
+	public function determineCrit($dmg, $turn){
+		if ($this->destroyed){return;}
+
+		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old);
+
+		if (!$dmg->new){return;}
+
 		$effects = $this->getValidEffects();
 
-		//Debug::log("determineCrit for ".get_class($this)." #".$this->id." on unit #".$this->parentId.", new: ".$new."%, old: ".$old."%");
+		$newRelDmg = round($dmg->new/(1-$dmg->old), 2);
+		Debug::log("newRelDmg: ".$newRelDmg);
 
-		$trigger = 80;
-		$bonus = 0;
+		if ($newRelDmg < $this->getCritTresh()){return;}
+		$newRelDmg = 1-$newRelDmg;
+		$chance = round((1 - ($newRelDmg*$newRelDmg))*100);
+		$roll = mt_rand(0, 100);
 
-		$dmg = floor($new + $old);
-		if ($new > $trigger){
-			$chance = 30;
-			$min = floor($chance * (1+($new - $trigger)/(100 - $trigger)));
-			$roll = mt_rand(0, 100);
-			if ($roll < $min){
-				$bonus += 20;
-				$this->crits[] = new Crit(
-					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 1, 0, 1
-				);
-			}
+		if ($roll > $chance){
+			Debug::log("SUCCESS, roll: ".$roll.", chance: ".$chance); return;
+		} else Debug::log("FAIL, roll: ".$roll.", chance: ".$chance);
+
+		$roll = mt_rand(0, 100);
+		$magnitude = $roll + ($dmg->new + $dmg->old)*100;
+
+		Debug::log("roll: ".$roll.", total magnitude: ".$magnitude);
+
+		if ($magnitude < $effects[0][1]){return;}
+
+		for ($i = sizeof($effects)-1; $i >= 0; $i--){
+			if ($magnitude < $effects[$i][1]){continue;}
+			$value = $this->getCritModMax($newRelDmg);
+
+			Debug::log("crit: ".$effects[$i][0].", value: ".$value);
+			
+			$this->crits[] = new Crit(
+				sizeof($this->crits)+1, $this->parentId, $this->id, $turn,
+				$effects[$i][0], $effects[$i][2], $value, 1
+			);
+			break;
 		}
+	}
 
-		$mod = $this->getCritModMax($new + $old);
-		if ($mod < 5){return;}
+	public function getCritTresh(){
+		return 0.15;
+	}
 
-		for ($i = 0; $i < sizeof($effects); $i++){
-			$roll = mt_rand(0, 100) + $bonus;
-
-			if ($roll < $dmg){
-				$bonus += 20;
-				$this->crits[] = new Crit(
-					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $effects[$i][0], 0,  ($mod * (1 + (0.5*$i))), 1
-				);
-			}
-		}
+	public function getCritModMax($dmg){
+		return min(30, floor($dmg*100));
 	}
 
 	public function addDamage($dmg){

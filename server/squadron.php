@@ -23,6 +23,19 @@ class Squadron extends Ship {
 		$this->addPrimary();
 	}
 
+	public function doTestCrits($turn){
+		Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($this->structures[$i]->destroyed){continue;}
+			$dmg = $this->structures[$i]->getCritDamages($turn, 0);
+			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
+				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){
+					$this->structures[$i]->structures[$j]->systems[$k]->determineCrit($dmg, $turn);
+				}
+			}
+		}
+	}
+
 	static function getKit($faction){
 		return array(
 			"id" => 0,
@@ -112,13 +125,6 @@ class Squadron extends Ship {
 			}
 		}
 		return true;
-	}
-	
-
-	public function setPreviewState($turn, $phase){
-		//Debug::log("setPreviewState ".get_class($this));
-		$this->setUnitState($turn, $phase);
-		$this->curImp = $this->baseImpulse;
 	}
 	
 	public function setUnitState($turn, $phase){
@@ -297,6 +303,22 @@ class Squadron extends Ship {
 		for ($i = 0; $i < sizeof($crits); $i++){
 			$found = 0;
 
+			//var_export($crits[$i]);
+
+			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
+				if ($this->primary->systems[$j]->id == $crits[$i]->systemid){
+					//Debug::log("add");
+					$this->primary->systems[$j]->crits[] = $crits[$i];
+					$found = 1;
+					break;
+				}
+			}
+
+			if ($found){
+				//Debug::log("ding");
+				continue;
+			}
+
 			for ($j = 0; $j < sizeof($this->structures); $j++){
 				if ($crits[$i]->systemid == $this->structures[$j]->id){
 					$this->structures[$j]->crits[] = $crits[$i];
@@ -329,6 +351,14 @@ class Squadron extends Ship {
 
 	public function getNewCrits($turn){
 		$crits = array();
+
+		for ($k = 0; $k < sizeof($this->primary->systems); $k++){
+			for ($l = 0; $l < sizeof($this->primary->systems[$k]->crits); $l++){
+				if ($this->primary->systems[$k]->crits[$l]->new){
+					$crits[] = $this->primary->systems[$k]->crits[$l];
+				}// else break;
+			}
+		}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$crits = array_merge($crits, $this->structures[$i]->getNewCrits($turn));

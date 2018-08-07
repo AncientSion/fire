@@ -4,14 +4,14 @@ class Demos extends Medium {
 	public $name = "Demos";
 	public $display = "Demos";
 	public $faction = "Centauri Republic";
-	public $size =  50;
+	public $size =  45;
 	public static $value = 450;
 	public $profile = array(0.9, 1.1);
-	public $mass = 3000;
+	public $mass = 2750;
 
-	public $integrity = 600;
-	public $vitalHP = 85;
-	public $ep = 110;
+	public $integrity = 550;
+	public $vitalHP = 70;
+	public $ep = 120;
 	public $ew = 700;
 
 	function __construct($data = false){

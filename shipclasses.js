@@ -258,7 +258,7 @@ Ship.prototype.doDeploy = function(pos){
 	this.select();
 
 	ui.deployOverlay.hide();
-	$("#deployWrapper")
+	$("#leftUnitWrapper")
 			.find("#reinforceBody").find(".requestReinforcements").each(function(){
 			if ($(this).hasClass("selected")){
 				//$(this).find(".cost").addClass("green");
@@ -1423,8 +1423,8 @@ Ship.prototype.drawTrajectory = function(){
 }
 
 Ship.prototype.create = function(){
-	//this.setHitTable();
-
+	this.setUnitState();
+	this.setSubSystemState();
 	this.setStringHitChance();
 
 	if (game.turn > 1 && game.phase == -1 && this.available == game.turn){
@@ -1449,11 +1449,13 @@ Ship.prototype.setSubSystemState = function(){
 }
 
 Ship.prototype.setStringHitChance = function(){
+	console.log("setStringHitChance #" + this.id);
 	if (this.squad){return Mixed.prototype.setStringHitChance.call(this); }
 	this.stringHitChance = Math.floor(this.baseHitChance * this.profile[0]) + " - " + Math.floor(this.baseHitChance * this.profile[1]) + "%"
 }
 
 Ship.prototype.getStringHitChance = function(){
+	console.log("getStringHitChance #" + this.id);
 	return this.stringHitChance;
 }
 
@@ -1522,7 +1524,7 @@ Ship.prototype.createMoraleLogEntry = function(){
 
 	console.log(morale);
 	
-	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Due to severe damage, " + this.getLogTitleSpan() + " fails its morale check check and rolls a " + morale + " on a D100.</br>";
+	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Severe damage forces " + this.getLogTitleSpan() + " into a failed morale check (roll: " + morale + ") </br>";
 
 	//console.log(this.notes);
 
@@ -2228,8 +2230,6 @@ Ship.prototype.getOfficerMoraleBonus = function(){
 }
 
 Ship.prototype.getCriticalMoraleMalus = function(){
-	if (!this.ship){return ""};
-
 	var mod = this.getSystemByName("Command").getCritMod("Morale")*-1;
 	if (mod){return mod + "%";}
 	return "";

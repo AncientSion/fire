@@ -23,8 +23,4 @@
 				return "ERROR";
 		}
 	}
-
-	function doPurge(){
-		
-	}
 ?>
