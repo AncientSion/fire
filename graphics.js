@@ -394,9 +394,7 @@ function drawBaseSpriteExplo(wpn, anim){
 function drawExplosion(weapon, anim){  // 150, 150, 30
 	var fraction = anim.n/anim.m;
 	var sin = weapon.exploSize*1*Math.sin(Math.PI*fraction);
-	if (sin < 0){
-		return;
-	}
+	if (sin < 0){return;}
 
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z)
@@ -427,7 +425,11 @@ function drawExplosion(weapon, anim){  // 150, 150, 30
 	fxCtx.beginPath(); fxCtx.arc(anim.tx, anim.ty, sin*0.35, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = inner; fxCtx.fill();
 
 
+	if (anim.float){drawDamageNumbers(weapon, anim, fraction);}
 
+	fxCtx.globalAlpha = 1;
+	fxCtx.globalCompositeOperation = "source-over";
+	fxCtx.setTransform(1,0,0,1,0,0);
 	//var font = "Damage!";
 
 	//fxCtx.font = "30px Arial";
@@ -459,31 +461,27 @@ function drawExplosion(weapon, anim){  // 150, 150, 30
 			fxCtx.closePath()
 		}
 	}*/
-
-	fxCtx.globalAlpha = 1;
-	fxCtx.setTransform(1,0,0,1,0,0);
 }
 
-function drawDamageNumbers(fire){
+function drawDamageNumbers(weapon, anim, fraction){
 	//console.log("draw");
 	//console.log(fire);
 	//console.log(fire);
 	//console.log(fire.anims[0][0]);
 	//console.log(fire.anims[fire.anims.length][]);
 	fxCtx.font = "14px Arial";
-	fxCtx.fillStyle = "red";
 	fxCtx.textAlign = "center";
-	var font = "Damage!";
 
-	fxCtx.translate(cam.o.x, cam.o.y);
-	fxCtx.scale(cam.z, cam.z)
-	fxCtx.fillText(font, fire.float.x, fire.float.y - (20 * fire.float.n / fire.float.m));
-	fxCtx.globalCompositeOperation = "source-over";
-	fxCtx.setTransform(1,0,0,1,0,0);
+	fxCtx.fillStyle = "grey";
+	fxCtx.fillText(anim.float.armour, anim.tx -30, anim.ty - 30 - (20 * fraction));
+	fxCtx.fillStyle = "yellow";
+	fxCtx.fillText(anim.float.system, anim.tx, anim.ty - 30 - (20 * fraction));
+	fxCtx.fillStyle = "red";
+	fxCtx.fillText(anim.float.hull, anim.tx +30, anim.ty - 30 - (20 * fraction));
 
-
-
-
+	//fxCtx.translate(cam.o.x, cam.o.y);
+	//fxCtx.scale(cam.z, cam.z);
+//	fxCtx.fillText(font, anim.tx, anim.ty - 30 - (20 * fraction));
 }
 
 function drawUnitExploa(posX, posY, img, s, now, max){
@@ -529,35 +527,35 @@ function drawUnitExplo(x, y, s, now, max){
 	fxCtx.setTransform(1,0,0,1,0,0);
 }
 
-function drawBeam(weapon, fire){
+function drawBeam(weapon, anim){
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z)
 
-	var fraction = fire.n/fire.m;
+	var fraction = anim.n/anim.m;
 	var charge = 0.5 - 0.3*Math.cos(2*Math.PI*fraction);
 
 	fxCtx.globalAlpha = 1;
 	fxCtx.beginPath();
-	fxCtx.arc(fire.ox, fire.oy, weapon.beamWidth*charge, 0, 2*Math.PI);
+	fxCtx.arc(anim.ox, anim.oy, weapon.beamWidth*charge, 0, 2*Math.PI);
 	fxCtx.closePath();	
 	fxCtx.fillStyle = weapon.animColor;
 	fxCtx.fill();
 
 	fxCtx.beginPath();
-	fxCtx.arc(fire.ox, fire.oy, weapon.beamWidth/2*charge, 0, 2*Math.PI);
+	fxCtx.arc(anim.ox, anim.oy, weapon.beamWidth/2*charge, 0, 2*Math.PI);
 	fxCtx.closePath();
 	fxCtx.globalCompositeOperation = "lighter";
 	fxCtx.fillStyle = "white";
 	fxCtx.fill();	
 
-	var x = fire.tax + fire.nx * fire.n;
-	var y = fire.tay + fire.ny * fire.n;
+	var x = anim.tax + anim.nx * anim.n;
+	var y = anim.tay + anim.ny * anim.n;
 
 	if (fraction > 0.3){
 		var beamW = 0.5 + 0.5 * Math.cos(2*Math.PI*fraction);
 		fxCtx.lineCap = "round";	
 		fxCtx.beginPath();
-		fxCtx.moveTo(fire.ox, fire.oy);
+		fxCtx.moveTo(anim.ox, anim.oy);
 		fxCtx.lineTo(x, y);
 		fxCtx.closePath();
 
@@ -571,8 +569,11 @@ function drawBeam(weapon, fire){
 		fxCtx.lineWidth = 1 + 1* beamW;
 		fxCtx.strokeStyle = "white";
 		fxCtx.stroke();
-		if (fire.h){
+		if (anim.h){
 			drawBeamExplosion(weapon, x, y, fraction);
+			if (fraction > 0.3){
+				drawDamageNumbers(weapon, {tx: anim.tax, ty: anim.tay, float: anim.float}, fraction);
+			}
 		}
 	}
 		

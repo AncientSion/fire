@@ -583,11 +583,12 @@
 					window.cancelAnimationFrame(anim);
 					fxCtx.clearRect(0, 0, res.x, res.y);
 
-					$("#combatLog").find("tr").each(function(i){if (i){$(this).remove()}});
+					//$("#combatLog").find("tr").each(function(i){if (i){$(this).remove()}});
 
 					for (var i = 0; i < game.fireOrders.length; i++){
+						game.fireOrders[i].tr.show();
 						game.fireOrders[i].animated = 1;
-						game.fireOrders[i].weapon.createCombatLogEntry(game.fireOrders[i]);
+						//game.fireOrders[i].weapon.createCombatLogEntry(game.fireOrders[i]);
 					}
 
 					game.createFireFinalEntry();

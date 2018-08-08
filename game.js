@@ -2191,12 +2191,25 @@ function Game(data){
 		}
 	}
 
-	this.getFireAnimationDetails = function(){
+	this.getFireAnimationDetails = function(){	
+
+		this.fireOrders.sort(function(a, b){
+			return (
+				a.shooter.salvo - b.shooter.salvo ||
+				a.shooter.flight - b.shooter.flight ||
+				a.shooter.flight ||
+				a.targetid - b.targetid ||
+				a.weapon.priority - b.weapon.priority ||
+				a.shooterid - b.shooterid
+			)
+		});
 		
 		for (var i = 0; i < this.fireOrders.length; i++){
 			this.fireOrders[i].anim = this.fireOrders[i].weapon.getAnimation(this.fireOrders[i]);
+			this.fireOrders[i].createCombatLogEntry();
 			//console.log(this.fireOrders[i].weapon.priority);
 		}
+
 		/*
 
 		usort($this->fires, function($a, $b){
@@ -2212,35 +2225,30 @@ function Game(data){
 
 
 		for (var i = 0; i < this.fireOrders.length; i++){
-			var min = 0;
-			var max = 0;
+			var last;
 			for (var j = 0; j < this.fireOrders[i].anim.length; j++){
 				for (var k = 0; k < this.fireOrders[i].anim[j].length; k++){
-					min = Math.min(min, this.fireOrders[i].anim[j][k].n)
-					max = Math.max(max, this.fireOrders[i].anim[j][k].m)
+					if (this.fireOrders[i].anim[j][k].h){
+						last = this.fireOrders[i].anim[j][k];
+					}
 				}
 			}
 
-			var min = this.fireOrders[i].anim[0][0].n;
-			var max = this.fireOrders[i].anim[0][0].m;
 
-			this.fireOrders[i].float = {n: min, m: max, value: "value", x: this.fireOrders[i].target.drawX, y: this.fireOrders[i].target.drawY};
+			if (last){
+				var armour = this.fireOrders[i].tr.find("td").eq(6).html();
+				var system = this.fireOrders[i].tr.find("td").eq(7).html();
+				var hull = this.fireOrders[i].tr.find("td").eq(8).html();
+
+				last.float =
+					{
+						armour: armour,
+						system: system,
+						hull: hull,
+					}
+			}
 		}
 
-	//fire.float = {n: min, m: max, x: t.x, y: t.y, value: "ding"};
-
-
-
-		this.fireOrders.sort(function(a, b){
-			return (
-				a.shooter.salvo - b.shooter.salvo ||
-				a.shooter.flight - b.shooter.flight ||
-				a.shooter.flight ||
-				a.targetid - b.targetid ||
-				a.weapon.priority - b.weapon.priority ||
-				a.shooterid - b.shooterid
-			)
-		});
 		//for (var i = 0; i < this.fireOrders.length; i++){
 		//	console.log(this.fireOrders[i].weapon.priority);
 		//}
@@ -2271,8 +2279,11 @@ function Game(data){
 		for (var i = 0; i < this.fireOrders.length; i++){
 			//if (this.fireOrders[i].shooterid != 16){continue;}
 			if (!this.fireOrders[i].animated){
-				this.fireOrders[i].weapon.createCombatLogEntry(this.fireOrders[i]);
+				//this.fireOrders[i].weapon.createCombatLogEntry(this.fireOrders[i]);
+				
+				this.fireOrders[i].tr.show();
 				this.animateSingleFireOrder(i, 1);
+
 				return;
 			}
 		}
@@ -2312,18 +2323,6 @@ function Game(data){
 			game.draw();
 			return;
 		}
-		else {
-			game.fireOrders[i].float.n++;
-			if (game.fireOrders[i].float.n < game.fireOrders[i].float.m * 0.85 && game.fireOrders[i].float.n > game.fireOrders[i].float.m * 0.15){
-				drawDamageNumbers(game.fireOrders[i]);
-			}
-		}
-
-		//ticks++;
-		//console.log(ticks);
-		//if (game.fireOrders[i].animating){	
-		//	drawDamageNumbers(game.fireOrders[i]);
-		//}
 
 		for (var j = 0; j < game.fireOrders[i].anim.length; j++){
 			for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){
