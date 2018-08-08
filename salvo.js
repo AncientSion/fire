@@ -129,7 +129,7 @@ function Salvo(data){
 
 Salvo.prototype = Object.create(Mixed.prototype);
 
-Salvo.prototype.setUnitState = function(){
+Salvo.prototype.setUniddtState = function(){
 	if (this.userid == game.userid){
 		this.friendly = 1;
 	}

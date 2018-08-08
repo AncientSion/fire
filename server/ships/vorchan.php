@@ -22,7 +22,7 @@ class Vorchan extends Light {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 300, 60, 0, array(array("Javelin", 4, 2), array("Hasta", 8, 4)));
+		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 300, 60, 0, array(array("Javelin", 4, 6), array("Hasta", 12, 4)));
 		$structs[] = $front;
 
 		$right = new Section(60, 180);

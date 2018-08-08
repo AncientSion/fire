@@ -39,7 +39,7 @@ class Flight extends Mixed {
 
 		if (!isset($this->mission) || empty($this->mission) || !sizeof($this->structures)){return;}
 
-		$elapsed = 3;
+		$elapsed = 2;
 		//var_export($this->mission);
 		//if (!$this->mission->arrived){
 			$elapsed += $turn - $this->mission->turn;

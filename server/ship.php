@@ -827,6 +827,7 @@ class Ship {
 		$current = 0;
 		$main = $this->primary->getHitChance();
 		//Debug::log("main: ".$main);
+		//$main = 10;
 		$total = $main;
 
 		$struct = $this->getFacingElement($fire);

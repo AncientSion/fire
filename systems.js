@@ -1117,7 +1117,7 @@ System.prototype.drawSystemArc = function(facing, rolled, pos){
 		}*/
 
 	var dist = game.arcRange;
-	if (this.maxRange){dist = this.maxRange;}
+	if (this.maxRange){dist = this.getMaxRange();}
 	for (var i = 0; i < this.arc.length; i++){
 		var	start;
 		var	end;
@@ -2135,11 +2135,17 @@ Weapon.prototype.getDmgLoss = function(dist){
 	return Math.ceil(this.dmgLoss * dist / 100 * this.getRangeDmgMod());
 }
 
+Weapon.prototype.getMaxRange = function(){
+	var range = this.maxRange;
+	var mod = 100 - this.getCritMod("Max Range");
+	return Math.floor(range/100*mod);
+}
+
 Weapon.prototype.getAimData = function(target, final, dist, row){
 	var dmgLoss = this.getDmgLoss(dist);
 	var accLoss = this.getAccuracyLoss(dist);
 
-	if (this.maxRange && dist > this.maxRange){
+	if (this.maxRange && dist > this.getMaxRange()){
 		row.append($("<td>").attr("colSpan", 4).addClass("red").html("Insufficient Range, max: " + this.maxRange));
 		return;
 	}
@@ -2661,7 +2667,8 @@ Particle.prototype.getAnimation = function(fire){
 		speed /= 3;
 	}
 
-
+	var min = 0;
+	var max = 0;
 	
 	for (var i = 0; i < fire.guns; i++){
 		var gunAnims = [];
@@ -2683,7 +2690,7 @@ Particle.prototype.getAnimation = function(fire){
 			var ty = t.y + dest.y;
 
 			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
-				shotAnim.n = 0 - i*gunDelay - j*shotDelay
+				shotAnim.n = 0 - i*gunDelay - j*shotDelay;
 
 			gunAnims.push(shotAnim);
 
@@ -2700,6 +2707,8 @@ Particle.prototype.getAnimation = function(fire){
 		allAnims.push(gunAnims)
 	}
 
+	//console.log(fire.weapon.display);
+	//console.log(min, max);
 	return allAnims;
 }
 
@@ -3165,7 +3174,7 @@ Launcher.prototype.getSysDiv = function(){
 
 		var ammo = this.loads[this.ammo];
 
-		if (ammo.maxRange){$(table).append($("<tr>").append($("<td>").html("Max Range")).append($("<td>").html(ammo.maxRange)));}
+		if (ammo.maxRange){$(table).append($("<tr>").append($("<td>").html("Max Range")).append($("<td>").html(this.getMaxRange())));}
 
 		$(table).append($("<tr>").append($("<th>").css("border-top", "1px solid white").attr("colSpan", 2).html(ammo.name)));
 		$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).html(ammo.role)))
@@ -3206,7 +3215,7 @@ Launcher.prototype.setAmmo = function(){
 	for (var i = 0; i < this.loads.length; i++){
 		if (this.loads[i].amount > 0){
 			this.ammo = i;
-			this.output = this.loads[i].amount;
+			this.output = this.loads[i].amount + this.getCritMod("Ammo Amount");
 			return;
 		}
 	}
@@ -3250,7 +3259,10 @@ Launcher.prototype.getEffiency = function(){
 }
 
 Launcher.prototype.getRemAmmo = function(){
-	return this.output;
+	var max = this.getMaxAmmo();
+	var loss = this.getCritMod("Ammo Amount");
+
+	return this.output - Math.ceil((max/100*loss));
 	return this.getMaxAmmo() - this.fireOrders.map(x => x.shots).reduce((l,r) => l+r, []);
 }
 
@@ -3259,9 +3271,7 @@ Launcher.prototype.getMaxAmmo = function(){
 }
 
 Launcher.prototype.getBoostDiv = function(){
-	if (!this.getRemAmmo()){
-		return;
-	}
+	if (!this.getRemAmmo()){return;}
 	return System.prototype.getBoostDiv.call(this);
 }
 

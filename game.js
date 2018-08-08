@@ -2210,6 +2210,27 @@ function Game(data){
 		});
 	*/
 
+
+		for (var i = 0; i < this.fireOrders.length; i++){
+			var min = 0;
+			var max = 0;
+			for (var j = 0; j < this.fireOrders[i].anim.length; j++){
+				for (var k = 0; k < this.fireOrders[i].anim[j].length; k++){
+					min = Math.min(min, this.fireOrders[i].anim[j][k].n)
+					max = Math.max(max, this.fireOrders[i].anim[j][k].m)
+				}
+			}
+
+			var min = this.fireOrders[i].anim[0][0].n;
+			var max = this.fireOrders[i].anim[0][0].m;
+
+			this.fireOrders[i].float = {n: min, m: max, value: "value", x: this.fireOrders[i].target.drawX, y: this.fireOrders[i].target.drawY};
+		}
+
+	//fire.float = {n: min, m: max, x: t.x, y: t.y, value: "ding"};
+
+
+
 		this.fireOrders.sort(function(a, b){
 			return (
 				a.shooter.salvo - b.shooter.salvo ||
@@ -2286,12 +2307,26 @@ function Game(data){
 		if (!game.fireOrders[i].animating){
 			game.fireOrders[i].animating = 1;
 			if (game.phase == 3){cam.setFireFocus(game.fireOrders[i]);}
+			//window.ticks = 0;
+			console.log(game.fireOrders[i]);
 			game.draw();
 			return;
 		}
+		else {
+			game.fireOrders[i].float.n++;
+			if (game.fireOrders[i].float.n < game.fireOrders[i].float.m * 0.85 && game.fireOrders[i].float.n > game.fireOrders[i].float.m * 0.15){
+				drawDamageNumbers(game.fireOrders[i]);
+			}
+		}
+
+		//ticks++;
+		//console.log(ticks);
+		//if (game.fireOrders[i].animating){	
+		//	drawDamageNumbers(game.fireOrders[i]);
+		//}
 
 		for (var j = 0; j < game.fireOrders[i].anim.length; j++){
-			for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){								
+			for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){
 				if (game.fireOrders[i].anim[j][k].done){continue;}
 
 				if (game.fireOrders[i].weapon.animation == "em"){

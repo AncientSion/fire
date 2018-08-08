@@ -16,14 +16,6 @@ class Launcher extends Weapon {
 	public $shots = 0;
 	public $accDecay = 0;
 
-	public function getValidEffects(){
-		return array(// attr, %-tresh, duration, modifier
-			array("Placeholder1", 60, 0, 0),
-			array("Placeholder2", 80, 0, 0),
-			array("Destroyed", 180, 0, 1),
-		);
-	}
-
 	function __construct($id, $parentId, $start, $end, $integrity, $width){
         parent::__construct($id, $parentId, $start, $end, 0, $width);
         $this->integrity = $integrity;
@@ -46,6 +38,10 @@ class Launcher extends Weapon {
 		else {$this->armourMod =  0.3; $this->mount = "Arm Rail";}
 		$this->armour = floor($rem * $this->armourMod);
 	}
+
+	public function getCritModMax($dmg){
+		return min(15, floor(round((1-$dmg)*10)*10));
+	}
 }
 
 class MissileLauncher extends Launcher {
@@ -61,6 +57,13 @@ class MissileLauncher extends Launcher {
 			$this->capacity[] = $loads[$i][1];
 			$this->launchRate[] = $loads[$i][2];
 		}
+	}
+
+	public function getValidEffects(){
+		return array(// attr, mag, duration, modifier
+			array("Ammo Amount", 120, 0, 0),
+			array("Destroyed", 170, 0, 1),
+		);
 	}
 
 	public function adjustLoad($dbLoad){
@@ -86,5 +89,13 @@ class TorpedoLauncher extends MissileLauncher {
 
 	function __construct($id, $parentId, $start, $end, $integrity, $loads, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $integrity, $loads, $width);
+	}
+
+	public function getValidEffects(){
+		return array(// attr, mag, duration, modifier
+			array("Max Range", 80, 0, 0),
+			array("Ammo Amount", 120, 0, 0),
+			array("Destroyed", 170, 0, 1),
+		);
 	}
 }

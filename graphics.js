@@ -426,6 +426,13 @@ function drawExplosion(weapon, anim){  // 150, 150, 30
 	fxCtx.beginPath(); fxCtx.arc(anim.tx, anim.ty, sin*0.66, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = mid; fxCtx.fill();
 	fxCtx.beginPath(); fxCtx.arc(anim.tx, anim.ty, sin*0.35, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = inner; fxCtx.fill();
 
+
+
+	//var font = "Damage!";
+
+	//fxCtx.font = "30px Arial";
+	//fxCtx.fillText(font, anim.tx, anim.ty - 20 * fraction);
+
 	/*if (weapon instanceof Plasma){
 		for (i = 0; i < 6; i++){
 			var d = getPointInDir(2*sin, 360/6*i + range(-15, 15), x, y)
@@ -455,6 +462,28 @@ function drawExplosion(weapon, anim){  // 150, 150, 30
 
 	fxCtx.globalAlpha = 1;
 	fxCtx.setTransform(1,0,0,1,0,0);
+}
+
+function drawDamageNumbers(fire){
+	//console.log("draw");
+	//console.log(fire);
+	//console.log(fire);
+	//console.log(fire.anims[0][0]);
+	//console.log(fire.anims[fire.anims.length][]);
+	fxCtx.font = "14px Arial";
+	fxCtx.fillStyle = "red";
+	fxCtx.textAlign = "center";
+	var font = "Damage!";
+
+	fxCtx.translate(cam.o.x, cam.o.y);
+	fxCtx.scale(cam.z, cam.z)
+	fxCtx.fillText(font, fire.float.x, fire.float.y - (20 * fire.float.n / fire.float.m));
+	fxCtx.globalCompositeOperation = "source-over";
+	fxCtx.setTransform(1,0,0,1,0,0);
+
+
+
+
 }
 
 function drawUnitExploa(posX, posY, img, s, now, max){

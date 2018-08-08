@@ -84,7 +84,7 @@ class SquadBuilder {
 			array(
 				"active" => 0,
 				"chance" => 40,
-				"notes" => "Vorchan Hunter (Torpedo)",
+				"notes" => "Vorchan Hunter (Javelin)",
 				"units" =>
 					array(
 						array(
@@ -101,12 +101,12 @@ class SquadBuilder {
 						array(
 							"systemid" => 5,
 							"name" => "Javelin",
-							"amount" => 5,
+							"amount" => 6,
 						),
 						array(
 							"systemid" => 9,
 							"name" => "Javelin",
-							"amount" => 5,
+							"amount" => 6,
 						),
 					),
 			),

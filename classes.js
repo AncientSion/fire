@@ -159,6 +159,7 @@ function FireOrder(data){
 	this.rolls = data.notes.slice(0, data.notes.length-1).split(";").map(Number);
 	this.systems = [];
 	this.animating = 0;
+	this.float = {};
 }
 
 function Damage(data){

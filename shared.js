@@ -17,6 +17,7 @@ window.cache;
 window.downTime = 0;
 window.hold = 0;
 window.translate = 0;
+window.ticks = 0;
 
 
 $(document).ready(function(){

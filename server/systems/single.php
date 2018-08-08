@@ -186,37 +186,44 @@ class Single {
 		);
 	}
 
-	public function determineCrit($new, $old, $turn){
+
+	public function getCritTresh(){
+		return 0.15;
+	}
+
+	public function determineCrit($dmg, $turn){
 		if ($this->destroyed){return;}
+		if (!$dmg->new){return;}
 
-		Debug::log("checkDropoutCrits ".get_class($this)." #".$this->id.", new: ".$new.", old: ".$old);
-
-		if (!$new){return;}
+		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old);
 
 		$effects = $this->getValidEffects();
 
-		$newRelDmg = round($new/(1-$old), 2);
+		$newRelDmg = round($dmg->new/(1-$dmg->old), 2);
 		Debug::log("newRelDmg: ".$newRelDmg);
 
-		if ($newRelDmg < 0.15){return;}
+		if ($newRelDmg < $this->getCritTresh()){return;}
 		$newRelDmg = 1-$newRelDmg;
 		$chance = round((1 - ($newRelDmg*$newRelDmg))*100);
 		$roll = mt_rand(0, 100);
 
-		if ($roll > $chance){
-			Debug::log("SUCCESS, roll: ".$roll.", chance: ".$chance); return;
-		} else Debug::log("FAIL, roll: ".$roll.", chance: ".$chance);
+		if ($roll > $chance){return;}
+		//if ($roll > $chance){
+		//	Debug::log("SUCCESS, roll: ".$roll.", chance: ".$chance); return;
+		//} else Debug::log("FAIL, roll: ".$roll.", chance: ".$chance);
 
 		$roll = mt_rand(0, 100);
-		$magnitude = $roll + ($new + $old)*100;
+		$magnitude = $roll + ($dmg->new + $dmg->old)*100;
 
-		if ($magnitude  < $effects[0][1]){return;}
+		Debug::log("roll: ".$roll.", total magnitude: ".$magnitude);
+
+		if ($magnitude < $effects[0][1]){return;}
 
 		for ($i = sizeof($effects)-1; $i >= 0; $i--){
 			if ($magnitude < $effects[$i][1]){continue;}
-			$value = 0.00;
 
-			Debug::log("roll: ".$roll.", total magnitude: ".$magnitude.", crit: ".$effects[$i][0]);
+			Debug::log("crit: ".$effects[$i][0].", value: ".$value);
+			
 			$this->crits[] = new Crit(
 				sizeof($this->crits)+1, $this->parentId, $this->id, $turn,
 				$effects[$i][0], $effects[$i][2], $value, 1

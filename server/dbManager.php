@@ -453,8 +453,8 @@
 			$this->updateFocusValues(array($data));
 		}
 
-		public function updateCommandState($data){
-			//Debug::log("updateCommandState:".$data["commandChange"]["new"].", ".$data["turn"]);
+		public function updateCommandUnit($data){
+			//Debug::log("updateCommandUni:".$data["commandChange"]["new"].", ".$data["turn"]);
 			//$_POST["userid"], $_POST["gameid"], $_POST["commandChange"]["old"], $_POST["commandChange"]["new"
 
 			$stmt = $this->connection->prepare("
@@ -467,17 +467,7 @@
 
 			$stmt->bindValue(":id", $data["commandChange"]["new"]);
 			$stmt->bindValue(":turn", ($data["turn"]+1));
-			//Debug::log("executing");
 			$stmt->execute();
-
-			//Debug::log($stmt->errorCode());
-
-			return;
-
-
-			$sql = "SELECT * FROM units where id = ".$id;
-			//Debug::log($sql);
-			$result = $this->query($sql);
 		}
 
 		public function updateFocusValues($data){

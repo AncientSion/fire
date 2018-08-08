@@ -1101,11 +1101,11 @@ Ship.prototype.getPowerOrders = function(){
 Ship.prototype.switchDiv = function(){
 	if (this.selected){
 		game.zIndex++;
-		$(this.element).removeClass("disabled").css("zIndex", game.zIndex);
+		$(this.element).removeClass("disabled").css("zIndex", game.zIndex).find(".commandContainer").show();
 	}
 	else if ($(this.element).hasClass("disabled")){
 		game.zIndex++;
-		$(this.element).removeClass("disabled").css("zIndex", game.zIndex);
+		$(this.element).removeClass("disabled").css("zIndex", game.zIndex).find(".commandContainer").hide();
 	}
 	else {
 		game.zIndex--;
@@ -1315,6 +1315,7 @@ Ship.prototype.getParent = function(){
 }
 
 Ship.prototype.setUnitState = function(){
+	//console.log("setUnitState " + this.id)
 	if (this.userid == game.userid){
 		this.friendly = 1;
 	}
@@ -1449,13 +1450,13 @@ Ship.prototype.setSubSystemState = function(){
 }
 
 Ship.prototype.setStringHitChance = function(){
-	console.log("setStringHitChance #" + this.id);
+	//console.log("setStringHitChance #" + this.id);
 	if (this.squad){return Mixed.prototype.setStringHitChance.call(this); }
 	this.stringHitChance = Math.floor(this.baseHitChance * this.profile[0]) + " - " + Math.floor(this.baseHitChance * this.profile[1]) + "%"
 }
 
 Ship.prototype.getStringHitChance = function(){
-	console.log("getStringHitChance #" + this.id);
+	//console.log("getStringHitChance #" + this.id);
 	return this.stringHitChance;
 }
 
@@ -1522,25 +1523,30 @@ Ship.prototype.createMoraleLogEntry = function(){
 	 //Math.floor(fire.damages[i].notes[1].slice(1, fire.damages[i].notes[1].length)) + ", ";
 
 
-	console.log(morale);
+	//console.log(morale);
 	
-	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Severe damage forces " + this.getLogTitleSpan() + " into a failed morale check (roll: " + morale + ") </br>";
+	//var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Severe damage forces " + this.getLogTitleSpan() + " into a failed morale check (roll: " + morale + ") </br>";
+	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Severe damage forces " + this.getLogTitleSpan() + " into a morale check.</br>";
 
 	//console.log(this.notes);
 
-
+	var effect = 0;
 	if (this.status == "jumpOut"){
 		html += "The unit <span class='yellow'> is routed</span>.</td>";
+		effect = 1;
 	}
 	else {
 		var command = this.getSystemByName("Command");
 		for (var i = 0; i < command.crits.length; i++){
 			if (command.crits[i].turn != game.turn || command.crits[i].duration != -1){continue;}
 			html += "The unit suffers a permanent <span class='yellow'>" + command.crits[i].value + "% Morale penalty</span>.</td>";
+			effect = 1;
 		}
 	}
 
-
+	if (!effect){
+		html += "The unit however suffers no penalty for now.</td>";
+	}
 
 	// else html += "The unit <span class='yellow'>passes</span> (roll: " + this.notes + ").</td>";
 	
@@ -2386,7 +2392,7 @@ Ship.prototype.addFocusDiv = function(div){
 		.append(
 			$("<input>")
 			.attr("type", "button")
-			.attr("value", "Assign Focus (" + this.getFocusCost()+")")
+			.attr("value", "Assign Focus (cost: " + this.getFocusCost()+")")
 			.hide()
 			.click(function(){
 				game.getUnit($(this).parent().parent().data("shipId")).setUnitFocus();
@@ -2414,8 +2420,8 @@ Ship.prototype.addCommandDiv = function(div){
 	if (!this.friendly){return;}
 	if (game.phase == -2){return;}
 	//if (game.phase != 3){return;}
-	if (!game.hasNoCommandUnit()){return;}
-	if (!game.canSetNewCommandUnit()){return;}
+	//if (!game.hasNoCommandUnit()){return;}
+	//if (!game.canSetNewCommandUnit()){return;}
 
 	$(div).append(
 		$("<div>")
@@ -2423,15 +2429,16 @@ Ship.prototype.addCommandDiv = function(div){
 		.append(
 			$("<input>")
 			.attr("type", "button")
-			.attr("value", "Assign Fleet Command ( +" + this.getFocusIfCommand() + " / Turn)")
+			.attr("value", "Assign Fleet Command (+" + this.getFocusIfCommand() + " / turn)")
 			.hide()
 			.click(function(){
-				game.getUnit($(this).parent().parent().data("shipId")).setCommand();
+				popup("Reallocation Fleet Command will set saved Focus Points to 0 at end of turn.</br>Please confirm your order.</br><input type='button' class='popupEntryConfirm' value='Confirm Transfer' onclick='game.getUnit(aUnit).setCommand()'>");
+				//game.getUnit($(this).parent().parent().data("shipId")).setCommand();
 			})
 		)
 		.append(
 			$("<div>")
-			.html("Acts as Fleet Command")
+			.html("Active Fleet Command (+" + this.getFocusIfCommand() + " / turn)")
 			.addClass("commandEntry")
 			.hide()
 		)
@@ -2473,9 +2480,10 @@ Ship.prototype.setCommand = function(){
 		if (!game.ships[i].friendly || game.ships[i].flight || game.ships[i].salvo){continue;}
 		game.ships[i].command = 0;
 		game.commandChange.old = game.ships[i].id;
-		$(game.ships[i].element).find(".commandContainer")
-		.find("input").show().end()
-		.find(".commandEntry").hide().end();
+		$(game.ships[i].element)
+			.find(".commandContainer")
+			.find("input").show().end()
+			.find(".commandEntry").hide().end();
 	}
 
 	this.command = game.turn + 1;
@@ -2493,7 +2501,8 @@ Ship.prototype.setCommand = function(){
 		}
 	}
 
-	game.setFocusInfo()
+	$("#instructWrapper").hide();
+	game.setFocusInfo();
 }
 
 Ship.prototype.getFocusCost = function(){

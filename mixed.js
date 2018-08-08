@@ -397,6 +397,7 @@ Mixed.prototype.canUndoShortenTurn = function(){
 }
 
 Mixed.prototype.create = function(){
+	this.setUnitState();
 	this.setSubUnitStatus();
 	this.setStringHitChance();
 }

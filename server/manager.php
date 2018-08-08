@@ -87,7 +87,7 @@
 		//$this->testMorale();
 		//return;
 
-		if (!$this->settings->turn){return false;}
+		if (!$this->settings || !$this->settings->turn){return false;}
 		
 		$data = array(
 			"id" => $this->gameid,
@@ -1474,41 +1474,7 @@
 		}
 
 		if (sizeof($data)){DBManager::app()->updateFocusValues($data);}
-	}
-			
-	public function getNewFocusValue($playerstatus, $unit){
-		Debug::log("getNewFocusValue turn:".$this->turn.", phase: ".$this->phase);	
-		if ($unit->isDestroyed() || $unit->status == "jumpOut"){
-			Debug::log("kill/flee!");
-			$curFocus = 0; $gainFocus = 0; $maxFocus = 0;
-		}
-		else {
-			$output = 100;
-			if (get_class($unit) == "Squadron"){
-			}
-			else {
-				$command = $unit->getSystemByName("Command");
-				$output += $command->getCrewEffect() * $command->getCrewLevel();
-				$output -= $command->getCritMod("Morale", $this->turn);
-			}
-
-			$baseGain = floor($this->settings->pv / 100 * $this->settings->focusMod);
-			$commandRating = ($unit->baseFocusRate + $unit->modFocusRate);
-			$gainFocus = floor($baseGain / 10 * $commandRating / 100 * $output);
-
-			Debug::log("basegain: ".$baseGain.", commandRating: ".$commandRating.", command: ".$unit->name.", output: ".$output.", gain: ".$gainFocus);
-
-			$curFocus = $playerstatus["curFocus"];
-		}
-
-		return 
-			array(
-				"id" => $playerstatus["id"],
-				"curFocus" => $curFocus,
-				"gainFocus" => $gainFocus, 
-				"maxFocus" => $gainFocus * 4
-			);
-	}
+	}		
 
 	public function setPostFireFocusValues(){
 		//Debug::log("setPostFireFocusValues");
@@ -1545,6 +1511,46 @@
 		}
 
 		if (sizeof($data)){DBManager::app()->updateFocusValues($data);}
+	}
+
+	public function getNewFocusValue($playerstatus, $unit){
+		Debug::log("getNewFocusValue turn:".$this->turn.", phase: ".$this->phase);
+
+		$curFocus; $gainFocus;
+
+		if ($unit->isDestroyed() || $unit->status == "jumpOut"){
+			Debug::log("kill/flee!");
+			$curFocus = 0; $gainFocus = 0;
+		}
+		else {
+			if ($this->phase == 3 && $game->turn > 1 && $unit->command == $this->turn+1){
+				Debug::log("Command has been transfered!");
+				$playerstatus["curFocus"] = 0;
+			}
+
+
+			$output = 100;
+
+			$command = $unit->getSystemByName("Command");
+			$output += $command->getCrewEffect() * $command->getCrewLevel();
+			$output -= $command->getCritMod("Morale", $this->turn);
+
+			$baseGain = floor($this->settings->pv / 100 * $this->settings->focusMod);
+			$commandRating = ($unit->baseFocusRate + $unit->modFocusRate);
+
+			$curFocus = $playerstatus["curFocus"];
+			$gainFocus = floor($baseGain / 10 * $commandRating / 100 * $output);
+
+			Debug::log("basegain: ".$baseGain.", commandRating: ".$commandRating.", command: ".$unit->name.", output: ".$output.", gain: ".$gainFocus);
+		}
+
+		return 
+			array(
+				"id" => $playerstatus["id"],
+				"curFocus" => $curFocus,
+				"gainFocus" => $gainFocus, 
+				"maxFocus" => $gainFocus * 4
+			);
 	}
 
 	public function handleResolvedFireData(){
