@@ -1780,7 +1780,7 @@ function Weapon(system){
 	this.loaded;
 	this.fireOrders = [];
 	this.mount;
-	this.exploSize = 2+((this.minDmg+this.maxDmg)/30) * (1+(3*(this.fireMode == "Flash")));
+	this.exploSize = 2+((this.minDmg+this.maxDmg)/30) * (1+(1*(this.fireMode == "Flash")));
 	this.odds = 0;
 }
 Weapon.prototype = Object.create(System.prototype);
@@ -2034,26 +2034,20 @@ Weapon.prototype.getSysDiv = function(){
 	}
 	
 	$(table).append($("<tr>").append($("<td>").html("Loading")).append($("<td>").addClass("loading").html(this.getTimeLoaded() + " / " + this.reload)));
+	if (this.traverse >= 0){$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + getUnitType(this.getTraverseRating()))));}
 
 	if (this.fireMode == "Laser"){
-		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + getUnitType(this.getTraverseRating()))));
 		$(table).append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").html(this.optRange + "px")));
 		$(table).append($("<tr>").append($("<td>").html("Damage loss")).append($("<td>").html(this.getDmgLoss(this.optRange+100) + "% per 100px")));
-		$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html(this.getAccuracy() + "% per 100px")));
 	}
-	else {
-		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + getUnitType(this.getTraverseRating()))));
+	else if (!this.tiny && this.fireMode == "Plasma"){
+		$(table).append($("<tr>").append($("<td>").html("Damage loss")).append($("<td>").html(this.getDmgLoss(100) + "% per 100px")));
+	}
 
-		if (!this.tiny){
-			if (this.dmgType == "Plasma"){
-				$(table).append($("<tr>").append($("<td>").html("Damage loss")).append($("<td>").html(this.getDmgLoss(100) + "% per 100px")));
-			}
-			$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").html(this.getAccuracy() + "% per 100px")));
-		}
-	}
+
+	if (this.accDecay){$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").html(this.getAccuracy() + "% per 100px")));}
 
 	if (this.linked > 1){
-		//$(table).append($("<tr>").append($("<td>").html("Linked Shots")).append($("<td>").html(this.linked + " x " + this.shots)));
 		$(table).append($("<tr>").append($("<td>").html("Linked Guns")).append($("<td>").html(this.linked)));
 	}
 	
@@ -2062,13 +2056,14 @@ Weapon.prototype.getSysDiv = function(){
 	}
 	else if (this.fireMode == "Pulse"){
 			$(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots())));
-			//$(table).append($("<tr>").append($("<td>").html("Base / Max Hits")).append($("<td>").html(this.basePulses + " / " + (this.basePulses + this.extraPulses))));
-			//$(table).append($("<tr>").append($("<td>").html("Bonus Hits")).append($("<td>").html(" +1 per " + this.grouping + "%")));
 			$(table).append($("<tr>").append($("<td>").html("Volley")).append($("<td>").html(this.basePulses + "+1 (max " + (this.basePulses+this.extraPulses)  +") per " + this.grouping + "%")))
-	} else $(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots())));
+	}
+	else if (this.area){
+	}
+	else $(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots())));
 
 	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));
-	if (!this.tiny){$(table).append($("<tr>").append($("<td>").html("Priority (low->early)")).append($("<td>").html(this.priority)));}
+	if (this.priority){$(table).append($("<tr>").append($("<td>").html("Priority (low->early)")).append($("<td>").html(this.priority)));}
 
 	div.appendChild(table);
 	this.attachSysNotes(div);
@@ -2132,7 +2127,7 @@ Weapon.prototype.getAccuracy = function(){
 Weapon.prototype.getDmgString = function(){
 	var mod = this.getDamage();
 
-	if (this.minDmg == this.maxDmg){
+	if (!this.maxDmg || this.minDmg == this.maxDmg){
 		return Math.floor(this.minDmg * mod);
 	} else return (Math.floor(this.minDmg*mod) + " - " + Math.floor(this.maxDmg*mod));
 }
@@ -3107,6 +3102,7 @@ Launcher.prototype.getTraverseMod = function(target){
 		return Math.max(0, (this.loads[this.ammo].traverse - target.traverse));
 	}
 }
+
 Launcher.prototype.getDmgString = function(){
 	if (this.ammo != -1){
 		return this.loads[this.ammo].systems[0].minDmg + " - " + this.loads[this.ammo].systems[0].maxDmg;
@@ -3342,6 +3338,11 @@ Area.prototype.select = function(){
 	if (!game.monoSystem && game.getUnit(aUnit).hasWeaponsSelected()){return;}
 	Weapon.prototype.select.call(this);
 	game.monoSystem = this.selected;
+}
+
+
+Area.prototype.getDmgString = function(){
+	return Weapon.prototype.getDmgString.call(this) + " per hit";
 }
 
 Area.prototype.getAnimation = function(fire){
@@ -3602,7 +3603,7 @@ Area.prototype.hasEvent = function(){
 }
 
 
-Area.prototype.getSysDiv = function(){
+Area.prototype.geftSysDiv = function(){
 	var div = document.createElement("div");
 		div.id = "sysDiv";
 	var table = document.createElement("table");

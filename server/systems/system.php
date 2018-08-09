@@ -40,16 +40,17 @@ class System {
 	public $notes = array();
 	public $emDmg = 0;
 	public $loadout = 0;
+	public $dmgs = array();
 
 	function __construct($id, $parentId, $output = 0, $width = 1){
-		$this->id = $id;
+	$this->id = $id;
 		$this->parentId = $parentId;
 		$this->output = $output;
 		$this->width = $width;
 	}
 
 	static function setStaticPriority($val){
-		static::$prio = $val;
+		static::$prio = $val+1;
 	}
 
 	public function setState($turn, $phase){

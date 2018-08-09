@@ -75,10 +75,6 @@ class Squaddie extends Single {
 		return $this->baseHitChance;
 	}
 
-	public function getOverkillSystem($fire){
-		return false;
-	}
-
 	public function setNegation($main, $armourDmg){
 		$p = 1.25;
 		$this->parentIntegrity = round($main*1.5);

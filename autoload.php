@@ -159,6 +159,8 @@ spl_autoload_register(
 
                 'antimatterconverter' => '/server/systems/weapons/particle.php',
 
+                'mediumshock' => '/server/systems/weapons/particle.php',
+
                 'area' => '/server/systems/weapons/area.php',
                 'energymine' => '/server/systems/weapons/area.php',
                 'graviticmine' => '/server/systems/weapons/area.php',

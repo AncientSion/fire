@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 08. Aug 2018 um 15:29
+-- Erstellungszeit: 09. Aug 2018 um 16:27
 -- Server-Version: 10.1.16-MariaDB
 -- PHP-Version: 7.0.9
 
@@ -159,10 +159,7 @@ CREATE TABLE `fireorders` (
 --
 
 INSERT INTO `fireorders` (`id`, `gameid`, `turn`, `shooterid`, `targetid`, `x`, `y`, `weaponid`, `shots`, `req`, `notes`, `hits`, `resolved`) VALUES
-(1, 1, 1, 1, 2, 120, 161, 6, 0, 0, '', 0, 0),
-(2, 1, 1, 1, 2, 120, 161, 7, 0, 0, '', 0, 0),
-(3, 1, 1, 1, 2, 120, 161, 10, 0, 0, '', 0, 0),
-(4, 1, 1, 1, 2, 120, 161, 11, 0, 0, '', 0, 0),
+(4, 1, 1, 1, 2, 120, 161, 10, 0, 0, '', 0, 0),
 (5, 2, 1, 4, 3, -85, 313, 17, 2, 117, '26;70;', 2, 1),
 (6, 2, 1, 4, 3, -85, 313, 18, 2, 117, '25;63;', 2, 1),
 (7, 2, 1, 5, 3, -90, 318, 6, 1, 118, '33;', 1, 1),

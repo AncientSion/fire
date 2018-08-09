@@ -59,7 +59,7 @@ class Weapon extends System {
 		$mod = $this->getDamageMod($fire);
 		$range = $this->getDmgRangeMod($fire);
 
-		Debug::log("base: ".$base.", bonus: ".$bonus.", mod: ".$mod.", range: ".$range);
+		//Debug::log("base: ".$base.", bonus: ".$bonus.", mod: ".$mod.", range: ".$range);
 		return floor(($base+$bonus)*$mod*$range);
 	}
 	
@@ -71,25 +71,58 @@ class Weapon extends System {
 		return 0;
 	}
 
+
 	public function setFlashData(){
-		$data = array(1, 2, 0, 6, 12, 18, 24);
-		$this->flashDiv = array(40, 60);
+		$data = array(100, 70, 40, 10);
 
 		for ($i = 0; $i < sizeof($data); $i++){
-			$this->dmgs[$i] = $data[$i] * $this->minDmg;
+			$this->dmgs[$i] = floor($data[$i] / 100 * $this->minDmg);
+		}
+
+		$this->notes[] = "Intial hit scores ".$this->dmgs[0]." damage against</br>target main structure";
+		$this->notes[] = "</br><u>Ship</u>";
+		$this->notes[] = "Facing systems are subject to either</br>".$this->dmgs[1].", ".$this->dmgs[2]." or ".$this->dmgs[3]." damage";
+		$this->notes[] = "Armour applies, no Overkill";
+	}
+
+	public function setShockData(){
+		$data = array(1, 2, 0, 5, 10, 15, 20);
+
+		for ($i = 0; $i < sizeof($data); $i++){
+			$this->dmgs[$i] = $data[$i];
+		}
+
+		$this->notes[] = "<u>Salvo</u>: $data[0] hit each";
+		$this->notes[] = "<u>Flight</u>: $data[1] hits each";
+		$this->notes[] = "<u>Squadron</u>: $data[3] hits each";
+
+		$html = "<u>Ship target</u></br>";
+		$html .= "Scores $data[4] (+ ".floor($data[5]-$data[4])." per size) hits each</br>";
+		$html .= "Facing systems are subject to 1-2 hits each.";	
+		$this->notes[] = $html;
+		$this->notes[] = "Armour applies, no Overkill";
+	}
+
+	public function setShdockData(){
+		$data = array(1, 2, 0, 5, 10, 15, 20);
+
+		for ($i = 0; $i < sizeof($data); $i++){
+			$this->dmgs[$i] = floor($data[$i] / 100 * $this->minDmg);
 		}
 		
-		$this->notes[] = "<u>Salvo</u>: ".$this->dmgs[0]." dmg / unit";
-		$this->notes[] = "<u>Flight</u>: ".$this->dmgs[1]." dmg / unit";
-		$this->notes[] = "<u>Squadron</u>: ".$this->dmgs[3]." dmg / unit";
+		$this->notes[] = "<u>Salvo</u>: ".$data[0]."% / ".$this->dmgs[0]." hit each";
+		$this->notes[] = "<u>Flight</u>: ".$data[1]."% / ".$this->dmgs[1]." hits each";
+		$this->notes[] = "<u>Squadron</u>: ".$data[3]."% / ".$this->dmgs[3]." hits each";
 
-		$html = "<u>Ship</u></br>";
+		$values = array(200, 50);
+
+		$html = "<u>Ship target</u></br>";
 		$html .= $this->dmgs[4]." (+".floor($this->dmgs[4]*0.5)." per target size) damage</br>";
-		$html .= $this->flashDiv[1]."% evenly divided directed towards each facing system. Overkill fully applies.</br>";
-		$html .= $this->flashDiv[0]."% directed towards main structure</br>";
+		$html .= "Intial hit scores ".$values[0]." damage against</br>target main structure";
+		$html .= "All facing systems are subject to $values[1] damage</br>";
+		$this->notes[] = "Armour applies, no Overkill";
 	
 		$this->notes[] = $html;
-		$this->maxDmg = $this->dmgs[sizeof($this->dmgs)-1];
 	}
 
 	public function setAntimatterData(){		

@@ -80,6 +80,36 @@ class MediumParticle extends LightParticle {
 	}
 }
 
+class MediumShock extends Particle {
+	public $name = "MediumShock";
+	public $display = "MediumShock";
+	public $fireMode = "Shockwave";
+	public static $prio = 0;
+	public $minDmg = 20;
+	public $maxDmg = 20;
+	public $accDecay = 120;
+	public $shots = 1;
+	public $reload = 3;
+	public $integrity = 36;
+	public $powerReq = 3;
+	public $traverse = 3;
+	public $effiency = 3;
+
+	public $animColor = "orange";
+	public $projSize = 3;
+	public $projSpeed = 7;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+		$this->notes = array("Area of Effect");
+        $this->setShockData();
+	}
+
+	public function getMultiShotHits($fire){
+		return $this->dmgs[$fire->target->traverse];
+	}
+}
+
 class HeavyParticle extends MediumParticle {
 	public $name = "HeavyParticle";
 	public $display = "Heavy Particle Cannon";
@@ -193,10 +223,6 @@ class AntimatterConverter extends Particle {
 		parent::__construct($id, $parentId, $start, $end, $output, $width);
         $this->setFlashData();
         $this->setAntimatterData();
-	}
-
-	public function getBaseDamage($fire, $hit){
-		return DmgCalc::getFlashBaseDamage($fire, $hit);
 	}
 
 	public function getBonusDamage($fire, $baseDmg, $hit){

@@ -790,6 +790,7 @@ class Ship {
 	}
 
 	public function getOverkillSystem($fire){
+		if (!$this->ship || $fire->weapon->fireMode == "Showckwave"){return false;}
 		return true;
 	}
 

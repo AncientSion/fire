@@ -20,7 +20,7 @@ class Plasma extends Weapon {
 		$boost = (100 + ($this->getBoostEffect("Damage loss") * $this->getBoostLevel($fire->turn))) / 100;
 		$loss = $fire->dist * ($this->dmgLoss * $boost) / 10000;
 
-		Debug::log(get_class($this).", weapon id: ".$this->id.", boost: ".$boost.", final multi: ".(1-$loss));
+		//Debug::log(get_class($this).", weapon id: ".$this->id.", boostMod: ".$boost.", final multi: ".(1-$loss));
 		return 1-$loss;
 	}
 }
@@ -124,7 +124,8 @@ class MagCompressor extends Plasma {
 	public $usage = 2;
 	public $freeAim = 0;
 	public static $prio = 0;
-	public $minDmg = 11;
+	public $minDmg = 80;
+	public $maxDmg = 80;
 	public $accDecay = 120;
 	public $dmgLoss = 8;
 	public $shots = 1;
@@ -135,16 +136,11 @@ class MagCompressor extends Plasma {
 	public $integrity = 54;
 	public $powerReq = 6;
 	public $traverse = 5;
-	public $dmgs = array();
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $start, $end, $output, $width);
 		$this->boostEffect = array();
-        $this->setFlashData();
-	}
-
-	public function getBaseDamage($fire, $hit){
-		return DmgCalc::getFlashBaseDamage($fire, $hit);
+		$this->setFlashData();
 	}
 }
 

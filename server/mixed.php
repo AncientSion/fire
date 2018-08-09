@@ -111,10 +111,6 @@ class Mixed extends Ship {
 		return $crits;
 	}
 
-	public function getOverkillSystem($fire){
-		return false;
-	}
-
 	public function addCritDB($crits){
 		for ($i = 0; $i < sizeof($crits); $i++){
 			for ($j = 0; $j < sizeof($this->structures); $j++){

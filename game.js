@@ -2207,12 +2207,11 @@ function Game(data){
 		for (var i = 0; i < this.fireOrders.length; i++){
 			this.fireOrders[i].anim = this.fireOrders[i].weapon.getAnimation(this.fireOrders[i]);
 			this.fireOrders[i].createCombatLogEntry();
+			this.fireOrders[i].setNumberAnim();
 			//console.log(this.fireOrders[i].weapon.priority);
 		}
 
-		/*
-
-		usort($this->fires, function($a, $b){
+		/*	usort($this->fires, function($a, $b){
 			if ($a->targetid != $b->targetid){
 				return $a->targetid - $b->targetid;
 			}
@@ -2220,34 +2219,7 @@ function Game(data){
 				return $a->weapon->priority - $b->weapon->priority;
 			}
 			else return $a->shooterid - $b->shooterid;
-		});
-	*/
-
-
-		for (var i = 0; i < this.fireOrders.length; i++){
-			var last;
-			for (var j = 0; j < this.fireOrders[i].anim.length; j++){
-				for (var k = 0; k < this.fireOrders[i].anim[j].length; k++){
-					if (this.fireOrders[i].anim[j][k].h){
-						last = this.fireOrders[i].anim[j][k];
-					}
-				}
-			}
-
-
-			if (last){
-				var armour = this.fireOrders[i].tr.find("td").eq(6).html();
-				var system = this.fireOrders[i].tr.find("td").eq(7).html();
-				var hull = this.fireOrders[i].tr.find("td").eq(8).html();
-
-				last.float =
-					{
-						armour: armour,
-						system: system,
-						hull: hull,
-					}
-			}
-		}
+		});	*/
 
 		//for (var i = 0; i < this.fireOrders.length; i++){
 		//	console.log(this.fireOrders[i].weapon.priority);

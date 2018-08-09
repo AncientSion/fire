@@ -921,6 +921,31 @@ function FireOrder(data){
 	this.systems = [];
 	this.animating = 0;
 	this.tr = false;
+	this.float = false;
+}
+
+FireOrder.prototype.setNumberAnim = function(){
+	var last;
+	for (var i = 0; i < this.anim.length; i++){
+		for (var j = 0; j < this.anim[i].length; j++){
+			if (this.anim[i][j].h){
+				last = this.anim[i][j];
+			}
+		}
+	}
+
+	if (last){
+		var armour = this.tr.find("td").eq(6).html();
+		var system = this.tr.find("td").eq(7).html();
+		var hull = this.tr.find("td").eq(8).html();
+
+		last.float =
+			{
+				armour: armour,
+				system: system,
+				hull: hull,
+			}
+	}
 }
 
 FireOrder.prototype.createCombatLogEntry = function(){
@@ -1014,7 +1039,6 @@ FireOrder.prototype.addLogStartEntry = function(log){
 		em += this.damages[i].emDmg
 	}
 
-
 	var tr = $("<tr>");
 	this.tr = tr;
 	var index = $(log).children().length;
@@ -1036,6 +1060,7 @@ FireOrder.prototype.addLogStartEntry = function(log){
 
 		game.redraw();
 		game.fireOrders[i].anim = game.fireOrders[i].weapon.getAnimation(game.fireOrders[i]);
+		game.fireOrders[i].setNumberAnim();
 		$(fxCanvas).css("opacity", 1);
 		game.animateSingleFireOrder(i, 0)
 	})

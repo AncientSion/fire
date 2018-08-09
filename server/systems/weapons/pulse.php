@@ -15,6 +15,10 @@ class Pulse extends Weapon {
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
+
+	public function getMultiShotHits($fire){
+		return $this->basePulses + min($this->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $this->grouping));
+	}
 }
 
 class LightPulse extends Pulse {

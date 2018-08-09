@@ -263,7 +263,7 @@ function drawProjectile(weapon, anim){
 	if (anim.n >= anim.m && anim.h){
 		anim.p = 1;
 		anim.n = 0;
-		anim.m = 36;
+		anim.m = 42;
 	}
 }
 
@@ -398,7 +398,7 @@ function drawExplosion(weapon, anim){  // 150, 150, 30
 
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z)
-	fxCtx.globalAlpha = 1.5 - fraction;
+	fxCtx.globalAlpha = 1.2 - fraction;
 
 	var outer = "";
 	var mid = "";

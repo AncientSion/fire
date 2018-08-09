@@ -26,7 +26,8 @@ class Vorchan extends Light {
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new LightPlasma($this->getId(), $this->parentId, 315, 45);
+		//$right->systems[] = new LightPlasma($this->getId(), $this->parentId, 315, 45);
+		$right->systems[] = new MagCompressor($this->getId(), $this->parentId, 315, 45);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
