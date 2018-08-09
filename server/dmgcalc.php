@@ -187,12 +187,12 @@ class DmgCalc {
 		$armour = 0;
 		$em = 0;
 
-		$name = get_class($system);
-		$hits = $fire->weapon->basePulses + min($fire->weapon->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $fire->weapon->grouping));
-		//$hits = $fire->weapon->getMultiShotHits($fire);
+		//$name = get_class($system);
+		//$hits = $fire->weapon->basePulses + min($fire->weapon->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $fire->weapon->grouping));
+		$hits = $fire->weapon->getMultiShotHits($fire, $system);
 		$dmg->notes .= ("v".$hits.";");
 
-		Debug::log("fire #".$fire->id.", doPulseDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".$name.", hits: ".$hits.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"].", armourDmg: ".$dmg->armourDmg);
+		Debug::log("fire #".$fire->id.", doPulseDmg, weapon: ".$fire->weapon->name.", target #".$fire->target->id."/".$system->id."/".$system->name.", hits: ".$hits.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"].", armourDmg: ".$dmg->armourDmg);
 
 		/*if ($negation["bonus"] > 1){
 			Debug::log("PulseDmg:</br>");
@@ -320,7 +320,6 @@ class DmgCalc {
 		Debug::log("fire #".$fire->id.", doFlashDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".get_class($system).", baseDmg: ".$baseDmg);
 
 		static::doStandardDmg($fire, $hit, $system);
-		static::doDmg($fire, $hit, $system);
 
 		if (!$fire->target->ship){return;}
 
@@ -330,7 +329,7 @@ class DmgCalc {
 		$index = 1;
 
 		for ($i = 0; $i < sizeof($secondary); $i++){
-			$fire->hits++;
+			//$fire->hits++;
 			$system = $secondary[$i];
 			$remInt = $system->getRemIntegrity();
 			$destroyed = 0;
@@ -369,20 +368,18 @@ class DmgCalc {
 
 
 		Debug::log("fire #".$fire->id.", doShockDamage, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id.", baseDmg: ".$totalDmg);
+		
+		if ($fire->target->ship){
+			static::doPulseDmg($fire, $hit, $fire->target->primary);
+		}
 
 		$targets = $fire->target->getFlashTargets($fire);
-		$hits = $fire->weapon->getMultiShotHits($fire);
 
 		for ($i = 0; $i < sizeof($targets); $i++){
-			Debug::log("doing ".$hits." hits to ".$targets[$i]->name);
+			static::doPulseDmg($fire, $hit, $targets[$i]);
 		}
-
 			
-		if ($fire->target->ship){
-			$hits = $fire->weapon->getMultiShotHits($fire);
-			Debug::log("doing ".$hits." hits to ".$targets[$i]->name);
-			static::doPulseDmg($fire, $hit, $system);
-		}
+		return true;
 
 	}
 

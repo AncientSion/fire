@@ -23,7 +23,9 @@ class Area extends Weapon {
 		$this->armour = floor($rem * $this->armourMod);
 	}
 
-	public function getMultiShotHits($fire){
+	public function getMultiShotHits($fire, $element){
+		//Debug::log("getMultiShotHits versus ".$element->name.", system ? :".$element->system);
+		if ($element->system){return $this->dmgs[1];}
 		return $this->dmgs[$fire->target->traverse];
 	}
 }
@@ -32,7 +34,8 @@ class EnergyMine extends Area {
 	public $name = "EnergyMine";
 	public $display = "Energy Mine";
 	public static $prio = 0;
-	public $minDmg = 20;
+	public $minDmg = 22;
+	public $maxDmg = 22;
 	public $animColor = "blue";
 	public $projSize = 3;
 	public $projSpeed = 5;

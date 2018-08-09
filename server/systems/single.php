@@ -30,6 +30,7 @@ class Single {
 	public $traverse = 0;
 	public $index = 0;
 	public $emDmg = 0;
+	public $system = false;
 	public $dropout = array(15, 0);
 
 

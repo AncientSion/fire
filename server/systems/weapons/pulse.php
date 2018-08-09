@@ -16,7 +16,7 @@ class Pulse extends Weapon {
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 
-	public function getMultiShotHits($fire){
+	public function getMultiShotHits($fire, $element){
 		return $this->basePulses + min($this->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $this->grouping));
 	}
 }

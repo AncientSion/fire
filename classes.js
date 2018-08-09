@@ -692,7 +692,7 @@ Single.prototype.getSysDiv = function(){
 			.append($("<tr>").append($("<td>").html("Acceleration")).append($("<td>").html(this.baseImpulse)))
 			.append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html("<span class='yellow'>" + this.getEMDmg() + "<span>")))
 			.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
-			.append($("<tr>").append($("<td>").attr("colSpan", 2).html("Subject to dropout testing if damaged for more than 15 % of remaining HP in a single turn"))))
+			.append($("<tr>").append($("<td>").attr("colSpan", 2).html("Subject to dropout testing if damaged for more than "+this.dropout[0]+"% of remaining HP in a single turn"))))
 
 
 	this.attachSysNotes(div);
@@ -1145,9 +1145,14 @@ FireOrder.prototype.assembleDmgData = function(){
 		}
 		else dmgs[this.damages[i].system] = [0, 0, 1, 0, 0, 0, ""]; // new system entry
 
-		if (this.grouping && this.damages[i].notes[1][0] == "v"){ // pulse volley 
-			dmgs[this.damages[i].system][6] += Math.floor(this.damages[i].notes[1].slice(1, this.damages[i].notes[1].length)) + ", ";
+		if (this.groupin || this.weapon.fireMode == "Shockwave"){ // multi hit weapons
+			for (var j = 0; j < this.damages[i].notes.length; j++){
+				if (this.damages[i].notes[j][0] == "v"){
+					dmgs[this.damages[i].system][6] += Math.floor(this.damages[i].notes[j].slice(1, this.damages[i].notes[j].length)) + ", ";
+				}
+			}
 		}
+
 		
 		if (this.damages[i].destroyed){ // kill
 			dmgs[this.damages[i].system][0]++;
@@ -1163,7 +1168,7 @@ FireOrder.prototype.assembleDmgData = function(){
 
 	}
 
-	if (this.grouping){
+	if (this.groupin || this.weapon.fireMode == "Shockwave"){ // multi hit weapons
 		for (var i in dmgs){
 			dmgs[i][6] = " (" + (dmgs[i][6].slice(0, dmgs[i][6].length-2)) + ")";
 		}

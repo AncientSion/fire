@@ -85,8 +85,8 @@ class MediumShock extends Particle {
 	public $display = "MediumShock";
 	public $fireMode = "Shockwave";
 	public static $prio = 0;
-	public $minDmg = 20;
-	public $maxDmg = 20;
+	public $minDmg = 16;
+	public $maxDmg = 18;
 	public $accDecay = 120;
 	public $shots = 1;
 	public $reload = 3;
@@ -105,7 +105,9 @@ class MediumShock extends Particle {
         $this->setShockData();
 	}
 
-	public function getMultiShotHits($fire){
+	public function getMultiShotHits($fire, $element){
+		//Debug::log("getMultiShotHits versus ".$element->name.", system ? :".$element->system);
+		if ($element->system){return $this->dmgs[2];}
 		return $this->dmgs[$fire->target->traverse];
 	}
 }

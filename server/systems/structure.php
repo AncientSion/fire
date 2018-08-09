@@ -151,6 +151,7 @@ class Primary {
 	public $newDmg = 0;
 	public $damaged = 0;
 	public $emDmg = 0;
+	public $system = false;
 
 	function __construct($id, $parentId, $start, $end, $integrity){
 		$this->id = $id;

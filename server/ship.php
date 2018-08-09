@@ -37,6 +37,7 @@ class Ship {
 	public $flight = false;
 	public $salvo = false;
 	public $squad = false;
+	public $system = false;
 	public $traverse = 0;
 	public $mass = 0;
 	public $profile = array();
@@ -790,7 +791,7 @@ class Ship {
 	}
 
 	public function getOverkillSystem($fire){
-		if (!$this->ship || $fire->weapon->fireMode == "Showckwave"){return false;}
+		if (!$this->ship || $fire->weapon->fireMode == "Shockwave"){return false;}
 		return true;
 	}
 

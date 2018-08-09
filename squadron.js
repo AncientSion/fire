@@ -163,10 +163,6 @@ Squadron.prototype.createBaseDiv = function(){
 	}
 }
 
-Squadron.prototype.getFsocusIfCommand = function(){
-	return Math.floor(game.settings.pv / 100 * (this.baseFocusRate + this.modFocusRate));
-}
-
 Squadron.prototype.setSubElements = function(){
 	var w = $($(this.element).find(".structContainer")).width();
 	var h = $($(this.element).find(".structContainer")).height();
@@ -549,7 +545,7 @@ Squadron.prototype.getFireDest = function(fire, isHit, num){
 			y: range(10, 25) * (1-range(0, 1)*2)
 		}
 	}
-	else if (fire.weapon.fireMode == "Flash"){
+	else if (fire.weapon.fireMode == "Shockwave"){
 		return {x: 0, y: 0};
 	}
 	else {

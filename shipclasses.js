@@ -1913,13 +1913,14 @@ Ship.prototype.getRemSpeed = function(){
 	return impulse;
 }
 
-Ship.prototype.getFlasHitSection = function(fire){
+Ship.prototype.getFlashHitSection = function(fire){
 	var o = fire.shooter.getPlannedPos();
 	var t = this.getPlannedPos();
 	var a = getAngleFromTo(o, t) + range(-5, 5);
 	var d = -this.size/3;
 	return getPointInDir(d, a, 0, 0);
 }
+
 
 Ship.prototype.getFireDest = function(fire, isHit, num){
 	if (isHit){return fire.damages[num].loc;}
@@ -1930,14 +1931,6 @@ Ship.prototype.getFireDest = function(fire, isHit, num){
 		var d = this.size * (10-(range(-1, 1)*3))/10;
 		return getPointInDir(d, a, 0, 0);
 	}
-
-	if (!isHit){
-		return {
-			x: ((this.size/2 + (range (0, this.size/6))) * (1-(range(0, 1)*2))),
-			y: ((this.size/2 + (range (0, this.size/6))) * (1-(range(0, 1)*2)))
-		}
-	}
-	return fire.damages[num].loc;
 }
 
 Ship.prototype.getHitSection = function(fire){

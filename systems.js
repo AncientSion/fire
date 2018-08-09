@@ -1780,7 +1780,7 @@ function Weapon(system){
 	this.loaded;
 	this.fireOrders = [];
 	this.mount;
-	this.exploSize = 2+((this.minDmg+this.maxDmg)/30) * (1+(1*(this.fireMode == "Flash")));
+	this.exploSize = 2+((this.minDmg+this.maxDmg)/30) * (1+   (1*(this.fireMode == "Flash")) +(10*(this.fireMode == "Shockwave")));
 	this.odds = 0;
 }
 Weapon.prototype = Object.create(System.prototype);
@@ -1797,6 +1797,18 @@ Weapon.prototype.doUnboost = function(){
 }
 
 Weapon.prototype.getDmgsPerShot = function(fire){
+	if (this.fireMode == "Laser"){
+		if (fire.target.ship){return this.output;}
+		return 1;
+	}
+	else if (this.fireMode == "Flash"){
+		if (fire.target.ship){return 10;}
+		return 1;
+	}
+	else if (this.fireMode == "Shockwave"){
+		if (fire.target.ship){return 10;}
+		return fire.target.structures.length;
+	}
 	return 1;
 }
 
@@ -2307,8 +2319,14 @@ Flash.prototype.getAnimation = function(fire){
 			hit = true;
 		}
 		
-		var dest = fire.target.getFlasHitSection(fire);
-		
+		if (fire.target.ship){
+			dest = fire.target.getFlashHitSection(fire);
+		} 
+		else {
+			var p = fire.target.getPlannedPos();
+			dest = fire.target.getFireDest(fire, hit, hits);
+		}
+	
 		var tx = t.x + dest.x;
 		var ty = t.y + dest.y;
 
@@ -2329,6 +2347,7 @@ Particle.prototype = Object.create(Weapon.prototype);
 
 Particle.prototype.getAnimation = function(fire){
 	if (this.fireMode == "Flash"){return Flash.prototype.getAnimation.call(this, fire);}
+	if (this.fireMode == "ShockWave" && fire.target.ship){return Flash.prototype.getAnimation.call(this, fire);}
 	var allAnims = [];
 	var grouping = 2;
 	var speed = this.projSpeed;
@@ -2506,10 +2525,6 @@ function Laser(system){
 }
 Laser.prototype = Object.create(Weapon.prototype);
 
-Laser.prototype.getDmgsPerShot = function(fire){
-	if (fire.target.ship){return this.output;}
-	return 1
-}
 
 Laser.prototype.getAnimation = function(fire){
 	var allAnims = [];

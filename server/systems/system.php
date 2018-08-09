@@ -41,6 +41,7 @@ class System {
 	public $emDmg = 0;
 	public $loadout = 0;
 	public $dmgs = array();
+	public $system = true;
 
 	function __construct($id, $parentId, $output = 0, $width = 1){
 	$this->id = $id;
