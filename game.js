@@ -950,12 +950,12 @@ function Game(data){
 			}
 		}
 
-		this.createLogEntry("-- Movement Events concluded --");
+		this.createLogEntry("-- Movement concluded --");
 
 		if (this.events.length){
 			if (game.phase == 2){
 				game.timeout = setTimeout(function(){
-					$($("#combatLog").find("td")[0]).attr("colSpan", 8)
+					//$($("#combatLog").find("td")[0]).attr("colSpan", 8)
 					game.resolvePostMoveFire();
 				}, 1000);
 			}
@@ -2018,11 +2018,7 @@ function Game(data){
 
 	this.resolvePostMoveFire = function(){
 		console.log("resolvePostMoveFire");
-		this.getAllResolvingFireOrders();
-		this.getAreaShotDetails();
-		this.getFireAnimationDetails();
-		this.getAllUnitExplos();
-
+		
 		ui.combatLogWrapper
 			.find("#combatLogInnerWrapper").find("#combatLog")
 				.append($("<tr>")
@@ -2033,6 +2029,12 @@ function Game(data){
 				.append($("<th>").html("Armour"))
 				.append($("<th>").html("System"))
 				.append($("<th>").html("Structure")))
+
+		this.getAllResolvingFireOrders();
+		this.getAreaShotDetails();
+		this.getFireAnimationDetails();
+		this.getAllUnitExplos();
+
 
 		this.drawingEvents = 0;
 		this.setFireGlobals();
@@ -3410,7 +3412,7 @@ Game.prototype.doResolveMovement = function(){
 	this.animFlight = 0;
 	this.animSalvo = 0;
 
-	this.doPositionLog("Movement Resolution Log", 600);
+	this.doPositionLog("Movement Log", 600);
 
 	this.animateUnitMovement();
 }

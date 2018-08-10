@@ -38,10 +38,6 @@ class Launcher extends Weapon {
 		else {$this->armourMod =  0.3; $this->mount = "Arm Rail";}
 		$this->armour = floor($rem * $this->armourMod);
 	}
-
-	public function getCritModMax($dmg){
-		return min(15, floor(round((1-$dmg)*10)*10));
-	}
 }
 
 class MissileLauncher extends Launcher {

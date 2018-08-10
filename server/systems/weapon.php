@@ -86,7 +86,7 @@ class Weapon extends System {
 	}
 
 	public function setShockData(){
-		$data = array(1, 2, 3, 6, 10, 14, 18);
+		$data = array(1, 1, 2, 6, 10, 14, 18);
 
 		for ($i = 0; $i < sizeof($data); $i++){
 			$this->dmgs[$i] = $data[$i];

@@ -877,7 +877,10 @@
 		}
 
 		usort($flights, function($a, $b){
-			if ($a->mission->target->flight != $b->mission->target->flight){
+			if ($a->mission->type == 1){
+				return -1;
+			}
+			else if ($a->mission->target->flight != $b->mission->target->flight){
 				return $a->mission->target->flight - $b->mission->target->flight;
 			}
 			else if ($a->mission->target->flight && $b->mission->target->flight){
@@ -892,7 +895,6 @@
 		});
 
 		for ($i = 0; $i < sizeof($flights); $i++){
-			Debug::log($flights[$i]->id);
 			$flights[$i]->setMove($this);
 		}
 

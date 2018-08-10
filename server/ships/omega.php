@@ -25,6 +25,7 @@ class Omega extends SuperHeavy {
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 1200, 21, 5);
 		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 60, array("HeavyLaser", "HeavyPulse"));
+		//$front->systems[] = new EnergyMine($this->getId(), $this->id, 0, 360);
 		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 60, array("HeavyLaser", "HeavyPulse"));
 		$front->systems[] = new Hangar($this->getId(), $this->id, 12, array("Aurora", "Thunderbolt"), 24);
 		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 60, array("HeavyLaser", "HeavyPulse"));

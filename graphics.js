@@ -318,6 +318,8 @@ function drawAreaEffect(weapon, anim){
 	if (fraction > 0.7){
 		fxCtx.globalAlpha = 1 - (fraction-0.7)*3
 	} else fxCtx.globalAlpha = 1;
+
+	drawDamageNumbers(weapon, anim, fraction);
 	
 
 	fxCtx.drawImage(graphics.eMine, anim.tx -size/2, anim.ty -size/2, size, size);
@@ -472,12 +474,15 @@ function drawDamageNumbers(weapon, anim, fraction){
 	fxCtx.font = "14px Arial";
 	fxCtx.textAlign = "center";
 
-	fxCtx.fillStyle = "grey";
-	fxCtx.fillText(anim.float.armour, anim.tx -30, anim.ty - 30 - (20 * fraction));
-	fxCtx.fillStyle = "yellow";
-	fxCtx.fillText(anim.float.system, anim.tx, anim.ty - 30 - (20 * fraction));
-	fxCtx.fillStyle = "red";
-	fxCtx.fillText(anim.float.hull, anim.tx +30, anim.ty - 30 - (20 * fraction));
+	for (var i = 0; i < anim.float.length; i++){
+		fxCtx.fillStyle = "grey";
+		fxCtx.fillText(anim.float[i].armour, anim.float[i].x -30, anim.float[i].y -30 - (20 * fraction));
+		fxCtx.fillStyle = "yellow";
+		fxCtx.fillText(anim.float[i].system, anim.float[i].x, anim.float[i].y -30 - (20 * fraction));
+		fxCtx.fillStyle = "red";
+		fxCtx.fillText(anim.float[i].hull, anim.float[i].x +30, anim.float[i].y -30 - (20 * fraction));
+	}
+
 
 	//fxCtx.translate(cam.o.x, cam.o.y);
 	//fxCtx.scale(cam.z, cam.z);

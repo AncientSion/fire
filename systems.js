@@ -1776,6 +1776,7 @@ function Weapon(system){
 	this.dmgType = system.dmgType;
 	this.dmgLoss = system.dmgLoss;
 	this.melt = system.melt;
+	this.aoe = system.aoe;
 	this.animation = system.animation;
 	this.loaded;
 	this.fireOrders = [];
@@ -1806,7 +1807,7 @@ Weapon.prototype.getDmgsPerShot = function(fire){
 		return 1;
 	}
 	else if (this.fireMode == "Shockwave"){
-		if (fire.target.ship){return 10;}
+		if (fire.target.ship || this.aoe){return 10;}
 		return fire.target.structures.length;
 	}
 	return 1;

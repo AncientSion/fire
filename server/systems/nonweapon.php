@@ -11,6 +11,10 @@ class PrimarySystem extends System {
 	public $hitChance = 0;
 	public $hitPct = 0;
 
+	public function getCritModMax($relDmg){
+		return min(15, round($relDmg*100/5) * 5);
+	}
+
 	public function getCritTresh(){
 		return 0.05;
 	}
@@ -108,10 +112,6 @@ class Command extends PrimarySystem {
 		}
 	}
 
-	public function getCritModMax($dmg){
-		return min(6, round((1-$dmg)*100/2));
-	}
-
 	public function determineCrit($dmg, $turn){
 		if ($this->destroyed){return;}
 		if ($dmg->new <= 0.05){return;}
@@ -149,8 +149,8 @@ class Reactor extends PrimarySystem {
     	$this->output = $this->output + + $use + $add;
     }
 
-	public function getCritModMax($dmg){
-		return min(10, round((1-$dmg)/2));
+	public function getCritModMax($relDmg){
+		return min(10, round($relDmg*100/5) * 5);
 	}
 
 	public function applyPowerSpike($turn, $potential, $em){

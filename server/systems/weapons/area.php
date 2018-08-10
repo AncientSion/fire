@@ -34,8 +34,8 @@ class EnergyMine extends Area {
 	public $name = "EnergyMine";
 	public $display = "Energy Mine";
 	public static $prio = 0;
-	public $minDmg = 22;
-	public $maxDmg = 22;
+	public $minDmg = 20;
+	public $maxDmg = 20;
 	public $animColor = "blue";
 	public $projSize = 3;
 	public $projSpeed = 5;

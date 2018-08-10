@@ -282,8 +282,8 @@ class System {
 		return 0.15;
 	}
 
-	public function getCritModMax($dmg){
-		return min(30, floor(round((1-$dmg)*10)*10));
+	public function getCritModMax($relDmg){
+		return min(30, round($relDmg*100/10) * 10);
 	}
 
 	public function addDamage($dmg){
