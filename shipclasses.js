@@ -2636,7 +2636,7 @@ Ship.prototype.expandDiv = function(div){
 		else if (max == 2){
 			if (extraWidth){
 				if (a == 0 || a == 180){
-					armour.css("width", 80);
+					armour.css("width", 70);
 					armour.css("height", 25);
 				}
 				else {
