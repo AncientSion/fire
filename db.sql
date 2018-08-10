@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 10. Aug 2018 um 14:59
+-- Erstellungszeit: 10. Aug 2018 um 17:59
 -- Server-Version: 10.1.16-MariaDB
 -- PHP-Version: 7.0.9
 
@@ -40,47 +40,6 @@ CREATE TABLE `actions` (
   `costmod` float DEFAULT NULL,
   `resolved` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Daten für Tabelle `actions`
---
-
-INSERT INTO `actions` (`id`, `shipid`, `turn`, `type`, `dist`, `x`, `y`, `a`, `cost`, `delay`, `costmod`, `resolved`) VALUES
-(1, 1, 1, 'deploy', 0, -252, 155, '0.00', 0, 0, 1, 1),
-(2, 2, 1, 'deploy', 0, 240, 167, '180.00', 0, 0, 1, 1),
-(3, 2, 1, 'jumpIn', 0, 240, 167, '0.00', 0, 0, 0, 1),
-(4, 1, 1, 'jumpIn', 0, -252, 155, '0.00', 0, 0, 0, 1),
-(5, 2, 1, 'speed', -1, 240, 167, '0.00', 30, 0, 1, 1),
-(6, 2, 1, 'speed', -1, 240, 167, '0.00', 30, 0, 1, 1),
-(7, 2, 1, 'move', 117, 123, 167, '0.00', 0, 0, 1, 1),
-(8, 1, 1, 'move', 175, -77, 155, '0.00', 0, 0, 1, 1),
-(9, 4, 1, 'deploy', 0, 277, -1, '180.00', 0, 0, 1, 1),
-(10, 5, 1, 'deploy', 0, 295, 325, '180.00', 0, 0, 1, 1),
-(11, 3, 1, 'deploy', 0, -225, 311, '0.00', 0, 0, 1, 1),
-(12, 3, 1, 'jumpIn', 0, -225, 311, '0.00', 0, 0, 0, 1),
-(13, 4, 1, 'jumpIn', 0, 277, -1, '0.00', 0, 0, 0, 1),
-(14, 5, 1, 'jumpIn', 0, 295, 325, '0.00', 0, 0, 0, 1),
-(15, 3, 1, 'move', 140, -85, 311, '0.00', 0, 0, 1, 1),
-(16, 4, 1, 'move', 165, 112, -1, '0.00', 0, 0, 1, 1),
-(17, 5, 1, 'move', 175, 120, 325, '0.00', 0, 0, 1, 1),
-(18, 3, 2, 'turn', 0, -85, 311, '-30.00', 30, 107, 1, 1),
-(19, 3, 2, 'move', 140, 36, 241, '0.00', 0, 0, 1, 1),
-(20, 3, 2, 'turn', 0, 36, 241, '-30.00', 30, 107, 1, 1),
-(21, 4, 2, 'turn', 0, 112, -1, '-30.00', 30, 65, 1, 1),
-(22, 4, 2, 'move', 65, 56, 31, '0.00', 0, 0, 1, 1),
-(23, 4, 2, 'turn', 0, 56, 31, '-30.00', 30, 65, 1, 1),
-(24, 4, 2, 'move', 65, 24, 87, '0.00', 0, 0, 1, 1),
-(25, 4, 2, 'turn', 0, 24, 87, '-25.00', 25, 54, 1, 1),
-(26, 4, 2, 'move', 35, 21, 122, '0.00', 0, 0, 1, 1),
-(27, 5, 2, 'move', 175, -55, 325, '0.00', 0, 0, 1, 1),
-(28, 7, 1, 'deploy', 0, 351, 229, '180.00', 0, 0, 1, 1),
-(29, 6, 1, 'deploy', 0, -355, 244, '0.00', 0, 0, 1, 1),
-(30, 6, 1, 'jumpIn', 0, -355, 244, '0.00', 0, 0, 0, 1),
-(31, 7, 1, 'jumpIn', 0, 351, 229, '0.00', 0, 0, 0, 1),
-(32, 6, 1, 'speed', -1, -355, 244, '0.00', 30, 0, 1, 1),
-(33, 6, 1, 'move', 123, -232, 244, '0.00', 0, 0, 1, 1),
-(34, 7, 1, 'speed', -1, 351, 229, '0.00', 30, 0, 1, 1),
-(35, 7, 1, 'move', 123, 228, 229, '0.00', 0, 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -124,39 +83,6 @@ CREATE TABLE `damages` (
   `new` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Daten für Tabelle `damages`
---
-
-INSERT INTO `damages` (`id`, `fireid`, `gameid`, `shipid`, `structureid`, `systemid`, `turn`, `roll`, `type`, `totalDmg`, `shieldDmg`, `structDmg`, `armourDmg`, `emDmg`, `overkill`, `negation`, `destroyed`, `notes`, `new`) VALUES
-(1, 9, 2, 3, 6, 1, 1, 0, 'Particle', 49, 0, 0, 43, 0, 30, 19, 0, 'p;', 0),
-(2, 5, 2, 3, 26, 1, 1, 0, 'Particle', 35, 0, 0, 19, 0, 16, 19, 0, 'p;', 0),
-(3, 6, 2, 3, 26, 1, 1, 0, 'Particle', 33, 0, 0, 18, 0, 15, 18, 0, 'p;', 0),
-(4, 8, 2, 3, 6, 8, 1, 0, 'Particle', 60, 0, 45, 45, 0, 0, 15, 0, 'p;', 0),
-(5, 10, 2, 3, 6, 9, 1, 0, 'Particle', 51, 0, 42, 34, 0, 0, 9, 0, 'p;', 0),
-(6, 7, 2, 3, 6, 11, 1, 0, 'Particle', 45, 0, 29, 38, 0, 0, 16, 0, 'p;', 0),
-(7, 5, 2, 3, 26, 28, 1, 0, 'Particle', 28, 0, 19, 9, 0, 0, 9, 0, 'p;', 0),
-(8, 6, 2, 3, 26, 28, 1, 0, 'Particle', 35, 0, 9, 8, 0, 18, 8, 1, 'p;o2;', 0),
-(9, 11, 2, 4, 16, 1, 1, 0, 'Pulse', 80, 0, 0, 40, 0, 0, 16, 0, 'b;v5;', 0),
-(10, 12, 2, 4, 16, 1, 1, 0, 'Pulse', 80, 0, 0, 75, 0, 5, 15, 0, 'p;v5;', 0),
-(11, 17, 2, 4, 16, 1, 1, 0, 'Pulse', 80, 0, 0, 60, 0, 20, 12, 0, 'p;v5;', 0),
-(12, 18, 2, 4, 16, 1, 1, 0, 'Pulse', 80, 0, 0, 50, 0, 30, 10, 0, 'p;v5;', 0),
-(13, 19, 2, 4, 16, 1, 1, 0, 'Pulse', 70, 0, 0, 45, 0, 25, 9, 0, 'p;v5;', 0),
-(14, 20, 2, 4, 16, 1, 1, 0, 'Pulse', 80, 0, 0, 40, 0, 40, 8, 0, 'p;v5;', 0),
-(15, 21, 2, 4, 16, 1, 1, 0, 'Pulse', 70, 0, 0, 30, 0, 40, 6, 0, 'p;v5;', 0),
-(16, 22, 2, 4, 16, 1, 1, 0, 'Pulse', 70, 0, 0, 30, 0, 40, 6, 0, 'p;v5;', 0),
-(17, 14, 2, 5, 4, 4, 1, 0, 'Pulse', 75, 0, 0, 55, 0, 20, 11, 0, 'p;v5;', 0),
-(18, 15, 2, 5, 8, 4, 1, 0, 'Pulse', 68, 0, 0, 36, 0, 32, 9, 0, 'p;v4;', 0),
-(19, 16, 2, 5, 4, 4, 1, 0, 'Pulse', 80, 0, 0, 40, 0, 40, 8, 0, 'p;v5;', 0),
-(20, 13, 2, 5, 8, 8, 1, 0, 'Pulse', 75, 0, 0, 55, 0, 20, 11, 0, 'p;v5;', 0),
-(21, 4, 1, 2, 6, 8, 1, 0, 'Particle', 52, 0, 34, 44, 0, 0, 18, 0, 'p;', 0),
-(22, 23, 1, 1, 4, 4, 1, 0, 'Laser', 100, 0, 0, 33, 0, 66, 11, 0, 'p;', 0),
-(23, 24, 1, 1, 4, 4, 1, 0, 'Laser', 102, 0, 0, 30, 0, 72, 10, 0, 'p;', 0),
-(24, 25, 1, 1, 8, 8, 1, 0, 'Pulse', 50, 0, 0, 50, 0, 0, 11, 0, 'b;v5;', 0),
-(25, 26, 1, 1, 8, 8, 1, 0, 'Pulse', 45, 0, 0, 45, 0, 0, 10, 0, 'b;v5;', 0),
-(26, 27, 0, 5, 8, 4, 2, 0, 'Area', 132, 0, 0, 42, 0, 90, 7, 0, 'p;v6;', 0),
-(27, 27, 0, 5, 8, 8, 2, 0, 'Area', 132, 0, 0, 54, 0, 78, 9, 0, 'p;v6;', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -179,36 +105,6 @@ CREATE TABLE `fireorders` (
   `resolved` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Daten für Tabelle `fireorders`
---
-
-INSERT INTO `fireorders` (`id`, `gameid`, `turn`, `shooterid`, `targetid`, `x`, `y`, `weaponid`, `shots`, `req`, `notes`, `hits`, `resolved`) VALUES
-(4, 1, 1, 1, 2, 120, 161, 10, 1, 184, '32;', 1, 1),
-(5, 2, 1, 4, 3, -85, 313, 17, 2, 117, '26;70;', 2, 1),
-(6, 2, 1, 4, 3, -85, 313, 18, 2, 117, '25;63;', 2, 1),
-(7, 2, 1, 5, 3, -90, 318, 6, 1, 118, '33;', 1, 1),
-(8, 2, 1, 5, 3, -90, 318, 7, 1, 118, '63;', 1, 1),
-(9, 2, 1, 5, 3, -90, 318, 10, 1, 118, '81;', 1, 1),
-(10, 2, 1, 5, 3, -90, 318, 11, 1, 118, '37;', 1, 1),
-(11, 2, 1, 3, 4, 115, -3, 13, 1, 203, '25;', 1, 1),
-(12, 2, 1, 3, 4, 115, -3, 14, 1, 203, '17;', 1, 1),
-(13, 2, 1, 3, 5, 112, 322, 15, 1, 153, '31;', 1, 1),
-(14, 2, 1, 3, 5, 112, 322, 16, 1, 153, '27;', 1, 1),
-(15, 2, 1, 3, 5, 112, 322, 17, 1, 153, '95;', 1, 1),
-(16, 2, 1, 3, 5, 112, 322, 18, 1, 153, '47;', 1, 1),
-(17, 2, 1, 3, 4, 115, -3, 27, 1, 203, '63;', 1, 1),
-(18, 2, 1, 3, 4, 115, -3, 28, 1, 203, '34;', 1, 1),
-(19, 2, 1, 3, 4, 115, -3, 29, 1, 203, '70;', 1, 1),
-(20, 2, 1, 3, 4, 115, -3, 30, 1, 203, '24;', 1, 1),
-(21, 2, 1, 3, 4, 115, -3, 31, 1, 203, '6;', 1, 1),
-(22, 2, 1, 3, 4, 115, -3, 32, 1, 203, '27;', 1, 1),
-(23, 1, 1, 2, 1, -70, 154, 11, 1, 163, '11;', 1, 1),
-(24, 1, 1, 2, 1, -70, 154, 12, 1, 163, '64;', 1, 1),
-(25, 1, 1, 2, 1, -70, 154, 13, 1, 212, '10;', 1, 1),
-(26, 1, 1, 2, 1, -70, 154, 14, 1, 212, '21;', 1, 1),
-(27, 2, 2, 3, 0, -55, 313, 7, 1, 0, '-55;313;', 1, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -229,15 +125,6 @@ CREATE TABLE `games` (
   `focusMod` int(3) DEFAULT '100'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Daten für Tabelle `games`
---
-
-INSERT INTO `games` (`id`, `name`, `status`, `turn`, `phase`, `pv`, `reinforce`, `reinforceTurn`, `reinforceETA`, `reinforceAmount`, `focusMod`) VALUES
-(1, 'myGame', 'active', 1, 3, 3500, 1500, 11, 3, 10, 10),
-(2, 'myGame', 'active', 2, 2, 3500, 1500, 11, 3, 10, 10),
-(3, 'myGame', 'active', 2, -1, 3500, 1500, 11, 3, 10, 10);
-
 -- --------------------------------------------------------
 
 --
@@ -251,16 +138,6 @@ CREATE TABLE `loads` (
   `name` varchar(20) DEFAULT NULL,
   `amount` int(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Daten für Tabelle `loads`
---
-
-INSERT INTO `loads` (`id`, `shipid`, `systemid`, `name`, `amount`) VALUES
-(1, 2, 7, 'Vran', 10),
-(2, 3, 9, 'Aurora', 12),
-(3, 6, 9, 'Aurora', 12),
-(4, 7, 9, 'Aurora', 12);
 
 -- --------------------------------------------------------
 
@@ -299,18 +176,6 @@ CREATE TABLE `playerstatus` (
   `status` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Daten für Tabelle `playerstatus`
---
-
-INSERT INTO `playerstatus` (`id`, `userid`, `gameid`, `turn`, `phase`, `faction`, `value`, `maxFocus`, `gainFocus`, `curFocus`, `status`) VALUES
-(1, 2, 1, 1, 3, 'Centauri Republic', 4440, 1120, 280, 280, 'waiting'),
-(2, 1, 1, 1, 3, 'Narn Regime', 4250, 1540, 385, 385, 'waiting'),
-(3, 1, 2, 2, 2, 'Earth Alliance', 3564, 1680, 420, 840, 'waiting'),
-(4, 2, 2, 2, 2, 'Centauri Republic', 3930, 1120, 280, 560, 'waiting'),
-(5, 1, 3, 2, -1, 'Earth Alliance', 3564, 1680, 420, 840, 'waiting'),
-(6, 2, 3, 2, -1, 'Earth Alliance', 3564, 1680, 420, 840, 'waiting');
-
 -- --------------------------------------------------------
 
 --
@@ -325,93 +190,6 @@ CREATE TABLE `powers` (
   `type` varchar(10) DEFAULT NULL,
   `cost` int(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Daten für Tabelle `powers`
---
-
-INSERT INTO `powers` (`id`, `unitid`, `systemid`, `turn`, `type`, `cost`) VALUES
-(1, 1, 5, 1, '0', 0),
-(2, 1, 9, 1, '0', 0),
-(3, 2, 7, 1, '0', 0),
-(4, 2, 9, 1, '0', 0),
-(5, 3, 7, 1, '-1', 0),
-(6, 3, 8, 1, '-1', 0),
-(7, 3, 10, 1, '-1', 0),
-(8, 3, 11, 1, '-1', 0),
-(9, 3, 13, 1, '-1', 0),
-(10, 3, 14, 1, '-1', 0),
-(11, 3, 15, 1, '-1', 0),
-(12, 3, 16, 1, '-1', 0),
-(13, 3, 17, 1, '-1', 0),
-(14, 3, 18, 1, '-1', 0),
-(15, 3, 19, 1, '-1', 0),
-(16, 3, 20, 1, '-1', 0),
-(17, 3, 27, 1, '-1', 0),
-(18, 3, 28, 1, '-1', 0),
-(19, 3, 29, 1, '-1', 0),
-(20, 3, 30, 1, '-1', 0),
-(21, 3, 31, 1, '-1', 0),
-(22, 3, 32, 1, '-1', 0),
-(23, 3, 33, 1, '-1', 0),
-(24, 3, 34, 1, '-1', 0),
-(25, 3, 7, 2, '-1', 0),
-(26, 3, 8, 2, '-1', 0),
-(27, 3, 10, 2, '-1', 0),
-(28, 3, 11, 2, '-1', 0),
-(29, 3, 13, 2, '-1', 0),
-(30, 3, 14, 2, '-1', 0),
-(31, 3, 15, 2, '-1', 0),
-(32, 3, 16, 2, '-1', 0),
-(33, 3, 17, 2, '-1', 0),
-(34, 3, 18, 2, '-1', 0),
-(35, 3, 19, 2, '-1', 0),
-(36, 3, 20, 2, '-1', 0),
-(37, 3, 27, 2, '-1', 0),
-(38, 3, 29, 2, '-1', 0),
-(39, 3, 30, 2, '-1', 0),
-(40, 3, 31, 2, '-1', 0),
-(41, 3, 32, 2, '-1', 0),
-(42, 3, 33, 2, '-1', 0),
-(43, 3, 34, 2, '-1', 0),
-(44, 7, 8, 1, '-1', 0),
-(45, 7, 10, 1, '-1', 0),
-(46, 7, 11, 1, '-1', 0),
-(47, 7, 13, 1, '-1', 0),
-(48, 7, 14, 1, '-1', 0),
-(49, 7, 15, 1, '-1', 0),
-(50, 7, 16, 1, '-1', 0),
-(51, 7, 17, 1, '-1', 0),
-(52, 7, 18, 1, '-1', 0),
-(53, 7, 19, 1, '-1', 0),
-(54, 7, 20, 1, '-1', 0),
-(55, 7, 27, 1, '-1', 0),
-(56, 7, 28, 1, '-1', 0),
-(57, 7, 29, 1, '-1', 0),
-(58, 7, 30, 1, '-1', 0),
-(59, 7, 31, 1, '-1', 0),
-(60, 7, 32, 1, '-1', 0),
-(61, 7, 33, 1, '-1', 0),
-(62, 7, 34, 1, '-1', 0),
-(63, 6, 8, 1, '-1', 0),
-(64, 6, 10, 1, '-1', 0),
-(65, 6, 11, 1, '-1', 0),
-(66, 6, 13, 1, '-1', 0),
-(67, 6, 14, 1, '-1', 0),
-(68, 6, 15, 1, '-1', 0),
-(69, 6, 16, 1, '-1', 0),
-(70, 6, 17, 1, '-1', 0),
-(71, 6, 18, 1, '-1', 0),
-(72, 6, 19, 1, '-1', 0),
-(73, 6, 20, 1, '-1', 0),
-(74, 6, 27, 1, '-1', 0),
-(75, 6, 28, 1, '-1', 0),
-(76, 6, 29, 1, '-1', 0),
-(77, 6, 30, 1, '-1', 0),
-(78, 6, 31, 1, '-1', 0),
-(79, 6, 32, 1, '-1', 0),
-(80, 6, 33, 1, '-1', 0),
-(81, 6, 34, 1, '-1', 0);
 
 -- --------------------------------------------------------
 
@@ -429,22 +207,6 @@ CREATE TABLE `sensors` (
   `type` int(3) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Daten für Tabelle `sensors`
---
-
-INSERT INTO `sensors` (`id`, `unitid`, `systemid`, `turn`, `angle`, `dist`, `type`) VALUES
-(1, 1, 2, 1, '-1.00', 77, 0),
-(2, 2, 4, 1, '-1.00', 110, 0),
-(3, 4, 4, 1, '-1.00', 106, 0),
-(4, 5, 2, 1, '-1.00', 77, 0),
-(5, 3, 4, 1, '-1.00', 117, 0),
-(6, 4, 4, 2, '-1.00', 106, 0),
-(7, 5, 2, 2, '-1.00', 77, 0),
-(8, 3, 4, 2, '-1.00', 117, 0),
-(9, 7, 4, 1, '-1.00', 117, 0),
-(10, 6, 4, 1, '-1.00', 117, 0);
-
 -- --------------------------------------------------------
 
 --
@@ -457,16 +219,6 @@ CREATE TABLE `subunits` (
   `amount` int(2) DEFAULT NULL,
   `name` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Daten für Tabelle `subunits`
---
-
-INSERT INTO `subunits` (`id`, `unitid`, `amount`, `name`) VALUES
-(1, 1, 1, 'Vorchan'),
-(2, 1, 1, 'Vorchan'),
-(3, 5, 1, 'Vorchan'),
-(4, 5, 1, 'Vorchan');
 
 -- --------------------------------------------------------
 
@@ -483,16 +235,6 @@ CREATE TABLE `systemcrits` (
   `duration` int(3) DEFAULT NULL,
   `value` decimal(5,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Daten für Tabelle `systemcrits`
---
-
-INSERT INTO `systemcrits` (`id`, `shipid`, `systemid`, `turn`, `type`, `duration`, `value`) VALUES
-(1, 3, 5, 1, 'Overload', 0, '1.48'),
-(2, 5, 5, 1, 'Ammo Amount', 0, '15.00'),
-(3, 5, 6, 1, 'Damage', 0, '30.00'),
-(4, 1, 7, 1, 'Destroyed', 0, '10.00');
 
 -- --------------------------------------------------------
 
@@ -525,19 +267,6 @@ CREATE TABLE `units` (
   `focus` tinyint(4) DEFAULT '0',
   `notes` varchar(50) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Daten für Tabelle `units`
---
-
-INSERT INTO `units` (`id`, `gameid`, `userid`, `ship`, `ball`, `name`, `display`, `status`, `command`, `available`, `destroyed`, `x`, `y`, `facing`, `delay`, `thrust`, `rolling`, `rolled`, `flipped`, `turn`, `phase`, `focus`, `notes`) VALUES
-(1, 1, 2, 1, 0, 'Squadron', '', 'bought', 1, 1, 0, -252, 155, '0.00', 0, 175, 0, 0, 0, 1, -1, 0, 'm37;'),
-(2, 1, 1, 1, 0, 'GSten', '', 'bought', 1, 1, 0, 240, 167, '0.00', 0, 155, 0, 0, 0, 1, -1, 0, ''),
-(3, 2, 1, 1, 0, 'Omega', '', 'bought', 1, 1, 0, -85, 311, '0.00', 0, 140, 0, 0, 0, 1, 3, 0, ''),
-(4, 2, 2, 1, 0, 'Altarian', '', 'bought', 0, 1, 0, 112, -1, '180.00', 0, 165, 0, 0, 0, 1, 3, 0, ''),
-(5, 2, 2, 1, 0, 'Squadron', '', 'bought', 1, 1, 0, 120, 325, '180.00', 0, 175, 0, 0, 0, 1, 3, 0, ''),
-(6, 3, 1, 1, 0, 'Omega', '', 'bought', 1, 1, 0, -232, 244, '0.00', 0, 123, 0, 0, 0, 1, 3, 0, ''),
-(7, 3, 2, 1, 0, 'Omega', '', 'bought', 1, 1, 0, 228, 229, '180.00', 0, 123, 0, 0, 0, 1, 3, 0, '');
 
 -- --------------------------------------------------------
 
@@ -656,7 +385,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT für Tabelle `actions`
 --
 ALTER TABLE `actions`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT für Tabelle `chat`
 --
@@ -666,22 +395,22 @@ ALTER TABLE `chat`
 -- AUTO_INCREMENT für Tabelle `damages`
 --
 ALTER TABLE `damages`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT für Tabelle `fireorders`
 --
 ALTER TABLE `fireorders`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT für Tabelle `games`
 --
 ALTER TABLE `games`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT für Tabelle `loads`
 --
 ALTER TABLE `loads`
-  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT für Tabelle `missions`
 --
@@ -691,32 +420,32 @@ ALTER TABLE `missions`
 -- AUTO_INCREMENT für Tabelle `playerstatus`
 --
 ALTER TABLE `playerstatus`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT für Tabelle `powers`
 --
 ALTER TABLE `powers`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT für Tabelle `sensors`
 --
 ALTER TABLE `sensors`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT für Tabelle `subunits`
 --
 ALTER TABLE `subunits`
-  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT für Tabelle `systemcrits`
 --
 ALTER TABLE `systemcrits`
-  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT für Tabelle `units`
 --
 ALTER TABLE `units`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT für Tabelle `users`
 --
