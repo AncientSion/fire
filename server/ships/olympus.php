@@ -22,7 +22,7 @@ class Olympus extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 350, 14, 3);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 350, 14, 2);
 		$front->systems[] = new MediumLaser($this->getId(), $this->id, 315, 45);
 		//$front->systems[] = new Dual($this->getId(), $this->id, 300, 60, 28, array("LightPulse", "LightParticleBeam"));
 		$front->systems[] = new MediumLaser($this->getId(), $this->id, 315, 45);
