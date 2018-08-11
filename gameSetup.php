@@ -88,7 +88,7 @@ if (isset($_SESSION["userid"])){
 
 }
 else {
-	$element = "<span>PLEASE LOGIN</span>";
+	$element = "<span>PLEASE LOGIN</span>"; return;
 }
 ?>
 
