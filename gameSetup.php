@@ -87,9 +87,7 @@ if (isset($_SESSION["userid"])){
 	else if ($joined){echo "<script> window.joined = true;</script>";}
 
 }
-else {
-	$element = "<span>PLEASE LOGIN</span>"; return;
-}
+else header("Location: index.php");
 ?>
 
 <!DOCTYPE html>
