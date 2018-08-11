@@ -704,13 +704,16 @@ Squadron.prototype.isDestroyed = function(){
 	return true;
 }
 
-Squadron.prototype.resetCommandUpgrades = function(){
-	for (var i = 0; i < this.primary.systems[0].loads.length; i++){
-		while (this.primary.systems[0].loads[i].amount){
+Squadron.prototype.recalcCommandUpgrades = function(){
+	var command = this.getSystemByName("Command");
+
+	for (var i = 0; i < command.loads.length; i++){
+		if (command.loads[i].amount){
 			this.minusCrewLevel(i);
+			this.plusCrewLevel(i);
 		}
 	}
-	this.primary.systems[0].totalCost = 0;
+	//command.updateCrewTotals(); return;
 }
 
 Squadron.prototype.doConfirmSystemLoadout = function(){
@@ -732,14 +735,16 @@ Squadron.prototype.doConfirmSystemLoadout = function(){
 }
 
 Squadron.prototype.setBuyData = function(){
-	var units = [];
-	var loads = [];
-	var cost = 0;
+	this.totalCost = this.cost;
 
 	for (var i = 0; i < this.primary.systems.length; i++){
 		if (!this.primary.systems[i].cost){continue;}
 		this.upgrades.push(this.primary.systems[i].getUpgradeData());
 	}
+
+	var units = [];
+	var loads = [];
+	var cost = 0;
 
 	for (var i = 0; i < this.structures.length; i++){
 		units.push({
@@ -765,10 +770,11 @@ Squadron.prototype.getBuyTableData = function(table){
 
 	var command =  this.primary.systems[0].getUpgradeData();
 	if (command.cost){
+		this.totalCost += command.cost;
 		$(table)
 		.append
 			($("<tr>")
-			.append($("<td>").html(command.text))
+			.append($("<td>").addClass("font14").html(command.text))
 			.append($("<td>").html(command.cost))
 		)
 	}
@@ -795,7 +801,7 @@ Squadron.prototype.getBuyTableData = function(table){
 				$(table)
 				.append(
 					$("<tr>")
-					.append($("<td>").html(data.text))
+					.append($("<td>").addClass("font14").html(data.text))
 					.append($("<td>").html(data.cost))
 					.data("systemid", this.structures[i].structures[j].systems[k].id)
 					.hover(function(){

@@ -360,8 +360,22 @@ table, th, tr, td {
 	font-size: 14px;
 }
 
+
+#hangarTable tr:first-child, #weaponTable tr:first-child, #crewTable tr:first-child {
+	height: 30px;
+}
+
 #hangarTable tr, #weaponTable tr, #crewTable tr {
 	border: 1px solid white;
+}
+
+#hangarTable, #weaponTable, #crewTable {
+	width: 100%;
+	margin: auto;
+	border-collapse: collapse;
+	border: 1px solid white;
+	background-color: black;
+	font-size: 14px;
 }
 
 #hangarTable td, #weaponTable td, #crewTable td {
@@ -627,100 +641,6 @@ table, th, tr, td {
 	transform: rotate(270deg);
 	-webkit-transform: rotate(270deg);
 	-ms-transform: rotate(270deg);
-}
-.size20 {
-	height: 20px;
-	width: 20px;
-}
-
-.size30 {
-	width: 30px;
-	height: 30px;
-	margin: auto;
-}
-
-.size35 {
-	width: 35px;
-	height: 35px;
-	margin: auto;
-}
-
-.size40 {
-	width: 40px;
-	height: 40px;
-	margin: auto;
-}
-
-.size50 {
-	width: 50px;
-	height: 50px;
-	margin: auto;
-}
-
-.size45 {
-	width: 45px;
-	height: 45px;
-	margin: auto;
-}
-
-.size60 {
-	width: 60px;
-	height: 60px;
-	margin: auto;
-}
-
-.size70 {
-	width: 60px;
-	height: 60px;
-	margin: auto;
-	margin-top: -5px;
-}
-
-.size90 {
-	width: 90px;
-	height: 90px;
-}
-
-.size100 {
-	width: 100px;
-	height: 100px;
-	margin: auto;
-}
-
-.size120 {
-	width: 120px;
-	height: 120px;
-	margin: auto;
-}
-
-.size100pct {
-	width: 100%;
-	height: 100%;
-	margin: auto;
-}
-
-.font12 {
-	font-size: 12px;
-}
-
-.font14 {
-	font-size: 14px;
-}
-
-.font15 {
-	font-size: 15px;
-}
-
-.font16 {
-	font-size: 16px;
-}
-
-.font18 {
-	font-size: 18px;
-}
-
-.font20 {
-	font-size: 20px;
 }
 
 .unitContainer {
@@ -1345,6 +1265,15 @@ div.integrityFull {
 
 #totalShipCost td {
 	font-size: 16px;
+}
+
+#totalShipCost td.font14 {
+	font-size: 14px;
+}
+
+.systemTotal {
+	color: yellow;
+	font-size: 18px;
 }
 
 .shipDiv th, td {
@@ -2195,4 +2124,98 @@ textarea.sendWrapper {
 	font-family: arial;
 	font-size: 16px;
 	font-weight: normal;
+}
+.size20 {
+	height: 20px;
+	width: 20px;
+}
+
+.size30 {
+	width: 30px;
+	height: 30px;
+	margin: auto;
+}
+
+.size35 {
+	width: 35px;
+	height: 35px;
+	margin: auto;
+}
+
+.size40 {
+	width: 40px;
+	height: 40px;
+	margin: auto;
+}
+
+.size50 {
+	width: 50px;
+	height: 50px;
+	margin: auto;
+}
+
+.size45 {
+	width: 45px;
+	height: 45px;
+	margin: auto;
+}
+
+.size60 {
+	width: 60px;
+	height: 60px;
+	margin: auto;
+}
+
+.size70 {
+	width: 60px;
+	height: 60px;
+	margin: auto;
+	margin-top: -5px;
+}
+
+.size90 {
+	width: 90px;
+	height: 90px;
+}
+
+.size100 {
+	width: 100px;
+	height: 100px;
+	margin: auto;
+}
+
+.size120 {
+	width: 120px;
+	height: 120px;
+	margin: auto;
+}
+
+.size100pct {
+	width: 100%;
+	height: 100%;
+	margin: auto;
+}
+
+.font12 {
+	font-size: 12px;
+}
+
+.font14 {
+	font-size: 14px;
+}
+
+.font15 {
+	font-size: 15px;
+}
+
+.font16 {
+	font-size: 16px;
+}
+
+.font18 {
+	font-size: 18px;
+}
+
+.font20 {
+	font-size: 20px;
 }

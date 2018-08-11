@@ -536,7 +536,7 @@ else header("Location: index.php");
 				setUnitTotal: function(unit){
 					var table = document.getElementById("totalShipCost");
 						table.innerHTML = "";
-					unit.totalCost = unit.cost;
+
 					unit.upgrades = [];
 					unit.setBuyData();
 
@@ -546,7 +546,7 @@ else header("Location: index.php");
 
 					$(table).append(unit.getBuyTableData(table))
 
-					if (unit.squad && unit.structures.length > 2){
+				/*	if (unit.squad && unit.structures.length > 2){
 						var size = unit.structures.length;
 						var mod = 0;
 						if (size == 3){mod = 8;} else if (size == 4){mod = 12;}
@@ -557,13 +557,13 @@ else header("Location: index.php");
 							tr.insertCell(-1).innerHTML = extra;
 
 							unit.totalCost += extra
-					}
+					} */
 
 					$(table)
 						.append(
 						$("<tr>")
 							.append($("<th>").html("Total Unit Cost").css("font-size", 20))
-							.append($("<th>").html(unit.totalCost).css("font-size", 20)))
+							.append($("<th>").html(unit.totalCost).addClass("yellow").css("font-size", 20)))
 						.append(
 						$("<tr>")
 							.append($("<td>")
@@ -869,7 +869,7 @@ else header("Location: index.php");
 		sub.previewSetup();
 		drawShipPreview();
 
-		unit.resetCommandUpgrades();
+		unit.recalcCommandUpgrades();
 		game.setUnitTotal(unit);
 	}
 

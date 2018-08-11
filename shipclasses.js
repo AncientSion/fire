@@ -2447,10 +2447,10 @@ Ship.prototype.getUnmoddedFocusGain = function(){
 }
 
 Ship.prototype.getFocusIfCommand = function(){
-	var bridge = this.getSystemByName("Command");
-	bridge.output = 100;
-	var gain = Math.floor(game.settings.pv / 100 * bridge.getOutput() / 100 * (this.baseFocusRate + this.modFocusRate));
-	bridge.output = 0;
+	var command = this.getSystemByName("Command");
+	command.output = 100;
+	var gain = Math.floor(game.settings.pv / 100 * command.getOutput() / 100 * (this.baseFocusRate + this.modFocusRate));
+	command.output = 0;
 	return gain;
 }
 
@@ -3534,6 +3534,8 @@ Ship.prototype.weaponHighlight = function(weapon){
 	}
 }
 Ship.prototype.setBuyData = function(){
+	this.totalCost = this.cost;
+
 	for (var i = 0; i < this.primary.systems.length; i++){
 		if (!this.primary.systems[i].cost){continue;}
 		this.upgrades.push(this.primary.systems[i].getUpgradeData());
@@ -3553,7 +3555,7 @@ Ship.prototype.getBuyTableData = function(table){
 		$(table)
 		.append(
 			$("<tr>")
-			.append($("<td>").html(this.upgrades[i].text))
+			.append($("<td>").addClass("font14").html(this.upgrades[i].text))
 			.append($("<td>").html(this.upgrades[i].cost))
 			.data("systemid", this.upgrades[i].systemid)
 			.hover(function(){
@@ -3600,54 +3602,42 @@ Ship.prototype.updateNonPowerOutput = function(system){
 	)
 }
 
-Ship.prototype.showCrew = function(e, bridge){
-	if (bridge.selected){
+Ship.prototype.handleCrewDiv = function(command){
+	if (command.selected){
 		game.system = 0;
-		bridge.selected = false;
-		this.disableCrewPurchase(e);
+		command.selected = false;
+		this.disableCrewPurchase();
 	}
 	else {
-		bridge.selected = true;
-		game.system = bridge.id;
-		this.enableCrewPurchase(e, bridge);
+		command.selected = true;
+		game.system = command.id;
+		this.enableCrewPurchase(command);
 	}
-	bridge.setSystemBorder();
+	command.setSystemBorder();
 }
 
-Ship.prototype.handleCrew = function(e, bridge){
-	if (bridge.selected){
-		game.system = 0;
-		bridge.selected = false;
-		this.disableCrewPurchase(e);
-	}
-	else {
-		bridge.selected = true;
-		game.system = bridge.id;
-		this.enableCrewPurchase(e, bridge);
-	}
-	bridge.setSystemBorder();
-}
-
-Ship.prototype.enableCrewPurchase = function(e, bridge){
+Ship.prototype.enableCrewPurchase = function(command){
 	var div = $("#crewDiv");
-	var table = div.find("#crewTable").empty();
+	var table = div.find("#crewTable");
 
 	table
-		.append(
-			$($("<tr>")
-				.append($("<th>").html("Type").css("width", "18%"))
-				.append($("<th>").html("Effect / lvl").css("width", "40%"))
-				.append($("<th>").html("Cost").css("width", "8%"))
-				.append($("<th>").attr("colSpan", 3).html("Level").css("width", "15%"))
-				.append($("<th>").html("Total Cost"))
-			)
-		)
+		.empty()
+		.append($("<thead>")
+			.append(
+				$($("<tr>")
+					.append($("<th>").html("Type").css("width", "18%"))
+					.append($("<th>").html("Effect / lvl").css("width", "40%"))
+					.append($("<th>").html("Cost").css("width", "8%"))
+					.append($("<th>").attr("colSpan", 3).html("Level").css("width", "15%"))
+					.append($("<th>").html("Total Cost")))))
+	
+	table.append($("<tbody>"));
 
-	for (var i = 0; i < bridge.loads.length; i++){
+	for (var i = 0; i < command.loads.length; i++){
 		table
 		.append(
 			$($("<tr>")
-				.append($("<td>").html(bridge.loads[i].name + "</br>Officer"))
+				.append($("<td>").html(command.loads[i].name + "</br>Officer"))
 				.append($("<td>").html(this.getCrewEffect(i)))
 				.append($("<td>").html(this.getCrewAddCost(i)))
 				.append($("<td>")
@@ -3671,30 +3661,31 @@ Ship.prototype.enableCrewPurchase = function(e, bridge){
 	}
 
 	if (game.phase == -2){
-	table
-		.append(
-			$($("<tr>")
-				.append($("<th>").attr("colSpan", 3).html(""))
-				.append($("<th>").attr("colSpan", 3).html("Grand Total"))
-				.append($("<th>").html(bridge.cost))
-			)
-		)
+			table
+			.append($("<tr>")
+				.css("fontSize", 18).css("height", 30)
+				.append($("<th>"))
+				.append($("<th>").attr("colSpan", 4).html("Grand Total"))
+				.append($("<th>"))
+				.append($("<th>").addClass("systemTotal")))
+
+		this.getSystemByName("Command").setTotalBuyData();
 	}
 	$(div).data("systemid", this.id).css("left", 650).css("top", 400).removeClass("disabled");
 }
 
 
-Ship.prototype.disableCrewPurchase = function(e){
+Ship.prototype.disableCrewPurchase = function(){
 	$("#crewDiv").addClass("disabled");
 	if (game.phase == -2){game.setUnitTotal(this);}
 }
 
 Ship.prototype.plusCrewLevel = function(i){
-	var bridge = this.getSystemByName("Command");
-	if (bridge.loads[i].amount == 3){return;}
-	bridge.loads[i].amount++;
-	bridge.loads[i].cost = this.getTotalCrewCost(i);
-	var system = this.getSystemByName(bridge.loads[i].name);
+	var command = this.getSystemByName("Command");
+	if (command.loads[i].amount == 3){return;}
+	command.loads[i].amount++;
+	command.loads[i].cost = this.getTotalCrewCost(i);
+	var system = this.getSystemByName(command.loads[i].name);
 		system.powers.push({
 			id: system.powers.length+1, unitid: system.parentId, systemid: system.id,
 			turn: game.turn,type: 2, cost: 0, new: 1
@@ -3704,11 +3695,11 @@ Ship.prototype.plusCrewLevel = function(i){
 }
 
 Ship.prototype.minusCrewLevel = function(i){
-	var bridge = this.getSystemByName("Command");
-	if (!bridge.loads[i].amount){return;}
-	bridge.loads[i].amount--;
-	bridge.loads[i].cost = this.getTotalCrewCost(i);
-	var system = this.getSystemByName(bridge.loads[i].name);
+	var command = this.getSystemByName("Command");
+	if (!command.loads[i].amount){return;}
+	command.loads[i].amount--;
+	command.loads[i].cost = this.getTotalCrewCost(i);
+	var system = this.getSystemByName(command.loads[i].name);
 		system.doUnboost();
 		system.update();
 	this.updateCrewDiv(i);
@@ -3723,7 +3714,8 @@ Ship.prototype.updateCrewDiv = function(i){
 	if (i == 0){ // Command upgrade
 		$(this.element).find(".focusGain").html(this.getFocusString());
 	}
-	this.updateCrewTotals();
+	this.getSystemByName("Command").setTotalBuyData();
+	//this.updateCrewTotals();
 }
 
 Ship.prototype.getCrewEffect = function(i){
@@ -3770,13 +3762,13 @@ Ship.prototype.getTotalCrewCost = function(i){
 	return Math.ceil(cost);
 }
 
-Ship.prototype.updateCrewTotals = function(){
-	var bridge = this.getSystemByName("Command");
+Ship.prototype.updateCrdewTotals = function(){
+	var command = this.getSystemByName("Command");
 	var total = 0;
-	for (var i = 0; i < bridge.loads.length; i++){
+	for (var i = 0; i < command.loads.length; i++){
 		total += this.getTotalCrewCost(i);
 	}
-	bridge.cost = total;	
+	command.cost = total;	
 	$("#crewDiv").find("#crewTable").children().children().children().last().html(total);
 }
 

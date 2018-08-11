@@ -1395,13 +1395,26 @@ Command.prototype.select = function(e){
 	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit){
 		return false;
 	}
-	else ship.handleCrew(e, this);
+	else ship.handleCrewDiv(this);
 	if (game.phase != -2){
 		$("#crewDiv")
 			.find(".header").html("Crew specialists on board").end()
 			.find("#crewTable").find("img").each(function(){$(this).remove();});
 	}
 }
+
+Command.prototype.setTotalBuyData = function(){
+	var table = $("#crewTable");
+	var tCost = 0;
+
+	for (let i = 0; i < this.loads.length; i++){
+		tCost += this.loads[i].cost;
+	}
+
+	table.find("tr").last().children().last().html(tCost);
+	this.cost = tCost;
+}
+
 
 Command.prototype.getUpgradeData = function(){
 	var loads = [];
@@ -3234,17 +3247,20 @@ Launcher.prototype.initLauncherDiv = function(){
 
 	table
 		.empty()
-		.append($("<tr>")
-			.append($("<th>").html("Class"))
-			.append($("<th>").html(""))
-			.append($("<th>").html("Tracking"))
-			.append($("<th>").html("Cost"))
-			.append($("<th>").html("Shots & Reload"))
-			.append($("<th>").html(""))
-			.append($("<th>").html("Loaded"))
-			.append($("<th>").html(""))
-			.append($("<th>").html("Total Cost")))
+		.append($("<thead>")
+			.append($("<tr>")
+				.append($("<th>").html("Class"))
+				.append($("<th>").html(""))
+				.append($("<th>").html("Tracking"))
+				.append($("<th>").html("Cost"))
+				.append($("<th>").html("Shots & Reload"))
+				.append($("<th>").html(""))
+				.append($("<th>").html("Loaded"))
+				.append($("<th>").html(""))
+				.append($("<th>").html("Total Cost"))))
 
+	table.append($("<tbody>"));
+	
 	for (var i = 0; i < this.loads.length; i++){
 		table
 			.append($("<tr>")
@@ -3287,11 +3303,11 @@ Launcher.prototype.initLauncherDiv = function(){
 
 	table
 		.append($("<tr>")
-			.css("fontSize", 18)
-			.append($("<th>").attr("colSpan", 6).css("fontSize", 18).html("Grand Total"))
+			.css("fontSize", 18).css("height", 30)
+			.append($("<th>").attr("colSpan", 6).html("Grand Total"))
 			.append($("<th>"))
 			.append($("<th>"))
-			.append($("<th>")))
+			.append($("<th>").addClass("systemTotal")))
 
 	this.setTotalBuyData();
 }
@@ -4126,13 +4142,16 @@ Hangar.prototype.initHangarPurchaseDiv = function(){
 
 	table
 		.empty()
-		.append($("<tr>")
-			.append($("<th>").html("Class"))
-			.append($("<th>").html("Cost").css("width", 40))
-			.append($("<th>").html(""))
-			.append($("<th>").html("Amount").css("width", 70))
-			.append($("<th>").html(""))
-			.append($("<th>").html("Total Cost").css("width", 70)))
+		.append($("<thead>")
+			.append($("<tr>")
+				.append($("<th>").html("Class"))
+				.append($("<th>").html("Cost").css("width", 40))
+				.append($("<th>").html(""))
+				.append($("<th>").html("Amount").css("width", 70))
+				.append($("<th>").html(""))
+				.append($("<th>").html("Total Cost").css("width", 70))))
+
+	table.append($("<tbody>"));
 
 	for (var i = 0; i < this.loads.length; i++){
 		table
@@ -4172,11 +4191,11 @@ Hangar.prototype.initHangarPurchaseDiv = function(){
 
 	table
 		.append($("<tr>")
-			.css("fontSize", 18)
-			.append($("<th>").attr("colSpan", 3).css("fontSize", 18).html("Grand Total"))
+			.css("fontSize", 18).css("height", 30)
+			.append($("<th>").attr("colSpan", 3).html("Grand Total"))
 			.append($("<th>"))
 			.append($("<th>"))
-			.append($("<th>")))
+			.append($("<th>").addClass("systemTotal")))
 
 	this.setTotalBuyData();
 }
