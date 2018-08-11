@@ -110,9 +110,9 @@ class Weapon extends System {
 			$this->dmgs[$i] = floor($data[$i] / 100 * $this->minDmg);
 		}
 		
-		$this->notes[] = "<u>Salvo</u>: ".$data[0]."% / ".$this->dmgs[0]." hit each";
-		$this->notes[] = "<u>Flight</u>: ".$data[1]."% / ".$this->dmgs[1]." hits each";
-		$this->notes[] = "<u>Squadron</u>: ".$data[3]."% / ".$this->dmgs[3]." hits each";
+		$this->notes[] = "<u>Salvo</u>: $data[0]% / $this->dmgs[0] hit each";
+		$this->notes[] = "<u>Flight</u>: $data[1]% / $this->dmgs[1] hits each";
+		$this->notes[] = "<u>Squadron</u>: $data[3]% / $this->dmgs[3] hits each";
 
 		$values = array(200, 50);
 

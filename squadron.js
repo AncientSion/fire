@@ -490,6 +490,7 @@ Squadron.prototype.setImage = function(){
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
 		t.height = this.size*2;
+		//console.log("s: " +this.size);
 	var ctx = t.getContext("2d");
 		ctx.translate(t.width/2, t.height/2);
 		//ctx.scale(0.8, 0.8)
@@ -511,6 +512,12 @@ Squadron.prototype.setImage = function(){
 	}		
 	ctx.setTransform(1,0,0,1,0,0);
 	this.img = t;
+}
+
+Squadron.prototype.updateImage = function(){
+	this.setImage();
+	$(this.element).find(".iconContainer").empty()
+		.append($(this.getBaseImage()).addClass("rotate270").css("width", "100%").css("border-left", "1px solid white"))
 }
 
 Squadron.prototype.getWeaponOrigin = function(id){
@@ -678,6 +685,7 @@ Squadron.prototype.hasInvalidPower = function(){
 }
 
 Squadron.prototype.getBaseImage = function(){
+	return this.img;
 	var img = new Image();
 		img.src = this.img.toDataURL();
 	return img;

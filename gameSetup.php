@@ -855,18 +855,21 @@ else {
 
 		var unit = game.getUnit(aUnit);
 		var sub = initSquaddie (JSON.parse(data));
-			sub.create();
+			sub.create();			
 
 		unit.structures.push(sub);
 		unit.index = sub.index;
+		unit.size = (50 + unit.structures.length*10) * 0.7;
 		unit.setLayout();
 		unit.setSubElements();
 		unit.setStats();
 		unit.setSubSystemState();
+		unit.updateImage();
 		//unit.primary.systems[0].select();
 		//unit.doConfirmSystemLoadout();
 		sub.expandElement();
 		sub.previewSetup();
+		drawShipPreview();
 
 		unit.resetCommandUpgrades();
 		game.setUnitTotal(unit);
@@ -890,11 +893,15 @@ else {
 
 	function drawShipPreview(){
 		var unit = game.getUnit(aUnit);
+		var size = shipCanvas.width/4;
+		if (unit.squad && unit.structures.length > 1){
+			size *= 1.25;
+		}
+
 		window.shipCtx.clearRect(0, 0, res.x, res.y);
 		window.shipCtx.save();
 		window.shipCtx.translate(res.x/2, res.y/2);
 		window.shipCtx.rotate(unit.getPlannedFacing()*(Math.PI/180));
-		var size = shipCanvas.width/4;
 		window.shipCtx.drawImage(unit.getBaseImage(), -size, -size, size*2, size*2);
 		window.shipCtx.restore();
 	}

@@ -2079,7 +2079,6 @@ function Game(data){
 
 	this.resetImageData = function(){
 		console.log("resetImageData");
-		this.setPost
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setPreFireImage();
 			// if (!this.ships[i].ship){this.ships[i].setPreFireImage();}
