@@ -55,6 +55,7 @@ function Game(data){
 	this.animData = {jump: 45};
 	this.commandChange = {old: 0, new: 0}
 	this.subPhase = 1;
+	this.exclusiveSystem = false;
 
 	this.hasSnapCenterline = function(shooter, shooterAngle, target){
 		if (game.phase > 0){

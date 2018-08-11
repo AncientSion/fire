@@ -45,7 +45,6 @@ function System(system){
 	this.usage = system.usage;
 	this.freeAim = system.freeAim;
 	this.width = system.width;
-	this.monoSystem = false;
 }
 
 System.prototype.setTotalBuyData = function(){
@@ -1976,7 +1975,7 @@ Weapon.prototype.select = function(e){
 				this.selected = false;
 				this.validTarget = 0;
 			}
-			else if(!unit.hasHangarSelected() && !game.monoSystem){
+			else if(!unit.hasHangarSelected() && !game.exclusiveSystem){
 				this.selected = true;
 			}
 		}
@@ -3351,9 +3350,9 @@ Area.prototype = Object.create(Particle.prototype);
 Area.prototype.select = function(){
 	if (aUnit != this.parentId){return;}
 	if (game.phase == -1 && game.getUnit(aUnit).hasPlannedMoves()){popup("This system can only be used BEFORE planning movement</br>Please reverse movement plan.");return;}
-	if (!game.monoSystem && game.getUnit(aUnit).hasWeaponsSelected()){return;}
+	if (!game.exclusiveSystem && game.getUnit(aUnit).hasWeaponsSelected()){return;}
 	Weapon.prototype.select.call(this);
-	game.monoSystem = this.selected;
+	game.exclusiveSystem = this.selected;
 }
 
 
@@ -3443,7 +3442,7 @@ Area.prototype.setFireOrder = function(targetid, pos){
 		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
 	);
 	this.selected = 0;
-	game.monoSystem = 0;
+	game.exclusiveSystem = 0;
 	this.validTarget = 0;
 	this.highlight = 0;
 	this.setSystemBorder();

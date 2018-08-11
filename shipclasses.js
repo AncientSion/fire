@@ -3062,6 +3062,8 @@ Ship.prototype.previewSetup = function(){
 			$(this.primary.systems[i].element).addClass("hasOptions");
 		}
 	}
+
+	if (!this.ship){return;}
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (this.structures[i].systems[j].loadout){

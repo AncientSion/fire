@@ -801,10 +801,6 @@ Squadron.prototype.getBuyTableData = function(table){
 	}
 }
 
-Squadron.prototype.previewSetup = function(){
-	return;
-}
-
 Squadron.prototype.getUnusedPower = function(){
 	var highest = 0;
 	for (var i = 0; i < this.structures.length; i++){

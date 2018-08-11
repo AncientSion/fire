@@ -213,9 +213,9 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 			<?php
 				if (isset($_SESSION['userid']) && $_SESSION['userid'] == 1){
 					echo "<div class='lobbyDiv'>";
-					echo 	"<form method='post'>";
-					echo 		"<input type='submit' value='purge' name='purge'>";
-					echo 	"</form>";
+						echo "<form method='post'>";
+							echo "<input type='submit' value='purge' name='purge'>";
+						echo "</form>";
 					echo "</div>";
 				}
 			?>
