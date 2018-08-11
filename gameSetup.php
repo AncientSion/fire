@@ -892,7 +892,7 @@ else header("Location: index.php");
 	function drawShipPreview(){
 		var unit = game.getUnit(aUnit);
 		var size = shipCanvas.width/4;
-		if (unit.squad && unit.structures.length > 1){
+		if (unit.squad && unit.structures.length > 2){
 			size *= 1.25;
 		}
 
