@@ -413,7 +413,7 @@
 		</div>
 		<div id="crewDiv" class="disabled">
 			<div class="header">
-				Add crew specialists to the selected unit
+				Assign experienced officers to this unit
 			</div>
 			<table id="crewTable">
 			</table>

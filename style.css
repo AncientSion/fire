@@ -2125,9 +2125,15 @@ textarea.sendWrapper {
 	font-size: 16px;
 	font-weight: normal;
 }
+
 .size20 {
 	height: 20px;
 	width: 20px;
+}
+
+.size25 {
+	height: 25px;
+	width: 25px;
 }
 
 .size30 {

@@ -2709,7 +2709,7 @@ Ship.prototype.expandDiv = function(div){
 			else offsetX += 20;
 		}
 		
-		var pos = getPointInDir(135 - offsetX, a-90, conWidth/2, conHeight/2-40);
+		var pos = getPointInDir(130 - offsetX, a-90, conWidth/2, conHeight/2-40);
 		var w = $(structDiv).width();
 		var h = $(structDiv).height();
 
@@ -3642,7 +3642,7 @@ Ship.prototype.enableCrewPurchase = function(command){
 				.append($("<td>").html(this.getCrewAddCost(i)))
 				.append($("<td>")
 					.append($("<img>")
-						.attr("src", "varIcons/plus.png").addClass("size20")
+						.attr("src", "varIcons/plus.png").addClass("size25")
 						.data("type", i)
 						.click(function(){game.getUnit(aUnit).plusCrewLevel($(this).data("type"))})
 					)
@@ -3650,7 +3650,7 @@ Ship.prototype.enableCrewPurchase = function(command){
 				.append($("<td>").html(this.getCrewLevel(i)))
 				.append($("<td>")
 					.append($("<img>")
-						.attr("src", "varIcons/minus.png").addClass("size20")
+						.attr("src", "varIcons/minus.png").addClass("size25")
 						.data("type", i)
 						.click(function(){game.getUnit(aUnit).minusCrewLevel($(this).data("type"))})
 					)
@@ -3738,7 +3738,7 @@ Ship.prototype.getCrewAddCost = function(i){
 	if (game.phase > -2){return "";}
 	var baseCost = this.getCrewBaseCost(i);
 	var level = this.getCrewLevel(i);
-	var add = 0.5;
+	var add = 0.3;
 	return Math.ceil(baseCost * (1 + (level*add)));
 }
 
@@ -3754,7 +3754,7 @@ Ship.prototype.getTotalCrewCost = function(i){
 	var baseCost = this.getCrewBaseCost(i);
 	var level = this.getCrewLevel(i);
 	var cost = 0;
-	var add = 0.5;
+	var add = 0.3;
 
 	for (j = 0; j < level; j++){
 		cost += baseCost * (1 + add*j)

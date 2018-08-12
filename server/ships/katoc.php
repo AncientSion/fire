@@ -23,7 +23,7 @@ class KaToc extends Medium {
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 400, 17, 3);
 		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 240, 60);
-		$front->systems[] = new MagCompressor($this->getId(), $this->id, 330, 30);
+		$front->systems[] = new MagCompressor($this->getId(), $this->id, 315, 45);
 		//$front->systems[] = new GraviticMine($this->getId(), $this->id, 330, 30);
 		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;
@@ -31,17 +31,18 @@ class KaToc extends Medium {
 		$right = new Structure($this->getId(), $this->id, 30, 150, 325, 15, 1);
 		$right->systems[] = new MediumLaser($this->getId(), $this->id, 355, 115);
 		$right->systems[] = new Bulkhead($this->getId(), $this->id, 60, 0, 1);
-		$right->systems[] = new TwinParticleBolter($this->getId(), $this->id, 90, 270);
+		$right->systems[] = new TwinParticleBolter($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 15, 1);
-		$aft->systems[] = new Hangar($this->getId(), $this->id, 7, array("Gorith"), 7);
+		$aft->systems[] = new Hangar($this->getId(), $this->id, 6, array("Gorith"), 6);
+		$aft->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 90, 270);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 325, 15, 1);
 		$left->systems[] = new MediumLaser($this->getId(), $this->id, 245, 5);
 		$left->systems[] = new Bulkhead($this->getId(), $this->id, 60, 0, 1);
-		$left->systems[] = new TwinParticleBolter($this->getId(), $this->id, 90, 270);
+		$left->systems[] = new TwinParticleBolter($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -68,7 +69,7 @@ class KaToc extends Medium {
 						array(
 							"systemid" => 15,
 							"name" => "Gorith",
-							"amount" => 7
+							"amount" => 6
 						),
 					)
 				),

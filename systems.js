@@ -1363,7 +1363,13 @@ Engine.prototype = Object.create(PrimarySystem.prototype);
 
 Engine.prototype.doUnboost = function(){
 	System.prototype.doUnboost.call(this);
-	if (this.name == "Engine"){game.getUnit(this.parentId).checkUnboostEngine(); return;}
+	game.getUnit(this.parentId).checkUnboostEngine();
+}
+
+Engine.prototype.update = function(){
+	System.prototype.update.call(this);
+	var unit = game.getUnit(aUnit);
+	$(unit.element).find(".ep").html(unit.getRemEP() + " / " + unit.getEP());
 }
 
 Engine.prototype.getPowerDiv = function(){
@@ -1376,14 +1382,6 @@ function Command(system){
 	this.powerReq = 0;
 }
 Command.prototype = Object.create(PrimarySystem.prototype);
-
-Command.prototype.update = function(){
-	var unit = game.getUnit(this.parentId);
-		unit.morale.bonusChance = 0;
-	for (var i = 0; i < this.powers.length; i++){
-		unit.morale.bonusChance -= 10;
-	}
-}
 
 Command.prototype.select = function(e){
 	console.log(this);
@@ -1398,7 +1396,7 @@ Command.prototype.select = function(e){
 	else ship.handleCrewDiv(this);
 	if (game.phase != -2){
 		$("#crewDiv")
-			.find(".header").html("Crew specialists on board").end()
+			.find(".header").html("Trained officers on board").end()
 			.find("#crewTable").find("img").each(function(){$(this).remove();});
 	}
 }

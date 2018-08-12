@@ -49,9 +49,9 @@ class Thunderbolt extends Fighter {
 	public $name = "Thunderbolt";
 	public $role = "Superiority Fighter";
 	public $faction = "Earth Alliance";
-	public static $value =  35;
+	public static $value =  34;
 	public $mass = 36;
-	public $integrity = 29;
+	public $integrity = 28;
 	public $negation = 5;
 	public $baseImpulse = 90;
 	public $baseHitChance = 25;
@@ -148,7 +148,7 @@ class Gorith extends Fighter {
 	public $name = "Gorith";
 	public $role = "Medium Fighter";
 	public $faction = "Narn Regime";
-	public static $value =  24;
+	public static $value =  21;
 	public $mass = 34;
 	public $integrity = 22;
 	public $negation = 3;
@@ -168,7 +168,7 @@ class Frazi extends Fighter {
 	public $name = "Frazi";
 	public $role = "Heavy Fighter";
 	public $faction = "Narn Regime";
-	public static $value =  32;
+	public static $value =  30;
 	public $mass = 34;
 	public $integrity = 26;
 	public $negation = 5;
