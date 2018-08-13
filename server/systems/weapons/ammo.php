@@ -69,10 +69,10 @@ class Vran extends Torpedo {
 	public $name = "Vran";
 	public $role = "Light Particle Torpedo";
 	public static $prio = 0;
-	public $integrity = 5;
+	public $integrity = 10;
 	public $negation = 1;
 	public $traverse = 3;
-	public $maxRange = 600;
+	public $maxRange = 700;
 	public $reload = 2;
 	public static $value = 0;
 
@@ -86,10 +86,8 @@ class Vranoth extends Torpedo {
 	public $name = "Vranoth";
 	public $role = "Medium Particle Torpedo";
 	public static $prio = 0;
-	public $integrity = 8;
-	public $negation = 2;
-	public $traverse = 0;
-	public $maxRange = 800;
+	public $traverse = 4;
+	public $maxRange = 850;
 	public $reload = 3;
 	public static $value = 0;
 
@@ -103,9 +101,7 @@ class VranothKa extends Torpedo {
 	public $name = "VranothKa";
 	public $role = "Heavy Particle Torpedo";
 	public static $prio = 0;
-	public $integrity = 11;
-	public $negation = 3;
-	public $traverse = 1;
+	public $traverse = 5;
 	public $maxRange = 1000;
 	public $reload = 3;
 	public static $value = 0;

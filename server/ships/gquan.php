@@ -11,7 +11,7 @@ class GQuan extends Heavy {
 
 	public $integrity = 1150;
 	public $vitalHP = 130;
-	public $ep = 80;
+	public $ep = 75;
 	public $ew = 775;
 	public $power = -4;
 

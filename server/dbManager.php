@@ -55,10 +55,10 @@
 					$stmt = $this->connection->prepare($sql);
 					$stmt->execute();
 					if ($stmt->errorCode() == 0){$sql = "";}
-					else die("<div>Problem in executing the SQL query".$sql."</div>");
+					//else die("<div>Problem in executing the SQL query".$sql."</div>");
 				}
 			}
-			echo "<div>SQL file imported successfully.</div>";
+			//echo "<div>SQL file imported successfully.</div>";
 
 
 		}

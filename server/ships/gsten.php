@@ -11,7 +11,7 @@ class GSten extends Heavy {
 
 	public $integrity = 900;
 	public $vitalHP = 110;
-	public $ep = 85;
+	public $ep = 80;
 	public $ew = 750;
 
 
@@ -23,9 +23,9 @@ class GSten extends Heavy {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 18, 3);
-		$front->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 45, 60, array(array("Vran", 16, 4), array("Vranoth", 12, 3)));
+		$front->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 45, 60, array(array("Vran", 16, 4), array("Vranoth", 16, 4)));
 		$front->systems[] = new Bulkhead($this->getId(), $this->id, 80);
-		$front->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 45, 60, array(array("Vran", 16, 4), array("Vranoth", 12, 3)));
+		$front->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 45, 60, array(array("Vran", 16, 4), array("Vranoth", 16, 4)));
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 16);

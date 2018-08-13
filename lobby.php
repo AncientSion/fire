@@ -13,6 +13,7 @@ if (0){
 if (isset($_POST["purge"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
 	$db = "db.sql";
 	echo DBManager::app()->doPurge($db);
+	header("Location: lobby.php");
 }
 
 //echo DmgCalc::setWeaponPriority(); return;

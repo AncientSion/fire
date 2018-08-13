@@ -28,13 +28,13 @@ class DagKar extends Medium {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 15);
-		$right->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, 44, array(array("Vranoth", 15, 3), array("VranothKa", 10, 2)));
-		$right->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, 44, array(array("Vranoth", 15, 3), array("VranothKa", 10, 2)));
+		$right->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, 44, array(array("Vranoth", 15, 3), array("VranothKa", 15, 3)));
+		$right->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, 44, array(array("Vranoth", 15, 3), array("VranothKa", 15, 3)));
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 15);
-		$left->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, 44, array(array("Vranoth", 15, 3), array("VranothKa", 10, 2)));
-		$left->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, 44, array(array("Vranoth", 15, 3), array("VranothKa", 10, 2)));
+		$left->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, 44, array(array("Vranoth", 15, 3), array("VranothKa", 15, 3)));
+		$left->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, 44, array(array("Vranoth", 15, 3), array("VranothKa", 15, 3)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
