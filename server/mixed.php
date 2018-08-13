@@ -232,7 +232,7 @@ class Mixed extends Ship {
 
 							if ($speed > $t->getCurSpeed() || $speed == $t->getCurSpeed() && $this->id > $t->id){
 								$shift = 1;
-								Debug::log("im faster (or equal and > ID, target moves before me");
+								Debug::log("im faster (or equal and > ID), target moves before me");
 							}
 						}
 						if ($shift){

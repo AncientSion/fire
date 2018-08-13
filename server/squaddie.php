@@ -28,7 +28,6 @@ class Squaddie extends Single {
 
 	public $slots = 0;
 	public $squaddie = 1;
-	//public $dropout = array(0, 0);
 	
 	function __construct($id, $parentId){
 		$this->integrity = floor($this->integrity * 0.8);

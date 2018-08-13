@@ -31,7 +31,6 @@ class Single {
 	public $index = 0;
 	public $emDmg = 0;
 	public $system = false;
-	public $dropout = array(15, 0);
 
 
 	function __construct($id, $parentId){

@@ -33,7 +33,7 @@ class Aurora extends Fighter {
 	public $mass = 34;
 	public $integrity = 26;
 	public $negation = 4;
-	public $baseImpulse = 90;
+	public $baseImpulse = 100;
 	public $baseHitChance = 24;
 
 	function __construct($id, $parentId){
@@ -53,7 +53,7 @@ class Thunderbolt extends Fighter {
 	public $mass = 36;
 	public $integrity = 28;
 	public $negation = 5;
-	public $baseImpulse = 90;
+	public $baseImpulse = 100;
 	public $baseHitChance = 25;
 
 	function __construct($id, $parentId){
@@ -73,7 +73,7 @@ class Sentri extends Fighter {
 	public $mass = 32;
 	public $integrity = 24;
 	public $negation = 5;
-	public $baseImpulse = 105;
+	public $baseImpulse = 110;
 	public $baseHitChance = 22;
 
 	function __construct($id, $parentId){
@@ -92,7 +92,7 @@ class Sitara extends Fighter {
 	public $mass = 34;
 	public $integrity = 22;
 	public $negation = 6;
-	public $baseImpulse = 95;
+	public $baseImpulse = 90;
 	public $baseHitChance = 24;
 
 	function __construct($id, $parentId){
@@ -108,11 +108,11 @@ class Nial extends Fighter {
 	public $name = "Nial";
 	public $role = "Advanced Superiority Fighter";
 	public $faction = "Minbari Federation";
-	public static $value =  45;
+	public static $value =  40;
 	public $mass = 31;
-	public $integrity = 31;
+	public $integrity = 30;
 	public $negation = 7;
-	public $baseImpulse = 115;
+	public $baseImpulse = 120;
 	public $baseHitChance = 26;
 
 	function __construct($id, $parentId){
@@ -132,7 +132,7 @@ class Tishat extends Fighter {
 	public $mass = 29;
 	public $integrity = 28;
 	public $negation = 6;
-	public $baseImpulse = 115;
+	public $baseImpulse = 120;
 	public $baseHitChance = 24;
 
 	function __construct($id, $parentId){
@@ -140,7 +140,7 @@ class Tishat extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new NeutronRepeater($this->getId(), $this->id, $this->parentId, 1, 2, 14, 18, 0, 360);
+		$this->systems[] = new NeutronRepeater($this->getId(), $this->id, $this->parentId, 1, 2, 13, 17, 0, 360);
 	}
 }
 
@@ -152,7 +152,7 @@ class Gorith extends Fighter {
 	public $mass = 34;
 	public $integrity = 22;
 	public $negation = 3;
-	public $baseImpulse = 90;
+	public $baseImpulse = 100;
 	public $baseHitChance = 24;
 
 	function __construct($id, $parentId){
@@ -172,7 +172,7 @@ class Frazi extends Fighter {
 	public $mass = 34;
 	public $integrity = 26;
 	public $negation = 5;
-	public $baseImpulse = 90;
+	public $baseImpulse = 1000;
 	public $baseHitChance = 26;
 
 	function __construct($id, $parentId){

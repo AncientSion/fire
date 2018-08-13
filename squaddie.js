@@ -77,7 +77,7 @@ Squaddie.prototype.getSysDiv = function(){
 				.append($("<td>").html(this.baseHitChance + "%")))
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
-			.append($("<tr>").append($("<td>").attr("colSpan", 2).html("Subject to dropout testing if damaged for more than "+this.dropout[0]+"% of remaining HP in a single turn")))
+//			.append($("<tr>").append($("<td>").attr("colSpan", 2).html("Subject to dropout testing if damaged for more than "+this.dropout[0]+"% of remaining HP in a single turn")))
 		)
 
 	this.attachSysNotes(div);
