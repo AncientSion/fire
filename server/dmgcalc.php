@@ -310,6 +310,7 @@ class DmgCalc {
 
 	public static function doFlashDmg($fire, $hit, $ignored){
 		$baseDmg = $fire->weapon->getTotalDamage($fire, $hit);
+		$damageMod = $baseDmg / $fire->weapon->getBaseDamage($fire, $hit);
 		$system;
 
 		if ($fire->target->ship){
@@ -334,7 +335,8 @@ class DmgCalc {
 			$remInt = $system->getRemIntegrity();
 			$destroyed = 0;
 			$negation = $fire->target->getArmour($fire, $system);	
-			$totalDmg = ceil($baseDmg / 100 * $values[$index]);
+			$subDamage = $values[$index];
+			$totalDmg = ceil($values[$index] * $damageMod);
 			$dmg = static::calcDmg($fire->weapon, $totalDmg, $negation);
 			$dmg = $system->setMaxDmg($fire, $dmg);
 

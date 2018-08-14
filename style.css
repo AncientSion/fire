@@ -743,7 +743,7 @@ table, th, tr, td {
 	position: relative;
 	color: white;
 	margin: auto;
-	margin-top: 5px;
+	margfin-top: 5px;
 	border: 1px solid white;
 	padding: 3px;
 }
@@ -752,7 +752,7 @@ table, th, tr, td {
 	margin: auto;
 	width: 100%;
 	text-align: center;
-	font-size: 18px;
+	font-size: 16px;
 	color: #ffeb3e;
 	background-color: black;
 }
@@ -1371,6 +1371,11 @@ tr.rowBorderBottom {
 	font-size: 14px;
 }
 
+.positiveMod {
+	color: #27e627;
+	font-size: 14px;
+}
+
 .structTable .boostDiv {
 	z-index: 15;
 	position: absolute;
@@ -1742,6 +1747,12 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 	background-color: black;
 	border-radius: 5px;
 	width: 140px;
+	padding: 2px;
+}
+
+#shortinfo div {
+	margin: auto;
+	text-align: center;
 }
 
 #aimDiv {

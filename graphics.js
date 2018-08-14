@@ -471,7 +471,7 @@ function drawDamageNumbers(weapon, anim, fraction){
 	//console.log(fire);
 	//console.log(fire.anims[0][0]);
 	//console.log(fire.anims[fire.anims.length][]);
-	fxCtx.font = "14px Arial";
+	fxCtx.font = "16px Arial";
 	fxCtx.textAlign = "center";
 
 	for (var i = 0; i < anim.float.length; i++){

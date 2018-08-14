@@ -394,16 +394,14 @@ Salvo.prototype.getShortInfo = function(){
 		$(ele).attr("class", "friendly");
 	} else $(ele).attr("class", "hostile");
 
-	var table = document.createElement("table");
-		table.insertRow(-1).insertCell(-1).innerHTML = ("Salvo #" + this.id);
-		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + this.getCurSpeed() + " / " + this.getIntactElements() + "x " + this.structures[0].name;
-		table.insertRow(-1).insertCell(-1).innerHTML = "Base To-Hit: " + this.getStringHitChance();
+	ele
+	.append($("<div>").html("Flight #" + this.id))
+	.append($("<div>").html("Speed: " + this.getCurSpeed() + " / " + this.getIntactElements() + "x " + this.structures[0].name))
+	.append($("<div>").html("Base To-Hit: " + this.getStringHitChance()))
 
 	if (!this.mission.arrived && this.contactThisTurn()){
-		table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>contact imminent</span>";
+		ele.append($("<div>").html("<span class='yellow'>contact imminent</span>"));
 	}
-
-	return table;
 }
 
 Salvo.prototype.setImage = function(){

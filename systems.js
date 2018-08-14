@@ -116,20 +116,21 @@ System.prototype.attachSysMods = function(ele){
 		.append($("<tr>").append($("<th>").html("Modifiers").attr("colSpan", 2)));
 		if (boost){
 			for (var i = 0; i < this.boostEffect.length; i++){
+				var html = "<span class='positiveMod'>";
 				if (this.boostEffect[i].type == "Reload"){
-					var html = this.boostEffect[i].type + ": " + (this.boostEffect[i].value * boost);
+					html += this.boostEffect[i].type + ": " + (this.boostEffect[i].value * boost);
 				}
 				else if (this.boostEffect[i].type == "Shots"){
-					var html = this.boostEffect[i].type + ": +" + (this.boostEffect[i].value * boost);
+					html += this.boostEffect[i].type + ": +" + (this.boostEffect[i].value * boost);
 				}
 				else {
 					var mod = "";
 					if (this.boostEffect[i].value > 0 && this.boostEffect[i].value){
 						mod = "+";
 					}
-					var html = this.boostEffect[i].type + ": " + mod + (this.boostEffect[i].value * boost) + "%";
+						html += this.boostEffect[i].type + ": " + mod + (this.boostEffect[i].value * boost) + "%";
 				}
-				$(table[0]).append($("<tr>").append($("<td>").html(html).attr("colSpan", 2).addClass("positive")));
+				$(table[0]).append($("<tr>").append($("<td>").html(html).attr("colSpan", 2)));
 			}
 		}
 		if (crew){

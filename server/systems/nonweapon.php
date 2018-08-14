@@ -118,14 +118,13 @@ class Command extends PrimarySystem {
 
 		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old);
 
-		$value = 10;
 
         $options = array("Morale", "Focus", "Engine", "Sensor", "Reactor");
         $multi = array(1, 1, 0.75, 1, 0.75);
 		$roll = mt_rand(0, sizeof($options)-1);
 		$roll = 0;
 		$pick = $options[$roll];
-		$value = round($mod * $multi[$roll], 2);
+		$value = round(10 * $multi[$roll], 2);
 
 		Debug::log("BRIDGE CRIT: on ".$pick." for :".$value."%");
 

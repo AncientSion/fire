@@ -1101,11 +1101,11 @@ Ship.prototype.getPowerOrders = function(){
 Ship.prototype.switchDiv = function(){
 	if (this.selected){
 		game.zIndex++;
-		$(this.element).removeClass("disabled").css("zIndex", game.zIndex).find(".commandContainer").show();
+		$(this.element).removeClass("disabled").css("zIndex", game.zIndex);
 	}
 	else if ($(this.element).hasClass("disabled")){
 		game.zIndex++;
-		$(this.element).removeClass("disabled").css("zIndex", game.zIndex).find(".commandContainer").hide();
+		$(this.element).removeClass("disabled").css("zIndex", game.zIndex);
 	}
 	else {
 		game.zIndex--;
@@ -1134,7 +1134,7 @@ Ship.prototype.setPostMoveFacing = function(){
 }
 
 Ship.prototype.setPreMovePosition = function(){
-	//console.log("setPreMovePosition");
+	console.log("setPreMovePosition #" + this.id);
 	this.drawX = this.x;
 	this.drawY = this.y;
 }
@@ -1284,10 +1284,20 @@ Ship.prototype.drawMovePlan = function(){
 }
 
 Ship.prototype.getHeader = function(){
-	var header = this.name + " #" + this.id;
-	if (this.command){header += "<font color='yellow'> - CMD - </font>";}
-	if (this.focus){header += "<font color='yellow'> (FOCUS)</font>";}
-	return header;
+	var div = $("<div>");
+	div
+	.append($("<div>")
+		.append($("<div>").css("display", "inline").html(this.name + " #" + this.id))
+		.append($("<div>").css("display", "inline").css("margin-left", 30).html("(" + this.getFocusCost() + ")")))
+
+	var html = "";
+	if (this.command && this.focus){html = "<div class='yellow'>-CMD-  &  -FOCUS-</div>";}
+	else if (this.command){html = "<div class='yellow'>-CMD-</div>";}
+	else if (this.focus){html = "<div class='yellow'>-CMD-</div>";}
+
+	div.append($("<div>").html(html));
+
+	return div;
 }
 
 Ship.prototype.getShortInfo = function(){
@@ -1297,17 +1307,17 @@ Ship.prototype.getShortInfo = function(){
 	} else $(ele).attr("class", "hostile");
 
 	var impulse = this.getCurSpeed();
-	var header = this.getHeader();
 
-	var table = document.createElement("table");
-		table.insertRow(-1).insertCell(-1).innerHTML = header;
-		//table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id + " ("+this.traverse+")";
-		if (this.isRolled()){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-ROLLED-!</span>";}
-		if (this.isRolling()){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-ROLLING-!</span>";}
-		if (this.isFlipping()){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-FLIPPING-!</span>";}
-		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
-		table.insertRow(-1).insertCell(-1).innerHTML = "Base To-Hit: " + this.getStringHitChance();
-	return table;
+	ele
+	.append(this.getHeader())
+
+	if (this.isRolled()){ele.append($("<div>").addClass("yellow").html("!-ROLLED-!"));}
+	if (this.isRolling()){ele.append($("<div>").addClass("yellow").html("!-ROLLING-!"));}
+	if (this.isFlipping()){ele.append($("<div>").addClass("yellow").html("!-FLIPPING-!"));}
+
+	ele
+	.append($("<div>").html("Speed: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")"))
+	.append($("<div>").html("Base To-Hit: " + this.getStringHitChance()))
 }
 
 Ship.prototype.getParent = function(){
@@ -2374,12 +2384,10 @@ Ship.prototype.getFocusString = function(){
 	return this.baseFocusRate + " + " + this.modFocusRate + "%" + " / " + this.getFocusIfCommand();
 }
 
-Ship.prototype.addFocusDiv = function(div){
-	if (this.isJumpingOut()){return;}
-	if (this.isDestroyed()){return;}
-	if (game.phase == -2){return;}
+Ship.prototype.addFocusDiv = function(shipDiv){
+	if (this.isJumpingOut() || this.isDestroyed() || game.phase != 3){return;}
 
-	div.append(
+	shipDiv.append(
 		$("<div>")
 		.addClass("focusContainer")
 		.append(
@@ -2402,44 +2410,37 @@ Ship.prototype.addFocusDiv = function(div){
 		)
 	)
 
-	if (game.phase != 3){div.find(".focusContainer input").addClass("inactive")}
-	if (this.focus){$(this.element).find(".focusContainer .focusEntry").show();}
+	if (this.focus){$(shipDiv).find(".focusContainer .focusEntry").show();}
 	else $(this.element).find(".focusContainer input").show();
 }
 
-Ship.prototype.addCommandDiv = function(div){
-	if (this.isJumpingOut()){return;}
-	if (this.isDestroyed()){return;}
-	if (!this.friendly){return;}
-	if (game.phase == -2){return;}
-	//if (game.phase != 3){return;}
-	//if (!game.hasNoCommandUnit()){return;}
-	//if (!game.canSetNewCommandUnit()){return;}
+Ship.prototype.addCommandDiv = function(shipDiv){
+	if (this.isJumpingOut() || this.isDestroyed()){return;}
 
-	$(div).append(
+	$(shipDiv).append(
 		$("<div>")
 		.addClass("commandContainer")
-		.append(
-			$("<input>")
-			.attr("type", "button")
-			.attr("value", "Assign Fleet Command (+" + this.getFocusIfCommand() + " / turn)")
-			.hide()
-			.click(function(){
-				popup("Reallocation Fleet Command will set saved Focus Points to 0 at end of turn.</br>Please confirm your order.</br><input type='button' class='popupEntryConfirm' value='Confirm Transfer' onclick='game.getUnit(aUnit).setCommand()'>");
-				//game.getUnit($(this).parent().parent().data("shipId")).setCommand();
-			})
-		)
-		.append(
-			$("<div>")
-			.html("Active Fleet Command (+" + this.getFocusIfCommand() + " / turn)")
-			.addClass("commandEntry")
-			.hide()
-		)
+			.append(
+				$("<input>")
+				.attr("type", "button")
+				.attr("value", "Assign Fleet Command (+" + this.getFocusIfCommand() + " / turn)")
+				.hide()
+				.click(function(){
+					popup("Reallocation Fleet Command will set saved Focus Points to 0 at end of turn.</br>Please confirm your order.</br><input type='button' class='popupEntryConfirm' value='Confirm Transfer' onclick='game.getUnit(aUnit).setCommand()'>");
+					//game.getUnit($(this).parent().parent().data("shipId")).setCommand();
+				})
+			)
+			.append(
+				$("<div>")
+				.html("Active Fleet Command (+" + this.getFocusIfCommand() + " / turn)")
+				.addClass("commandEntry")
+				.hide()
+			)
 	)
 
-	if (this.command){div.find(".commandContainer .commandEntry").show();}
-	else if (game.phase == 3 && game.canSetNewCommandUnit()){div.find(".commandContainer input").show();}
-	else div.find(".commandContainer").hide();
+	if (this.command){shipDiv.find(".commandContainer .commandEntry").show();}
+	else if (game.phase == 3 && game.canSetNewCommandUnit()){shipDiv.find(".commandContainer input").show();}
+	else shipDiv.find(".commandContainer").hide();
 }
 
 Ship.prototype.getUnmoddedFocusGain = function(){

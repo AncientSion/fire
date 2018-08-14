@@ -1569,10 +1569,11 @@ function Game(data){
 
 		this.shortInfo = unit.id;
 
-		var ele = ui.shortInfo;
-		$(ele).children().remove().end().append($(unit.getShortInfo()).css("width", "100%"));
+		unit.getShortInfo();
+		//var ele = ui.shortInfo;
+		//$(ele).children().remove().end().append($(unit.getShortInfo()).css("width", "100%"));
 
-		var oX = $(ele).width()/2;
+		var oX = $(ui.shortInfo).width()/2;
 		var pos;
 		var top;
 		var left;
@@ -1588,7 +1589,7 @@ function Game(data){
 			top = pos.y + 30;
 		}
 
-		$(ele).css("left", left).css("top", top).show();
+		$(ui.shortInfo).css("left", left).css("top", top).show();
 
 		if (unit.id != aUnit){unit.doHover();}
 	}
