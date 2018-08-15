@@ -422,6 +422,22 @@ function drawExplosion(weapon, anim){  // 150, 150, 30
 	fxCtx.beginPath(); fxCtx.arc(anim.tx, anim.ty, sin*0.66, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = mid; fxCtx.fill();
 	fxCtx.beginPath(); fxCtx.arc(anim.tx, anim.ty, sin*0.35, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = inner; fxCtx.fill();
 
+	/*
+	var width = 90;
+	var parts = 15;
+	for (var i = -width/2; i < width; i += width/parts){
+		var a = i;
+		var p = getPointInDir(30*fraction, a, 0, 0);
+
+		fxCtx.beginPath();
+		fxCtx.moveTo(anim.tx, anim.ty);
+		fxCtx.lineTo(anim.tx + p.x, anim.ty + p.y);
+		fxCtx.closePath();
+		fxCtx.strokeStyle = "yellow";
+		fxCtx.stroke();
+	}
+	*/
+
 
 	drawDamageNumbers(weapon, anim, fraction);
 

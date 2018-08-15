@@ -418,7 +418,7 @@ class Mixed extends Ship {
 			"id" => $this->id,
 			"x" => $this->actions[sizeof($this->actions)-1]->x,
 			"y" => $this->actions[sizeof($this->actions)-1]->y,
-			"delay" => $delay,
+			"delay" => 0,
 			"facing" => $facing,
 			"thrust" => $this->curImp,
 			"rolling" => $this->isRolling(),

@@ -1576,6 +1576,7 @@ function Game(data){
 
 		this.shortInfo = unit.id;
 
+		ui.shortInfo.empty();
 		unit.getShortInfo();
 		//var ele = ui.shortInfo;
 		//$(ele).children().remove().end().append($(unit.getShortInfo()).css("width", "100%"));
