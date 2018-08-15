@@ -62,6 +62,7 @@ function BeamVector(o, a, b, n, m, h){
 	this.n = n;
 	this.m = m;
 	this.h = h;
+	this.p = 0;
 	this.done = 0;
 	this.x;
 	this.y;
@@ -957,8 +958,10 @@ FireOrder.prototype.setNumberAnim = function(){
 				armour: armour,
 				system: system,
 				hull: hull,
-				x: drawPos.x,
-				y: drawPos.y
+				x: drawPos.x + range(-10, 10),
+				y: drawPos.y,
+				n: 0,
+				m: last.m
 
 			}
 		);

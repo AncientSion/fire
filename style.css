@@ -732,7 +732,7 @@ table, th, tr, td {
 	position: relative;
 	color: white;
 	margin: auto;
-	border: 1px solid white;
+	border-top: 1px solid white;
 }
 
 .structContainer.squad {
@@ -744,7 +744,8 @@ table, th, tr, td {
 	color: white;
 	margin: auto;
 	margfin-top: 5px;
-	border: 1px solid white;
+	bforder-top: 1px solid white;
+	forder-bottom: 1px solid white;
 	padding: 3px;
 }
 
@@ -1182,14 +1183,13 @@ div.integrityFull {
 	width: 205px;
 	margin: auto;
 	padding: 0 0 0 0;
-	border: 1px solid white;
 }
 
 .shipDiv .coreContainer {
 	display: inline-block;
 	width: 100px;
-	border-top: 1px solid white;
-	border-bottom: 1px solid white;
+	lborder-top: 1px solid white;
+	lborder-bottom: 1px solid white;
 }
 
 .shipDiv .notes {
@@ -1199,6 +1199,7 @@ div.integrityFull {
 	width: 100%;
 	text-align: center;
 	color: #ffeb3e;
+	border-top: 1px solid black;
 }
 
 .shipDiv.squad .notes {
@@ -1206,7 +1207,7 @@ div.integrityFull {
 
 .shipDiv .iconContainer {
 	width: 80px;
-	border: 1px solid white;
+	border-left: 1px solid white;
 }
 
 .coreContainer  .system {

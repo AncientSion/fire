@@ -1150,7 +1150,7 @@ Ship.prototype.setPostMovePosition = function(){
 	this.drawY = this.actions[this.actions.length-1].y;
 }
 
-Ship.prototype.needsAnimationNow = function(){
+Ship.prototype.animatesThisPhase = function(){
 	if (!this.toAnimate){return false;}
 	if ((this.ship || this.squad) && !game.animShip){return false;}
 	if (this.flight && !game.animFlight || this.salvo && !game.animSalvo){return false;}
@@ -1609,7 +1609,7 @@ Ship.prototype.createMoveStartEntry = function(type){
 
 }
 
-Ship.prototype.createActionEntry = function(move){
+Ship.prototype.createActionEntry = function(){
 	if (this.isRolling()){
 		this.attachLogEntry("<th colSpan=9><span>" + this.getLogTitleSpan() + " is initiating a ROLL manover.</span></th>");
 	}
@@ -1878,8 +1878,8 @@ Ship.prototype.getSystemLocation = function(i, name){
 Ship.prototype.getWeaponOrigin = function(id){
 	for (var i = 0; i < this.structures.length; i++){
 		if (i == this.structures.length-1 || id > this.structures[i].id && id < this.structures[i+1].id){
-			var devi = this.size / 2;
-			return getPointInDir(this.size/4 + range (-devi, devi), (getSystemArcDir(this.structures[i]) + this.getDrawFacing()), 0, 0);
+			var devi = this.size / 5;
+			return getPointInDir(this.size/3 + range (-devi, devi), (getSystemArcDir(this.structures[i]) + this.getDrawFacing()), 0, 0);
 		}
 	}
 	console.log("lacking gun origin");
@@ -2396,7 +2396,7 @@ Ship.prototype.addFocusDiv = function(shipDiv){
 			.attr("value", "Assign Focus (cost: " + this.getFocusCost()+")")
 			.hide()
 			.click(function(){
-				game.getUnit($(this).parent().parent().data("shipId")).setUnitFocus();
+				game.getUnit($(this).parent().parent().data("shipId")).toggleFocus();
 			})
 		)
 		.append(
@@ -2405,7 +2405,7 @@ Ship.prototype.addFocusDiv = function(shipDiv){
 			.addClass("focusEntry")
 			.hide()
 			.click(function(){
-				game.getUnit($(this).parent().parent().data("shipId")).unsetUnitFocus();
+				game.getUnit($(this).parent().parent().data("shipId")).toggleFocus();
 			})
 		)
 	)
@@ -2503,6 +2503,11 @@ Ship.prototype.getFocusCost = function(){
 	return Math.ceil(this.cost);
 }
 
+Ship.prototype.toggleFocus = function(){
+	if (this.focus){this.unsetUnitFocus();}
+	else this.setUnitFocus();
+}
+
 Ship.prototype.setUnitFocus = function(){
 	if (!this.friendly){return;}
 	if (game.phase != 3){popup("Focus can only be issued in Phase 3 - Damage Control"); return;}
@@ -2510,7 +2515,8 @@ Ship.prototype.setUnitFocus = function(){
 	if (!this.canAffordFocus()){popup("You are lacking focus ressources for this action.</br>Have: " + game.getRemFocus() + "</br>Spending: " + game.getFocusSpending() + "</br>Need: " + this.getFocusCost()); return;}
 	if (!this.focus){
 		this.focus = 1;
-		$(this.element).find(".focusContainer").find("input").hide().end().find(".focusEntry").show();
+		//$(this.element).find(".focusContainer").find("input").hide().end().find(".focusEntry").show();
+		$(this.element).find(".focusContainer").find("input").attr("value", "Has Focus (" + this.getFocusCost() + " FP)");
 		//game.setFocusInfo();
 	}
 }
@@ -2518,7 +2524,8 @@ Ship.prototype.setUnitFocus = function(){
 Ship.prototype.unsetUnitFocus = function(){
 	if (this.focus){
 		this.focus = 0;
-		$(this.element).find(".focusContainer").find("input").show().end().find(".focusEntry").hide();
+		//$(this.element).find(".focusContainer").find("input").show().end().find(".focusEntry").hide();
+		$(this.element).find(".focusContainer").find("input").attr("value", "Assign Focus (" + this.getFocusCost() + " FP)");
 		//game.setFocusInfo();
 	}
 }
@@ -2903,15 +2910,15 @@ Ship.prototype.expandDiv = function(div){
 			$(this.getBaseImage().cloneNode(true))
 				.addClass("rotate270")
 				.css("width", "100%")
-				.css("border-left", "1px solid white")
+				//.css("border-left", "1px solid white")
 				//.css("width", goal)
 				//.css("height", goal)
 				//.css("margin-left", (conW - goal)/2)
 		)
 		.append($("<div>")
 			.addClass("notes")
-				.hide())
-
+				//.hide()
+			)
 	//rolling ?
 
 	this.setNotes();
@@ -3366,7 +3373,7 @@ Ship.prototype.getLockEffect = function(target){
 
 	if (target.ship || target.squad){
 		multi = 0.5;
-		multi += (0.6 / 10 * this.traverse);
+		multi += (0.6 / 10 * (this.traverse-4));
 	}
 	else if (target.flight){
 		multi = 1.5;
@@ -3404,7 +3411,7 @@ Ship.prototype.getMaskEffect = function(shooter){
 
 	if (shooter.ship || shooter.squad){
 		multi = 0.5;
-		multi += (0.6 / 10 * this.traverse);
+		multi += (0.6 / 10 * (this.traverse-4));
 	}
 	else if (shooter.flight){
 		return 0;

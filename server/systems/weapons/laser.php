@@ -79,7 +79,7 @@ class LightParticleBeam extends Laser {
 	public $name = "LightParticleBeam";
 	public $display = "Light Particle Beam";
 	public $animColor = "blue";
-	public $rakeTime = 25;
+	public $rakeTime = 35;
 	public $beamWidth = 1;
 	public static $prio = 0;
 	public $minDmg = 25;

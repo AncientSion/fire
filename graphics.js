@@ -236,9 +236,6 @@ function drawProjectile(weapon, anim){
 	var trailEnd = getPointInDir(weapon.projSize*2.5, anim.f, x, y);
 	var w = 1;
 
-	fxCtx.translate(cam.o.x, cam.o.y);
-	fxCtx.scale(cam.z, cam.z)
-
 	if (anim.n/anim.m > 0.7){
 		w -= 2*(anim.n/anim.m- 0.7);
 	}
@@ -258,7 +255,6 @@ function drawProjectile(weapon, anim){
 	fxCtx.stroke();
 	fxCtx.closePath();
 	fxCtx.globalCompositeOperation = "source-over";
-	fxCtx.setTransform(1,0,0,1,0,0);
 
 	if (anim.n >= anim.m && anim.h){
 		anim.p = 1;
@@ -398,8 +394,8 @@ function drawExplosion(weapon, anim){  // 150, 150, 30
 	var sin = weapon.exploSize*1*Math.sin(Math.PI*fraction);
 	if (sin < 0){return;}
 
-	fxCtx.translate(cam.o.x, cam.o.y);
-	fxCtx.scale(cam.z, cam.z)
+	//fxCtx.translate(cam.o.x, cam.o.y);
+	//fxCtx.scale(cam.z, cam.z)
 	fxCtx.globalAlpha = 1.2 - fraction;
 
 	var outer = "";
@@ -427,11 +423,11 @@ function drawExplosion(weapon, anim){  // 150, 150, 30
 	fxCtx.beginPath(); fxCtx.arc(anim.tx, anim.ty, sin*0.35, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = inner; fxCtx.fill();
 
 
-	if (anim.float){drawDamageNumbers(weapon, anim, fraction);}
+	drawDamageNumbers(weapon, anim, fraction);
 
 	fxCtx.globalAlpha = 1;
 	fxCtx.globalCompositeOperation = "source-over";
-	fxCtx.setTransform(1,0,0,1,0,0);
+	//fxCtx.setTransform(1,0,0,1,0,0);
 	//var font = "Damage!";
 
 	//fxCtx.font = "30px Arial";
@@ -465,7 +461,30 @@ function drawExplosion(weapon, anim){  // 150, 150, 30
 	}*/
 }
 
+function drawDamageNumbers2(weapon, anim){
+	var fraction = anim.n/anim.m;
+
+	fxCtx.font = "16px Arial";
+	fxCtx.textAlign = "center";
+
+	for (var i = 0; i < anim.float.length; i++){
+		fxCtx.fillStyle = "lightBlue";
+		fxCtx.fillText(anim.float[i].armour, anim.float[i].x -35, anim.float[i].y -30 - (20 * fraction));
+		fxCtx.fillStyle = "yellow";
+		fxCtx.fillText(anim.float[i].system, anim.float[i].x, anim.float[i].y -30 - (20 * fraction));
+		fxCtx.fillStyle = "red";
+		fxCtx.fillText(anim.float[i].hull, anim.float[i].x +35, anim.float[i].y -30 - (20 * fraction));
+	}
+
+
+	//fxCtx.translate(cam.o.x, cam.o.y);
+	//fxCtx.scale(cam.z, cam.z);
+//	fxCtx.fillText(font, anim.tx, anim.ty - 30 - (20 * fraction));
+}
+
 function drawDamageNumbers(weapon, anim, fraction){
+	return;
+	if (!anim.float || !anim.h){return;}
 	//console.log("draw");
 	//console.log(fire);
 	//console.log(fire);
@@ -475,12 +494,12 @@ function drawDamageNumbers(weapon, anim, fraction){
 	fxCtx.textAlign = "center";
 
 	for (var i = 0; i < anim.float.length; i++){
-		fxCtx.fillStyle = "grey";
-		fxCtx.fillText(anim.float[i].armour, anim.float[i].x -30, anim.float[i].y -30 - (20 * fraction));
+		fxCtx.fillStyle = "lightBlue";
+		fxCtx.fillText(anim.float[i].armour, anim.float[i].x -35, anim.float[i].y -30 - (20 * fraction));
 		fxCtx.fillStyle = "yellow";
 		fxCtx.fillText(anim.float[i].system, anim.float[i].x, anim.float[i].y -30 - (20 * fraction));
 		fxCtx.fillStyle = "red";
-		fxCtx.fillText(anim.float[i].hull, anim.float[i].x +30, anim.float[i].y -30 - (20 * fraction));
+		fxCtx.fillText(anim.float[i].hull, anim.float[i].x +35, anim.float[i].y -30 - (20 * fraction));
 	}
 
 
@@ -533,8 +552,8 @@ function drawUnitExplo(x, y, s, now, max){
 }
 
 function drawBeam(weapon, anim){
-	fxCtx.translate(cam.o.x, cam.o.y);
-	fxCtx.scale(cam.z, cam.z)
+	//fxCtx.translate(cam.o.x, cam.o.y);
+	//fxCtx.scale(cam.z, cam.z)
 
 	var fraction = anim.n/anim.m;
 	var charge = 0.5 - 0.3*Math.cos(2*Math.PI*fraction);
@@ -557,6 +576,7 @@ function drawBeam(weapon, anim){
 	var y = anim.tay + anim.ny * anim.n;
 
 	if (fraction > 0.3){
+		anim.p = 1;
 		var beamW = 0.5 + 0.5 * Math.cos(2*Math.PI*fraction);
 		fxCtx.lineCap = "round";	
 		fxCtx.beginPath();
@@ -576,15 +596,12 @@ function drawBeam(weapon, anim){
 		fxCtx.stroke();
 		if (anim.h){
 			drawBeamExplosion(weapon, x, y, fraction);
-			if (fraction > 0.3){
-				drawDamageNumbers(weapon, {tx: anim.tax, ty: anim.tay, float: anim.float}, fraction);
-			}
 		}
 	}
 		
 	fxCtx.globalCompositeOperation = "source-over";
 	fxCtx.lineCap = "butt";
-	fxCtx.setTransform(1,0,0,1,0,0);
+	//fxCtx.setTransform(1,0,0,1,0,0);
 }
 
 function drawBeamExplosion(weapon, x, y, fraction){

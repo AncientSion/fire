@@ -2366,7 +2366,7 @@ Particle.prototype.getAnimation = function(fire){
 	var gunDelay = 30;
 	var shotDelay = 8;
 	//if (this.name == "MediumParticle"){shotDelay = 10;}
-	//else if (this.name == "LightParticle"){gunDelay = 15;}
+	if (this.name == "LightParticle"){gunDelay = 40;}
 	//else if (this.name == "SuperHeavyParticle"){shotDelay = 3; gunDelay = 35;}
 	var cc = 0;
 	var hits = 0;

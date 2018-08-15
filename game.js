@@ -939,7 +939,7 @@ function Game(data){
 		this.setPostMoveCC();
 		this.checkUnitOffsetting();
 
-		if (game.phase == 2){
+		if (this.phase == 2){
 			for (var i = 0; i < this.ships.length; i++){
 				//if (this.ships[i].ship || this.ships[i].squad){this.ships[i].setSupportImage();}
 				this.ships[i].setSupportImage();
@@ -948,19 +948,26 @@ function Game(data){
 					this.ships[i].setPatrolLayout();
 					this.ships[i].setImage();
 				}
+				else if (this.ships[i].ship || this.ships[i].squad && !this.ships[i].animatesThisPhase()){
+					for (var j = 0; j < this.ships[i].actions.length; j++){
+						if (this.ships[i].actions[j].type == "roll"){this.ships[i].createActionEntry();}
+						else if (this.ships[i].actions[j].type == "flip"){this.ships[i].createActionEntry();}
+					}
+				}
+
 			}
 		}
 
 		this.createLogEntry("-- Movement concluded --");
 
 		if (this.events.length){
-			if (game.phase == 2){
+			if (this.phase == 2){
 				game.timeout = setTimeout(function(){
 					//$($("#combatLog").find("td")[0]).attr("colSpan", 8)
 					game.resolvePostMoveFire();
 				}, 1000);
 			}
-			else if (game.phase == 1){
+			else if (this.phase == 1){
 				this.animating = 0;
 				this.drawingEvents = 1;
 				this.logWeaponEvents();
@@ -971,7 +978,7 @@ function Game(data){
 			this.animating = 0;
 			this.drawingEvents = 1;
 			this.draw();
-			if (game.phase == 2){
+			if (this.phase == 2){
 				this.autoIssueFireOrders();
 			}
 		}
@@ -1805,7 +1812,7 @@ function Game(data){
 		
 			for (var i = 0; i < game.ships.length; i++){
 				if (game.ships[i].deployed){
-					if (!game.ships[i].needsAnimationNow()){game.ships[i].draw(); continue;}
+					if (!game.ships[i].animatesThisPhase()){game.ships[i].draw(); continue;}
 
 					for (var j = 0; j < game.ships[i].actions.length; j++){
 						if (game.ships[i].actions[j].turn == game.turn && !game.ships[i].actions[j].animated){
@@ -1851,11 +1858,11 @@ function Game(data){
 							}
 							else if (action.type == "roll"){
 								action.animated = true;
-								game.ships[i].createActionEntry(action);
+								game.ships[i].createActionEntry();
 							}
 							else if (action.type == "flip"){
 								action.animated = true;
-								game.ships[i].createActionEntry(action);
+								game.ships[i].createActionEntry();
 							}
 							else if (action.type == "patrol"){
 								action.animated = true;
@@ -1879,10 +1886,10 @@ function Game(data){
 			
 			for (var i = 0; i < game.ships.length; i++){
 				if (!done){break;}
-				else if (game.ships[i].needsAnimationNow()){
+				else if (game.ships[i].animatesThisPhase()){
 					for (var j = 0; j < game.ships[i].actions.length; j++){
 						if (game.ships[i].actions[j].turn == game.turn){
-							if (! game.ships[i].actions[j].animated){
+							if (!game.ships[i].actions[j].animated){
 								done = false;
 								break;
 							}
@@ -2289,6 +2296,8 @@ function Game(data){
 
 		window.then = window.now - (window.elapsed % window.fpsTicks);
 		fxCtx.clearRect(0, 0, res.x, res.y);
+		fxCtx.translate(cam.o.x, cam.o.y);
+		fxCtx.scale(cam.z, cam.z)
 
 		if (!game.fireOrders[i].animating){
 			game.fireOrders[i].animating = 1;
@@ -2344,6 +2353,11 @@ function Game(data){
 						game.fireOrders[i].anim[j][k].n += 1;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
 							drawBeam(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+							//if (game.fireOrders[i].anim[j][k].h){
+							//	drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+							//}
+
+							drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
 							if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
 								game.fireOrders[i].anim[j][k].done = true;
 							}
@@ -2362,6 +2376,7 @@ function Game(data){
 					}
 				}
 				else if (game.fireOrders[i].weapon.animation == "area"){
+					float = 0;
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 						game.fireOrders[i].anim[j][k].n += 1;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
@@ -2372,9 +2387,25 @@ function Game(data){
 						}
 					}
 				}
+
+
+				
+				if (game.fireOrders[i].anim[j][k].float && game.fireOrders[i].anim[j][k].p){
+					for (var l = 0; l < game.fireOrders[i].anim[j][k].float.length; l++){
+						game.fireOrders[i].anim[j][k].float[l].n++;
+						drawDamageNumbers2(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+					}
+				}
+				
 			}
 		}
 
+
+		
+
+		//console.log("ding");
+
+		fxCtx.setTransform(1,0,0,1,0,0);
 		var allAnimated = 1;
 		for (var j = 0; j < game.fireOrders[i].anim.length; j++){
 			for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){

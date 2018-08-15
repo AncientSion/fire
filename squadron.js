@@ -192,11 +192,12 @@ Squadron.prototype.expandDiv = function(div){
 		.append($("<div>")
 			.addClass("iconContainer")					
 				.append(
-					$(this.getBaseImage()).addClass("rotate270").css("width", "100%").css("border-left", "1px solid white")
+					$(this.getBaseImage()).addClass("rotate270").css("width", "100%")//.css("border-left", "1px solid white")
 				)
 				.append($("<div>")
 					.addClass("notes")
-						.hide())
+						//.hide()
+				)
 				.data("shipId", this.id)
 				.hover(function(e){
 					if (aUnit){
@@ -517,7 +518,8 @@ Squadron.prototype.setImage = function(){
 Squadron.prototype.updateImage = function(){
 	this.setImage();
 	$(this.element).find(".iconContainer").empty()
-		.append($(this.getBaseImage()).addClass("rotate270").css("width", "100%").css("border-left", "1px solid white"))
+		.append($(this.getBaseImage()).addClass("rotate270").css("width", "100%")//.css("border-left", "1px solid white")
+	)
 }
 
 Squadron.prototype.getWeaponOrigin = function(id){

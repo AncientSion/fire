@@ -941,7 +941,7 @@ class Ship {
 
 	public function getLockEffect($target){
 		if ($target->ship || $target->squad){
-			return 0.5 + (0.06 * $this->traverse);
+			return 0.5 + (0.06 * ($this->traverse-4));
 		}
 		else if ($target->flight){
 			return 1.5;
@@ -953,7 +953,7 @@ class Ship {
 
 	public function getMaskEffect($target){
 		if ($target->ship || $target->squad){
-			return 0.5 + (0.06 * $this->traverse);
+			return 0.5 + (0.06 * ($this->traverse-4));
 		}
 		else if ($target->flight){
 			return 0;
@@ -1321,15 +1321,13 @@ class Ship {
 	}
 
 	static function getKit($faction){
-	return array(
-		"id" => 0,
-		"name" => "",
-		"cost" => static::$value,
-		"gameid" => 0,
-		"userid" => 0,
-		"upgrades" => 
-			array(
-			)
+		return array(
+			"id" => 0,
+			"name" => "",
+			"cost" => static::$value,
+			"gameid" => 0,
+			"userid" => 0,
+			"upgrades" => array()
 		);
 	}
 
