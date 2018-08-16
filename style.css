@@ -1188,8 +1188,7 @@ div.integrityFull {
 .shipDiv .coreContainer {
 	display: inline-block;
 	width: 100px;
-	lborder-top: 1px solid white;
-	lborder-bottom: 1px solid white;
+	border-left: 1px solid white;
 }
 
 .shipDiv .notes {

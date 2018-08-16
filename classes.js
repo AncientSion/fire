@@ -75,6 +75,8 @@ function BeamVector(o, a, b, n, m, h){
 		this.tby = b.y;
 		this.x = b.x - a.x;
 		this.y = b.y - a.y;
+
+		this.f = getAngleFromTo(o, a);
 		
 		var x = Math.pow(this.x, 2);
 		var y = Math.pow(this.y, 2);

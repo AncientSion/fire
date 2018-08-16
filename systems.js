@@ -134,7 +134,7 @@ System.prototype.attachSysMods = function(ele){
 			}
 		}
 		if (crew){
-			$(table[0]).append($("<tr>").append($("<td>").html(crew + "* Officer: +" + (this.getCrewEffect() * crew) + "% " + this.getCrewTerm()).attr("colSpan", 2).addClass("positive")));
+			$(table[0]).append($("<tr>").append($("<td>").html("<span class='positiveMod'>" + crew + "* Officer: +" + (this.getCrewEffect() * crew) + "% " + this.getCrewTerm() +"</span>").attr("colSpan", 2)));
 		}
 		if (this.crits.length){
 			for (var i = 0; i < this.crits.length; i++){
