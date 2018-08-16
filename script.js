@@ -21,6 +21,8 @@ function sizeCanvas(){
 		canv[i].style.zIndex = i+1;
 		canv[i].style.position = "absolute";
 	}
+	
+	drawCanvas.style.zIndex = 0;
 }
 
 function scopeCanvas(){
