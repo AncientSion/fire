@@ -102,9 +102,6 @@ window.speedMod = 1;
 
 window.startTime, window.now, window.then, window.elapsed;
 
-window.res.x = window.innerWidth-1;
-window.res.y = window.innerHeight-1;
-
 window.iterator = 0;
 
 function setFPS(fps){

@@ -7,6 +7,16 @@ $(window).on("load", function(){
 function init(data){
 	console.time("time");
 
+	res.x = window.innerWidth-1;
+	res.y = window.innerHeight-1;
+
+	$(window).on('resize', function(){
+		res.x = window.innerWidth-1;
+		res.y = window.innerHeight-1;
+		game.doPositionChat();
+
+	});
+
 	$("#mouseCanvas").mousemove(canvasMouseMove);
 	$("#mouseCanvas").bind('wheel', mouseCanvasZoom);
 	$("#mouseCanvas").contextmenu(function(e){e.preventDefault(); e.stopPropagation();});
@@ -25,6 +35,7 @@ function init(data){
 		canv[i].style.zIndex = i+1;
 		canv[i].style.position = "absolute";
 	}
+
 
 	$("#phaseSwitchDiv").css("width", res.x).css("height", res.y);
 	var h = $("#phaseSwitchInnerDiv").height();

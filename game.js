@@ -2834,9 +2834,9 @@ Game.prototype.doPositionChat = function(){
 	var chatW = $chat.width();
 	var chatH = $chat.height();
 
-	$log = $("#combatLogWrapper");
-	var logW = $chat.width();
-	var logH = $chat.height();
+	//$log = $("#combatLogWrapper");
+	//var logW = $chat.width();
+	//var logH = $chat.height();
 
 	//var w = 600;
 
