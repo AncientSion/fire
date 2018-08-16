@@ -4,27 +4,13 @@ $(window).on("load", function(){
 	ajax.getGameData(window.gameid, window.userid);
 });
 
-function init(data){
-	console.time("time");
+function initCanvas(){
+	sizeCanvas();
+	scopeCanvas()
 
-	res.x = window.innerWidth-1;
-	res.y = window.innerHeight-1;
+}
 
-	$(window).on('resize', function(){
-		res.x = window.innerWidth-1;
-		res.y = window.innerHeight-1;
-		game.doPositionChat();
-
-	});
-
-	$("#mouseCanvas").mousemove(canvasMouseMove);
-	$("#mouseCanvas").bind('wheel', mouseCanvasZoom);
-	$("#mouseCanvas").contextmenu(function(e){e.preventDefault(); e.stopPropagation();});
-
-	$("#mouseCanvas").mousedown(handleMouseDown);
-	$("#mouseCanvas").mouseup(function(e){handleMouseUp(e);});
-	$("#mouseCanvas").mouseout(function(e){handleMouseOut(e);});
-
+function sizeCanvas(){
 	var canv = document.getElementsByTagName("canvas");
 
 	for (var i = 0; i < canv.length; i++){
@@ -35,13 +21,10 @@ function init(data){
 		canv[i].style.zIndex = i+1;
 		canv[i].style.position = "absolute";
 	}
+}
 
-
-	$("#phaseSwitchDiv").css("width", res.x).css("height", res.y);
-	var h = $("#phaseSwitchInnerDiv").height();
-	var w = $("#phaseSwitchInnerDiv").width();
-	$("#phaseSwitchInnerDiv").css("top", res.y/2 - h-400).css("left", res.x/2 - w/2).removeClass("disabled");
-
+function scopeCanvas(){
+	var canv = document.getElementsByTagName("canvas");
 
 	canvas = canv[0];
 	ctx = canvas.getContext("2d");
@@ -64,6 +47,40 @@ function init(data){
 	drawCanvas = canv[6];
 	drawCanvas.style.zIndex = 0;
 	drawCtx = drawCanvas.getContext("2d");
+}
+
+function init(data){
+	console.time("time");
+
+	res.x = window.innerWidth-1;
+	res.y = window.innerHeight-1;
+
+	$(window).on('resize', function(){
+		res.x = window.innerWidth-1;
+		res.y = window.innerHeight-1;
+		sizeCanvas();
+		game.doPositionChat();
+		game.draw();
+	});
+
+	scopeCanvas();
+	sizeCanvas();
+
+	$("#mouseCanvas").mousemove(canvasMouseMove);
+	$("#mouseCanvas").bind('wheel', mouseCanvasZoom);
+	$("#mouseCanvas").contextmenu(function(e){e.preventDefault(); e.stopPropagation();});
+
+	$("#mouseCanvas").mousedown(handleMouseDown);
+	$("#mouseCanvas").mouseup(function(e){handleMouseUp(e);});
+	$("#mouseCanvas").mouseout(function(e){handleMouseOut(e);});
+
+
+	$("#phaseSwitchDiv").css("width", res.x).css("height", res.y);
+	var h = $("#phaseSwitchInnerDiv").height();
+	var w = $("#phaseSwitchInnerDiv").width();
+	$("#phaseSwitchInnerDiv").css("top", res.y/2 - h-400).css("left", res.x/2 - w/2).removeClass("disabled");
+
+
 
 	turn = new Turn();
 	game = new Game(data);
