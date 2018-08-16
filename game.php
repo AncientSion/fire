@@ -221,13 +221,13 @@
 		</div>
 
 		<div id="canvasDiv" class="disabled">
-			<canvas id="canvas"></canvas>
-			<canvas id="fxCanvas"></canvas>
-			<canvas id="planCanvas"></canvas>
-			<canvas id="moveCanvas"></canvas>
-			<canvas id="salvoCanvas"></canvas>
-			<canvas id="mouseCanvas"></canvas>
-			<canvas id="drawCanvas"></canvas>
+			<canvas id="canvas" class="gameCanvas"></canvas>
+			<canvas id="fxCanvas" class="gameCanvas"></canvas>
+			<canvas id="planCanvas" class="gameCanvas"></canvas>
+			<canvas id="moveCanvas" class="gameCanvas"></canvas>
+			<canvas id="salvoCanvas" class="gameCanvas"></canvas>
+			<canvas id="mouseCanvas" class="gameCanvas"></canvas>
+			<canvas id="drawCanvas" class="gameCanvas"></canvas>
 		</div>
 		<div id="shortInfo" class="disabled">
 		</div>

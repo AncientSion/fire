@@ -11,7 +11,7 @@ function initCanvas(){
 }
 
 function sizeCanvas(){
-	var canv = document.getElementsByTagName("canvas");
+	var canv = document.getElementsByClassName("gameCanvas");
 
 	for (var i = 0; i < canv.length; i++){
 		canv[i].width = res.x;
@@ -21,12 +21,12 @@ function sizeCanvas(){
 		canv[i].style.zIndex = i+1;
 		canv[i].style.position = "absolute";
 	}
-	
+
 	drawCanvas.style.zIndex = 0;
 }
 
 function scopeCanvas(){
-	var canv = document.getElementsByTagName("canvas");
+	var canv = document.getElementsByClassName("gameCanvas");
 
 	canvas = canv[0];
 	ctx = canvas.getContext("2d");

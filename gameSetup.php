@@ -175,8 +175,8 @@ else header("Location: index.php");
 			</tr>
 		</table>
 		<div id="game" style="position: absolute; top: 13px; left: 875px">
-			<canvas id="shipCanvas" style='border: 1px solid white; z-index: 2'></canvas>
-			<canvas id="fxCanvas" style='z-index: 1'></canvas>
+			<canvas id="shipCanvas" class="gameCanvas" style='border: 1px solid white; z-index: 2'></canvas>
+			<canvas id="fxCanvas" class="gameCanvas" style='z-index: 1'></canvas>
 		</div>
 		<div id="hangarDiv" class="disabled">
 			<div class="header">
