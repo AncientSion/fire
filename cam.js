@@ -47,14 +47,23 @@ window.cam = {
 	},
 
 	setFireFocus: function(fire){
+		var a = Math.abs(fire.anim[0][0].f);
+
 		if (fire.dist == 0){
 			this.z = 3
 		}
 		else if (fire.dist <= 150){
 			this.z = 2;
 		}
-		else if (fire.dist > res.x / 2 || fire.dist > res.y){
-			this.z = Math.floor( (res.x / 2) / fire.dist * 15)/10;
+		else if (a > 145 || < 45){
+			if (fire.dist > res.x / 2){
+				this.z = Math.floor( (res.x / 2) / fire.dist * 15)/10;
+			}
+			else {
+				if (fire.dist > res.y / 2){
+					this.z = Math.floor( (res.y / 2) / fire.dist * 15)/10;
+				}
+			}
 		}
 		else this.z = 1.5;
 
