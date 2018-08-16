@@ -71,7 +71,7 @@ window.cam = {
 		var target = fire.target.getPlannedPos();
 
 		var centerX = (target.x + origin.x) / 2;
-		var centerY = (target.y + origin.y) / 2 +200;
+		var centerY = (target.y + origin.y) / 2 -200;
 
 		//var h = ui.combatLogWrapper.height();
 		//console.log(h);
