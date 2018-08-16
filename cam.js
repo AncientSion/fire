@@ -55,7 +55,7 @@ window.cam = {
 		else if (fire.dist <= 150){
 			this.z = 2;
 		}
-		else if (a > 145 || < 45){
+		else if (a > 145 || a < 45){
 			if (fire.dist > res.x / 2){
 				this.z = Math.floor( (res.x / 2) / fire.dist * 15)/10;
 			}
