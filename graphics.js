@@ -486,26 +486,26 @@ function drawDamageNumbers2(weapon, anim){
 	var fraction = anim.n/anim.m;
 	//console.log(fraction)
 
-	//fxCtx.globalAlpha = 1 - fraction;
-	fxCtx.globalAlpha = 1;
+	fxCtx.globalAlpha = 1.4 - fraction;
+	//fxCtx.globalAlpha = 1;
 
 	fxCtx.font = "16px Arial";
 	fxCtx.textAlign = "center";
 
-	if (fraction < 0.4){
+	//if (fraction < 0.4){
 		fxCtx.fillStyle = "white";
-		fxCtx.fillText(anim.shots, anim.x, anim.y -30 - (30 * fraction));
-	}
-	else {
+		fxCtx.fillText(anim.shots, anim.x, anim.y -60 - (30 * fraction));
+	//}
+	//else {
 		fxCtx.fillStyle = "lightBlue";
 		fxCtx.fillText(anim.armour, anim.x -35, anim.y -30 - (30 * fraction));
 		fxCtx.fillStyle = "yellow";
 		fxCtx.fillText(anim.system, anim.x, anim.y -30 - (30 * fraction));
 		fxCtx.fillStyle = "red";
 		fxCtx.fillText(anim.hull, anim.x +35, anim.y -30 - (30 * fraction));
-	}
+	//}
 
-	fxCtx.globalAlpha = 1;
+	//fxCtx.globalAlpha = 1;
 
 
 	if (anim.n >= anim.m){anim.done = 1; return;}

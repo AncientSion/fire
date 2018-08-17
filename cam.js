@@ -50,20 +50,20 @@ window.cam = {
 		var a = Math.abs(fire.anim[0][0].f);
 
 		if (fire.dist == 0){
-			this.z = 3
+			this.z = 2.5
 		}
 		else if (fire.dist <= 150){
 			this.z = 2;
 		}
 		else if (a > 150 || a < 30){
-			if (fire.dist > res.x / 2){
-				this.z = Math.floor( (res.x / 2) / fire.dist * 15)/10;
-			}
+			//if (fire.dist > res.x / 2){
+				this.z = Math.min(2, Math.floor( (res.x / 2) / fire.dist * 15)/10);
+			//} else this.z = 
 		}
 		else if (a > 60 || a > 120){
-			if (fire.dist > res.y / 2){
-				this.z = Math.floor( (res.y / 2) / fire.dist * 15)/10;
-			}
+			//if (fire.dist > res.y / 2){
+				this.z = Math.min(2, Math.floor( (res.y / 2) / fire.dist * 15)/10);
+			//}
 		}
 		else if (fire.dist > 800){
 			this.z = 0.8
