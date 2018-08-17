@@ -140,8 +140,8 @@ Salvo.prototype.setUniddtState = function(){
 
 Salvo.prototype.getSpeedString = function(){
 	if (this.structures[0].missile){
-		return (this.getCurSpeed() + "px</br>(+" + Math.floor(this.getBaseImpulse()) + "px per Turn)");
-	} else return ("fixed " + this.getCurSpeed() + "px / Turn");
+		return (this.getCurSpeed() + "(+" + Math.floor(this.getBaseImpulse()) + " per Turn)");
+	} else return ("fixed " + this.getCurSpeed());
 }
 
 Salvo.prototype.createBaseDiv = function(){
@@ -171,26 +171,24 @@ Salvo.prototype.createBaseDiv = function(){
 	var lacking = 0;
 	//var dist = Math.ceil(getDistance(this.getPlannedPos(), target.getPlannedPos()));
 
-	if (target.traverse < this.structures[0].systems[0].traverse){
-		lacking = 1;
-	}
+	//if (target.traverse < this.structures[0].systems[0].traverse){lacking = 1;}
 
 	var table = $("<table>")
 		.append($("<tr>")
 			.append($("<th>").html(this.structures.length + "x '" + this.structures[0].name + "' #" + this.id).attr("colSpan", 4).addClass(headerC)))
 		.append($("<tr>")
-			.append($("<td>").html(this.structures[0].display).addClass("yellow").css("font-size", 14).attr("colSpan", 4)))
+			.append($("<td>").html(this.structures[0].role).addClass("yellow").css("font-size", 14).attr("colSpan", 4)))
 		.append($("<tr>")
-			.append($("<td>").html("Type / Size").css("width", "60%"))
+			.append($("<td>").html("Type / Size").css("width", "50%"))
 			.append($("<td>").html(getUnitType(this.traverse) + " / " + this.traverse).attr("colSpan", 3)))
 		.append($("<tr>")
 			.append($("<td>").html("Base To-Hit"))
 			.append($("<td>").html(this.getProfileString()).attr("colSpan", 3)))
 		.append($("<tr>")
-			.append($("<td>").html("Speed"))
+			.append($("<td>").html("Speed / Accel"))
 			.append($("<td>").html(this.getSpeedString()).addClass("speed").attr("colSpan", 3)))
 		.append($("<tr>")
-    		.append($("<td>").html("Maximum Tracking"))
+    		.append($("<td>").html("Tracking"))
 			.append($("<td>").html(getUnitType(this.structures[0].systems[0].traverse)).attr("colSpan", 3)))
 		.append($("<tr>").append($("<td>").attr("colSpan", 4).css("height", 15)))
 		.append($("<tr>")
@@ -204,10 +202,8 @@ Salvo.prototype.createBaseDiv = function(){
 				.append($("<th>").html("- Targetting unsuited units -").attr("colSpan", 4)))
 		}
 
-
-
 		table.append($("<tr>")
-    		.append($("<td>").html("Chance to hit outside of EW"))
+    		.append($("<td>").html("Hit Chance (w/o EW)")
 			.append($("<td>").html(this.getTrackingString()).attr("colSpan", 3)))
 		//.append($("<tr>")
     	//	.append($("<td>").html("Damage"))
