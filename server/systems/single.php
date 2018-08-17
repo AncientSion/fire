@@ -177,7 +177,7 @@ class Single {
 			} else $old += $this->damages[$i]->overkill;
 		}
 
-		return new RelDmg($new*$multi, $old*$multi, $this->integrity);
+		return new RelDmg($new, $old, $this->integrity, $multi);
 	}
 	
 	public function getValidEffects(){

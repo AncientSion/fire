@@ -1051,6 +1051,7 @@ function Game(data){
 		this.createPlaceHolderEntry();
 		this.createLogEntry("-- Fire Events concluded --");
 
+		this.doPositionLog();
 		ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 
 		if (game.phase == 2){
@@ -2062,7 +2063,8 @@ function Game(data){
 		this.getAllUnitExplos();
 
 		//ui.combatLogWrapper.css("top", 0).show();
-		this.doPositionLog(false, 800);
+		ui.combatLogWrapper.hide();
+		///this.doPositionLog(false, 800);
 
 		this.setFireGlobals();
 
@@ -2309,6 +2311,17 @@ function Game(data){
 			return;
 		}
 
+
+		
+
+		
+		if (game.fireOrders[i].numbers.length){
+			for (var j = 0; j < game.fireOrders[i].numbers.length; j++){
+				drawDamageNumbers2(game.fireOrders[i].weapon, game.fireOrders[i].numbers[j]);
+			}
+		}
+
+
 		for (var j = 0; j < game.fireOrders[i].anim.length; j++){
 			for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){
 				if (game.fireOrders[i].anim[j][k].done){continue;}
@@ -2388,16 +2401,6 @@ function Game(data){
 						}
 					}
 				}
-
-
-				
-				if (game.fireOrders[i].anim[j][k].float && game.fireOrders[i].anim[j][k].p){
-					for (var l = 0; l < game.fireOrders[i].anim[j][k].float.length; l++){
-						game.fireOrders[i].anim[j][k].float[l].n++;
-						drawDamageNumbers2(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
-					}
-				}
-				
 			}
 		}
 
@@ -2407,7 +2410,7 @@ function Game(data){
 		//console.log("ding");
 
 		fxCtx.setTransform(1,0,0,1,0,0);
-		var allAnimated = 1;
+		var allAnimated = 1;		
 		for (var j = 0; j < game.fireOrders[i].anim.length; j++){
 			for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){
 				if (! game.fireOrders[i].anim[j][k].done){
@@ -2415,8 +2418,15 @@ function Game(data){
 					break;
 				}
 			}
-			if (!allAnimated){
-				break;
+			if (!allAnimated){break;}
+		}
+
+		
+		if (allAnimated){
+			for (var j = 0; j < game.fireOrders[i].numbers.length; j++){
+				if (!game.fireOrders[i].numbers[j].done){
+					allAnimated = 0; break;
+				}
 			}
 		}
 		
@@ -2612,9 +2622,8 @@ function Game(data){
 			var eta = this.incoming[i].available - game.turn;
 
 			if (this.incoming[i].userid === game.userid){
-				if (eta == 0){
-					html = "NOW";
-				} else html = (eta + " Turn/s");
+				if (eta == 0){html = "NOW";}
+				else html = (eta + " Turn/s");
 
 				wrapper
 				.append($("<tr>").addClass("deployNow")
@@ -2624,8 +2633,9 @@ function Game(data){
 						function(){game.draw();}
 					)
 					.append($("<td>")
-						.append($(graphics.images[this.incoming[i].name.toLowerCase()].cloneNode(true))
-							.addClass("size40")
+						.append($(this.incoming[i].getBaseImage()).addClass("size40")
+					//	.append($(graphics.images[this.incoming[i].name.toLowerCase()].cloneNode(true))
+							//.addClass("size40")
 						)
 					)
 					.append($("<td>")

@@ -224,7 +224,7 @@ class System {
 
 		//Debug::log("new: ".$new."/".$old);
 
-		return new RelDmg($new*$multi, $old*$multi, $this->integrity);
+		return new RelDmg($new, $old, $this->integrity, $multi);
 	}
 
 	public function getValidEffects(){
@@ -259,14 +259,14 @@ class System {
 		$roll = mt_rand(0, 100);
 		$magnitude = $roll + ($dmg->new + $dmg->old)*100;
 
-		Debug::log("roll: ".$roll.", total magnitude: ".$magnitude);
+		Debug::log("magRoll: ".$roll.", total magnitude: ".$magnitude);
 
 		if ($magnitude < $effects[0][1]){return;}
 
 		for ($i = sizeof($effects)-1; $i >= 0; $i--){
 			if ($magnitude < $effects[$i][1]){continue;}
 			$value = $this->getCritModMax($newRelDmg);
-			if (!$value){continue;}
+			if (!$value){Debug::log("no value"); continue;}
 
 			Debug::log("crit: ".$effects[$i][0].", value: ".$value);
 			

@@ -924,6 +924,7 @@ function FireOrder(data){
 	this.systems = [];
 	this.animating = 0;
 	this.tr = false;
+	this.numbers = [];
 }
 
 FireOrder.prototype.setNumberAnim = function(){
@@ -935,10 +936,10 @@ FireOrder.prototype.setNumberAnim = function(){
 	var aoe = this.weapon.aoe ? 1 : 0;
 
 	if (aoe){
-		last = this.anim[this.anim.length-1][this.anim[this.anim.length-1].length-1];
+	//	last = this.anim[this.anim.length-1][this.anim[this.anim.length-1].length-1];
 		targets = data.end - data.start+1;
 	}
-	else {
+/*	else {
 		for (var i = 0; i < this.anim.length; i++){
 			for (var j = 0; j < this.anim[i].length; j++){
 				if (!this.anim[i][j].h){continue;}
@@ -946,27 +947,36 @@ FireOrder.prototype.setNumberAnim = function(){
 			}
 		}
 	}
+*/
+	last = this.anim[this.anim.length-1][this.anim[this.anim.length-1].length-1];
 
-	if (!last){return;}
+	var len = Math.abs(last.n) + last.m;
+
+	//if (!last){return;}
 
 	for (var i = 0; i < targets; i++){
 		var tr = $("#combatLog tr").eq(row+aoe+i);
 		var drawPos = game.getUnit(tr.data("targetid")).getDrawPos();
+		var shots = aoe ? "" : tr.find("td").eq(5).html();
 		var armour = tr.find("td").eq(6 - aoe*2).html();
 		var system = tr.find("td").eq(7 - aoe*2).html();
 		var hull = tr.find("td").eq(8 - aoe*2).html();
-		last.float.push(
+
+		this.numbers.push(
 			{
+				x: drawPos.x + range(-10, 10),
+				y: drawPos.y,
+				n: Math.floor(len*0.4)*-1,
+				m: Math.max(140, last.m),
+				shots: shots,
 				armour: armour,
 				system: system,
 				hull: hull,
-				x: drawPos.x + range(-10, 10),
-				y: drawPos.y,
-				n: 0,
-				m: last.m
-
+				done: 0
 			}
 		);
+
+		console.log(this.numbers[0].n + " / " +this.numbers[0].m);
 	}
 }
 
@@ -978,7 +988,7 @@ FireOrder.prototype.createCombatLogEntry = function(){
 	var dmgs = this.assembleDmgData();
 	var depth = Object.keys(dmgs).length-1;
 
-	if (this.addLogShieldEntry(log)){depth++;}
+	if (this.addLogShieldEntry(log, inflicted.shield)){depth++;}
 	if (this.addLogRollsEntry(log)){depth++;}
 
 	//dmg Details

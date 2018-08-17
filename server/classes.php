@@ -28,10 +28,14 @@ class Morale {
 class RelDmg {
 	public $new = 0.00;
 	public $old = 0.00;
+	public $rawNew = 0;
+	public $rawOld = 0;
 
-	function __construct($new, $old, $integrity){
-		$this->new = round($new / $integrity, 2);
-		$this->old = round($old / $integrity, 2);
+	function __construct($new, $old, $integrity, $multi){
+		$this->new = min(1, round($new*$multi / $integrity, 2));
+		$this->old = min(1, round($old*$multi / $integrity, 2));
+		$this->rawNew = $new;
+		$this->rawOld = $old;
 	}
 }
 

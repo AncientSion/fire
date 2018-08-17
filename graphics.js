@@ -315,7 +315,7 @@ function drawAreaEffect(weapon, anim){
 		fxCtx.globalAlpha = 1 - (fraction-0.7)*3
 	} else fxCtx.globalAlpha = 1;
 
-	drawDamageNumbers(weapon, anim, fraction);
+	//drawDamageNumbers(weapon, anim, fraction);
 	
 
 	fxCtx.drawImage(graphics.eMine, anim.tx -size/2, anim.ty -size/2, size, size);
@@ -439,7 +439,7 @@ function drawExplosion(weapon, anim){  // 150, 150, 30
 	*/
 
 
-	drawDamageNumbers(weapon, anim, fraction);
+	//drawDamageNumbers(weapon, anim, fraction);
 
 	fxCtx.globalAlpha = 1;
 	fxCtx.globalCompositeOperation = "source-over";
@@ -478,20 +478,37 @@ function drawExplosion(weapon, anim){  // 150, 150, 30
 }
 
 function drawDamageNumbers2(weapon, anim){
+	if (anim.done){return;}
+	anim.n++;
+	if (anim.n <= 0){return;}
+
+
 	var fraction = anim.n/anim.m;
+	//console.log(fraction)
+
+	//fxCtx.globalAlpha = 1 - fraction;
+	fxCtx.globalAlpha = 1;
 
 	fxCtx.font = "16px Arial";
 	fxCtx.textAlign = "center";
 
-	for (var i = 0; i < anim.float.length; i++){
+	if (fraction < 0.4){
+		fxCtx.fillStyle = "white";
+		fxCtx.fillText(anim.shots, anim.x, anim.y -30 - (30 * fraction));
+	}
+	else {
 		fxCtx.fillStyle = "lightBlue";
-		fxCtx.fillText(anim.float[i].armour, anim.float[i].x -35, anim.float[i].y -30 - (20 * fraction));
+		fxCtx.fillText(anim.armour, anim.x -35, anim.y -30 - (30 * fraction));
 		fxCtx.fillStyle = "yellow";
-		fxCtx.fillText(anim.float[i].system, anim.float[i].x, anim.float[i].y -30 - (20 * fraction));
+		fxCtx.fillText(anim.system, anim.x, anim.y -30 - (30 * fraction));
 		fxCtx.fillStyle = "red";
-		fxCtx.fillText(anim.float[i].hull, anim.float[i].x +35, anim.float[i].y -30 - (20 * fraction));
+		fxCtx.fillText(anim.hull, anim.x +35, anim.y -30 - (30 * fraction));
 	}
 
+	fxCtx.globalAlpha = 1;
+
+
+	if (anim.n >= anim.m){anim.done = 1; return;}
 
 	//fxCtx.translate(cam.o.x, cam.o.y);
 	//fxCtx.scale(cam.z, cam.z);

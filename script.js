@@ -11,6 +11,7 @@ function initCanvas(){
 }
 
 function sizeCanvas(){
+	console.log("sizeCanvas");
 	var canv = document.getElementsByClassName("gameCanvas");
 
 	for (var i = 0; i < canv.length; i++){
@@ -26,6 +27,7 @@ function sizeCanvas(){
 }
 
 function scopeCanvas(){
+	console.log("scopeCanvas");
 	var canv = document.getElementsByClassName("gameCanvas");
 
 	canvas = canv[0];
