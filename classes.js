@@ -975,7 +975,7 @@ FireOrder.prototype.setNumberAnim = function(){
 				armour: armour,
 				system: system,
 				hull: hull,
-				odds: 
+				odds: odds,
 				done: 0
 			}
 		);
