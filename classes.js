@@ -958,6 +958,7 @@ FireOrder.prototype.setNumberAnim = function(){
 	for (var i = 0; i < targets; i++){
 		var tr = $("#combatLog tr").eq(row+aoe+i);
 		var drawPos = game.getUnit(tr.data("targetid")).getDrawPos();
+		var odds = aoe ? "" : tr.find("td").eq(4).html();
 		var shots = aoe ? "" : tr.find("td").eq(5).html();
 		var armour = tr.find("td").eq(6 - aoe*2).html();
 		var system = tr.find("td").eq(7 - aoe*2).html();
@@ -974,6 +975,7 @@ FireOrder.prototype.setNumberAnim = function(){
 				armour: armour,
 				system: system,
 				hull: hull,
+				odds: 
 				done: 0
 			}
 		);
