@@ -203,7 +203,7 @@ Salvo.prototype.createBaseDiv = function(){
 		}
 
 		table.append($("<tr>")
-    		.append($("<td>").html("Hit Chance (w/o EW)")
+    		.append($("<td>").html("Hit Chance (w/o EW)"))
 			.append($("<td>").html(this.getTrackingString()).attr("colSpan", 3)))
 		//.append($("<tr>")
     	//	.append($("<td>").html("Damage"))
