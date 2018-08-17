@@ -65,8 +65,9 @@ window.cam = {
 				this.z = Math.min(2, Math.floor( (res.y / 2) / fire.dist * 15)/10);
 			//}
 		}
-		else if (fire.dist > 800){
-			this.z = 0.8
+		else if (fire.dist > 600){
+			this.z = Math.min(2, Math.floor( (res.x / 2) / fire.dist * 15)/10);
+			//this.z = 0.8
 		}
 		else this.z = 1.5;
 
