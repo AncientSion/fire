@@ -495,7 +495,7 @@ function drawDamageNumbers2(weapon, anim){
 	//if (fraction < 0.4){
 		fxCtx.fillStyle = "white";
 		fxCtx.fillText(anim.odds, anim.x, anim.y -80 - (30 * fraction));
-		fxCtx.fillText((anim.shots, anim.x, anim.y -60 - (30 * fraction));
+		fxCtx.fillText(anim.shots, anim.x, anim.y -60 - (30 * fraction));
 	//}
 	//else {
 	fxCtx.font = "16px Arial";
