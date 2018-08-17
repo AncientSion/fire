@@ -932,6 +932,7 @@ FireOrder.prototype.setNumberAnim = function(){
 	var targets = 1;
 	var data = this.tr.data();
 	var row = data.row;
+	this.numbers = [];
 
 	var aoe = this.weapon.aoe ? 1 : 0;
 

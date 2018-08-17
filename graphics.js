@@ -396,7 +396,7 @@ function drawExplosion(weapon, anim){  // 150, 150, 30
 
 	//fxCtx.translate(cam.o.x, cam.o.y);
 	//fxCtx.scale(cam.z, cam.z)
-	fxCtx.globalAlpha = 1.2 - fraction;
+	fxCtx.globalAlpha = Math.min(1, 1.2 - fraction);
 
 	var outer = "";
 	var mid = "";
@@ -486,7 +486,7 @@ function drawDamageNumbers2(weapon, anim){
 	var fraction = anim.n/anim.m;
 	//console.log(fraction)
 
-	fxCtx.globalAlpha = 1.4 - fraction;
+	fxCtx.globalAlpha = Math.min(1, 1.4 - fraction);
 	//fxCtx.globalAlpha = 1;
 
 	fxCtx.font = "16px Arial";
@@ -505,7 +505,7 @@ function drawDamageNumbers2(weapon, anim){
 		fxCtx.fillText(anim.hull, anim.x +35, anim.y -30 - (30 * fraction));
 	//}
 
-	//fxCtx.globalAlpha = 1;
+	fxCtx.globalAlpha = 1;
 
 
 	if (anim.n >= anim.m){anim.done = 1; return;}
@@ -638,7 +638,7 @@ function drawBeam(weapon, anim){
 }
 
 function drawBeamExplosion(weapon, x, y, fraction){
-	fxCtx.globalAlpha = 1.5 - fraction;
+	fxCtx.globalAlpha = Math.min(1, 1.5 - fraction);
 	fxCtx.globalCompositeOperation = "source-over";
 
 	for (var i = 0; i < 1; i++){
