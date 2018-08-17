@@ -489,14 +489,17 @@ function drawDamageNumbers2(weapon, anim){
 	fxCtx.globalAlpha = Math.min(1, 1.4 - fraction);
 	//fxCtx.globalAlpha = 1;
 
-	fxCtx.font = "16px Arial";
+	fxCtx.font = "14px Arial";
 	fxCtx.textAlign = "center";
 
 	//if (fraction < 0.4){
 		fxCtx.fillStyle = "white";
-		fxCtx.fillText((anim.shots + "  " + anim.odds), anim.x, anim.y -60 - (30 * fraction));
+		fxCtx.fillText(anim.odds, anim.x, anim.y -80 - (30 * fraction));
+		fxCtx.fillText((anim.shots, anim.x, anim.y -60 - (30 * fraction));
 	//}
 	//else {
+	fxCtx.font = "16px Arial";
+
 		fxCtx.fillStyle = "lightBlue";
 		fxCtx.fillText(anim.armour, anim.x -35, anim.y -30 - (30 * fraction));
 		fxCtx.fillStyle = "yellow";
