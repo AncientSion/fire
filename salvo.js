@@ -194,7 +194,7 @@ Salvo.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			.append($("<td>").html("Targeting"))
 			.append($("<td>").html(target.name + " #" + target.id).attr("colSpan", 3)))
-		.append($("<tr>").append($("<td>").attr("colSpan", 4).css("height", 15)))
+		//.append($("<tr>").append($("<td>").attr("colSpan", 4).css("height", 15)))
 
 		if (lacking){
 			table

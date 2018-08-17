@@ -581,6 +581,7 @@
 
 					game.animating = false;
 					window.cancelAnimationFrame(anim);
+					fxCtx.setTransform(1,0,0,1,0,0)
 					fxCtx.clearRect(0, 0, res.x, res.y);
 
 					//$("#combatLog").find("tr").each(function(i){if (i){$(this).remove()}});
