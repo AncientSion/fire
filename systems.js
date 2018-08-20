@@ -2927,7 +2927,7 @@ Launcher.prototype.init = function(){
 	}
 	if (game.phase == -2){
 	}
-	else if (this.getRemAmmo() == 0 && !this.hasFireOrder()){
+	else if (this.ammo ==-1 || this.getRemAmmo() == 0 && !this.hasFireOrder()){
 		this.shots = 0;
 		this.forceUnpower();
 	}
@@ -2992,7 +2992,7 @@ Launcher.prototype.getRemAmmo = function(){
 }
 
 Launcher.prototype.getMaxAmmo = function(){
-	return this.capacity[this.ammo];
+	return (this.ammo >= 0) ? this.capacity[this.ammo] : 0;
 }
 
 Launcher.prototype.getBoostDiv = function(){
