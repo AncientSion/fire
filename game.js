@@ -3931,7 +3931,7 @@ Game.prototype.setCommandUnits = function(){
 				}
 			}
 		}
-		units.sort(function(a, b){return a.command - b.command});
+		units.sort(function(a, b){return b.command - a.command});
 		for (var j = 1; j < units.length; j++){
 			units[j].command = 0;
 		}
