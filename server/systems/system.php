@@ -243,7 +243,7 @@ class System {
 
 		$effects = $this->getValidEffects();
 
-		$newRelDmg = round($dmg->new/(1-$dmg->old), 2);
+		$newRelDmg = min(1, round($dmg->new/(1-$dmg->old), 2));
 		Debug::log("newRelDmg: ".$newRelDmg);
 
 		if ($newRelDmg < $this->getCritTresh()){return;}
