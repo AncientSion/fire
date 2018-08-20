@@ -3665,15 +3665,15 @@ Game.prototype.userHasNoCommand = function(userid){
 }
 
 Game.prototype.getCommandUnit = function(userid){
-	var units = [];
+	//var units = [];
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].userid != userid){continue;}
-		if (this.ships[i].command){units.push(this.ships[i]);}
-		//if (this.ships[i].command){return this.ships[i];}
+		//if (this.ships[i].command){units.push(this.ships[i]);}
+		if (this.ships[i].command){return this.ships[i];}
 	}
 
-	units.sort(function(b, a){return a.command - b.command});
-	return units[0];
+	//units.sort(function(b, a){return a.command - b.command});
+	//return units[0];
 
 	return false;
 }
@@ -3906,7 +3906,7 @@ Game.prototype.create = function(data){
 
 	if (game.phase != 2){this.checkUnitOffsetting();}
 
-
+	this.setCommandUnits();
 	this.addFocusInfo();
 	this.initIncomingTable();
 	this.createReinforcementsTable();
@@ -3919,6 +3919,23 @@ Game.prototype.create = function(data){
 	this.extractPlayerStatusData()
 	cam.setFocusToPos({x: 0, y: 0});
 	this.initPhase(this.phase);
+}
+
+Game.prototype.setCommandUnits = function(){
+	for  (var i = 0; i < this.playerstatus.length; i++){
+		var units = [];
+		for (var j = 0; j < this.ships.length; j++){
+			if (this.ships[j].userid == this.playerstatus[i].userid){
+				if (this.ships[j].command){
+					units.push(this.ships[j]);
+				}
+			}
+		}
+		units.sort(function(a, b){return a.command - b.command});
+		for (var j = 1; j < units.length; j++){
+			units[j].command = 0;
+		}
+	}
 }
 
 Game.prototype.extractPlayerStatusData = function(){
