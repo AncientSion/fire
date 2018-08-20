@@ -1134,7 +1134,7 @@ Ship.prototype.setPostMoveFacing = function(){
 }
 
 Ship.prototype.setPreMovePosition = function(){
-	console.log("setPreMovePosition #" + this.id);
+	//console.log("setPreMovePosition #" + this.id);
 	this.drawX = this.x;
 	this.drawY = this.y;
 }

@@ -884,7 +884,7 @@ function Game(data){
 
 		if (game.turn == 1){return;}
 
-		this.doPositionLog("Turn Beginning Log", 400);
+		this.doPositionLog("Turn Beginning Log", 600);
 		this.resolveDamageControl();
 	}
 
