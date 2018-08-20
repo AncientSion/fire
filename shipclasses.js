@@ -1293,7 +1293,7 @@ Ship.prototype.getHeader = function(){
 	var html = "";
 	if (this.command && this.focus){html = "<div class='yellow'>-CMD-  &  -FOCUS-</div>";}
 	else if (this.command){html = "<div class='yellow'>-CMD-</div>";}
-	else if (this.focus){html = "<div class='yellow'>-CMD-</div>";}
+	else if (this.focus){html = "<div class='yellow'>-FOCUS-</div>";}
 
 	div.append($("<div>").html(html));
 
@@ -2393,7 +2393,7 @@ Ship.prototype.addFocusDiv = function(shipDiv){
 		.append(
 			$("<input>")
 			.attr("type", "button")
-			.attr("value", "Assign Focus (cost: " + this.getFocusCost()+")")
+			.attr("value", "Assign Focus (" + this.getFocusCost() + " FP)")
 			.hide()
 			.click(function(){
 				game.getUnit($(this).parent().parent().data("shipId")).toggleFocus();
