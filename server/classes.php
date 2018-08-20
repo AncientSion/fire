@@ -31,9 +31,9 @@ class RelDmg {
 	public $rawNew = 0;
 	public $rawOld = 0;
 
-	function __construct($new, $old, $integrity, $multi){ // 60, 132, 250
-		$this->new = min(1, round($new*$multi / $integrity, 2)); // 60*1,5 / 250    0,36
-		$this->old = min(1, round($old*$multi / $integrity, 2)); // 132* / 250     0,52
+	function __construct($new, $old, $integrity){ // 60, 132, 250
+		$this->new = round($new / $integrity, 2); // 60*1,5 / 250    0,36
+		$this->old = round($old / $integrity, 2); // 132* / 250     0,52
 		$this->rawNew = $new;
 		$this->rawOld = $old;
 	}

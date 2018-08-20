@@ -212,7 +212,7 @@ class System {
 		return $dmg;
 	}
 
-	public function getCritDamages($turn, $multi = 1){
+	public function getCritDamages($turn){
 		//Debug::log("getCritDamages ".get_class($this)." #".$this->id);
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
@@ -224,7 +224,7 @@ class System {
 
 		//Debug::log("new: ".$new."/".$old);
 
-		return new RelDmg($new, $old, $this->integrity, $multi);
+		return new RelDmg($new, $old, $this->integrity);
 	}
 
 	public function getValidEffects(){
@@ -235,7 +235,7 @@ class System {
 		);
 	}	
 
-	public function determineCrit($dmg, $turn){
+	public function determineCrit($dmg, $turn, $add){
 		if ($this->destroyed){return;}
 		if (!$dmg->new){return;}
 
@@ -243,13 +243,13 @@ class System {
 
 		$effects = $this->getValidEffects();
 
-		$newRelDmg = min(1, round($dmg->new/(1-$dmg->old), 2));
+		$newRelDmg = round($dmg->new/(1-$dmg->old), 2);
 		Debug::log("newRelDmg: ".$newRelDmg);
 
 		if ($newRelDmg < $this->getCritTresh()){return;}
 		$newRelDmg = 1-$newRelDmg;
 		$chance = round((1 - ($newRelDmg*$newRelDmg))*100);
-		$roll = mt_rand(0, 100);
+		$roll = mt_rand(0, 100 + $add);
 
 		if ($roll > $chance){return;}
 		//if ($roll > $chance){

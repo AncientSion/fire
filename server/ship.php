@@ -1357,7 +1357,7 @@ class Ship {
 			for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 				if ($this->primary->systems[$i]->destroyed){continue;}
 				$dmg = $this->primary->systems[$i]->getCritDamages($turn);
-				if ($dmg->new){$this->primary->systems[$i]->determineCrit($dmg, $turn);}
+				if ($dmg->new){$this->primary->systems[$i]->determineCrit($dmg, $turn, 0);}
 			}
 
 			$potential = array();
@@ -1365,7 +1365,7 @@ class Ship {
 				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 					if (!$this->structures[$i]->systems[$j]->destroyed){
 						$dmg = $this->structures[$i]->systems[$j]->getCritDamages($turn);
-						if ($dmg->new){$this->structures[$i]->systems[$j]->determineCrit($dmg, $turn);}
+						if ($dmg->new){$this->structures[$i]->systems[$j]->determineCrit($dmg, $turn, 0);}
 					}
 					else if ($this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){
 						$usage = $this->structures[$i]->systems[$j]->getPowerUsage($turn);

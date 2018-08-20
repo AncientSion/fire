@@ -32,7 +32,7 @@ class Squadron extends Ship {
 			if (!$dmg->new){continue;}
 			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
 				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){
-					$this->structures[$i]->structures[$j]->systems[$k]->determineCrit($dmg, $turn);
+					$this->structures[$i]->structures[$j]->systems[$k]->determineCrit($dmg, $turn, 60);
 				}
 			}
 		}

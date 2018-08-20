@@ -112,7 +112,7 @@ class Command extends PrimarySystem {
 		}
 	}
 
-	public function determineCrit($dmg, $turn){
+	public function determineCrit($dmg, $turn, $add){
 		if ($this->destroyed){return;}
 		if ($dmg->new <= 0.05){return;}
 
@@ -312,7 +312,7 @@ class Bulkhead extends System {
 		return $this->integrity*4;
 	}
 
-	public function determineCrit($dmg, $turn){
+	public function determineCrit($dmg, $turn, $add){
 		return;
 	}
 }
