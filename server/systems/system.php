@@ -249,14 +249,14 @@ class System {
 		if ($newRelDmg < $this->getCritTresh()){return;}
 		$newRelDmg = 1-$newRelDmg;
 		$chance = round((1 - ($newRelDmg*$newRelDmg))*100);
-		$roll = mt_rand(0, 100 + $add);
+		$roll = mt_rand(0, 100);
 
 		if ($roll > $chance){return;}
 		//if ($roll > $chance){
 		//	Debug::log("SUCCESS, roll: ".$roll.", chance: ".$chance); return;
 		//} else Debug::log("FAIL, roll: ".$roll.", chance: ".$chance);
 
-		$roll = mt_rand(0, 100);
+		$roll = mt_rand(0, 100) + $add;
 		$magnitude = $roll + ($dmg->new + $dmg->old)*100;
 
 		Debug::log("magRoll: ".$roll.", total magnitude: ".$magnitude);
