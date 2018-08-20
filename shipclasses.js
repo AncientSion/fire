@@ -1542,21 +1542,21 @@ Ship.prototype.createMoraleLogEntry = function(){
 
 	var effect = 0;
 	if (this.status == "jumpOut"){
-		html += "The unit <span class='yellow'> is routed</span>.</td>";
+		html += "The unit <span class='yellow'> is routed (" + morale + " on D100)</span>.</td>";
 		effect = 1;
 	}
 	else {
 		var command = this.getSystemByName("Command");
 		for (var i = 0; i < command.crits.length; i++){
 			if (command.crits[i].turn != game.turn || command.crits[i].duration != -1){continue;}
-			html += "The unit suffers a permanent <span class='yellow'>" + command.crits[i].value + "% Morale penalty</span>.</td>";
+			html += "The unit suffers a permanent <span class='yellow'>" + command.crits[i].value + "% Morale penalty (" + morale + " on D100)</span>.</td>";
 			effect = 1;
 		}
 	}
 
 	if (!effect){
 		html += "The unit however suffers no penalty for now.</td>";
-	}
+	} else html 
 
 	// else html += "The unit <span class='yellow'>passes</span> (roll: " + this.notes + ").</td>";
 	
@@ -2495,7 +2495,7 @@ Ship.prototype.setCommand = function(){
 		}
 	}
 
-	$("#instructWrapper").hide();
+	$("#popupWrapper").hide();
 	game.setFocusInfo();
 }
 
