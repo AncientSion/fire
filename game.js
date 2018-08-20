@@ -3665,10 +3665,16 @@ Game.prototype.userHasNoCommand = function(userid){
 }
 
 Game.prototype.getCommandUnit = function(userid){
+	var units = [];
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].userid != userid){continue;}
-		if (this.ships[i].command){return this.ships[i];}
+		if (this.ships[i].command){units.push(this.ships[i]);}
+		//if (this.ships[i].command){return this.ships[i];}
 	}
+
+	units.sort(function(b, a){return a.command - b.command});
+	return units[0];
+
 	return false;
 }
 
