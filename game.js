@@ -891,8 +891,10 @@ function Game(data){
 	this.createCommandTransferEntries = function(){
 		if (game.phase == 1){return false;}
 
+		var show = 0;
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].command == game.turn){
+				show = 1;
 				this.ships[i].createCommandTransferEntry();
 			}
 		}
