@@ -1525,7 +1525,7 @@
 			$curFocus = 0; $gainFocus = 0;
 		}
 		else {
-			if ($this->phase == 3 && $game->turn > 1 && $unit->command == $this->turn+1){
+			if ($this->phase == 3 && $this->turn > 1 && $unit->command == $this->turn+1){
 				Debug::log("Command has been transfered!");
 				$playerstatus["curFocus"] = 0;
 			}
