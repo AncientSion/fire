@@ -889,13 +889,16 @@ function Game(data){
 	}
 
 	this.createCommandTransferEntries = function(){
-		if (game.phase == 1){return;}
+		if (game.phase == 1){return false;}
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].command == game.turn){
 				this.ships[i].createCommandTransferEntry();
 			}
 		}
+
+		if (show){return true;}
+		return false;
 	}
 
 	this.endMoveSubPhase = function(){
@@ -2015,10 +2018,10 @@ function Game(data){
 
 		if (show){this.createPlaceHolderEntry();}
 
-		this.createCommandTransferEntries();
+		if (this.createCommandTransferEntries()){this.createPlaceHolderEntry();}
 
 		if (this.reinforcements.length){
-			this.createPlaceHolderEntry();
+			//this.createPlaceHolderEntry();
 			this.createLogEntry("Reinforcements are being hailed.");
 			this.createPlaceHolderEntry();
 			$("#leftUnitWrapper").show();
