@@ -313,9 +313,9 @@
 				);
 				$unit->cost = $possible[$i]["delay"];
 				$unit->curImp = $unit->baseImpulse;
-				if (!$unit->ship){$unit->addSubUnits($possible[$i]["subunits"]);}
 
 				$unit->addAllSystems();
+				if (!$unit->ship){$unit->addSubUnits($possible[$i]["subunits"]);}
 				$unit->setUnitState($this->turn, $this->phase);
 
 

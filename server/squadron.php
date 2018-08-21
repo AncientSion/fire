@@ -106,6 +106,7 @@ class Squadron extends Ship {
 
 
 	public function addPrimary(){
+		//Debug::log("addPrimary #".$this->id.", index: ".$this->index);
 		$this->primary = new Shared();
 		$this->primary->systems[] = new Command($this->getId(), $this->id, 0, 0, $this->ship);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 0, 0, 0);
@@ -119,6 +120,7 @@ class Squadron extends Ship {
 	public function addSubUnits($elements){
 		//Debug::log("SQUADRON addSubUnits ".sizeof($elements));
 
+		//Debug::log("addSubUnits #".$this->id.", index: ".$this->index);
 		for ($i = 0; $i < sizeof($elements); $i++){
 			for ($j = 1; $j <= $elements[$i]["amount"]; $j++){
 				$this->structures[] = new $elements[$i]["name"]($this->getId(), $this->id);
@@ -210,15 +212,19 @@ class Squadron extends Ship {
 	}
 
 	public function getSystem($id){
-		//Debug::log("Squadron getSystem #".$id);
+		//Debug::log("Squadron #".$this->id.", getSystem #".$id);
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			//Debug::log($this->primary->systems[$i]->name." id: ".$this->primary->systems[$i]->id);
 			if ($this->primary->systems[$i]->id == $id){
 				return $this->primary->systems[$i];
 			}
 		}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->id == $id){return $this->structures[$i];}
+			if ($this->structures[$i]->id == $id){
+				Debug::log("id: ".$this->structures[$i]->id);
+				return $this->structures[$i];
+			}
 
 			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
 				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){

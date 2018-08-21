@@ -446,10 +446,12 @@ class Ship {
 	}
 
 	public function addLoadout($dbLoad){
+		//Debug::log("addLoadout to #".$this->id);
 		$chunk = array();
 		$chunk[] = $dbLoad[0];
 
 		for ($i = 1; $i < sizeof($dbLoad); $i++){
+			//Debug::log($i.": ".$dbLoad[$i]["systemid"]);
 			if ($dbLoad[$i]["systemid"] != $chunk[sizeof($chunk)-1]["systemid"]){
 				$this->getSystem($chunk[sizeof($chunk)-1]["systemid"])->adjustLoad($chunk);
 				$chunk = array();
