@@ -232,6 +232,7 @@ class Ship {
 	}
 
 	public function getUnitCost(){
+		if ($this->cost){return;}
 		if ($this->ship || !sizeof($this->structures)){return static::$value;}
 
 		$cost = 0;
