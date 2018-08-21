@@ -84,7 +84,7 @@ if (isset($_POST["type"])) {
 	}
 	else if ($_POST["type"] == "damageControl"){
 		if (sizeof($_POST["jumpout"])){
-			$dbManager->jumpOutUnits($_POST["jumpout"]);
+			$dbManager->updateMoraleResults($_POST["jumpout"]);
 		}
 		if (sizeof($_POST["focus"])){
 			$dbManager->updateFocusState($_POST["focus"]);

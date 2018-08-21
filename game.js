@@ -884,18 +884,23 @@ function Game(data){
 
 		if (game.turn == 1){return;}
 
-		this.doPositionLog("Turn Beginning Log", 400);
+		this.doPositionLog("Turn Beginning Log", 600);
 		this.resolveDamageControl();
 	}
 
 	this.createCommandTransferEntries = function(){
-		if (game.phase == 1){return;}
+		if (game.phase == 1){return false;}
 
+		var show = 0;
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].command == game.turn){
+				show = 1;
 				this.ships[i].createCommandTransferEntry();
 			}
 		}
+
+		if (show){return true;}
+		return false;
 	}
 
 	this.endMoveSubPhase = function(){
@@ -2015,10 +2020,10 @@ function Game(data){
 
 		if (show){this.createPlaceHolderEntry();}
 
-		this.createCommandTransferEntries();
+		if (this.createCommandTransferEntries()){this.createPlaceHolderEntry();}
 
 		if (this.reinforcements.length){
-			this.createPlaceHolderEntry();
+			//this.createPlaceHolderEntry();
 			this.createLogEntry("Reinforcements are being hailed.");
 			this.createPlaceHolderEntry();
 			$("#leftUnitWrapper").show();
@@ -3665,10 +3670,16 @@ Game.prototype.userHasNoCommand = function(userid){
 }
 
 Game.prototype.getCommandUnit = function(userid){
+	//var units = [];
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].userid != userid){continue;}
+		//if (this.ships[i].command){units.push(this.ships[i]);}
 		if (this.ships[i].command){return this.ships[i];}
 	}
+
+	//units.sort(function(b, a){return a.command - b.command});
+	//return units[0];
+
 	return false;
 }
 
@@ -3900,7 +3911,7 @@ Game.prototype.create = function(data){
 
 	if (game.phase != 2){this.checkUnitOffsetting();}
 
-
+	this.setCommandUnits();
 	this.addFocusInfo();
 	this.initIncomingTable();
 	this.createReinforcementsTable();
@@ -3913,6 +3924,23 @@ Game.prototype.create = function(data){
 	this.extractPlayerStatusData()
 	cam.setFocusToPos({x: 0, y: 0});
 	this.initPhase(this.phase);
+}
+
+Game.prototype.setCommandUnits = function(){
+	for  (var i = 0; i < this.playerstatus.length; i++){
+		var units = [];
+		for (var j = 0; j < this.ships.length; j++){
+			if (this.ships[j].userid == this.playerstatus[i].userid){
+				if (this.ships[j].command){
+					units.push(this.ships[j]);
+				}
+			}
+		}
+		units.sort(function(a, b){return b.command - a.command});
+		for (var j = 1; j < units.length; j++){
+			units[j].command = 0;
+		}
+	}
 }
 
 Game.prototype.extractPlayerStatusData = function(){

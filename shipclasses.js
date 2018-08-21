@@ -1134,7 +1134,7 @@ Ship.prototype.setPostMoveFacing = function(){
 }
 
 Ship.prototype.setPreMovePosition = function(){
-	console.log("setPreMovePosition #" + this.id);
+	//console.log("setPreMovePosition #" + this.id);
 	this.drawX = this.x;
 	this.drawY = this.y;
 }
@@ -1293,7 +1293,7 @@ Ship.prototype.getHeader = function(){
 	var html = "";
 	if (this.command && this.focus){html = "<div class='yellow'>-CMD-  &  -FOCUS-</div>";}
 	else if (this.command){html = "<div class='yellow'>-CMD-</div>";}
-	else if (this.focus){html = "<div class='yellow'>-CMD-</div>";}
+	else if (this.focus){html = "<div class='yellow'>-FOCUS-</div>";}
 
 	div.append($("<div>").html(html));
 
@@ -1542,21 +1542,21 @@ Ship.prototype.createMoraleLogEntry = function(){
 
 	var effect = 0;
 	if (this.status == "jumpOut"){
-		html += "The unit <span class='yellow'> is routed</span>.</td>";
+		html += "The unit <span class='yellow'> is routed (" + morale + " on D100)</span>.</td>";
 		effect = 1;
 	}
 	else {
 		var command = this.getSystemByName("Command");
 		for (var i = 0; i < command.crits.length; i++){
 			if (command.crits[i].turn != game.turn || command.crits[i].duration != -1){continue;}
-			html += "The unit suffers a permanent <span class='yellow'>" + command.crits[i].value + "% Morale penalty</span>.</td>";
+			html += "The unit suffers a permanent <span class='yellow'>" + command.crits[i].value + "% Morale penalty (" + morale + " on D100)</span>.</td>";
 			effect = 1;
 		}
 	}
 
 	if (!effect){
 		html += "The unit however suffers no penalty for now.</td>";
-	}
+	} else html 
 
 	// else html += "The unit <span class='yellow'>passes</span> (roll: " + this.notes + ").</td>";
 	
@@ -2393,7 +2393,7 @@ Ship.prototype.addFocusDiv = function(shipDiv){
 		.append(
 			$("<input>")
 			.attr("type", "button")
-			.attr("value", "Assign Focus (cost: " + this.getFocusCost()+")")
+			.attr("value", "Assign Focus (" + this.getFocusCost() + " FP)")
 			.hide()
 			.click(function(){
 				game.getUnit($(this).parent().parent().data("shipId")).toggleFocus();
@@ -2495,7 +2495,7 @@ Ship.prototype.setCommand = function(){
 		}
 	}
 
-	$("#instructWrapper").hide();
+	$("#popupWrapper").hide();
 	game.setFocusInfo();
 }
 
