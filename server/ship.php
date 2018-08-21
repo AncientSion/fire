@@ -1123,7 +1123,7 @@ class Ship {
 
 		Debug::log("roll: ".$roll.", total magnitude: ".$magnitude);
 		//$this->notes = "m".$roll.";"
-		$this->notes = "--R: ".$roll.", tMag: ".$magnitude."--");
+		$this->notes = ("--R: ".$roll.", tMag: ".$magnitude."--");
 
 		if ($magnitude  < $effects[0][1]){return;}
 
