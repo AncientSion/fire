@@ -27,12 +27,12 @@ class Squadron extends Ship {
 		Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
-			$dmg = $this->structures[$i]->getCritDamages($turn, 1.5);
+			$dmg = $this->structures[$i]->getCritDamages($turn);
 			Debug::log($this->structures[$i]->name ." #".$this->structures[$i]->id.", rawNew: ".$dmg->rawNew.", rawOld: ".$dmg->rawOld);
 			if (!$dmg->new){continue;}
 			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
 				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){
-					$this->structures[$i]->structures[$j]->systems[$k]->determineCrit($dmg, $turn, 60);
+					$this->structures[$i]->structures[$j]->systems[$k]->determineCrit($dmg, $turn, 1);
 				}
 			}
 		}
@@ -328,17 +328,16 @@ class Squadron extends Ship {
 			}
 
 			for ($j = 0; $j < sizeof($this->structures); $j++){
+				/*
 				if ($crits[$i]->systemid == $this->structures[$j]->id){
 					$this->structures[$j]->crits[] = $crits[$i];
-					//Debug::log("adding crit");
 					if ($crits[$i]->type == "Disabled" && $crits[$i]->duration == 0){
-					//Debug::log("destroyed crit");
 						$this->structures[$j]->destroyed = 1;
 					}
 					$found = 1;
 					break;
 				}
-
+				*/
 				for ($k = 0; $k < sizeof($this->structures[$j]->structures); $k++){
 					for ($l = 0; $l < sizeof($this->structures[$j]->structures[$k]->systems); $l++){
 						//Debug::log("system id: ".$this->structures[$j]->structures[$k]->systems[$l]->id);

@@ -126,9 +126,10 @@ class System {
 				return true;
 			}
 		}
+		if (!sizeof($this->crits)){return false;}
 		for ($i = sizeof($this->crits)-1; $i >= 0; $i--){
 			if ($this->crits[$i]->type == "Destroyed"){
-				$this->disabled = true;
+				$this->destroyed = true;
 				return true;
 			}
 		}
@@ -136,8 +137,7 @@ class System {
 	}
 
 	public function isDisabled($turn){
-		if (!sizeof($this->crits)){return false;}
-		
+		if (!sizeof($this->crits)){return false;}		
 		for ($i = sizeof($this->crits)-1; $i >= 0; $i--){
 			if ($this->crits[$i]->type == "Disabled"){
 				if ($turn <= $this->crits[$i]->turn + $this->crits[$i]->duration){
@@ -235,7 +235,7 @@ class System {
 		);
 	}	
 
-	public function determineCrit($dmg, $turn, $add){
+	public function determineCrit($dmg, $turn, $squad){
 		if ($this->destroyed){return;}
 		if (!$dmg->new){return;}
 
@@ -256,7 +256,7 @@ class System {
 		//	Debug::log("SUCCESS, roll: ".$roll.", chance: ".$chance); return;
 		//} else Debug::log("FAIL, roll: ".$roll.", chance: ".$chance);
 
-		$roll = mt_rand(0, 100) + $add;
+		$roll = mt_rand(0, 100) + $squad * 60;
 		$magnitude = $roll + ($dmg->new + $dmg->old)*100;
 
 		Debug::log("magRoll: ".$roll.", total magnitude: ".$magnitude);

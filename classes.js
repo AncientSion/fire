@@ -980,7 +980,7 @@ FireOrder.prototype.setNumberAnim = function(){
 			}
 		);
 
-		console.log(this.numbers[0].n + " / " +this.numbers[0].m);
+		//console.log(this.numbers[0].n + " / " +this.numbers[0].m);
 	}
 }
 

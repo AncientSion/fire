@@ -300,7 +300,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 
 		if (target){snap = game.hasSnapCenterline(shooter, shooterAngle, target);}
 
-		if ((target.squad || target.flight) && target.getStringHitChance().length > 15){
+		if ((target.squad || target.flight) && target.getStringHitChance().length > 5){
 			weaponInfo.append(
 				$("<tr>").append(
 					$("<td>")

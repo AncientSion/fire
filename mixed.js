@@ -153,30 +153,6 @@ Mixed.prototype.isDestroyed = function(){
 	return true;
 }
 
-Mixed.prototype.setSubUnitStatus = function(){
-	//	console.log("setStatus")
-	for (var i = 0; i < this.structures.length; i++){
-		for (var j = 0; j < this.structures[i].crits.length; j++){
-			if (this.structures[i].crits[j].type == "Disabled"){
-				this.structures[i].disabled = true;
-			}
-		}
-
-		if (this.structures[i].destroyed){
-			this.structures[i].doDraw = 0;
-			for (var k = 0; k < this.structures[i].systems.length; k++){
-				this.structures[i].systems[k].destroyed = true;
-			}
-		}
-		else if (this.structures[i].disabled){
-			this.structures[i].doDraw = 0;
-			for (var k = 0; k < this.structures[i].systems.length; k++){
-				this.structures[i].systems[k].disabled = true;
-			}
-		}
-	}
-}
-
 Mixed.prototype.hasLockOnUnit = function(){
 	return false;
 }
@@ -397,10 +373,28 @@ Mixed.prototype.canUndoShortenTurn = function(){
 	return false;
 }
 
-Mixed.prototype.create = function(){
-	this.setUnitState();
-	this.setSubUnitStatus();
-	this.setStringHitChance();
+Mixed.prototype.setSubSystemState = function(){
+	//	console.log("setStatus")
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].crits.length; j++){
+			if (this.structures[i].crits[j].type == "Disabled"){
+				this.structures[i].disabled = true;
+			}
+		}
+
+		if (this.structures[i].destroyed){
+			this.structures[i].doDraw = 0;
+			for (var k = 0; k < this.structures[i].systems.length; k++){
+				this.structures[i].systems[k].destroyed = true;
+			}
+		}
+		else if (this.structures[i].disabled){
+			this.structures[i].doDraw = 0;
+			for (var k = 0; k < this.structures[i].systems.length; k++){
+				this.structures[i].systems[k].disabled = true;
+			}
+		}
+	}
 }
 
 Mixed.prototype.setPreMovePosition = function(){

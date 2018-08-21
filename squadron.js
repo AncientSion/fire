@@ -26,23 +26,12 @@ Squadron.prototype.setSubSystemState = function(){
 		this.primary.systems[i].setState();
 	}
 	for (var i = 0; i < this.structures.length; i++){
-		for (var j = 0; j < this.structures[i].structures.length; j++){
-			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
-				this.structures[i].structures[j].systems[k].setState()
-			}
-		}
-	}
-}
-
-Squadron.prototype.setSubUnitStatus = function(){
-	//console.log("setSubUnitStatus CREATE")
-	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].destroyed){
 			this.structures[i].doDestroy();
 		}
-		for (var j = 0; j < this.structures[i].crits.length; j++){
-			if (this.structures[i].crits[j].type == "Disabled"){
-				this.structures[i].disabled = true;
+		for (var j = 0; j < this.structures[i].structures.length; j++){
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				this.structures[i].structures[j].systems[k].setState()
 			}
 		}
 	}

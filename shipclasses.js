@@ -1438,11 +1438,13 @@ Ship.prototype.create = function(){
 	this.setSubSystemState();
 	this.setStringHitChance();
 
-	if (game.turn > 1 && game.phase == -1 && this.available == game.turn){
-		this.x = this.actions[0].x;
-		this.y = this.actions[0].y;
-		this.drawX = this.actions[0].x;
-		this.drawY = this.actions[0].y;
+	if (this.ship || this.squadron){
+		if (game.turn > 1 && game.phase == -1 && this.available == game.turn){
+			this.x = this.actions[0].x;
+			this.y = this.actions[0].y;
+			this.drawX = this.actions[0].x;
+			this.drawY = this.actions[0].y;
+		}
 	}
 }
 

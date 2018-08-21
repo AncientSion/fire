@@ -192,7 +192,7 @@ class Single {
 		return 0.15;
 	}
 
-	public function determineCrit($dmg, $turn, $add){
+	public function determineCrit($dmg, $turn, $squad){
 		if ($this->destroyed){return;}
 		if (!$dmg->new){return;}
 
