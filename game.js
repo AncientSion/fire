@@ -2633,7 +2633,7 @@ function Game(data){
 					.append($("<td>")
 					//	.append($(this.incoming[i].getBaseImage()).addClass("size40")
 						.append($(graphics.images[this.incoming[i].name.toLowerCase()].cloneNode(true))
-							//.addClass("size40")
+							.addClass("size40")
 						)
 					)
 					.append($("<td>")
