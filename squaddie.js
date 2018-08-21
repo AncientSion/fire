@@ -405,7 +405,8 @@ Squaddie.prototype.doDestroy = function(){
 	this.doDraw = 0;
 	for (var i = 0; i < this.structures.length; i++){
 		for (var k = 0; k < this.structures[i].systems.length; k++){
-			this.structures[i].systems[k].destroyed = true;
+			//this.structures[i].systems[k].destroyed = true;
+			this.structures[i].systems[k].locked = true;
 		}
 	}
 }
