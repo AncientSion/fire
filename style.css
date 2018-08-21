@@ -1507,7 +1507,7 @@ tr.rowBorderBottom {
 	box-shadow: inset 0 0 4px 3px #ffeb3e
 }
 
-#unitSelector img:hover {
+#unitSelector img:hover, .requestReinforcements img:hover {
 	background-color: white;
 }
 

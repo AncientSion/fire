@@ -224,22 +224,22 @@ class Ship {
 
 	public function setProps($turn, $phase){
 		//Debug::log("setProps ".get_class($this)." #".$this->id);
-		$this->cost = $this->getUnitCost();
+		$this->setUnitCost();
 		$this->setCurSpeed($turn, $phase);
 		$this->setRemImpulse($turn);
 		$this->setRemDelay($turn);
 		$this->setSpecialActionState($turn, $phase);
 	}
 
-	public function getUnitCost(){
+	public function setUnitCost(){
 		if ($this->cost){return;}
-		if ($this->ship || !sizeof($this->structures)){return static::$value;}
+		if ($this->ship || !sizeof($this->structures)){$this->cost = static::$value; return;}
 
 		$cost = 0;
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$cost += $this->structures[$i]->getValue();
 		}
-		return $cost;
+		$this->cost = $cost;
 	}
 
 	public function setPosition(){
