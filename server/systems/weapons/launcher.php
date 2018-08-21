@@ -43,7 +43,11 @@ class Launcher extends Weapon {
 class MissileLauncher extends Launcher {
 	public $name = "MissileLauncher";
 	public $display = "Missile Launcher";
-	public $loadout = 1;
+	public $loadout = 1;	
+	public $critEffects =  array( // type, mag, dura, effect
+		array("Ammo Amount", 120, 0, 0),
+		array("Destroyed", 170, 0, 1),
+	);
 
 	function __construct($id, $parentId, $start, $end, $integrity, $loads, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $integrity, $width);
@@ -53,13 +57,6 @@ class MissileLauncher extends Launcher {
 			$this->capacity[] = $loads[$i][1];
 			$this->launchRate[] = $loads[$i][2];
 		}
-	}
-
-	public function getValidEffects(){
-		return array(// attr, mag, duration, modifier
-			array("Ammo Amount", 120, 0, 0),
-			array("Destroyed", 170, 0, 1),
-		);
 	}
 
 	public function adjustLoad($dbLoad){
@@ -81,17 +78,14 @@ class MissileLauncher extends Launcher {
 class TorpedoLauncher extends MissileLauncher {
 	public $name = "TorpedoLauncher";
 	public $display = "Torpedo Launcher";
-	public $powerReq = 4;
+	public $powerReq = 4;	
+	public $critEffects =  array( // type, mag, dura, effect
+		array("Max Range", 80, 0, 0),
+		array("Ammo Amount", 120, 0, 0),
+		array("Destroyed", 170, 0, 1),
+	);
 
 	function __construct($id, $parentId, $start, $end, $integrity, $loads, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $integrity, $loads, $width);
-	}
-
-	public function getValidEffects(){
-		return array(// attr, mag, duration, modifier
-			array("Max Range", 80, 0, 0),
-			array("Ammo Amount", 120, 0, 0),
-			array("Destroyed", 170, 0, 1),
-		);
 	}
 }

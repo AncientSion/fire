@@ -42,6 +42,11 @@ class System {
 	public $loadout = 0;
 	public $dmgs = array();
 	public $system = true;
+	public $critEffects =  array( // type, mag, dura, effect
+		array("Accuracy", 100, 0, 0),
+		array("Damage", 120, 0, 0),
+		array("Destroyed", 180, 0, 1),
+	);
 
 	function __construct($id, $parentId, $output = 0, $width = 1){
 	$this->id = $id;
@@ -227,21 +232,13 @@ class System {
 		return new RelDmg($new, $old, $this->integrity);
 	}
 
-	public function getValidEffects(){
-		return array( // type, mag, dura, effect
-			array("Accuracy", 100, 0, 0),
-			array("Damage", 120, 0, 0),
-			array("Destroyed", 180, 0, 1),
-		);
-	}	
-
 	public function determineCrit($dmg, $turn, $squad){
 		if ($this->destroyed){return;}
 		if (!$dmg->new){return;}
 
 		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old);
 
-		$effects = $this->getValidEffects();
+		$effects = $this->critEffects;
 
 		$newRelDmg = round($dmg->new/(1-$dmg->old), 2);
 		Debug::log("newRelDmg: ".$newRelDmg);

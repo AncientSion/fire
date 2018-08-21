@@ -65,6 +65,12 @@ class Ship {
 	public $power = 0;
 	public $modFocusRate = 0;
 
+	public $critEffects = array( // type, min%, dura, effect
+		array("Morale", 50, -1, 5.00),
+		array("Morale", 100, -1, 10.00),
+		array("Route", 150, -1, 0.00),
+	);
+
 	function __construct($data){
 		//Debug::log("constructing!");
 		if (!$data){return;}
@@ -1102,12 +1108,7 @@ class Ship {
 
 		if ($new < 0.15){return;}
 
-		$effects = 
-			array( // type, min%, dura, effect
-				array("Morale", 50, -1, 5.00),
-				array("Morale", 100, -1, 10.00),
-				array("Route", 150, -1, 0.00),
-			);
+		$effects = $this->critEffects;
 
 		$new = 1-$new;
 		$chance = round((1 - ($new*$new))*100);
@@ -1118,10 +1119,11 @@ class Ship {
 		} else Debug::log("opening test FAIL, roll: ".$roll.", chance: ".$chance);
 
 		$roll = mt_rand(0, 100);
-		$this->notes = "m".$roll.";";
 		$magnitude = $roll + 100 - $this->morale->current;
 
 		Debug::log("roll: ".$roll.", total magnitude: ".$magnitude);
+		//$this->notes = "m".$roll.";"
+		$this->notes = "--R: ".$roll.", tMag: ".$magnitude."--");
 
 		if ($magnitude  < $effects[0][1]){return;}
 

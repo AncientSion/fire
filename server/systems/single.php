@@ -31,7 +31,10 @@ class Single {
 	public $index = 0;
 	public $emDmg = 0;
 	public $system = false;
-
+	
+	public $critEffects =  array( // type, mag, dura, effect
+		array("Disabled", 130, 0, 0.00),
+	);
 
 	function __construct($id, $parentId){
 		$this->id = $id;
@@ -180,13 +183,6 @@ class Single {
 
 		return new RelDmg($new, $old, $this->integrity);
 	}
-	
-	public function getValidEffects(){
-		return array( // type, mag, duration, effect
-			array("Disabled", 130, 0, 0.00),
-		);
-	}
-
 
 	public function getCritTresh(){
 		return 0.15;
@@ -198,7 +194,7 @@ class Single {
 
 		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old);
 
-		$effects = $this->getValidEffects();
+		$effects = $this->critEffects;
 
 		$newRelDmg = round($dmg->new/(1-$dmg->old), 2);
 		Debug::log("newRelDmg: ".$newRelDmg);

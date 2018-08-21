@@ -592,6 +592,7 @@ function Single(data){
 	this.disabled = data.disabled;
 	this.traverse = data.traverse;
 	this.baseImpulse = data.baseImpulse;
+	this.critEffects = data.critEffects;
 	this.damages = [];
 	this.crits = [];
 	this.systems = [];

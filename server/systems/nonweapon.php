@@ -10,6 +10,9 @@ class PrimarySystem extends System {
 	public $hitMod = 4;
 	public $hitChance = 0;
 	public $hitPct = 0;
+	public $critEffects =  array( // type, mag, dura, effect
+		array("Output", 0, 0, 0)
+	);
 
 	public function getCritModMax($relDmg){
 		return min(15, round($relDmg*100/5) * 5);
@@ -66,12 +69,6 @@ class PrimarySystem extends System {
 
 		//Debug::log("ship: #".$this->parentId.", output: ".floor($this->output*$mod));
 		return floor($this->output * $mod/100);
-	}
-
-	public function getValidEffects(){
-		return array( // type, mag, dur, effect
-			array("Output", 0, 0, 0)
-		);
 	}
 }
 

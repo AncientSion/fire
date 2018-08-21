@@ -16,6 +16,7 @@ function System(system){
 	this.locked = system.locked;
 	this.maxRange = system.maxRange;
 	this.loads = system.loads || [];
+	this.critEffects = system.critEffects;
 	this.crits = [];
 	this.damages = [];
 	this.detailsTable = false;
@@ -1746,11 +1747,11 @@ Sensor.prototype.doBoost = function(){
 	if (this.ew[this.ew.length-1].angle == -1){
 		this.ew[this.ew.length-1].dist = Math.floor(this.ew[this.ew.length-1].dist * 1.1);
 	}
-	game.sensorMode = 1;
+	//game.sensorMode = 1;
 	this.setTempEW();
 	salvoCtx.clearRect(0, 0, res.x, res.y);
 	this.drawEW();
-	game.sensorMode = 0;
+	//game.sensorMode = 1;
 
 }
 

@@ -28,6 +28,7 @@ function Ship(data){
 	this.morale = data.morale;
 	this.baseFocusRate = data.baseFocusRate;
 	this.modFocusRate = data.modFocusRate;
+	this.critEffects = data.critEffects;
 	this.cc = [];
 	this.index = 0;
 
@@ -1529,18 +1530,11 @@ Ship.prototype.createCritLogEntry = function(){
 Ship.prototype.createMoraleLogEntry = function(){
 	if (!this.notes || this.flight || this.salvo){return false;}
 	var data = this.notes.slice(0, this.notes.length-1).split(";");
-	var morale = "";
-	for (var i = 0; i < data.length; i++){if (data[i][0] == "m"){morale = data[i].slice(1, data[i].length); break;}}
-
-	 //Math.floor(fire.damages[i].notes[1].slice(1, fire.damages[i].notes[1].length)) + ", ";
-
-
-	//console.log(morale);
-	
-	//var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Severe damage forces " + this.getLogTitleSpan() + " into a failed morale check (roll: " + morale + ") </br>";
+	//var morale = "";
+	//for (var i = 0; i < data.length; i++){if (data[i][0] == "m"){morale = data[i].slice(1, data[i].length); break;}}
+	var morale = this.notes;
 	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Severe damage forces " + this.getLogTitleSpan() + " into a morale check.</br>";
 
-	//console.log(this.notes);
 
 	var effect = 0;
 	if (this.status == "jumpOut"){
@@ -1560,11 +1554,6 @@ Ship.prototype.createMoraleLogEntry = function(){
 		html += "The unit however suffers no penalty for now.</td>";
 	} else html 
 
-	// else html += "The unit <span class='yellow'>passes</span> (roll: " + this.notes + ").</td>";
-	
-	
-	//var html = "<td colSpan=9><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is routed (and prepares to flee to hyperspace (Chance to rout: " + this.morale.effChance + "%, roll: " + this.notes + ")</td>";
-	
 	this.attachLogEntry(html);
 	return true;
 }

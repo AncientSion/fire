@@ -8,6 +8,12 @@ class Plasma extends Weapon {
 
 	public $fireMode = "Standard";
 	public $dmgType = "Plasma";
+	
+	public $critEffects =  array( // type, mag, dura, effect
+		array("Damage Loss", 80, 0, 0),
+		array("Accuracy", 100, 0, 0),
+		array("Destroyed", 180, 0, 1),
+	);
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -47,14 +53,6 @@ class LightPlasmaShredder extends Plasma {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-	}
-
-	public function getValidEffects(){
-		return array( // type, mag, dura, effect
-			array("Damage Loss", 80, 0, 0),
-			array("Accuracy", 100, 0, 0),
-			array("Destroyed", 180, 0, 1),
-		);
 	}
 }
 
