@@ -2631,8 +2631,8 @@ function Game(data){
 						function(){game.draw();}
 					)
 					.append($("<td>")
-						.append($(this.incoming[i].getBaseImage()).addClass("size40")
-					//	.append($(graphics.images[this.incoming[i].name.toLowerCase()].cloneNode(true))
+					//	.append($(this.incoming[i].getBaseImage()).addClass("size40")
+						.append($(graphics.images[this.incoming[i].name.toLowerCase()].cloneNode(true))
 							//.addClass("size40")
 						)
 					)

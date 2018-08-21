@@ -74,12 +74,12 @@ class Avenger extends Heavy {
 						array(
 							"systemid" => 12,
 							"name" => "Aurora",
-							"amount" => 15
+							"amount" => 12
 						),
 						array(
 							"systemid" => 21,
 							"name" => "Aurora",
-							"amount" => 15
+							"amount" => 12
 						),
 					)
 				),
@@ -93,12 +93,12 @@ class Avenger extends Heavy {
 						array(
 							"systemid" => 12,
 							"name" => "Aurora",
-							"amount" => 30
+							"amount" => 24
 						),
 						array(
 							"systemid" => 21,
 							"name" => "Aurora",
-							"amount" => 30
+							"amount" => 24
 						),
 					)
 				)
