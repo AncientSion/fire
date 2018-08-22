@@ -489,23 +489,23 @@ function drawDamageNumbers2(weapon, anim){
 	fxCtx.globalAlpha = Math.min(1, 1.4 - fraction);
 	//fxCtx.globalAlpha = 1;
 
-	fxCtx.font = "14px Arial";
+	fxCtx.font = Math.ceil(14*cam.z) + "px Arial";
 	fxCtx.textAlign = "center";
 
 	//if (fraction < 0.4){
 		fxCtx.fillStyle = "white";
-		fxCtx.fillText(anim.odds, anim.x, anim.y -70 - (30 * fraction));
-		fxCtx.fillText(anim.shots, anim.x, anim.y -55 - (30 * fraction));
+		fxCtx.fillText(anim.odds, anim.x, anim.y -55 - (30 * fraction));
+		fxCtx.fillText(anim.shots, anim.x, anim.y -40 - (30 * fraction));
 	//}
 	//else {
 	fxCtx.font = "16px Arial";
 
 		fxCtx.fillStyle = "lightBlue";
-		fxCtx.fillText(anim.armour, anim.x -35, anim.y -30 - (30 * fraction));
+		fxCtx.fillText(anim.armour, anim.x -35, anim.y -15 - (30 * fraction));
 		fxCtx.fillStyle = "yellow";
-		fxCtx.fillText(anim.system, anim.x, anim.y -30 - (30 * fraction));
+		fxCtx.fillText(anim.system, anim.x, anim.y -15 - (30 * fraction));
 		fxCtx.fillStyle = "red";
-		fxCtx.fillText(anim.hull, anim.x +35, anim.y -30 - (30 * fraction));
+		fxCtx.fillText(anim.hull, anim.x +35, anim.y -15 - (30 * fraction));
 	//}
 
 	fxCtx.globalAlpha = 1;

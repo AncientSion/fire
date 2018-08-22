@@ -61,11 +61,10 @@ window.cam = {
 			this.z = Math.min(2, Math.floor( (res.x / 2) / fire.dist * 15)/10);
 		}
 		else if (a > 45 || a <= 135){
-			//if (fire.dist > res.y / 2){
-				this.z = Math.min(2, Math.floor( (res.y / 2) / fire.dist * 15)/10);
-			//}
+			this.z = Math.min(2, Math.floor( (res.y / 2) / fire.dist * 15)/10);
 		}
 		else this.z = 1.5;
+
 
 		var origin = fire.shooter.getPlannedPos();
 		var target = fire.target.getPlannedPos();

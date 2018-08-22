@@ -1056,6 +1056,7 @@ function Game(data){
 		this.createPlaceHolderEntry();
 		this.createLogEntry("-- Fire Events concluded --");
 
+		this.showUI();
 		this.doPositionLog();
 		ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 
@@ -2087,7 +2088,7 @@ function Game(data){
 	}
 
 	this.showUI = function(){
-		ui.combatLogWrapper.show();
+		//ui.combatLogWrapper.show();
 		ui.unitSelector.show();
 		ui.deployOverlay.show();
 		ui.reinforceWrapper.show();
@@ -2285,11 +2286,9 @@ function Game(data){
 		for (var i = 0; i < this.fireOrders.length; i++){
 			//if (this.fireOrders[i].shooterid != 16){continue;}
 			if (!this.fireOrders[i].animated){
-				//this.fireOrders[i].weapon.createCombatLogEntry(this.fireOrders[i]);
-				
+				//this.fireOrders[i].weapon.createCombatLogEntry(this.fireOrders[i]);				
 				this.fireOrders[i].tr.show();
 				this.animateSingleFireOrder(i, 1);
-
 				return;
 			}
 		}
