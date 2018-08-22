@@ -962,7 +962,8 @@
 					facing = 0,
 					turn = :turn,
 					phase = -1,
-					delay = 0
+					delay = 0,
+					notes = '',
 				WHERE id = :id
 			");
 
