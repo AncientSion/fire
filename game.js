@@ -2083,7 +2083,7 @@ function Game(data){
 		ui.combatLogWrapper.hide();
 		ui.unitSelector.hide();
 		$("#leftUnitWrapper").hide();
-		$("#upperGUI").show()
+		$("#upperGUI").hide()
 	}
 
 	this.showUI = function(){
