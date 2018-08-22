@@ -3880,6 +3880,8 @@ Game.prototype.create = function(data){
 		this.ships[i].setSize();
 		this.ships[i].setDrawData();
 	}
+	
+	this.setCommandUnits();
 
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].setImage();
@@ -3903,7 +3905,6 @@ Game.prototype.create = function(data){
 
 	if (game.phase != 2){this.checkUnitOffsetting();}
 
-	this.setCommandUnits();
 	this.addFocusInfo();
 	this.initIncomingTable();
 	this.createReinforcementsTable();

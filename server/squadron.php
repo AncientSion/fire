@@ -222,7 +222,7 @@ class Squadron extends Ship {
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->id == $id){
-				Debug::log("id: ".$this->structures[$i]->id);
+				//Debug::log("id: ".$this->structures[$i]->id);
 				return $this->structures[$i];
 			}
 
