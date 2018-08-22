@@ -48,7 +48,7 @@ window.cam = {
 
 	setFireFocus: function(fire){
 
-		console.log("fire #"+fire.id+", ".fire.shooter.name + "/" + fire.shooter.weapon);
+		console.log("fire #"+fire.id+", "+fire.shooter.name + "/" + fire.shooter.weapon);
 		var a = Math.abs(fire.anim[0][0].f);
 
 		if (fire.dist == 0){
