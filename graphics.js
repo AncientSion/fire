@@ -489,7 +489,7 @@ function drawDamageNumbers2(weapon, anim){
 	fxCtx.globalAlpha = Math.min(1, 1.4 - fraction);
 	//fxCtx.globalAlpha = 1;
 
-	fxCtx.font = Math.ceil(14*cam.z) + "px Arial";
+	fxCtx.font = Math.ceil(14/cam.z) + "px Arial";
 	fxCtx.textAlign = "center";
 
 	//if (fraction < 0.4){
@@ -498,7 +498,7 @@ function drawDamageNumbers2(weapon, anim){
 		fxCtx.fillText(anim.shots, anim.x, anim.y -40 - (30 * fraction));
 	//}
 	//else {
-	fxCtx.font = "16px Arial";
+	//fxCtx.font = "16px Arial";
 
 		fxCtx.fillStyle = "lightBlue";
 		fxCtx.fillText(anim.armour, anim.x -35, anim.y -15 - (30 * fraction));

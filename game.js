@@ -1058,7 +1058,7 @@ function Game(data){
 
 		this.showUI();
 		this.doPositionLog();
-		ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+		//ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 
 		if (game.phase == 2){
 			this.autoIssueFireOrders();
