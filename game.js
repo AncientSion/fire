@@ -2068,7 +2068,7 @@ function Game(data){
 		this.getAllUnitExplos();
 
 		//ui.combatLogWrapper.css("top", 0).show();
-		ui.combatLogWrapper.hide();
+		this.hideUI();
 		///this.doPositionLog(false, 800);
 
 		this.setFireGlobals();
@@ -2076,6 +2076,22 @@ function Game(data){
 		//this.animateUnitExplos(); return;
 		this.animateAllFireOrders();
 
+	}
+
+	this.hideUI = function(){
+		ui.combatLogWrapper.hide();
+		ui.unitSelector.hide();
+		ui.deployOverlay.hide();
+		ui.reinforceWrapper.hide();
+		$("#upperGUI").hide()
+	}
+
+	this.showUI = function(){
+		ui.combatLogWrapper.show();
+		ui.unitSelector.show();
+		ui.deployOverlay.show();
+		ui.reinforceWrapper.show();
+		$("#upperGUI").show()
 	}
 
 	this.setFireGlobals = function(){
