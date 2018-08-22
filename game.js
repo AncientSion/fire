@@ -1058,7 +1058,6 @@ function Game(data){
 
 		this.showUI();
 		this.doPositionLog();
-		//ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 
 		if (game.phase == 2){
 			this.autoIssueFireOrders();
@@ -2533,7 +2532,6 @@ function Game(data){
 						}
 					)
 				)
-		ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 	}
 
 	this.initIncomingTable = function(){
@@ -2866,24 +2864,6 @@ Game.prototype.doPositionChat = function(){
 		.css("position", "absolute")
 		.css("width", chatW)
 		.removeClass("disabled")
-/*		.data("s", 1)
-		.data("pos", top)
-		.contextmenu(function(e){
-			e.preventDefault(); e.stopPropagation();
-			if ($(this).data("s") == 0){
-				$(this).data("s", 1).css("width", 600);
-			}
-			else if ($(this).data("s") == 1){
-				$(this).data("s", 2).css("width", Math.min(res.x - 50, 1000)).css("top", res.y - 330)
-					.find(".chatBox").addClass("widen");
-			}
-			else {
-				$(this).data("s", 0).css("width", 150).css("top", $(this).data("pos"))
-					.find(".chatBox").removeClass("widen")
-						.scrollTop(function(){return this.scrollHeight});
-			}
-		})//.drag();
-*/
 
 	if (!this.userid){
 		$chat.find(".sendWrapper").remove();

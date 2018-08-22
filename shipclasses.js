@@ -1507,7 +1507,6 @@ Ship.prototype.attachLogEntry = function(html){
 				}
 			)
 			.html(html));
-	ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 }
 
 Ship.prototype.createCritLogEntry = function(){

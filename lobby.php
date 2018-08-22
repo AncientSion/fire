@@ -322,7 +322,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 <script>
 	$(document).ready(function(){
 
-		$(".chatWrapper")/*.css("position", "relative").css("width", 700).css("margin", "auto").css("margin-top", 20)*/.find(".chatBox").scrollTop(function(){return this.scrollHeight}).end();
+		$(".chatWrapper").find(".chatBox").scrollTop(function(){return this.scrollHeight}).end();
 		
 		var checkChat = setInterval(
 			function(){ajax.checkChat();},

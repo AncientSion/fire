@@ -1038,8 +1038,6 @@ FireOrder.prototype.createCombatLogEntry = function(){
 
 		$(log).append(sub);
 	}
-
-	ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 }
 
 FireOrder.prototype.addLogStartEntry = function(log){
@@ -1113,15 +1111,10 @@ FireOrder.prototype.addLogStartEntry = function(log){
 			}
 		}
 		else {
-			//console.log(ui.combatLogWrapper.find("#combatLogInnerWrapper")[0].scrollHeight)
 			$(this).data("expanded", 1).addClass("selected");
 			for (var i = startRow; i <= endRow; i++){
 				$(rows[i]).show().addClass("selected");
-				//console.log($(rows[i]).scrollTop())
 			}
-			//console.log(ui.combatLogWrapper.find("#combatLogInnerWrapper")[0].scrollHeight)
-			//ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
-			//ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return 100});
 		}
 
 
