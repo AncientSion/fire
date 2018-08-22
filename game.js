@@ -2082,16 +2082,13 @@ function Game(data){
 	this.hideUI = function(){
 		ui.combatLogWrapper.hide();
 		ui.unitSelector.hide();
-		ui.deployOverlay.hide();
-		ui.reinforceWrapper.hide();
-		$("#upperGUI").hide()
+		$("#leftUnitWrapper").hide();
+		$("#upperGUI").show()
 	}
 
 	this.showUI = function(){
-		//ui.combatLogWrapper.show();
 		ui.unitSelector.show();
-		ui.deployOverlay.show();
-		ui.reinforceWrapper.show();
+		$("#leftUnitWrapper").show();
 		$("#upperGUI").show()
 	}
 
