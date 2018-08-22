@@ -1695,12 +1695,39 @@ Ship.prototype.draw = function(){
 	ctx.rotate(this.getDrawFacing() * Math.PI/180);
 
 	//console.log("draw #" + this.id);
- 	if (this.doDraw){
-		this.drawSelf();
-	}
+ 	if (this.doDraw){this.drawSelf();}
 
 	this.drawEscort();
 	ctx.rotate(-this.getDrawFacing() * Math.PI/180);
+	ctx.translate(-this.drawX, -this.drawY);
+}
+
+Ship.prototype.drawIncoming = function(){
+	ctx.translate(this.drawX, this.drawY);
+
+	ctx.beginPath();
+	ctx.arc(0, 0, (this.friendly ? this.size/2 : 50), 0, 2*Math.PI, false);
+	ctx.closePath();
+
+	//ctx.font = "26px Arial";
+	ctx.fillStyle = "lightBlue";
+	ctx.globalAlpha = 0.2;
+	ctx.fill();
+	ctx.globalAlpha = 1;
+
+	if (this.friendly){
+		ctx.rotate(this.getDrawFacing() * Math.PI/180);
+		ctx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
+		ctx.rotate(-this.getDrawFacing() * Math.PI/180);
+	}
+	else {
+		ctx.textAlign = "center";
+		ctx.fillStyle = "red";
+		ctx.font = "50px Arial";
+		ctx.fillText("?", 0, 0);
+		ctx.font = "20px Arial";
+		ctx.fillText("ETA " + (this.available - game.turn), 0, +30);
+	}
 	ctx.translate(-this.drawX, -this.drawY);
 }
 

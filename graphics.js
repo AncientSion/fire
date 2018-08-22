@@ -477,7 +477,7 @@ function drawExplosion(weapon, anim){  // 150, 150, 30
 	}*/
 }
 
-function drawDamageNumbers2(weapon, anim){
+function drawDamageNumbers(weapon, anim){
 	if (anim.done){return;}
 	anim.n++;
 	if (anim.n <= 0){return;}
@@ -487,62 +487,23 @@ function drawDamageNumbers2(weapon, anim){
 	//console.log(fraction)
 
 	fxCtx.globalAlpha = Math.min(1, 1.4 - fraction);
-	//fxCtx.globalAlpha = 1;
 
-	//fxCtx.font = Math.ceil(14/cam.z) + "px Arial";
-	fxCtx.font = "14px Arial";
-	fxCtx.textAlign = "center";
+	fxCtx.fillStyle = "white";
+	fxCtx.fillText(anim.odds, anim.x, anim.y -55 - (30 * fraction));
+	fxCtx.fillText(anim.shots, anim.x, anim.y -40 - (30 * fraction));
 
-	//if (fraction < 0.4){
-		fxCtx.fillStyle = "white";
-		fxCtx.fillText(anim.odds, anim.x, anim.y -55 - (30 * fraction));
-		fxCtx.fillText(anim.shots, anim.x, anim.y -40 - (30 * fraction));
-	//}
-	//else {
-	//fxCtx.font = "16px Arial";
 
-		fxCtx.fillStyle = "lightBlue";
-		fxCtx.fillText(anim.armour, anim.x -35, anim.y -15 - (30 * fraction));
-		fxCtx.fillStyle = "yellow";
-		fxCtx.fillText(anim.system, anim.x, anim.y -15 - (30 * fraction));
-		fxCtx.fillStyle = "red";
-		fxCtx.fillText(anim.hull, anim.x +35, anim.y -15 - (30 * fraction));
-	//}
+	fxCtx.fillStyle = "lightBlue";
+	fxCtx.fillText(anim.armour, anim.x -35, anim.y -15 - (30 * fraction));
+	fxCtx.fillStyle = "yellow";
+	fxCtx.fillText(anim.system, anim.x, anim.y -15 - (30 * fraction));
+	fxCtx.fillStyle = "red";
+	fxCtx.fillText(anim.hull, anim.x +35, anim.y -15 - (30 * fraction));
 
 	fxCtx.globalAlpha = 1;
 
-
 	if (anim.n >= anim.m){anim.done = 1; return;}
 
-	//fxCtx.translate(cam.o.x, cam.o.y);
-	//fxCtx.scale(cam.z, cam.z);
-//	fxCtx.fillText(font, anim.tx, anim.ty - 30 - (20 * fraction));
-}
-
-function drawDamageNumbers(weapon, anim, fraction){
-	return;
-	if (!anim.float || !anim.h){return;}
-	//console.log("draw");
-	//console.log(fire);
-	//console.log(fire);
-	//console.log(fire.anims[0][0]);
-	//console.log(fire.anims[fire.anims.length][]);
-	fxCtx.font = "16px Arial";
-	fxCtx.textAlign = "center";
-
-	for (var i = 0; i < anim.float.length; i++){
-		fxCtx.fillStyle = "lightBlue";
-		fxCtx.fillText(anim.float[i].armour, anim.float[i].x -35, anim.float[i].y -30 - (20 * fraction));
-		fxCtx.fillStyle = "yellow";
-		fxCtx.fillText(anim.float[i].system, anim.float[i].x, anim.float[i].y -30 - (20 * fraction));
-		fxCtx.fillStyle = "red";
-		fxCtx.fillText(anim.float[i].hull, anim.float[i].x +35, anim.float[i].y -30 - (20 * fraction));
-	}
-
-
-	//fxCtx.translate(cam.o.x, cam.o.y);
-	//fxCtx.scale(cam.z, cam.z);
-//	fxCtx.fillText(font, anim.tx, anim.ty - 30 - (20 * fraction));
 }
 
 function drawUnitExploa(posX, posY, img, s, now, max){

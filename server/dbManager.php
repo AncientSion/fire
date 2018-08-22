@@ -963,15 +963,16 @@
 					turn = :turn,
 					phase = -1,
 					delay = 0,
-					notes = '',
+					notes = ''
 				WHERE id = :id
 			");
 
+			$notes = "";
 			for ($i = 0; $i < sizeof($picks); $i++){
 				$cost += $picks[$i]["cost"];
-;
 				$stmt->bindParam(":eta", $turn);
 				$stmt->bindParam(":turn", $turn);
+			//	$stmt->bindParam(":notes", $notes);
 				$stmt->bindParam(":id", $picks[$i]["id"]);
 
 				$stmt->execute();
@@ -1579,10 +1580,12 @@
 			$stmt = $this->connection->prepare("
 				SELECT * FROM actions
 				WHERE shipid = :shipid
-				AND turn = :turn
+				AND turn >= :turn
 			");
 
+
 			for ($i = 0; $i < sizeof($units); $i++){
+
 				$stmt->bindParam(":shipid", $units[$i]->id);
 				$stmt->bindParam(":turn", $turn);
 				$stmt->execute();
@@ -1919,6 +1922,8 @@
 				AND phase > -2
 				ORDER BY userid ASC
 			");
+
+			$turn = 30;
 			
 			$stmt->bindParam(":gameid", $gameid);
 			$stmt->bindParam(":turn", $turn);

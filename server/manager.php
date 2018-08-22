@@ -169,7 +169,7 @@
 		$this->ships = $this->assembleUnits();
 		$this->setCC();
 		$this->reinforcements = $this->readyReinforcements();
-		$this->incoming = $db->getIncomingShips($this->gameid, $this->turn);
+		//$this->incoming = $db->getIncomingShips($this->gameid, $this->turn);
 	}
 
 	public function setUserIndex(){
@@ -195,25 +195,27 @@
 	}
 
 	public function getShipData(){
-		//Debug::log("getShipData");
-		if ($this->turn == 1 && $this->phase == -1){return $this->ships;}
-
+		Debug::log("getShipData");
 		//Debug::log("user: ".$this->userid.", turn: ".$this->turn.", phase: ".$this->phase);
 		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
-			if ($this->ships[$i]->userid != $this->userid){
-				//Debug::log("shipid: ".$this->ships[$i]->id.", user ".$this->ships[$i]->userid.", actions: ".sizeof($this->ships[$i]->actions));
-				if ($this->phase == 3){$this->ships[$i]->focus = 0;}
+		if ($this->turn == 1 && $this->phase == -1){return $this->ships;}
 
-				if ($this->ships[$i]->available == $this->turn && $this->phase == -1){
-					if ($this->ships[$i]->flight){
-						//Debug::log("ding");
-						array_splice($this->ships, $i, 1);
-					}
-					else if ($this->turn > 1){
-						$this->shiftToIncoming($this->ships[$i]);
-						array_splice($this->ships, $i, 1);
-					}
+			//if ($this->ships[$i]->userid == $this->userid){continue;}
+
+			if ($this->phase == 3){$this->ships[$i]->focus = 0;}
+
+			if ($this->ships[$i]->available == $this->turn && $this->phase == -1){
+				if ($this->ships[$i]->flight){
+
+					array_splice($this->ships, $i, 1);
 				}
+				else if ($this->turn > 1){
+					$this->incoming[] = $this->ships[$i];
+					array_splice($this->ships, $i, 1);
+				}
+			} else if ($this->ships[$i]->available > $this->turn){
+				$this->incoming[] = $this->ships[$i];
+				array_splice($this->ships, $i, 1);
 			}
 		}
 
@@ -251,29 +253,17 @@
 		return $this->ships;
 	}
 
-	public function shiftToIncoming($unit){
-		//Debug::log("shifting");
-		$this->incoming[] = array(
-			"id" => $unit->id, "userid" => $unit->userid, "available" => $unit->available, "name" => $unit->name,
-				"x" => $unit->actions[0]->x, "y" => $unit->actions[0]->y, "a" => $unit->actions[0]->a
-		);
-	}
-
 	public function getIncomingData(){
-		//Debug::log(sizeof($this->incoming));
+		//Debug::log("getIncomingData ".sizeof($this->incoming));
+
 		for ($i = sizeof($this->incoming)-1; $i >= 0; $i--){
-			if ($this->incoming[$i]["userid"] != $this->userid){
-				if ($this->incoming[$i]["available"] > $this->turn + 1){
-					array_splice($this->incoming, $i, 1);
-				}
+			//var_export($this->incoming[$i]);
+			if ($this->incoming[$i]->userid != $this->userid && $this->incoming[$i]->available > $this->turn+1){
+				array_splice($this->incoming, $i, 1);
 			}
 		}
-
-		for ($i = sizeof($this->incoming)-1; $i >= 0; $i--){
-			$this->incoming[$i]["actions"] = array(array("x" => $this->incoming[$i]["x"], "y" => $this->incoming[$i]["y"], "a" => $this->incoming[$i]["a"]));
-
-		}	
-		return $this->incoming;	
+		//Debug::log("return incoming: ".sizeof($this->incoming));
+		return $this->incoming;
 	}
 
 	public function createGame($name){
@@ -1529,7 +1519,6 @@
 				Debug::log("Command has been transfered!");
 				$playerstatus["curFocus"] = 0;
 			}
-
 
 			$output = 100;
 
