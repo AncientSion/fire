@@ -489,7 +489,8 @@ function drawDamageNumbers2(weapon, anim){
 	fxCtx.globalAlpha = Math.min(1, 1.4 - fraction);
 	//fxCtx.globalAlpha = 1;
 
-	fxCtx.font = Math.ceil(14/cam.z) + "px Arial";
+	//fxCtx.font = Math.ceil(14/cam.z) + "px Arial";
+	fxCtx.font = "14px Arial";
 	fxCtx.textAlign = "center";
 
 	//if (fraction < 0.4){
