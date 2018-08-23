@@ -1059,7 +1059,7 @@ function Game(data){
 		this.showUI();
 		ui.combatLogWrapper
 		.show()
-		.css("top", 200)
+		.css("top", 200).css("left", 0)
 		.find("#combatLogInnerWrapper")
 			.css("overflow", "unset")
 			.css("max-height", "unset");
