@@ -1058,11 +1058,12 @@ function Game(data){
 
 		this.showUI();
 		ui.combatLogWrapper
+		.show()
 		.css("top", 200)
 		.find("#combatLogInnerWrapper")
 			.css("overflow", "unset")
 			.css("max-height", "unset");
-			
+
 		if (game.phase == 2){
 			this.autoIssueFireOrders();
 		}
