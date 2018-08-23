@@ -1159,7 +1159,7 @@ function Game(data){
 		};
 	}
 
-	this.setDeployWrapperVisibility = function(){	
+	this.setLeftWrapperVisibility = function(){	
 		$("#reinforce")
 			.data("on", 1)
 			.click(function(e){
@@ -1189,9 +1189,7 @@ function Game(data){
 		
 		if (incoming.find("tbody").children().length < 2){incoming.hide();}
 
-		if (!avail.is(":visible") && !incoming.is(":visible")){
-			wrapper.hide();
-		}
+		if (!avail.is(":visible") && !incoming.is(":visible")){wrapper.hide();}
 
 	/*	if (incoming.children().children().length > 2 || avail.children().children().length > 3){
 			return;
@@ -2087,7 +2085,7 @@ function Game(data){
 
 	this.showUI = function(){
 		ui.unitSelector.show();
-		$("#leftUnitWrapper").show();
+		this.setLeftWrapperVisibility();
 		$("#upperGUI").show()
 	}
 
@@ -2535,7 +2533,9 @@ function Game(data){
 	}
 
 	this.initIncomingTable = function(){
+		return;
 		var wrapper = $("#deployTable");
+		//	wrapper.hide(); return;
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].salvo || this.ships[i].flight){continue;}
@@ -2544,13 +2544,15 @@ function Game(data){
 
 			if (this.ships[i].friendly || game.phase == 0){
 				var color = "green";
-				if (!this.ships[i].friendly){color = "red"}
 				wrapper
 				.append($("<tr>").addClass("deployNow")
-					.hover(
-						//function(){game.drawDeployMarker($(this).data("shipid"))},
-						//function(){game.draw();}
-					)
+				//	.hover(
+				//		function(){game.drawDeployMarker($(this).data("shipid"))},
+				//		function(){game.draw();}
+				//	)
+					//.click(function(){
+					//	game.getIncomingById($(this).data("shipid"));
+					//})
 					.data("shipid", this.ships[i].id)
 					.append($("<td>")
 						.append($(this.ships[i].getBaseImage().cloneNode(true))
@@ -2572,8 +2574,8 @@ function Game(data){
 				.append($("<tr>").addClass("deployNow")
 					.data("shipid", this.ships[i].id)
 					.hover(
-						//function(){game.drawDeployMarker($(this).data("shipid"))},
-						//function(){game.draw();}
+						function(){game.drawDeployMarker($(this).data("shipid"))},
+						function(){game.draw();}
 					)
 					.append($("<td>")
 						.append($("<img>")
@@ -3827,7 +3829,7 @@ Game.prototype.create = function(data){
 	this.initIncomingTable();
 	this.createReinforcementsTable();
 	this.initReinforceTable();
-	this.setDeployWrapperVisibility();
+	this.setLeftWrapperVisibility();
 	this.initSelectionWrapper();
 	this.initOptionsUI();
 	this.doPositionChat();

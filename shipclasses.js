@@ -1714,14 +1714,17 @@ Ship.prototype.drawIncoming = function(){
 	ctx.globalAlpha = 0.2;
 	ctx.fill();
 	ctx.globalAlpha = 1;
+	ctx.textAlign = "center";
 
 	if (this.friendly){
 		ctx.rotate(this.getDrawFacing() * Math.PI/180);
 		ctx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
 		ctx.rotate(-this.getDrawFacing() * Math.PI/180);
+		ctx.fillStyle = "green";
+		ctx.font = "20px Arial";
+		ctx.fillText("ETA " + (this.available - game.turn), 0, +40);
 	}
 	else {
-		ctx.textAlign = "center";
 		ctx.fillStyle = "red";
 		ctx.font = "50px Arial";
 		ctx.fillText("?", 0, 0);
