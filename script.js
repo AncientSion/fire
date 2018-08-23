@@ -314,7 +314,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 					$("<td>")
 						.attr("colSpan", 5)
 						.css("color", "yellow")
-						.css("font-size", 18)
+						.css("font-size", 14)
 						.html("- Targeting a mixed unit, chance to hit will slightly difer -")));
 		}
 

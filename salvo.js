@@ -199,7 +199,7 @@ Salvo.prototype.createBaseDiv = function(){
 		if (lacking){
 			table
 			.append($("<tr>")
-				.append($("<th>").html("- Targetting unsuited units -").attr("colSpan", 4)))
+				.append($("<th>").html("- Targeting unsuited units -").attr("colSpan", 4)))
 		}
 
 		table.append($("<tr>")
