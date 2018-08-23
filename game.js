@@ -1057,8 +1057,12 @@ function Game(data){
 		this.createLogEntry("-- Fire Events concluded --");
 
 		this.showUI();
-		this.doPositionLog();
-
+		ui.combatLogWrapper
+		.css("top", 200)
+		.find("#combatLogInnerWrapper")
+			.css("overflow", "unset")
+			.css("max-height", "unset");
+			
 		if (game.phase == 2){
 			this.autoIssueFireOrders();
 		}
