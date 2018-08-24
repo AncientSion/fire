@@ -83,7 +83,7 @@
 
 	public function getClientData(){
 
-		//$this->handleCommandTransfer();
+		$this->handleCommandTransfer();
 		//$this->getNewFocusValue();
 		//return;
 		//$this->handleFlightMovement();
@@ -1490,7 +1490,7 @@
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			for ($j = 0; $j < sizeof($this->ships); $j++){
 				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
-				if ($this->ships[$j]->command != $this->turn){continue;}
+				if ($this->ships[$j]->command != 24){continue;}
 
 				$data[] = $this->getNewFocusValue($this->playerstatus[$i], $this->ships[$j]);
 
