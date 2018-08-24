@@ -83,7 +83,7 @@
 
 	public function getClientData(){
 
-		$this->setPostFireFocusValues();
+		/	$this->setPostFireFocusValues();
 		//$this->handleFlightMovement();
 		//$this->testMorale();
 		//return;
@@ -1523,7 +1523,7 @@
 	}
 
 	public function getNewFocusValue($playerstatus, $unit){
-		Debug::log("getNewFocusValue turn:".$this->turn.", phase: ".$this->phase.", cmd: ".$unit->name." #".$unit->id);
+		//Debug::log("getNewFocusValue turn:".$this->turn.", phase: ".$this->phase.", cmd: ".$unit->name." #".$unit->id);
 
 		$curFocus; $gainFocus;
 
@@ -1540,11 +1540,8 @@
 			$output = 100;
 
 			$command = $unit->getSystemByName("Command");
-			Debug::log($output);
 			$output += $command->getCrewEffect() * $command->getCrewLevel();
-			Debug::log($output);
 			$output -= $command->getCritMod("Focus", $this->turn);
-			Debug::log($output);
 
 			$baseGain = floor($this->settings->pv / 100 * $this->settings->focusMod);
 			$commandRating = ($unit->baseFocusRate + $unit->modFocusRate);
