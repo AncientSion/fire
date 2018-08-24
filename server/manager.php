@@ -1540,7 +1540,7 @@
 
 			$command = $unit->getSystemByName("Command");
 			$output += $command->getCrewEffect() * $command->getCrewLevel();
-			$output -= $command->getCritMod("Morale", $this->turn);
+			$output -= $command->getCritMod("Focus", $this->turn);
 
 			$baseGain = floor($this->settings->pv / 100 * $this->settings->focusMod);
 			$commandRating = ($unit->baseFocusRate + $unit->modFocusRate);
