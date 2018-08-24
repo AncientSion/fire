@@ -83,9 +83,9 @@
 
 	public function getClientData(){
 
-		$this->handleCommandTransfer();
+		//$this->handleCommandTransfer();
 		//$this->getNewFocusValue();
-		return;
+		//return;
 		//$this->handleFlightMovement();
 		//$this->testMorale();
 		//return;
