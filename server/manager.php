@@ -1493,9 +1493,9 @@
 				$units[] = $this->ships[$j];
 			}
 			
-			usort($units, function($a, $b)){
+			usort($units, function($a, $b){
 				return $b->command - $a->command;
-			}
+			})
 
 			$data[] = $this->getNewFocusValue($this->playerstatus[$i], $units[0]);
 		}
@@ -1522,7 +1522,7 @@
 	}
 
 	public function getNewFocusValue($playerstatus, $unit){
-		Debug::log("getNewFocusValue turn:".$this->turn.", phase: ".$this->phase);
+		Debug::log("getNewFocusValue turn:".$this->turn.", phase: ".$this->phase.", cmd: ".$unit->name." #".$unit->id);
 
 		$curFocus; $gainFocus;
 
