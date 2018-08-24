@@ -489,7 +489,6 @@
 			");
 
 			for ($i = 0; $i < sizeof($data); $i++){
-				//var_export($data[$i]);
 				$stmt->bindParam(":curFocus", $data[$i]["curFocus"]);
 				$stmt->bindParam(":gainFocus", $data[$i]["gainFocus"]);
 				$stmt->bindParam(":maxFocus", $data[$i]["maxFocus"]);

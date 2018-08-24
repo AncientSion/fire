@@ -3955,8 +3955,7 @@ Hangar.prototype.showHangarLaunchControl = function(){
 				.append($("<td>").html(this.loads[i].launch).attr("id", this.loads[i].name + "Amount")));
 	}
 
-
-	var mission = this.getMission();
+	var mission = this.getMission
 	var element = $("#hangarDiv");
 		$(element)
 			.data("mission", mission)
@@ -3971,28 +3970,10 @@ Hangar.prototype.showHangarLaunchControl = function(){
 					}
 				})
 
-	this.triggerLaunchButton();
-}
+	if (game.getUnit(this.parentId).available == game.turn){
+		element.find("input").hide();
+	} else element.find("input").show();
 
-Hangar.prototype.triggerLaunchButton = function(){
-	return;
-	if (this.canFire()){return;}
-
-
-
-	var value = Math.floor($(this.element).find("input[name=mission]:checked").val());
-	game.mission = value;
-	//console.log(value);
-	ui.deployOverlay.show().find("#deployType").html( game.getMissionType(value)).end();
-
-	if (this.canLaunchFlight()){
-		$("#hangarDiv").find("input[type=button]").removeClass("inactive")
-	}
-	else {
-		game.flightDeploy = 0;
-		ui.deployOverlay.hide();
-		$("#hangarDiv").find("input[type=button]").addClass("inactive");
-	}
 }
 
 Hangar.prototype.setMission = function(val){
@@ -4240,7 +4221,9 @@ Hangar.prototype.setupHangarLoadout = function(e){
 		this.initHangarPurchaseDiv();
 	}
 	else {
-		game.setUnitTotal(game.getUnit(this.parentId));
+		var parent = game.getUnit(this.parentId);
+		game.setUnitTotal(parent);
+		//if (parent.available == game.turn){div.find("input").hide()};
 		$(div).addClass("disabled");
 	}
 }

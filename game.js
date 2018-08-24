@@ -2090,6 +2090,7 @@ function Game(data){
 
 	this.showUI = function(){
 		ui.unitSelector.show();
+		ui.combatLogWrapper.show();
 		this.setLeftWrapperVisibility();
 		$("#upperGUI").show()
 	}

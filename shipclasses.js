@@ -2337,7 +2337,7 @@ Ship.prototype.createBaseDiv = function(){
 
 	$(table)
 		.append($("<tr>")
-			.append($("<th>").html(this.getHeader()).attr("colSpan", 2).addClass(headerC)))
+			.append($("<th>").html(this.getHeader()).attr("colSpan", 2).addClass("name " + headerC)))
 		.append($("<tr>")
 			.append($("<th>").html(this.getCallSign()).attr("colSpan", 2).addClass(headerC)))
 		.append($("<tr>")
@@ -2447,7 +2447,6 @@ Ship.prototype.addCommandDiv = function(shipDiv){
 				.hide()
 				.click(function(){
 					popup("Reallocation Fleet Command will set saved Focus Points to 0 at end of turn.</br>Please confirm your order.</br><input type='button' class='popupEntryConfirm' value='Confirm Transfer' onclick='game.getUnit(aUnit).setCommand()'>");
-					//game.getUnit($(this).parent().parent().data("shipId")).setCommand();
 				})
 			)
 			.append(
@@ -2495,6 +2494,7 @@ Ship.prototype.setCommand = function(){
 		game.ships[i].command = 0;
 		game.commandChange.old = game.ships[i].id;
 		$(game.ships[i].element)
+			.find(".name").html(this.getHeader()).end()
 			.find(".commandContainer")
 			.find("input").show().end()
 			.find(".commandEntry").hide().end();
@@ -2516,6 +2516,7 @@ Ship.prototype.setCommand = function(){
 	}
 
 	$("#popupWrapper").hide();
+	$(this.element).find(".name").html(this.getHeader());
 	game.setFocusInfo();
 }
 
@@ -2535,18 +2536,16 @@ Ship.prototype.setUnitFocus = function(){
 	if (!this.canAffordFocus()){popup("You are lacking focus ressources for this action.</br>Have: " + game.getRemFocus() + "</br>Spending: " + game.getFocusSpending() + "</br>Need: " + this.getFocusCost()); return;}
 	if (!this.focus){
 		this.focus = 1;
-		//$(this.element).find(".focusContainer").find("input").hide().end().find(".focusEntry").show();
 		$(this.element).find(".focusContainer").find("input").attr("value", "Has Focus (" + this.getFocusCost() + " FP)");
-		//game.setFocusInfo();
+		$(this.element).find(".name").html(this.getHeader());
 	}
 }
 
 Ship.prototype.unsetUnitFocus = function(){
 	if (this.focus){
 		this.focus = 0;
-		//$(this.element).find(".focusContainer").find("input").show().end().find(".focusEntry").hide();
 		$(this.element).find(".focusContainer").find("input").attr("value", "Assign Focus (" + this.getFocusCost() + " FP)");
-		//game.setFocusInfo();
+		$(this.element).find(".name").html(this.getHeader());
 	}
 }
 

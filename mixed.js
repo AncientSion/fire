@@ -428,9 +428,6 @@ Mixed.prototype.setDrawData = function(){
 	}
 }
 
-Mixed.prototype.setSubSystemState = function(){
-}
-
 Mixed.prototype.getSystemByName = function(name){
 	return false;
 }

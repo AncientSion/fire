@@ -195,7 +195,7 @@
 	}
 
 	public function getShipData(){
-		Debug::log("getShipData");
+		//Debug::log("getShipData");
 		//Debug::log("user: ".$this->userid.", turn: ".$this->turn.", phase: ".$this->phase);
 		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
 		if ($this->turn == 1 && $this->phase == -1){return $this->ships;}
@@ -206,10 +206,9 @@
 
 			if ($this->ships[$i]->available == $this->turn && $this->phase == -1){
 				if ($this->ships[$i]->flight){
-
 					array_splice($this->ships, $i, 1);
 				}
-				else if ($this->turn > 1){
+				else if ($this->turn > 1 && $this->ships[$i]->userid != $this->userid){
 					$this->incoming[] = $this->ships[$i];
 					array_splice($this->ships, $i, 1);
 				}
@@ -1511,7 +1510,7 @@
 		$curFocus; $gainFocus;
 
 		if ($unit->isDestroyed() || $unit->status == "jumpOut"){
-			Debug::log("kill/flee!");
+			Debug::log("CMD kill/flee!");
 			$curFocus = 0; $gainFocus = 0;
 		}
 		else {
