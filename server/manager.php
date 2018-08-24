@@ -1540,11 +1540,11 @@
 			$output = 100;
 
 			$command = $unit->getSystemByName("Command");
-			Debug::log($ouput);
+			Debug::log($output);
 			$output += $command->getCrewEffect() * $command->getCrewLevel();
-			Debug::log($ouput);
+			Debug::log($output);
 			$output -= $command->getCritMod("Focus", $this->turn);
-			Debug::log($ouput);
+			Debug::log($output);
 
 			$baseGain = floor($this->settings->pv / 100 * $this->settings->focusMod);
 			$commandRating = ($unit->baseFocusRate + $unit->modFocusRate);
