@@ -1495,7 +1495,7 @@
 			
 			usort($units, function($a, $b){
 				return $b->command - $a->command;
-			})
+			});
 
 			$data[] = $this->getNewFocusValue($this->playerstatus[$i], $units[0]);
 		}
