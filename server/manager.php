@@ -83,6 +83,9 @@
 
 	public function getClientData(){
 
+		$this->handleCommandTransfer();
+		//$this->getNewFocusValue();
+		return;
 		//$this->handleFlightMovement();
 		//$this->testMorale();
 		//return;
@@ -976,7 +979,6 @@
 		$this->resolveBallisticFireOrders();
 		$this->testCriticals();
 		$this->testMorale();
-		$this->setPostFireFocusValues();
 
 		$this->handleResolvedFireData();
 
@@ -1480,23 +1482,6 @@
 
 		if (sizeof($data)){DBManager::app()->updateFocusValues($data);}
 	}		
-
-	public function setPostFireFocusValues(){
-		//Debug::log("setPostFireFocusValues");
-		$data = array();
-
-		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-			for ($j = 0; $j < sizeof($this->ships); $j++){
-				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
-				if (!$this->ships[$j]->command){continue;}
-
-				$data[] = $this->getNewFocusValue($this->playerstatus[$i], $this->ships[$j]);
-				$curFocus = $this->playerstatus[$i]["curFocus"];
-			}
-		}
-
-		if (sizeof($data)){DBManager::app()->updateFocusValues($data);}
-	}
 
 	public function handleCommandTransfer(){
 		//Debug::log("handleCommandTransfer");	
