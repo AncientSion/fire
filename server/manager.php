@@ -83,11 +83,6 @@
 
 	public function getClientData(){
 
-		/	$this->setPostFireFocusValues();
-		//$this->handleFlightMovement();
-		//$this->testMorale();
-		//return;
-
 		if (!$this->settings || !$this->settings->turn){return false;}
 		
 		$data = array(
