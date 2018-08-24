@@ -119,7 +119,7 @@ class Command extends PrimarySystem {
         $options = array("Morale", "Focus", "Engine", "Sensor", "Reactor");
         $multi = array(1, 1, 0.75, 1, 0.75);
 		$roll = mt_rand(0, sizeof($options)-1);
-		$roll = 0;
+		//$roll = 0;
 		$pick = $options[$roll];
 		$value = round(10 * $multi[$roll], 2);
 

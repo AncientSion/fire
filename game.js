@@ -52,7 +52,7 @@ function Game(data){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.animData = {jump: 45};
+	this.animData = {jump: 5};
 	this.commandChange = {old: 0, new: 0}
 	this.subPhase = 1;
 	this.exclusiveSystem = false;
@@ -2401,7 +2401,6 @@ function Game(data){
 					}
 				}
 				else if (game.fireOrders[i].weapon.animation == "area"){
-					float = 0;
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 						game.fireOrders[i].anim[j][k].n += 1;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
@@ -2539,7 +2538,7 @@ function Game(data){
 	}
 
 	this.initIncomingTable = function(){
-		return;
+		if (game.turn != 1 || game.phase != -1){return};
 		var wrapper = $("#deployTable");
 		//	wrapper.hide(); return;
 
@@ -2552,13 +2551,6 @@ function Game(data){
 				var color = "green";
 				wrapper
 				.append($("<tr>").addClass("deployNow")
-				//	.hover(
-				//		function(){game.drawDeployMarker($(this).data("shipid"))},
-				//		function(){game.draw();}
-				//	)
-					//.click(function(){
-					//	game.getIncomingById($(this).data("shipid"));
-					//})
 					.data("shipid", this.ships[i].id)
 					.append($("<td>")
 						.append($(this.ships[i].getBaseImage().cloneNode(true))
@@ -2579,10 +2571,6 @@ function Game(data){
 				wrapper
 				.append($("<tr>").addClass("deployNow")
 					.data("shipid", this.ships[i].id)
-					.hover(
-						function(){game.drawDeployMarker($(this).data("shipid"))},
-						function(){game.draw();}
-					)
 					.append($("<td>")
 						.append($("<img>")
 							.addClass("size40")
@@ -2622,10 +2610,6 @@ function Game(data){
 					.contextmenu(function(e){
 						e.preventDefault(); e.stopPropagation();
 					})	
-				$(this).hover(
-					//function(){game.drawDeployMarker($(this).data("shipid"))},
-					//function(){game.redraw();}
-				)
 			})
 		}
 
@@ -2640,12 +2624,7 @@ function Game(data){
 				wrapper
 				.append($("<tr>").addClass("deployNow")
 					.data("shipid", this.incoming[i].id)
-					.hover(
-						//function(){game.drawDeployMarker($(this).data("shipid"))},
-						//function(){game.draw();}
-					)
 					.append($("<td>")
-					//	.append($(this.incoming[i].getBaseImage()).addClass("size40")
 						.append($(graphics.images[this.incoming[i].name.toLowerCase()].cloneNode(true))
 							.addClass("size40")
 						)
@@ -2668,10 +2647,6 @@ function Game(data){
 				wrapper
 				.append($("<tr>").addClass("deployNow")
 					.data("shipid", this.incoming[i].id)
-					.hover(
-						//function(){game.drawDeployMarker($(this).data("shipid"))},
-						//function(){game.draw();}
-					)
 					.append($("<td>")
 						.append($("<img>")
 							.addClass("size40")
@@ -3129,7 +3104,7 @@ Game.prototype.drawShips = function(){
 	}
 
 	for (var i = 0; i < this.incoming.length; i++){
-		this.incoming[i].drawIncoming();
+		this.incoming[i].drawIncomingPreview();
 	}
 
 	this.resetShipTransform();

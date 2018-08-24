@@ -471,7 +471,7 @@
 		}
 
 		public function updateFocusValues($data){
-		//	Debug::log("updateFocusValues s: ".sizeof($data));
+			Debug::log("updateFocusValues s: ".sizeof($data));
 		//	Debug::log("curFocus: ".$data[0]["curFocus"]);
 		//	Debug::log("gainFocus: ".$data[0]["gainFocus"]);
 		//	Debug::log("maxFocus: ".$data[0]["maxFocus"]);

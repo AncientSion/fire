@@ -24,7 +24,7 @@ function Move(id, type, dist, x, y, a, delay, cost, costmod, manual, resolved){
 	this.s = false;
 }
 
-function BallVector(a, b, s, h){
+function ShotVector(a, b, s, h){
 	this.x;
 	this.y;
 	this.nx;

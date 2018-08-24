@@ -25,7 +25,7 @@ class Area extends Weapon {
 
 	public function getMultiShotHits($fire, $element){
 		//Debug::log("getMultiShotHits versus ".$element->name.", system ? :".$element->system);
-		if ($element->system){return $this->dmgs[1];}
+		if ($element->system){return $this->dmgs[mt_rand(1, 2)];}
 		return $this->dmgs[$fire->target->traverse];
 	}
 }

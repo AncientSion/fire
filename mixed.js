@@ -270,7 +270,7 @@ Mixed.prototype.setTarget = function(){
 			else if (target.flight){
 				if (target.mission.targetid == this.id){
 					if (s > target.getCurSpeed() || s == target.getCurSpeed() && this.id > target.id){
-						popup("Flight #" + this.id + " (targeting Flight #" + target.id + ") has the advantage and will move last");
+						popup("Flight #" + this.id + " (targeting Flight #" + target.id + ") has the advantage (is faster) and will move last");
 						target.setTarget();
 					}
 

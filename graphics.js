@@ -270,8 +270,8 @@ function drawAreaProjectile(weapon, anim){
 	var trailEnd = getPointInDir(weapon.projSize*2.5, anim.f, x, y);
 	var w = 1;
 
-	fxCtx.translate(cam.o.x, cam.o.y);
-	fxCtx.scale(cam.z, cam.z)
+	//fxCtx.translate(cam.o.x, cam.o.y);
+	//fxCtx.scale(cam.z, cam.z)
 
 	if (anim.n/anim.m > 0.8){
 		w -= 2*(anim.n/anim.m - 0.8);
@@ -292,7 +292,7 @@ function drawAreaProjectile(weapon, anim){
 	fxCtx.stroke();
 	fxCtx.closePath();
 	fxCtx.globalCompositeOperation = "source-over";
-	fxCtx.setTransform(1,0,0,1,0,0);
+	//fxCtx.setTransform(1,0,0,1,0,0);
 
 	if (anim.n >= anim.m){
 		anim.p = 1;
@@ -305,8 +305,8 @@ function drawAreaEffect(weapon, anim){
 	var fraction = anim.n/anim.m;
 	var size = weapon.aoe*2 * fraction;
 
-	fxCtx.translate(cam.o.x, cam.o.y);
-	fxCtx.scale(cam.z, cam.z)
+	//fxCtx.translate(cam.o.x, cam.o.y);
+	//fxCtx.scale(cam.z, cam.z)
 
 	//var cos = 0.5 + Math.cos(2*Math.PI*fraction);
 	//console.log(cos);
@@ -320,7 +320,7 @@ function drawAreaEffect(weapon, anim){
 
 	fxCtx.drawImage(graphics.eMine, anim.tx -size/2, anim.ty -size/2, size, size);
 	fxCtx.globalAlpha = 1;
-	fxCtx.setTransform(1,0,0,1,0,0);
+	//fxCtx.setTransform(1,0,0,1,0,0);
 
 	if (anim.n >= anim.m){
 		anim.done = true;

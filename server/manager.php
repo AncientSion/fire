@@ -93,7 +93,7 @@
 			"id" => $this->gameid,
 			"turn" => $this->turn,
 			"phase" => $this->phase,
-			"ships" => $this->getShipData(),
+			"ships" => $this->getUnitDataForClient(),
 			"reinforcements" => $this->reinforcements,
 			"incoming" =>$this->getIncomingData(),
 			"const" => $this->const,
@@ -194,8 +194,8 @@
 		}
 	}
 
-	public function getShipData(){
-		//Debug::log("getShipData");
+	public function getUnitDataForClient(){
+		//Debug::log("getUnitDataForClient");
 		//Debug::log("user: ".$this->userid.", turn: ".$this->turn.", phase: ".$this->phase);
 		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
 		if ($this->turn == 1 && $this->phase == -1){return $this->ships;}
@@ -208,11 +208,15 @@
 				if ($this->ships[$i]->flight){
 					array_splice($this->ships, $i, 1);
 				}
-				else if ($this->turn > 1 && $this->ships[$i]->userid != $this->userid){
-					$this->incoming[] = $this->ships[$i];
-					array_splice($this->ships, $i, 1);
+				else if ($this->turn > 1){
+					if ($this->ships[$i]->userid != $this->userid){
+						$this->incoming[] = $this->ships[$i];
+						array_splice($this->ships, $i, 1);
+					}
+					else $this->incoming[] = $this->ships[$i];
 				}
-			} else if ($this->ships[$i]->available > $this->turn){
+			}
+			else if ($this->ships[$i]->available > $this->turn){
 				$this->incoming[] = $this->ships[$i];
 				array_splice($this->ships, $i, 1);
 			}
@@ -937,6 +941,7 @@
 		//Debug::log("assembleEndStates");
 		$states = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->available > $this->turn){continue;}
 			$states[] = $this->ships[$i]->getEndState($this->turn);
 		}
 
@@ -982,7 +987,6 @@
 	
 	public function handleDamageControlPhase(){
 		$this->handleJumpOutActions();
-		$this->handleCommandTransfer();
 		return true;
 	}
 
@@ -1084,7 +1088,9 @@
 		$this->turn++;
 		$this->phase = -1;
 		DBManager::app()->setGameTurnPhase($this->gameid, $this->turn, $this->phase);
-		$this->addTurnStartFocusPoints();
+		$this->handleFocusCost();
+		$this->handleCommandTransfer();
+		$this->handleFocusGain();
 		$this->pickReinforcements();
 		return true;
 	}
@@ -1444,16 +1450,24 @@
 		}
 	}
 
-	public function addTurnStartFocusPoints(){
+	public function handleFocusCost(){
+		Debug::log("handleFocusCost");
+		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			for ($j = 0; $j < sizeof($this->ships); $j++){
+				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
+				if ($this->ships[$j]->focus){
+					$this->playerstatus[$i]["curFocus"] -= ceil($this->ships[$j]->cost);
+				}
+			}
+		}
+	}
+
+	public function handleFocusGain(){
+		Debug::log("handleFocusGain");
 		$data = array();
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			$curFocus = $this->playerstatus[$i]["curFocus"];
-			for ($j = 0; $j < sizeof($this->ships); $j++){
-				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
-				if ($this->ships[$j]->focus){$curFocus -= ceil($this->ships[$j]->cost);}
-			}
-
 			$gainFocus = $this->playerstatus[$i]["gainFocus"];
 
 			$data[] = array(
@@ -1491,7 +1505,7 @@
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			for ($j = 0; $j < sizeof($this->ships); $j++){
 				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
-				if ($this->ships[$j]->command <= $this->turn){continue;}
+				if ($this->ships[$j]->command != $this->turn){continue;}
 
 				$data[] = $this->getNewFocusValue($this->playerstatus[$i], $this->ships[$j]);
 
@@ -1500,8 +1514,6 @@
 				$this->playerstatus[$i]["maxFocus"] = $data[sizeof($data)-1]["maxFocus"];
 			}
 		}
-
-		if (sizeof($data)){DBManager::app()->updateFocusValues($data);}
 	}
 
 	public function getNewFocusValue($playerstatus, $unit){
@@ -1514,7 +1526,7 @@
 			$curFocus = 0; $gainFocus = 0;
 		}
 		else {
-			if ($this->phase == 3 && $this->turn > 1 && $unit->command == $this->turn+1){
+			if ($this->phase == -1 && $this->turn > 1 && $unit->command == $this->turn){
 				Debug::log("Command has been transfered!");
 				$playerstatus["curFocus"] = 0;
 			}

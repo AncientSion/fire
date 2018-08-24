@@ -372,7 +372,7 @@ Ship.prototype.doHover = function(){
 	}
 
 	this.drawMovePlan();
-	this.drawIncomingMovePlan();
+	this.drawIncomingPreviewMovePlan();
 	this.drawTargetMovePlan();
 }
 
@@ -1412,7 +1412,7 @@ Ship.prototype.doHighlight = function(){
 		ctx.setTransform(1,0,0,1,0,0);
 
 		//this.drawMovePlan();
-		//this.drawIncomingMovePlan();
+		//this.drawIncomingPreviewMovePlan();
 		//this.drawTargetMovePlan();
 		//this.drawTrajectory();
 	}
@@ -1577,6 +1577,11 @@ Ship.prototype.getLogNameEntry = function(){
 
 Ship.prototype.createDeployEntry = function(){
 	this.attachLogEntry("<th colSpan=9><span>" + this.getLogTitleSpan() + " jumps into local space.</span></th>");
+	$("#combatLog").find("tbody tr").last()
+		.hover(
+			function(){game.getUnit($(this).data("shipid")).highlightJumpShift();},
+			function(){game.redraw()}
+		)
 }
 
 Ship.prototype.createUndeployEntry = function(){
@@ -1702,7 +1707,7 @@ Ship.prototype.draw = function(){
 	ctx.translate(-this.drawX, -this.drawY);
 }
 
-Ship.prototype.drawIncoming = function(){
+Ship.prototype.drawIncomingPreview = function(){
 	ctx.translate(this.drawX, this.drawY);
 
 	ctx.beginPath();
@@ -1723,6 +1728,7 @@ Ship.prototype.drawIncoming = function(){
 		ctx.fillStyle = "green";
 		ctx.font = "20px Arial";
 		ctx.fillText("ETA " + (this.available - game.turn), 0, +40);
+		//ctx.fillText(this.available != game.turn ? "ETA " + (this.available - game.turn) : "NOW", 0, +40);
 	}
 	else {
 		ctx.fillStyle = "red";
@@ -1732,6 +1738,30 @@ Ship.prototype.drawIncoming = function(){
 		ctx.fillText("ETA " + (this.available - game.turn), 0, +30);
 	}
 	ctx.translate(-this.drawX, -this.drawY);
+}
+
+Ship.prototype.highlightJumpShift = function(){
+	ctx.translate(cam.o.x, cam.o.y);
+	ctx.scale(cam.z, cam.z);
+	ctx.translate(this.actions[0].x, this.actions[0].y);
+	ctx.globalAlpha = 1;
+
+	ctx.beginPath();
+	ctx.arc(0, 0, 10, 0, 2*Math.PI, false);
+	ctx.closePath();
+	ctx.fillStyle = "yellow";
+	ctx.fill();
+
+	var p = getPointInDir(100, this.actions[0].a, 0, 0);
+	console.log(p);
+	ctx.beginPath();
+	ctx.moveTo(0, 0)
+	ctx.lineTo(p.x, p.y);
+	ctx.closePath();
+	ctx.strokeStyle = "yellow";
+	ctx.stroke();
+
+	ctx.translate(-this.drawX, -this.drawY); return;
 }
 
 Ship.prototype.drawPositionMarker = function(){
@@ -3455,7 +3485,7 @@ Ship.prototype.drawTargetMovePlan = function(){
 	return;
 }
 
-Ship.prototype.drawIncomingMovePlan = function(){
+Ship.prototype.drawIncomingPreviewMovePlan = function(){
 	for (var i = 0; i < game.ships.length; i++){
 		if (game.ships[i].flight || game.ships[i].salvo){
 			if (game.ships[i].mission.arrived){continue;}

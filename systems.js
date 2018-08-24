@@ -2343,7 +2343,7 @@ Flash.prototype.getAnimation = function(fire){
 		var tx = t.x + dest.x;
 		var ty = t.y + dest.y;
 
-		var gunAnims = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
+		var gunAnims = new ShotVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
 			gunAnims.n = 0 - ((i / grouping) * delay + i*shotDelay);
 
 		allAnims.push([gunAnims])
@@ -2404,7 +2404,6 @@ Particle.prototype.getAnimation = function(fire){
 	for (var i = 0; i < fire.guns; i++){
 		var gunAnims = [];
 		var o = fire.shooter.getWeaponOrigin(fire.systems[i]);
-
 		var ox = fire.shooter.drawX + o.x;
 		var oy = fire.shooter.drawY + o.y;
 
@@ -2420,7 +2419,7 @@ Particle.prototype.getAnimation = function(fire){
 			var tx = t.x + dest.x;
 			var ty = t.y + dest.y;
 
-			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
+			var shotAnim = new ShotVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
 				shotAnim.n = 0 - i*gunDelay - j*shotDelay;
 
 			gunAnims.push(shotAnim);
@@ -2430,7 +2429,7 @@ Particle.prototype.getAnimation = function(fire){
 				oy += range(3, 6) * range(0, 1) * -1;
 				tx += range(3, 6) * range(0, 1) * -1;
 				ty += range(3, 6) * range(0, 1) * -1;
-				var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
+				var shotAnim = new ShotVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
 					shotAnim.n = 0 - i*gunDelay - j*shotDelay
 				gunAnims.push(shotAnim);
 			}
@@ -2513,7 +2512,7 @@ Pulse.prototype.getAnimation = function(fire){
 
 		for (var k = 0; k < (this.basePulses + this.extraPulses); k++){
 			var devi = {x: range(-2, 2), y: range(-2, 2)};
-			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx + devi.x, y: ty + devi.y}, speed, (k < subHits));
+			var shotAnim = new ShotVector({x: ox, y: oy}, {x: tx + devi.x, y: ty + devi.y}, speed, (k < subHits));
 				shotAnim.n = 0 - ((j / grouping) * delay + k*shotDelay);
 
 				if ( isNaN(shotAnim.n) ||isNaN(shotAnim.m) ||isNaN(shotAnim.n) ){
@@ -3398,14 +3397,15 @@ Area.prototype.getAnimation = function(fire){
 	delay *= fraction;
 	shotDelay *= fraction;
 	
-	for (var j = 0; j < fire.guns; j++){
+	for (var i = 0; i < fire.guns; i++){
 		var gunAnims = [];
-		var ox = fire.shooter.x;
-		var oy = fire.shooter.y;
+		var o = fire.shooter.getWeaponOrigin(fire.systems[i]);
+		var ox = fire.shooter.drawX + o.x;
+		var oy = fire.shooter.drawY + o.y;
 
 		for (var k = 0; k < this.shots; k++){
 			var hit = 0;
-			if (fire.hits[j] > k){
+			if (fire.hits[i] > k){
 				hit = 1;
 				hits++;
 			}
@@ -3415,8 +3415,8 @@ Area.prototype.getAnimation = function(fire){
 			var tx = t.x + dest.x;
 			var ty = t.y + dest.y;
 
-			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
-				shotAnim.n = 0 - ((j / grouping) * delay + k*shotDelay);
+			var shotAnim = new ShotVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
+				shotAnim.n = 0 - ((i / grouping) * delay + k*shotDelay);
 
 			gunAnims.push(shotAnim);
 		}

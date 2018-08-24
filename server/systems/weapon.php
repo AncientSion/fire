@@ -98,7 +98,7 @@ class Weapon extends System {
 
 		$html = "<u>Ship target</u></br>";
 		$html .= "Structure is subject to $data[4] (+ ".floor($data[5]-$data[4])." per size) hits.</br>";
-		$html .= "Facing systems are subject to $data[2] hits each.";	
+		$html .= "Facing systems are subject to $data[1] - $data[2] hits each.";	
 		$this->notes[] = $html;
 		$this->notes[] = "Armour applies, no Overkill";
 	}

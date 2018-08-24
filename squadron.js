@@ -17,7 +17,7 @@ Squadron.prototype.create = function(){
 		this.curImp = 0;
 		this.primary.systems[0].output = 0;
 		this.primary.systems[1].output = 0;
-	}
+	} else if (this.id < 0){this.curImp = this.baseImpulse;}
 	Ship.prototype.create.call(this);
 }
 

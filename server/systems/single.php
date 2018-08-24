@@ -218,6 +218,8 @@ class Single {
 
 		for ($i = sizeof($effects)-1; $i >= 0; $i--){
 			if ($magnitude < $effects[$i][1]){continue;}
+			$value = $effects[$i][3];
+			//if (!$value){Debug::log("no value"); continue;}
 
 			Debug::log("crit: ".$effects[$i][0].", value: ".$value);
 			
