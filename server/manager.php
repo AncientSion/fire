@@ -83,9 +83,6 @@
 
 	public function getClientData(){
 
-		$this->handleCommandTransfer();
-		//$this->getNewFocusValue();
-		//return;
 		//$this->handleFlightMovement();
 		//$this->testMorale();
 		//return;
@@ -979,6 +976,7 @@
 		$this->resolveBallisticFireOrders();
 		$this->testCriticals();
 		$this->testMorale();
+		$this->setPostFireFocusValues();
 
 		$this->handleResolvedFireData();
 
@@ -1483,16 +1481,38 @@
 		if (sizeof($data)){DBManager::app()->updateFocusValues($data);}
 	}		
 
+	public function setPostFireFocusValues(){
+		//Debug::log("setPostFireFocusValues");
+		$data = array();
+
+		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			$units = array();
+			for ($j = 0; $j < sizeof($this->ships); $j++){
+				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
+				if (!$this->ships[$j]->command){continue;}
+				$units[] = $this->ships[$j];
+			}
+			
+			usort($units, function($a, $b)){
+				return $b->command - $a->command;
+			}
+
+			$data[] = $this->getNewFocusValue($this->playerstatus[$i], $units[0]);
+		}
+
+		if (sizeof($data)){DBManager::app()->updateFocusValues($data);}
+	}
+
 	public function handleCommandTransfer(){
 		//Debug::log("handleCommandTransfer");	
-		$data = array();
+		//$data = array();
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			for ($j = 0; $j < sizeof($this->ships); $j++){
 				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
-				if ($this->ships[$j]->command != 24){continue;}
+				if ($this->ships[$j]->command != $this->turn){continue;}
 
-				$data[] = $this->getNewFocusValue($this->playerstatus[$i], $this->ships[$j]);
+				//$data[] = $this->getNewFocusValue($this->playerstatus[$i], $this->ships[$j]);
 
 				$this->playerstatus[$i]["curFocus"] = $data[sizeof($data)-1]["curFocus"];
 				$this->playerstatus[$i]["gainFocus"] = $data[sizeof($data)-1]["gainFocus"];
