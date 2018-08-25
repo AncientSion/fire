@@ -2335,7 +2335,7 @@ Ship.prototype.getMoraleDiv = function(){
 			.append($("<td>").html("Morale"))
 			.append($("<td>").attr("colSpan", 1).addClass("Morale")
 				.append($("<div>").addClass("moraleFull"))
-				.append($("<div>").addClass("moraleTrigger").css("width", (this.getMoraleTrigger() + "%")))
+				//.append($("<div>").addClass("moraleTrigger").css("width", (this.getMoraleTrigger() + "%")))
 				.append($("<div>").addClass("moraleNow").css("width", (Math.min(100, this.getCurrentMorale()) + "%")))
 				.hover(
 					function(e){
