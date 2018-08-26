@@ -17,17 +17,20 @@ class Plasma extends Weapon {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-		$this->boostEffect[] = new Effect("Damage loss", -50);
+		$this->boostEffect[] = new Effect("Damage Loss", -50);
 		//$this->boostEffect[] = new Effect("Damage", 10);
 		$this->notes = array($this->melt."% of total damage is added as extra damage to armour");
 	}
 	
 	public function getDmgRangeMod($fire){
-		$boost = (100 + ($this->getBoostEffect("Damage loss") * $this->getBoostLevel($fire->turn))) / 100;
-		$loss = $fire->dist * ($this->dmgLoss * $boost) / 10000;
+		$mod = 100;
+		$boost += $this->getBoostEffect("Damage Loss")* $this->getBoostLevel($fire->turn);
+		$crit += $this->getCritMod("Damage Loss", $fire->turn);
 
-		//Debug::log(get_class($this).", weapon id: ".$this->id.", boostMod: ".$boost.", final multi: ".(1-$loss));
-		return 1-$loss;
+		$mod = $mod + $boost + $crit / 100;
+		$loss = $fire->dist * $this->dmgLoss * $mod / 10000;		
+		Debug::log("Plasma, total mod: ".$mod, ", loss: ".$loss);
+		return $mod;
 	}
 }
 

@@ -388,7 +388,7 @@ class Mixed extends Ship {
 			}
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if ($this->structures[$i]->systems[$j]->id == $id){
-					return $this->structures[$i]->systems[$j];
+					return $this->structures[$i]->systems[$j]->getActiveSystem();
 				}
 			}
 		}
@@ -426,8 +426,8 @@ class Mixed extends Ship {
 			"rolled" => $this->isRolled(),
 			"flipped" => $this->flipped,
 			"status" => $this->status,
-			"notes" => $this->notes,
-			);
+			"notes" => "",
+		);
 	}
 }
 

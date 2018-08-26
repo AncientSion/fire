@@ -40,7 +40,14 @@ Mixed.prototype.canDeploy = function(){
 }
 
 Mixed.prototype.getPowerOrders = function(){
-	return [];
+	var powers = [];
+
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].systems.length; j++){
+			powers = powers.concat(this.structures[i].systems[j].getPowerOrders());
+		}
+	}
+	return powers;
 }
 
 Mixed.prototype.hasHangarSelected = function(){

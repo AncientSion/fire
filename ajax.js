@@ -280,7 +280,7 @@ window.ajax = {
 
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid != game.userid){continue;}
-			if (game.ships[i].flight || game.ships[i].salvo){continue;}
+			//if (game.ships[i].flight || game.ships[i].salvo){continue;}
 
 			var power = game.ships[i].getPowerOrders();
 			for (var j = 0; j < power.length; j++){
@@ -399,7 +399,7 @@ window.ajax = {
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid == game.userid){
 				if (game.ships[i].status == "jumpOut"){
-					jumpout.push({id: game.ships[i].id, status: "jumpOut", notes: ""});
+					jumpout.push({id: game.ships[i].id, status: "jumpOut", notes: game.ships[i].notes});
 				}
 				if (game.ships[i].focus){
 					focus.push(game.ships[i].id);

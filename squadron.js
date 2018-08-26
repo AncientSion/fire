@@ -871,12 +871,8 @@ Squadron.prototype.getDamageMoraleMalus = function(){
 			if (this.structures[i].isDestroyed()){continue;}
 			remaining += Math.max(0, this.structures[i].remaining);
 		}
-
-		dmg = Math.floor(remaining / integrity *100)
+		return (100 - Math.floor(remaining / integrity *100))*-1;
 	}
-
-	if (!dmg){return ""}
-	return dmg-100 + "%";
 }
 
 Squadron.prototype.getCrewBaseCost = function(i){

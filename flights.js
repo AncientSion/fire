@@ -16,6 +16,9 @@ Fighter.prototype.create = function(data){
 	}
 	for (var k = 0; k < data.systems.length; k++){
 		var system = new window[data.systems[k].type](data.systems[k]);
+		for (var l = 0; l < data.systems[k].powers.length; l++){
+			system.powers.push(new Power(data.systems[k].powers[l]));
+		}
 		for (var l = 0; l < data.systems[k].fireOrders.length; l++){
 			system.fireOrders.push(new FireOrder(data.systems[k].fireOrders[l]));
 		}

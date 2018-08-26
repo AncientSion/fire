@@ -83,6 +83,7 @@
 
 	public function getClientData(){
 
+		//$this->testMorale(); return;
 		if (!$this->settings || !$this->settings->turn){return false;}
 		
 		$data = array(
@@ -977,7 +978,7 @@
 		$this->handleResolvedFireData();
 
 		$time += microtime(true); 
-		Debug::log("handleFiringPhase time: ".round($time, 3)." seconds.");
+		Debug::log("handleFiringPhase DONE time: ".round($time, 3)." seconds.");
 		return true;
 	}
 	
@@ -1325,7 +1326,7 @@
 			if ($this->fires[$i]->resolved){continue;}
 			if (!$this->fires[$i]->shooter->flight){continue;}
 			if ($this->fires[$i]->shooter->getStruct($this->fires[$i]->weapon->fighterId)->destroyed){
-				Debug::log("SKIPPING firorder, fighter (shooter) is destroyed");
+				Debug::log("SKIPPING firorder, SINGLE (shooter) is destroyed");
 				$this->fires[$i]->resolved = 1;
 			}
 		}
@@ -1368,7 +1369,7 @@
 
 			if ($this->fires[$i]->shooter->flight == true && $this->fires[$i]->target->flight == false){
 				if ($this->fires[$i]->shooter->getStruct($this->fires[$i]->weapon->fighterId)->destroyed){
-					Debug::log("BBB skipping fireorder due to destroyed single shooter");
+					Debug::log("SKIPPING firorder, SINGLE (shooter) is destroyed");
 					$this->fires[$i]->resolved = 1;
 					continue;
 				}
@@ -1536,13 +1537,13 @@
 
 			$command = $unit->getSystemByName("Command");
 			$output += $command->getCrewEffect() * $command->getCrewLevel();
-			$output -= $command->getCritMod("Focus", $this->turn);
+			$output += $command->getCritMod("Focus", $this->turn);
 
 			$baseGain = floor($this->settings->pv / 100 * $this->settings->focusMod);
 			$commandRating = ($unit->baseFocusRate + $unit->modFocusRate);
 
 			$curFocus = $playerstatus["curFocus"];
-			$gainFocus = floor($baseGain / 10 * $commandRating / 100 * $output);
+			$gainFocus = floor($baseGain / 10 * $commandRating / 100 * $output * ($unit->faction == "Minbari Federation" ? 1.3 : 0));
 
 			Debug::log("basegain: ".$baseGain.", commandRating: ".$commandRating.", command: ".$unit->name.", output: ".$output.", gain: ".$gainFocus);
 		}
@@ -1628,10 +1629,39 @@
 		return array("Earth Alliance", "Centauri Republic", "Minbari Federation", "Narn Regime", "The Shadows");
 	}
 
-	public function getUnitsForFaction($faction){
-		//Debug::log("getUnitsForFaction");
+	public function getFactionData($faction){
+		//Debug::log("getFactionData");
+
+		$notes = array();
 		$units = array(array(), array(), array(), array());
-		$return = array(array(), array(), array(), array());
+		$return = array(array(), array(), array(), array(), array());
+
+		switch ($faction){
+			case "Earth Alliance": 
+				$notes = array(
+					array("Inpenetrable", "By trading energy, units can temporary empower their armour, making them far more resistent to damage."),
+					array("Insurmountable", "An array of networked turrets will provide dedicated point defense to every unit."),
+				);
+			break;
+			case "Centauri Republic"; 
+				$notes = array(
+					array("Hunt them down", "Excelling at wolfpack tactics results in each Squadrons with at least 3 units being 15 % less expensive."),
+					array("Hit and Run", "Specialized battle doctrine and starship design yield a 20 % cost reduction for every non-turning move action.")
+				);
+			break;
+			case "Minbari Federation";
+				$notes = array(
+					array("Advanced Tech", "Highly advanced tech allow easy overpowering of hostile sensors. EW is considered to be originating from a unit 2 levels higher."),
+					array("Enlightened", "Superior tactical capabilities and officer training result in a 30 % increased Focus gain as well as starting morale 120.")
+				);
+			break;
+			case "Narn Regime";
+				$notes = array(
+					array("Relentless & Unbreakable", "Narn by nature will hardly ever flee from a battle until the very last moment. Unit starting morale 140."),
+					array("Shon'Kar", "Every unit can declare blood oath, marking an enemy as nemesis. Firing orders between oath-sworn incur a 20 % base to-Hit increase.")
+				);
+			break;
+		}
 
 		switch ($faction){
 			case "Earth Alliance";
@@ -1752,8 +1782,6 @@
 				break;
 		}
 
-		$ship;
-
 		for ($i = 0; $i < sizeof($units[0]); $i++){
 			$name = $units[0][$i];
 			$unit = new $name(1, 0, 0, 0, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "");
@@ -1764,7 +1792,7 @@
 				"ew" => $unit->ew,
 				"eta" => 0
 			);
-			$return[0][] = $data;
+			$return[1][] = $data;
 		}
 
 		for ($j = 0; $j < sizeof($units[1]); $j++){
@@ -1777,18 +1805,19 @@
 				"space" => $unit->space,
 				"eta" => 0
 			);
-			$return[1][] = $data;
+			$return[2][] = $data;
 		}
 
 		for ($i = 0; $i < sizeof($units[2]); $i++){
 			$fighter = new $units[2][$i](0, 0);
-			$return[2][] = $fighter;
+			$return[3][] = $fighter;
 		}
 		for ($i = 0; $i < sizeof($units[3]); $i++){
 			$ballistic = new $units[3][$i](0, 0);
-			$return[3][] = $ballistic;
+			$return[4][] = $ballistic;
 		}
 
+		$return[0] = $notes;
 
 		return $return;
 	}

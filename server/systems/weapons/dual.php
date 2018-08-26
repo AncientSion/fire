@@ -1,5 +1,25 @@
 <?php
 
+class FighterDual extends Dual {
+	public $tiny = 1;
+
+	function __construct($id, $parentId, $fighterId, $linked, $modes){
+		$this->linked = $linked;
+		Weapon::__construct($id, $parentId, 0, 0, 0, 0, 0);
+
+		for ($i = 0; $i < sizeof($modes); $i++){
+			$this->states[] = 0;
+			$this->modes[] = $modes[$i];
+			$this->weapons[] = new $modes[$i][0]($i, $parentId, $linked, $modes[$i][1], $modes[$i][2], $modes[$i][3]);
+			$this->weapons[sizeof($this->weapons)-1]->dualParent = $id;
+			$this->weapons[sizeof($this->weapons)-1]->fighterId = $fighterId;
+			$this->display .= $this->weapons[$i]->display." / ";
+		}
+
+		$this->display = substr($this->display, 0, strlen($this->display)-3);
+	}
+}
+
 class Dual extends Weapon {
 	public $type = "Dual";
 	public $name = "Dual";
@@ -38,9 +58,9 @@ class Dual extends Weapon {
 	}
 
 	public function setActiveSystem($turn){
-		//if ($this->parentId == 15 && $this->id == 14){
-		//	Debug::log("setActiveSystempowers: ".sizeof($this->powers));
-		//}
+	//	if ($this->parentId == 8){
+	//		Debug::log("setActiveSystempowers: ".sizeof($this->powers));
+	//	}
 		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
 			if ($this->powers[$i]->type < 0){
 				if ($this->powers[$i]->turn == $turn || $this->powers[$i]->turn == $turn-1){

@@ -66,10 +66,10 @@ class Ship {
 	public $modFocusRate = 0;
 
 	public $critEffects = array( // type, min%, dura, effect
-		array("Morale", 30, -1, 5.00),
-		array("Morale", 60, -1, 15.00),
-		array("Morale", 100, -1, 25.00),
-		array("Route", 150, -1, 0.00),
+		array("Morale", 30, -1, -5.00),
+		array("Morale", 60, -1, -15.00),
+		array("Morale", 100, -1, -25.00),
+		array("Rout", 150, -1, 0.00),
 	);
 
 	function __construct($data){
@@ -208,7 +208,7 @@ class Ship {
 			$command->getCritMod("Morale", $turn)
 		);
 
-		//Debug::log("Morale #".$this->id.": ".$this->morale->damage."/".$this->morale->cmd."/".$this->morale->crew."/".$this->morale->crit.", current: ".$this->morale->current.", effChance: ".$this->morale->effChance);
+		//Debug::log("Morale #".$this->id.": ".$this->morale->damage."/".$this->morale->cmd."/".$this->morale->crew."/".$this->morale->crit.", rem: ".$this->morale->rem.", effChance: ".$this->morale->effChance);
 
 
 	}
@@ -1120,11 +1120,11 @@ class Ship {
 		} else Debug::log("opening test FAIL, roll: ".$roll.", chance: ".$chance);
 
 		$roll = mt_rand(0, 100);
-		$magnitude = $roll + 100 - $this->morale->current;
+		$magnitude = $roll + 100 - $this->morale->rem;
 
 		Debug::log("roll: ".$roll.", total magnitude: ".$magnitude);
 		//$this->notes = "m".$roll.";"
-		$this->notes = ("--R: ".$roll.", tMag: ".$magnitude."--");
+		$this->notes = "--R: ".$roll.", tMag: ".$magnitude."--";
 
 		if ($magnitude  < $effects[0][1]){return;}
 
@@ -1140,24 +1140,8 @@ class Ship {
 					$effects[$i][0], $effects[$i][2], $effects[$i][3], 1
 				);
 			}
-			break;
+			return;
 		}
-	}
-
-
-	public function adoTestMorale($turn){
-		Debug::log(get_class($this). " #".$this->id.", morale @ ".$this->morale->current."%");
-		//$this->morale->current = 20;
-		if ($this->morale->current >= $this->morale->trigger){return;}
-		$roll = mt_rand(0, 100);
-		$this->notes = $roll;
-		Debug::log(" => effChance: ".$this->morale->effChance.", roll: ".$roll);
-		if ($roll < $this->morale->effChance){
-			Debug::log(" ===> retreat!");
-			$this->status = "jumpOut";
-			return true;
-		}
-		return false; 
 	}
 
 	public function addSystem($obj){

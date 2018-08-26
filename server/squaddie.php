@@ -56,7 +56,6 @@ class Squaddie extends Single {
 		}
 		$this->setNegation($this->integrity, 0);
 
-
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				$this->structures[$i]->systems[$j]->setState($turn, $phase);
@@ -127,10 +126,6 @@ class Squaddie extends Single {
 	public function getName(){
 		return "Main";
 	}
-
-	public function addPowerEntry($power){
-		$this->powers[] = $power;
-	}	
 
 	public function getBoostEffect($type){
 		for ($i = 0; $i < sizeof($this->boostEffect); $i++){

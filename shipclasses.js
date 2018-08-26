@@ -915,7 +915,7 @@ Ship.prototype.getProfileMod = function(){
 }
 
 Ship.prototype.canBoost = function(system){
-	if (system.disabled || system.destroyed){
+	if (system.disabled || system.destroyed || system.tiny){
 		return false;
 	}
 	else if (system instanceof Weapon && !system.disabled && !system.destroyed && (system.getLoadLevel() >= 1 || system.getBoostEffect("Reload") && system.getLoadLevel() < 1)){
@@ -2234,37 +2234,45 @@ Ship.prototype.showMoraleDiv = function(e){
 				.append($("<th>").attr("colSpan", 2).html("Morale Overview")))
 			.append($("<tr>")
 				.append($("<td>").html("Base Morale"))
-				.append($("<td>").html("100%")))
+				.append($("<td>").html(100)))
 			.append($("<tr>")
 				.append($("<td>").html("Flagship Bonus"))
-				.append($("<td>").addClass("moraleFlagship").html(this.getFlagshipMoraleBonus())))
+				.append($("<td>").html(this.getFlagshipMoraleBonus())))
 			.append($("<tr>")
 				.append($("<td>").html("Officer Bonus"))
 				.append($("<td>").html(this.getOfficerMoraleBonus())))
 			.append($("<tr>")
 				.append($("<td>").html("Critical Malus"))
-				.append($("<td>").addClass("moraleCrit").html(this.getCriticalMoraleMalus())))
+				.append($("<td>").html(this.getCriticalMoraleMalus())))
 			.append($("<tr>")
 				.append($("<td>").html("Damage Malus"))
-				.append($("<td>").addClass("moraleDamage").html(this.getDamageMoraleMalus())))
+				.append($("<td>").html(this.getDamageMoraleMalus())))
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
 			.append($("<tr>")
-				.append($("<th>").html("Final Morale"))
-				.append($("<th>").addClass("moraleFinal").html(this.getCurrentMorale() + "%")))
-/*			.append($("<tr>")
+				.append($("<td>").html("Remaining Morale"))
+				.append($("<td>").html("<span class='yellow'>"+this.getSumMoraleModifers()+"</span>")))
+			.append($("<tr>")
+				.append($("<td>").attr("colSpan", 2).css("height", 12)))
+			.append($("<tr>")
+				.append($("<td>").attr("colSpan", 2).html("Morale Test if received >= 15 % damage.</br>Rolls D100, subtracts morale.")))
+			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
 			.append($("<tr>")
-				.append($("<td>").attr("colSpan", 2).html("Check required @ Morale < " + this.getMoraleTrigger() + "%")))
+				.append($("<th>").attr("colSpan", 2).html("Possible Effects")))
 			.append($("<tr>")
-				.append($("<td>").attr("colSpan", 2).css("height", 6)))
+				.append($("<td>").html(">= " + this.critEffects[0][1]))
+				.append($("<td>").html(this.critEffects[0][0] + " " + this.critEffects[0][3])))
 			.append($("<tr>")
-				.append($("<td>").html("Start Chance to Rout"))
-				.append($("<td>").html(this.getModifiedRoutChance())))
+				.append($("<td>").html(">= " + this.critEffects[1][1]))
+				.append($("<td>").html(this.critEffects[1][0] + " " + this.critEffects[1][3])))
 			.append($("<tr>")
-				.append($("<td>").html("Current Rout Chance"))
-				.append($("<th>").html(this.getEffectiveRoutChance() + "%")))
-*/		)
+				.append($("<td>").html(">= " + this.critEffects[2][1]))
+				.append($("<td>").html(this.critEffects[2][0] + " " + this.critEffects[2][3])))
+			.append($("<tr>")
+				.append($("<td>").html(">= " + this.critEffects[3][1]))
+				.append($("<td>").html(this.critEffects[3][0])))
+		)
 	)
 }
 
@@ -2277,39 +2285,44 @@ Ship.prototype.getMoraleTrigger = function(){
 }
 
 Ship.prototype.getFlagshipMoraleBonus = function(){
-	if (this.command){
-		return "+10%";
-	} return "";
+	return this.command * 10;
 }
 
 Ship.prototype.getOfficerMoraleBonus = function(){
 	var mod = this.getCrewLevel(0) * this.getSystemByName("Command").crewEffect;
-	if (mod){return "+" + mod + "%";}
+	if (mod){return "+" + mod;}
 	return "";
 }
 
 Ship.prototype.getCriticalMoraleMalus = function(){
 	var mod = this.getSystemByName("Command").getCritMod("Morale")*-1;
-	if (mod){return mod + "%";}
+	if (mod){return mod;}
 	return "";
 }
 
 Ship.prototype.getDamageMoraleMalus = function(){
 	var dmg = (100 - Math.floor(this.primary.remaining / this.primary.integrity * 100))*-1;
-	if (!dmg){return ""}
-	return dmg + "%";
+	//if (!dmg){return ""}
+	return dmg;
 }
 
-Ship.prototype.getCurrentMorale = function(){
+Ship.prototype.getSumMoraleModifers = function(){
 	var cmd = this.getSystemByName("Command");
-	var base = 100;
 	var flagship = this.command == true ? 10 : 0;
 	var upgrade = this.getCrewLevel(0) * cmd.crewEffect;
-	var crits = cmd.getCritMod("Morale")*-1;
+	var crits = cmd.getCritMod("Morale");
 	var dmg = this.getDamageMoraleMalus();
-	if (dmg){dmg = Math.floor(dmg.slice(0, dmg.length-1))}
+	return 100 + Math.floor(flagship + upgrade + crits + dmg);
+}
 
-	return Math.floor(base + flagship + upgrade + crits + dmg);
+Ship.prototype.getRemMorale = function(){
+	var cmd = this.getSystemByName("Command");
+	var flagship = this.command == true ? 10 : 0;
+	var upgrade = this.getCrewLevel(0) * cmd.crewEffect;
+	var crits = cmd.getCritMod("Morale");
+	var dmg = this.getDamageMoraleMalus();
+
+	return 100 + Math.floor(flagship + upgrade + crits + dmg);
 }
 
 Ship.prototype.getModifiedRoutChance = function(){
@@ -2334,15 +2347,15 @@ Ship.prototype.getMoraleDiv = function(){
 	return ($("<tr>")
 			.append($("<td>").html("Morale"))
 			.append($("<td>").attr("colSpan", 1).addClass("Morale")
-				.append($("<div>").addClass("moraleFull"))
+				//.append($("<div>").addClass("moraleFull"))
 				//.append($("<div>").addClass("moraleTrigger").css("width", (this.getMoraleTrigger() + "%")))
-				.append($("<div>").addClass("moraleNow").css("width", (Math.min(100, this.getCurrentMorale()) + "%")))
+				.append($("<div>").addClass("moraleNow").css("width", (Math.min(100, this.getRefmMorale()) + "%")))
 				.hover(
 					function(e){
-						game.getUnit($(this).parent().parent().parent().parent().parent().parent().data("shipId")).showMoraleDiv(e);
+						game.getUnit($(this).parent().parent().parent().parent().parent().parent().data("shipId")).showfMoraleDiv(e);
 					},
 					function(e){
-						game.getUnit($(this).parent().parent().parent().parent().parent().parent().data("shipId")).hideMoraleDiv();
+						game.getUnit($(this).parent().parent().parent().parent().parent().parent().data("shipId")).hidefMoraleDiv();
 					}))
 				)
 }
@@ -2379,7 +2392,21 @@ Ship.prototype.createBaseDiv = function(){
 		//.append($("<tr>")
 		//	.append($("<td>").html("Focus Gain"))
 		//	.append($("<td>").addClass("focusGain").html((this.getFocusString()))))
-		.append(this.getMoraleDiv())
+		//.append(this.getMoraleDiv())
+		.append($("<tr>")
+			.append($("<td>").html("Current Morale"))
+			.append(
+				$("<td>")
+					.addClass("curMorale")
+					.html(this.getSumMoraleModifers()))
+					.hover(
+						function(e){
+							game.getUnit($(this).parent().parent().parent().parent().parent().data("shipId")).showMoraleDiv(e);
+						},
+						function(e){
+							game.getUnit($(this).parent().parent().parent().parent().parent().data("shipId")).hideMoraleDiv(e);
+						})
+					)
 		.append($("<tr>")
 			.append($("<td>").html("Speed"))
 			.append($("<td>").html(this.getRemSpeed() + " / " + this.getCurSpeed()).addClass("speed")))
@@ -2499,7 +2526,7 @@ Ship.prototype.getUnmoddedFocusGain = function(){
 Ship.prototype.getFocusIfCommand = function(){
 	var command = this.getSystemByName("Command");
 	command.output = 100;
-	var gain = Math.floor(game.settings.pv / 100 * command.getOutput() / 100 * (this.baseFocusRate + this.modFocusRate));
+	var gain = Math.floor(game.settings.pv / 100 * command.getOutput() / 100 * (this.baseFocusRate + this.modFocusRate) * (this.faction == "Minbari Federation" ? 1.3 : 0));
 	command.output = 0;
 	return gain;
 }
@@ -3628,6 +3655,7 @@ Ship.prototype.getDeployImg = function(){
 }
 
 Ship.prototype.updateShipPower = function(system){
+	if (this.flight){return;}
 	var reactor = this.getSystemByName("Reactor");
 	var s = reactor.getOutput();
 	$(reactor.element).find(".outputMask").html(s);
@@ -3768,9 +3796,6 @@ Ship.prototype.updateCrewDiv = function(i){
 	$(tr.children()[4]).html(this.getCrewLevel(i));
 	$(tr.children()[6]).html(this.getTotalCrewCost(i));
 
-	if (i == 0){ // Command upgrade
-		$(this.element).find(".focusGain").html(this.getFocusString());
-	}
 	this.getSystemByName("Command").setTotalBuyData();
 	//this.updateCrewTotals();
 }

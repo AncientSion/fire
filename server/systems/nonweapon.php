@@ -15,7 +15,7 @@ class PrimarySystem extends System {
 	);
 
 	public function getCritModMax($relDmg){
-		return min(15, round($relDmg*100/5) * 5);
+		return (min(15, round($relDmg*100/5) * 5)*-1);
 	}
 
 	public function getCritTresh(){
@@ -121,7 +121,7 @@ class Command extends PrimarySystem {
 		$roll = mt_rand(0, sizeof($options)-1);
 		//$roll = 0;
 		$pick = $options[$roll];
-		$value = round(10 * $multi[$roll], 2);
+		$value = round(10 * $multi[$roll], 2)*-1;
 
 		Debug::log("BRIDGE CRIT: on ".$pick." for :".$value."%");
 
@@ -146,7 +146,7 @@ class Reactor extends PrimarySystem {
     }
 
 	public function getCritModMax($relDmg){
-		return min(10, round($relDmg*100/5) * 5);
+		return (min(10, round($relDmg*100/5) * 5)*-4);
 	}
 
 	public function applyPowerSpike($turn, $potential, $em){

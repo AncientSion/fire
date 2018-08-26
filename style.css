@@ -462,6 +462,27 @@ table, th, tr, td {
 	border: none;
 }
 
+.factionName {
+	width: 50%;
+	font-size: 22px;
+}
+
+.factionSpecialHead {
+	padding-top: 10px;
+	padding-bottom: 15px;
+	margin: auto;
+	width: 80%;
+}
+
+.factionSpecial {
+	border-bottom: 1px solid white;
+	margin-bottom: 5px;
+}
+
+.factionSpecial div:first-child {
+	font-size: 16px;
+}
+
 .factionUpperTable {
 	width: 405px;
 	margin: auto;

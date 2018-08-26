@@ -81,7 +81,7 @@ class Squadron extends Ship {
 
 		$this->morale = new Morale($val, $this->command, 0, 0);
 
-		//Debug::log("Morale #".$this->id.": ".$this->morale->damage."/".$this->morale->cmd."/".$this->morale->crew."/".$this->morale->crit.", current: ".$this->morale->current.", effChance: ".$this->morale->effChance);
+		//Debug::log("Morale #".$this->id.": ".$this->morale->damage."/".$this->morale->cmd."/".$this->morale->crew."/".$this->morale->crit.", rem: ".$this->morale->rem.", effChance: ".$this->morale->effChance);
 	 }
 
 

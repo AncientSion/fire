@@ -1,8 +1,9 @@
 <?php
 
 class System {
-	public $id;
-	public $parentId;
+	public $id = 0;
+	public $parentId = 0;
+	public $figherId = 0;
 	public $weapon = 0;
 	public $utility = 0;
 	public $destroyed = false;
@@ -79,7 +80,6 @@ class System {
 	}
 
 	public function addPowerEntry($power){
-		//if ($this->parentId == 15 && $this->id == 14){Debug::log("adding");}
 		$this->powers[] = $power;
 	}
 
@@ -244,8 +244,7 @@ class System {
 		Debug::log("newRelDmg: ".$newRelDmg);
 
 		if ($newRelDmg < $this->getCritTresh()){return;}
-		$newRelDmg = 1-$newRelDmg;
-		$chance = round((1 - ($newRelDmg*$newRelDmg))*100);
+		$chance = round((1 - ((1-$newRelDmg)*(1-$newRelDmg)))*100);
 		$roll = mt_rand(0, 100);
 
 		if ($roll > $chance){return;}
@@ -280,7 +279,7 @@ class System {
 	}
 
 	public function getCritModMax($relDmg){
-		return min(30, round($relDmg*100/20) * 10);
+		return (min(30, round($relDmg*100/20) * 10)*-1);
 	}
 
 	public function addDamage($dmg){

@@ -1166,7 +1166,7 @@
 		}
 
 		public function updateMoraleResults($data){
-			Debug::log("updateMoraleResults s: ".sizeof($data));
+			Debug::log(" => DB updateMoraleResults s: ".sizeof($data));
 			
 			$stmt = $this->connection->prepare("
 				UPDATE units 

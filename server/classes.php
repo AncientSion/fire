@@ -3,25 +3,18 @@
 error_reporting(E_ALL); ini_set('display_errors', '1');
 
 class Morale {
-	public $trigger = 30;
-	public $baseChance = 70;
-
 	public $damage;
 	public $crew;
 	public $crit;
-	public $current;
+	public $rem;
 
 	function __construct($damage, $cmd, $crew, $crit){
 		//var_export(func_get_args());
 		$this->damage = floor($damage);
 		$this->cmd = $cmd == true ? 10 : 0;
 		$this->crew = $crew;
-		$this->crit = -$crit;
-		$this->current = 100 + $this->damage + $this->cmd + $this->crew + $this->crit;
-
-		//if ($this->current >= $this->trigger){$this->effChance = 0;}
-		//else $this->effChance = floor(100*($this->baseChance * (1+($this->trigger-$this->current)/100) / (100 - $this->trigger/100)));
-
+		$this->crit = $crit;
+		$this->rem = 100 + $this->damage + $this->cmd + $this->crew + $this->crit;
 	}
 }
 

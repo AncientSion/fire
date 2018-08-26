@@ -40,6 +40,7 @@ if (isset($_POST["type"])) {
 		}
 	}
 	else if ($_POST["type"] == "deploy"){
+		//return;
 		if (isset($_POST["deployedShips"])){
 			$dbManager->deployShipsDB($_POST["gameid"], $_POST["deployedShips"]);
 		}

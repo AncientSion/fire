@@ -577,6 +577,48 @@ else header("Location: index.php");
 
 				},
 
+				buildNotesList: function(data, t){
+					var div = $("<div>").addClass("factionSpecialHead");
+
+					for (var i = 0; i < data.length; i++){
+						div.append($("<div>").addClass("factionSpecial")
+							.append($("<div>").html(data[i][0]))
+							.append($("<div>").html(data[i][1])))
+					}
+
+				$(t)
+				.append($("<tr>")
+					.append($("<td>").attr("colSpan", 6)
+						.append(div)));
+
+					return;
+
+
+
+
+
+					for (var i = 0; i < data.length; i++){
+						console.log(data[i])
+						$(t)
+						.append($("<tr>")
+							.append($("<th>").attr("colSpan", 6).html(data[i][0])))
+						.append($("<tr>")
+							.append($("<td>").attr("colSpan", 6).html(data[i][1])))
+					}
+				},
+
+				buildFactionUnitHeader: function(ele){
+					ele.append(
+					$("<tr>")
+						.append($("<th>").css("width", 90).html("Class"))
+						.append($("<th>").html(""))
+						.append($("<th>").css("width", 80).html("Turning"))
+						.append($("<th>").css("width", 80).html("Sensor"))
+						.append($("<th>").css("width", 50).html("Cost"))
+						.append($("<th>").html("")
+						)
+					)
+				},
 
 				buildShipList: function(data, t){
 					for (var i = 0; i < data.length; i++){
@@ -685,6 +727,7 @@ else header("Location: index.php");
 			$(table)
 				.append(
 					$("<tr>")
+						.css("margin-bottom", 20)
 						.data("row", i)
 						.data("faction", i)
 						.data("set", 0)
@@ -692,12 +735,10 @@ else header("Location: index.php");
 							$(this).toggleClass("highlight");
 						})
 						.click(function(){
-							if ($(this).data("set") == 1){
-								showShipList($(this));
+							if ($(this).data("set")){
+								showFactionData($(this));
 							}
-							else {
-								requestShipsForFaction(this, buildUnitList);
-							}
+							else requestFactionData(this, buildUnitList);
 						})
 						.contextmenu(function(e){
 							e.stopPropagation(); e.preventDefault();
@@ -710,8 +751,7 @@ else header("Location: index.php");
 						)
 						.append(
 							$("<td>")
-							.css("fontSize", 20)
-							.css("width", "50%")
+							.addClass("factionName")
 							.html(factions[i])
 						)
 						.append(
@@ -729,16 +769,6 @@ else header("Location: index.php");
 								$("<table>")
 									.addClass("factionSubTable ")
 									.attr("id", i)
-									.append(
-										$("<tr>")
-											.append($("<th>").css("width", 90).html("Class"))
-											.append($("<th>").html(""))
-											.append($("<th>").css("width", 80).html("Turning"))
-											.append($("<th>").css("width", 80).html("Sensor"))
-											.append($("<th>").css("width", 50).html("Cost"))
-											.append($("<th>").html("")
-											)
-										)
 									)
 								)
 							)
@@ -755,7 +785,7 @@ else header("Location: index.php");
 			url: "getGameData.php",
 			datatype: "json",
 			data: {
-					type: "shipdata",
+					type: "unitdata",
 					unit: "ship",
 					purchases: game.purchases,
 					name: name,
@@ -781,7 +811,7 @@ else header("Location: index.php");
 			url: "getGameData.php",
 			datatype: "json",
 			data: {
-					type: "shipdata",
+					type: "unitdata",
 					unit: "squaddie",
 					purchases: purchase,
 					index: unit.index,
@@ -904,6 +934,22 @@ else header("Location: index.php");
 		window.shipCtx.restore();
 	}
 
+	function requestFactionData(ele, callback){
+		var ele = ele;
+		$.ajax({
+			type: "GET",
+			url: "getGameData.php",
+			datatype: "json",
+			data: {
+					type: "factiondata",
+					faction: factions[$(ele).data("faction")]
+					},
+			ele: ele,
+			success: function(data){callback(data, this.ele)},
+			error: ajax.error,
+		});
+	}
+
 	function requestShipsForFaction(ele, callback){
 		var ele = ele;
 		$.ajax({
@@ -926,15 +972,17 @@ else header("Location: index.php");
 		var t = $("#factionDiv").find("#" + $(ele).data("faction"))
 		$(ele).data("set", 1);
 
-		game.buildShipList(data[0], t);
-		game.buildSquadList(data[1], t);
-		game.buildFighterList(data[2], t);
-		game.buildBallisticList(data[3], t);
+		game.buildNotesList(data[0], t);
+		game.buildFactionUnitHeader(t);
+		game.buildShipList(data[1], t);
+		game.buildSquadList(data[2], t);
+		game.buildFighterList(data[3], t);
+		game.buildBallisticList(data[4], t);
 
-		showShipList(ele);
+		showFactionData(ele);
 	}
 
-	function showShipList(ele){
+	function showFactionData(ele){
 		$(ele).next().toggleClass("disabled");
 		//return;
 

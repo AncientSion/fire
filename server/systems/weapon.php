@@ -71,7 +71,6 @@ class Weapon extends System {
 		return 0;
 	}
 
-
 	public function setFlashData(){
 		$data = array(100, 70, 40, 10);
 
@@ -144,7 +143,7 @@ class Weapon extends System {
 	public function getAccuracyMod($fire){
 		$mod = 100;
 		$mod += $this->getCritMod("Accuracy", $fire->turn);
-		$mod -= $this->getBoostEffect("Accuracy")* $this->getBoostLevel($fire->turn);
+		$mod += $this->getBoostEffect("Accuracy")* $this->getBoostLevel($fire->turn);
 
 		//if ($mod != 100){Debug::log("weapon id: ".$this->id.", RANGE LOSS mod: ".$mod);}
 		return $mod / 100;
@@ -160,7 +159,7 @@ class Weapon extends System {
 		$boost = $this->getBoostEffect("Damage") * $this->getBoostLevel($fire->turn);
 		$crit = $this->getCritMod("Damage", $fire->turn);
 
-		$mod = $mod + $boost - $crit;
+		$mod = $mod + $boost + $crit;
 		//if ($mod != 1){Debug::log(get_class($this).", weapon id: ".$this->id.", DAMAGE mod: ".(-$crit + $boost )." (crits: ".$crit.", boost: ".$boost.")");}
 		return $mod / 100;
 	}

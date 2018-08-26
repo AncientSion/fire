@@ -179,7 +179,7 @@ function Crit(data){
 			} return this.type + " (Turn " + this.turn + ")";
 		}
 		else if (this.type == "Destroyed"){return this.type + " (Turn " + this.turn + ")";}
-		else return (this.type + " -" + (this.value) + "% (Turn " + this.turn + ")");
+		else return (this.type + " " + (this.value) + "% (Turn " + this.turn + ")");
 	}
 
 	this.inEffect = function(){
@@ -852,8 +852,11 @@ Single.prototype.getElement = function(isBuy){
 	div.append(wrap);
 
 	var s = 20;
-	for (var j = 0; j < this.systems.length; j++){
-		var ele = $(this.systems[j].getFighterSystemData(true));
+	for (var i = 0; i < this.systems.length; i++){
+		var ele = $(this.systems[i].getFighterSystemData(true));
+		var modeDiv = this.systems[i].getModeDiv();
+		if (modeDiv){ele.append(modeDiv);}
+
 		this.addSysEvents(ele, isBuy)
 		div.append(ele);
 	}

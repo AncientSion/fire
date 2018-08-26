@@ -5,6 +5,9 @@ class Fighter extends Single {
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
 		$this->addSystems();
+		for ($i = 0; $i < sizeof($this->systems); $i++){
+			$this->systems[$i]->fighterId = $this->id;
+		}
 	}
 
 	public function setBaseStats($phase, $turn){
@@ -41,7 +44,15 @@ class Aurora extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new ParticleGun($this->getId(), $this->id, $this->parentId, 1, 2, 12, 16, 0, 360);
+		//$this->systems[] = new ParticleGun($this->getId(), $this->id, $this->parentId, 1, 2, 12, 16, 0, 360);
+		//$this->systems[] = new Dual($this->getId(), $this->parentId, 0, 0, 0, array("HeavyLaser", "HeavyPulse"));
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
+			array(
+				array("FighterStandard", 1, 12, 16),
+				array("FighterStrafe", 3, 12, 16)
+			)
+		);
+
 	}
 }
 

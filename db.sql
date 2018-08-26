@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 24. Aug 2018 um 14:39
+-- Erstellungszeit: 26. Aug 2018 um 15:28
 -- Server-Version: 10.1.16-MariaDB
 -- PHP-Version: 7.0.9
 
@@ -79,7 +79,18 @@ INSERT INTO `actions` (`id`, `shipid`, `turn`, `type`, `dist`, `x`, `y`, `a`, `c
 (31, 28, 3, 'deploy', 0, 724, 122, '133.69', 0, 0, 1, 1),
 (32, 17, 3, 'deploy', 0, -721, -282, '326.49', 0, 0, 1, 1),
 (33, 15, 2, 'move', 140, -386, -49, '0.00', 0, 0, 1, 1),
-(34, 16, 2, 'move', 165, 313, 1, '0.00', 0, 0, 1, 1);
+(34, 16, 2, 'move', 165, 313, 1, '0.00', 0, 0, 1, 1),
+(35, 38, 1, 'deploy', 0, 638, 182, '180.00', 0, 0, 1, 1),
+(36, 37, 1, 'deploy', 0, -272, 190, '0.00', 0, 0, 1, 1),
+(37, 37, 1, 'jumpIn', 0, -272, 190, '0.00', 0, 0, 0, 1),
+(38, 38, 1, 'jumpIn', 0, 638, 182, '0.00', 0, 0, 0, 1),
+(39, 37, 1, 'move', 140, -132, 190, '0.00', 0, 0, 1, 1),
+(40, 38, 1, 'move', 165, 473, 182, '0.00', 0, 0, 1, 1),
+(41, 39, 2, 'deploy', 0, -132, 190, '0.00', 1, 0, 1, 1),
+(42, 38, 2, 'move', 165, 308, 182, '0.00', 0, 0, 1, 1),
+(43, 37, 2, 'turn', 0, -132, 190, '-30.00', 30, 107, 1, 1),
+(44, 37, 2, 'move', 140, -11, 120, '0.00', 0, 0, 1, 1),
+(45, 39, 2, 'move', 100, -32, 188, '358.96', 0, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -145,6 +156,13 @@ CREATE TABLE `fireorders` (
   `resolved` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Daten für Tabelle `fireorders`
+--
+
+INSERT INTO `fireorders` (`id`, `gameid`, `turn`, `shooterid`, `targetid`, `x`, `y`, `weaponid`, `shots`, `req`, `notes`, `hits`, `resolved`) VALUES
+(1, 3, 2, 37, 0, 475, 175, 9, 0, 0, '', 0, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -171,7 +189,8 @@ CREATE TABLE `games` (
 
 INSERT INTO `games` (`id`, `name`, `status`, `turn`, `phase`, `pv`, `reinforce`, `reinforceTurn`, `reinforceETA`, `reinforceAmount`, `focusMod`) VALUES
 (1, 'myGame', 'active', 3, 3, 3500, 1500, 2, 2, 5, 10),
-(2, 'myGame', 'active', 2, 3, 3500, 1500, 2, 1, 10, 10);
+(2, 'myGame', 'active', 2, 3, 3500, 1500, 2, 1, 10, 10),
+(3, 'myGame', 'active', 3, -1, 3500, 1500, 11, 3, 10, 10);
 
 -- --------------------------------------------------------
 
@@ -213,6 +232,13 @@ CREATE TABLE `missions` (
   `arrived` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Daten für Tabelle `missions`
+--
+
+INSERT INTO `missions` (`id`, `unitid`, `type`, `turn`, `targetid`, `x`, `y`, `arrived`) VALUES
+(1, 39, '2', 2, 38, 473, 182, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -241,7 +267,9 @@ INSERT INTO `playerstatus` (`id`, `userid`, `gameid`, `turn`, `phase`, `faction`
 (1, 1, 1, 3, 3, 'Earth Alliance', 2370, 1680, 420, 1260, 'waiting'),
 (2, 2, 1, 3, 3, 'Centauri Republic', 2576, 1400, 350, 1050, 'ready'),
 (3, 1, 2, 2, 3, 'Earth Alliance', 3410, 1680, 420, 840, 'waiting'),
-(4, 2, 2, 2, 3, 'Earth Alliance', 3508, 1400, 350, 700, 'waiting');
+(4, 2, 2, 2, 3, 'Earth Alliance', 3508, 1400, 350, 700, 'waiting'),
+(5, 1, 3, 3, -1, 'Earth Alliance', 3564, 1680, 420, 1260, 'waiting'),
+(6, 2, 3, 3, -1, 'Centauri Republic', 4490, 1400, 350, 1050, 'ready');
 
 -- --------------------------------------------------------
 
@@ -394,7 +422,47 @@ INSERT INTO `powers` (`id`, `unitid`, `systemid`, `turn`, `type`, `cost`) VALUES
 (129, -17, 11, 2, '-1', 0),
 (130, -17, 12, 2, '-1', 0),
 (131, -17, 17, 2, '-1', 0),
-(132, -17, 18, 2, '-1', 0);
+(132, -17, 18, 2, '-1', 0),
+(133, 37, 7, 1, '-1', 0),
+(134, 37, 8, 1, '-1', 0),
+(135, 37, 10, 1, '-1', 0),
+(136, 37, 11, 1, '-1', 0),
+(137, 37, 13, 1, '-1', 0),
+(138, 37, 14, 1, '-1', 0),
+(139, 37, 15, 1, '-1', 0),
+(140, 37, 16, 1, '-1', 0),
+(141, 37, 17, 1, '-1', 0),
+(142, 37, 18, 1, '-1', 0),
+(143, 37, 19, 1, '-1', 0),
+(144, 37, 20, 1, '-1', 0),
+(145, 37, 27, 1, '-1', 0),
+(146, 37, 28, 1, '-1', 0),
+(147, 37, 29, 1, '-1', 0),
+(148, 37, 30, 1, '-1', 0),
+(149, 37, 31, 1, '-1', 0),
+(150, 37, 32, 1, '-1', 0),
+(151, 37, 33, 1, '-1', 0),
+(152, 37, 34, 1, '-1', 0),
+(153, 37, 7, 2, '-1', 0),
+(154, 37, 8, 2, '-1', 0),
+(155, 37, 10, 2, '-1', 0),
+(156, 37, 11, 2, '-1', 0),
+(157, 37, 13, 2, '-1', 0),
+(158, 37, 14, 2, '-1', 0),
+(159, 37, 15, 2, '-1', 0),
+(160, 37, 16, 2, '-1', 0),
+(161, 37, 17, 2, '-1', 0),
+(162, 37, 18, 2, '-1', 0),
+(163, 37, 19, 2, '-1', 0),
+(164, 37, 20, 2, '-1', 0),
+(165, 37, 27, 2, '-1', 0),
+(166, 37, 28, 2, '-1', 0),
+(167, 37, 29, 2, '-1', 0),
+(168, 37, 30, 2, '-1', 0),
+(169, 37, 31, 2, '-1', 0),
+(170, 37, 32, 2, '-1', 0),
+(171, 37, 33, 2, '-1', 0),
+(172, 37, 34, 2, '-1', 0);
 
 -- --------------------------------------------------------
 
@@ -438,7 +506,12 @@ INSERT INTO `sensors` (`id`, `unitid`, `systemid`, `turn`, `angle`, `dist`, `typ
 (19, -27, 2, 2, '-1.00', 55, 0),
 (20, -28, 4, 2, '-1.00', 88, 0),
 (21, 15, 4, 2, '-1.00', 117, 0),
-(22, -17, 4, 2, '-1.00', 95, 0);
+(22, -17, 4, 2, '-1.00', 95, 0),
+(23, 38, 4, 1, '-1.00', 106, 0),
+(24, 37, 4, 1, '-1.00', 117, 0),
+(25, 38, 4, 2, '-1.00', 106, 0),
+(26, 37, 4, 2, '-1.00', 117, 0),
+(27, 38, 4, 3, '-1.00', 106, 0);
 
 -- --------------------------------------------------------
 
@@ -464,7 +537,8 @@ INSERT INTO `subunits` (`id`, `unitid`, `amount`, `name`) VALUES
 (4, 6, 1, 'Crius'),
 (23, 27, 1, 'Tethys'),
 (24, 27, 1, 'Tethys'),
-(25, 27, 1, 'Tethys');
+(25, 27, 1, 'Tethys'),
+(35, 39, 12, 'Aurora');
 
 -- --------------------------------------------------------
 
@@ -530,7 +604,10 @@ INSERT INTO `units` (`id`, `gameid`, `userid`, `ship`, `ball`, `name`, `display`
 (16, 2, 2, 1, 0, 'Olympus', '', 'bought', 1, 1, 0, 478, 1, '180.00', 0, 165, 0, 0, 0, 1, 3, 0, ''),
 (17, 2, 1, 1, 0, 'Artemis', '', 'bought', 0, 3, 0, 0, 0, '0.00', 0, 0, 0, 0, 0, 2, -1, 0, ''),
 (27, 2, 2, 1, 0, 'Squadron', '', 'bought', 0, 3, 0, 0, 0, '0.00', 0, 0, 0, 0, 0, 2, -1, 0, ''),
-(28, 2, 2, 1, 0, 'Olympus', '', 'bought', 0, 3, 0, 0, 0, '0.00', 0, 0, 0, 0, 0, 2, -1, 0, '');
+(28, 2, 2, 1, 0, 'Olympus', '', 'bought', 0, 3, 0, 0, 0, '0.00', 0, 0, 0, 0, 0, 2, -1, 0, ''),
+(37, 3, 1, 1, 0, 'Omega', '', 'bought', 1, 1, 0, -11, 120, '330.00', 0, 140, 0, 0, 0, 2, 3, 0, ''),
+(38, 3, 2, 1, 0, 'Altarian', '', 'bought', 1, 1, 0, 308, 182, '180.00', 0, 165, 0, 0, 0, 2, 3, 0, ''),
+(39, 3, 1, 0, 0, 'Flight', '', 'deployed', 0, 2, 0, -32, 188, '358.96', 0, 200, 0, 0, 0, 2, 3, 0, '');
 
 -- --------------------------------------------------------
 
@@ -649,7 +726,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT für Tabelle `actions`
 --
 ALTER TABLE `actions`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 --
 -- AUTO_INCREMENT für Tabelle `chat`
 --
@@ -664,42 +741,42 @@ ALTER TABLE `damages`
 -- AUTO_INCREMENT für Tabelle `fireorders`
 --
 ALTER TABLE `fireorders`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT für Tabelle `games`
 --
 ALTER TABLE `games`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT für Tabelle `loads`
 --
 ALTER TABLE `loads`
-  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 --
 -- AUTO_INCREMENT für Tabelle `missions`
 --
 ALTER TABLE `missions`
-  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT für Tabelle `playerstatus`
 --
 ALTER TABLE `playerstatus`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT für Tabelle `powers`
 --
 ALTER TABLE `powers`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=173;
 --
 -- AUTO_INCREMENT für Tabelle `sensors`
 --
 ALTER TABLE `sensors`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 --
 -- AUTO_INCREMENT für Tabelle `subunits`
 --
 ALTER TABLE `subunits`
-  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 --
 -- AUTO_INCREMENT für Tabelle `systemcrits`
 --
@@ -709,7 +786,7 @@ ALTER TABLE `systemcrits`
 -- AUTO_INCREMENT für Tabelle `units`
 --
 ALTER TABLE `units`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 --
 -- AUTO_INCREMENT für Tabelle `users`
 --

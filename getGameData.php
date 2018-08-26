@@ -44,11 +44,11 @@ if (isset($_GET["type"])){
 	else {
 		$dbManager = DBManager::app();
 		$manager = new Manager($gameid, $userid);
-		if ($_GET["type"] == "shiplist"){
-			$ships = $manager->getUnitsForFaction($_GET["faction"]);
+		if ($_GET["type"] == "factiondata"){
+			$ships = $manager->getFactionData($_GET["faction"]);
 			echo json_encode($ships);
 		}
-		else if ($_GET["type"] == "shipdata"){
+		else if ($_GET["type"] == "unitdata"){
 			$unit = $manager->getPreviewData($_GET);
 			echo json_encode($unit, JSON_NUMERIC_CHECK);
 		}

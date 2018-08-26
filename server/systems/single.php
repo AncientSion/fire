@@ -65,6 +65,9 @@ class Single {
 		return;
 	}
 
+	public function addPowerEntry($power){
+		$this->powers[] = $power;
+	}
 
 	public function addStructures(){
 		return;
@@ -153,17 +156,12 @@ class Single {
 
 	public function setSubunitState($turn, $phase){
 		//Debug::log("setSubunitState ".get_class($this));
-		for ($i = 0; $i < sizeof($this->crits); $i++){
-			if ($this->crits[$i]->type == "Disabled"){
-				$this->destroyed = true;
-				return;
-			}
+		if ($this->isDestroyed()){
+			$this->destroyed = 1;
 		}
-		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
-			if ($this->damages[$i]->destroyed){
-				$this->destroyed = true;
-				return;
-			}
+		
+		for ($i = 0; $i < sizeof($this->systems); $i++){
+			$this->systems[$i]->setState($turn, $phase);
 		}
 	}
 	

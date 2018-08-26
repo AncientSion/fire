@@ -104,6 +104,7 @@ spl_autoload_register(
                 'hangar' => '/server/systems/nonweapon.php',
 
                 'dual' => '/server/systems/weapons/dual.php',
+                'fighterdual' => '/server/systems/weapons/dual.php',
                 'dualpulseion' => '/server/systems/weapons/dual.php',
 
                 'plasma' => '/server/systems/weapons/plasma.php',
@@ -177,6 +178,10 @@ spl_autoload_register(
                 'particlepulsar' => '/server/systems/weapons/linked.php',
                 'fighterplasma' => '/server/systems/weapons/linked.php',
                 'plasmabomb' => '/server/systems/weapons/linked.php',
+
+                'fighterstandard' => '/server/systems/weapons/linked.php',
+                'fighterstrafe' => '/server/systems/weapons/linked.php',
+
 
                 'structure' => '/server/systems/structure.php',
                 'primary' => '/server/systems/structure.php',

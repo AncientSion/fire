@@ -151,7 +151,7 @@ System.prototype.attachSysMods = function(ele){
 					html = this.crits[i].type + " (Turn " + this.crits[i].turn + ")";
 				}
 				else if (this.crits[i].type == "Destroyed"){html = this.crits[i].type + " (Turn " + this.crits[i].turn + ")";}
-				else html = (this.crits[i].type + " -" + (this.crits[i].value) + "% (Turn " + this.crits[i].turn + ")");
+				else html = (this.crits[i].type + " " + (this.crits[i].value) + "% (Turn " + this.crits[i].turn + ")");
 
 				$(table[0]).append($("<tr>").append($("<td>").html(html).attr("colSpan", 2).addClass("negative")));
 			}
@@ -626,12 +626,12 @@ System.prototype.isUnpowered = function(){
 	else return false;
 }
 System.prototype.canUnpower = function(){
-	if (this.powerReq && this.isPowered()){
+	if (!this.tiny ||  this.powerReq && this.isPowered()){
 		return true;
 	} else return false;
 }
 System.prototype.canPower = function(){
-	if (this.powerReq && !this.isPowered()){
+	if (!this.tiny || this.powerReq && !this.isPowered()){
 		return true;
 	} else return false;
 }
@@ -830,12 +830,12 @@ System.prototype.hasOutput = function(){
 }
 
 System.prototype.getFighterSystemData = function(){
-	var file = "sysIcons/" + this.getImageName() + this.linked + ".png";
+	var file = "sysIcons/" + this.getImageName() + (this.dual ? "" : this.linked) + ".png";
 	var sysDiv = $("<div>").addClass("system");
 		sysDiv
 		.data("systemId", this.id)
 		.append(
-			$("<img>").attr("src", file)
+			$("<img>").attr("src", file).addClass("sysIcon")
 		)
 		.append(
 			$("<div>").addClass("loadLevel")
@@ -1385,6 +1385,12 @@ function Command(system){
 }
 Command.prototype = Object.create(PrimarySystem.prototype);
 
+Command.prototype.update = function(){
+	System.prototype.update.call(this);
+	var unit = game.getUnit(aUnit);
+	$(unit.element).find(".curMorale").html(unit.getSumMoraleModifers());
+}
+
 Command.prototype.select = function(e){
 	console.log(this);
 	var id = this.id;
@@ -1850,8 +1856,8 @@ Weapon.prototype.hasFireOrder = function(){
 Weapon.prototype.getRangeDmgMod = function(){
 	var mod = 100;
 	if (this.fireMode == "Laser" || this.dmgType == "Plasma"){
-		mod += this.getCritMod("Damage loss");
-		mod += this.getBoostEffect("Damage loss") * this.getBoostLevel();
+		mod += this.getCritMod("Damage Loss");
+		mod += this.getBoostEffect("Damage Loss") * this.getBoostLevel();
 	}
 	return mod / 100;
 }
@@ -2063,10 +2069,10 @@ Weapon.prototype.getSysDiv = function(){
 
 	if (this.fireMode == "Laser"){
 		$(table).append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").html(this.optRange + "px")));
-		$(table).append($("<tr>").append($("<td>").html("Damage loss")).append($("<td>").html(this.getDmgLoss(this.optRange+100) + "% per 100px")));
+		$(table).append($("<tr>").append($("<td>").html("Damage Loss")).append($("<td>").html(this.getDmgLoss(this.optRange+100) + "% per 100px")));
 	}
 	else if (!this.tiny && this.fireMode == "Plasma"){
-		$(table).append($("<tr>").append($("<td>").html("Damage loss")).append($("<td>").html(this.getDmgLoss(100) + "% per 100px")));
+		$(table).append($("<tr>").append($("<td>").html("Damage Loss")).append($("<td>").html(this.getDmgLoss(100) + "% per 100px")));
 	}
 
 
@@ -2159,7 +2165,7 @@ Weapon.prototype.getDmgString = function(){
 
 Weapon.prototype.getDamage = function(){
 	var mod = 100;
-		mod -= this.getCritMod("Damage");
+		mod += this.getCritMod("Damage");
 		mod += this.getBoostEffect("Damage") * this.getBoostLevel();
 
 	return mod / 100;
@@ -2388,7 +2394,7 @@ Particle.prototype.getAnimation = function(fire){
 
 	if (linked){
 		gunDelay = 10;
-		shotDelay = 0;
+		shotDelay = 0 + (this.shots > 1) * 10;
 	}
 
 	if (fire.dist == 0){
@@ -2694,6 +2700,8 @@ Dual.prototype.switchMode = function(id){
 }
 
 Dual.prototype.setSystemImage = function(){
+	//console.log($(this.element).find("img")); return;
+	$(this.element).find(".sysIcon").attr("src", "sysIcons/" + this.getImageName() + ".png"); return;
 	this.element.childNodes[0].src = "sysIcons/" + this.getImageName() + ".png";
 }
 
@@ -3986,7 +3994,7 @@ Hangar.prototype.setMission = function(val){
 		}
 	});
 
-	this.triggerLaunchButton();
+	//this.triggerLaunchButton();
 }
 
 Hangar.prototype.getMission = function(){
