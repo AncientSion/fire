@@ -1488,12 +1488,12 @@ tr.rowBorderBottom {
 
 .fleetMorale:first-child {
 	float: left;
-	margin-right: 5px;
+	margin-ridght: 5px;
 }
 
 .fleetMorale:last-child {
 	float: right;
-	margin-left: 5px;
+	margin-lefdt: 5px;
 }
 
 .fleetMorale {

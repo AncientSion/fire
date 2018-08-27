@@ -13,7 +13,7 @@ if (isset($_POST["type"])) {
 		return true;
 	}
 
-	$manager = new Manager($_POST["gameid"], $_POST["userid"]);
+	//$manager = new Manager($_POST["gameid"], $_POST["userid"]);
 
 	if ($_POST["type"] == "joinGame") {
 		//Debug::log("joinGame success");
@@ -28,7 +28,7 @@ if (isset($_POST["type"])) {
 		echo $dbManager->leaveGame($_POST["userid"], $_POST["gameid"]);
 	}
 	else if ($_POST["type"] == "buyInitialFleet"){	
-		if ($dbManager->processInitialBuy($_POST["userid"], $_POST["gameid"], $_POST["ships"], -$manager->getPostBuyPV($_POST["ships"]), $_POST["faction"])){
+		if ($dbManager->processInitialBuy($_POST["userid"], $_POST["gameid"], $_POST["ships"], $_POST["faction"])){
 			if ($dbManager->gameIsReady($_POST["gameid"])) {
 				if ($dbManager->startGame($_POST["gameid"])) {
 					header("Location: game.php?gameid=".$_POST["gameid"]);
@@ -45,7 +45,7 @@ if (isset($_POST["type"])) {
 			$dbManager->deployShipsDB($_POST["gameid"], $_POST["deployedShips"]);
 		}
 		if (isset($_POST["requestReinforce"])){
-			$dbManager->requestShipsDB($_POST["userid"], $_POST["gameid"], $manager->turn, $_POST["requestReinforce"]);
+			$dbManager->requestShipsDB($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["requestReinforce"]);
 		}
 		if (isset($_POST["plannedMoves"])){
 			$dbManager->insertClientActions($_POST["plannedMoves"]);

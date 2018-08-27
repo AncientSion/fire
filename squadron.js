@@ -727,6 +727,7 @@ Squadron.prototype.doConfirmSystemLoadout = function(){
 
 Squadron.prototype.setBuyData = function(){
 	this.totalCost = this.cost;
+	this.moraleCost = this.cost;
 
 	for (var i = 0; i < this.primary.systems.length; i++){
 		if (!this.primary.systems[i].cost){continue;}
@@ -762,6 +763,7 @@ Squadron.prototype.getBuyTableData = function(table){
 	var command =  this.primary.systems[0].getUpgradeData();
 	if (command.cost){
 		this.totalCost += command.cost;
+		this.moraleCost += command.cost;
 		$(table)
 		.append
 			($("<tr>")
@@ -770,8 +772,14 @@ Squadron.prototype.getBuyTableData = function(table){
 		)
 	}
 
+	var huntThemDown = true;
+
 	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].faction != "Centauri Republic"){huntThemDown = false;}
+
 		this.totalCost += this.structures[i].cost;
+		this.moraleCost += this.structures[i].cost;
+
 		$(table)
 		.append
 			($("<tr>")
@@ -804,7 +812,7 @@ Squadron.prototype.getBuyTableData = function(table){
 		}
 	}
 
-	if (game.faction == "Centauri Republic" && this.structures.length >= 3){
+	if (huntThemDown && this.structures.length >= 3){
 		$(table)
 		.append(
 			$("<tr>")
@@ -812,6 +820,7 @@ Squadron.prototype.getBuyTableData = function(table){
 			.append($("<td>").html(Math.floor(this.totalCost * -0.15))));
 
 		this.totalCost = Math.ceil(this.totalCost *0.85);
+		this.moraleCost = Math.ceil(this.moraleCost *0.85);
 			
 	}
 }

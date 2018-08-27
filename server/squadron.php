@@ -79,7 +79,7 @@ class Squadron extends Ship {
 			$val = ($integrity - $remaining) / $integrity * -100;
 		}
 
-		$this->morale = new Morale($val, $this->command, 0, 0);
+		$this->morale = new Morale($this->getBaseMorale(), $val, $this->command, 0, 0);
 
 		//Debug::log("Morale #".$this->id.": ".$this->morale->damage."/".$this->morale->cmd."/".$this->morale->crew."/".$this->morale->crit.", rem: ".$this->morale->rem.", effChance: ".$this->morale->effChance);
 	 }
@@ -118,8 +118,6 @@ class Squadron extends Ship {
 	}
 	
 	public function addSubUnits($elements){
-		//Debug::log("SQUADRON addSubUnits ".sizeof($elements));
-
 		//Debug::log("addSubUnits #".$this->id.", index: ".$this->index);
 		for ($i = 0; $i < sizeof($elements); $i++){
 			for ($j = 1; $j <= $elements[$i]["amount"]; $j++){
@@ -141,6 +139,7 @@ class Squadron extends Ship {
 			$this->primary->systems[$i]->setState($turn, $phase);
 		}
 
+		$this->setFaction();
 		$this->getSystemByName("Engine")->setPowerReq(0);
 		$this->setBaseStats($turn, $phase);
 		$this->setProps($turn, $phase);
@@ -149,6 +148,19 @@ class Squadron extends Ship {
 		$this->isDestroyed();
 
 		return true;
+	}
+
+	public function setFaction(){
+		if (!sizeof($this->structures)){
+			$this->faction = ""; return;
+		}
+		else $this->faction = $this->structures[0]->faction;
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($this->structures[$i]->faction != $this->faction){
+				$this->faction = ""; return;
+			}
+		}
 	}
 
 	public function setBaseStats($turn, $phase){

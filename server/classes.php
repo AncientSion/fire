@@ -8,13 +8,14 @@ class Morale {
 	public $crit;
 	public $rem;
 
-	function __construct($damage, $cmd, $crew, $crit){
+	function __construct($baseMorale, $damage, $cmd, $crew, $crit){
 		//var_export(func_get_args());
+		$this->baseMorale = $baseMorale;
 		$this->damage = floor($damage);
 		$this->cmd = $cmd == true ? 10 : 0;
 		$this->crew = $crew;
 		$this->crit = $crit;
-		$this->rem = 100 + $this->damage + $this->cmd + $this->crew + $this->crit;
+		$this->rem = $this->baseMorale + $this->damage + $this->cmd + $this->crew + $this->crit;
 	}
 }
 

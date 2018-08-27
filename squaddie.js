@@ -16,6 +16,7 @@ function Squaddie(data){
 	this.baseTurnDelay = data.baseTurnDelay;
 	this.baseImpulseCost = data.baseImpulseCost;
 	this.baseImpulse = data.baseImpulse;
+	this.faction = data.faction;
 	this.armourElement;
 	this.type = "Main ";
 }

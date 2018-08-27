@@ -33,6 +33,7 @@ function Ship(data){
 	this.index = 0;
 
 	this.totalCost = 0;
+	this.moraleCost = data.moraleCost;
 	this.upgrades = [];
 
 	this.slipAngle = data.slipAngle || 0;
@@ -392,7 +393,7 @@ Ship.prototype.getRealActionCost = function(type){
 }
 
 Ship.prototype.getImpulseChangeCost = function(){
-	return this.baseImpulseCost;
+	//return this.baseImpulseCost;
 	return Math.ceil(this.baseImpulseCost * (1-((this.getImpulseMod()-1)/2)) * this.getImpulseMod());
 	return Math.floor(this.baseImpulseCost * this.getBaseEP() / this.getImpulseMod()/100);
 	return Math.floor(this.baseImpulseCost*(1-(1-this.getImpulseMod())/2) / this.getEffectiveEP() * this.getEP());
@@ -1753,7 +1754,7 @@ Ship.prototype.highlightJumpShift = function(){
 	ctx.fill();
 
 	var p = getPointInDir(100, this.actions[0].a, 0, 0);
-	console.log(p);
+	//console.log(p);
 	ctx.beginPath();
 	ctx.moveTo(0, 0)
 	ctx.lineTo(p.x, p.y);
@@ -2234,7 +2235,7 @@ Ship.prototype.showMoraleDiv = function(e){
 				.append($("<th>").attr("colSpan", 2).html("Morale Overview")))
 			.append($("<tr>")
 				.append($("<td>").html("Base Morale"))
-				.append($("<td>").html(100)))
+				.append($("<td>").html(this.getBaseMorale())))
 			.append($("<tr>")
 				.append($("<td>").html("Flagship Bonus"))
 				.append($("<td>").html(this.getFlagshipMoraleBonus())))
@@ -2306,23 +2307,29 @@ Ship.prototype.getDamageMoraleMalus = function(){
 	return dmg;
 }
 
+Ship.prototype.getBaseMorale = function(){
+	return 100 + (this.faction == "Narn Regime" ? 50 : 0);
+}
+
 Ship.prototype.getSumMoraleModifers = function(){
+	var baseMorale = this.getBaseMorale();
 	var cmd = this.getSystemByName("Command");
 	var flagship = this.command == true ? 10 : 0;
 	var upgrade = this.getCrewLevel(0) * cmd.crewEffect;
 	var crits = cmd.getCritMod("Morale");
 	var dmg = this.getDamageMoraleMalus();
-	return 100 + Math.floor(flagship + upgrade + crits + dmg);
+	return baseMorale + Math.floor(flagship + upgrade + crits + dmg);
 }
 
 Ship.prototype.getRemMorale = function(){
+	var baseMorale = this.getBaseMorale();
 	var cmd = this.getSystemByName("Command");
 	var flagship = this.command == true ? 10 : 0;
 	var upgrade = this.getCrewLevel(0) * cmd.crewEffect;
 	var crits = cmd.getCritMod("Morale");
 	var dmg = this.getDamageMoraleMalus();
 
-	return 100 + Math.floor(flagship + upgrade + crits + dmg);
+	return baseMorale + Math.floor(flagship + upgrade + crits + dmg);
 }
 
 Ship.prototype.getModifiedRoutChance = function(){
@@ -2526,7 +2533,7 @@ Ship.prototype.getUnmoddedFocusGain = function(){
 Ship.prototype.getFocusIfCommand = function(){
 	var command = this.getSystemByName("Command");
 	command.output = 100;
-	var gain = Math.floor(game.settings.pv / 100 * command.getOutput() / 100 * (this.baseFocusRate + this.modFocusRate) * (this.faction == "Minbari Federation" ? 1.3 : 0));
+	var gain = Math.floor(game.settings.pv / 100 * command.getOutput() / 100 * (this.baseFocusRate + this.modFocusRate) * (this.faction == "Minbari Federation" ? 1.3 : 1));
 	command.output = 0;
 	return gain;
 }
@@ -2578,7 +2585,7 @@ Ship.prototype.setCommand = function(){
 }
 
 Ship.prototype.getFocusCost = function(){
-	return Math.ceil(this.cost);
+	return Math.ceil(this.moraleCost);
 }
 
 Ship.prototype.toggleFocus = function(){
@@ -3619,9 +3626,11 @@ Ship.prototype.weaponHighlight = function(weapon){
 }
 Ship.prototype.setBuyData = function(){
 	this.totalCost = this.cost;
+	this.moraleCost = this.cost;
 
 	for (var i = 0; i < this.primary.systems.length; i++){
 		if (!this.primary.systems[i].cost){continue;}
+		this.moraleCost += this.primary.systems[i].cost;
 		this.upgrades.push(this.primary.systems[i].getUpgradeData());
 	}
 
@@ -3636,6 +3645,7 @@ Ship.prototype.setBuyData = function(){
 Ship.prototype.getBuyTableData = function(table){
 	for (var i = 0; i < this.upgrades.length; i++){
 		this.totalCost += this.upgrades[i].cost;
+
 		$(table)
 		.append(
 			$("<tr>")

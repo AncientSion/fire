@@ -25,6 +25,7 @@ class Ship {
 	public $remImp;
 	public $baseImpulse;
 	public $impulseHitMod = 0;
+	public $baseMorale = 100;
 
 	public $name = "";
 	public $faction = "";
@@ -78,6 +79,8 @@ class Ship {
 		$this->id = $data["id"];
 		$this->userid = $data["userid"];
 		$this->display = $data["display"];
+		$this->moraleCost = $data["moraleCost"];
+		$this->cost = static::$value;
 		$this->status = $data["status"];
 		$this->command = $data["command"];
 		$this->available = $data["available"];
@@ -127,6 +130,17 @@ class Ship {
 
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 			$this->primary->systems[$i]->hitPct = round($this->primary->systems[$i]->getHitChance() / $all * 100, 2);
+		}
+	}
+
+	public function setSpecialAbilities(){
+		if ($this->ship || $this->squad){
+			if ($this->faction == "Centauri Republic"){
+				$this->baseImpulseCost = ceil($this->baseImpulseCost * 0.8);
+			}
+			else if ($this->faction == "Narn Regime"){
+				$this->baseMorale = 150;
+			}
 		}
 	}
 	
@@ -198,10 +212,15 @@ class Ship {
 		return $alive;
 	}
 
+	public function getBaseMorale(){
+		return $this->baseMorale;
+	}
+
 	public function setMorale($turn){
 		//Debug::log("Morale ".$this->id);
 		$command = $this->getSystemByName("Command");
 		$this->morale = new Morale(
+			$this->getBaseMorale(),
 			($this->primary->integrity - $this->primary->remaining) / $this->primary->integrity * -100,
 			$this->command,
 			$command->getCrewLevel() * $command->getCrewEffect(),

@@ -147,15 +147,6 @@
 		$this->weapons = DmgCalc::setWeaponPriority();
 	}
 
-	public function getPostBuyPV($units){
-		$cost = 0;
-		for ($i = 0; $i < sizeof($units); $i++){
-			$cost += $units[$i]["totalCost"];
-		}
-		Debug::log("cost: ".$cost);
-		return $cost;
-	}
-
 	public function getGameData(){
 		//Debug::log("getGameData for: ".$this->gameid.", for user: ".$this->userid);
 		if (!$this->settings){return false;}
@@ -176,6 +167,7 @@
 			}
 		}
 	}
+
 
 	public function getBaseFacing(){
 		return 0 + (180 * ($this->userindex % 2));
@@ -288,11 +280,12 @@
 					"available" => $this->turn + $possible[$i]["available"],
 					"display" => $possible[$i]["display"],
 					"status" => $possible[$i]["status"],
+					"cost" => $possible[$i]["value"],
 					"destroyed" => $possible[$i]["destroyed"],
 					"x" => $possible[$i]["x"],
 					"y" => $possible[$i]["y"],
 					"facing" => $possible[$i]["facing"],
-					"delay" => 0,
+					"delay" =>  $possible[$i]["delay"],
 					"thrust" => $possible[$i]["thrust"],
 					"rolling" => $possible[$i]["rolling"],
 					"rolled" => $possible[$i]["rolled"],
@@ -301,12 +294,12 @@
 					"notes" => $possible[$i]["notes"]
 					)
 				);
-				$unit->cost = $possible[$i]["delay"];
 				$unit->curImp = $unit->baseImpulse;
 
 				$unit->addAllSystems();
 				if (!$unit->ship){$unit->addSubUnits($possible[$i]["subunits"]);}
 				$unit->setUnitState($this->turn, $this->phase);
+				$unit->setSpecialAbilities($this->turn, $this->phase);
 
 
 				$data[] = $unit;
@@ -333,6 +326,8 @@
 			if (isset($db[$i]["subunits"])){$unit->addSubUnits($db[$i]["subunits"]);}
 			if (isset($db[$i]["mission"])){$unit->addMission($db[$i]["mission"], $this->userid, $this->turn, $this->phase);}
 
+			$unit->setUnitState($this->turn, $this->phase);
+			$unit->setSpecialAbilities($this->turn, $this->phase);
 			$units[] = $unit;
 		}
 
@@ -343,10 +338,6 @@
 		DBManager::app()->getActions($units, $this->turn);
 		DBManager::app()->getEW($units, $this->turn);
 		DBManager::app()->getShipLoad($units);
-
-		for ($i = 0; $i < sizeof($units); $i++){
-			$units[$i]->setUnitState($this->turn, $this->phase);
-		}
 
 		return $units;
 	}
@@ -486,6 +477,7 @@
 					if ($roll > $current){continue;}
 					$data = $entry[0]::getKit($faction);
 					$data["name"] = $entry[0];
+					$data["moraleCost"] = $data["cost"];
 					$data["notes"] = "";
 					$data["userid"] = $this->playerstatus[$i]["userid"];
 					$data["eta"] = $eta;
@@ -509,13 +501,13 @@
 
 							if (isset($data["upgrades"][$j]["units"])){
 								foreach ($data["upgrades"][$j]["units"] as $entry){
-									//echo "name: ".$entry["name"].", cost : ".$entry["name"]::$value.", amount: ".$entry["amount"]."</br>";
+									//echo "name: ".$entry["name"].", value : ".$entry["name"]::$value.", amount: ".$entry["amount"]."</br>";
 									$data["cost"] += floor($entry["name"]::$value * $entry["amount"]);
 								}
 							} else $data["upgrades"][$j]["units"] = array();
 							
 							foreach ($data["upgrades"][$j]["loads"] as $entry){
-								//echo "name: ".$entry["name"].", cost : ".$entry["name"]::$value.", amount: ".$entry["amount"]."</br>";
+								//echo "name: ".$entry["name"].", value : ".$entry["name"]::$value.", amount: ".$entry["amount"]."</br>";
 								$data["cost"] += floor($entry["name"]::$value * $entry["amount"]);
 							}
 
@@ -727,7 +719,7 @@
 				//$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "", "deployed", 0, 0, 0, 0, 0, 0, 0, 0, "");
 				$this->ships[] = new Salvo(
 					array(
-						"id" => $units[$i]["id"], "userid" => $units[$i]["userid"], "command" => 0, "available" => $this->turn, "display" => "", "status" => "deployed",
+						"id" => $units[$i]["id"], "userid" => $units[$i]["userid"], "command" => 0, "available" => $this->turn, "display" => "", "value" => 0, "status" => "deployed",
 						"destroyed" => 0, "x" => 0, "y" => 0, "facing" => 270, "delay" => 0, "thrust" => 0, 
 						"rolling" => 0, "rolled" => 0, "flipped" => 0, "focus" => 0, "notes" => ""
 					)
@@ -1879,13 +1871,14 @@
 		if ($get["unit"] == "ship"){
 			$unit = new $get["name"](
 				array(
-					"id" => $get["purchases"], "userid" => 1, "command" => 0, "available" => 0, "display" => "", "status" => "",
+					"id" => $get["purchases"], "userid" => 1, "command" => 0, "available" => 0, "display" => "", "status" => "", "moraleCost" => 0,
 					"destroyed" => 0, "x" => 0, "y" => 0, "facing" => 270, "delay" => 0, "thrust" => 0, 
 					"rolling" => 0, "rolled" => 0, "flipped" => 0, "focus" => 0, "notes" => ""
 				)
 			);
 			$unit->addAllSystems();
 			$unit->setUnitState(0, 0);
+			$unit->setSpecialAbilities(0, 0);
 		}
 		elseif ($get["unit"] == "squaddie"){
 			$unit = new $get["name"]($get["index"]+1, $get["purchases"]);
@@ -1924,6 +1917,24 @@
 			$data["hits"],
 			$data["resolved"]
 		);
+	}
+
+	static function getPostBuyPV($units){
+		$totalCost = 0;
+		for ($i = 0; $i < sizeof($units); $i++){
+			$totalCost += $units[$i]["totalCost"];
+		}
+		//Debug::log("totalCost: ".$totalCost);
+		return $totalCost;
+	}
+
+	static function getMoraleValue($units){
+		$moraleCost = 0;
+		for ($i = 0; $i < sizeof($units); $i++){
+			$moraleCost += $units[$i]["moraleCost"];
+		}
+		//Debug::log("totalCost: ".$totalCost);
+		return $moraleCost;
 	}
 }
 ?>

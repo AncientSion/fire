@@ -286,7 +286,7 @@
 				INSERT INTO playerstatus
 					(userid, gameid, turn, phase, faction, morale, value, status)
 				VALUES
-					(:userid, :gameid, :turn, :phase, :faction, 100, (SELECT pv FROM games WHERE id = $gameid), :status)
+					(:userid, :gameid, :turn, :phase, :faction, 0, (SELECT pv FROM games WHERE id = $gameid), :status)
 			");
 
 
@@ -400,14 +400,14 @@
 			}
 		}
 
-		public function processInitialBuy($userid, $gameid, $units, $rem, $faction){
-			//Debug::log("processInitialBuy s:".sizeof($units));
+		public function processInitialBuy($userid, $gameid, $units, $faction){
+			Debug::log("processInitialBuy");
 			$this->insertUnits($userid, $gameid, $units);
 			$this->insertLoads($userid, $gameid, $units);
-			$this->setReinforceFaction($userid, $gameid, $faction);
-			$this->addReinforceValue($userid, $gameid, $rem);
+			$this->setInitialFleetData($userid, $gameid, $units, $faction);
 			$this->setInitialCommandUnit($userid, $gameid, $units);
 			$this->setPlayerStatus($userid, $gameid, -1, -1, "ready");
+			Debug::log("processInitialBuy done");
 			return true;
 		}
 
@@ -509,9 +509,9 @@
 
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
-					(gameid, userid, ship, ball, name, display, status, available, destroyed)
+					(gameid, userid, ship, ball, name, display, moraleCost, status, available, destroyed)
 				VALUES
-					(:gameid, :userid, :ship, :ball, :name, :display, :status, :available, :destroyed)
+					(:gameid, :userid, :ship, :ball, :name, :display, :moraleCost, :status, :available, :destroyed)
 			");
 
 			$missions = array();
@@ -543,8 +543,8 @@
 				$stmt->bindParam(":ship", $ship);
 				$stmt->bindParam(":ball", $ball);
 				$stmt->bindParam(":name", $units[$i]["name"]);
-				//Debug::log("display: ".$units[$i]["display"]);
 				$stmt->bindParam(":display", $units[$i]["display"]);
+				$stmt->bindParam(":moraleCost", $units[$i]["moraleCost"]);
 				$stmt->bindParam(":status", $status);
 				$stmt->bindValue(":available", (floor($units[$i]["turn"]) + floor($units[$i]["eta"])));
 				$stmt->bindParam(":destroyed", $destroyed);
@@ -684,9 +684,9 @@
 			//Debug::log("insertReinforcements: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
-					(gameid, userid, ship, ball, name, display, status, available, destroyed, delay, turn, phase, notes)
+					(gameid, userid, ship, ball, name, display, moraleCost, status, available, destroyed, turn, phase, notes)
 				VALUES
-					(:gameid, :userid, :ship, :ball, :name, :display, :status, :available, :destroyed, :delay, :turn, :phase, :notes)
+					(:gameid, :userid, :ship, :ball, :name, :display, :moraleCost, :status, :available, :destroyed, :turn, :phase, :notes)
 			");
 
 			$ship = 1;
@@ -706,10 +706,10 @@
 				$stmt->bindParam(":ball", $ball);
 				$stmt->bindParam(":name", $data[$i]["name"]);
 				$stmt->bindParam(":display", $display);
+				$stmt->bindParam(":moraleCost", $data[$i]["moraleCost"]);
 				$stmt->bindParam(":status", $status);
 				$stmt->bindValue(":available", $data[$i]["eta"]);
 				$stmt->bindParam(":destroyed", $destroyed);
-				$stmt->bindParam(":delay", $data[$i]["cost"]);
 				$stmt->bindParam(":turn", $turn);
 				$stmt->bindParam(":phase", $phase);
 				$stmt->bindParam(":notes", $data[$i]["notes"]);
@@ -1754,6 +1754,36 @@
 			else return false;
 		}
 
+		public function setInitialFleetData($userid, $gameid, $units, $faction){
+			$value = Manager::getPostBuyPV($units);
+			$morale = Manager::getMoraleValue($units);
+
+			Debug::log("setInitialFleetData $value / $morale / $faction");
+			$stmt = $this->connection->prepare("
+				UPDATE playerstatus 
+				SET
+				value = value - :value,
+				morale = :morale,
+				faction = :faction
+				WHERE
+					gameid = :gameid
+				AND
+					userid = :userid
+			");
+
+			$stmt->bindParam(":value", $value);
+			$stmt->bindParam(":morale", $morale);
+			$stmt->bindParam(":faction", $faction);
+			$stmt->bindParam(":gameid", $gameid);
+			$stmt->bindParam(":userid", $userid);
+
+			$stmt->execute();
+
+			if ($stmt->errorCode() == 0){
+				return true;
+			} else return false;
+		}
+
 		public function setPlayerstatus($userid, $gameid, $turn, $phase, $status){
 			//Debug::log("setPlayerstatus for player ".$userid. " adjusted to turn/phase: ".$turn."/".$phase);
 
@@ -1779,27 +1809,6 @@
 
 			if ($stmt->errorCode() == 0){
 				//Debug::log("game ".$gameid.", user ".$userid." --- adjusting to turn/phase/status ".$turn."/".$phase."/".$status);
-				return true;
-			} else return false;
-		}
-
-		public function setReinforceFaction($userid, $gameid, $faction){
-			$stmt = $this->connection->prepare("
-				UPDATE playerstatus 
-				SET faction = :faction
-				WHERE
-					gameid = :gameid
-				AND
-					userid = :userid
-			");
-
-			$stmt->bindParam(":faction", $faction);
-			$stmt->bindParam(":gameid", $gameid);
-			$stmt->bindParam(":userid", $userid);
-
-			$stmt->execute();
-
-			if ($stmt->errorCode() == 0){
 				return true;
 			} else return false;
 		}

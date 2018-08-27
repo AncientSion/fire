@@ -384,6 +384,7 @@ function Game(data){
 					name: "Flight",
 					call: this.ships[i].call,
 					display: "",
+					value: 0,
 					mission: this.ships[i].mission,
 					loadAdjust: this.ships[i].getLoadAdjustment(),
 					upgrades: this.ships[i].getLaunchData(),
@@ -2553,7 +2554,7 @@ function Game(data){
 				.append($("<tr>").addClass("deployNow")
 					.data("shipid", this.ships[i].id)
 					.append($("<td>")
-						.append($(this.ships[i].getBaseImage().cloneNode(true))
+						.append($(this.ships[i].getUnitSelectorIcon().cloneNode(true))
 							.addClass("size40")
 						)
 					)
@@ -3517,12 +3518,12 @@ Game.prototype.setFocusInfo = function(){
 			$("#upperGUI").find(".playerInfo").find(".focusInfo" + this.playerstatus[i].id).html("Unknown"); continue;
 		}
 		//var html = this.getUserCurFocus(i) + " + " + this.getUserFocusGain(i) + " / turn (max: " + this.getUserMaxFocus(i)+")";
-		var html = this.getUserCurFocus(i) + " + " + this.getUserFocusGain(i) + " / turn";
+		var html = "<span class='yellow'>" + this.getUserCurFocus(i) + "</span> + " + this.getUserFocusGain(i) + " / turn";
 		$("#upperGUI").find(".playerInfo").find(".focusInfo" + this.playerstatus[i].id)
 			.html(html)
 			.data("userid", this.playerstatus[i].userid)
 			.hover(
-				function(){game.showFocusInfo($(this).data("userid"));},
+				function(e){game.showFocusInfo(e, $(this).data("userid"));},
 				function(){game.hideFocusInfo();}
 			)
 
@@ -3572,7 +3573,7 @@ Game.prototype.getUserMaxFocus = function(i){
 	return this.playerstatus[i].maxFocus;
 }
 
-Game.prototype.showFleetMorale = function(userid){
+Game.prototype.showFleetMorale = function(e, userid){
 	var i;
 	for (i = 0; i < this.playerstatus.length; i++){
 		if (this.playerstatus[i].userid == userid){break;}
@@ -3583,7 +3584,7 @@ Game.prototype.showFleetMorale = function(userid){
 		.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 10)))
 		.append($("<tr>")
 			.append($("<td>").html("Initial Morale"))
-			.append($("<td>").html(this.playerstatus[i].morale))
+			.append($("<td>").html(100))
 		)
 
 	for (var j = 0; j < this.playerstatus[i].globals.length; j++){
@@ -3599,13 +3600,13 @@ Game.prototype.showFleetMorale = function(userid){
 		.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 10))))
 	.append($("<tr>")
 		.append($("<td>").html("Remaining Morale"))
-		.append($("<td>").html(game.playerstatus[i].morale + this.playerstatus[i].globals.map(x => x.value).reduce((l,r) => l+r, 0))))
+		.append($("<td>").html(100 + this.playerstatus[i].globals.map(x => x.value).reduce((l,r) => l+r, 0))))
 
 
 	$(document.body)
 	.append(
 		$("<div>").attr("id", "sysDiv")
-		.css("top", 220).css("left", 0)
+		.css("top", e.clientY + 30).css("left", e.clientX - 50)
 		.append(table))
 }
 
@@ -3613,7 +3614,7 @@ Game.prototype.hideFleetMorale = function(){
 	$("#sysDiv").remove();
 }
 
-Game.prototype.showFocusInfo = function(userid){
+Game.prototype.showFocusInfo = function(e, userid){
 	var i;
 	for (i = 0; i < this.playerstatus.length; i++){
 		if (this.playerstatus[i].userid == userid){break;}
@@ -3625,7 +3626,7 @@ Game.prototype.showFocusInfo = function(userid){
 	$(document.body)
 	.append(
 		$("<div>").attr("id", "sysDiv")
-		.css("top", 220).css("left", 0)
+		.css("top", e.clientY + 30).css("left", e.clientX - 50)
 		.append($("<table>")
 			.append($("<tr>")
 				.append($("<th>").html("Focus Overview - " + this.playerstatus[i].username).attr("colSpan", 2))
@@ -3698,8 +3699,12 @@ Game.prototype.addFleetMoraleInfo = function(){
 
 	for (let i = 0; i < this.playerstatus.length; i++){
 		var start = this.playerstatus[i].morale;
+			start = 100;
 		var reduce = this.playerstatus[i].globals.map(x => x.value).reduce((l,r) => l+r, 0)
-		var rem = (reduce ? (start + reduce)/start*100 : 0);
+		var rem = (reduce ? (start + reduce)/start*100 : 100);
+
+		// 1230
+
 		//console.log(rem);
 		td.append($("<div>")
 			.addClass("fleetMorale")
@@ -3708,7 +3713,7 @@ Game.prototype.addFleetMoraleInfo = function(){
 			.append($("<div>").addClass("fleetMoraleNow").css("width", rem + "%"))
 			.append($("<div>").addClass("fleetMoraleInt").html(round(start + reduce)))
 			.hover(
-				function(){game.showFleetMorale($(this).data("userid"))},
+				function(e){game.showFleetMorale(e, $(this).data("userid"))},
 				function(){game.hideFleetMorale()}
 			)
 		)

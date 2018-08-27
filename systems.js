@@ -626,12 +626,12 @@ System.prototype.isUnpowered = function(){
 	else return false;
 }
 System.prototype.canUnpower = function(){
-	if (!this.tiny ||  this.powerReq && this.isPowered()){
+	if (!this.tiny && this.powerReq && this.isPowered()){
 		return true;
 	} else return false;
 }
 System.prototype.canPower = function(){
-	if (!this.tiny || this.powerReq && !this.isPowered()){
+	if (!this.tiny && this.powerReq && !this.isPowered()){
 		return true;
 	} else return false;
 }

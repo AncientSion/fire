@@ -377,7 +377,7 @@ else header("Location: index.php");
 					$("#hangarDiv").addClass("disabled");
 					$("#weaponDiv").addClass("disabled");
 					$("#hangarTable").html("");
-					if (game.faction == ""){game.setReinforceFaction(unit.faction);}
+					game.setReinforceFaction(unit);
 					aUnit = 0;
 					game.ships[0] = undefined;
 					game.system = 0;
@@ -438,6 +438,7 @@ else header("Location: index.php");
 							display: game.shipsBought[i].display,
 							faction: game.shipsBought[i].faction,
 							totalCost: game.shipsBought[i].totalCost,
+							moraleCost: game.shipsBought[i].moraleCost,
 							upgrades: game.shipsBought[i].getAllUpgrades(),
 							turn: 1,
 							eta: 0,
@@ -503,10 +504,12 @@ else header("Location: index.php");
 					return this.ships[0];
 				},
 
-				setReinforceFaction: function(faction){
-					if (faction.length < 3){return;}
-					game.faction = faction;
-					$("#reinforceFaction").removeClass("disabled").html(faction);
+				setReinforceFaction: function(unit){
+					if (game.faction != ""){return;}
+
+					if (unit.ship){game.faction = unit.faction;}
+					else {game.faction = unit.structures[0].faction;}
+					$("#reinforceFaction").removeClass("disabled").html(game.faction);
 				},
 				
 				getFleetCost: function(){
