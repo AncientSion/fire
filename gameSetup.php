@@ -110,7 +110,7 @@ else header("Location: index.php");
 	<script src='game.js'></script>
 	<script src='ajax.js'></script>
 </head>
-	<body style="padding: 10px">
+	<body style="padding: 5px">
 		<div id ="popupWrapper">
 			<div id="popupText">
 			</div>

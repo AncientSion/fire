@@ -199,7 +199,7 @@
 			<div></div>
 		</div>
 		<div id="upperGUI" class="disabled">
-			<table id="overview">
+			<table class="overview">
 				<thead>
 					<tr>
 						<th>
@@ -213,6 +213,10 @@
 						</th>
 					</tr>
 				</thead>
+				<tbody></tbody>
+			</table>
+			<table class="playerInfo">
+				<thead></thead>
 				<tbody></tbody>
 			</table>
 		</div>

@@ -284,9 +284,9 @@
 
 			$stmt = $this->connection->prepare("
 				INSERT INTO playerstatus
-					(userid, gameid, turn, phase, faction, value, status)
+					(userid, gameid, turn, phase, faction, morale, value, status)
 				VALUES
-					(:userid, :gameid, :turn, :phase, :faction, (SELECT pv FROM games WHERE id = $gameid), :status)
+					(:userid, :gameid, :turn, :phase, :faction, 100, (SELECT pv FROM games WHERE id = $gameid), :status)
 			");
 
 
@@ -873,7 +873,6 @@
 				return true;
 			}
 		}
-
 
 		public function setStartGamePlayerStatus($gameid){
 			Debug::log("setStartGamePlayerStatus ".$gameid);
@@ -1725,7 +1724,7 @@
 
 		public function getPlayerStatus($gameid){
 			$stmt = $this->connection->prepare("
-				SELECT users.username, playerstatus.id, playerstatus.userid, playerstatus.gameid, playerstatus.turn, playerstatus.phase, playerstatus.faction, playerstatus.value, playerstatus.maxFocus, playerstatus.gainFocus, playerstatus.curFocus, playerstatus.status FROM playerstatus
+				SELECT users.username, playerstatus.id, playerstatus.userid, playerstatus.gameid, playerstatus.turn, playerstatus.phase, playerstatus.faction, playerstatus.morale, playerstatus.value, playerstatus.maxFocus, playerstatus.gainFocus, playerstatus.curFocus, playerstatus.status FROM playerstatus
 				LEFT JOIN users 
 				ON playerstatus.userid = users.id
 				WHERE
@@ -1738,6 +1737,18 @@
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			if ($result){
+				for ($i = 0; $i < sizeof($result); $i++){
+					$stmt = $this->connection->prepare("
+						SELECT * from globals WHERE playerstatusid = :playerstatusid
+					");
+
+					$stmt->bindParam(":playerstatusid", $result[$i]["id"]);
+					$stmt->execute();
+					$subResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
+					//if ($subResult){
+						$result[$i]["globals"] = $subResult;
+					//}
+				}
 				return $result;
 			}
 			else return false;

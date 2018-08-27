@@ -1651,13 +1651,13 @@
 			break;
 			case "Minbari Federation";
 				$notes = array(
-					array("Advanced Tech", "Highly advanced tech allow easy overpowering of hostile sensors. EW is considered to be originating from a unit 2 levels higher."),
+					array("Advanced", "Highly advanced tech allow easy overpowering of hostile sensors. EW is considered to be originating from a unit 2 levels higher."),
 					array("Enlightened", "Superior tactical capabilities and officer training result in a 30 % increased Focus gain as well as starting morale 120.")
 				);
 			break;
 			case "Narn Regime";
 				$notes = array(
-					array("Relentless & Unbreakable", "Narn by nature will hardly ever flee from a battle until the very last moment. Unit starting morale 140."),
+					array("Iron Will", "Narn by nature will hardly ever flee from a battle until the very last moment. Unit starting morale 140."),
 					array("Shon'Kar", "Every unit can declare blood oath, marking an enemy as nemesis. Firing orders between oath-sworn incur a 20 % base to-Hit increase.")
 				);
 			break;

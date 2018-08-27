@@ -174,7 +174,7 @@ class Reactor extends PrimarySystem {
 class Engine extends PrimarySystem {
 	public $name = "Engine";
 	public $display = "Engine & Drive";
-	public $crewEffect = 10;
+	public $crewEffect = 12;
 	public $hitMod = 2.5;
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
@@ -193,7 +193,7 @@ class Sensor extends PrimarySystem {
 	public $display = "Sensor & Analyzing";
 	public $ew = array();
 	public $effiency = 10;
-	public $crewEffect = 8;
+	public $crewEffect = 12;
 	public $hitMod = 2;
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){

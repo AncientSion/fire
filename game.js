@@ -749,7 +749,7 @@ function Game(data){
 				var step = 1;
 				var h = 1000;
 				var w = 200;
-				var dist = 600;
+				var dist = 200;
 				var y = h/2;
 
 				if (i % 2 == 0){step = -1;}
@@ -3504,7 +3504,7 @@ Game.prototype.setPhaseSwitchDiv = function(){
 }
 
 Game.prototype.setGameInfo = function(){
-	$("#upperGUI").find("#overview").find("tbody")
+	$("#upperGUI").find(".overview").find("tbody")
 		.append($("<tr>")
 			.append($("<td>").html(this.turn))
 			.append($("<td>").html(getPhaseString(this.phase)))
@@ -3514,10 +3514,11 @@ Game.prototype.setGameInfo = function(){
 Game.prototype.setFocusInfo = function(){
 	for (let i = 0; i < this.playerstatus.length; i++){
 		if (game.turn == 1 && game.phase == -1 && this.playerstatus[i].userid != this.userid){
-			$("#upperGUI").find("#overview").find(".focusInfo" + this.playerstatus[i].id).html("Unknown"); continue;
+			$("#upperGUI").find(".playerInfo").find(".focusInfo" + this.playerstatus[i].id).html("Unknown"); continue;
 		}
-		var html = "<span class='yellow'>" + this.getUserCurFocus(i) + "</span> + " + this.getUserFocusGain(i) + " / turn (max: " + this.getUserMaxFocus(i)+")";
-		$("#upperGUI").find("#overview").find(".focusInfo" + this.playerstatus[i].id)
+		//var html = this.getUserCurFocus(i) + " + " + this.getUserFocusGain(i) + " / turn (max: " + this.getUserMaxFocus(i)+")";
+		var html = this.getUserCurFocus(i) + " + " + this.getUserFocusGain(i) + " / turn";
+		$("#upperGUI").find(".playerInfo").find(".focusInfo" + this.playerstatus[i].id)
 			.html(html)
 			.data("userid", this.playerstatus[i].userid)
 			.hover(
@@ -3571,6 +3572,47 @@ Game.prototype.getUserMaxFocus = function(i){
 	return this.playerstatus[i].maxFocus;
 }
 
+Game.prototype.showFleetMorale = function(userid){
+	var i;
+	for (i = 0; i < this.playerstatus.length; i++){
+		if (this.playerstatus[i].userid == userid){break;}
+	}
+
+	var table = $("<table>")
+		.append($("<tr>").append($("<th>").html("Fleet Morale Overview - " + this.playerstatus[i].username).attr("colSpan", 2)))
+		.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 10)))
+		.append($("<tr>")
+			.append($("<td>").html("Initial Morale"))
+			.append($("<td>").html(this.playerstatus[i].morale))
+		)
+
+	for (var j = 0; j < this.playerstatus[i].globals.length; j++){
+		if (this.playerstatus[i].globals[j].type != "Morale"){continue;}
+		var crit = this.playerstatus[i].globals[j];
+		table.append($("<tr>")
+			.append($("<td>").html("Turn " + crit.turn))
+			.append($("<td>").html(crit.value)))
+	}
+
+	table
+	.append($("<tr>")
+		.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 10))))
+	.append($("<tr>")
+		.append($("<td>").html("Remaining Morale"))
+		.append($("<td>").html(game.playerstatus[i].morale + this.playerstatus[i].globals.map(x => x.value).reduce((l,r) => l+r, 0))))
+
+
+	$(document.body)
+	.append(
+		$("<div>").attr("id", "sysDiv")
+		.css("top", 220).css("left", 0)
+		.append(table))
+}
+
+Game.prototype.hideFleetMorale = function(){
+	$("#sysDiv").remove();
+}
+
 Game.prototype.showFocusInfo = function(userid){
 	var i;
 	for (i = 0; i < this.playerstatus.length; i++){
@@ -3583,7 +3625,7 @@ Game.prototype.showFocusInfo = function(userid){
 	$(document.body)
 	.append(
 		$("<div>").attr("id", "sysDiv")
-		.css("top", 180).css("left", 0)
+		.css("top", 220).css("left", 0)
 		.append($("<table>")
 			.append($("<tr>")
 				.append($("<th>").html("Focus Overview - " + this.playerstatus[i].username).attr("colSpan", 2))
@@ -3641,8 +3683,61 @@ Game.prototype.getPlayerStatus = function(){
 	return false;
 }
 
+Game.prototype.addPlayerInfo = function(){	
+	var tr = $("<tr>");
+	for (let i = 0; i < this.playerstatus.length; i++){
+		tr.append($("<td>").css("width", "50%").css("font-size", 16).html(this.playerstatus[i].username))
+	}
+
+	$("#upperGUI").find(".playerInfo").find("thead").append(tr)
+}
+
+Game.prototype.addFleetMoraleInfo = function(){
+
+	var td = $("<td>").attr("colSpan", 3).addClass("fleetMoraleDiv");
+
+	for (let i = 0; i < this.playerstatus.length; i++){
+		var start = this.playerstatus[i].morale;
+		var reduce = this.playerstatus[i].globals.map(x => x.value).reduce((l,r) => l+r, 0)
+		var rem = (reduce ? (start + reduce)/start*100 : 0);
+		//console.log(rem);
+		td.append($("<div>")
+			.addClass("fleetMorale")
+			.data("userid", this.playerstatus[i].userid)
+			.append($("<div>").addClass("fleetMoraleMax").data("userid", this.playerstatus[i].userid))
+			.append($("<div>").addClass("fleetMoraleNow").css("width", rem + "%"))
+			.append($("<div>").addClass("fleetMoraleInt").html(round(start + reduce)))
+			.hover(
+				function(){game.showFleetMorale($(this).data("userid"))},
+				function(){game.hideFleetMorale()}
+			)
+		)
+	}
+
+	$("#upperGUI").find(".playerInfo").find("tbody")
+		.append($("<tr>").append(td));
+	this.setFocusInfo()
+}
+
 Game.prototype.addFocusInfo = function(){
-	var tBody = $("#upperGUI").find("#overview").find("tbody");
+
+	var tr = $("<tr>");
+
+	for (var i = 0; i < this.playerstatus.length; i++){
+		tr
+		.append($("<td>")
+			.addClass("focusInfo" + this.playerstatus[i].id))
+	}
+
+	$("#upperGUI").find(".playerInfo").find("tbody")
+		.append($("<tr>").append($("<td>").css("height", 6).attr("colSpan", 2)))
+		.append(tr);
+
+	this.setFocusInfo()
+}
+
+Game.prototype.addFocusInfo2 = function(){
+	var tBody = $("#upperGUI").find(".playerInfo").find("tbody");
 		tBody
 			.append($("<tr>")
 				.append($("<td>")
@@ -3653,7 +3748,7 @@ Game.prototype.addFocusInfo = function(){
 					.attr("colSpan", 3)
 					.html("Focus Overview")))
 	
-	for (let i = 0; i < this.playerstatus.length; i++){
+	for (var i = 0; i < this.playerstatus.length; i++){
 		var string = "<span class='";
 		if (this.playerstatus[i].userid == this.userid){
 			string += "green'";
@@ -3721,12 +3816,12 @@ Game.prototype.setConfirmInfo = function(){
 	}
 
 	
-	$("#upperGUI").find("#overview").find("tbody")
+	$("#upperGUI").find(".overview").find("tbody")
 	.append($("<tr>").append(td));
 
 	if (this.phase == 3 && this.getPlayerStatus().status == "waiting"){
-		$("#upperGUI").find("#overview").find("tbody")
-		.append($("<tr>").append($("<td>").css("height", 8)))
+		$("#upperGUI").find(".overview").find("tbody")
+		.append($("<tr>").append($("<td>").css("height", 5)))
 		.append($("<tr>")
 			.append($("<td>").attr("colSpan", 3)
 				.append($("<input>")
@@ -3806,6 +3901,8 @@ Game.prototype.create = function(data){
 
 	if (game.phase != 2){this.checkUnitOffsetting();}
 
+	this.addPlayerInfo();
+	this.addFleetMoraleInfo();
 	this.addFocusInfo();
 	this.initIncomingTable();
 	this.createReinforcementsTable();
