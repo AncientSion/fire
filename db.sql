@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 27. Aug 2018 um 16:55
+-- Erstellungszeit: 27. Aug 2018 um 23:18
 -- Server-Version: 10.1.16-MariaDB
 -- PHP-Version: 7.0.9
 
@@ -125,13 +125,6 @@ CREATE TABLE `games` (
   `focusMod` int(3) DEFAULT '100'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Daten für Tabelle `games`
---
-
-INSERT INTO `games` (`id`, `name`, `status`, `turn`, `phase`, `pv`, `reinforce`, `reinforceTurn`, `reinforceETA`, `reinforceAmount`, `focusMod`) VALUES
-(1, 'myGame', 'open', -1, -1, 3500, 1500, 11, 3, 10, 10);
-
 -- --------------------------------------------------------
 
 --
@@ -197,13 +190,6 @@ CREATE TABLE `playerstatus` (
   `curFocus` int(4) DEFAULT '0',
   `status` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Daten für Tabelle `playerstatus`
---
-
-INSERT INTO `playerstatus` (`id`, `userid`, `gameid`, `turn`, `phase`, `faction`, `morale`, `value`, `maxFocus`, `gainFocus`, `curFocus`, `status`) VALUES
-(1, 1, 1, -1, -1, '', 100, 3500, 0, 0, 0, 'joined');
 
 -- --------------------------------------------------------
 
@@ -279,6 +265,7 @@ CREATE TABLE `units` (
   `ball` tinyint(1) DEFAULT '0',
   `name` varchar(255) DEFAULT '',
   `display` varchar(40) DEFAULT '',
+  `moraleCost` int(4) NOT NULL DEFAULT '0',
   `status` varchar(255) DEFAULT '',
   `command` tinyint(4) DEFAULT '0',
   `available` int(3) DEFAULT '0',
@@ -440,7 +427,7 @@ ALTER TABLE `fireorders`
 -- AUTO_INCREMENT für Tabelle `games`
 --
 ALTER TABLE `games`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT für Tabelle `globals`
 --
@@ -460,7 +447,7 @@ ALTER TABLE `missions`
 -- AUTO_INCREMENT für Tabelle `playerstatus`
 --
 ALTER TABLE `playerstatus`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT für Tabelle `powers`
 --
