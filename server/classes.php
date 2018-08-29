@@ -274,15 +274,15 @@ class Damage {
 	public $type;
 	public $totalDmg;
 	public $shieldDmg;
-	public $structDmg;
 	public $armourDmg;
+	public $systemDmg;
+	public $hullDmg;
 	public $emDmg;
-	public $overkill;
 	public $destroyed;
 	public $notes;
 	public $new;
 	
-	function __construct($id, $fireid, $gameid, $shipid, $structureid, $systemid, $turn, $type, $totalDmg, $shieldDmg, $structDmg, $armourDmg, $emDmg, $overkill, $negation, $destroyed, $notes, $new){
+	function __construct($id, $fireid, $gameid, $shipid, $structureid, $systemid, $turn, $type, $totalDmg, $shieldDmg, $armourDmg, $systemDmg, $hullDmg, $emDmg, $negation, $destroyed, $notes, $new){
 		$this->id = $id;
 		$this->fireid = $fireid;
 		$this->gameid = $gameid;
@@ -293,10 +293,10 @@ class Damage {
 		$this->type = $type;
 		$this->totalDmg = $totalDmg;
 		$this->shieldDmg = $shieldDmg;
-		$this->structDmg = $structDmg;
 		$this->armourDmg = $armourDmg;
+		$this->systemDmg = $systemDmg;
+		$this->hullDmg = $hullDmg;
 		$this->emDmg = $emDmg;
-		$this->overkill = $overkill;
 		$this->negation = $negation;
 		$this->destroyed = $destroyed;
 		$this->notes = $notes;
@@ -338,17 +338,17 @@ class Crit {
 }
 
 class Divider {
-	public $shieldDmg;
-	public $armourDmg;
-	public $structDmg;
-	public $emDmg;
-	public $notes;
-	public $overkill = 0;
+	public $shieldDmg = 0;
+	public $armourDmg = 0;
+	public $systemDmg = 0;
+	public $hullDmg = 0;
+	public $emDmg = 0;
+	public $notes = "";
 
-	function __construct($shieldDmg, $armourDmg, $structDmg, $emDmg, $notes = ""){
+	function __construct($shieldDmg, $armourDmg, $systemDmg, $emDmg, $notes = ""){
 		$this->shieldDmg = $shieldDmg;
 		$this->armourDmg = $armourDmg;
-		$this->structDmg = $structDmg;
+		$this->systemDmg = $systemDmg;
 		$this->emDmg = $emDmg;
 		$this->notes = $notes;
 	}

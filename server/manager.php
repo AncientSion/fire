@@ -1448,21 +1448,23 @@
 		Debug::log("-----------------testFleetMorale--------------");
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			$full = $this->playerstatus[$i]["morale"];
+			Debug::log("max Morale: ".$full);
 
 			for ($j = 0; $j < sizeof($this->ships); $j++){
 				if ($this->ships[$j]->flight || $this->ships[$j]->salvo){continue;}
 				if ($this->ships[$j]->userid != $this->playerstatus[$i]["userid"]){continue;}
-				if ($this->ships[$i]->destroyed || $this->ships[$j]->status == "jumpOut"){
+				if ($this->ships[$j]->destroyed || $this->ships[$j]->status == "jumpOut"){
 
 					$value = ceil($this->ships[$j]->moraleCost / $full *100);
-					Debug::log("unit #".$this->ships[$i]->id.", morale: ".-$this->ships[$i]->moraleCost.", value: ".$value);
+					Debug::log("unit #".$this->ships[$i]->id.", moraleCost: ".$this->ships[$i]->moraleCost.", value: ".$value);
 
 					$this->playerstatus[$i]["globals"][] = array(
 						"id" => 0,
 						"playerstatusid" => $this->playerstatus[$i]["id"],
 						"turn" => $this->turn,
 						"type" => "Morale",
-						"value" => -$this->ships[$j]->moraleCost
+						"value" => -$value,
+						"notes" => $this->ships[$j]->name.($this->ships[$i]->destroyed ? " destroyed" : " routed")
 					);
 				}
 			}

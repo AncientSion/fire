@@ -509,37 +509,6 @@ class Ship {
 		}
 	}
 
-	public function addDamagesFromDB($dmgs){
-		for ($i = 0; $i < sizeof($dmgs); $i++){
-			for ($j = 0; $j < sizeof($this->structures); $j++){
-				if ($dmgs[$i]->structureid == $this->structures[$j]->id){
-					$this->structures[$j]->armourDmg += $dmgs[$i]->armourDmg;
-
-					if ($dmgs[$i]->systemid == 1){
-						$this->primary->addDamage($dmgs[$i]);
-						break 1;
-					}
-
-					for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
-						if ($this->structures[$j]->systems[$k]->id == $dmgs[$i]->systemid){
-							$this->structures[$j]->systems[$k]->addDamage($dmgs[$i]);
-							$this->primary->addDamage($dmgs[$i]);
-							break 2;
-						}
-					}
-
-					for ($k = 0; $k < sizeof($this->primary->systems); $k++){
-						if ($this->primary->systems[$k]->id == $dmgs[$i]->systemid){
-							$this->primary->systems[$k]->addDamage($dmgs[$i]);
-							$this->primary->addDamage($dmgs[$i]);
-							break 2;
-						}
-					}
-				}
-			}
-		}
-	}
-
 	public function addCritDB($crits){
 		for ($i = 0; $i < sizeof($crits); $i++){
 			$found = 0;
@@ -592,8 +561,9 @@ class Ship {
 					$copy->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." ".$bridge->crits[$i]->value ."%</span> effect.";
 					$this->primary->systems[$j]->crits[] = $copy;
 
-					$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." ".$bridge->crits[$i]->value."%</span> effect.";
-					//$bridge->crits[$i]->type = "";
+					if ($bridge->crits[$i]->type == "Morale" || $bridge->crits[$i]->type = "Focus"){
+						$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." ".$bridge->crits[$i]->value."%</span> effect.";
+					} $bridge->crits[$i]->duration = -1;
 					break;
 				}
 			}
@@ -614,49 +584,36 @@ class Ship {
 		$this->destroyed = 1;
 	}
 
-	public function addNewDamage($dmg){
+	public function addDamagesFromDB($dmgs){
+		for ($i = 0; $i < sizeof($dmgs); $i++){
+			$this->addTopDamage($dmgs[$i]);
+		}
+	}
 
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($dmg->structureid == $this->structures[$i]->id){
-				$this->structures[$i]->armourDmg += $dmg->armourDmg;
+	public function addTopDamage($dmg){
+		//Debug::log("addDamage ".get_class($this));
 
-				if ($dmg->systemid == 1){
-					$this->primary->addDamage($dmg);
-					if ($this->primary->isDestroyed()){
-						$this->doDestroy();
-					}
-					return;
-				}
-				else {
-					for ($i = 0; $i < sizeof($this->structures); $i++){
-						if ($this->structures[$i]->id == $dmg->structureid){
-							for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-								if ($this->structures[$i]->systems[$j]->id == $dmg->systemid){
-									$this->structures[$i]->systems[$j]->addDamage($dmg);
-									$this->primary->addDamage($dmg);
-									if ($this->primary->isDestroyed()){
-										$this->doDestroy();
-									}
-									return;
-								}
-							}
-						}
-					}
-				}
-				for ($j = 0; $j < sizeof($this->primary->systems); $j++){
-					if ($this->primary->systems[$j]->id == $dmg->systemid){
-						$this->primary->systems[$j]->addDamage($dmg);
-						$this->primary->addDamage($dmg);
-						if ($this->primary->isDestroyed()){
-							$this->doDestroy();
-						}
-						return;
-					}
-				}
-			}
+		if ($dmg->new){
+			$dmg->hullDmg += $dmg->systemDmg;
+			$dmg->systemDmg = 0;
 		}
 
-		Debug::log("WARNING couldnt SHIP addNewDamage: #".$dmg->id);
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($dmg->systemid == $this->structures[$i]->id){
+
+				$this->structures[$i]->addDamage($dmg);
+
+				if ($dmg->destroyed){
+					for ($j = 0; $j < sizeof($this->structures); $j++){
+						if (!$this->structures[$j]->destroyed){
+							return;
+						}
+					}
+					$this->destroyed = 1;
+				}
+				return;
+			}
+		}
 	}
 
 	public function doUnpowerAllSystems($turn){
@@ -697,7 +654,7 @@ class Ship {
 		//Debug::log("ship getRemIntegrity, rem: ".$this->primary->remaining);
 		$total = $this->primary->integrity;
 		for ($i = 0; $i < sizeof($this->primary->damages); $i++){
-			$total = $total - $this->primary->damages[$i]->structDmg;
+			$total = $total - $this->primary->damages[$i]->systemDmg;
 		}
 		//Debug::log("total: ".$total);
 		return $total;
@@ -1125,7 +1082,7 @@ class Ship {
 		$new = round($this->getNewRelDmgPct($turn), 2);
 		//$old = $dmg["old"];
 		//$new = $dmg["new"];
-		Debug::log("doTestMorale ".get_class($this).", remMorale: ".$this->morale->rem." #".$this->id.", newRel: ".$new);
+		Debug::log("doTestMorale ".get_class($this)."# ".$this->id." remMorale: ".$this->morale->rem." #".$this->id.", newRel: ".$new);
 
 		if ($new < 0.15){return;}
 
@@ -1408,6 +1365,37 @@ class Medium extends Ship {
 
 	function __construct($data){
 		parent::__construct($data);
+	}
+
+	public function addTopDamage($dmg){
+		//Debug::log("addTopDamage dmg ".$dmg->id);
+		$this->primary->addDamage($dmg);
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($dmg->structureid == $this->structures[$i]->id){
+				$this->structures[$i]->armourDmg += $dmg->armourDmg;
+
+				if ($dmg->systemid == 1){break;}
+
+				if ($this->structures[$i]->id == $dmg->structureid){
+					for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+						if ($this->structures[$i]->systems[$j]->id == $dmg->systemid){
+							$this->structures[$i]->systems[$j]->addDamage($dmg);
+							break 2;
+						}
+					}
+				}
+
+				for ($j = 0; $j < sizeof($this->primary->systems); $j++){
+					if ($this->primary->systems[$j]->id == $dmg->systemid){
+						$this->primary->systems[$j]->addDamage($dmg);
+						break 2;
+					}
+				}
+			}
+
+			if ($this->primary->isDestroyed()){$this->destroyed = 1;}
+		}
 	}
 }
 

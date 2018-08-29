@@ -37,9 +37,9 @@ class PrimarySystem extends System {
 	}
 
 	public function setMaxDmg($fire, $dmg){
-		if ($dmg->structDmg > $this->maxDmg){
-			$dmg->overkill += $dmg->structDmg - $this->maxDmg;
-			$dmg->structDmg = $this->maxDmg;
+		if ($dmg->systemDmg > $this->maxDmg){
+			$dmg->hullDmg += $dmg->systemDmg - $this->maxDmg;
+			$dmg->systemDmg = $this->maxDmg;
 			$dmg->notes .= "c;";
 		}
 		return $dmg;
@@ -166,7 +166,7 @@ class Reactor extends PrimarySystem {
 			if (!$modifier){return;}
 			Debug::log("POTENTIAL: ".$all.", output: ".$this->output.", result: ".$overload." units, value: ".$modifier."%");
 
-			$this->crits[] = new Crit(sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Overload", 0, $modifier, 1);
+			$this->crits[] = new Crit(sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Overload", 0, -$modifier, 1);
 		}
 	}
 }

@@ -152,10 +152,10 @@ function Damage(data){
 	this.type = data.type;
 	this.totalDmg = data.totalDmg;
 	this.shieldDmg = data.shieldDmg;
-	this.structDmg = data.structDmg;
 	this.armourDmg = data.armourDmg;
+	this.systemDmg = data.systemDmg;
+	this.hullDmg = data.hullDmg;
 	this.emDmg = data.emDmg;
-	this.overkill = data.overkill;
 	this.negation = data.negation;
 	this.destroyed = data.destroyed;
 	this.notes = data.notes.slice(0, data.notes.length-1).split(";");
@@ -556,8 +556,8 @@ Primary.prototype.getSysDiv = function(){
 Primary.prototype.getRemIntegrity = function(){
 	var integrity = this.integrity;
 	for (var i = 0; i < this.damages.length; i++){
-		integrity -= this.damages[i].structDmg;
-		if (this.damages[i].overkill){
+		integrity -= this.damages[i].systemDmg;
+		if (this.damages[i].hullDmg){
 			console.log("dnig");
 		}
 	}
@@ -656,7 +656,7 @@ Single.prototype.getRemIntegrity = function(){
 	return this.remaining;
 	var integrity = this.integrity;
 	for (var i = 0; i < this.damages.length; i++){
-		integrity -= this.damages[i].structDmg;
+		integrity -= this.damages[i].systemDmg;
 	}
 	return integrity;
 }
@@ -1049,7 +1049,7 @@ FireOrder.prototype.addLogStartEntry = function(log){
 	var armour = 0;
 	var em = 0;
 	var system = 0;
-	var struct = 0;
+	var hull = 0;
 	var shield = 0;
 
 	var req = this.req.slice();
@@ -1071,10 +1071,10 @@ FireOrder.prototype.addLogStartEntry = function(log){
 	}
 
 	for (var i = 0; i < this.damages.length; i++){
-		armour += this.damages[i].armourDmg
-		system += this.damages[i].structDmg;
-		struct += this.damages[i].overkill;
 		shield += this.damages[i].shieldDmg;;
+		armour += this.damages[i].armourDmg
+		system += this.damages[i].systemDmg;
+		hull += this.damages[i].hullDmg;
 		em += this.damages[i].emDmg
 	}
 
@@ -1153,7 +1153,7 @@ FireOrder.prototype.addLogStartEntry = function(log){
 		.append($("<td>").html(hits + " / " + shots))
 		.append($("<td>").html(armour ? armour : ""))
 		.append($("<td>").html(system || em || ""))
-		.append($("<td>").html(struct ? struct : ""))
+		.append($("<td>").html(hull ? hull : ""))
 	}
 	else {
 		tr
@@ -1162,13 +1162,13 @@ FireOrder.prototype.addLogStartEntry = function(log){
 		.append($("<td>").html(this.damages.length))
 		.append($("<td>").html(armour ? armour : ""))
 		.append($("<td>").html(system || em || ""))
-		.append($("<td>").html(struct ? struct : ""))
+		.append($("<td>").html(hull ? hull : ""))
 	}
 
 	$(log).append(tr);
 	this.tr = tr;
 
-	return {armour: armour, system: system, struct: struct, shield: shield, em: em};
+	return {armour: armour, system: system, hull: hull, shield: shield, em: em};
 }
 
 FireOrder.prototype.assembleDmgData = function(){
@@ -1196,9 +1196,9 @@ FireOrder.prototype.assembleDmgData = function(){
 		}
 
 		dmgs[this.damages[i].system][3] += this.damages[i].armourDmg;
-		dmgs[this.damages[i].system][4] += this.damages[i].structDmg;
+		dmgs[this.damages[i].system][4] += this.damages[i].systemDmg;
 		dmgs[this.damages[i].system][4] += this.damages[i].emDmg;
-		dmgs[this.damages[i].system][5] += this.damages[i].overkill;
+		dmgs[this.damages[i].system][5] += this.damages[i].hullDmg;
 
 	}
 

@@ -36,8 +36,8 @@ class LightParticle extends Particle {
 	public $name = "LightParticle";
 	public $display = "Light Particle Bolter Array";
 	public static $prio = 0;
-	public $minDmg = 12;
-	public $maxDmg = 16;
+	public $minDmg = 220;
+	public $maxDmg = 260;
 	public $accDecay = 180;
 	public $shots = 4;	
 	public $reload = 2;

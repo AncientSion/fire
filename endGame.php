@@ -9,8 +9,8 @@
 	$sql = "SELECT
 				units.name, units.id, units.userid,
 				COALESCE(SUM(damages.armourDmg), 0) AS ArmourDamage,
-				COALESCE(SUM(damages.structDmg), 0) AS SystemDamage,
-				COALESCE(SUM(damages.overkill), 0) AS HealthDamage
+				COALESCE(SUM(damages.systemDmg), 0) AS SystemDamage,
+				COALESCE(SUM(damages.hullDmg), 0) AS HealthDamage
 				from units
 			LEFT JOIN fireorders ON
 				fireorders.shooterid = units.id

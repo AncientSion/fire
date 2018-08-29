@@ -121,23 +121,20 @@ class Single {
 	public function addDamage($dmg){
 		if ($dmg->new){
 			$this->emDmg += $dmg->emDmg;
-			Debug::log($this->parentId."/".$this->id." total emDmg: ".$this->emDmg);
+			//Debug::log($this->parentId."/".$this->id." total emDmg: ".$this->emDmg);
 			if (!$this->destroyed && $this->emDmg >= $this->integrity){
-				Debug::log("immediate disable");
+				//Debug::log("immediate disable");
 				$this->doDropout();
 
 			}
 		}
 
 		$this->armourDmg += $dmg->armourDmg;
-		$this->remaining -= $dmg->overkill;
+		$this->remaining -= $dmg->hullDmg;
 		$this->damages[] = $dmg;
 
-
-		if ($this->remaining < 1){
-			$this->destroyed = 1;
-			$dmg->overkill += $this->remaining;
-			$dmg->destroyed = 1;
+		if ($dmg->destroyed){
+			$this->destroyed = true;
 		}
 	}
 
@@ -174,9 +171,9 @@ class Single {
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->turn == $turn){
-				$new += $this->damages[$i]->overkill;
+				$new += $this->damages[$i]->hullDmg;
 				$new += $this->damages[$i]->emDmg*2;
-			} else $old += $this->damages[$i]->overkill;
+			} else $old += $this->damages[$i]->hullDmg;
 		}
 
 		return new RelDmg($new, $old, $this->integrity);

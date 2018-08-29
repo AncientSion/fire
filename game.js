@@ -1250,8 +1250,8 @@ function Game(data){
 			}
 
 			aTotal += units[i].armourDmg;
-			sTotal += units[i].structDmg;
-			sTotal += units[i].overkill
+			sTotal += units[i].systemDmg;
+			sTotal += units[i].hullDmg
 
 			var table = $("<table>")
 				.addClass("unitStats")
@@ -1304,14 +1304,14 @@ function Game(data){
 						.html(units[i].armourDmg)
 					)
 					.append($("<td>")
-						.html(units[i].structDmg)
+						.html(units[i].systemDmg)
 					)
 					.append($("<td>")
-						.html(units[i].overkill)
+						.html(units[i].hullDmg)
 					)
 					.append($("<td>")
 						.css("color", "yellow")
-						.html(units[i].structDmg + units[i].overkill)
+						.html(units[i].systemDmg + units[i].hullDmg)
 					)
 				)
 
@@ -3591,7 +3591,7 @@ Game.prototype.showFleetMorale = function(e, userid){
 		if (this.playerstatus[i].globals[j].type != "Morale"){continue;}
 		var crit = this.playerstatus[i].globals[j];
 		table.append($("<tr>")
-			.append($("<td>").html("Turn " + crit.turn))
+			.append($("<td>").html("Turn " + crit.turn + " / " + crit.notes))
 			.append($("<td>").html(crit.value)))
 	}
 

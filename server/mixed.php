@@ -128,42 +128,6 @@ class Mixed extends Ship {
 		return;
 	}
 
-	public function addNewDamage($dmg){
-		if ($dmg->new){
-			$dmg->overkill += $dmg->structDmg;
-			$dmg->structDmg = 0;
-		}
-
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($dmg->systemid != $this->structures[$i]->id){continue;}
-			
-			$this->structures[$i]->addDamage($dmg);
-
-			if ($dmg->destroyed){
-				for ($j = 0; $j < sizeof($this->structures); $j++){
-					if (!$this->structures[$j]->destroyed){
-						return;
-					}
-				}
-				$this->destroyed = 1;
-			}
-			return;
-		}
-
-		Debug::log("WARNING couldnt apply damage #".$dmg->id.", looking for unit #".$dmg->shipid."/".$dmg->systemid);
-	}
-
-	public function addDamagesFromDB($dmgs){
-		for ($i = 0; $i < sizeof($dmgs); $i++){
-			for ($j = 0; $j < sizeof($this->structures); $j++){
-				if ($dmgs[$i]->systemid == $this->structures[$j]->id){
-					$this->structures[$j]->addDamage($dmgs[$i]);
-					break;
-				}
-			}
-		}
-	}
-
 	public function setMove(&$gd){
 		Debug::log("**** setMove ".$this->id);
 		if ($this->moveSet){return;}

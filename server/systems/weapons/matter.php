@@ -70,12 +70,12 @@ class Test extends MediumRailGun {
 	public function determineDamage($totalDmg, $negation){
 		$shieldDmg = 0;
 		$armourDmg = 0;
-		$structDmg = 0;
+		$systemDmg = 0;
 
 		$armourDmg = 0;
-		$structDmg = $totalDmg - $armourDmg;
+		$systemDmg = $totalDmg - $armourDmg;
 		
-		return new Divider($shieldDmg * $this->linked, $armourDmg * $this->linked, $structDmg * $this->linked);
+		return new Divider($shieldDmg * $this->linked, $armourDmg * $this->linked, $systemDmg * $this->linked);
 	}
 }
 

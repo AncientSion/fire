@@ -150,6 +150,7 @@ class Primary {
 	public $remaining = 0;
 	public $damaged = 0;
 	public $emDmg = 0;
+	public $newDmg = 0;
 	public $system = false;
 
 	function __construct($id, $parentId, $start, $end, $integrity){
@@ -169,26 +170,22 @@ class Primary {
 	}
 
 	public function addDamage($dmg){
-		if ($dmg->systemid == 1){
-			$dmg->overkill += $dmg->structDmg;
-			$dmg->structDmg = 0;
+		if ($dmg->new){
+			if ($dmg->systemid == 1){
+				$dmg->hullDmg += $dmg->systemDmg;
+				$dmg->systemDmg = 0;
+				$this->damages[] = $dmg;
+			}
+			$this->newDmg += $dmg->hullDmg;
+			$this->emDmg += $dmg->emDmg;
+		} else if ($dmg->systemid == 1){
 			$this->damages[] = $dmg;
 		}
 
-		$this->remaining -= $dmg->overkill;
-
-		if ($dmg->new){
-			if ($dmg->systemid == 1){$this->emDmg += $dmg->emDmg;}
-		}
+		$this->remaining -= $dmg->hullDmg;
 
 		if ($this->remaining < 1){
-			//Debug::log("rem: ".$this->remaining, ", destroying!");
 			$this->destroyed = 1;
-			$dmg->overkill += $this->remaining;
-			$dmg->destroyed = 1;
-		}
-		if ($this->destroyed){
-			Debug::log("destroyed dmg #".$dmg->id.", adding to: ".$this->name);
 		}
 	}
 

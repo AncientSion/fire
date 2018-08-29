@@ -1866,7 +1866,7 @@ Ship.prototype.getDmgByFire = function(fire){
 			dmgs.push(this.primary.damages[i]);
 			dmgs[dmgs.length-1].system = this.primary.display;
 			dmgs[dmgs.length-1].loc = this.getSystemLocation(-1, this.primary.name);
-			lookup--;
+			//if (this.primary.damages[i].systemid == 1){lookup--;}
 			if (!lookup){return dmgs};
 		}
 		else if (this.primary.damages[i].turn < fire.turn){

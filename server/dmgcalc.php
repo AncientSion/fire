@@ -147,29 +147,29 @@ class DmgCalc {
 
 		Debug::log("fire #".$fire->id.", doStandardDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".get_class($system).", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
 
-		if ($remInt <= $dmg->structDmg){ // destroyed
+		if ($remInt <= $dmg->systemDmg){ // destroyed
 			//Debug::log("destroying");
 			$destroyed = 1;
 			$okSystem = $fire->target->getOverkillSystem($fire);
 
 			if ($okSystem){
-				$dmg->overkill += abs($remInt - $dmg->structDmg);
-				$dmg->structDmg = $remInt;
-				Debug::log(" => OVERKILL ship target system ".$system->name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$dmg->overkill." dmg");
+				$dmg->hullDmg += abs($remInt - $dmg->systemDmg);
+				$dmg->systemDmg = $remInt;
+				Debug::log(" => OVERKILL ship target system ".$system->name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->systemDmg.", OK for: ".$dmg->hullDmg." dmg");
 			}
 			else {
-				$dmg->structDmg = $remInt;
-				Debug::log(" => destroying non-ship target system ".$system->name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg);
+				$dmg->systemDmg = $remInt;
+				Debug::log(" => destroying non-ship target system ".$system->name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->systemDmg);
 			}
 		}
 
 		$entry = new Damage(
 			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
-			$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
+			$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 		);
 
 		$fire->damages[] = $entry;
-		$fire->target->addNewDamage($entry);	
+		$fire->target->addTopDamage($entry);	
 	}
 
 	public static function doPulseDmg($fire, $hit, $system){
@@ -204,40 +204,40 @@ class DmgCalc {
 			$total += $totalDmg;
 			$shield += $dmg->shieldDmg;
 			$armour += $dmg->armourDmg;
-			$struct += $dmg->structDmg;
+			$struct += $dmg->systemDmg;
 			$em += $dmg->emDmg;
 			//Debug::log("added hit ".($i+1).", ".$shield."/".$armour."/".$struct);
 		}
 		$dmg->shieldDmg = $shield;
 		$dmg->armourDmg = $armour;
-		$dmg->structDmg = $struct;
+		$dmg->systemDmg = $struct;
 		$dmg->emDmg = $em;
 
 		$dmg = $system->setMaxDmg($fire, $dmg);
 
-		if ($remInt <= $dmg->structDmg){ // destroyed
+		if ($remInt <= $dmg->systemDmg){ // destroyed
 			//Debug::log("destroying");
 			$destroyed = 1;
 			$okSystem = $fire->target->getOverkillSystem($fire);
 
 			if ($okSystem){
-				$dmg->overkill += abs($remInt - $struct);
-				$dmg->structDmg -= $dmg->overkill;
-				//Debug::log(" => hit ".($i+1).", adding ".$dmg->structDmg."/".$dmg->armourDmg." to overkill which is now: ".$dmg->overkill." pts");
+				$dmg->hullDmg += abs($remInt - $struct);
+				$dmg->systemDmg -= $dmg->hullDmg;
+				//Debug::log(" => hit ".($i+1).", adding ".$dmg->systemDmg."/".$dmg->armourDmg." to overkill which is now: ".$dmg->hullDmg." pts");
 			}
 			else {
-				$dmg->structDmg = $remInt;
-				Debug::log(" => destroying non-ship target system ".$system->name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg);
+				$dmg->systemDmg = $remInt;
+				Debug::log(" => destroying non-ship target system ".$system->name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->systemDmg);
 			}
 		}
 
 		$entry = new Damage(
 			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
-			$total, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
+			$total, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 		);
 
 		$fire->damages[] = $entry;
-		$fire->target->addNewDamage($entry);
+		$fire->target->addTopDamage($entry);
 	}
 
 	public static function doLaserDmg($fire, $hit, $system){
@@ -274,18 +274,18 @@ class DmgCalc {
 			
 			$rakes -= $counter;
 
-			if ($remInt - $dmg->structDmg < 1){
+			if ($remInt - $dmg->systemDmg < 1){
 				$destroyed = 1;
 				$name = get_class($system);
 				$okSystem = $fire->target->getOverkillSystem($fire);
 
 				if ($okSystem){
-					$dmg->overkill += abs($remInt - $dmg->structDmg);
-					$dmg->structDmg = $remInt;
-					Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$dmg->overkill." dmg");
+					$dmg->hullDmg += abs($remInt - $dmg->systemDmg);
+					$dmg->systemDmg = $remInt;
+					Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->systemDmg.", OK for: ".$dmg->hullDmg." dmg");
 				}
 				else {
-					Debug::log(" => destroying non-ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg);
+					Debug::log(" => destroying non-ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->systemDmg);
 					$rakes = 0;
 				}
 			}
@@ -293,16 +293,16 @@ class DmgCalc {
 			if (!$fire->target->squad || $rakes == $fire->weapon->rakes-1){
 				$entry = new Damage(
 					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
-					$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
+					$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 				);
 			}
 
 			if (!$fire->target->squad || !$rakes){
 				$fire->damages[] = $entry;
-				$fire->target->addNewDamage($entry);
+				$fire->target->addTopDamage($entry);
 			}
 			else if ($rakes){
-				$entry->shieldDmg += $dmg->shieldDmg; $entry->structDmg += $dmg->structDmg; $entry->armourDmg += $dmg->armourDmg; $entry->destroyed = $destroyed;
+				$entry->shieldDmg += $dmg->shieldDmg; $entry->systemDmg += $dmg->systemDmg; $entry->armourDmg += $dmg->armourDmg; $entry->destroyed = $destroyed;
 			}
 		}
 		Debug::log($print);
@@ -342,21 +342,21 @@ class DmgCalc {
 
 			Debug::log("doing: ".$totalDmg." to ".$system->name." #".$system->id.", value: ".$values[$index]);
 
-			if ($remInt <= $dmg->structDmg){ // destroyed
+			if ($remInt <= $dmg->systemDmg){ // destroyed
 				//Debug::log("destroying");
 				$destroyed = 1;
 
-				$dmg->structDmg = $remInt;
-				//Debug::log(" => destroying non-ship target system ".$system->name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg);
+				$dmg->systemDmg = $remInt;
+				//Debug::log(" => destroying non-ship target system ".$system->name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->systemDmg);
 			}
 
 			$entry = new Damage(
 				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
-				$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
+				$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 			);
 
 			$fire->damages[] = $entry;
-			$fire->target->addNewDamage($entry);
+			$fire->target->addTopDamage($entry);
 			
 			//Debug::log("doing: ".$values[$index]."% to ".$system->name);
 			if ($index == 3){
@@ -440,22 +440,22 @@ class DmgCalc {
 
 			$dmg = static::calcDmg($fire->weapon, $dmgs[$i], $negation);
 
-			if ($remInt - $dmg->structDmg < 1){
+			if ($remInt - $dmg->systemDmg < 1){
 				$destroyed = 1;
-				$dmg->overkill = $dmg->structDmg - $remInt;
-				Debug::log("destroying, rem: ".$remInt.", dmg: ".$dmg->structDmg.", adding overkill ".$dmg->overkill);
-				$dmg->structDmg = $remInt;
+				$dmg->hullDmg = $dmg->systemDmg - $remInt;
+				Debug::log("destroying, rem: ".$remInt.", dmg: ".$dmg->systemDmg.", adding overkill ".$dmg->hullDmg);
+				$dmg->systemDmg = $remInt;
 			}
 			
-			Debug::log("dealing ".$dmg->armourDmg."/".$dmg->structDmg."/".$dmg->overkill." to ".$targets[$i]->display);
+			Debug::log("dealing ".$dmg->armourDmg."/".$dmg->systemDmg."/".$dmg->hullDmg." to ".$targets[$i]->display);
 
 			$entry = new Damage(
 				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
-				$dmgs[$i], $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
+				$dmgs[$i], $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 			);
 
 			$fire->damages[] = $entry;
-			$fire->target->addNewDamage($entry);
+			$fire->target->addTopDamage($entry);
 		}
 	}
 
@@ -474,18 +474,18 @@ class DmgCalc {
 			$negation = $fire->target->getArmour($fire, $system);
 			$dmg = static::calcDmg($fire->weapon, $totalDmg, $negation);
 
-			if ($remInt - $dmg->structDmg < 1){
+			if ($remInt - $dmg->systemDmg < 1){
 				$destroyed = 1;
-				$dmg->structDmg = $remInt;
+				$dmg->systemDmg = $remInt;
 			}
 			
 			$entry = new Damage(
 				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
-				$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
+				$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 			);
 
 			$fire->damages[] = $entry;
-			$fire->target->addNewDamage($entry);
+			$fire->target->addTopDamage($entry);
 
 		}
 	}
@@ -505,10 +505,10 @@ class DmgCalc {
 
 			Debug::log("fire #".$fire->id.", doFlashDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".$name.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
 
-			if ($remInt - $dmg->structDmg < 1){ // destroy system
-				Debug::log(" => destroying target system ".$name." #".$system->id.", rem: ".$remInt.", doing: ".$dmg->structDmg);
+			if ($remInt - $dmg->systemDmg < 1){ // destroy system
+				Debug::log(" => destroying target system ".$name." #".$system->id.", rem: ".$remInt.", doing: ".$dmg->systemDmg);
 				$destroyed = 1;
-				$dmg->structDmg = $remInt;
+				$dmg->systemDmg = $remInt;
 				$push = true;
 			}
 			else if ($toDo){ // no dmg left
@@ -519,17 +519,17 @@ class DmgCalc {
 			if ($push){
 				$toDo -= $dmg->shieldDmg; 
 				$toDo -= $dmg->armourDmg; 
-				$toDo -= $dmg->structDmg; 
+				$toDo -= $dmg->systemDmg; 
 				$toDo -= $dmg->emDmg;
 				$fire->hits++;
 				
 				$entry = new Damage(
 					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
-					$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
+					$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 				);
 
 				$fire->damages[] = $entry;
-				$fire->target->addNewDamage($entry);	
+				$fire->target->addTopDamage($entry);	
 
 				if ($toDo){
 					$system = $fire->target->getFlashOverkillSystem($fire);
@@ -543,7 +543,7 @@ class DmgCalc {
 	public static function calcEMDmg($weapon, $totalDmg, $negation){
 		$shieldDmg = 0;
 		$armourDmg = 0;
-		$structDmg = 0;
+		$systemDmg = 0;
 		$emDmg = 0;
 		$notes = "";
 
@@ -552,14 +552,14 @@ class DmgCalc {
 		$emDmg = round($totalDmg - $shieldDmg - $armourDmg);
 		$armourDmg = 0;
 
-		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $structDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
+		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $systemDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
 	}
 
 	public static function calcStandardDmg($weapon, $totalDmg, $negation){
 		Debug::log("calcStandardDmg, negation: ".$negation["stock"]."/".$negation["bonus"]);
 		$shieldDmg = 0;
 		$armourDmg = 0;
-		$structDmg = 0;
+		$systemDmg = 0;
 		$emDmg = 0;
 		$notes = "";
 
@@ -572,17 +572,17 @@ class DmgCalc {
 			$notes = "p;";
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
-			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
+			$systemDmg = round($totalDmg - $shieldDmg - $armourDmg);
 		}
 
-		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $structDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
+		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $systemDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
 	}
 
 	public static function calcMatterDmg($weapon, $totalDmg, $negation){
 		Debug::log("calcMatterDmg, negation: ".$negation["stock"]."/".$negation["bonus"]);
 		$shieldDmg = 0;
 		$armourDmg = 0;
-		$structDmg = 0;
+		$systemDmg = 0;
 		$emDmg = 0;
 		$notes = "";
 
@@ -594,16 +594,16 @@ class DmgCalc {
 			$notes = "p;";
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]/2));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]/2));
-			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
+			$systemDmg = round($totalDmg - $shieldDmg - $armourDmg);
 		}
 		
-		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $structDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
+		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $systemDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
 	}
 
 	public static function calcMolecularDmg($weapon, $totalDmg, $negation){
 		$shieldDmg = 0;
 		$armourDmg = 0;
-		$structDmg = 0;
+		$systemDmg = 0;
 		$emDmg = 0;
 		$notes = "";
 
@@ -615,17 +615,17 @@ class DmgCalc {
 			$notes = "p;";
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]/4));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]/4));
-			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
+			$systemDmg = round($totalDmg - $shieldDmg - $armourDmg);
 		}
 		
-		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $structDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
+		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $systemDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
 	}
 
 	public static function calcPlasmaDmg($weapon, $totalDmg, $negation){
 		//Debug::log("calcPlasmaDmg, negation: ".$negation["stock"]."/".$negation["bonus"]);
 		$shieldDmg = 0;
 		$armourDmg = 0;
-		$structDmg = 0;
+		$systemDmg = 0;
 		$emDmg = 0;
 		$notes = "";
 
@@ -638,7 +638,7 @@ class DmgCalc {
 			$notes = "p;";
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
-			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
+			$systemDmg = round($totalDmg - $shieldDmg - $armourDmg);
 			$armourDmg += floor(($totalDmg-$shieldDmg) / 100 * $weapon->melt);
 
 //		shield	round(min(16, 3))
@@ -653,7 +653,7 @@ class DmgCalc {
 
 		}
 
-		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $structDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
+		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $systemDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
 	}
 }
 

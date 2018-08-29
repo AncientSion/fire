@@ -226,8 +226,8 @@
 				SELECT
 					units.name, units.display, units.id, units.userid, units.destroyed,
 					COALESCE(SUM(damages.armourDmg), 0) as armourDmg,
-					COALESCE(SUM(damages.structDmg), 0) as structDmg,
-					COALESCE(SUM(damages.overkill), 0) as overkill
+					COALESCE(SUM(damages.systemDmg), 0) as systemDmg,
+					COALESCE(SUM(damages.hullDmg), 0) as hullDmg
 				FROM units
 				LEFT JOIN fireorders ON
 					fireorders.shooterid = units.id
@@ -1191,7 +1191,7 @@
 			
 			$stmt = $this->connection->prepare("
 				 INSERT into globals 
-				 VALUES (0, :playerstatusid, :turn, :type, :value)
+				 VALUES (0, :playerstatusid, :turn, :type, :value, :notes)
 			");
 			
 			for ($i = 0; $i < sizeof($playerstatus); $i++){
@@ -1202,7 +1202,8 @@
 					$stmt->bindParam(":turn", $playerstatus[$i]["globals"][$j]["turn"]);
 					$stmt->bindParam(":type", $playerstatus[$i]["globals"][$j]["type"]);
 					$stmt->bindParam(":value", $playerstatus[$i]["globals"][$j]["value"]);
-					Debug::log("writing new entry");
+					$stmt->bindParam(":notes", $playerstatus[$i]["globals"][$j]["notes"]);
+					//Debug::log("writing new entry");
 					$stmt->execute();
 
 					if ($stmt->errorCode() == 0){continue;}
@@ -1482,10 +1483,10 @@
 							$result[$j]["type"],
 							$result[$j]["totalDmg"],
 							$result[$j]["shieldDmg"],
-							$result[$j]["structDmg"],
 							$result[$j]["armourDmg"],
+							$result[$j]["systemDmg"],
+							$result[$j]["hullDmg"],
 							$result[$j]["emDmg"],
-							$result[$j]["overkill"],
 							$result[$j]["negation"],
 							$result[$j]["destroyed"],
 							$result[$j]["notes"],
@@ -1676,9 +1677,9 @@
 
 			$stmt = $this->connection->prepare("
 				INSERT INTO damages 
-					( fireid, shipid, gameid, structureid, systemid, turn, roll, type, totalDmg, shieldDmg, structDmg, armourDmg, emDmg, overkill, negation, destroyed, notes, new)
+					( fireid, shipid, gameid, structureid, systemid, turn, roll, type, totalDmg, shieldDmg, armourDmg, systemDmg, hullDmg, emDmg, negation, destroyed, notes, new)
 				VALUES
-					( :fireid, :shipid, :gameid, :structureid, :systemid, :turn, :roll, :type, :totalDmg, :shieldDmg, :structDmg, :armourDmg, :emDmg, :overkill, :negation, :destroyed, :notes, :new)
+					( :fireid, :shipid, :gameid, :structureid, :systemid, :turn, :roll, :type, :totalDmg, :shieldDmg, :armourDmg, :systemDmg, :hullDmg, :emDmg, :negation, :destroyed, :notes, :new)
 			");
 
 			$new = 0;
@@ -1695,10 +1696,10 @@
 				$stmt->bindParam(":type", $damages[$i]->type);
 				$stmt->bindParam(":totalDmg", $damages[$i]->totalDmg);
 				$stmt->bindParam(":shieldDmg", $damages[$i]->shieldDmg);
-				$stmt->bindParam(":structDmg", $damages[$i]->structDmg);
 				$stmt->bindParam(":armourDmg", $damages[$i]->armourDmg);
+				$stmt->bindParam(":systemDmg", $damages[$i]->systemDmg);
+				$stmt->bindParam(":hullDmg", $damages[$i]->hullDmg);
 				$stmt->bindParam(":emDmg", $damages[$i]->emDmg);
-				$stmt->bindParam(":overkill", $damages[$i]->overkill);
 				$stmt->bindParam(":negation", $damages[$i]->negation);
 				$stmt->bindParam(":destroyed", $damages[$i]->destroyed);
 				$stmt->bindParam(":notes", $damages[$i]->notes);

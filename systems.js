@@ -144,7 +144,7 @@ System.prototype.attachSysMods = function(ele){
   				var html = "";
 
   				if (this.crits[i].duration < 0){
-  					html =(this.crits[i].type + " -" + (this.crits[i].value) + "% (Turn " + this.crits[i].turn + " Morale Fail)");
+  					html =(this.crits[i].type + " " + (this.crits[i].value) + "% (Turn " + this.crits[i].turn + " Morale Fail)");
   				}
 				else if (this.crits[i].type == "Disabled"){
 					if (this.crits[i].duration){html = (this.crits[i].type + " (Incl. Turn " + (this.crits[i].turn + this.crits[i].duration) + ")" + " (Turn " + this.crits[i].turn + ")");}
@@ -969,7 +969,7 @@ System.prototype.update = function(){
 System.prototype.getRemIntegrity = function(){
 	var dmg = 0;
 	for (var i = 0; i < this.damages.length; i++){
-		dmg += this.damages[i].structDmg;
+		dmg += this.damages[i].systemDmg;
 	}
 	return this.integrity - dmg;
 }
@@ -1230,8 +1230,8 @@ PrimarySystem.prototype.getOutput = function(){
 	var mod = 100;
 		mod += this.getBoostEffect("Output") * this.getBoostLevel();
 		mod += this.getCrewEffect() * this.getCrewLevel();
-		mod -= this.getCritMod("Output");
-		mod -= this.getCritMod("Overload");
+		mod += this.getCritMod("Output");
+		mod += this.getCritMod("Overload");
 
 	return Math.floor(this.output / 100 * mod) - usage;
 }

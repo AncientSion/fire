@@ -165,12 +165,12 @@ class Weapon extends System {
 	}
 
 	public function getMinDamage(){
-		return 100;
+		//return 100;
 		return $this->minDmg;
 	}
 
 	public function getMaxDamage(){
-		return 200;
+		//return 200;
 		return $this->maxDmg;
 	}
 

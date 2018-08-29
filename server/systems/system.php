@@ -208,7 +208,7 @@ class System {
 	public function getRemIntegrity(){
 		$rem = $this->integrity;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
-			$rem -= $this->damages[$i]->structDmg;
+			$rem -= $this->damages[$i]->systemDmg;
 		}
 		return $rem;
 	}
@@ -222,9 +222,9 @@ class System {
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->turn == $turn){
-				$new += $this->damages[$i]->structDmg;
+				$new += $this->damages[$i]->systemDmg;
 				$new += $this->damages[$i]->emDmg*2;
-			} else $old += $this->damages[$i]->structDmg;
+			} else $old += $this->damages[$i]->systemDmg;
 		}
 
 		//Debug::log("new: ".$new."/".$old);
@@ -283,12 +283,11 @@ class System {
 	}
 
 	public function addDamage($dmg){
-		if ($dmg->new){$this->emDmg += $dmg->emDmg;}
-
 		$this->damages[] = $dmg;
+
+		if ($dmg->new){$this->emDmg += $dmg->emDmg;}
 		
 		if ($dmg->destroyed){
-			Debug::log("destroyed dmg #".$dmg->id.", adding to: ".$this->name);
 			$this->destroyed = true;
 		}
 	}
