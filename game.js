@@ -3652,7 +3652,7 @@ Game.prototype.showFocusInfo = function(e, userid){
 			)
 			.append($("<tr>")
 				.append($("<td>").html("Flagship Crit Modifiers"))
-				.append($("<td>").html( (command ? ("-" + command.getCritMod("Output") + "%") : "0%")))
+				.append($("<td>").html( (command ? (command.getCritMod("Output") + "%") : "0%")))
 			)
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 10))

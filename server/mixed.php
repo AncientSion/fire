@@ -60,7 +60,7 @@ class Mixed extends Ship {
 			return true;
 		}
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if (! $this->structures[$i]->isDestroyed()){
+			if (!$this->structures[$i]->isDestroyed()){
 				return false;
 			}
 		}

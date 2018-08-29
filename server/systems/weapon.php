@@ -155,12 +155,8 @@ class Weapon extends System {
 
 	public function getDamageMod($fire){
 		$mod = 100;
-
-		$boost = $this->getBoostEffect("Damage") * $this->getBoostLevel($fire->turn);
-		$crit = $this->getCritMod("Damage", $fire->turn);
-
-		$mod = $mod + $boost + $crit;
-		//if ($mod != 1){Debug::log(get_class($this).", weapon id: ".$this->id.", DAMAGE mod: ".(-$crit + $boost )." (crits: ".$crit.", boost: ".$boost.")");}
+		$mod += $this->getBoostEffect("Damage") * $this->getBoostLevel($fire->turn);
+		$mod += $this->getCritMod("Damage", $fire->turn);
 		return $mod / 100;
 	}
 
@@ -169,10 +165,12 @@ class Weapon extends System {
 	}
 
 	public function getMinDamage(){
+		return 100;
 		return $this->minDmg;
 	}
 
 	public function getMaxDamage(){
+		return 200;
 		return $this->maxDmg;
 	}
 

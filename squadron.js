@@ -816,7 +816,7 @@ Squadron.prototype.getBuyTableData = function(table){
 		$(table)
 		.append(
 			$("<tr>")
-			.append($("<td>").addClass("font16").html("Hunt them down"))
+			.append($("<td>").addClass("font16").html("Wolfpack"))
 			.append($("<td>").html(Math.floor(this.totalCost * -0.15))));
 
 		this.totalCost = Math.ceil(this.totalCost *0.85);

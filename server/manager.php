@@ -82,7 +82,7 @@
 	}
 
 	public function getClientData(){
-
+		//Debug::log("getClientData");
 		//$this->testMorale(); return;
 		if (!$this->settings || !$this->settings->turn){return false;}
 		
@@ -142,7 +142,7 @@
 		$this->turn = $gd["turn"];
 		$this->phase = $gd["phase"];
 
-		$this->playerstatus = DBManager::app()->getPlayerStatus($this->gameid);
+		$this->playerstatus = DBManager::app()->getDBPlayerStatus($this->gameid);
 
 		$this->weapons = DmgCalc::setWeaponPriority();
 	}
@@ -326,8 +326,6 @@
 			if (isset($db[$i]["subunits"])){$unit->addSubUnits($db[$i]["subunits"]);}
 			if (isset($db[$i]["mission"])){$unit->addMission($db[$i]["mission"], $this->userid, $this->turn, $this->phase);}
 
-			$unit->setUnitState($this->turn, $this->phase);
-			$unit->setSpecialAbilities($this->turn, $this->phase);
 			$units[] = $unit;
 		}
 
@@ -338,6 +336,11 @@
 		DBManager::app()->getActions($units, $this->turn);
 		DBManager::app()->getEW($units, $this->turn);
 		DBManager::app()->getShipLoad($units);
+
+		for ($i = 0; $i < sizeof($units); $i++){
+			$units[$i]->setSpecialAbilities($this->turn, $this->phase);
+			$units[$i]->setUnitState($this->turn, $this->phase);
+		}
 
 		return $units;
 	}
@@ -363,7 +366,7 @@
 		//return false;
 		if ($gamedata["status"] == "closed" || $gamedata["status"] == "open"){return false;}
 
-		$this->playerstatus = DBManager::app()->getPlayerStatus($gamedata["id"]);
+		$this->playerstatus = DBManager::app()->getDBPlayerStatus($gamedata["id"]);
 
 		if (sizeof($this->playerstatus) >= 2){
 			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
@@ -943,7 +946,6 @@
 		$this->phase = 2;
 
 		if ($dbManager->setGameTurnPhase($this->gameid, $this->turn, $this->phase)){
-			//$players = $dbManager->getPlayerStatus($this->gameid);
 			$this->updatePlayerStatus("waiting");
 			return true;
 		}
@@ -963,8 +965,9 @@
 		$this->resolveShipFireOrders();
 		$this->resolveFighterFireOrders();
 		$this->resolveBallisticFireOrders();
-		$this->testCriticals();
-		$this->testMorale();
+		$this->testUnitCriticals();
+		$this->testUnitMorale();
+		$this->testFleetMorale();
 		$this->setPostFireFocusValues();
 
 		$this->handleResolvedFireData();
@@ -1423,19 +1426,46 @@
 		}
 	}
 
-	public function testCriticals(){
-		Debug::log("------------------------------- testCriticals");
+	public function testUnitCriticals(){
+		Debug::log("----------------testUnitCriticals---------------");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
+			//Debug::log($this->ships[$i]->name.", destroyed: ".$this->ships[$i]->destroyed);
+			if ($this->ships[$i]->destroyed){continue;}
 			$this->ships[$i]->doTestCrits($this->turn);
 		}
 	}
 
-	public function testMorale(){
-		Debug::log("------------------------------- testMorale");
+	public function testUnitMorale(){
+		Debug::log("----------------testUnitMorale-------------------");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->isDestroyed()){continue;}
+			if ($this->ships[$i]->destroyed){continue;}
 			$this->ships[$i]->setMorale($this->turn, $this->phase);
 			$this->ships[$i]->doTestMorale($this->turn);
+		}
+	}
+
+	public function testFleetMorale(){
+		Debug::log("-----------------testFleetMorale--------------");
+		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			$full = $this->playerstatus[$i]["morale"];
+
+			for ($j = 0; $j < sizeof($this->ships); $j++){
+				if ($this->ships[$j]->flight || $this->ships[$j]->salvo){continue;}
+				if ($this->ships[$j]->userid != $this->playerstatus[$i]["userid"]){continue;}
+				if ($this->ships[$i]->destroyed || $this->ships[$j]->status == "jumpOut"){
+
+					$value = ceil($this->ships[$j]->moraleCost / $full *100);
+					Debug::log("unit #".$this->ships[$i]->id.", morale: ".-$this->ships[$i]->moraleCost.", value: ".$value);
+
+					$this->playerstatus[$i]["globals"][] = array(
+						"id" => 0,
+						"playerstatusid" => $this->playerstatus[$i]["id"],
+						"turn" => $this->turn,
+						"type" => "Morale",
+						"value" => -$this->ships[$j]->moraleCost
+					);
+				}
+			}
 		}
 	}
 
@@ -1515,7 +1545,7 @@
 
 		$curFocus; $gainFocus;
 
-		if ($unit->isDestroyed() || $unit->status == "jumpOut"){
+		if ($unit->destroyed || $unit->status == "jumpOut"){
 			Debug::log("CMD kill/flee!");
 			$curFocus = 0; $gainFocus = 0;
 		}
@@ -1553,12 +1583,13 @@
 		Debug::log("handleResolvedFireData");
 		$newDmgs = $this->getAllNewDamages();
 		$newCrits = $this->getAllNewCrits();
-		$newMorales = $this->getAllNewMoraleResults();
+		$unitMorales = $this->getNewUnitMoraleCrits();
 
 		DBManager::app()->updateFireOrders($this->fires);
 		if (sizeof($newDmgs)){DBManager::app()->insertDamageEntries($newDmgs);}
 		if (sizeof($newCrits)){DBManager::app()->insertCritEntries($newCrits);}
-		if (sizeof($newMorales)){DBManager::app()->updateMoraleResults($newMorales);}
+		if (sizeof($unitMorales)){DBManager::app()->updateUnitMoraleResults($unitMorales);}
+		DBManager::app()->insertFleetMoraleCrits($this->playerstatus);
 	}
 
 	public function getAllNewDamages(){
@@ -1580,8 +1611,8 @@
 		return $data;
 	}
 	
-	public function getAllNewMoraleResults(){
-		//Debug::log("getAllNewMoraleResults");
+	public function getNewUnitMoraleCrits(){
+		//Debug::log("getNewUnitMoraleCrits");
 		$data = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->destroyed || $this->ships[$i]->flight || $this->ships[$i]->salvo){continue;}
@@ -1618,7 +1649,7 @@
 	}
 
 	public function getFactions(){
-		return array("Earth Alliance", "Centauri Republic", "Minbari Federation", "Narn Regime", "The Shadows");
+		return array("Earth Alliance", "Centauri Republic", "Minbari Federation", "Narn Regime");
 	}
 
 	public function getFactionData($faction){
@@ -1637,19 +1668,19 @@
 			break;
 			case "Centauri Republic"; 
 				$notes = array(
-					array("Hunt them down", "Excelling at wolfpack tactics results in each Squadrons with at least 3 units being 15 % less expensive."),
+					array("Wolfpack", "Excelling at wolfpack tactics results in each Squadrons with at least 3 units being 15 % less expensive."),
 					array("Hit and Run", "Specialized battle doctrine and starship design yield a 20 % cost reduction for every non-turning move action.")
 				);
 			break;
 			case "Minbari Federation";
 				$notes = array(
 					array("Advanced", "Highly advanced tech allow easy overpowering of hostile sensors. EW is considered to be originating from a unit 2 levels higher."),
-					array("Enlightened", "Superior tactical capabilities and officer training result in a 30 % increased Focus gain as well as starting morale 120.")
+					array("Enlightened", "Superior tactical capabilities and officer training result in a 30 % increased Focus gain as well as starting morale increased to 120.")
 				);
 			break;
 			case "Narn Regime";
 				$notes = array(
-					array("Iron Will", "Narn by nature will hardly ever flee from a battle until the very last moment. Unit starting morale 140."),
+					array("Iron Will", "Narn by nature will hardly ever flee from a battle until the very last moment. Unit starting morale is increased to 150."),
 					array("Shon'Kar", "Every unit can declare blood oath, marking an enemy as nemesis. Firing orders between oath-sworn incur a 20 % base to-Hit increase.")
 				);
 			break;

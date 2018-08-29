@@ -28,7 +28,8 @@ if (isset($_SESSION["userid"])){
 	$joined = false;
 	$ready = false;
 
-	$element = "<table class='gameSetupStatus'";
+	$element = "<div class='gameSetupStatus'>";
+	$element .= "<table>";
 	$element .= "<tr>";
 	$element .= "<th colSpan=2 style='font-size: 22px;'>".$game["name"]."</th>";
 	$element .= "</tr>";
@@ -81,7 +82,7 @@ if (isset($_SESSION["userid"])){
 
 	$element .= "<tr><td colSpan=2><input type='button' onclick='window.goToLobby()' value='Return to Lobby'></td></tr>";	
 
-	$element .= "</table>";
+	$element .= "</table></div>";
 
 	if ($ready){echo "<script> window.ready = true;</script>";}
 	else if ($joined){echo "<script> window.joined = true;</script>";}
@@ -115,17 +116,10 @@ else header("Location: index.php");
 			<div id="popupText">
 			</div>
 		</div>
-		<table>
-			<tr>
-				<td>
-					<div style="margin: auto">
-						<?php echo $element;?>
-					</div>
-				</td>
-			</tr>
-		</table>
 
-		<div style="position: absolute; top: 13px; left: 445px; border: 1px solid white;">
+		<?php echo $element;?>
+
+		<div class="fleetBought">
 			<table id="shipsBoughtTable">
 				<thead>
 					<tr>
@@ -166,15 +160,13 @@ else header("Location: index.php");
 			</table>
 		</div>
 
-		<table style="position: absolute; top: 240px">
-			<tr>
-				<td>
-					<div id="factionDiv">			
-					</div>
-				</td>
-			</tr>
-		</table>
-		<div id="game" style="position: absolute; top: 13px; left: 875px">
+		<div id="fleetChoice">
+			<div class="factionAvail"></div>
+			<div class="factionContentWrapper"></div>
+		</div>
+
+
+		<div id="game" style="position: absolute; top: 5px; left: 875px">
 			<canvas id="shipCanvas" class="gameCanvas" style='border: 1px solid white; z-index: 2'></canvas>
 			<canvas id="fxCanvas" class="gameCanvas" style='z-index: 1'></canvas>
 		</div>
@@ -547,22 +539,9 @@ else header("Location: index.php");
 						tr.insertCell(-1).innerHTML = "<th>Base Unit Cost</th>";
 						tr.insertCell(-1).innerHTML = unit.cost;
 
-					$(table).append(unit.getBuyTableData(table))
-
-				/*	if (unit.squad && unit.structures.length > 2){
-						var size = unit.structures.length;
-						var mod = 0;
-						if (size == 3){mod = 8;} else if (size == 4){mod = 12;}
-						var extra = Math.floor(unit.totalCost / 100 * mod);
-
-						var tr = table.insertRow(-1);
-							tr.insertCell(-1).innerHTML = size + " units, each unit costs + " + mod + "%";
-							tr.insertCell(-1).innerHTML = extra;
-
-							unit.totalCost += extra
-					} */
 
 					$(table)
+						.append(unit.getBuyTableData(table))
 						.append(
 						$("<tr>")
 							.append($("<th>").html("Total Unit Cost").css("font-size", 20))
@@ -581,7 +560,7 @@ else header("Location: index.php");
 				},
 
 				buildNotesList: function(data, t){
-					var div = $("<div>").addClass("factionSpecialHead");
+					var div = $("<div>").addClass("factionSpecialWrapper");
 
 					for (var i = 0; i < data.length; i++){
 						div.append($("<div>").addClass("factionSpecial")
@@ -589,37 +568,24 @@ else header("Location: index.php");
 							.append($("<div>").html(data[i][1])))
 					}
 
-				$(t)
-				.append($("<tr>")
-					.append($("<td>").attr("colSpan", 6)
-						.append(div)));
-
-					return;
-
-
-
-
-
-					for (var i = 0; i < data.length; i++){
-						console.log(data[i])
-						$(t)
-						.append($("<tr>")
-							.append($("<th>").attr("colSpan", 6).html(data[i][0])))
-						.append($("<tr>")
-							.append($("<td>").attr("colSpan", 6).html(data[i][1])))
-					}
+					$(t).append(div);
 				},
 
 				buildFactionUnitHeader: function(ele){
 					ele.append(
-					$("<tr>")
-						.append($("<th>").css("width", 90).html("Class"))
-						.append($("<th>").html(""))
-						.append($("<th>").css("width", 80).html("Turning"))
-						.append($("<th>").css("width", 80).html("Sensor"))
-						.append($("<th>").css("width", 50).html("Cost"))
-						.append($("<th>").html("")
+						$("<table>")
+						.append($("<thead>")
+							.append($("<tr>")
+								.append($("<th>").css("width", 90).html("Class"))
+								.append($("<th>").html(""))
+								.append($("<th>").css("width", 80).html("Turning"))
+								.append($("<th>").css("width", 80).html("Sensor"))
+								.append($("<th>").css("width", 50).html("Cost"))
+								.append($("<th>").html("")
+								)
+							)
 						)
+						.append($("<tbody>"))
 					)
 				},
 
@@ -710,72 +676,41 @@ else header("Location: index.php");
 			}
 
 			initPreviewCanvas();
-			initFactionTable();
+			initFactionAvail();
 		} else $("#game").hide();
 	})
 
-
-	function initFactionTable(){
-		var icons = [graphics.images.earth, graphics.images.centauri, graphics.images.minbari, graphics.images.narn, graphics.images.shadows];		
-
-		var table = document.createElement("table"); 
-			table.className = "factionUpperTable";
-		var tr = document.createElement("tr"); 
-		var th = document.createElement("th");
-			th.style.fontSize = "30px";
-			th.colSpan = 3;
-			th.innerHTML = "Assemble Your Fleet"; tr.appendChild(th); table.appendChild(tr);
+	function initFactionAvail(){
+		console.log("initFactionAvail");
+		var icons = [graphics.images.earth, graphics.images.centauri, graphics.images.minbari, graphics.images.narn];
+		window.isset = [];
 
 		for (var i = 0; i < factions.length; i++){
-			$(table)
-				.append(
-					$("<tr>")
-						.css("margin-bottom", 20)
-						.data("row", i)
-						.data("faction", i)
-						.data("set", 0)
-						.hover(function(){
-							$(this).toggleClass("highlight");
-						})
-						.click(function(){
-							if ($(this).data("set")){
-								showFactionData($(this));
-							}
-							else requestFactionData(this, buildUnitList);
-						})
-						.contextmenu(function(e){
-							e.stopPropagation(); e.preventDefault();
-							game.setReinforceFaction(factions[$(this).data("faction")]);
-						})
-						.append(
-							$("<td>")
-							.append(
-								$(icons[i]))
-						)
-						.append(
-							$("<td>")
-							.addClass("factionName")
-							.html(factions[i])
-						)
-						.append(
-							$("<td>")
-							.html('<img src="' + icons[i].src + '"></img>')
-						)
-					)
-				.append(
-					$("<tr>")
-						.addClass("disabled")
-						.append(
-							$("<td>")
-							.attr("colSpan", 3)
-							.append(
-								$("<table>")
-									.addClass("factionSubTable ")
-									.attr("id", i)
-									)
-								)
-							)
-			$("#factionDiv").append(table);
+			isset[i] = 0;
+			$(".factionAvail")
+				.append($("<div>")
+					.addClass("factionOption")
+					.data("faction", i)
+					.hover(function(){
+						$(this).toggleClass("highlight");
+					})
+					.click(function(){
+						showFactionData($(this).data("faction"))
+					})
+					.append($(icons[i])))
+		}
+
+		for (var i = 0; i < factions.length; i++){
+			$(".factionContentWrapper")
+			.append($("<div>")
+				.hide()
+				.addClass("factionWrapper" + i)
+				.append($("<div>")
+					.html(factions[i])
+					.addClass("factionName"))
+				.append($("<div>")
+					.addClass("factionContent")))
+
 		}
 	}
 
@@ -937,61 +872,49 @@ else header("Location: index.php");
 		window.shipCtx.restore();
 	}
 
-	function requestFactionData(ele, callback){
-		var ele = ele;
+	function requestFactionData(i, callback){
 		$.ajax({
 			type: "GET",
 			url: "getGameData.php",
 			datatype: "json",
 			data: {
 					type: "factiondata",
-					faction: factions[$(ele).data("faction")]
+					faction: factions[i],
 					},
-			ele: ele,
-			success: function(data){callback(data, this.ele)},
+			success: function(data){callback(i, data)},
 			error: ajax.error,
 		});
 	}
 
-	function requestShipsForFaction(ele, callback){
-		var ele = ele;
-		$.ajax({
-			type: "GET",
-			url: "getGameData.php",
-			datatype: "json",
-			data: {
-					type: "shiplist",
-					faction: factions[$(ele).data("faction")]
-					},
-			ele: ele,
-			success: function(data){callback(data, this.ele)},
-			error: ajax.error,
-		});
+	function showFactionData(i){
+		if (isset[i]){
+			var ele = $(".factionContentWrapper .factionWrapper" + i);
+			if (ele.is(":visible")){ele.hide(); return;}
+
+			$(".factionContentWrapper").children().each(function(){
+				$(this).hide();
+			})
+			ele.show();
+		}
+		else requestFactionData(i, buildUnitList);
 	}
 
-	function buildUnitList(data, ele){
+	function buildUnitList(i, data){
+		console.log("buildUnitList");
 		data = JSON.parse(data);
 
-		var t = $("#factionDiv").find("#" + $(ele).data("faction"))
-		$(ele).data("set", 1);
+		window.isset[i] = 1;
+		div = $(".factionContentWrapper .factionWrapper" + i + " .factionContent");
 
-		game.buildNotesList(data[0], t);
-		game.buildFactionUnitHeader(t);
-		game.buildShipList(data[1], t);
-		game.buildSquadList(data[2], t);
-		game.buildFighterList(data[3], t);
-		game.buildBallisticList(data[4], t);
+		game.buildNotesList(data[0], div);
+		game.buildFactionUnitHeader(div);
 
-		showFactionData(ele);
-	}
-
-	function showFactionData(ele){
-		$(ele).next().toggleClass("disabled");
-		//return;
-
-		var t = $(".factionUpperTable").position();
-		var h =  $(".factionUpperTable").height();
-		//$("#game").css("top", t.top+h+20);
+		var tbody = div.find("table tbody");
+		game.buildShipList(data[1], tbody);
+		game.buildSquadList(data[2], tbody);
+		game.buildFighterList(data[3], tbody);
+		game.buildBallisticList(data[4], tbody);
+		showFactionData(i);
 	}
 
 	function joinGame(){

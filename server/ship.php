@@ -146,6 +146,7 @@ class Ship {
 	
 	public function setUnitState($turn, $phase){
 		//Debug::log("ship setUnitState #".$this->id."/".$this->display);
+		//if ($this->id == 6){Debug::log("d: ".$this->getSystemByName("Sensor")->damages[0]->destroyed);}
 
 		$this->setBaseStats($turn, $phase);
 		$this->setStructureState($turn, $phase);
@@ -185,7 +186,6 @@ class Ship {
 		$this->setCrewUpgrades($turn);
 		$this->setMorale($turn, $phase);
 		$this->isDestroyed();
-
 		return true;
 	}
 
@@ -576,8 +576,8 @@ class Ship {
 		for ($i = 0; $i < sizeof($bridge->crits); $i++){
 			if ($bridge->crits[$i]->type == "Focus" || $bridge->crits[$i]->type == "Morale"){
 				if ($bridge->crits[$i]->duration == 0){
-					$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." -".$bridge->crits[$i]->value."%</span> effect.";
-				} else $bridge->crits[$i]->display = "Morale Check Fail: <span class='yellow'>".$bridge->crits[$i]->type." -".$bridge->crits[$i]->value."%</span> effect.";
+					$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." ".$bridge->crits[$i]->value."%</span> effect.";
+				} else $bridge->crits[$i]->display = "Morale Check Fail: <span class='yellow'>".$bridge->crits[$i]->type." ".$bridge->crits[$i]->value."%</span> effect.";
 
 				//$copy = clone $bridge->crits[$i];
 				//$copy->type = "Morale";
@@ -589,10 +589,10 @@ class Ship {
 				if ($this->primary->systems[$j]->name == $bridge->crits[$i]->type){
 					$copy = clone $bridge->crits[$i];
 					$copy->type = "Output";
-					$copy->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." -".$bridge->crits[$i]->value ."%</span> effect.";
+					$copy->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." ".$bridge->crits[$i]->value ."%</span> effect.";
 					$this->primary->systems[$j]->crits[] = $copy;
 
-					$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." -".$bridge->crits[$i]->value."%</span> effect.";
+					$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." ".$bridge->crits[$i]->value."%</span> effect.";
 					//$bridge->crits[$i]->type = "";
 					break;
 				}
@@ -602,11 +602,16 @@ class Ship {
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 			for ($j = 0; $j < sizeof($this->primary->systems[$i]->crits); $j++){
 				if ($this->primary->systems[$i]->crits[$j]->display != ""){continue;}
-				$this->primary->systems[$i]->crits[$j]->display = "<span class='yellow'>".$this->primary->systems[$i]->display." -".$this->primary->systems[$i]->crits[$j]->value."%</span> effect."; 
+				$this->primary->systems[$i]->crits[$j]->display = "<span class='yellow'>".$this->primary->systems[$i]->display." ".$this->primary->systems[$i]->crits[$j]->value."%</span> effect."; 
 			}
 		}
 
 		return true;
+	}
+
+	public function doDestroy(){
+		//Debug::log("doDestroy!");
+		$this->destroyed = 1;
 	}
 
 	public function addNewDamage($dmg){
@@ -618,8 +623,7 @@ class Ship {
 				if ($dmg->systemid == 1){
 					$this->primary->addDamage($dmg);
 					if ($this->primary->isDestroyed()){
-						//Debug::log("destroying unit #".$this->id);
-						$this->destroyed = 1;
+						$this->doDestroy();
 					}
 					return;
 				}
@@ -631,8 +635,7 @@ class Ship {
 									$this->structures[$i]->systems[$j]->addDamage($dmg);
 									$this->primary->addDamage($dmg);
 									if ($this->primary->isDestroyed()){
-										//Debug::log("destroying unit #".$this->id);
-										$this->destroyed = 1;
+										$this->doDestroy();
 									}
 									return;
 								}
@@ -645,8 +648,7 @@ class Ship {
 						$this->primary->systems[$j]->addDamage($dmg);
 						$this->primary->addDamage($dmg);
 						if ($this->primary->isDestroyed()){
-							//Debug::log("destroying unit #".$this->id);
-							$this->destroyed = 1;
+							$this->doDestroy();
 						}
 						return;
 					}
@@ -702,11 +704,10 @@ class Ship {
 	}
 
 	public function isDestroyed(){
-		//Debug::log("isDestroyed()".get_class($this));
+		//Debug::log("isDestroyed() ".get_class($this));
+		//Debug::trace();
 		$kill = 0;
-		if ($this->destroyed){
-			return true;
-		}
+		if ($this->destroyed){return true;}
 		if ($this->primary->isDestroyed()){
 			$kill = 1;
 		}
@@ -718,6 +719,7 @@ class Ship {
 		}
 
 		if ($kill){
+			//Debug::log("destroying");
 			$this->destroyed = 1;
 			$this->status = "destroyed";
 			return true;
@@ -737,8 +739,8 @@ class Ship {
 	}
 
 	public function resolveFireOrder($fire){ // target
-		if ($this->isDestroyed()){
-			Debug::log("STOP - resolveFireOrder #".$fire->id.", TARGET: ".get_class($this)." isDestroyed()");
+		if ($this->destroyed){
+			Debug::log("STOP - resolveFireOrder #".$fire->id.", TARGET: ".get_class($this)." destroyed");
 		}
 		else if ($fire->weapon->aoe){
 			Debug::log("resolveFireOrder AREA - #".$fire->id.", TARGET ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
@@ -1119,12 +1121,11 @@ class Ship {
 	}
 
 	public function doTestMorale($turn){
-		if ($this->destroyed){return;}
 
 		$new = round($this->getNewRelDmgPct($turn), 2);
 		//$old = $dmg["old"];
 		//$new = $dmg["new"];
-		Debug::log("doTestMorale ".get_class($this)." #".$this->id.", newRel: ".$new);
+		Debug::log("doTestMorale ".get_class($this).", remMorale: ".$this->morale->rem." #".$this->id.", newRel: ".$new);
 
 		if ($new < 0.15){return;}
 
@@ -1135,8 +1136,8 @@ class Ship {
 		$roll = mt_rand(0, 100);
 
 		if ($roll > $chance){
-			Debug::log("opening test SUCCESS, roll: ".$roll.", chance: ".$chance); $this->notes = ""; return;
-		} else Debug::log("opening test FAIL, roll: ".$roll.", chance: ".$chance);
+			Debug::log("  opening test SUCCESS, roll: ".$roll.", chance: ".$chance); $this->notes = ""; return;
+		} else Debug::log("  opening test FAIL, roll: ".$roll.", chance: ".$chance);
 
 		$roll = mt_rand(0, 100);
 		$magnitude = $roll + 100 - $this->morale->rem;

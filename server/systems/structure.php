@@ -148,7 +148,6 @@ class Primary {
 	public $systems = array();
 	public $damages = array();
 	public $remaining = 0;
-	public $newDmg = 0;
 	public $damaged = 0;
 	public $emDmg = 0;
 	public $system = false;
@@ -179,14 +178,17 @@ class Primary {
 		$this->remaining -= $dmg->overkill;
 
 		if ($dmg->new){
-			$this->newDmg += $dmg->overkill;
 			if ($dmg->systemid == 1){$this->emDmg += $dmg->emDmg;}
 		}
 
 		if ($this->remaining < 1){
+			//Debug::log("rem: ".$this->remaining, ", destroying!");
 			$this->destroyed = 1;
 			$dmg->overkill += $this->remaining;
 			$dmg->destroyed = 1;
+		}
+		if ($this->destroyed){
+			Debug::log("destroyed dmg #".$dmg->id.", adding to: ".$this->name);
 		}
 	}
 

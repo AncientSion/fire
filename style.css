@@ -201,6 +201,14 @@ table, th, tr, td {
 	color: #ff3d00;
 }
 
+.fleetBought {
+	position: absolute;
+	top: 5px;
+	left: 445px;
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
 #reinforce:hover {
 	background-color: white;
 	color: black;
@@ -467,20 +475,26 @@ table, th, tr, td {
 	font-size: 22px;
 }
 
-.factionSpecialHead {
-	padding-top: 10px;
-	padding-bottom: 15px;
+.factionContent div {
 	margin: auto;
-	width: 80%;
+	width: 95%;
+	text-align: center;
+}
+
+.factionContent th, .factionContent td {
+	border: none;
 }
 
 .factionSpecial {
 	border-bottom: 1px solid white;
-	margin-bottom: 5px;
+}
+.factionSpecial div:first-child {
+	margin-top: 10px;
 }
 
 .factionSpecial div:first-child {
 	font-size: 16px;
+	text-align: center;
 }
 
 .factionUpperTable {
@@ -564,7 +578,9 @@ table, th, tr, td {
 }
 
 .gameSetupStatus {
-	margin: 0 0 0 0;
+	position;: absolute;
+	top: 5px;
+	left: 5px;
 	border-collapse: collapse;
 	border: 1px solid white;
 	width: 405px;
@@ -1627,6 +1643,63 @@ input[type=button]:hover, input[type=submit]:hover {
 input[type=button].inactive:hover, input[type=submit].inactive:hover {
 	cursor: unset;
 	background-color: white;
+}
+
+.factionContent table {
+	margin: auto;
+	margin-top: 15px;
+	padding: 5px;
+	text-align: center;
+}
+
+.factionContent table {
+	border-collapse: collapse;
+}
+
+.factionContent table td input {
+	font-size: 12px;
+}
+
+#fleetChoice {
+	position: absolute;
+	top: 240px;
+	width: 405px;
+	border-radius: 5px;
+	border: 1px solid white;
+}
+
+.factionOption {
+	display: inline-block;
+	width: 25%;
+}
+
+.factionAvail {
+	width: 100%;
+	border-bottom: 1px solid white;
+}
+
+.factionContentWrapper {
+	width: 100%;
+}
+
+.factionWrapper {
+	width: 100%;
+	position: absolute;
+	top: 60;
+	left: 0;
+}
+
+.factionName {
+	font-size: 22px;
+	margin: auto;
+	text-align: center;
+	margin-top: 10px;
+}
+
+.factionOption img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 #factionDiv input[type=button] {

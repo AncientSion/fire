@@ -288,6 +288,7 @@ class System {
 		$this->damages[] = $dmg;
 		
 		if ($dmg->destroyed){
+			Debug::log("destroyed dmg #".$dmg->id.", adding to: ".$this->name);
 			$this->destroyed = true;
 		}
 	}

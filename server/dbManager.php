@@ -1164,7 +1164,7 @@
 			return;
 		}
 
-		public function updateMoraleResults($data){
+		public function updateUnitMoraleResults($data){
 			Debug::log(" => DB updateMoraleResults s: ".sizeof($data));
 			
 			$stmt = $this->connection->prepare("
@@ -1183,6 +1183,30 @@
 				$stmt->execute();
 
 				if ($stmt->errorCode() == 0){continue;}
+			}
+		}
+
+		public function insertFleetMoraleCrits($playerstatus){
+			Debug::log(" => DB insertFleetMoraleCrits");
+			
+			$stmt = $this->connection->prepare("
+				 INSERT into globals 
+				 VALUES (0, :playerstatusid, :turn, :type, :value)
+			");
+			
+			for ($i = 0; $i < sizeof($playerstatus); $i++){
+				for ($j = 0; $j < sizeof($playerstatus[$i]["globals"]); $j++){
+					if ($playerstatus[$i]["globals"][$j]["id"]){continue;}
+
+					$stmt->bindParam(":playerstatusid", $playerstatus[$i]["globals"][$j]["playerstatusid"]);
+					$stmt->bindParam(":turn", $playerstatus[$i]["globals"][$j]["turn"]);
+					$stmt->bindParam(":type", $playerstatus[$i]["globals"][$j]["type"]);
+					$stmt->bindParam(":value", $playerstatus[$i]["globals"][$j]["value"]);
+					Debug::log("writing new entry");
+					$stmt->execute();
+
+					if ($stmt->errorCode() == 0){continue;}
+				}
 			}
 		}
 
@@ -1722,7 +1746,7 @@
 			return true;
 		}
 
-		public function getPlayerStatus($gameid){
+		public function getDBPlayerStatus($gameid){
 			$stmt = $this->connection->prepare("
 				SELECT users.username, playerstatus.id, playerstatus.userid, playerstatus.gameid, playerstatus.turn, playerstatus.phase, playerstatus.faction, playerstatus.morale, playerstatus.value, playerstatus.maxFocus, playerstatus.gainFocus, playerstatus.curFocus, playerstatus.status FROM playerstatus
 				LEFT JOIN users 
