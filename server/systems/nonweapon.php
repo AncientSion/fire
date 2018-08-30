@@ -18,10 +18,6 @@ class PrimarySystem extends System {
 		return (min(15, round($relDmg*100/5) * 5)*-1);
 	}
 
-	public function getCritTresh(){
-		return 0.05;
-	}
-
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $output, $width);
 		$this->integrity = floor($integrity*0.85);

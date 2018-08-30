@@ -178,53 +178,20 @@ class Single {
 
 		return new RelDmg($new, $old, $this->integrity);
 	}
-
-	public function getCritTresh(){
-		return 0.15;
-	}
-
+	
 	public function determineCrit($dmg, $turn, $squad){
 		if ($this->destroyed){return;}
 		if (!$dmg->new){return;}
 
 		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old);
 
-		$effects = $this->critEffects;
+		$crit = DmgCalc::critProcedure($this->parentId, $this->id, $turn, 1-$new, $this->critEffects, ($dmg->new + $dmg->old)*100);
 
-		$newRelDmg = round($dmg->new/(1-$dmg->old), 2);
-		Debug::log("newRelDmg: ".$newRelDmg);
-
-		if ($newRelDmg < $this->getCritTresh()){return;}
-		$newRelDmg = 1-$newRelDmg;
-		$chance = round((1 - ($newRelDmg*$newRelDmg))*100);
-		$roll = mt_rand(0, 100);
-
-		if ($roll > $chance){return;}
-		//if ($roll > $chance){
-		//	Debug::log("SUCCESS, roll: ".$roll.", chance: ".$chance); return;
-		//} else Debug::log("FAIL, roll: ".$roll.", chance: ".$chance);
-
-		$roll = mt_rand(0, 100);
-		$magnitude = $roll + ($dmg->new + $dmg->old)*100;
-
-		Debug::log("roll: ".$roll.", total magnitude: ".$magnitude);
-
-		if ($magnitude < $effects[0][1]){return;}
-
-		for ($i = sizeof($effects)-1; $i >= 0; $i--){
-			if ($magnitude < $effects[$i][1]){continue;}
-			$value = $effects[$i][3];
-			//if (!$value){Debug::log("no value"); continue;}
-
-			Debug::log("crit: ".$effects[$i][0].", value: ".$value);
-			
-			$this->crits[] = new Crit(
-				sizeof($this->crits)+1, $this->parentId, $this->id, $turn,
-				$effects[$i][0], $effects[$i][2], $value, 1
-			);
+		if ($crit){
 			$this->destroyed = 1;
-			break;
+			$this->crits[] = $crit;
 		}
+		return;
 	}
 
 	public function doDropout($turn){

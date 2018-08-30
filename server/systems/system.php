@@ -236,7 +236,16 @@ class System {
 		if ($this->destroyed){return;}
 		if (!$dmg->new){return;}
 
-		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old);
+		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old.", Squad: ".$squad);
+
+		$crit = DmgCalc::critProcedure($this->parentId, $this->id, $turn, 1-$new, $this->critEffects, ($dmg->new + $dmg->old)*100);
+
+		if ($crit){
+			//$crit->value = $this->getCritModMax($crit->value);
+			$this->crits[] = $crit;
+		}
+		return;
+
 
 		$effects = $this->critEffects;
 
@@ -272,10 +281,6 @@ class System {
 			);
 			break;
 		}
-	}
-
-	public function getCritTresh(){
-		return 0.15;
 	}
 
 	public function getCritModMax($relDmg){

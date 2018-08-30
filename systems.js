@@ -1723,10 +1723,7 @@ Sensor.prototype.select = function(e){
 		this.setSystemBorder();
 	}
 	else {
-		unit = game.getUnit(parentId);
-		if (unit.hasWeaponsSelected()){
-			return;
-		} else if (!unit.friendly){return;}
+		if (game.getUnit(parentId).hasWeaponsSelected()){return;}
 		else {
 			this.selected = true;
 			game.sensorMode = 1;
@@ -3993,8 +3990,6 @@ Hangar.prototype.setMission = function(val){
 			$($(this).children()[1]).addClass("selected")
 		}
 	});
-
-	//this.triggerLaunchButton();
 }
 
 Hangar.prototype.getMission = function(){
@@ -4042,8 +4037,6 @@ Hangar.prototype.alterFlight = function(ele, max){
 			break;
 		}
 	}
-
-	this.triggerLaunchButton();
 }
 
 Hangar.prototype.addFighter = function(ele, all){

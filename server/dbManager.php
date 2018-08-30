@@ -509,9 +509,9 @@
 
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
-					(gameid, userid, ship, ball, name, display, moraleCost, status, available, destroyed)
+					(gameid, userid, ship, ball, name, display, totalCost, moraleCost, status, available, destroyed)
 				VALUES
-					(:gameid, :userid, :ship, :ball, :name, :display, :moraleCost, :status, :available, :destroyed)
+					(:gameid, :userid, :ship, :ball, :name, :display, :totalCost, :moraleCost, :status, :available, :destroyed)
 			");
 
 			$missions = array();
@@ -544,6 +544,7 @@
 				$stmt->bindParam(":ball", $ball);
 				$stmt->bindParam(":name", $units[$i]["name"]);
 				$stmt->bindParam(":display", $units[$i]["display"]);
+				$stmt->bindParam(":totalCost", $units[$i]["totalCost"]);
 				$stmt->bindParam(":moraleCost", $units[$i]["moraleCost"]);
 				$stmt->bindParam(":status", $status);
 				$stmt->bindValue(":available", (floor($units[$i]["turn"]) + floor($units[$i]["eta"])));
@@ -684,9 +685,9 @@
 			//Debug::log("insertReinforcements: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
-					(gameid, userid, ship, ball, name, display, moraleCost, status, available, destroyed, turn, phase, notes)
+					(gameid, userid, ship, ball, name, display, totalCost, moraleCost, status, available, destroyed, turn, phase, notes)
 				VALUES
-					(:gameid, :userid, :ship, :ball, :name, :display, :moraleCost, :status, :available, :destroyed, :turn, :phase, :notes)
+					(:gameid, :userid, :ship, :ball, :name, :display, :totalCost, :moraleCost, :status, :available, :destroyed, :turn, :phase, :notes)
 			");
 
 			$ship = 1;
@@ -706,6 +707,7 @@
 				$stmt->bindParam(":ball", $ball);
 				$stmt->bindParam(":name", $data[$i]["name"]);
 				$stmt->bindParam(":display", $display);
+				$stmt->bindParam(":totalCost", $data[$i]["totalCost"]);
 				$stmt->bindParam(":moraleCost", $data[$i]["moraleCost"]);
 				$stmt->bindParam(":status", $status);
 				$stmt->bindValue(":available", $data[$i]["eta"]);
@@ -1164,8 +1166,8 @@
 			return;
 		}
 
-		public function updateUnitMoraleResults($data){
-			Debug::log(" => DB updateMoraleResults s: ".sizeof($data));
+		public function updateUnitStatusNotes($data){
+			Debug::log(" => DB updateUnitStatusNotes s: ".sizeof($data));
 			
 			$stmt = $this->connection->prepare("
 				UPDATE units 

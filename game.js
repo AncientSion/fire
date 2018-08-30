@@ -240,7 +240,7 @@ function Game(data){
 		//var mission = {id: -1, unitid: -this.ships.length-20, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
 
 		var flight = new Flight(
-			{id: range(-0, -100), name: "Flight", mission: false, traverse: -3,
+			{id: range(-0, -100), name: "Flight", mission: false, traverse: 1,
 			x: o.x, y: o.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, curImp: 0, fSize: 15, baseSize: 25, unitSize: 4, userid: this.userid, available: this.turn}
 		);
 
@@ -318,20 +318,16 @@ function Game(data){
 
 	this.offsetFromFlight = function(){
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].flight){
-				if (this.ships[i].cc.length){continue;}
-				var aPos = this.ships[i].getDrawPos();
-				for (var j = i+1; j < this.ships.length; j++){
-					if (this.ships[j].flight){
-						if (this.ships[i].doDraw && this.ships[j].doDraw){
-							var bPos = this.ships[j].getDrawPos();
+			if (!this.ships[i].flight || this.ships[i].doDraw || !this.ships[i].cc.length){continue;}
+			var aPos = this.ships[i].getDrawPos();
 
-							if (aPos.x == bPos.x && aPos.y == bPos.y){
-								this.ships[i].doRandomOffset(1);
-								this.ships[j].doRandomOffset(-1);
-							}
-						}
-					}
+			for (var j = i+1; j < this.ships.length; j++){
+				if (!this.ships[j].flight && !this.ships[i].doDraw || !this.ships[j].doDraw){continue;}
+				var bPos = this.ships[j].getDrawPos();
+
+				if (aPos.x == bPos.x && aPos.y == bPos.y){
+					this.ships[i].doRandomOffset(1);
+					this.ships[j].doRandomOffset(-1);
 				}
 			}
 		}
@@ -339,18 +335,15 @@ function Game(data){
 
 	this.offsetFromShips = function(){
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].ship){
-				var aPos = this.ships[i].getDrawPos();
-				for (var j = i+1; j < this.ships.length; j++){
-					if (this.ships[j].flight){
-						if (this.ships[j].doDraw){
-							var bPos = this.ships[j].getDrawPos();
+			if (!this.ships[i].ship || !this.ships[i].doDraw){continue;}
+			var aPos = this.ships[i].getDrawPos();
 
-							if (aPos.x == bPos.x && aPos.y == bPos.y){
-								this.ships[j].doRandomOffset(0);
-							}
-						}
-					}
+			for (var j = 0; j < this.ships.length; j++){
+				if (!this.ships[j].flight || !this.ships[i].doDraw){continue;}
+				var bPos = this.ships[j].getDrawPos();
+
+				if (aPos.x == bPos.x && aPos.y == bPos.y){
+					this.ships[j].doRandomOffset(0);
 				}
 			}
 		}
@@ -384,7 +377,8 @@ function Game(data){
 					name: "Flight",
 					call: this.ships[i].call,
 					display: "",
-					value: 0,
+					totalCost: this.ships[i].getCost(),
+					moraleCost: this.ships[i].getCost(),
 					mission: this.ships[i].mission,
 					loadAdjust: this.ships[i].getLoadAdjustment(),
 					upgrades: this.ships[i].getLaunchData(),
@@ -1359,30 +1353,6 @@ function Game(data){
 				this.events.splice(i, 1);
 				game.redraw();
 				return;
-			}
-		}
-	}
-
-	this.setDrawOffset = function(){
-		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].flight){
-				var doOffset = 0;
-				var a = this.ships[i].getPlannedPos();
-
-				for (var j = 0; j < this.ships.length; j++){
-					if (this.ships[i].id == this.ships[j].id){continue;}
-					var b = this.ships[j].getPlannedPos();
-					if (a.x == b.x && a.y == b.y){
-						doOffset = 1;
-						//console.log (this.ships[i].id + " / " + this.ships[j].id);
-						for (var k = 0; k < this.ships[j].cc.length; k++){
-							if (this.ships[j].cc[k] == this.ships[i].id){
-								doOffset = 0; break;
-							}
-						}
-					}
-				}
-				if (doOffset){this.ships[i].doOffset();}
 			}
 		}
 	}
@@ -2692,7 +2662,7 @@ function Game(data){
 				)
 				.append($("<td>").html(this.reinforcements[i].name + "</br>" + this.reinforcements[i].notes))
 				.append($("<td>").html(this.reinforcements[i].available - this.turn))
-				.append($("<td>").addClass("cost").html(this.reinforcements[i].cost))
+				.append($("<td>").addClass("cost").html(this.reinforcements[i].totalCost))
 			)
 		}
 	}
@@ -2702,7 +2672,7 @@ function Game(data){
 		$("#leftUnitWrapper").find("#reinforceBody").find(".requestReinforcements").each(function(i){
 			$(this)
 			.data("id", game.reinforcements[i]["id"])
-			.data("cost", game.reinforcements[i]["cost"])
+			.data("totalCost", game.reinforcements[i]["totalCost"])
 			.click(function(e){
 				e.stopPropagation();
 				if (game.phase == -1){
@@ -2717,7 +2687,7 @@ function Game(data){
 						}
 						else if (!game.deploying){
 							var rem = game.getCurrentReinforceCost();
-							if (!$(this).hasClass("green") && Math.floor(game.reinforcePoints) >= $(this).data("cost") + rem){
+							if (!$(this).hasClass("green") && Math.floor(game.reinforcePoints) >= $(this).data("totalCost") + rem){
 								$(this).addClass("selected");
 								game.enableDeployment($(this).data("id"));
 							} else popup("You have insufficient Reinforce Points ("+(game.reinforcePoints - rem)+") available.");
@@ -2735,6 +2705,9 @@ function Game(data){
 				}
 			});
 		})
+
+		$("#totalRequestCost").html("(" + game.getRemainingReinforcePoints() + " points left)");
+
 	}
 
 
@@ -3171,7 +3144,7 @@ Game.prototype.getCurrentReinforceCost = function(){
 	var cost = 0;
 
 	$("#leftUnitWrapper").find("#reinforceBody").find(".green").each(function(i){
-		cost += $(this).data("cost");
+		cost += $(this).data("totalCost");
 	})
 
 	return Math.floor(cost);
@@ -3687,7 +3660,7 @@ Game.prototype.getPlayerStatus = function(){
 Game.prototype.addPlayerInfo = function(){	
 	var tr = $("<tr>");
 	for (let i = 0; i < this.playerstatus.length; i++){
-		tr.append($("<td>").css("width", "50%").css("font-size", 16).html(this.playerstatus[i].username))
+		tr.append($("<td>").css("width", "50%").css("font-size", 16).html(this.playerstatus[i].username).addClass((this.playerstatus[i].userid == game.userid) ? "green" : "red"))
 	}
 
 	$("#upperGUI").find(".playerInfo").find("thead").append(tr)
@@ -3906,6 +3879,7 @@ Game.prototype.create = function(data){
 
 	if (game.phase != 2){this.checkUnitOffsetting();}
 
+	this.extractPlayerStatusData();
 	this.addPlayerInfo();
 	this.addFleetMoraleInfo();
 	this.addFocusInfo();
@@ -3917,7 +3891,6 @@ Game.prototype.create = function(data){
 	this.initOptionsUI();
 	this.doPositionChat();
 	this.initEvents();
-	this.extractPlayerStatusData()
 	cam.setFocusToPos({x: 0, y: 0});
 	this.initPhase(this.phase);
 }

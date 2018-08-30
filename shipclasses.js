@@ -10,8 +10,10 @@ function Ship(data){
 	this.facing = data.facing || 0;
 	this.faction = data.faction;
 	this.mass = data.mass;
-	this.cost = data.cost;
 	this.profile = data.profile;
+	this.cost = data.cost;
+	this.totalCost = data.totalCost;
+	this.moraleCost = data.moraleCost;
 	this.stringHitChance = "";
 	this.size = data.size * 0.7;
 	this.userid = data.userid;
@@ -31,9 +33,6 @@ function Ship(data){
 	this.critEffects = data.critEffects;
 	this.cc = [];
 	this.index = 0;
-
-	this.totalCost = 0;
-	this.moraleCost = data.moraleCost;
 	this.upgrades = [];
 
 	this.slipAngle = data.slipAngle || 0;
@@ -1625,6 +1624,10 @@ Ship.prototype.createMoveEndEntry = function(){
 	this.attachLogEntry("<th colSpan=9><span>" + this.getLogTitleSpan() + " has completed a full roll.</span></th>")
 }
 
+Ship.prototype.getCost = function(){
+ 	return this.structures.map(x => x.cost).reduce((a, b) => a+b, 0);
+}
+
 Ship.prototype.animateSelfJumpIn = function(){
 	if (this.deployAnim[0] == this.deployAnim[1]){
 		this.deployed = 1;
@@ -2510,7 +2513,7 @@ Ship.prototype.addCommandDiv = function(shipDiv){
 				.attr("value", "Assign Fleet Command (+" + this.getFocusIfCommand() + " / turn)")
 				.hide()
 				.click(function(){
-					popup("Reallocation Fleet Command will set saved Focus Points to 0 at end of turn.</br>Please confirm your order.</br><input type='button' class='popupEntryConfirm' value='Confirm Transfer' onclick='game.getUnit(aUnit).setCommand()'>");
+					game.getUnit(aUnit).trySetCommand()
 				})
 			)
 			.append(
@@ -2546,12 +2549,17 @@ Ship.prototype.getUnitClass = function(){
 Ship.prototype.getUnitName = function(){
 	if (this.ship){return this.name;
 	} else return "Squadron";
-}	
+}
 
-Ship.prototype.setCommand = function(){
+Ship.prototype.trySetCommand = function(){
+	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace.");}
+	else {
+		popup("Reallocation Fleet Command will set saved Focus Points to 0 at end of turn.</br>Please confirm your order.</br><input type='button' class='popupEntryConfirm' value='Confirm Transfer' onclick='game.getUnit(aUnit).doSetCommand()'>");
+	}
+}
+
+Ship.prototype.doSetCommand = function(){
 	//console.log("setCommand");
-
-	if (this.destroyed || this.isJumpingOut()){return;}
 
 	for (var i = 0; i < game.ships.length; i++){
 		if (!game.ships[i].friendly || game.ships[i].flight || game.ships[i].salvo){continue;}
@@ -2596,7 +2604,7 @@ Ship.prototype.toggleFocus = function(){
 Ship.prototype.setUnitFocus = function(){
 	if (!this.friendly){return;}
 	if (game.phase != 3){popup("Focus can only be issued in Phase 3 - Damage Control"); return;}
-	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace, it cant be issued focus."); return;}
+	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace."); return;}
 	if (!this.canAffordFocus()){popup("You are lacking focus ressources for this action.</br>Have: " + game.getRemFocus() + "</br>Spending: " + game.getFocusSpending() + "</br>Need: " + this.getFocusCost()); return;}
 	if (!this.focus){
 		this.focus = 1;
@@ -3053,29 +3061,6 @@ Ship.prototype.addNoteEntry = function(val){
 	$(this.element).find(".notes")
 		.show()
 		.append($("<span>").html(val + "</br>"));
-}
-
-Ship.prototype.doOffset = function(){
-	if (this.ship || this.squad){return;}
-	if (!this.doDraw){return;}
-	//console.log("doOffset #" + this.id);
-	var o = this.getPlannedPos();
-	var t = this.getTarget();
-	var a = 0;
-	if (t){
-		a = addAngle(range(30, 45) * (1-(range(0, 1))), getAngleFromTo(o, this.getTarget().getPlannedPos()));
-	} else a = range(0, 360);
-	
-	var p = getPointInDir(Math.max(25, this.size/3), a, o.x, o.y);
-
-	this.drawX = p.x;
-	this.drawY = p.y;
-
-	for (var i = 0; i < this.cc.length; i++){
-		var s = game.getUnit(this.cc[i]);
-			s.drawX = p.x;
-			s.drawY = p.y;
-	}
 }
 
 Ship.prototype.doRandomOffset = function(shift){

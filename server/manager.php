@@ -33,6 +33,12 @@
 				"len" => 10,
 				"effect" => array(0 => 0.5, 1 => 0.5, 2 => 0.25),
 			),
+			"morale" => array(
+				array("Morale", 30, 0, -5.00),
+				array("Morale", 60, 0, -15.00),
+				array("Morale", 100, 0, -25.00),
+				array("Rout", 150, 0, 0.00)
+			),
 		);
 
 		function __construct($gameid = 0, $userid = 0){
@@ -84,6 +90,9 @@
 	public function getClientData(){
 		//Debug::log("getClientData");
 		//$this->testMorale(); return;
+		//$this->setPostFireFocusValues(); return;
+		$this->testFleetMorale();
+
 		if (!$this->settings || !$this->settings->turn){return false;}
 		
 		$data = array(
@@ -276,11 +285,12 @@
 					array(
 					"id" => -$possible[$i]["id"],
 					"userid" => $possible[$i]["userid"],
+					"display" => $possible[$i]["display"],
+					"totalCost" => $possible[$i]["totalCost"],
+					"moraleCost" => $possible[$i]["moraleCost"],
+					"status" => $possible[$i]["status"],
 					"command" => $possible[$i]["command"],
 					"available" => $this->turn + $possible[$i]["available"],
-					"display" => $possible[$i]["display"],
-					"status" => $possible[$i]["status"],
-					"cost" => $possible[$i]["value"],
 					"destroyed" => $possible[$i]["destroyed"],
 					"x" => $possible[$i]["x"],
 					"y" => $possible[$i]["y"],
@@ -480,6 +490,7 @@
 					if ($roll > $current){continue;}
 					$data = $entry[0]::getKit($faction);
 					$data["name"] = $entry[0];
+					$data["totalCost"] = $data["cost"];
 					$data["moraleCost"] = $data["cost"];
 					$data["notes"] = "";
 					$data["userid"] = $this->playerstatus[$i]["userid"];
@@ -505,20 +516,20 @@
 							if (isset($data["upgrades"][$j]["units"])){
 								foreach ($data["upgrades"][$j]["units"] as $entry){
 									//echo "name: ".$entry["name"].", value : ".$entry["name"]::$value.", amount: ".$entry["amount"]."</br>";
-									$data["cost"] += floor($entry["name"]::$value * $entry["amount"]);
+									$data["totalCost"] += floor($entry["name"]::$value * $entry["amount"]);
 								}
 							} else $data["upgrades"][$j]["units"] = array();
 							
 							foreach ($data["upgrades"][$j]["loads"] as $entry){
 								//echo "name: ".$entry["name"].", value : ".$entry["name"]::$value.", amount: ".$entry["amount"]."</br>";
-								$data["cost"] += floor($entry["name"]::$value * $entry["amount"]);
+								$data["totalCost"] += floor($entry["name"]::$value * $entry["amount"]);
 							}
 
 							break;
 						}
 					}
 
-					if (floor($data["cost"]) > floor($this->playerstatus[$i]["value"])){$add--; continue;}
+					if (floor($data["totalCost"]) > floor($this->playerstatus[$i]["value"])){$add--; continue;}
 
 
 					$picks[] = $data;
@@ -722,7 +733,7 @@
 				//$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "", "deployed", 0, 0, 0, 0, 0, 0, 0, 0, "");
 				$this->ships[] = new Salvo(
 					array(
-						"id" => $units[$i]["id"], "userid" => $units[$i]["userid"], "command" => 0, "available" => $this->turn, "display" => "", "value" => 0, "status" => "deployed",
+						"id" => $units[$i]["id"], "userid" => $units[$i]["userid"], "command" => 0, "available" => $this->turn, "display" => "", "totalCost" => 0, "moraleCost" => 0, "status" => "deployed",
 						"destroyed" => 0, "x" => 0, "y" => 0, "facing" => 270, "delay" => 0, "thrust" => 0, 
 						"rolling" => 0, "rolled" => 0, "flipped" => 0, "focus" => 0, "notes" => ""
 					)
@@ -967,6 +978,7 @@
 		$this->resolveBallisticFireOrders();
 		$this->testUnitCriticals();
 		$this->testUnitMorale();
+		$this->adjustFleetMorale();
 		$this->testFleetMorale();
 		$this->setPostFireFocusValues();
 
@@ -1444,8 +1456,8 @@
 		}
 	}
 
-	public function testFleetMorale(){
-		Debug::log("-----------------testFleetMorale--------------");
+	public function adjustFleetMorale(){
+		Debug::log("-----------------adjustFleetMorale--------------");
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			$full = $this->playerstatus[$i]["morale"];
 			Debug::log("max Morale: ".$full);
@@ -1468,6 +1480,38 @@
 					);
 				}
 			}
+		}
+	}
+
+	public function testFleetMorale(){
+		$this->turn = 1;
+		Debug::log("-----------------testFleetMorale--------------");
+		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			$old = 100;
+			$new = 100;
+			//echo ($this->playerstatus[$i]["globals"]."\n");
+			for ($j = 0; $j < sizeof($this->playerstatus[$i]["globals"]); $j++){
+				if ($this->playerstatus[$i]["globals"][$j]["turn"] < $this->turn){
+					$old += $this->playerstatus[$i]["globals"][$j]["value"];
+				}
+				else {
+					//$old += $this->playerstatus[$i]["globals"][$j]["value"];
+					$new += $this->playerstatus[$i]["globals"][$j]["value"];
+				}
+			}
+
+
+
+			$dif = ($old - $new) / $old;
+			Debug::log("player ".$i.", old: ".$old.", new: ".$new.", dif: ".$dif);
+			if (!$dif){continue;}
+
+
+			$crit = DmgCalc::critProcedure(0, 0, $this->turn, 1-$dif, $this->const["morale"], 0);
+
+
+
+
 		}
 	}
 
@@ -1567,7 +1611,7 @@
 			$commandRating = ($unit->baseFocusRate + $unit->modFocusRate);
 
 			$curFocus = $playerstatus["curFocus"];
-			$gainFocus = floor($baseGain / 10 * $commandRating / 100 * $output * ($unit->faction == "Minbari Federation" ? 1.3 : 0));
+			$gainFocus = floor($baseGain / 10 * $commandRating / 100 * $output * ($unit->faction == "Minbari Federation" ? 1.3 : 1));
 
 			Debug::log("basegain: ".$baseGain.", commandRating: ".$commandRating.", command: ".$unit->name.", output: ".$output.", gain: ".$gainFocus);
 		}
@@ -1590,7 +1634,7 @@
 		DBManager::app()->updateFireOrders($this->fires);
 		if (sizeof($newDmgs)){DBManager::app()->insertDamageEntries($newDmgs);}
 		if (sizeof($newCrits)){DBManager::app()->insertCritEntries($newCrits);}
-		if (sizeof($unitMorales)){DBManager::app()->updateUnitMoraleResults($unitMorales);}
+		if (sizeof($unitMorales)){DBManager::app()->updateUnitStatusNotes($unitMorales);}
 		DBManager::app()->insertFleetMoraleCrits($this->playerstatus);
 	}
 
@@ -1904,7 +1948,7 @@
 		if ($get["unit"] == "ship"){
 			$unit = new $get["name"](
 				array(
-					"id" => $get["purchases"], "userid" => 1, "command" => 0, "available" => 0, "display" => "", "status" => "", "moraleCost" => 0,
+					"id" => $get["purchases"], "userid" => 1, "command" => 0, "available" => 0, "display" => "", "status" => "", "totalCost" => 0,"moraleCost" => 0,
 					"destroyed" => 0, "x" => 0, "y" => 0, "facing" => 270, "delay" => 0, "thrust" => 0, 
 					"rolling" => 0, "rolled" => 0, "flipped" => 0, "focus" => 0, "notes" => ""
 				)

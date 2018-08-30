@@ -74,13 +74,14 @@ class Ship {
 	);
 
 	function __construct($data){
-		//Debug::log("constructing!");
+		//echo ("constructing!" .$data["id"]."\n");
 		if (!$data){return;}
 		$this->id = $data["id"];
 		$this->userid = $data["userid"];
 		$this->display = $data["display"];
-		$this->moraleCost = $data["moraleCost"];
 		$this->cost = static::$value;
+		$this->totalCost = $data["totalCost"];
+		$this->moraleCost = $data["moraleCost"];
 		$this->status = $data["status"];
 		$this->command = $data["command"];
 		$this->available = $data["available"];
@@ -1078,7 +1079,6 @@ class Ship {
 	}
 
 	public function doTestMorale($turn){
-
 		$new = round($this->getNewRelDmgPct($turn), 2);
 		//$old = $dmg["old"];
 		//$new = $dmg["new"];
@@ -1086,39 +1086,11 @@ class Ship {
 
 		if ($new < 0.15){return;}
 
-		$effects = $this->critEffects;
+		$crit = DmgCalc::critProcedure($this->id, 1, $turn, 1-$new, $this->critEffects, 100 - $this->morale->rem);
+		if (!$crit){return;}
 
-		$new = 1-$new;
-		$chance = round((1 - ($new*$new))*100);
-		$roll = mt_rand(0, 100);
-
-		if ($roll > $chance){
-			Debug::log("  opening test SUCCESS, roll: ".$roll.", chance: ".$chance); $this->notes = ""; return;
-		} else Debug::log("  opening test FAIL, roll: ".$roll.", chance: ".$chance);
-
-		$roll = mt_rand(0, 100);
-		$magnitude = $roll + 100 - $this->morale->rem;
-
-		Debug::log("roll: ".$roll.", total magnitude: ".$magnitude);
-		//$this->notes = "m".$roll.";"
-		$this->notes = "--R: ".$roll.", tMag: ".$magnitude."--";
-
-		if ($magnitude  < $effects[0][1]){return;}
-
-		for ($i = sizeof($effects)-1; $i >= 0; $i--){
-			if ($magnitude < $effects[$i][1]){continue;}
-
-			Debug::log("magnitude roll: ".$roll.", total magnitude: ".$magnitude.", crit: ".$effects[$i][0]."/".$effects[$i][3]);
-			if ($i == sizeof($effects)-1){$this->status = "jumpOut";}
-			else {
-				$command = $this->getSystemByName("Command");
-				$command->crits[] = new Crit(
-					0, $this->id, $command->id, $turn,
-					$effects[$i][0], $effects[$i][2], $effects[$i][3], 1
-				);
-			}
-			return;
-		}
+		if ($crit->type == "Rout"){$this->status = "jumpOut";}
+		else $this->getSystemByName("Command")->crits[] = $crit;
 	}
 
 	public function addSystem($obj){
