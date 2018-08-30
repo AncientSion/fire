@@ -22,14 +22,12 @@ class Morale {
 class RelDmg {
 	public $new = 0.00;
 	public $old = 0.00;
-	public $rawNew = 0;
-	public $rawOld = 0;
+	public $rel = 0.00;
 
-	function __construct($new, $old, $integrity){ // 60, 132, 250
-		$this->new = round($new / $integrity, 2); // 60*1,5 / 250    0,36
-		$this->old = round($old / $integrity, 2); // 132* / 250     0,52
-		$this->rawNew = $new;
-		$this->rawOld = $old;
+	function __construct($new, $old, $integrity){//331 30, 0, 90
+		$this->new = round($new / $integrity, 2); // 60  - 0.25
+		$this->old = round($old / $integrity, 2); // 120 - 0.50
+		$this->rel = round($new / ($integrity-$old), 2); // rem 0.25
 	}
 }
 

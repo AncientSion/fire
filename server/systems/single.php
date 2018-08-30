@@ -33,7 +33,7 @@ class Single {
 	public $system = false;
 	
 	public $critEffects =  array( // type, mag, dura, effect
-		array("Disabled", 130, 0, 0.00),
+		array("Disabled", 120, 0, 0.00),
 	);
 
 	function __construct($id, $parentId){
@@ -166,8 +166,8 @@ class Single {
 		return $this->negation;
 	}
 
-	public function getCritDamages($turn){
-		//Debug::log("getCritDamages ".get_class($this)." #".$this->id);
+	public function getRelDmg($turn){
+		//Debug::log("getRelDmg ".get_class($this)." #".$this->id);
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->turn == $turn){
@@ -181,11 +181,11 @@ class Single {
 	
 	public function determineCrit($dmg, $turn, $squad){
 		if ($this->destroyed){return;}
-		if (!$dmg->new){return;}
+		if (!$dmg->rel){return;}
 
-		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old);
+		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old.", rel: ".$dmg->rel.", Squad: ".$squad);
 
-		$crit = DmgCalc::critProcedure($this->parentId, $this->id, $turn, 1-$new, $this->critEffects, ($dmg->new + $dmg->old)*100);
+		$crit = DmgCalc::critProcedure($this->parentId, $this->id, $turn, $dmg->rel, $this->critEffects, ($dmg->new + $dmg->old)*100);
 
 		if ($crit){
 			$this->destroyed = 1;

@@ -27,8 +27,7 @@ class Squadron extends Ship {
 		Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
-			$dmg = $this->structures[$i]->getCritDamages($turn);
-			Debug::log($this->structures[$i]->name ." #".$this->structures[$i]->id.", rawNew: ".$dmg->rawNew.", rawOld: ".$dmg->rawOld);
+			$dmg = $this->structures[$i]->getRelDmg($turn);
 			if (!$dmg->new){continue;}
 			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
 				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){
@@ -85,12 +84,14 @@ class Squadron extends Ship {
 	 }
 
 
-	public function getNewRelDmgPct($turn){
-		$rem = 0;
+	public function getRelDmg($turn){
+		$max = 0;
 		$new = 0;
+		$rem = 0;
 
 		if (sizeof($this->structures)){
 			for ($i = 0; $i < sizeof($this->structures); $i++){
+				$max += $this->structures[$i]->integrity;
 				$rem += $this->structures[$i]->remaining;
 				for ($j = 0; $j < sizeof($this->structures[$i]->damages); $j++){
 					if ($this->structures[$i]->damages[$j]->turn == $turn){
@@ -100,8 +101,8 @@ class Squadron extends Ship {
 			}
 		}
 
-		if (!$new){return 0;}
-		return 1 - ($rem / ($rem + $new));
+		return new RelDmg($new, $max-$rem-$new, $max);
+;
 	}
 
 

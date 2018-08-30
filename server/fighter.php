@@ -85,7 +85,7 @@ class Sentri extends Fighter {
 	public $integrity = 24;
 	public $negation = 5;
 	public $baseImpulse = 110;
-	public $baseHitChance = 22;
+	public $baseHitChance = 122;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

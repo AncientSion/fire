@@ -3,27 +3,32 @@
 class DmgCalc {
 
 	static function critProcedure($targetid, $systemid, $turn, $new, $effects, $magAdd){
-		Debug::log("critProcedure $targetid, $systemid, $turn, $new, $magAdd");
-		$chance = round((1 - ($new*$new))*100);
+		//Debug::log("critProcedure $targetid, $systemid, $turn, $new, $magAdd");
+		$chance = round((1-((1-$new)*(1-$new)))*100);
 		$roll = mt_rand(0, 100);
 
 		if ($roll > $chance){
-			Debug::log("  opening test SUCCESS, roll: ".$roll.", chance: ".$chance); return;
-		} else Debug::log("  opening test FAIL, roll: ".$roll.", chance: ".$chance);
+			Debug::log("___opening test SUCCESS, roll: ".$roll.", chance: ".$chance); return;
+		} else Debug::log("___opening test FAIL, roll: ".$roll.", chance: ".$chance);
 
 		$roll = mt_rand(0, 100);
 		$magnitude = $roll + $magAdd;
 
+
+		Debug::log("magRoll $roll, modifier $magAdd, total $magnitude");
 		if ($magnitude  < $effects[0][1]){return;}
 
 		for ($i = sizeof($effects)-1; $i >= 0; $i--){
 			if ($magnitude < $effects[$i][1]){continue;}
 
-			Debug::log("magnitude roll: ".$roll.", total magnitude: ".$magnitude.", crit: ".$effects[$i][0]."/".$effects[$i][3]);
+	
+				//($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
+			Debug::log($effects[$i][0]);
 			return 
 				new Crit(
-					0, $targetid, $system, $turn,
-					$effects[$i][0], $effects[$i][2], $effects[$i][3], 1
+					0, $targetid, $systemid, $turn,
+					$effects[$i][0], $effects[$i][2], $effects[$i][3],
+					1
 				);
 		}
 		return false;

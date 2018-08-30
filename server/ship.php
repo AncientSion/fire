@@ -1074,19 +1074,17 @@ class Ship {
 		return $locs[mt_rand(0, sizeof($locs)-1)];
 	}
 
-	public function getNewRelDmgPct($turn){
-		return 1 - ($this->primary->remaining / ($this->primary->remaining + $this->primary->newDmg));
+	public function getRelDmg($turn){ // 100 new, 800 total, 400 cur
+		return new RelDmg($this->primary->newDmg, $this->primary->integrity-$this->primary->remaining-$this->primary->newDmg, $this->primary->integrity);
 	}
 
 	public function doTestMorale($turn){
-		$new = round($this->getNewRelDmgPct($turn), 2);
-		//$old = $dmg["old"];
-		//$new = $dmg["new"];
-		Debug::log("doTestMorale ".get_class($this)."# ".$this->id." remMorale: ".$this->morale->rem." #".$this->id.", newRel: ".$new);
+		$dmg = $this->getRelDmg($turn);
+		Debug::log("doTestMorale ".get_class($this)."# ".$this->id." remMorale: ".$this->morale->rem." #".$this->id.", newRel: ".$dmg->rel);
 
-		if ($new < 0.15){return;}
+		if ($dmg->rel < 0.15){return;}
 
-		$crit = DmgCalc::critProcedure($this->id, 1, $turn, 1-$new, $this->critEffects, 100 - $this->morale->rem);
+		$crit = DmgCalc::critProcedure($this->id, 1, $turn, $dmg->rel, $this->critEffects, 100 - $this->morale->rem);
 		if (!$crit){return;}
 
 		if ($crit->type == "Rout"){$this->status = "jumpOut";}
@@ -1295,7 +1293,7 @@ class Ship {
 
 			for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 				if ($this->primary->systems[$i]->destroyed){continue;}
-				$dmg = $this->primary->systems[$i]->getCritDamages($turn);
+				$dmg = $this->primary->systems[$i]->getRelDmg($turn);
 				if ($dmg->new){$this->primary->systems[$i]->determineCrit($dmg, $turn, 0);}
 			}
 
@@ -1303,7 +1301,7 @@ class Ship {
 			for ($i = 0; $i < sizeof($this->structures); $i++){
 				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 					if (!$this->structures[$i]->systems[$j]->destroyed){
-						$dmg = $this->structures[$i]->systems[$j]->getCritDamages($turn);
+						$dmg = $this->structures[$i]->systems[$j]->getRelDmg($turn);
 						if ($dmg->new){$this->structures[$i]->systems[$j]->determineCrit($dmg, $turn, 0);}
 					}
 					else if ($this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){

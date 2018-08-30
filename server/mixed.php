@@ -81,7 +81,7 @@ class Mixed extends Ship {
 		if ($this->salvo && $this->mission->arrived){return;}
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
-			$dmg = $this->structures[$i]->getCritDamages($turn);
+			$dmg = $this->structures[$i]->getRelDmg($turn);
 			if ($dmg->new){$this->structures[$i]->determineCrit($dmg, $turn, 0);}
 		}
 	}

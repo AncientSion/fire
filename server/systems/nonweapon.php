@@ -105,11 +105,11 @@ class Command extends PrimarySystem {
 		}
 	}
 
-	public function determineCrit($dmg, $turn, $squad){
+	public function determineCrit($rel, $turn, $squad){
 		if ($this->destroyed){return;}
-		if ($dmg->new <= 0.05){return;}
+		if ($rel->relNew <= 0.05){return;}
 
-		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old);
+		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$rel->new.", old: ".$rel->old.", rel: ".$rel->relNew.", Squad: ".$squad);
 
 
         $options = array("Morale", "Focus", "Engine", "Sensor", "Reactor");
@@ -160,7 +160,7 @@ class Reactor extends PrimarySystem {
 
 			$modifier = round($overload / $this->output * 100, 2);
 			if (!$modifier){return;}
-			Debug::log("POTENTIAL: ".$all.", output: ".$this->output.", result: ".$overload." units, value: ".$modifier."%");
+			Debug::log("POTENTIAL: ".$all.", output: ".$this->output.", result: ".$overload." overload, value: ".$modifier."%");
 
 			$this->crits[] = new Crit(sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Overload", 0, -$modifier, 1);
 		}
@@ -305,7 +305,7 @@ class Bulkhead extends System {
 		return $this->integrity*4;
 	}
 
-	public function determineCrit($dmg, $turn, $squad){
+	public function determineCrit($rel, $turn, $squad){
 		return;
 	}
 }

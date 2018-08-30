@@ -91,7 +91,7 @@
 		//Debug::log("getClientData");
 		//$this->testMorale(); return;
 		//$this->setPostFireFocusValues(); return;
-		$this->testFleetMorale();
+		//$this->testFleetMorale();
 
 		if (!$this->settings || !$this->settings->turn){return false;}
 		
@@ -1442,7 +1442,7 @@
 		Debug::log("----------------testUnitCriticals---------------");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			//Debug::log($this->ships[$i]->name.", destroyed: ".$this->ships[$i]->destroyed);
-			if ($this->ships[$i]->destroyed){continue;}
+			if ($this->ships[$i]->destroyed || $this->ships[$i]->available > $this->turn){continue;}
 			$this->ships[$i]->doTestCrits($this->turn);
 		}
 	}
@@ -1450,7 +1450,7 @@
 	public function testUnitMorale(){
 		Debug::log("----------------testUnitMorale-------------------");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->destroyed){continue;}
+			if ($this->ships[$i]->destroyed || $this->ships[$i]->available > $this->turn){continue;}
 			$this->ships[$i]->setMorale($this->turn, $this->phase);
 			$this->ships[$i]->doTestMorale($this->turn);
 		}
@@ -1463,12 +1463,13 @@
 			Debug::log("max Morale: ".$full);
 
 			for ($j = 0; $j < sizeof($this->ships); $j++){
-				if ($this->ships[$j]->flight || $this->ships[$j]->salvo){continue;}
+				if ($this->ships[$j]->flight || $this->ships[$j]->salvo || $this->ships[$j]->available > $this->turn){continue;}
 				if ($this->ships[$j]->userid != $this->playerstatus[$i]["userid"]){continue;}
-				if ($this->ships[$j]->destroyed || $this->ships[$j]->status == "jumpOut"){
 
+
+				if ($this->ships[$j]->destroyed || $this->ships[$j]->status == "jumpOut"){
 					$value = ceil($this->ships[$j]->moraleCost / $full *100);
-					Debug::log("unit #".$this->ships[$i]->id.", moraleCost: ".$this->ships[$i]->moraleCost.", value: ".$value);
+					Debug::log("unit #".$this->ships[$j]->id.", moraleCost: ".$this->ships[$j]->moraleCost.", value: ".$value);
 
 					$this->playerstatus[$i]["globals"][] = array(
 						"id" => 0,
@@ -1484,7 +1485,7 @@
 	}
 
 	public function testFleetMorale(){
-		$this->turn = 1;
+		//this->turn = 1;
 		Debug::log("-----------------testFleetMorale--------------");
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			$old = 100;
@@ -1570,14 +1571,14 @@
 
 	public function handleCommandTransfer(){
 		//Debug::log("handleCommandTransfer");	
-		//$data = array();
+		$data = array();
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			for ($j = 0; $j < sizeof($this->ships); $j++){
 				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
 				if ($this->ships[$j]->command != $this->turn){continue;}
 
-				//$data[] = $this->getNewFocusValue($this->playerstatus[$i], $this->ships[$j]);
+				$data[] = $this->getNewFocusValue($this->playerstatus[$i], $this->ships[$j]);
 
 				$this->playerstatus[$i]["curFocus"] = $data[sizeof($data)-1]["curFocus"];
 				$this->playerstatus[$i]["gainFocus"] = $data[sizeof($data)-1]["gainFocus"];
