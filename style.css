@@ -1502,29 +1502,20 @@ tr.rowBorderBottom {
 	display: none;
 }
 
-.fleetMorale:first-child {
-	float: left;
-	margin-ridght: 5px;
-}
-
-.fleetMorale:last-child {
-	float: right;
-	margin-lefdt: 5px;
-}
-
 .fleetMorale {
 	display: inline-block;
-	width: 45%;
 	height: 15px;
+	margin-top: 5px;
+	margin-bottom: 10px;
 }
 
 .fleetMoraleInt {
 	margin: auto;
 	color: white;
-	font-size: 12px;
+	font-size: 14px;
 	z-index: 10;
 	position: relative;
-	top: -30px;
+	top: -31px;
 }
 
 .fleetMoraleMax {
@@ -1582,14 +1573,40 @@ tr.rowBorderBottom {
 	background-color: white;
 }
 
-.overview, .playerInfo {
+.overview {
 	border-collapse: collapse;
 	width: 100%;
 	color: white;
 }
 
-.overview th, .playerInfo th {
+.overview th {
 	font-size: 15px;
+}
+
+.playerInfoWrapper {
+	width: 100%;
+	display: inline-block;
+}
+
+.playerInfo div {
+	text-align: center;
+	width: 100%;
+}
+
+.playerInfo div:first-child {
+	font-size: 16px;
+}
+
+.playerInfo {
+	width: 48%;
+}
+
+.playerInfo:first-child {
+	float: left;
+}
+
+.playerInfo:last-child {
+	float: right;
 }
 
 .overview td {

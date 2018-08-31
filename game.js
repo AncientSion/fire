@@ -3573,14 +3573,28 @@ Game.prototype.showFleetMorale = function(e, userid){
 		.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 10))))
 	.append($("<tr>")
 		.append($("<td>").html("Remaining Morale"))
-		.append($("<td>").html(100 + this.playerstatus[i].globals.map(x => x.value).reduce((l,r) => l+r, 0))))
+		.append($("<td>").addClass("yellow").html(100 + this.playerstatus[i].globals.map(x => x.value).reduce((l,r) => l+r, 0))))
+	.append($("<tr>")
+		.append($("<td>").attr("colSpan", 2).css("height", 12)))
+	.append($("<tr>")
+		.append($("<td>").html("<span class='yellow'>Morale Test triggered upon unit loss.</br>Rolls D100, subtracts morale.</span>")))
+	.append($("<tr>")
+		.append($("<td>").attr("colSpan", 2).css("height", 6)))
 
-
-	$(document.body)
-	.append(
-		$("<div>").attr("id", "sysDiv")
+	var div = $("<div>").attr("id", "sysDiv")
 		.css("top", e.clientY + 30).css("left", e.clientX - 50)
-		.append(table))
+		.append(table);
+
+
+
+
+	for (var i = 0; i < this.const.morale.length; i++){
+			div.find("table")			
+			.append($("<tr>")
+				.append($("<td>").html(">= " + this.const.morale[i][1]))
+				.append($("<td>").html(this.const.morale[i][0] + " " + (this.const.morale[i][3] ? this.const.morale[i][3] : ""))))
+		}
+	$(document.body).append(div);
 }
 
 Game.prototype.hideFleetMorale = function(){
@@ -3657,88 +3671,30 @@ Game.prototype.getPlayerStatus = function(){
 	return false;
 }
 
-Game.prototype.addPlayerInfo = function(){	
-	var tr = $("<tr>");
-	for (let i = 0; i < this.playerstatus.length; i++){
-		tr.append($("<td>").css("width", "50%").css("font-size", 16).html(this.playerstatus[i].username).addClass((this.playerstatus[i].userid == game.userid) ? "green" : "red"))
-	}
-
-	$("#upperGUI").find(".playerInfo").find("thead").append(tr)
-}
-
-Game.prototype.addFleetMoraleInfo = function(){
-
-	var td = $("<td>").attr("colSpan", 3).addClass("fleetMoraleDiv");
-
+Game.prototype.addPlayerInfo = function(){
 	for (let i = 0; i < this.playerstatus.length; i++){
 		var start = this.playerstatus[i].morale;
 			start = 100;
 		var reduce = this.playerstatus[i].globals.map(x => x.value).reduce((l,r) => l+r, 0)
 		var rem = (reduce ? (start + reduce)/start*100 : 100);
 
-		// 1230
 
-		//console.log(rem);
-		td.append($("<div>")
-			.addClass("fleetMorale")
-			.data("userid", this.playerstatus[i].userid)
-			.append($("<div>").addClass("fleetMoraleMax").data("userid", this.playerstatus[i].userid))
-			.append($("<div>").addClass("fleetMoraleNow").css("width", rem + "%"))
-			.append($("<div>").addClass("fleetMoraleInt").html(round(start + reduce)))
-			.hover(
-				function(e){game.showFleetMorale(e, $(this).data("userid"))},
-				function(){game.hideFleetMorale()}
-			)
-		)
-	}
+		var div = $("<div>").addClass("playerInfo");
+			div.append($("<div>").html(this.playerstatus[i].username).addClass((this.playerstatus[i].userid == game.userid) ? "green" : "red")) //header
+			div.append($("<div>") // morale
+				.addClass("fleetMorale")
+				.data("userid", this.playerstatus[i].userid)
+				//.append($("<div>").addClass("fleetMoraleMax").data("userid", this.playerstatus[i].userid))
+				//.append($("<div>").addClass("fleetMoraleNow").css("width", rem + "%"))
+				//.append($("<div>").addClass("fleetMoraleInt").html(round(start + reduce)))
+				.append($("<div>").addClass("fleetMoraleInta").html(round(start + reduce)))
+				.hover(
+					function(e){game.showFleetMorale(e, $(this).data("userid"))},
+					function(){game.hideFleetMorale()}
+				)
+			)			
 
-	$("#upperGUI").find(".playerInfo").find("tbody")
-		.append($("<tr>").append(td));
-	this.setFocusInfo()
-}
-
-Game.prototype.addFocusInfo = function(){
-
-	var tr = $("<tr>");
-
-	for (var i = 0; i < this.playerstatus.length; i++){
-		tr
-		.append($("<td>")
-			.addClass("focusInfo" + this.playerstatus[i].id))
-	}
-
-	$("#upperGUI").find(".playerInfo").find("tbody")
-		.append($("<tr>").append($("<td>").css("height", 6).attr("colSpan", 2)))
-		.append(tr);
-
-	this.setFocusInfo()
-}
-
-Game.prototype.addFocusInfo2 = function(){
-	var tBody = $("#upperGUI").find(".playerInfo").find("tbody");
-		tBody
-			.append($("<tr>")
-				.append($("<td>")
-					.css("height", 10)
-					.attr("colSpan", 3)))
-			.append($("<tr>")
-				.append($("<th>")
-					.attr("colSpan", 3)
-					.html("Focus Overview")))
-	
-	for (var i = 0; i < this.playerstatus.length; i++){
-		var string = "<span class='";
-		if (this.playerstatus[i].userid == this.userid){
-			string += "green'";
-		} else string += "red'";
-		string += ">" + this.playerstatus[i].username + "</span>";
-
-		tBody.append($("<tr>")
-			.append($("<th>")
-				.html(string))
-			.append($("<td>")
-				.attr("colSpan", 2)
-				.addClass("focusInfo" + this.playerstatus[i].id)))
+			$(".playerInfoWrapper").append(div.append($("<div>").addClass("focusInfo" + this.playerstatus[i].id)));
 	}
 
 	this.setFocusInfo()
@@ -3881,8 +3837,6 @@ Game.prototype.create = function(data){
 
 	this.extractPlayerStatusData();
 	this.addPlayerInfo();
-	this.addFleetMoraleInfo();
-	this.addFocusInfo();
 	this.initIncomingTable();
 	this.createReinforcementsTable();
 	this.initReinforceTable();

@@ -24,11 +24,11 @@ class Squadron extends Ship {
 	}
 
 	public function doTestCrits($turn){
-		Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
 			$dmg = $this->structures[$i]->getRelDmg($turn);
 			if (!$dmg->new){continue;}
+			Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn." --- ".$this->structures[$i]->name." ".$i);
 			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
 				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){
 					$this->structures[$i]->structures[$j]->systems[$k]->determineCrit($dmg, $turn, 1);
@@ -59,12 +59,9 @@ class Squadron extends Ship {
 		}
 	}
 
-	public function doTestMoralea($turn){
-		return;
-	}
-
 	public function setMorale($turn){
-		$val = 100;
+		//Debug::log("setMorale ".$this->id);
+		$dmg = 100;
 		if (sizeof($this->structures)){
 			$integrity = 0;
 			$remaining = 0;
@@ -75,12 +72,14 @@ class Squadron extends Ship {
 				if ($this->structures[$i]->isDestroyed()){continue;}
 				$remaining += max(0, $this->structures[$i]->remaining);
 			}
-			$val = ($integrity - $remaining) / $integrity * -100;
+			$dmg = ($integrity - $remaining) / $integrity * -100;
 		}
 
-		$this->morale = new Morale($this->getBaseMorale(), $val, $this->command, 0, 0);
 
-		//Debug::log("Morale #".$this->id.": ".$this->morale->damage."/".$this->morale->cmd."/".$this->morale->crew."/".$this->morale->crit.", rem: ".$this->morale->rem.", effChance: ".$this->morale->effChance);
+		$training = $this->getSystemByName("Command")->getCrewLevel() * $this->getSystemByName("Command")->getCrewEffect();
+
+		$this->morale = new Morale($this->getBaseMorale(), $dmg, $this->command, $training, 0);
+		//var_export($this->morale);
 	 }
 
 
@@ -100,6 +99,8 @@ class Squadron extends Ship {
 				}
 			}
 		}
+
+		//Debug::log("Squadron getRelDmg $rem/$max new: $new");
 
 		return new RelDmg($new, $max-$rem-$new, $max);
 ;

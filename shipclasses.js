@@ -2228,8 +2228,7 @@ Ship.prototype.getCurMorale = function(){
 }
 
 Ship.prototype.showMoraleDiv = function(e){
-	$(document.body)
-	.append($("<div>")
+	var div = $("<div>")
 		.css("left", e.clientX - 90)
 		.css("top", e.clientY + 40)
 		.attr("id", "sysDiv")
@@ -2259,25 +2258,22 @@ Ship.prototype.showMoraleDiv = function(e){
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 12)))
 			.append($("<tr>")
-				.append($("<td>").attr("colSpan", 2).html("Morale Test if received >= 15 % damage.</br>Rolls D100, subtracts morale.")))
+				.append($("<td>").attr("colSpan", 2).html("Morale test triggered upon receiving >= 15 % damage.</br>Rolls D100, subtracts morale.")))
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
 			.append($("<tr>")
-				.append($("<th>").attr("colSpan", 2).html("Possible Effects")))
+				.append($("<th>").attr("colSpan", 2).html("Possible Effects"))))
+
+
+		for (var i = 0; i < this.critEffects.length; i++){
+			div.find("table")			
 			.append($("<tr>")
-				.append($("<td>").html(">= " + this.critEffects[0][1]))
-				.append($("<td>").html(this.critEffects[0][0] + " " + this.critEffects[0][3])))
-			.append($("<tr>")
-				.append($("<td>").html(">= " + this.critEffects[1][1]))
-				.append($("<td>").html(this.critEffects[1][0] + " " + this.critEffects[1][3])))
-			.append($("<tr>")
-				.append($("<td>").html(">= " + this.critEffects[2][1]))
-				.append($("<td>").html(this.critEffects[2][0] + " " + this.critEffects[2][3])))
-			.append($("<tr>")
-				.append($("<td>").html(">= " + this.critEffects[3][1]))
-				.append($("<td>").html(this.critEffects[3][0])))
-		)
-	)
+				.append($("<td>").html(">= " + this.critEffects[i][1]))
+				.append($("<td>").html(this.critEffects[i][0] + " " + (this.critEffects[i][3] ? this.critEffects[i][3] : ""))))
+		}
+
+	$(document.body).append(div);
+
 }
 
 Ship.prototype.hideMoraleDiv = function(){

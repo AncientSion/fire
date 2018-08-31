@@ -1486,33 +1486,45 @@
 
 	public function testFleetMorale(){
 		//this->turn = 1;
-		Debug::log("-----------------testFleetMorale--------------");
-		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-			$old = 100;
-			$new = 100;
-			//echo ($this->playerstatus[$i]["globals"]."\n");
-			for ($j = 0; $j < sizeof($this->playerstatus[$i]["globals"]); $j++){
-				if ($this->playerstatus[$i]["globals"][$j]["turn"] < $this->turn){
-					$old += $this->playerstatus[$i]["globals"][$j]["value"];
+
+		$do = 5;
+
+		while ($do){
+			Debug::log("-----------------testFleetMorale--------------");
+			$do--;
+			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+				$max = 100;
+				$old = 0;
+				$new = 0;
+				//echo ($this->playerstatus[$i]["globals"]."\n");
+				for ($j = 0; $j < sizeof($this->playerstatus[$i]["globals"]); $j++){
+					if ($this->playerstatus[$i]["globals"][$j]["turn"] < $this->turn){
+						$old -= $this->playerstatus[$i]["globals"][$j]["value"];
+					}
+					else {
+						//$old += $this->playerstatus[$i]["globals"][$j]["value"];
+						$new -= $this->playerstatus[$i]["globals"][$j]["value"];
+					}
 				}
-				else {
-					//$old += $this->playerstatus[$i]["globals"][$j]["value"];
-					$new += $this->playerstatus[$i]["globals"][$j]["value"];
+
+
+
+				$dif = round($new / ($max-$old), 2);
+				//Debug::log("player ".$i.", old: ".$old.", new: ".$new.", dif: ".$dif);
+				if (!$dif){continue;}
+
+				$crit = DmgCalc::critProcedure(0, 0, $this->turn, $dif, $this->const["morale"], $old+$new);
+				if ($crit){
+					$this->playerstatus[$i]["globals"][] = array(
+						"id" => 0,
+						"playerstatusid" => $this->playerstatus[$i]["id"],
+						"turn" => $crit->turn,
+						"type" => $crit->type,
+						"value" => $crit->value,
+						"notes" => "Morale Breakdown"
+					);
 				}
 			}
-
-
-
-			$dif = ($old - $new) / $old;
-			Debug::log("player ".$i.", old: ".$old.", new: ".$new.", dif: ".$dif);
-			if (!$dif){continue;}
-
-
-			$crit = DmgCalc::critProcedure(0, 0, $this->turn, 1-$dif, $this->const["morale"], 0);
-
-
-
-
 		}
 	}
 

@@ -61,8 +61,8 @@ class LightPlasma extends Plasma {
 	public $name = "LightPlasma";
 	public $display = "Light Plasma Cannon";
 	public static $prio = 0;
-	public $minDmg = 36;
-	public $maxDmg = 47;
+	public $minDmg = 32;
+	public $maxDmg = 45;
 	public $accDecay = 120;
 	public $dmgLoss = 10;
 	public $shots = 1;

@@ -1814,7 +1814,7 @@ Weapon.prototype.doUnboost = function(){
 
 Weapon.prototype.getDmgsPerShot = function(fire){
 	if (this.fireMode == "Laser"){
-		if (fire.target.ship){return this.output;}
+		if (fire.target.ship || fire.target.squad){return this.output;}
 		return 1;
 	}
 	else if (this.fireMode == "Flash"){
@@ -2068,7 +2068,7 @@ Weapon.prototype.getSysDiv = function(){
 		$(table).append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").html(this.optRange + "px")));
 		$(table).append($("<tr>").append($("<td>").html("Damage Loss")).append($("<td>").html(this.getDmgLoss(this.optRange+100) + "% per 100px")));
 	}
-	else if (!this.tiny && this.fireMode == "Plasma"){
+	else if (!this.tiny && this.dmgType == "Plasma"){
 		$(table).append($("<tr>").append($("<td>").html("Damage Loss")).append($("<td>").html(this.getDmgLoss(100) + "% per 100px")));
 	}
 

@@ -3,9 +3,9 @@
 class Pulse extends Weapon {
 	public $type = "Pulse";
 	public $animation = "projectile";
-	public $basePulses = 1;
+	public $basePulses = 2;
 	public $extraPulses = 3;
-	public $grouping = 120;
+	public $grouping = 20;
 	public $pulse = 1;
 
 	public $notes = array("Hits allocate versus same unit / system", "More hits if to-hit-roll is undercut");

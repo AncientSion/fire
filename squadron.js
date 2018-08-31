@@ -566,7 +566,7 @@ Squadron.prototype.getDmgByFire = function(fire){
 		for (var j = this.structures[i].damages.length-1; j >= 0; j--){
 			if (this.structures[i].damages[j].fireid == fire.id){
 				dmgs.push(this.structures[i].damages[j]);
-				dmgs[dmgs.length-1].system = (this.structures[i].display + " #" + (i+1));
+				dmgs[dmgs.length-1].system = (this.structures[i].display + " #" + (this.structures[i].id));
 				dmgs[dmgs.length-1].loc = this.structures[i].layout;
 				lookup--;
 				if (!lookup){return dmgs};

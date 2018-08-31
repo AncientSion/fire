@@ -5,25 +5,26 @@ class DmgCalc {
 	static function critProcedure($targetid, $systemid, $turn, $new, $effects, $magAdd){
 		//Debug::log("critProcedure $targetid, $systemid, $turn, $new, $magAdd");
 		$chance = round((1-((1-$new)*(1-$new)))*100);
-		$roll = mt_rand(0, 100);
+		$chanceRoll = mt_rand(0, 100);
 
-		if ($roll > $chance){
-			Debug::log("___opening test SUCCESS, roll: ".$roll.", chance: ".$chance); return;
-		} else Debug::log("___opening test FAIL, roll: ".$roll.", chance: ".$chance);
+		if ($chanceRoll > $chance){
+			//Debug::log("___opening test SUCCESS, roll: ".$roll.", chance: ".$chance);
+			return;
+		}// else Debug::log("___opening test FAIL, roll: ".$roll.", chance: ".$chance);
 
 		$roll = mt_rand(0, 100);
 		$magnitude = $roll + $magAdd;
 
 
-		Debug::log("magRoll $roll, modifier $magAdd, total $magnitude");
+		Debug::log("chance to fail: $chance, rolled $chanceRoll, magRoll $roll, modifier $magAdd, total $magnitude");
 		if ($magnitude  < $effects[0][1]){return;}
 
 		for ($i = sizeof($effects)-1; $i >= 0; $i--){
 			if ($magnitude < $effects[$i][1]){continue;}
 
 	
-				//($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
-			Debug::log($effects[$i][0]);
+			Debug::log("crit: ".$effects[$i][0]);
+			//($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 			return 
 				new Crit(
 					0, $targetid, $systemid, $turn,
@@ -277,7 +278,7 @@ class DmgCalc {
 		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit);
 		$okSystem = 0;
 		$rakes = $fire->weapon->rakes;
-		$counter = 1 + (($rakes -1) * $fire->target instanceof Mixed);
+		$reduce = 1 + ($rakes-1) * $fire->target instanceof Mixed;
 		$systems = array();
 		$entry;
 
@@ -290,7 +291,6 @@ class DmgCalc {
 		while ($rakes){
 			if ($fire->target->ship){
 				if ($rakes < $fire->weapon->rakes){$system = $fire->target->getHitSystem($fire);}
-
 				for ($i = 0; $i < sizeof($systems); $i++){
 					if ($systems[$i] == $system->id){Debug::log("Laser DOUBLE HIT, switching to PRIMARY");$system = $fire->target->primary;}
 				}
@@ -305,7 +305,7 @@ class DmgCalc {
 			$dmg = DmgCalc::calcDmg($fire->weapon, $rake, $negation);
 			$dmg = $system->setMaxDmg($fire, $dmg);
 			
-			$rakes -= $counter;
+			$rakes -= $reduce;
 
 			if ($remInt - $dmg->systemDmg < 1){
 				$destroyed = 1;
@@ -314,15 +314,31 @@ class DmgCalc {
 
 				if ($okSystem){
 					$dmg->hullDmg += abs($remInt - $dmg->systemDmg);
-					$dmg->systemDmg = $remInt;
-					Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->systemDmg.", OK for: ".$dmg->hullDmg." dmg");
 				}
 				else {
-					Debug::log(" => destroying non-ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->systemDmg);
 					$rakes = 0;
 				}
+				$dmg->systemDmg = $remInt;
+				Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->systemDmg.", OK for: ".$dmg->hullDmg." dmg");
 			}
 
+
+			$entry = new Damage(
+				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
+				$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
+			);
+
+
+			$fire->damages[] = $entry;
+			$fire->target->addTopDamage($entry);
+		}
+
+		Debug::log($print);
+
+
+
+
+/*
 			if (!$fire->target->squad || $rakes == $fire->weapon->rakes-1){
 				$entry = new Damage(
 					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
@@ -335,11 +351,11 @@ class DmgCalc {
 				$fire->target->addTopDamage($entry);
 			}
 			else if ($rakes){
-				$entry->shieldDmg += $dmg->shieldDmg; $entry->systemDmg += $dmg->systemDmg; $entry->armourDmg += $dmg->armourDmg; $entry->destroyed = $destroyed;
+				$enarmtry->shieldDmg += $dmg->shieldDmg; $entry->systemDmg += $dmg->systemDmg; $entry->armourDmg += $dmg->ourDmg; $entry->destroyed = $destroyed;
 			}
 		}
 		Debug::log($print);
-	}
+*/	}
 
 	public static function doFlashDmg($fire, $hit, $ignored){
 		$baseDmg = $fire->weapon->getTotalDamage($fire, $hit);
@@ -589,7 +605,7 @@ class DmgCalc {
 	}
 
 	public static function calcStandardDmg($weapon, $totalDmg, $negation){
-		Debug::log("calcStandardDmg, negation: ".$negation["stock"]."/".$negation["bonus"]);
+		//Debug::log("calcStandardDmg, negation: ".$negation["stock"]."/".$negation["bonus"]);
 		$shieldDmg = 0;
 		$armourDmg = 0;
 		$systemDmg = 0;
@@ -612,7 +628,7 @@ class DmgCalc {
 	}
 
 	public static function calcMatterDmg($weapon, $totalDmg, $negation){
-		Debug::log("calcMatterDmg, negation: ".$negation["stock"]."/".$negation["bonus"]);
+		//Debug::log("calcMatterDmg, negation: ".$negation["stock"]."/".$negation["bonus"]);
 		$shieldDmg = 0;
 		$armourDmg = 0;
 		$systemDmg = 0;

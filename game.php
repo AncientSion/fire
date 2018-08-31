@@ -215,10 +215,8 @@
 				</thead>
 				<tbody></tbody>
 			</table>
-			<table class="playerInfo">
-				<thead></thead>
-				<tbody></tbody>
-			</table>
+			<div class="playerInfoWrapper">
+			</div>
 		</div>
 
 		<div id="unitSelector" class="disabled">
