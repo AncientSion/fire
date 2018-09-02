@@ -797,21 +797,16 @@ table, th, tr, td {
 	border: 1px solid white;
 }
 
-
-
 .ccContainer {
 	width: 99%;
 	margin: auto;
-	margin-top: 10px;
 	display: inline-block;
 	color: black;
-	border: 1px solid white;
+	border-top: 1px solid white;
 }
 
 .attachDiv {
 	display: block;
-	margin-top: 8px;
-	margin-bottom: 8px;
 	border-bottom: 1px solid white;
 }
 
@@ -1184,6 +1179,7 @@ div.integrityFull {
 	color: white;
 	border-collapse: collapse;
 	text-align: center;
+	padding-bottom: 10px;
 }
 
 .shipDiv .flightTable {

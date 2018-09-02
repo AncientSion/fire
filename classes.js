@@ -905,6 +905,7 @@ Ballistic.prototype.getBaseImage = function(){
 
 function FireOrder(data){
 	this.id = data.id || -1;
+	this.gameid = data.gameid;
 	this.turn = data.turn || game.turn;
 	this.shooterid = data.shooterid || -1;
 	this.targetid = data.targetid || -1;

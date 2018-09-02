@@ -7,10 +7,12 @@ class FighterWeapon extends Particle {
 	public $traverse = 0;
 	public $accDecay = 0;
 	public $tiny = 1;
+	public $fighterId = 0;
 
-	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
+	function __construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg){
 		$this->id = $id;
 		$this->parentId = $parentId;
+		$this->fighterId = $fighterId;
 		$this->shots = $shots;
 		$this->linked = $linked;
 		$this->minDmg = $minDmg;
@@ -23,8 +25,8 @@ class ParticleGun extends FighterWeapon {
 	public $display = "Particle Gun";
 	public $animColor = "blue";
 	
-	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
-		parent::__construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg);
+	function __construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg){
+		parent::__construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg);
 	}
 }
 
@@ -34,25 +36,25 @@ class FighterStandard extends FighterWeapon {
 	public $display = "Particle Gun / Hit & Run";
 	public $animColor = "blue";
 	
-	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
-		parent::__construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg);
+	function __construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg){
+		parent::__construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg);
 	}
 }
 
 class FighterStrafe extends FighterWeapon {
-	//public $type = "Pulse";
-	//public $fireMode = "Pulse";
+	public $type = "Pulse";
+	public $fireMode = "Pulse";
 	public $name = "FighterStrafe";
 	public $display = "Particle Gun / Strafing Attack";
 	public $animColor = "blue";
-	public $traverse = 3;
-	//public $basePulses = 2;
-	//public $extraPulses = 2;
-	//public $grouping = 20;
-	//public $shots = 3;
+	public $traverse = 4;
+	public $basePulses = 1;
+	public $extraPulses = 2;
+	public $grouping = 30;
+	public $shots = 1;
 	
-	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
-		parent::__construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg);
+	function __construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg){
+		parent::__construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg);
 	}
 
 	public function getMultiShotHits($fire, $element){
@@ -66,8 +68,8 @@ class NeutronRepeater extends FighterWeapon {
 	public $display = "Neutron Repeater";
 	public $animColor = "green";
 	
-	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
-		parent::__construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg);
+	function __construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg){
+		parent::__construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg);
 	}
 }
 
@@ -81,8 +83,8 @@ class ParticleBolt extends FighterWeapon {
 	public $reload = 2;
 	public $traverse = 3;
 	
-	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
-		parent::__construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg);
+	function __construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg){
+		parent::__construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg);
 	}
 }
 
@@ -110,8 +112,8 @@ class ParticlePulsar extends FighterPulse {
 	public $grouping = 20;
 	public $traverse = 0;
 	
-	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
-		parent::__construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg);
+	function __construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg){
+		parent::__construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg);
 	}
 }
 
@@ -138,8 +140,8 @@ class PlasmaBomb extends FighterPlasma {
 	public $dmgLoss = 0;
 	public $traverse = 1;
 	
-	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
-		parent::__construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg);
+	function __construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg){
+		parent::__construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg);
 	}
 }
 ?>

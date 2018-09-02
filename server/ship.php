@@ -135,13 +135,12 @@ class Ship {
 	}
 
 	public function setSpecialAbilities(){
-		if ($this->ship || $this->squad){
-			if ($this->faction == "Centauri Republic"){
-				$this->baseImpulseCost = ceil($this->baseImpulseCost * 0.8);
-			}
-			else if ($this->faction == "Narn Regime"){
-				$this->baseMorale = 150;
-			}
+		if ($this->faction == "Centauri Republic"){
+			//Debug::log("setSpecialAbilities #".$this->id.", now: ".$this->baseImpulseCost);
+			$this->baseImpulseCost = ceil($this->baseImpulseCost * 0.8);
+		}
+		else if ($this->faction == "Narn Regime"){
+			$this->baseMorale = 150;
 		}
 	}
 	
@@ -184,6 +183,7 @@ class Ship {
 			}
 		}
 
+		$this->setSpecialAbilities();
 		$this->setCrewUpgrades($turn);
 		$this->setMorale($turn, $phase);
 		$this->isDestroyed();
@@ -933,7 +933,7 @@ class Ship {
 			return 0.5 + (0.06 * ($this->traverse-4));
 		}
 		else if ($target->flight){
-			return 1.5;
+			return 1;
 		}
 		else if ($target->salvo){
 			return 3;

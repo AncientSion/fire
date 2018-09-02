@@ -13,6 +13,7 @@ Squadron.prototype = Object.create(Ship.prototype);
 
 
 Squadron.prototype.create = function(){
+	//console.log("create "+this.id);
 	if (!this.structures.length){
 		this.curImp = 0;
 		this.primary.systems[0].output = 0;

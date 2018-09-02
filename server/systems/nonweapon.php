@@ -262,7 +262,7 @@ class Hangar extends Weapon {
 
 
 		for ($i = 0; $i < sizeof($loads); $i++){
-			$fighter = new $loads[$i](0,0);
+			$fighter = new $loads[$i](0, 0);
 			$this->loads[] = $fighter;
 			//$this->loads[$i]->amount = 10;
 		}

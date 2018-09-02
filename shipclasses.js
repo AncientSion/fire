@@ -1135,7 +1135,7 @@ Ship.prototype.setPostMoveFacing = function(){
 }
 
 Ship.prototype.setPreMovePosition = function(){
-	//console.log("setPreMovePosition #" + this.id);
+	console.log("setPreMovePosition #" + this.id);
 	this.drawX = this.x;
 	this.drawY = this.y;
 }
@@ -1143,10 +1143,7 @@ Ship.prototype.setPreMovePosition = function(){
 Ship.prototype.setPostMovePosition = function(){
 	//console.log("setPostMovePosition");
 	//this.setPreMovePosition(); return;
-	if (!this.actions.length){
-		//this.actions.push(new Move(0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
-		return;
-	}
+	if (!this.actions.length){return;}
 	this.drawX = this.actions[this.actions.length-1].x;
 	this.drawY = this.actions[this.actions.length-1].y;
 }
@@ -1435,11 +1432,12 @@ Ship.prototype.drawTrajectory = function(){
 }
 
 Ship.prototype.create = function(){
+	//console.log("create "+this.id);
 	this.setUnitState();
 	this.setSubSystemState();
 	this.setStringHitChance();
 
-	if (this.ship || this.squadron){
+	if (this.ship ||this.squad){
 		if (game.turn > 1 && game.phase == -1 && this.available == game.turn){
 			this.x = this.actions[0].x;
 			this.y = this.actions[0].y;
@@ -3440,7 +3438,7 @@ Ship.prototype.getLockEffect = function(target){
 		multi += (0.6 / 10 * (this.traverse-4));
 	}
 	else if (target.flight){
-		multi = 1.5;
+		multi = 1;
 	}
 	else if (target.salvo){
 		multi = 3;

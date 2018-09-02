@@ -290,8 +290,9 @@ function refresh(data){
 	}, 300);
 }
 
-function goToLobby(){
-    console.log("goToLobby");
+function goToLobby(data){
+    //console.log(data);
+    //return;
     setTimeout(function(){
         window.location = "lobby.php";
     }, 600);

@@ -14,7 +14,7 @@ class Missile extends Single {
 	
 	public function setBaseStats($phase, $turn){
 		if ($this->missile){
-			$this->baseImpulse = ceil(pow($this->mass, -0.75)*400);
+			$this->baseImpulse = ceil(pow($this->mass, -0.75)*40000);
 			$this->baseHitChance = ceil(sqrt($this->mass)*5);
 		}
 		else {
@@ -48,9 +48,9 @@ class Warhead extends Weapon {
 	function __construct($id, $parentId, $traverse, $minDmg, $maxDmg, $fireMode = "Standard", $dmgType = "Standard", $melt = 0){
 		$this->id = $id;
 		$this->parentId = $parentId;
+		$this->traverse = $traverse;
 		$this->minDmg = $minDmg;
 		$this->maxDmg = $maxDmg;
-		$this->traverse = $traverse;
 		$this->fireMode = $fireMode;
 		$this->dmgType = $dmgType;
 		$this->melt = $melt;
@@ -69,7 +69,7 @@ class Vran extends Torpedo {
 	public $name = "Vran";
 	public $role = "Light Particle Torpedo";
 	public static $prio = 0;
-	public $integrity = 10;
+	public $integrity = 4;
 	public $negation = 1;
 	public $traverse = 3;
 	public $maxRange = 700;
@@ -82,7 +82,7 @@ class Vran extends Torpedo {
 	}
 }
 
-class Vranoth extends Torpedo {
+class Vranoth extends Vran {
 	public $name = "Vranoth";
 	public $role = "Medium Particle Torpedo";
 	public static $prio = 0;
@@ -97,7 +97,7 @@ class Vranoth extends Torpedo {
 	}
 }
 
-class VranothKa extends Torpedo {
+class VranothKa extends Vranoth {
 	public $name = "VranothKa";
 	public $role = "Heavy Particle Torpedo";
 	public static $prio = 0;
@@ -111,6 +111,9 @@ class VranothKa extends Torpedo {
 		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 54, 72);
 	}
 }
+
+
+
 
 class Hasta extends Missile {
 	public $name = "Hasta";

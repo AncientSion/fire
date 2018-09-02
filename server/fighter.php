@@ -44,8 +44,8 @@ class Aurora extends Fighter {
 	}
 
 	public function addSystems(){
-		//$this->systems[] = new ParticleGun($this->getId(), $this->id, $this->parentId, 1, 2, 12, 16, 0, 360);
-		//$this->systems[] = new Dual($this->getId(), $this->parentId, 0, 0, 0, array("HeavyLaser", "HeavyPulse"));
+		$this->systems[] = new ParticleGun($this->getId(), $this->parentId, $this->id, 2, 1, 12, 16);
+		return;
 		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
 			array(
 				array("FighterStandard", 1, 12, 16),
@@ -72,7 +72,7 @@ class Thunderbolt extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new ParticlePulsar($this->getId(), $this->id, $this->parentId, 1, 1, 12, 16, 0, 360);
+		$this->systems[] = new ParticlePulsar($this->getId(), $this->parentId, $this->id, 1, 1, 12, 16, 0, 360);
 	}
 }
 
@@ -85,14 +85,21 @@ class Sentri extends Fighter {
 	public $integrity = 24;
 	public $negation = 5;
 	public $baseImpulse = 110;
-	public $baseHitChance = 122;
+	public $baseHitChance = 22;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
 	}
 
 	public function addSystems(){
-		$this->systems[] = new ParticleGun($this->getId(), $this->id, $this->parentId, 1, 2, 10, 14, 0, 360);
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
+			array(
+				array("FighterStandard", 1, 12, 16),
+				array("FighterStrafe", 1, 12, 16)
+			)
+		);
+		return;
+		$this->systems[] = new ParticleGun($this->getId(), $this->parentId, $this->id, 2, 1, 10, 14);
 	}
 }
 
@@ -111,7 +118,7 @@ class Sitara extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new ParticleBolt($this->getId(), $this->id, $this->parentId, 1, 1, 30, 36, 0, 360);
+		$this->systems[] = new ParticleBolt($this->getId(), $this->parentId, $this->id, 1, 1, 30, 36, 0, 360);
 	}
 }
 
@@ -131,7 +138,7 @@ class Nial extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new NeutronRepeater($this->getId(), $this->id, $this->parentId, 1, 3, 14, 18, 0, 360);
+		$this->systems[] = new NeutronRepeater($this->getId(), $this->parentId, $this->id, 1, 3, 14, 18, 0, 360);
 	}
 }
 
@@ -151,7 +158,7 @@ class Tishat extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new NeutronRepeater($this->getId(), $this->id, $this->parentId, 1, 2, 13, 17, 0, 360);
+		$this->systems[] = new NeutronRepeater($this->getId(), $this->parentId, $this->id, 1, 2, 13, 17, 0, 360);
 	}
 }
 
@@ -171,7 +178,14 @@ class Gorith extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new ParticleGun($this->getId(), $this->id, $this->parentId, 1, 2, 11, 15, 0, 360);
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
+			array(
+				array("FighterStandard", 1, 12, 16),
+				array("FighterStrafe", 1, 12, 16)
+			)
+		);
+		return;
+		$this->systems[] = new ParticleGun($this->getId(), $this->parentId, $this->id, 2, 1, 11, 15);
 	}
 }
 
@@ -191,7 +205,7 @@ class Frazi extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new ParticleGun($this->getId(), $this->id, $this->parentId, 1, 2, 13, 17, 0, 360);
+		$this->systems[] = new ParticleGun($this->getId(), $this->parentId, $this->id, 2, 1, 13, 17);
 	}
 }
 

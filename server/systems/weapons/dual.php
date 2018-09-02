@@ -10,9 +10,8 @@ class FighterDual extends Dual {
 		for ($i = 0; $i < sizeof($modes); $i++){
 			$this->states[] = 0;
 			$this->modes[] = $modes[$i];
-			$this->weapons[] = new $modes[$i][0]($i, $parentId, $linked, $modes[$i][1], $modes[$i][2], $modes[$i][3]);
-			$this->weapons[sizeof($this->weapons)-1]->dualParent = $id;
-			$this->weapons[sizeof($this->weapons)-1]->fighterId = $fighterId;
+			$this->weapons[] = new $modes[$i][0]($i, $parentId, $fighterId, $linked, $modes[$i][1], $modes[$i][2], $modes[$i][3]);
+			$this->weapons[$i]->dualParent = $id;
 			$this->display .= $this->weapons[$i]->display." / ";
 		}
 

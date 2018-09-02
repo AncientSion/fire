@@ -56,11 +56,11 @@ if (isset($_POST["type"])) {
 		if (isset($_POST["missions"])){
 			$dbManager->insertMissions($_POST["missions"]);
 		}
-		if (isset($_POST["powers"])){
+		if (isset($_POST["powers"]) && sizeof($_POST["powers"])){
 			$dbManager->insertPowers($_POST["gameid"], $_POST["turn"], $_POST["powers"]);
 		}
-		if (isset($_POST["fireOrders"])){
-			$dbManager->insertClientFireOrders($_POST["gameid"], $_POST["turn"], $_POST["fireOrders"]);
+		if (isset($_POST["fireOrders"]) && sizeof($_POST["fireOrders"])){
+			$dbManager->handleClientFires($_POST["gameid"], $_POST["turn"], $_POST["fireOrders"]);
 		}
 		if (isset($_POST["ew"])){
 			$dbManager->insertEW($_POST["ew"]);
@@ -73,18 +73,16 @@ if (isset($_POST["type"])) {
 		$dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready");
 	}
 	else if ($_POST["type"] == "firing"){
-		if ($dbManager->insertClientFireOrders($_POST["gameid"], $_POST["turn"], $_POST["fireOrders"])){
-			//return;
-			if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready")){
-				echo "firing success";
-			}
+		if (isset($_POST["powers"]) && sizeof($_POST["powers"])){
+			$dbManager->insertPowers($_POST["gameid"], $_POST["turn"], $_POST["powers"]);
 		}
-		else {
-			echo "firing fail";
+		if (isset($_POST["fireOrders"]) && sizeof($_POST["fireOrders"])){
+			$dbManager->handleClientFires($_POST["gameid"], $_POST["turn"], $_POST["fireOrders"]);
 		}
+		$dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready");
 	}
 	else if ($_POST["type"] == "damageControl"){
-		Debug::log("damageControl");
+		//Debug::log("damageControl");
 		if (sizeof($_POST["jumpout"])){
 			$dbManager->updateUnitStatusNotes($_POST["jumpout"]);
 		}

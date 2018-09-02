@@ -1307,7 +1307,6 @@
 				$stmt->bindParam(":cost", $powers[$i]["cost"]);
 
 				$stmt->execute();
-
 				if ($stmt->errorCode() == 0){
 					continue;
 				}
@@ -1316,44 +1315,26 @@
 			return true;
 		}
 
-		public function insertClientFireOrders($gameid, $turn, $fires){
-			//Debug::log("insertClientFireOrders: ".sizeof($fires));
-			$stmt = $this->connection->prepare("
-				INSERT INTO fireorders 
-					(gameid, turn, shooterid, targetid, x, y, weaponid, resolved)
-				VALUES
-					(:gameid, :turn, :shooterid, :targetid, :x, :y, :weaponid, :resolved)
-			");
+		public function handleClientFires($gameid, $turn, $data){
+			//Debug::log("handleClientFires: ".sizeof($data));	var_export($data); return;
 
-			$x = 0;
-			$y = 0;
+			$fires = array();
 
-			for ($i = 0; $i < sizeof($fires); $i++){
-				$stmt->bindParam(":gameid", $gameid);
-				$stmt->bindParam(":turn", $turn);
-				$stmt->bindParam(":shooterid", $fires[$i]["shooterid"]);
-				$stmt->bindParam(":targetid", $fires[$i]["targetid"]);
-				$stmt->bindParam(":x", $fires[$i]["x"]);
-				$stmt->bindParam(":y", $fires[$i]["y"]);
-				$stmt->bindParam(":weaponid", $fires[$i]["weaponid"]);
-				$stmt->bindParam(":resolved", $fires[$i]["resolved"]);
-
-				$stmt->execute();
-
-				if ($stmt->errorCode() == 0){
-					continue;
-				} else return false;
+			for ($i = 0; $i < sizeof($data); $i++){
+				$fires[] = Manager::convertToFireOrder($data[$i]);
 			}
-			return true;
+
+			if ($this->insertFireOrders($fires)){return true;}
+			return false;
 		}
 
-		public function insertServerFireOrder($fires){
-			Debug::log("insertServerFireOrder: ".sizeof($fires));
+		public function insertFireOrders($fires){
+			//Debug::log("insertFireOrders: ".sizeof($fires)); var_export($fires); return;
 			$stmt = $this->connection->prepare("
 				INSERT INTO fireorders 
-					(gameid, turn, shooterid, targetid, x, y, weaponid, shots)
+					(gameid, turn, shooterid, targetid, x, y, weaponid)
 				VALUES
-					(:gameid, :turn, :shooterid, :targetid, :x, :y, :weaponid, :shots)
+					(:gameid, :turn, :shooterid, :targetid, :x, :y, :weaponid)
 			");
 
 			for ($i = 0; $i < sizeof($fires); $i++){
@@ -1364,7 +1345,6 @@
 				$stmt->bindParam(":x", $fires[$i]->x);
 				$stmt->bindParam(":y", $fires[$i]->y);
 				$stmt->bindParam(":weaponid",$fires[$i]->weaponid);
-				$stmt->bindParam(":shots",$fires[$i]->shots);
 
 				$stmt->execute();
 
@@ -1375,8 +1355,6 @@
 			}
 			return true;
 		}
-
-
 
 		public function insertEW($data){
 			//Debug::log("insertSensorSettings".sizeof($data));

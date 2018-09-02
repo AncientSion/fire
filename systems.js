@@ -180,7 +180,7 @@ System.prototype.setState = function(){
 		this.destroyed = true;
 	}
 	else {
-		if (game.phase == -1 && game.turn > 1){
+		if ((this.tiny && game.phase == 2 || game.phase == -1) && game.turn > 1){
 			for (var i = this.powers.length-1; i >= 0; i--){
 				if (this.powers[i].turn == game.turn-1){
 					this.copyPowers();
@@ -720,7 +720,8 @@ System.prototype.canChangeMode = function(){
 }
 
 System.prototype.showOptions = function(){
-	if (game.phase != -1 || game.getUnit(this.parentId).userid != game.userid || this.destroyed || this.locked){return;}
+	if (game.phase == -1 && this.tiny || game.phase != -1 && !this.tiny){return;}
+	if (game.getUnit(this.parentId).userid != game.userid || this.destroyed || this.locked){return;}
 
 	var ele = $(this.element);
 	var boost = this.effiency;
@@ -795,7 +796,7 @@ System.prototype.hideSysDiv = function(){
 System.prototype.setFireOrder = function(targetid, pos){
 	if (this.odds <= 0){return;}
 	this.fireOrders.push(
-		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
+		{id: 0, turn: game.turn, gameid: game.id, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
 		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
 	);
 	this.selected = 0;
@@ -1793,6 +1794,7 @@ function Weapon(system){
 	this.melt = system.melt;
 	this.aoe = system.aoe;
 	this.animation = system.animation;
+	this.fighterId = system.fighterId;
 	this.loaded;
 	this.fireOrders = [];
 	this.mount;
@@ -2216,7 +2218,7 @@ Warhead.prototype.getSysDiv = function(){
 	var div = $("<div>").attr("id", "sysDiv")
 		.append($("<table>")
 			.append($("<tr>")
-				.append($("<th>").html(this.display).attr("colSpan", 2)))
+				.append($("<th>").html("Impact Warhead").attr("colSpan", 2)))
 			.append($("<tr>")
 				.append($("<td>").html("Firing Mode").css("width", "60%"))
 				.append($("<td>").html(this.fireMode)))
@@ -3020,7 +3022,7 @@ Launcher.prototype.getTraverseRating = function(){
 Launcher.prototype.setFireOrder = function(targetid, pos){
 	if (this.odds <= 0){return;}
 	this.fireOrders.push(
-		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
+		{id: 0, turn: game.turn, gameid: game.id, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
 		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
 	);
 	this.selected = 0;
@@ -3093,7 +3095,7 @@ Launcher.prototype.select = function(e){
 		this.setupLauncherLoadout(e);
 	}
 	else if ((game.turn == 1 || game.turn == game.getUnit(this.parentId).available) || game.phase != -1  || game.deploying || this.getOutput() == 0){
-		return false;
+		//return false;
 	}
 	else if (game.phase == -1 && game.getUnit(aUnit).hasPlannedMoves()){popup("This system can only be used BEFORE planning movement</br>Please reverse movement plan.");return;}
 
@@ -3459,7 +3461,7 @@ Area.prototype.getAimData = function(target, final, dist, row){
 Area.prototype.setFireOrder = function(targetid, pos){
 	if (this.odds <= 0){return;}
 	this.fireOrders.push(
-		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
+		{id: 0, turn: game.turn, gameid: game.id, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
 		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
 	);
 	this.selected = 0;
@@ -3804,7 +3806,7 @@ Hangar.prototype.getUpgradeData = function(){
 
 Hangar.prototype.setFireOrder = function(targetid, pos){
 	this.fireOrders.push(
-		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: 0, x: pos.x, y: pos.y, weaponid: this.id, 
+		{id: 0, turn: game.turn, gameid: game.id, shooterid: this.parentId, targetid: 0, x: pos.x, y: pos.y, weaponid: this.id, 
 		shots: 0, req: -1, notes: "fighterLaunch", hits: -1, resolved: 0}
 	);
 	return this;

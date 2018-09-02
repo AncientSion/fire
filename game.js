@@ -3577,7 +3577,7 @@ Game.prototype.showFleetMorale = function(e, userid){
 	.append($("<tr>")
 		.append($("<td>").attr("colSpan", 2).css("height", 12)))
 	.append($("<tr>")
-		.append($("<td>").html("<span class='yellow'>Morale Test triggered upon unit loss.</br>Rolls D100, subtracts morale.</span>")))
+		.append($("<td>").attr("colSpan", 2).html("Morale Test triggered upon unit loss.</br>Rolls D100, subtracts morale.")))
 	.append($("<tr>")
 		.append($("<td>").attr("colSpan", 2).css("height", 6)))
 

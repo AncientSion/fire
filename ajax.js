@@ -277,23 +277,10 @@ window.ajax = {
 			}
 		}
 
-
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid != game.userid){continue;}
-			//if (game.ships[i].flight || game.ships[i].salvo){continue;}
-
-			var power = game.ships[i].getPowerOrders();
-			for (var j = 0; j < power.length; j++){
-				powers.push(power[j]);
-			}
-		}
-
-		for (var i = 0; i < game.ships.length; i++){
-			if (game.ships[i].userid != game.userid){continue;}
-			var fires = game.ships[i].getFireOrders();
-			for (var j = 0; j < fires.length; j++){
-				fireOrders.push(fires[j]);
-			}
+			fireOrders = fireOrders.concat(game.ships[i].getFireOrders());
+			powers = powers.concat(game.ships[i].getPowerOrders());
 		}
 
 		//console.log(missions);
@@ -364,12 +351,13 @@ window.ajax = {
 	confirmFiringOrders: function(callback){
 		//console.log("ding"); return;
 		var fireOrders = [];
+		var powers = [];
 		for (var i = 0; i < game.ships.length; i++){
-			if (game.ships[i].userid == game.userid){
-				var fire = game.ships[i].getFireOrders();
-				for (var j = 0; j < fire.length; j++){
-					fireOrders.push(fire[j]);
-				}
+			if (game.ships[i].userid != game.userid){continue;}
+			fireOrders = fireOrders.concat(game.ships[i].getFireOrders());
+
+			if (game.ships[i].flight){
+				powers = powers.concat(game.ships[i].getPowerOrders());
 			}
 		}
 		//return;
@@ -384,7 +372,8 @@ window.ajax = {
 					userid: game.userid,
 					turn: game.turn,
 					phase: game.phase,
-					fireOrders: fireOrders
+					fireOrders: fireOrders,
+					powers: powers
 					},
 			success: callback,
 			error: ajax.error,
@@ -397,13 +386,12 @@ window.ajax = {
 		var focus = [];
 
 		for (var i = 0; i < game.ships.length; i++){
-			if (game.ships[i].userid == game.userid){
-				if (game.ships[i].status == "jumpOut"){
-					jumpout.push({id: game.ships[i].id, status: "jumpOut", notes: game.ships[i].notes});
-				}
-				if (game.ships[i].focus){
-					focus.push(game.ships[i].id);
-				}
+			if (game.ships[i].userid != game.userid){continue;}
+			if (game.ships[i].status == "jumpOut"){
+				jumpout.push({id: game.ships[i].id, status: "jumpOut", notes: game.ships[i].notes});
+			}
+			if (game.ships[i].focus){
+				focus.push(game.ships[i].id);
 			}
 		}
 		//return;

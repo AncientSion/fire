@@ -141,9 +141,10 @@ class Squadron extends Ship {
 			$this->primary->systems[$i]->setState($turn, $phase);
 		}
 
-		$this->setFaction();
 		$this->getSystemByName("Engine")->setPowerReq(0);
 		$this->setBaseStats($turn, $phase);
+		$this->setFaction();
+		$this->setSpecialAbilities();
 		$this->setProps($turn, $phase);
 		$this->setCrewUpgrades($turn);
 		$this->setMorale($turn, $phase);

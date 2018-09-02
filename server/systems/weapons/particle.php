@@ -43,7 +43,7 @@ class LightParticle extends Particle {
 	public $reload = 2;
 	public $integrity = 28;
 	public $powerReq = 2;
-	public $traverse = 0;
+	public $traverse = 1;
 	public $effiency = 3;
 	public $maxBoost = 1;
 

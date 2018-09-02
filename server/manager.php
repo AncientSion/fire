@@ -309,7 +309,6 @@
 				$unit->addAllSystems();
 				if (!$unit->ship){$unit->addSubUnits($possible[$i]["subunits"]);}
 				$unit->setUnitState($this->turn, $this->phase);
-				$unit->setSpecialAbilities($this->turn, $this->phase);
 
 
 				$data[] = $unit;
@@ -348,7 +347,6 @@
 		DBManager::app()->getShipLoad($units);
 
 		for ($i = 0; $i < sizeof($units); $i++){
-			$units[$i]->setSpecialAbilities($this->turn, $this->phase);
 			$units[$i]->setUnitState($this->turn, $this->phase);
 		}
 
@@ -658,14 +656,14 @@
 				$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystem($this->fires[$i]->weaponid);
 			}
 
-			$this->handleDeployFireOrders();
-			$this->handleBallisticFireOrders();
+			$this->handleUnusedFires();
+			$this->handleSalvoCreation();
 			DBManager::app()->updateBallisticFireOrder($this->fires);
 		}
 	}
 
-	public function handleDeployFireOrders(){
-		Debug::log("handleDeployFireOrders");
+	public function handleUnusedFires(){
+		Debug::log("handleUnusedFires");
 		for ($i = 0; $i < sizeof($this->fires); $i++){
 			if ($this->fires[$i]->weapon instanceof Hangar){
 				$this->fires[$i]->resolved = 1;
@@ -673,8 +671,8 @@
 		}
 	}
 
-	public function handleBallisticFireOrders(){
-		Debug::log("handleBallisticFireOrders");
+	public function handleSalvoCreation(){
+		Debug::log("handleSalvoCreation");
 
 		$adjust = array();
 		$units = array();
@@ -720,7 +718,7 @@
 			$move = array("turn" => $this->turn, "type" => "deploy", "dist" => 0, "x" => $devi->x, "y" => $devi->y, "a" => $a, "cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
 			$upgrades = array(array("active" => 1, "shipid" => $this->fires[$i]->shooter->id, "systemid" => $this->fires[$i]->weapon->id, "units" => array(0 => array("amount" => $this->fires[$i]->shots, "name" => $name))));
 
-			$units[] = array("gameid" => $this->gameid, "userid" => $this->fires[$i]->shooter->userid, "type" => "Salvo", "name" => "Salvo", "display" => "", "turn" => $this->turn, "eta" => 0,
+			$units[] = array("gameid" => $this->gameid, "userid" => $this->fires[$i]->shooter->userid, "type" => "Salvo", "name" => "Salvo", "display" => "", "totalCost" => 0, "moraleCost" => 0, "turn" => $this->turn, "eta" => 0,
 				"mission" => $mission, "actions" => array($move), "upgrades" => $upgrades);
 
 
@@ -1053,6 +1051,7 @@
 				$this->ships[$i]->destroyed = true;
 			}
 			else if ($this->phase == 3 && $this->ships[$i]->salvo && $this->ships[$i]->structures[0]->torpedo){ // torps out of range
+				Debug::log("Torpedo out of range!");
 				$this->ships[$i]->destroyed = true;
 			}
 			else if (($this->ships[$i]->flight || $this->ships[$i]->salvo) && $this->ships[$i]->isDestroyed()){
@@ -1384,6 +1383,7 @@
 			}
 		}
 
+		return;
 		$index = 0;
 		for ($i = $index; $i < sizeof($this->fires); $i++){
 			if ($this->fires[$i]->shooter->flight){
@@ -1428,7 +1428,7 @@
 		}
 
 		if (sizeof($fires)){
-			DBManager::app()->insertServerFireOrder($fires);
+			DBManager::app()->insertFireOrders($fires);
 
 			for ($i = 0; $i < sizeof($fires); $i++){
 				Debug::log("ball fireorder ".$i);
@@ -1968,7 +1968,6 @@
 			);
 			$unit->addAllSystems();
 			$unit->setUnitState(0, 0);
-			$unit->setSpecialAbilities(0, 0);
 		}
 		elseif ($get["unit"] == "squaddie"){
 			$unit = new $get["name"]($get["index"]+1, $get["purchases"]);

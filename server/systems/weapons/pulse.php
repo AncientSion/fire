@@ -108,8 +108,8 @@ class LightPlasmaPulse extends LightPulse {
 	public $name = "LightPlasmaPulse";
 	public $display = "Light Plasma Pulse Cannon";
 	public static $prio = 0;
-	public $minDmg = 33;
-	public $maxDmg = 47;
+	public $minDmg = 13;
+	public $maxDmg = 17;
 	public $animColor = "darkGreen";
 	public $dmgType = "Plasma";
 	public $melt = 50;
