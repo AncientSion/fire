@@ -144,7 +144,8 @@ class Ship {
 		}
 		else if ($this->faction == "Earth Alliance"){
 			for ($i = 0; $i < sizeof($this->structures); $i++){
-				$this->structures[$i]->specials[] = new interceptor($this->getId(), $this->id);
+				$this->structures[$i]->specials[] = new Interceptor($this->getId(), $this->id);
+				$this->structures[$i]->modes = array(1, 0);
 			}
 		}
 	}

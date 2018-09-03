@@ -217,6 +217,8 @@ function Structure(data){
 	this.element;
 	this.effiency = data.effiency;
 	this.boostEffect = data.boostEffect;
+	this.modes = data.modes;
+	this.specials = data.specials;
 	this.width = data.width;
 }
 
@@ -296,12 +298,12 @@ Structure.prototype.hover = function(e){
 
 Structure.prototype.showOptions = function(){
 	if (this.locked || game.phase != -1 || !this.effiency || game.getUnit(this.parentId).userid != game.userid ){return;}
-	$(this.element).find(".boostDiv").show();
+	$(this.element).find(".boostDiv").show().end().find(".modeDiv").show();
 }
 
 Structure.prototype.hideOptions = function(){
 	if (this.locked || game.phase != -1 || !this.effiency || game.getUnit(this.parentId).userid != game.userid ){return;}
-	$(this.element).find(".boostDiv").hide();
+	$(this.element).find(".boostDiv").hide().end().find(".modeDiv").hide();
 }
 
 Structure.prototype.showSysDiv = function(e){
@@ -330,19 +332,35 @@ Structure.prototype.getSysDiv = function(){
 			.append($("<td>").html(((this.parentIntegrity - this.armourDmg) + " / " + this.parentIntegrity))))
 
 	if (this.boostEffect.length){
-		var boost = this.getBoostEffect("Armour");
-		if (boost){
-			table.append($("<tr>")
-					.append($("<th>").html("EA Energy Web").attr("colSpan", 2)))
+		for (var i = 0; i < this.boostEffect.length; i++){
+			var boost = this.getBoostEffect(this.boostEffect[i].type);
+			if (boost){
+				table.append($("<tr>")
+						.append($("<th>").html("EA Energy Web").attr("colSpan", 2)))
+					.append($("<tr>")
+						.append($("<td>").html("Current Extra Armour"))
+						.append($("<td>").html(this.getBoostEffect("Armour") * this.getBoostLevel()).addClass("boostEffect")))
+					.append($("<tr>")
+						.append($("<td>").html("Current Power Usage"))
+						.append($("<td>").html(this.getPowerUsage()).addClass("powerUse")))
+					.append($("<tr>")
+						.append($("<td>").html("Boost Power Cost"))
+						.append($("<td>").html(this.getEffiency()).addClass("powerCost")))
+			}
+		}
+	}
+
+	if (this.specials.length){
+		for (var i = 0; i < this.specials.length; i++){
+			table
 				.append($("<tr>")
-					.append($("<td>").html("Current Extra Armour"))
-					.append($("<td>").html(this.getBoostEffect("Armour") * this.getBoostLevel()).addClass("boostEffect")))
+					.append($("<th>").html(this.specials[i].display).attr("colSpan", 2)))
 				.append($("<tr>")
-					.append($("<td>").html("Current Power Usage"))
-					.append($("<td>").html(this.getPowerUsage()).addClass("powerUse")))
+					.append($("<td>").html("Current Mode"))
+					.append($("<td>").html(this.specials[i].modes[0] ? this.specials[i].modes[0] : this.specials[i].modes[1])))
 				.append($("<tr>")
-					.append($("<td>").html("Boost Power Cost"))
-					.append($("<td>").html(this.getEffiency()).addClass("powerCost")));
+					.append($("<td>").html("Strength"))
+					.append($("<td>").html(this.specials[i].turrets[0] + " / " + this.specials[i].turrets[1])))
 		}
 	}
 
@@ -449,6 +467,10 @@ Structure.prototype.drawStructArc = function(facing, rolled, pos){
 
 Structure.prototype.getBoostDiv = function(){
 	return System.prototype.getBoostDiv.call(this);
+}
+
+Structure.prototype.getModeDiv = function(){
+	return System.prototype.getModeDiv.call(this);
 }
 
 

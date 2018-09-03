@@ -2693,6 +2693,9 @@ Ship.prototype.expandDiv = function(div){
 		if ((game.phase == -1) && this.structures[i].getBoostEffect("Armour")){
 			{armour.append(this.structures[i].getBoostDiv())};
 		}
+		if ((game.phase == -1) && this.structures[i].specials.length){
+			{armour.append(this.structures[i].getModeDiv())};
+		}
 
 		var tr = document.createElement("tr");
 			$(tr).append(armour);

@@ -19,6 +19,7 @@ class Structure {
 	public $damages = array();
 	public $powers = array();
 	public $boostEffect = array();
+	public $modes = array();
 	public $effiency = 0;
 	public $bonusNegation = 0;
 

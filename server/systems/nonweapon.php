@@ -311,8 +311,10 @@ class Bulkhead extends System {
 }
 
 class Interceptor {
-	public $modes = array();
+	public $modes = array("Offensive", "Defensive");
+	public $states = array(0, 0);
 	public $powers = array();
+	public $turrets = array(4, 4);
 	public $id;
 	public $parentId;
 	public $name = "Interceptor";

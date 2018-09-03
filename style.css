@@ -1430,6 +1430,13 @@ tr.rowBorderBottom {
 	left: -16px;
 }
 
+.shipDiv .armour .modeDiv {
+	z-index: 15;
+	position: relative;
+	top: 8px;
+	left: 5px;
+}
+
 .plus, .minus, .power, .unpower {
 	display: block;
 	background-color: black;

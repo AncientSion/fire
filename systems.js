@@ -531,7 +531,7 @@ System.prototype.getPowerDiv = function(){
 }
 
 System.prototype.getModeDiv = function(){
-	if (this.destroyed || !Object.keys(this.modes).length){return;}
+	if (this.destroyed || !this.modes.length){return;}
 	var div = document.createElement("div");
 		$(div).addClass("modeDiv").hide()
 		.data("shipId", this.parentId)
@@ -751,7 +751,7 @@ System.prototype.showOptions = function(){
 		ele.find(".powerDiv").find(".power").show();
 	}
 	else if (canUnpower){
-			ele.find(".powerDiv").find(".unpower").show();
+		ele.find(".powerDiv").find(".unpower").show();
 	}
 }
 
