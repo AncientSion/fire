@@ -28,11 +28,11 @@ class Tethys extends SuperLight {
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new LightPulse($this->getId(), $this->parentId, 0, 360);
+		$right->systems[] = new LightPulse($this->getId(), $this->parentId, 240, 120);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new LightPulse($this->getId(), $this->parentId, 0, 360);
+		$left->systems[] = new LightPulse($this->getId(), $this->parentId, 240, 120);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

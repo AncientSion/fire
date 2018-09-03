@@ -14,7 +14,6 @@ function Ship(data){
 	this.cost = data.cost;
 	this.totalCost = data.totalCost;
 	this.moraleCost = data.moraleCost;
-	this.stringHitChance = "";
 	this.size = data.size * 0.7;
 	this.userid = data.userid;
 	this.available = data.available;
@@ -34,6 +33,7 @@ function Ship(data){
 	this.cc = [];
 	this.index = 0;
 	this.upgrades = [];
+	this.stringHitChance = "";
 
 	this.slipAngle = data.slipAngle || 0;
 	this.turnAngle = data.turnAngle || 0;
@@ -1135,7 +1135,7 @@ Ship.prototype.setPostMoveFacing = function(){
 }
 
 Ship.prototype.setPreMovePosition = function(){
-	console.log("setPreMovePosition #" + this.id);
+	//console.log("setPreMovePosition #" + this.id);
 	this.drawX = this.x;
 	this.drawY = this.y;
 }
@@ -2256,7 +2256,7 @@ Ship.prototype.showMoraleDiv = function(e){
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 12)))
 			.append($("<tr>")
-				.append($("<td>").attr("colSpan", 2).html("Morale test triggered upon receiving >= 15 % damage.</br>Rolls D100, subtracts morale.")))
+				.append($("<td>").attr("colSpan", 2).html("Morale test triggered if damaged for more than 15% of remaining HP.</br>Rolls D100, subtracts morale.")))
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
 			.append($("<tr>")

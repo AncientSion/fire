@@ -26,61 +26,16 @@ class Mograth extends Light {
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new LightParticle($this->getId(), $this->parentId, 300, 180);
+		$right->systems[] = new LightParticle($this->getId(), $this->parentId, 270, 90);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new LightParticle($this->getId(), $this->parentId, 180, 60);
+		$left->systems[] = new LightParticle($this->getId(), $this->parentId, 270, 90);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 		}
-	}
-
-	static function getKit($faction){
-		return array(
-			"id" => 0,
-			"name" => "",
-			"cost" => static::$value,
-			"gameid" => 0,
-			"userid" => 0,
-			"upgrades" => 
-			array(
-				array(
-					"active" => 0,
-					"chance" => 80,
-					"cost" => 60,
-					"name" => "Standard Outfit",
-					"units" => array(),
-					"loads" => 
-					array(
-						array(
-							"systemid" => 7,
-							"display" => "Front Missile Launcher",
-							"name" => "Hasta",
-							"amount" => 6
-						)
-					)
-				),
-				array(
-					"active" => 0,
-					"chance" => 80,
-					"cost" => 60,
-					"name" => "Standard Outfit",
-					"units" => array(),
-					"loads" => 
-					array(
-						array(
-							"systemid" => 7,
-							"display" => "Front Missile Launcher",
-							"name" => "Hasta",
-							"amount" => 6
-						)
-					)
-				)
-			)
-		);
 	}
 }
 

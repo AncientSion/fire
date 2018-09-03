@@ -2794,9 +2794,9 @@ function Game(data){
 
 		if (!l){return;}
 
-		var w = l*(s+6);
+		var w = l*(s+2);
 
-		ui.unitSelector.width(Math.min(res.x - 400, w)).removeClass("disabled");
+		ui.unitSelector.width(Math.min(res.x - 240 - 420, w)).removeClass("disabled");
 	}
 }
 

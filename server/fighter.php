@@ -187,6 +187,10 @@ class Gorith extends Fighter {
 		return;
 		$this->systems[] = new ParticleGun($this->getId(), $this->parentId, $this->id, 2, 1, 11, 15);
 	}
+	
+	public $critEffects =  array( // type, mag, dura, effect
+		array("Disabled", 160, 0, 0.00),
+	);
 }
 
 class Frazi extends Fighter {
@@ -203,6 +207,10 @@ class Frazi extends Fighter {
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
 	}
+	
+	public $critEffects =  array( // type, mag, dura, effect
+		array("Disabled", 160, 0, 0.00),
+	);
 
 	public function addSystems(){
 		$this->systems[] = new ParticleGun($this->getId(), $this->parentId, $this->id, 2, 1, 13, 17);

@@ -99,6 +99,7 @@ spl_autoload_register(
                 'lifesupport' => '/server/systems/nonweapon.php',
                 'sensor' => '/server/systems/nonweapon.php',
                 'cyber' => '/server/systems/nonweapon.php',
+                'interceptor' => '/server/systems/nonweapon.php',
                 
                 'bulkhead' => '/server/systems/nonweapon.php',
                 'hangar' => '/server/systems/nonweapon.php',

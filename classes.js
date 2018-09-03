@@ -198,12 +198,13 @@ function Structure(data){
 	this.name = "Structure";
 	this.display = "Structure";
 	this.type = data.type;
-	this.parentIntegrity = data.parentIntegrity;
-	this.armourDmg = data.armourDmg;
 	this.id = data.id;
 	this.parentId = data.parentId;
 	this.start = data.start;
 	this.end = data.end;
+	this.specials = data.specials;
+	this.parentIntegrity = data.parentIntegrity;
+	this.armourDmg = data.armourDmg;
 	this.negation = data.negation;
 	this.remNegation = data.remNegation;
 	this.bonusNegation = 0;
@@ -694,9 +695,22 @@ Single.prototype.getSysDiv = function(){
 			.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
 			.append($("<tr>").append($("<td>").html("Armour").css("width", "70%")).append($("<td>").html(this.negation)))
 			.append($("<tr>").append($("<td>").html("Acceleration")).append($("<td>").html(this.baseImpulse)))
-			.append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html("<span class='yellow'>" + this.getEMDmg() + "<span>")))
-			.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6))))
-			//.append($("<tr>").append($("<td>").attr("colSpan", 2).html("Subject to dropout testing if damaged for more than "+this.dropout[0]+"% of remaining HP in a single turn"))))
+			.append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html(this.getEMDmg())))
+			.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
+			.append($("<tr>")
+				.append($("<td>").attr("colSpan", 2).html("Critical test triggered if damaged for more than 15% of remaining HP.</br>Rolls D100, add own damage%.")))
+			.append($("<tr>")
+				.append($("<td>").attr("colSpan", 2).css("height", 6)))
+			.append($("<tr>")
+				.append($("<th>").attr("colSpan", 2).html("Possible Effects")))
+		)
+
+	for (var i = 0; i < this.critEffects.length; i++){
+		div.find("tbody")			
+		.append($("<tr>")
+			.append($("<td>").html(">= " + this.critEffects[i][1]))
+			.append($("<td>").html(this.critEffects[i][0] + " " + (this.critEffects[i][3] ? this.critEffects[i][3] : ""))))
+	}
 
 
 	this.attachSysNotes(div);

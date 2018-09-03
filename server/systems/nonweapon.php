@@ -191,13 +191,13 @@ class Sensor extends PrimarySystem {
 	public $effiency = 10;
 	public $crewEffect = 12;
 	public $hitMod = 2;
+	public $modes = array("Lock", "Mask");
+	public $states = array(0, 0);
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
 		$this->powerReq = floor($output/60);
 		$this->effiency = floor($this->powerReq/9)+2;
 		$this->boostEffect[] = new Effect("Output", 10);
-		$this->modes = array("Lock", "Scramble");
-		$this->states = array(0, 0);
         parent::__construct($id, $parentId, $integrity, $output, $width);
     }
 
@@ -307,6 +307,20 @@ class Bulkhead extends System {
 
 	public function determineCrit($rel, $turn, $squad){
 		return;
+	}
+}
+
+class Interceptor {
+	public $modes = array();
+	public $powers = array();
+	public $id;
+	public $parentId;
+	public $name = "Interceptor";
+	public $display = "Interceptor Grid";
+
+	function __construct($id, $parentId){
+		$this->id = $id;
+		$this->parentId = $parentId;
 	}
 }
 

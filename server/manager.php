@@ -1722,7 +1722,7 @@
 			case "Earth Alliance": 
 				$notes = array(
 					array("Inpenetrable", "By trading energy, units can temporary empower their armour, making them far more resistent to damage."),
-					array("Insurmountable", "An array of networked turrets will provide dedicated point defense to every unit."),
+					//array("Insurmountable", "An array of networked turrets will provide dedicated point defense to every unit."),
 				);
 			break;
 			case "Centauri Republic"; 
@@ -1740,7 +1740,7 @@
 			case "Narn Regime";
 				$notes = array(
 					array("Iron Will", "Narn by nature will hardly ever flee from a battle until the very last moment. Unit starting morale is increased to 150."),
-					array("Shon'Kar", "Every unit can declare blood oath, marking an enemy as nemesis. Firing orders between oath-sworn incur a 20 % base to-Hit increase.")
+					array("Tenacity", "Narn pilots are known for their reckless determination. Strikecraft are far less susceptible to dropping out (120 -> 160).")
 				);
 			break;
 		}

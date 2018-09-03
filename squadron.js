@@ -587,7 +587,11 @@ Squadron.prototype.setStats = function(){
 	var ew = 0;
 	var ep = 1000;
 
+	var hitAndRun = true;
+
 	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].faction != "Centauri Republic"){hitAndRun = false;}
+
 		this.slots[0] += this.structures[i].space;
 		this.baseImpulseCost = Math.max(this.baseImpulseCost, this.structures[i].baseImpulseCost);
 		this.baseTurnDelay = Math.max(this.baseTurnDelay, this.structures[i].baseTurnDelay);
@@ -596,6 +600,10 @@ Squadron.prototype.setStats = function(){
 
 		ew = Math.max(ew, this.structures[i].ew);
 		ep = Math.min(ep, this.structures[i].ep);
+	}
+
+	if (hitAndRun){
+		this.baseImpulseCost = Math.floor(this.baseImpulseCost * 0.8);
 	}
 
 	this.primary.systems[1].output = ew;
@@ -773,10 +781,10 @@ Squadron.prototype.getBuyTableData = function(table){
 		)
 	}
 
-	var huntThemDown = true;
+	var wolfPack = true;
 
 	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].faction != "Centauri Republic"){huntThemDown = false;}
+		if (this.structures[i].faction != "Centauri Republic"){wolfPack = false;}
 
 		this.totalCost += this.structures[i].cost;
 		this.moraleCost += this.structures[i].cost;
@@ -813,7 +821,7 @@ Squadron.prototype.getBuyTableData = function(table){
 		}
 	}
 
-	if (huntThemDown && this.structures.length >= 3){
+	if (wolfPack && this.structures.length >= 3){
 		$(table)
 		.append(
 			$("<tr>")

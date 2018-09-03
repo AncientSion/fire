@@ -142,6 +142,11 @@ class Ship {
 		else if ($this->faction == "Narn Regime"){
 			$this->baseMorale = 150;
 		}
+		else if ($this->faction == "Earth Alliance"){
+			for ($i = 0; $i < sizeof($this->structures); $i++){
+				$this->structures[$i]->specials[] = new interceptor($this->getId(), $this->id);
+			}
+		}
 	}
 	
 	public function setUnitState($turn, $phase){
