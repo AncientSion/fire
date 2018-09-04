@@ -99,13 +99,13 @@ else header("Location: index.php");
 	<script src='mathLib.js'></script>	
 	<script src='shared.js'></script>
 	<script src='shipclasses.js'></script>
+	<script src='systems.js'></script>
 	<script src='classes.js'></script>
 	<script src='mixed.js'></script>
 	<script src='salvo.js'></script>
 	<script src='flights.js'></script>
 	<script src='squadron.js'></script>
 	<script src='squaddie.js'></script>
-	<script src='systems.js'></script>
 	<script src='graphics.js'></script>
 	<script src='cam.js'></script>
 	<script src='game.js'></script>

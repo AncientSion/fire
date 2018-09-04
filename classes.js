@@ -222,6 +222,8 @@ function Structure(data){
 	this.width = data.width;
 }
 
+Structure.prototype = Object.create(System.prototype);
+
 Structure.prototype.getRemNegation = function(){
 	return this.remNegation;
 }
@@ -270,11 +272,45 @@ Structure.prototype.getTableData = function(){
 		.click(function(e){
 			var shipId = $(this).data("shipId");
 			var systemId = $(this).data("systemId");
-		console.log(game.getUnit(shipId).getSystem(systemId));
+			game.getUnit(shipId).getSystem(systemId).select(e);
 		})
 
 	this.element = td;
 	return td;
+}
+
+Structure.prototype.select = function(){
+	console.log(this);
+	var unit;
+
+	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || this.parentId < 0 || game.turnMode){return;}
+	else if (game.phase == -2 || game.turn == 1 && game.phase == -1){return;}
+
+	unit = game.getUnit(this.parentId);
+	if (unit.ship && unit.hasSystemSelected("Sensor") || unit.hasHangarSelected()){return false;}
+
+	if (this.hasUnresolvedFireOrder()){
+		this.unsetFireOrder();
+	}
+	if (this.selected){
+		this.selected = false;
+		this.validTarget = 0;
+	}
+	else if(!game.exclusiveSystem){
+		this.selected = true;
+	}
+
+	this.setSystemBorder();
+
+	if ((unit.ship || unit.squad) && unit.hasWeaponsSelected()){
+		game.mode = 2;
+		unit.highlightAllSelectedWeapons();
+	}
+	else {
+		$("#aimDiv").hide();
+		game.mode = 1;
+		fxCtx.clearRect(0, 0, res.x, res.y);
+	}
 }
 
 Structure.prototype.hover = function(e){

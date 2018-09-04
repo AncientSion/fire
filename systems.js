@@ -887,14 +887,13 @@ System.prototype.getTableData = function(forFighter){
 	td.append(div);
 
 	if (!this.destroyed){
-			var outputDiv = document.createElement("div");
-				outputDiv.className = "outputMask";
-				if (this.internal || this.getActiveSystem().canBeBoosted()){
-					outputDiv.innerHTML = this.getActualOutput();
-				}
-				else $(outputDiv).hide();
-	td.append(outputDiv);
-		//}
+		var outputDiv = document.createElement("div");
+			outputDiv.className = "outputMask";
+			if (this.internal || this.getActiveSystem().canBeBoosted()){
+				outputDiv.innerHTML = this.getActualOutput();
+			}
+			else $(outputDiv).hide();
+		td.append(outputDiv);
 	}
 
 	$(td).data("systemId", this.id);
