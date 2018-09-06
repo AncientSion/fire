@@ -1,6 +1,6 @@
 <?php
 
-class Haven extends SuperLight {
+class Haven extends UltraLight {
 	public $name = "Haven";
 	public $display = "Haven";
 	public $role = "Cutter";

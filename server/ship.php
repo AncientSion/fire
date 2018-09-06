@@ -142,7 +142,7 @@ class Ship {
 		else if ($this->faction == "Narn Regime"){
 			$this->baseMorale = 150;
 		}
-		else if ($this->faction == "Earth Alliance"){
+		else if ($this->faction == "Efarth Alliance"){
 			for ($i = 0; $i < sizeof($this->structures); $i++){
 				$this->structures[$i]->specials[] = new Interceptor($this->getId(), $this->id);
 				$this->structures[$i]->modes = array(1, 0);
@@ -241,18 +241,15 @@ class Ship {
 
 	public function setStructureState($turn, $phase){
 		$main = $this->primary->integrity;
-		//$multi = $this->getArmourMultiplier() + 1;
-		$multi = 4;
-		$elements = sizeof($this->structures);
-		$each = $main * $multi / $elements;
+		$total = $main * 4 / sizeof($this->structures);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){ // 
-			$this->structures[$i]->setNegation($each, 0);
+			$this->structures[$i]->setNegation($total, 0);
 		}
 	}
 
 	public function getArmourMultiplier(){
-		return pow(1.2, $this->traverse+3);
+		return pow(1.1, $this->traverse+3);
 	}
 
 	public function setProps($turn, $phase){

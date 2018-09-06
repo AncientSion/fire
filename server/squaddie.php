@@ -154,9 +154,9 @@ class Squaddie extends Single {
 
 class Light extends Squaddie {
 	public $baseImpulse = 175;
-	public $size = 45;
 	public $baseImpulseCost = 30;
-	public $space = 3;
+	public $size = 48;
+	public $space = 4;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -164,8 +164,16 @@ class Light extends Squaddie {
 }
 
 class SuperLight extends Light {
-	public $baseImpulse = 185;
-	public $size = 40;
+	public $size = 42;
+	public $space = 3;
+	
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
+	}
+}
+
+class UltraLight extends SuperLight {
+	public $size = 37;
 	public $space = 2;
 	
 	function __construct($id, $parentId){

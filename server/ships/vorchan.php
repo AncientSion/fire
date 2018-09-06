@@ -1,6 +1,6 @@
 <?php
 
-class Vorchan extends Light {
+class Vorchan extends SuperLight {
 	public $name = "Vorchan";
 	public $display = "Vorchan";
 	public $role = "Attack Frigate";

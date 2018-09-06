@@ -1,6 +1,6 @@
 <?php
 
-class Tethys extends SuperLight {
+class Tethys extends UltraLight {
 	public $name = "Tethys";
 	public $display = "Tethys";
 	public $role = "Police Cutter";

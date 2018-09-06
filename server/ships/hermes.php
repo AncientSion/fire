@@ -1,6 +1,6 @@
 <?php
 
-class Hermes extends Light {
+class Hermes extends SuperLight {
 	public $name = "Hermes";
 	public $display = "Hermes";
 	public $role = "Courier Corvette";

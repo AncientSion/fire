@@ -1,6 +1,6 @@
 <?php
 
-class Shokos extends SuperLight {
+class Shokos extends UltraLight {
 	public $name = "Shokos";
 	public $display = "Shokos";
 	public $role = "Light Corvette";
