@@ -2381,3 +2381,10 @@ textarea.sendWrapper {
 .font20 {
 	font-size: 20px;
 }
+
+.squadSlots {
+	border-bottom: 1px solid white;
+	text-align: center;
+	font-size: 20px;
+	padding: 4px;
+}

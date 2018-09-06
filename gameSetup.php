@@ -253,7 +253,7 @@ else header("Location: index.php");
 					var squadron = game.getUnit(aUnit);
 					var sub = squadron.getSystem(data.systemId);
 
-					if (squadron.slots[0] + sub.space > squadron.slots[1]){return;}
+					if (squadron.getSlotsUsed() + sub.space > squadron.getMaxSlots()){return;}
 
 					var copy = initSquaddie(JSON.parse(JSON.stringify(sub)));
 						copy.index = squadron.index +1;
@@ -288,8 +288,8 @@ else header("Location: index.php");
 					var add = unit.totalCost;
 					var max = game.settings.pv;
 
-					if (unit.squad && unit.structures.length < 2){
-						popup("A squadron needs to include at least 2 units.");
+					if (unit.squad && unit.structures.length < 1){
+						popup("A squadron needs to include at least 1 units.");
 					} else if (cur + add > max){
 						popup("You have insufficient point value left");
 					}
@@ -529,6 +529,10 @@ else header("Location: index.php");
 				},
 
 				setUnitTotal: function(unit){
+
+					if (unit.squad){unit.setSlotUsage();}
+
+					
 					var table = document.getElementById("totalShipCost");
 						table.innerHTML = "";
 
@@ -616,6 +620,8 @@ else header("Location: index.php");
 
 				buildSquadList: function(data, t){
 					$(t).append(
+						$("<tr>").append($("<td>").css("height", 10).attr("colSpan", 5)))
+						.append(
 						$("<tr>")
 							.hover(function(){
 								$(this).toggleClass("highlight");
@@ -623,7 +629,7 @@ else header("Location: index.php");
 							.css("border-top", "1px solid white")
 							.css("border-bottom", "1px solid white")
 							.append($("<td>").html("Squadron"))
-							.append($("<td>").html("Can group units worth up to </br>10 formation points (FP)</br> into a singular Squadron")
+							.append($("<td>").addClass("squadron")
 								.attr("colSpan", 4))
 							.append($("<td>")
 								.append($("<input>")
@@ -643,7 +649,7 @@ else header("Location: index.php");
 									$(this).toggleClass("highlight");
 								})
 								.append($("<td>").html(data[i]["name"]))
-								.append($("<td>").html(data[i]["space"] + " FP"))
+								.append($("<td>").html(data[i]["space"] + " slots"))
 								.append($("<td>").html(data[i]["ep"]))
 								.append($("<td>").html(data[i]["ew"]))
 								.append($("<td>").html(data[i]["value"]))
@@ -673,6 +679,10 @@ else header("Location: index.php");
 						this.ballistics.push(ballistic);
 					}
 				},
+
+				setFactionSpecials: function(data, t){
+					t.find(".squadron").html("Provides a total of " + data["squadronSlots"] + " slots points.")
+				}
 			}
 
 			initPreviewCanvas();
@@ -736,9 +746,10 @@ else header("Location: index.php");
 	function requestSubUnit(ele){
 		var unit = game.getUnit(aUnit);
 		if (!unit || !unit.squad){return;}
-		else if (unit.structures.length >= 4){popup("A squadron can only contain up to 4 units."); return;}
-		else if (unit.slots[0] + $(ele).data("space") > unit.slots[1]){
-			popup("This Squadron can only hold units worth a total of " + unit.slots[1]+  " Formation Points (FP).</br>The Squadron currently requires " + unit.slots[1] + " FP.</br>Adding another " + $(ele).data("name") + " would bring the FP to " + (unit.slots[0] + $(ele).data("space"))+".") ;return;}
+		//else if (unit.structures.length >= 4){popup("A squadron can only contain up to 4 units."); return;}
+		else if (unit.getRemainingSlots() < $(ele).data("space")){
+	//		popup("This Squadron can only hold units worth a total of " + unit.slots[1] +  " Formation Points (FP).</br>The Squadron currently requires " + unit.slots[1] + " FP.</br>Adding another " + $(ele).data("name") + " would bring the FP to " + (unit.slots[0] + $(ele).data("space"))+".") ;return;}
+			popup("Insufficent slot space remaining</br>" + $(unit.element).find(".squadSlots").html()); return; }
 
 		var purchase = game.purchases;
 
@@ -794,6 +805,7 @@ else header("Location: index.php");
 			.find(".structContainer").show();
 
 		addNamingDiv(unit);
+		addSquadronSlotsDiv(unit);
 		addCostDiv(unit);
 		game.setUnitTotal(unit);
 
@@ -810,6 +822,15 @@ else header("Location: index.php");
 					.append($("<td>").css("width", 60).html("Name: "))
 					.append($("<td>")
 						.append($("<input>").attr("type", "text").prop("value", name).click(function(e){e.stopPropagation();})))))))
+	}
+
+	function addSquadronSlotsDiv(unit){
+		if (!unit.squad){return;}
+
+		$(unit.element)
+			.prepend($("<div>")
+				.addClass("squadSlots"))
+		unit.setSlotUsage();
 	}
 
 	function addCostDiv(unit){
@@ -914,8 +935,14 @@ else header("Location: index.php");
 		game.buildSquadList(data[2], tbody);
 		game.buildFighterList(data[3], tbody);
 		game.buildBallisticList(data[4], tbody);
+		game.setFactionSpecials(data[5], tbody);
+
+
 		showFactionData(i);
 	}
+
+
+
 
 	function joinGame(){
 		console.log("joinGame");

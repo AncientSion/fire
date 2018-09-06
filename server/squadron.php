@@ -12,7 +12,7 @@ class Squadron extends Ship {
 	public $turnAngle = 45;
 	public $traverse = 3;
 	public static $space;
-	public $slots = array(0, 10);
+	public $slots = 9;
 	public $baseFocusRate = 8;
 
 	function __construct($data = false){

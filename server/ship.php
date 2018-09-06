@@ -142,11 +142,8 @@ class Ship {
 		else if ($this->faction == "Narn Regime"){
 			$this->baseMorale = 150;
 		}
-		else if ($this->faction == "Efarth Alliance"){
-			for ($i = 0; $i < sizeof($this->structures); $i++){
-				$this->structures[$i]->specials[] = new Interceptor($this->getId(), $this->id);
-				$this->structures[$i]->modes = array(1, 0);
-			}
+		else if ($this->faction == "Earth Alliance"){
+			if ($this->squad){$this->slots = 12;}
 		}
 	}
 	

@@ -936,6 +936,29 @@ Squadron.prototype.getPurchaseHeader = function(){
 	ret = ret.substr(0, ret.length-3) + ")</span>";
 
 	return "<span style='font-size: 16px;'>Squadron</span>" + (this.display ? "<span class='green'> -- " + this.display + " -- </span>" : "") + ret;
+}
 
+Squadron.prototype.getSlotsUsed = function(){
+	return Math.floor(this.structures.map(x => x.space).reduce((l,r) => l+r, 0));
+}
 
+Squadron.prototype.getMaxSlots = function(){
+	var ea = this.structures.length;
+
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].faction != "Earth Alliance"){
+			ea = 0; break;
+		}
+	}
+
+	if (!ea){return this.slots;}
+	return 12;
+}
+
+Squadron.prototype.getRemainingSlots = function(){
+	return this.getMaxSlots() - this.getSlotsUsed();
+}
+
+Squadron.prototype.setSlotUsage = function(){
+	$(this.element).find(".squadSlots").html("Remaining Slots: " + this.getSlotsUsed() + " / " + this.getMaxSlots());
 }

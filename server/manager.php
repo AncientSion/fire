@@ -1717,11 +1717,13 @@
 		$notes = array();
 		$units = array(array(), array(), array(), array());
 		$return = array(array(), array(), array(), array(), array());
+		$specials = array();
 
-		switch ($faction){
+		switch ($faction){ // specials
 			case "Earth Alliance": 
 				$notes = array(
 					array("Inpenetrable", "By trading energy, units can temporary empower their armour, making them far more resistent to damage."),
+					array("Improvise", "Earth Force hierarchy relies on a flexible chain of command. Increase flexibility and decreased reaction times allows upscaling of Squadrons (9 -> slots)."),
 					//array("Insurmountable", "An array of networked turrets will provide dedicated point defense to every unit."),
 				);
 			break;
@@ -1745,7 +1747,7 @@
 			break;
 		}
 
-		switch ($faction){
+		switch ($faction){ // units and suqadies
 			case "Earth Alliance";
 				$units = array(
 					array(
@@ -1782,10 +1784,8 @@
 						"Altarian",
 						"Demos",
 						"Kutai",
-						//"Darkner",
 					),
 					array(
-						//"Vorchar",
 						"Mograth",
 						"Darkner",
 						"Vorchan",
@@ -1864,7 +1864,54 @@
 				break;
 		}
 
-		for ($i = 0; $i < sizeof($units[0]); $i++){
+		switch ($faction){ // specials
+			case "Earth Alliance": 
+				$notes = array(
+					array("Inpenetrable", "By trading energy, units can temporary empower their armour, making them far more resistent to damage."),
+					array("Chain of Command", "Humans follow the chain of command without question and excel at coordinating their efforts. Squadrons can hold up to 12 slot points."),
+					//array("Insurmountable", "An array of networked turrets will provide dedicated point defense to every unit."),
+				);
+			break;
+			case "Centauri Republic"; 
+				$notes = array(
+					array("Wolfpack", "Excelling at wolfpack tactics results in each Squadrons with at least 3 units being 15 % less expensive."),
+					array("Hit and Run", "Specialized battle doctrine and starship design yield a 20 % cost reduction for every non-turning move action.")
+				);
+			break;
+			case "Minbari Federation";
+				$notes = array(
+					array("Advanced", "Highly advanced tech allow easy overpowering of hostile sensors. EW is considered to be originating from a unit 2 levels higher."),
+					array("Enlightened", "Superior tactical capabilities and officer training result in a 30 % increased Focus gain as well as starting morale increased to 120.")
+				);
+			break;
+			case "Narn Regime";
+				$notes = array(
+					array("Iron Will", "Narn by nature will hardly ever flee from a battle until the very last moment. Unit starting morale is increased to 150."),
+					array("Tenacity", "Narn pilots are known for their reckless determination. Strikecraft are far less susceptible to dropping out (120 -> 160).")
+				);
+			break;
+		}
+
+		switch ($faction){
+			case "Earth Alliance";
+				$specials = array("squadronSlots" => 12);
+				break;
+			case "Centauri Republic";
+				$specials = array("squadronSlots" => 9);
+				break;
+			case "Minbari Federation";
+				$specials = array("squadronSlots" => 9);
+				break;
+			case "Narn Regime";
+				$specials = array("squadronSlots" => 9);
+				break;
+			default:
+				break;
+		}
+
+		$return[0] = $notes; // notes
+
+		for ($i = 0; $i < sizeof($units[0]); $i++){ //ships
 			$name = $units[0][$i];
 			$unit = new $name(1, 0, 0, 0, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "");
 			$data = array(
@@ -1877,7 +1924,7 @@
 			$return[1][] = $data;
 		}
 
-		for ($j = 0; $j < sizeof($units[1]); $j++){
+		for ($j = 0; $j < sizeof($units[1]); $j++){ // squadies
 			$unit = new $units[1][$j](1, 1);
 			$data = array(
 				"name" => $unit->name,
@@ -1890,16 +1937,17 @@
 			$return[2][] = $data;
 		}
 
-		for ($i = 0; $i < sizeof($units[2]); $i++){
+		for ($i = 0; $i < sizeof($units[2]); $i++){ // fightes
 			$fighter = new $units[2][$i](0, 0);
 			$return[3][] = $fighter;
 		}
-		for ($i = 0; $i < sizeof($units[3]); $i++){
+		for ($i = 0; $i < sizeof($units[3]); $i++){ // missiles
 			$ballistic = new $units[3][$i](0, 0);
 			$return[4][] = $ballistic;
 		}
 
-		$return[0] = $notes;
+		$return[5] = $specials;
+
 
 		return $return;
 	}
