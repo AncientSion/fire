@@ -52,9 +52,9 @@ class Ship {
 
 	public $turnAngle = 30;
 	public $slipAngle = 15;
+	public $baseImpulseCost = 30;
 	public $turnStep = 1;
 	public $baseTurnDelay;
-	public $baseImpulseCost;
 	public $hitTable;
 	public $cc = array();
 	public $damaged = 0;
@@ -135,8 +135,9 @@ class Ship {
 	}
 
 	public function setSpecialAbilities(){
+		Debug::log("setSpecialAbilities #".$this->id.", now: ".$this->baseImpulseCost);
 		if ($this->faction == "Centauri Republic"){
-			//Debug::log("setSpecialAbilities #".$this->id.", now: ".$this->baseImpulseCost);
+			Debug::log("add");
 			$this->baseImpulseCost = ceil($this->baseImpulseCost * 0.8);
 		}
 		else if ($this->faction == "Narn Regime"){
@@ -148,6 +149,7 @@ class Ship {
 		else if ($this->faction == "Minbari Federation"){
 			$this->baseMorale = 120;
 		}
+		Debug::log("setSpecialAbilities #".$this->id.", now: ".$this->baseImpulseCost);
 	}
 	
 	public function setUnitState($turn, $phase){
@@ -1332,8 +1334,6 @@ class Ship {
 class Medium extends Ship {
 	public $baseImpulse = 165;
 	public $traverse = 4;
-	public $slipAngle = 15;
-	public $baseImpulseCost = 30;
 	public $baseFocusRate = 10;
 
 	function __construct($data){
@@ -1376,7 +1376,6 @@ class Heavy extends Medium {
 	public $baseImpulse = 155;
 	public $traverse = 5;
 	public $baseFocusRate = 11;
-	//public $baseImpulseCost = 45;
 	
 	function __construct($data = false){
         parent::__construct($data);
@@ -1387,7 +1386,6 @@ class SuperHeavy extends Heavy {
 	public $baseImpulse = 140;
 	public $traverse = 6;
 	public $baseFocusRate = 12;
-	//public $baseImpulseCost = 50;
 	
 	function __construct($data = false){
         parent::__construct($data);
@@ -1398,7 +1396,6 @@ class UltraHeavy extends SuperHeavy {
 	public $baseImpulse = 130;
 	public $traverse = 7;
 	public $baseFocusRate = 13;
-	//public $baseImpulseCost = 55;
 	
 	function __construct($data = false){
         parent::__construct($data);
