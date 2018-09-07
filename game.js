@@ -744,7 +744,7 @@ function Game(data){
 				var step = 1;
 				var h = 1000;
 				var w = 200;
-				var dist = 200;
+				var dist = 600;
 				var y = h/2;
 
 				if (i % 2 == 0){step = -1;}
