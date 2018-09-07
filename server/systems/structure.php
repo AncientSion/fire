@@ -15,7 +15,6 @@ class Structure {
 	public $parentIntegrity = 0;
 	public $parentPow;
 	public $systems = array();
-	public $specials = array();
 	public $damages = array();
 	public $powers = array();
 	public $boostEffect = array();

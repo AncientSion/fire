@@ -15,7 +15,7 @@ Squadron.prototype = Object.create(Ship.prototype);
 Squadron.prototype.create = function(){
 	//console.log("create "+this.id);
 	if (!this.structures.length){
-		this.curImp = 0;
+		//this.curImp = 0;
 		this.primary.systems[0].output = 0;
 		this.primary.systems[1].output = 0;
 	} else if (this.id < 0){this.curImp = this.baseImpulse;}
@@ -89,7 +89,7 @@ Squadron.prototype.setLayout = function(){
 		h = Math.abs(minY) + Math.abs(maxY) + s;
 
 
-	$(this.element).find(".structContainer").css("height", h + 20 + ((this.structures.length > 2) * 70));
+	//$(this.element).find(".structContainer").css("height", h + 20 + ((this.structures.length > 2) * 70));
 }
 
 Squadron.prototype.createBaseDiv = function(){
@@ -154,6 +154,47 @@ Squadron.prototype.createBaseDiv = function(){
 }
 
 Squadron.prototype.setSubElements = function(){
+
+	var cont = 160;
+
+	var w = this.structures.length == 4 ?  390 : Math.max(390, Math.min(3, Math.max(2, this.structures.length))*cont);
+	console.log(w);
+
+	$(this.element).css("width", w);
+
+	for (var i = 0; i < this.structures.length; i++){
+		$(this.element).find(".structContainer").append(this.structures[i].element);
+	}
+
+	if (this.structures.length == 4){
+		for (var i = 0; i < this.structures.length; i++){
+			$(this.structures[i].element).css("width", 194)
+		}
+	} else {
+		for (var i = 0; i < this.structures.length; i++){
+			$(this.structures[i].element).css("width", 160)
+		}
+	}
+	return;
+
+	var row = 0;
+	var col = -1;
+	var w = 160 + 3*3;
+
+	for (var i = 0; i < this.structures.length; i++){
+		if (col == 2){
+			row++;
+			col = 0;
+		} else col++;
+
+		$(this.structures[i].element)
+			.css("left", col * w)
+			.css("top", row * w)
+
+
+		$(this.element).find(".structContainer").append(this.structures[i].element);
+	}
+	return;
 	var w = $($(this.element).find(".structContainer")).width();
 	var h = $($(this.element).find(".structContainer")).height();
 

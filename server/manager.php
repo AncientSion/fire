@@ -1868,20 +1868,20 @@
 			case "Earth Alliance": 
 				$notes = array(
 					array("Inpenetrable", "By trading energy, units can temporary empower their armour, making them far more resistent to damage."),
-					array("Chain of Command", "Humans follow the chain of command without question and excel at coordinating their efforts. Squadrons can hold up to 12 slot points."),
+					array("Coordination", "Rapid response times within the existing chain of command grants increased flexibility for formation tactics.</br> Squadrons have a total of 12 slot points."),
 					//array("Insurmountable", "An array of networked turrets will provide dedicated point defense to every unit."),
 				);
 			break;
 			case "Centauri Republic"; 
 				$notes = array(
 					array("Wolfpack", "Excelling at wolfpack tactics results in each Squadrons with at least 3 units being 15 % less expensive."),
-					array("Hit and Run", "Specialized battle doctrine and starship design yield a 20 % cost reduction for every non-turning move action.")
+					array("Hit and Run", "Specialized battle doctrine and starship design yield a 20 % cost reduction for every non-turning move action")
 				);
 			break;
 			case "Minbari Federation";
 				$notes = array(
 					array("Advanced", "Highly advanced tech allow easy overpowering of hostile sensors. EW is considered to be originating from a unit 2 levels higher."),
-					array("Enlightened", "Superior tactical capabilities and officer training result in a 30 % increased Focus gain as well as starting morale increased to 120.")
+					array("Enlightened", "Superior tactical capabilities and officer training result in 30 % increased Focus gain. Unit starting morale increased to 120.")
 				);
 			break;
 			case "Narn Regime";
@@ -1897,13 +1897,13 @@
 				$specials = array("squadronSlots" => 12);
 				break;
 			case "Centauri Republic";
-				$specials = array("squadronSlots" => 9);
+				$specials = array("squadronSlots" => 10);
 				break;
 			case "Minbari Federation";
-				$specials = array("squadronSlots" => 9);
+				$specials = array("squadronSlots" => 10);
 				break;
 			case "Narn Regime";
-				$specials = array("squadronSlots" => 9);
+				$specials = array("squadronSlots" => 10);
 				break;
 			default:
 				break;

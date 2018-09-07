@@ -676,10 +676,10 @@ table, th, tr, td {
 }
 
 .unitContainer {
-	position: absolute;
+	display: inline-block;
+	position: relative;
 	width: 160px;
 	height: 160px;
-	border: 1px solid white;
 }
 
 .unitContainer.borderHighlight {
@@ -768,16 +768,13 @@ table, th, tr, td {
 }
 
 .structContainer.squad {
-	width: 390px;
+	height: unset;
 }
 
 .focusContainer, .commandContainer, .missionContainer {
 	position: relative;
 	color: white;
 	margin: auto;
-	margfin-top: 5px;
-	bforder-top: 1px solid white;
-	forder-bottom: 1px solid white;
 	padding: 3px;
 }
 

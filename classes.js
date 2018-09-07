@@ -202,7 +202,6 @@ function Structure(data){
 	this.parentId = data.parentId;
 	this.start = data.start;
 	this.end = data.end;
-	this.specials = data.specials;
 	this.parentIntegrity = data.parentIntegrity;
 	this.armourDmg = data.armourDmg;
 	this.negation = data.negation;
@@ -218,7 +217,6 @@ function Structure(data){
 	this.effiency = data.effiency;
 	this.boostEffect = data.boostEffect;
 	this.modes = data.modes;
-	this.specials = data.specials;
 	this.width = data.width;
 }
 
@@ -383,20 +381,6 @@ Structure.prototype.getSysDiv = function(){
 						.append($("<td>").html("Boost Power Cost"))
 						.append($("<td>").html(this.getEffiency()).addClass("powerCost")))
 			}
-		}
-	}
-
-	if (this.specials.length){
-		for (var i = 0; i < this.specials.length; i++){
-			table
-				.append($("<tr>")
-					.append($("<th>").html(this.specials[i].display).attr("colSpan", 2)))
-				.append($("<tr>")
-					.append($("<td>").html("Current Mode"))
-					.append($("<td>").html(this.specials[i].modes[0] ? this.specials[i].modes[0] : this.specials[i].modes[1])))
-				.append($("<tr>")
-					.append($("<td>").html("Strength"))
-					.append($("<td>").html(this.specials[i].turrets[0] + " / " + this.specials[i].turrets[1])))
 		}
 	}
 

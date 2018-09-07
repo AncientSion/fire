@@ -145,6 +145,9 @@ class Ship {
 		else if ($this->faction == "Earth Alliance"){
 			if ($this->squad){$this->slots = 12;}
 		}
+		else if ($this->faction == "Minbari Federation"){
+			$this->baseMorale = 120;
+		}
 	}
 	
 	public function setUnitState($turn, $phase){
@@ -352,7 +355,6 @@ class Ship {
 
 	public function setCurSpeed($turn, $phase){
 		$impulse = $this->curImp;
-		//Debug::log("setCurSpeed #".$this->id.": ".$impulse);
 		if ($turn == $this->available){
 			$impulse = $this->getBaseImpulse();
 		}
@@ -366,6 +368,7 @@ class Ship {
 			}
 		}
 		$this->curImp = $impulse;
+		Debug::log("setCurSpeed #".$this->id.": ".$this->curImp);
 	}
 
 	public function getCurSpeed(){

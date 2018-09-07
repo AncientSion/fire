@@ -6,13 +6,11 @@ class Squadron extends Ship {
 	public $name = "Squadron";
 	public $display = "Squadron";
 	public static $value = 0;
-	public $baseTurnDelay = 0;
-	public $baseImpulseCost = 0;
-	public $baseImpulse = 1000;
+	public $baseImpulse = 185;
 	public $turnAngle = 45;
 	public $traverse = 3;
 	public static $space;
-	public $slots = 9;
+	public $slots = 10;
 	public $baseFocusRate = 8;
 
 	function __construct($data = false){
@@ -125,7 +123,6 @@ class Squadron extends Ship {
 			for ($j = 1; $j <= $elements[$i]["amount"]; $j++){
 				$this->structures[] = new $elements[$i]["name"]($this->getId(), $this->id);
 				$this->index = $this->structures[sizeof($this->structures)-1]->index;
-				$this->slots[0] += $this->structures[sizeof($this->structures)-1]->space;
 			}
 		}
 		return true;
@@ -174,10 +171,10 @@ class Squadron extends Ship {
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (($this->structures[$i]->destroyed && !$this->structures[$i]->isDestroyedThisTurn($turn)) || $this->structures[$i]->disabled){continue;}
 
-			$this->baseTurnDelay = max($this->baseTurnDelay, $this->structures[$i]->baseTurnDelay);
-			$this->baseImpulseCost = max($this->baseImpulseCost, $this->structures[$i]->baseImpulseCost);
-			$this->baseImpulse = min($this->baseImpulse, $this->structures[$i]->baseImpulse);
-			$this->slipAngle = min($this->slipAngle, $this->structures[$i]->slipAngle);
+			//$this->baseTurnDelay = max($this->baseTurnDelay, $this->structures[$i]->baseTurnDelay);
+			//$this->baseImpulseCost = max($this->baseImpulseCost, $this->structures[$i]->baseImpulseCost);
+			//$this->baseImpulse = min($this->baseImpulse, $this->structures[$i]->baseImpulse);
+			//$this->slipAngle = min($this->slipAngle, $this->structures[$i]->slipAngle);
 
 			$this->primary->systems[1]->output = max($this->primary->systems[1]->output, $this->structures[$i]->ew);
 			$this->primary->systems[2]->output = min($this->primary->systems[2]->output, $this->structures[$i]->ep);
