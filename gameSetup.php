@@ -238,6 +238,7 @@ else header("Location: index.php");
 				turn: 0,
 			 	phase: -2,
 			 	purchases: 1,
+			 	openRequest: 0,
 			 	refit: 0,
 				ships: [],				
 				shipsBought: [],
@@ -746,15 +747,16 @@ else header("Location: index.php");
 	function requestSubUnit(ele){
 		var unit = game.getUnit(aUnit);
 		if (!unit || !unit.squad){return;}
-		//else if (unit.structures.length >= 4){popup("A squadron can only contain up to 4 units."); return;}
-		else if (unit.getRemainingSlots() < $(ele).data("space")){
-	//		popup("This Squadron can only hold units worth a total of " + unit.slots[1] +  " Formation Points (FP).</br>The Squadron currently requires " + unit.slots[1] + " FP.</br>Adding another " + $(ele).data("name") + " would bring the FP to " + (unit.slots[0] + $(ele).data("space"))+".") ;return;}
-			popup("Insufficent slot space remaining</br>" + $(unit.element).find(".squadSlots").html()); return; }
+		if (game.openRequest){return;}
+		if (unit.getRemainingSlots() < $(ele).data("space")){
+			popup("Insufficent slot space remaining</br>" + $(unit.element).find(".squadSlots").html()); return;
+		}
 
 		var purchase = game.purchases;
 
 		if (game.refit){purchase = unit.purchaseId;}
 
+		game.openRequest = 1;
 		$.ajax({
 			type: "GET",
 			url: "getGameData.php",
@@ -840,6 +842,7 @@ else header("Location: index.php");
 
 	function addUnitToSquadron(data){
 
+		game.openRequest = 0;
 		var unit = game.getUnit(aUnit);
 		var sub = initSquaddie (JSON.parse(data));
 			sub.create();			
