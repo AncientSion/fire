@@ -14,7 +14,7 @@ class Missile extends Single {
 	
 	public function setBaseStats($phase, $turn){
 		if ($this->missile){
-			$this->baseImpulse = ceil(pow($this->mass, -0.75)*40000);
+			$this->baseImpulse = ceil(pow($this->mass, -0.75)*400);
 			$this->baseHitChance = ceil(sqrt($this->mass)*5);
 		}
 		else {
