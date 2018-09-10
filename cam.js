@@ -64,18 +64,8 @@ window.cam = {
 			this.z = Math.min(2, Math.floor( (res.y / 2) / fire.dist * 15)/10);
 		}
 		else this.z = 1.5;
-
-
-		var origin = fire.shooter.getPlannedPos();
-		var target = fire.target.getPlannedPos();
-
-		var centerX = (target.x + origin.x) / 2;
-		var centerY = (target.y + origin.y) / 2;
-
-		//var h = ui.combatLogWrapper.height();
-		//console.log(h);
-
-		this.setFocusToPos({x: centerX, y: centerY}); return;
+		
+		this.setFocusToPos(fire.focus);
 	}
 }
 

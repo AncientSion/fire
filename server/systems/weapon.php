@@ -78,14 +78,14 @@ class Weapon extends System {
 			$this->dmgs[$i] = floor($data[$i] / 100 * $this->minDmg);
 		}
 
-		$this->notes[] = "Intial hit scores ".$this->dmgs[0]." damage against</br>target structure";
+		$this->notes[] = "Intial hit scores ".$this->dmgs[0]." damage against</br>target hull.";
 		$this->notes[] = "</br><u>Ship</u>";
 		$this->notes[] = "Facing systems are subject to either</br>".$this->dmgs[1].", ".$this->dmgs[2]." or ".$this->dmgs[3]." damage";
 		$this->notes[] = "Armour applies, no Overkill";
 	}
 
 	public function setShockData(){
-		$data = array(1, 1, 2, 6, 10, 14, 18);
+		$data = array(1, 1, 2, 5, 9, 13, 17);
 
 		for ($i = 0; $i < sizeof($data); $i++){
 			$this->dmgs[$i] = $data[$i];
@@ -96,7 +96,7 @@ class Weapon extends System {
 		$this->notes[] = "<u>Squadron</u>: $data[3] hits each";
 
 		$html = "<u>Ship target</u></br>";
-		$html .= "Structure is subject to $data[4] (+ ".floor($data[5]-$data[4])." per size) hits.</br>";
+		$html .= "Hull is subject to $data[4] / $data[5] / $data[6] hits pending size.</br>";
 		$html .= "Facing systems are subject to $data[1] - $data[2] hits each.";	
 		$this->notes[] = $html;
 		$this->notes[] = "Armour applies, no Overkill";

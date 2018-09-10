@@ -171,7 +171,7 @@ class Squadron extends Ship {
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (($this->structures[$i]->destroyed && !$this->structures[$i]->isDestroyedThisTurn($turn)) || $this->structures[$i]->disabled){continue;}
 
-			//$this->baseTurnDelay = max($this->baseTurnDelay, $this->structures[$i]->baseTurnDelay);
+			$this->baseTurnDelay = max($this->baseTurnDelay, $this->structures[$i]->baseTurnDelay);
 			//$this->baseImpulseCost = max($this->baseImpulseCost, $this->structures[$i]->baseImpulseCost);
 			//$this->baseImpulse = min($this->baseImpulse, $this->structures[$i]->baseImpulse);
 			//$this->slipAngle = min($this->slipAngle, $this->structures[$i]->slipAngle);

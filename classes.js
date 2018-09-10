@@ -965,6 +965,12 @@ function FireOrder(data){
 	this.turn = data.turn || game.turn;
 	this.shooterid = data.shooterid || -1;
 	this.targetid = data.targetid || -1;
+	this.shooter;
+	this.target;
+	this.weapon;
+	this.damages = [];
+	this.systems = [];
+	this.focus;
 	this.x = data.x || 0;
 	this.y = data.y || 0;
 	this.weaponid = data.weaponid || -1;
@@ -977,12 +983,10 @@ function FireOrder(data){
 	this.guns = 1;
 	this.animated = 0;
 	this.anim = [];
-	this.damages = [];
 	this.min;
 	this.max;
 	this.found = false;
 	this.rolls = data.notes.slice(0, data.notes.length-1).split(";").map(Number);
-	this.systems = [];
 	this.animating = 0;
 	this.tr = false;
 	this.numbers = [];
@@ -997,19 +1001,9 @@ FireOrder.prototype.setNumberAnim = function(){
 
 	var aoe = this.weapon.aoe ? 1 : 0;
 
-	if (aoe){
-	//	last = this.anim[this.anim.length-1][this.anim[this.anim.length-1].length-1];
-		targets = data.end - data.start+1;
-	}
-/*	else {
-		for (var i = 0; i < this.anim.length; i++){
-			for (var j = 0; j < this.anim[i].length; j++){
-				if (!this.anim[i][j].h){continue;}
-				last = this.anim[i][j];
-			}
-		}
-	}
-*/
+	if (aoe){targets = data.end - data.start+1;}
+
+
 	last = this.anim[this.anim.length-1][this.anim[this.anim.length-1].length-1];
 
 	var len = Math.abs(last.n) + last.m;
@@ -1021,9 +1015,9 @@ FireOrder.prototype.setNumberAnim = function(){
 		var drawPos = game.getUnit(tr.data("targetid")).getDrawPos();
 		var odds = aoe ? "" : tr.find("td").eq(4).html();
 		var shots = aoe ? "" : tr.find("td").eq(5).html();
-		var armour = tr.find("td").eq(6 - aoe*2).html();
-		var system = tr.find("td").eq(7 - aoe*2).html();
-		var hull = tr.find("td").eq(8 - aoe*2).html();
+		var armour = tr.find("td").eq(6 - aoe*3).html();
+		var system = tr.find("td").eq(7 - aoe*3).html();
+		var hull = tr.find("td").eq(8 - aoe*3).html();
 
 		this.numbers.push(
 			{
@@ -1073,20 +1067,18 @@ FireOrder.prototype.createCombatLogEntry = function(){
 			.append($("<td>")
 			)
 			.append($("<td>")
-				.attr("colSpan", 2)
+				.attr("colSpan", this.weapon.aoe ? 4 : 2)
 				.html(i + dmgs[i][6]) // system name
 			)
 
 
-		//if (this.weapon.aoe){sub.data("targetid", dmgs[i].shipid);}
-
-		var string = "";
-
-		if (dmgs[i][0]){string += "Kills: " + dmgs[i][0]};
-		if (string.length > 2 && dmgs[i][1]){string += " / "};
-		if (dmgs[i][1]){string += "Overload: " + dmgs[i][1]}
-		$(sub).append($("<td>").attr("colSpan", 2).html(string))
-
+		if (!this.weapon.aoe){
+			var string = "";
+			if (dmgs[i][0]){string += "Kills: " + dmgs[i][0]};
+			if (string.length > 2 && dmgs[i][1]){string += " / "};
+			if (dmgs[i][1]){string += "Overload: " + dmgs[i][1]}
+			$(sub).append($("<td>").attr("colSpan", 2).html(string));
+		}
 
 
 		for (var j = 2; j < dmgs[i].length-2; j++){
@@ -1214,7 +1206,7 @@ FireOrder.prototype.addLogStartEntry = function(log){
 	}
 	else {
 		tr
-		.append($("<td>").html("Interrupt"))
+		.append($("<td>").html("Interrupt").css("width", 70))
 		.append($("<td>").attr("colSpan", 4).html("<font color='" + this.shooter.getCodeColor() + "'>" + this.shooter.name + " #" + this.shooter.id + "</font> firing " + this.weapon.getDisplay()))
 		.append($("<td>").html(this.damages.length))
 		.append($("<td>").html(armour ? armour : ""))

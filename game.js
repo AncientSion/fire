@@ -744,7 +744,7 @@ function Game(data){
 				var step = 1;
 				var h = 1000;
 				var w = 200;
-				var dist = 600;
+				var dist = 400;
 				var y = h/2;
 
 				if (i % 2 == 0){step = -1;}
@@ -978,6 +978,7 @@ function Game(data){
 			this.animating = 0;
 			this.drawingEvents = 1;
 			this.draw();
+			this.showUI();
 			if (this.phase == 2){
 				this.autoIssueFireOrders();
 			}
@@ -1811,7 +1812,6 @@ function Game(data){
 								}
 							}
 							else if (action.type == "turn"){
-
 								action.t[0]++;
 								game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[2]);
 								//action.angle += action.t[2];
@@ -1839,11 +1839,11 @@ function Game(data){
 							}
 							else if (action.type == "roll"){
 								action.animated = true;
-								game.ships[i].createActionEntry();
+								//game.ships[i].createActionEntry();
 							}
 							else if (action.type == "flip"){
 								action.animated = true;
-								game.ships[i].createActionEntry();
+								//game.ships[i].createActionEntry();
 							}
 							else if (action.type == "patrol"){
 								action.animated = true;
@@ -2011,14 +2011,15 @@ function Game(data){
 		
 		ui.combatLogWrapper
 			.find("#combatLogInnerWrapper").find("#combatLog")
+				.append($("<tr>"))
 				.append($("<tr>")
 					.append($("<td>").attr("colSpan", 9).css("font-size", 18).html("Event Log")))
 				.append($("<tr>")
-				.append($("<th>").attr("colSpan", 5).html("Event Type"))
-				.append($("<th>").html("Hits"))
-				.append($("<th>").html("Armour"))
-				.append($("<th>").html("System"))
-				.append($("<th>").html("Structure")))
+				.append($("<th>").attr("colSpan", 5).css("width", 335).html("Event Type"))
+				.append($("<th>").html("Hits").css("width", 40))
+				.append($("<th>").html("Armour").css("width", 70))
+				.append($("<th>").html("System").css("width", 70))
+				.append($("<th>").html("Structure").css("width", 90)))
 
 		this.getAllResolvingFireOrders();
 		this.getAreaShotDetails();
@@ -2057,6 +2058,7 @@ function Game(data){
 		ui.unitSelector.hide();
 		$("#leftUnitWrapper").hide();
 		$("#upperGUI").hide()
+		$(".optionsWrapper").hide();
 	}
 
 	this.showUI = function(){
@@ -2064,6 +2066,7 @@ function Game(data){
 		ui.combatLogWrapper.show();
 		this.setLeftWrapperVisibility();
 		$("#upperGUI").show()
+		$(".optionsWrapper").hide();
 	}
 
 	this.setFireGlobals = function(){
@@ -2110,8 +2113,10 @@ function Game(data){
 			this.fireOrders[i].damages = this.getAreaDmgs(this.fireOrders[i]);
 			this.fireOrders[i].systems.push(this.fireOrders[i].weaponid);
 
-			var origin = this.fireOrders[i].shooter.getPlannedPos();			
-			this.fireOrders[i].dist = getDistance({x: origin.x, y: origin.y},{x: this.fireOrders[i].rolls[0], y: this.fireOrders[i].rolls[1]});
+			var origin = this.fireOrders[i].shooter.getGamePos();
+			var target = {x: this.fireOrders[i].rolls[0], y: this.fireOrders[i].rolls[1]};
+			this.fireOrders[i].focus = {x:  (target.x + origin.x) / 2, y:  (target.y + origin.y) / 2}
+			this.fireOrders[i].dist = getDistance({x: origin.x,	y: origin.y}, {x: target.x,	y: target.y});
 		}
 	}
 
@@ -2182,17 +2187,10 @@ function Game(data){
 				continue;
 			}
 			else {
-				var a = this.fireOrders[i].shooter.getGamePos();
-				var b = this.fireOrders[i].target.getGamePos();
-				this.fireOrders[i].dist = getDistance(
-					{
-						x: a.x,
-						y: a.y
-					},
-					{	x: b.x,
-						y: b.y
-					}
-				);
+				var origin = this.fireOrders[i].shooter.getGamePos();
+				var target = this.fireOrders[i].target.getGamePos();
+				this.fireOrders[i].focus = {x:  (target.x + origin.x) / 2, y:  (target.y + origin.y) / 2}
+				this.fireOrders[i].dist = getDistance({x: origin.x,	y: origin.y}, {x: target.x,	y: target.y});
 			}
 		}
 	}
@@ -2296,7 +2294,8 @@ function Game(data){
 
 		if (!game.fireOrders[i].animating){
 			game.fireOrders[i].animating = 1;
-			if (game.phase == 3){cam.setFireFocus(game.fireOrders[i]);}
+			//if (game.phase == 3){cam.setFireFocus(game.fireOrders[i]);}
+			cam.setFireFocus(game.fireOrders[i]);
 			//window.ticks = 0;
 			console.log(game.fireOrders[i]);
 			game.draw();
@@ -3407,6 +3406,7 @@ Game.prototype.doResolveMovement = function(){
 	this.animSalvo = 0;
 
 	this.doPositionLog("Movement Log", 600);
+	this.hideUI();
 
 	this.animateUnitMovement();
 }

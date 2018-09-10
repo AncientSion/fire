@@ -135,8 +135,8 @@ class Ship {
 	}
 
 	public function setSpecialAbilities(){
-		Debug::log("setSpecialAbilities #".$this->id.", now: ".$this->baseImpulseCost);
-		if ($this->faction == "Centauri Republic"){
+		//Debug::log("setSpecialAbilities #".$this->id.", now: ".$this->baseImpulseCost);
+		if (//$this->faction == "Centauri Republic"){
 			Debug::log("add");
 			$this->baseImpulseCost = ceil($this->baseImpulseCost * 0.8);
 		}
@@ -149,7 +149,7 @@ class Ship {
 		else if ($this->faction == "Minbari Federation"){
 			$this->baseMorale = 120;
 		}
-		Debug::log("setSpecialAbilities #".$this->id.", now: ".$this->baseImpulseCost);
+		//Debug::log("setSpecialAbilities #".$this->id.", now: ".$this->baseImpulseCost);
 	}
 	
 	public function setUnitState($turn, $phase){
@@ -370,7 +370,7 @@ class Ship {
 			}
 		}
 		$this->curImp = $impulse;
-		Debug::log("setCurSpeed #".$this->id.": ".$this->curImp);
+		//Debug::log("setCurSpeed #".$this->id.": ".$this->curImp);
 	}
 
 	public function getCurSpeed(){
