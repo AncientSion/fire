@@ -136,8 +136,8 @@ class Ship {
 
 	public function setSpecialAbilities(){
 		//Debug::log("setSpecialAbilities #".$this->id.", now: ".$this->baseImpulseCost);
-		if (//$this->faction == "Centauri Republic"){
-			Debug::log("add");
+		if ($this->faction == "Centauri Republic"){
+			//Debug::log("add");
 			$this->baseImpulseCost = ceil($this->baseImpulseCost * 0.8);
 		}
 		else if ($this->faction == "Narn Regime"){
