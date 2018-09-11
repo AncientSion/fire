@@ -4,9 +4,9 @@ class Salvo extends Mixed {
 	public $name = "Salvo";
 	public $unitType = "Salvo";
 	public $salvo = true;
-	public $tracking = 0;
 	public $missile = false;
 	public $torpedo = false;
+	public $traverse = 0;
 
 	function __construct($data = false){
         parent::__construct($data);

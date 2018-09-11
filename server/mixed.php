@@ -125,6 +125,17 @@ class Mixed extends Ship {
 	}
 
 	public function hidePowers($turn){
+		Debug::log("hide");
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				for ($k = sizeof($this->structures[$i]->systems[$j]->powers)-1; $k >= 0; $k--){
+					if ($this->structures[$i]->systems[$j]->powers[$k]->turn == $turn){
+						array_splice($this->structures[$i]->systems[$j]->powers, $k, 1);
+						$this->structures[$i]->systems[$j]->states = [1, 0];
+					} else break;
+				}
+			}
+		}
 		return;
 	}
 

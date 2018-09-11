@@ -2250,7 +2250,7 @@ Ship.prototype.showMoraleDiv = function(e){
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 12)))
 			.append($("<tr>")
-				.append($("<td>").attr("colSpan", 2).html("Morale test triggered if damaged for more than 15% of remaining HP.</br>Rolls D100, subtracts morale.")))
+				.append($("<td>").attr("colSpan", 2).html("Morale test triggered if damaged for more than 15% of remaining HP.</br>D100 + 100 - morale.")))
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
 			.append($("<tr>")

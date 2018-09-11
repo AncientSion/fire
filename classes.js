@@ -742,7 +742,7 @@ Single.prototype.getSysDiv = function(){
 			.append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html(this.getEMDmg())))
 			.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
 			.append($("<tr>")
-				.append($("<td>").attr("colSpan", 2).html("Critical test triggered if damaged for more than 15% of remaining HP.</br>Rolls D100, add own damage%.")))
+				.append($("<td>").attr("colSpan", 2).html("Critical test triggered if damaged for more than 15% of remaining HP.</br>D100 + own Damage%.")))
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
 			.append($("<tr>")
