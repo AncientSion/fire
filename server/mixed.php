@@ -349,7 +349,7 @@ class Mixed extends Ship {
 		for ($i = 0; $i < sizeof($elements); $i++){
 			for ($j = 1; $j <= $elements[$i]["amount"]; $j++){
 				$this->structures[] = new $elements[$i]["name"]($this->getId(), $this->id);
-				$this->structures[sizeof($this->structures)-1]->tracking = $this->tracking;
+				$this->structures[sizeof($this->structures)-1]->traverse = $this->traverse;
 				$this->index = $this->structures[sizeof($this->structures)-1]->index;
 			}
 		}
