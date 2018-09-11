@@ -7,10 +7,12 @@ function Point(x, y){
 	}
 }
 
-function Move(id, type, dist, x, y, a, delay, cost, costmod, manual, resolved){
+function Move(id, shipid, type, forced, dist, x, y, a, delay, cost, costmod, manual, resolved){
 	this.id = id;
+	this.shipid = shipid;
 	this.turn = game.turn;
 	this.type = type;
+	this.forced = forced;
 	this.dist = dist;
 	this.x = x;
 	this.y = y;
@@ -633,7 +635,7 @@ function Single(data){
 	this.baseHitChance = data.baseHitChance;
 	this.destroyed = data.destroyed;
 	this.disabled = data.disabled;
-	this.traverse = data.traverse;
+	this.tracking = data.tracking;
 	this.baseImpulse = data.baseImpulse;
 	this.critEffects = data.critEffects;
 	this.damages = [];
@@ -1228,7 +1230,7 @@ FireOrder.prototype.assembleDmgData = function(){
 		}
 		else dmgs[this.damages[i].system] = [0, 0, 1, 0, 0, 0, "", this.damages[i].shipid]; // new system entry
 
-		if (this.weapon.grouping || this.weapon.fireMode == "Shockwave"){ // multi hit weapons
+		if (this.weapon.grouping /*|| this.weapon.fireMode == "Shockwave"*/){ // multi hit weapons
 			for (var j = 0; j < this.damages[i].notes.length; j++){
 				if (this.damages[i].notes[j][0] == "v"){
 					dmgs[this.damages[i].system][6] += Math.floor(this.damages[i].notes[j].slice(1, this.damages[i].notes[j].length)) + ", ";
@@ -1251,7 +1253,7 @@ FireOrder.prototype.assembleDmgData = function(){
 
 	}
 
-	if (this.weapon.grouping || this.weapon.fireMode == "Shockwave"){ // multi hit weapons
+	if (this.weapon.grouping /*|| this.weapon.fireMode == "Shockwave"*/){ // multi hit weapons
 		for (var i in dmgs){
 			dmgs[i][6] = " (" + (dmgs[i][6].slice(0, dmgs[i][6].length-2)) + ")";
 		}

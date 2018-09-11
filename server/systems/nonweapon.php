@@ -107,9 +107,9 @@ class Command extends PrimarySystem {
 
 	public function determineCrit($rel, $turn, $squad){
 		if ($this->destroyed){return;}
-		if ($rel->relNew <= 0.05){return;}
+		if ($rel->new <= 0.05){return;}
 
-		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$rel->new.", old: ".$rel->old.", rel: ".$rel->relNew.", Squad: ".$squad);
+		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$rel->new.", old: ".$rel->old.", rel: ".$rel->new.", Squad: ".$squad);
 
 
         $options = array("Morale", "Focus", "Engine", "Sensor", "Reactor");
@@ -138,11 +138,11 @@ class Reactor extends PrimarySystem {
     }
 
     public function setOutput($use, $add){
-    	$this->output = $this->output + + $use + $add;
+    	$this->output = $this->output + $use + $add;
     }
 
 	public function getCritModMax($relDmg){
-		return (min(10, round($relDmg*100/5) * 5)*-4);
+		return (min(10, round($relDmg*100/5) * 5)*-1);
 	}
 
 	public function applyPowerSpike($turn, $potential, $em){

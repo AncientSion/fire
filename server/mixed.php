@@ -252,7 +252,7 @@ class Mixed extends Ship {
 			}
 		}
 
-		$move = new Action(-1, $this->id, $gd->turn, $type, $dist, $tPos->x, $tPos->y, $angle, 0, 0, 0, 1, 1);
+		$move = new Action(-1, $this->id, $gd->turn, $type, 0, $dist, $tPos->x, $tPos->y, $angle, 0, 0, 0, 1, 1);
 		Debug::log($this->id." --- adding ".$move->type." to => ".$move->x."/".$move->y.", dist: ".$dist);
 		$this->actions[] = $move;
 		$this->moveSet = 1;
@@ -338,7 +338,7 @@ class Mixed extends Ship {
 		for ($i = 0; $i < sizeof($elements); $i++){
 			for ($j = 1; $j <= $elements[$i]["amount"]; $j++){
 				$this->structures[] = new $elements[$i]["name"]($this->getId(), $this->id);
-				$this->structures[sizeof($this->structures)-1]->traverse = $this->traverse;
+				$this->structures[sizeof($this->structures)-1]->tracking = $this->tracking;
 				$this->index = $this->structures[sizeof($this->structures)-1]->index;
 			}
 		}

@@ -145,6 +145,7 @@ class Primary {
 	public $parentId;
 	public $start;
 	public $end;
+	public $traverse;
 	public $integrity;
 	public $destroyed = false;
 	public $systems = array();
@@ -155,11 +156,12 @@ class Primary {
 	public $newDmg = 0;
 	public $system = false;
 
-	function __construct($id, $parentId, $start, $end, $integrity){
+	function __construct($id, $parentId, $start, $end, $traverse, $integrity){
 		$this->id = $id;
 		$this->parentId = $parentId;
 		$this->start = $start;
 		$this->end = $end;
+		$this->traverse = $traverse;
 		$this->integrity = floor($integrity*0.85);
 		$this->remaining = floor($integrity*0.85);
 	}

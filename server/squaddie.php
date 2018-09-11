@@ -28,6 +28,7 @@ class Squaddie extends Single {
 
 	public $slots = 0;
 	public $squaddie = 1;
+	public $traverse = 3;
 	
 	function __construct($id, $parentId){
 		$this->integrity = floor($this->integrity * 0.8);

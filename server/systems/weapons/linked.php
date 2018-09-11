@@ -4,7 +4,7 @@ class FighterWeapon extends Particle {
 	public $projSpeed = 7;
 	public $projSize = 1.5;
 	public $reload = 1;
-	public $traverse = 0;
+	public $tracking = 0;
 	public $accDecay = 0;
 	public $tiny = 1;
 	public $fighterId = 0;
@@ -47,7 +47,7 @@ class FighterStrafe extends FighterWeapon {
 	public $name = "FighterStrafe";
 	public $display = "Particle Gun / Strafing Attack";
 	public $animColor = "blue";
-	public $traverse = 4;
+	public $tracking = 4;
 	public $basePulses = 1;
 	public $extraPulses = 2;
 	public $grouping = 30;
@@ -81,7 +81,7 @@ class ParticleBolt extends FighterWeapon {
 	public $projSpeed = 5;
 	public $shots = 1;
 	public $reload = 2;
-	public $traverse = 3;
+	public $tracking = 3;
 	
 	function __construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg){
 		parent::__construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg);
@@ -110,7 +110,7 @@ class ParticlePulsar extends FighterPulse {
 	public $basePulses = 2;
 	public $extraPulses = 1;
 	public $grouping = 20;
-	public $traverse = 0;
+	public $tracking = 0;
 	
 	function __construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg){
 		parent::__construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg);
@@ -138,7 +138,7 @@ class PlasmaBomb extends FighterPlasma {
 	public $shots = 1;
 	public $reload = 1;
 	public $dmgLoss = 0;
-	public $traverse = 1;
+	public $tracking = 1;
 	
 	function __construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg){
 		parent::__construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg);

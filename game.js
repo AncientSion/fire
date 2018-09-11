@@ -240,12 +240,12 @@ function Game(data){
 		//var mission = {id: -1, unitid: -this.ships.length-20, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
 
 		var flight = new Flight(
-			{id: range(-0, -100), name: "Flight", mission: false, traverse: 1,
+			{id: range(-0, -100), name: "Flight", mission: false, tracking: 1,
 			x: o.x, y: o.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, curImp: 0, fSize: 15, baseSize: 25, unitSize: 4, userid: this.userid, available: this.turn}
 		);
 
 		flight.primary = new Primary(0, flight.id, 0, 0, 0);
-		flight.actions.push(new Move(-1, "deploy", 0, o.x, o.y, facing, 0, 1, 1, 0));
+		flight.actions.push(new Move(-1, flight.id, "deploy", 0, 0, o.x, o.y, facing, 0, 1, 1, 0));
 		flight.launch = {
 			shipid: aUnit,
 			systemid: this.flightDeploy.id,
@@ -1799,6 +1799,13 @@ function Game(data){
 					for (var j = 0; j < game.ships[i].actions.length; j++){
 						if (game.ships[i].actions[j].turn == game.turn && !game.ships[i].actions[j].animated){
 							var action = game.ships[i].actions[j];
+
+							if (action.forced){
+								action.animated = 1;
+								continue;
+							}
+
+
 							if (action.type == "move"){
 								//	console.log(action.v);
 								action.v.t[0] += 1;
@@ -2066,7 +2073,7 @@ function Game(data){
 		ui.combatLogWrapper.show();
 		this.setLeftWrapperVisibility();
 		$("#upperGUI").show()
-		$(".optionsWrapper").hide();
+		$(".optionsWrapper").show();
 	}
 
 	this.setFireGlobals = function(){
@@ -2113,7 +2120,7 @@ function Game(data){
 			this.fireOrders[i].damages = this.getAreaDmgs(this.fireOrders[i]);
 			this.fireOrders[i].systems.push(this.fireOrders[i].weaponid);
 
-			var origin = this.fireOrders[i].shooter.getGamePos();
+			var origin = this.fireOrders[i].shooter.getTurnStartPos();
 			var target = {x: this.fireOrders[i].rolls[0], y: this.fireOrders[i].rolls[1]};
 			this.fireOrders[i].focus = {x:  (target.x + origin.x) / 2, y:  (target.y + origin.y) / 2}
 			this.fireOrders[i].dist = getDistance({x: origin.x,	y: origin.y}, {x: target.x,	y: target.y});
@@ -2793,7 +2800,7 @@ function Game(data){
 
 		if (!l){return;}
 
-		var w = l*(s+2);
+		var w = l*(s+6);
 
 		ui.unitSelector.width(Math.min(res.x - 240 - 420, w)).removeClass("disabled");
 	}

@@ -239,6 +239,7 @@ else header("Location: index.php");
 			 	phase: -2,
 			 	purchases: 1,
 			 	openRequest: 0,
+			 	canConfirm: 1,
 			 	refit: 0,
 				ships: [],				
 				shipsBought: [],
@@ -418,8 +419,9 @@ else header("Location: index.php");
 				},
 
 				doConfirmFleet: function(){
+					if  (!this.canConfirm){return;}
+					this.canConfirm = 0;
 					var data = [];
-
 
 					for (var i = 0; i < game.shipsBought.length; i++){
 						game.shipsBought[i].tr = undefined;
@@ -785,7 +787,7 @@ else header("Location: index.php");
 			game.ships[0] = ship;
 			game.system = 0;
 
-			ship.actions.push(new Move(-1, "deploy", 0, res.x/2, res.y/2, 0, 0, 0, 1, 1, 1));
+			ship.actions.push(new Move(-1, ship.id, "deploy", 0, 0, res.x/2, res.y/2, 0, 0, 0, 1, 1, 1));
 			ship.setUnitState();
 			ship.setSubSystemState();
 			ship.create();

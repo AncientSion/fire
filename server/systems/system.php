@@ -23,6 +23,7 @@ class System {
 	public $effiency = 0;
 	public $maxBoost = 0;
 	public $maxRange = 0;
+	public $traverse = 1;
 	public $mass;
 	public $boostEffect = array();
 	public $modes = array();

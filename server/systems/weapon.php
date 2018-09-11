@@ -8,7 +8,7 @@ class Weapon extends System {
 	public $powerReq = 2;
 	public $fireOrders = array();
 	public $arc = array();
-	public $traverse = 0;
+	public $tracking = 0;
 	public $projSize = 10;
 	public $projSpeed = 5;
 	public $animation = "projectile";
@@ -47,14 +47,14 @@ class Weapon extends System {
 		$this->armour = floor($rem * $this->armourMod);
 	}
 	
-	public function getTraverseMod($fire){
-		//Debug::log("this: ".$this->traverse);
+	public function getTrackingMod($fire){
+		//Debug::log("this: ".$this->tracking);
 		//Debug::log("target: ".$fire->target->traverse);
-		return max(0, $this->traverse - $fire->target->traverse);
+		return max(0, $this->tracking - $fire->target->traverse);
 	}
 
-	public function getTotalDamage($fire, $hit){
-		$base = $this->getBaseDamage($fire, $hit);
+	public function getTotalDamage($fire, $hit, $system){
+		$base = $this->getBaseDamage($fire, $hit, $system);
 		$bonus = $this->getBonusDamage($fire, $base, $hit);
 		$mod = $this->getDamageMod($fire);
 		$range = $this->getDmgRangeMod($fire);
@@ -63,7 +63,7 @@ class Weapon extends System {
 		return floor(($base+$bonus)*$mod*$range);
 	}
 	
-	public function getBaseDamage($fire, $hit){
+	public function getBaseDamage($fire, $hit, $system){
 		return mt_rand($this->getMinDamage(), $this->getMaxDamage());
 	}
 	
@@ -80,11 +80,31 @@ class Weapon extends System {
 
 		$this->notes[] = "Intial hit scores ".$this->dmgs[0]." damage against</br>target hull.";
 		$this->notes[] = "</br><u>Ship</u>";
-		$this->notes[] = "Facing systems are subject to either</br>".$this->dmgs[1].", ".$this->dmgs[2]." or ".$this->dmgs[3]." damage";
-		$this->notes[] = "Armour applies, no Overkill";
+		$this->notes[] = "Facing systems: Either</br>".$this->dmgs[1].", ".$this->dmgs[2]." or ".$this->dmgs[3]." damage each, no overkill";
 	}
 
 	public function setShockData(){
+
+		$this->dmgs[0] = ($this->minDmg . "-" . $this->maxDmg);
+		$this->dmgs[1] = ($this->minDmg . "-" . $this->maxDmg);
+
+		for ($i = 2; $i <= 6; $i++){
+			$this->dmgs[$i] = (($this->minDmg*$i) . "-" . ($this->maxDmg*$i));
+		}
+
+
+		$this->notes[] = "<u>Salvo</u>: ".$this->dmgs[0]." damage each";
+		$this->notes[] = "<u>Flight</u>: ".$this->dmgs[1]." damage each";
+		$this->notes[] = "<u>Squadron</u>: ".$this->dmgs[3]." damage each";
+
+		$html = "</br><u>Ship target</u></br>";
+		$html .= "Hull: ".$this->dmgs[4]." damage + " .$this->dmgs[0]." damage pending size</br>";
+		$html .= "Facing systems: ".$this->dmgs[0]." damage each no overkill";	
+		$this->notes[] = $html;
+		//$this->notes[] = "Armour applies, no Overkill";
+	}
+
+	public function setShockD1ata(){
 		$data = array(1, 1, 2, 5, 9, 13, 17);
 
 		for ($i = 0; $i < sizeof($data); $i++){

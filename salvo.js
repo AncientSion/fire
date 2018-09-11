@@ -28,11 +28,11 @@ function Salvo(data){
 		return this.structures[0].systems[0].maxDmg;
 	}
 
-	this.getTrackingStrinag = function(){
-		var t = this.getTarget().traverse;
+	this.gettrackingStrinag = function(){
+		var t = this.getTarget().tracking;
 		var html = "";
-		var d = Math.max(0, (this.structures[0].systems[0].traverse - t));
-		html += getUnitType(this.structures[0].systems[0].traverse) + "<span class='yellow'>";
+		var d = Math.max(0, (this.structures[0].systems[0].tracking - t));
+		html += getUnitType(this.structures[0].systems[0].tracking) + "<span class='yellow'>";
 
 	//	if (d > 0){
 	//		html += "'red'>";
@@ -58,13 +58,13 @@ function Salvo(data){
 	}
 
 
-	this.getTrackingString = function(){
+	this.gettrackingString = function(){
 		var base = 80;
 		var trackStep = 20;
 		var target = this.getTarget();
 		var spoof = target.getMaskEffect(this);
 			spoof = 0;
-		var trackingLack = Math.max(0, (this.structures[0].systems[0].traverse - target.traverse));
+		var trackingLack = Math.max(0, (this.structures[0].systems[0].tracking - target.traverse));
 		var final = base * (1-spoof) / 100 * (100-(trackingLack * trackStep))
 
 		/*
@@ -171,7 +171,7 @@ Salvo.prototype.createBaseDiv = function(){
 	var lacking = 0;
 	//var dist = Math.ceil(getDistance(this.getPlannedPos(), target.getPlannedPos()));
 
-	//if (target.traverse < this.structures[0].systems[0].traverse){lacking = 1;}
+	//if (target.traverse < this.structures[0].systems[0].tracking){lacking = 1;}
 
 	var table = $("<table>")
 		.append($("<tr>")
@@ -189,7 +189,7 @@ Salvo.prototype.createBaseDiv = function(){
 			.append($("<td>").html(this.getSpeedString()).addClass("speed").attr("colSpan", 3)))
 		.append($("<tr>")
     		.append($("<td>").html("Tracking"))
-			.append($("<td>").html(getUnitType(this.structures[0].systems[0].traverse)).attr("colSpan", 3)))
+			.append($("<td>").html(getUnitType(this.structures[0].systems[0].tracking)).attr("colSpan", 3)))
 		//.append($("<tr>").append($("<td>").attr("colSpan", 4).css("height", 15)))
 		.append($("<tr>")
 			.append($("<td>").html("Targeting"))
@@ -204,7 +204,7 @@ Salvo.prototype.createBaseDiv = function(){
 
 		table.append($("<tr>")
     		.append($("<td>").html("Hit Chance (w/o EW)"))
-			.append($("<td>").html(this.getTrackingString()).attr("colSpan", 3)))
+			.append($("<td>").html(this.gettrackingString()).attr("colSpan", 3)))
 		//.append($("<tr>")
     	//	.append($("<td>").html("Damage"))
     	//	.append($("<td>").html(this.getDamage()).attr("colSpan", 3)))

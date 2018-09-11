@@ -161,16 +161,21 @@ class DmgCalc {
 			case "Laser": static::doLaserDmg($fire, $hit, $system); break;
 			case "Shockwave": static::doShockDamage($fire, $hit, $system); break;
 			case "Flash": static::doFlashDmg($fire, $hit, $system); break;
+			case "Special": static::doSpecialDmg($fire, $hit, $system); break;
 			default: Debug::log("doDmg ERROR: ".$weapon->fireMode); break;
 		}
 
 		$fire->weapon->postDmg($fire);
 	}
 
+	public static function doSpecialDmg($fire, $hit, $system){
+		$fire->weapon->handleDmg($fire, $hit, $system);
+	}
+
 	public static function doStandardDmg($fire, $hit, $system){
 		//Debug::log("hitting: ".get_class($system));
 		$destroyed = 0;
-		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit);
+		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 		$okSystem = 0;
 		$remInt = $system->getRemIntegrity();
 		
@@ -208,7 +213,7 @@ class DmgCalc {
 
 	public static function doPulseDmg($fire, $hit, $system){
 		$destroyed = 0;
-		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit);
+		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 		$remInt = $system->getRemIntegrity();
 		$okSystem = 0;
 
@@ -275,7 +280,7 @@ class DmgCalc {
 	}
 
 	public static function doLaserDmg($fire, $hit, $system){
-		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit);
+		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 		$okSystem = 0;
 		$rakes = $fire->weapon->rakes;
 		$reduce = 1 + ($rakes-1) * $fire->target instanceof Mixed;
@@ -358,14 +363,14 @@ class DmgCalc {
 */	}
 
 	public static function doFlashDmg($fire, $hit, $ignored){
-		$baseDmg = $fire->weapon->getTotalDamage($fire, $hit);
-		$damageMod = $baseDmg / $fire->weapon->getBaseDamage($fire, $hit);
 		$system;
 
 		if ($fire->target->ship){
-			$system = $fire->target->primary;
+			$system = $fire->tawrget->primary;
 		} else $system = $ignored;
 
+		$baseDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
+		$damageMod = $baseDmg / $fire->weapon->getBaseDamage($fire, $hit, $system);
 
 		Debug::log("fire #".$fire->id.", doFlashDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".get_class($system).", baseDmg: ".$baseDmg);
 
@@ -415,7 +420,26 @@ class DmgCalc {
 	}
 
 	public static function doShockDamage($fire, $hit, $system){
-		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit);
+		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
+
+
+		Debug::log("fire #".$fire->id.", doShockDamage, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id.", baseDmg: ".$totalDmg);
+		
+		if ($fire->target->ship){
+			static::doStandardDmg($fire, $hit, $fire->target->primary);
+		}
+
+		$targets = $fire->target->getFlashTargets($fire);
+
+		for ($i = 0; $i < sizeof($targets); $i++){
+			static::doStandardDmg($fire, $hit, $targets[$i]);
+		}
+			
+		return true;
+
+	}
+	public static function doShockDamag2e($fire, $hit, $system){
+		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 
 
 		Debug::log("fire #".$fire->id.", doShockDamage, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id.", baseDmg: ".$totalDmg);
@@ -435,8 +459,7 @@ class DmgCalc {
 	}
 
 	public static function doShockDamage1($fire, $hit, $system){
-		//$totalDmg = $fire->weapon->getTotalDamage($fire) * (1 - ($this->ship*0.5));
-		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit);
+		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 		$targets = $fire->target->getFlashTargets($fire);
 		$negation;
 
@@ -509,7 +532,7 @@ class DmgCalc {
 	}
 
 	public static function doFlashDmg3($fire, $system){ // old flas
-		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit);
+		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 		$targets = $fire->target->getFlashTargets($fire);
 		$negation;
 
@@ -540,7 +563,7 @@ class DmgCalc {
 	}
 	
 	public static function doFlashDmg2($fire, $system){ // old flash
-		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit);
+		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 		$toDo = $totalDmg;
 		if ($fire->target->ship){$system = $fire->target->getFlashOverkillSystem($fire);}
 
@@ -637,6 +660,7 @@ class DmgCalc {
 
 		if ($totalDmg <= array_sum($negation)){ 
 			$notes = "b;";
+			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
 			$armourDmg = round($totalDmg/2);
 		}
 		else {

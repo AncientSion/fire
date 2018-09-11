@@ -4,7 +4,7 @@ class Salvo extends Mixed {
 	public $name = "Salvo";
 	public $unitType = "Salvo";
 	public $salvo = true;
-	public $traverse = 0;
+	public $tracking = 0;
 	public $missile = false;
 	public $torpedo = false;
 
@@ -92,8 +92,8 @@ class Salvo extends Mixed {
 		$base = 80;
 		//$base = 120;
 		$mask = $fire->target->getDefensiveBonus($this->id);
-		$traverse = $fire->weapon->getTraverseMod($fire)*0.2;
-		return ceil($base * (1-$mask) * (1-$traverse));
+		$tracking = $fire->weapon->getTrackingMod($fire)*0.2;
+		return ceil($base * (1-$mask) * (1-$tracking));
 	}
 
 	public function getLockMultiplier(){

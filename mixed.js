@@ -39,11 +39,13 @@ Mixed.prototype.canDeploy = function(){
 	return false;
 }
 
-Mixed.prototype.getPowerOrders = function(){
+Mixed.prototype.getAllPowerOrders = function(){
+	if (this.flight && game.phase != 2){return [];}
 	var powers = [];
 
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
+			if (!this.structures[i].systems[j].hasUnresolvedFireOrder()){continue;}
 			powers = powers.concat(this.structures[i].systems[j].getPowerOrders());
 		}
 	}

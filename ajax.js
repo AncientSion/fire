@@ -280,7 +280,7 @@ window.ajax = {
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid != game.userid){continue;}
 			fireOrders = fireOrders.concat(game.ships[i].getFireOrders());
-			powers = powers.concat(game.ships[i].getPowerOrders());
+			powers = powers.concat(game.ships[i].getAllPowerOrders());
 		}
 
 		//console.log(missions);
@@ -357,7 +357,7 @@ window.ajax = {
 			fireOrders = fireOrders.concat(game.ships[i].getFireOrders());
 
 			if (game.ships[i].flight){
-				powers = powers.concat(game.ships[i].getPowerOrders());
+				powers = powers.concat(game.ships[i].getAllPowerOrders());
 			}
 		}
 		//return;

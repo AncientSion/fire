@@ -790,35 +790,32 @@
 		}
 
 		public function insertServerActions($data){
-			//Debug::log("DB insertServerActions s: ".sizeof($units));
+			Debug::log("DB insertServerActions s: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				INSERT INTO actions 
-					(shipid, turn, type, dist, x, y, a, cost, delay, costmod, resolved)
+					(shipid, turn, type, forced, dist, x, y, a, cost, delay, costmod, resolved)
 				VALUES
-					(:shipid, :turn, :type, :dist, :x, :y, :a, :cost, :delay, :costmod, :resolved)
+					(:shipid, :turn, :type, :forced, :dist, :x, :y, :a, :cost, :delay, :costmod, :resolved)
 			");
 
 			for ($j = 0; $j < sizeof($data); $j++){
-				if ($data[$j]->new){
-					$stmt->bindParam(":shipid", $data[$j]->shipid);
-					$stmt->bindParam(":turn", $data[$j]->turn);
-					$stmt->bindParam(":type", $data[$j]->type);
-					$stmt->bindParam(":dist", $data[$j]->dist);
-					$stmt->bindParam(":x", $data[$j]->x);
-					$stmt->bindParam(":y", $data[$j]->y);
-					$stmt->bindParam(":a", $data[$j]->a);
-					$stmt->bindParam(":cost", $data[$j]->cost);
-					$stmt->bindParam(":delay", $data[$j]->delay);
-					$stmt->bindParam(":costmod", $data[$j]->costmod);
-					$stmt->bindParam(":resolved", $data[$j]->resolved);
-					$stmt->execute();		
-					if ($stmt->errorCode() == 0){
-						continue;
-					}
-					else {
-						return false;
-					}
-				}
+				if (!$data[$j]->new){continue;}
+
+				$stmt->bindParam(":shipid", $data[$j]->shipid);
+				$stmt->bindParam(":turn", $data[$j]->turn);
+				$stmt->bindParam(":type", $data[$j]->type);
+				$stmt->bindParam(":forced", $data[$j]->forced);
+				$stmt->bindParam(":dist", $data[$j]->dist);
+				$stmt->bindParam(":x", $data[$j]->x);
+				$stmt->bindParam(":y", $data[$j]->y);
+				$stmt->bindParam(":a", $data[$j]->a);
+				$stmt->bindParam(":cost", $data[$j]->cost);
+				$stmt->bindParam(":delay", $data[$j]->delay);
+				$stmt->bindParam(":costmod", $data[$j]->costmod);
+				$stmt->bindParam(":resolved", $data[$j]->resolved);
+				$stmt->execute();		
+				if ($stmt->errorCode() == 0){continue;}
+				else {return false;}
 			}
 			return true;
 		}
@@ -1603,6 +1600,7 @@
 							$result[$j]["shipid"],
 							$result[$j]["turn"],
 							$result[$j]["type"],
+							$result[$j]["forced"],
 							$result[$j]["dist"],
 							$result[$j]["x"],
 							$result[$j]["y"],

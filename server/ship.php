@@ -2,6 +2,7 @@
 
 class Ship {
 	public $id;
+	public $parentId = 0;
 	public $userid;
 	public $available;
 	public $display;
@@ -104,7 +105,7 @@ class Ship {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, $this->integrity);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, $this->traverse, $this->integrity);
 		$this->primary->systems[] = new Command($this->getId(), $this->id, $this->vitalHP, static::$value, $this->ship);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, $this->vitalHP, $this->ep);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, $this->vitalHP, $this->ew);
@@ -549,27 +550,19 @@ class Ship {
 		//return true;
 		$bridge = $this->getSystemByName("Command");
 		for ($i = 0; $i < sizeof($bridge->crits); $i++){
-			if ($bridge->crits[$i]->type == "Focus" || $bridge->crits[$i]->type == "Morale"){
-				if ($bridge->crits[$i]->duration == 0){
-					$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." ".$bridge->crits[$i]->value."%</span> effect.";
-				} else $bridge->crits[$i]->display = "Morale Check Fail: <span class='yellow'>".$bridge->crits[$i]->type." ".$bridge->crits[$i]->value."%</span> effect.";
+			if ($bridge->crits[$i]->duration == 0){
+				$bridge->crits[$i]->display = "Officer KIA";
+			} else $bridge->crits[$i]->display = "Morale Check";
+			$bridge->crits[$i]->display .= ": <span class='yellow'>".$bridge->crits[$i]->type." ".$bridge->crits[$i]->value."%</span> effect.";
 
-				//$copy = clone $bridge->crits[$i];
-				//$copy->type = "Morale";
-				//$copy->display = "Officer KIA: <span class='yellow'>Command -".$bridge->crits[$i]->value."%</span> effect.";
-				//$bridge->crits[] = $copy;
-				continue;
-			}
+			if ($bridge->crits[$i]->type == "Focus" || $bridge->crits[$i]->type == "Morale"){continue;}
+
 			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 				if ($this->primary->systems[$j]->name == $bridge->crits[$i]->type){
 					$copy = clone $bridge->crits[$i];
 					$copy->type = "Output";
-					$copy->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." ".$bridge->crits[$i]->value ."%</span> effect.";
+					$copy->duration = -1;
 					$this->primary->systems[$j]->crits[] = $copy;
-
-					if ($bridge->crits[$i]->type == "Morale" || $bridge->crits[$i]->type = "Focus"){
-						$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." ".$bridge->crits[$i]->value."%</span> effect.";
-					} $bridge->crits[$i]->duration = -1;
 					break;
 				}
 			}
@@ -767,15 +760,15 @@ class Ship {
 		$req = 0;
 		
 		$base = $fire->target->getHitChance($fire);
-		$traverse = 1-($fire->weapon->getTraverseMod($fire) * 0.2);
+		$tracking = 1-($fire->weapon->getTrackingMod($fire) * 0.2);
 		$range = $fire->weapon->getAccuracyLoss($fire);
 
 		$multi += $this->getOffensiveBonus($fire->target->id); //Debug::log($multi);
 		$multi -= $fire->target->getDefensiveBonus($this->id); //Debug::log($multi);
 		$multi += $fire->target->getImpulseProfileMod($fire); //Debug::log($multi);
 
-		$req = $base * $multi * $traverse - $range;
-		//Debug::log("CALCULATE TO HIT - angle: ".$fire->angle.", base: ".$base.", trav: ".$traverse.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
+		$req = $base * $multi * $tracking - $range;
+		//Debug::log("CALCULATE TO HIT - angle: ".$fire->angle.", base: ".$base.", trav: ".$tracking.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
 
 		return ceil($req);
 	}
@@ -1089,7 +1082,7 @@ class Ship {
 
 		if ($dmg->rel < 0.15){return;}
 
-		$crit = DmgCalc::critProcedure($this->id, 1, $turn, $dmg->rel, $this->critEffects, 100 - $this->morale->rem);
+		$crit = DmgCalc::critProcedure($this->parentId, $this->id, $turn, $dmg->rel, $this->critEffects, 100 - $this->morale->rem);
 		if (!$crit){return;}
 
 		if ($crit->type == "Rout"){$this->status = "jumpOut";}
@@ -1221,6 +1214,15 @@ class Ship {
 			}
 		}
 		return $crits;
+	}
+
+	public function getNewForcedMoves($turn){
+		$moves = array();
+		for ($i = 0; $i < sizeof($this->actions); $i++){
+			if (!$this->actions[$i]->new){continue;}
+			$moves[] = $this->actions[$i];
+		}
+		return $moves;
 	}
 
 	public function getNewDamages($turn){

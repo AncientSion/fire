@@ -239,7 +239,7 @@ Ship.prototype.doDeploy = function(pos){
 		this.drawY = pos.y;
 	}
 	else {
-		this.actions.push(new Move(-1, "deploy", 0, pos.x, pos.y, this.drawFacing, 0, 0, 1, 1, 0));
+		this.actions.push(new Move(-1, this.id, "deploy", 0, 0, pos.x, pos.y, this.drawFacing, 0, 0, 1, 1, 0));
 		this.deployed = 1;
 		this.isReady = 1;
 		this.x = pos.x;
@@ -543,7 +543,7 @@ Ship.prototype.issueMove = function(pos, dist){
 		this.actions[this.actions.length-1].dist+= dist;	
 		this.actions[this.actions.length-1].x = pos.x;
 		this.actions[this.actions.length-1].y = pos.y;
-	} else this.actions.push(new Move(-1, "move", dist, pos.x, pos.y, 0, 0, 0, 1, 1, 0));	
+	} else this.actions.push(new Move(-1, this.id, "move", 0, dist, pos.x, pos.y, 0, 0, 0, 1, 1, 0));	
 	
 	this.turnAngles = {}
 	$("#popupWrapper").hide();
@@ -872,13 +872,7 @@ Ship.prototype.issueTurn = function(a){
 	else {
 		var o = this.getPlannedPos();
 		this.actions.push(
-		/*	new Move(-1, "turn", 0, o.x, o.y, 
-				Math.round(a),
-				Math.ceil(this.getTurnDelay()*Math.abs(a)),
-				Math.ceil(this.getTurnCost()*Math.abs(a)),
-				round(turn.mod, 1), 1, 0
-			)
-		*/	new Move(-1, "turn", 0, o.x, o.y, 
+			new Move(-1, this.id, "turn", 0, 0, o.x, o.y, 
 				a,
 				Math.ceil(Math.abs(this.getTurnDelay()*a)),
 				Math.ceil(Math.abs(this.getTurnCost()*a)),
@@ -1077,7 +1071,7 @@ Ship.prototype.getFireOrders = function(){
 	return fires;
 }
 
-Ship.prototype.getPowerOrders = function(){
+Ship.prototype.getAllPowerOrders = function(){
 	var powers = [];
 	for (var i = 0; i < this.structures.length; i++){
 		for (var k = 0; k < this.structures[i].powers.length; k++){
@@ -2293,7 +2287,7 @@ Ship.prototype.getOfficerMoraleBonus = function(){
 }
 
 Ship.prototype.getCriticalMoraleMalus = function(){
-	var mod = this.getSystemByName("Command").getCritMod("Morale")*-1;
+	var mod = this.getSystemByName("Command").getCritMod("Morale");
 	if (mod){return mod;}
 	return "";
 }
@@ -3435,7 +3429,7 @@ Ship.prototype.getLockEffect = function(target){
 
 	if (target.ship || target.squad){
 		multi = 0.5;
-		multi += (0.6 / 10 * (this.traverse-4));
+		multi += (0.6 / 10 * (this.tracking-4));
 	}
 	else if (target.flight){
 		multi = 1;
@@ -4079,7 +4073,7 @@ Ship.prototype.canDoAnotherTurn = function(){
 
 Ship.prototype.doRoll = function(){
 	var shipPos = this.getPlannedPos();
-	this.actions.push(new Move(-1, "roll", 1, shipPos.x, shipPos.y, 0, 0, this.getActionCost(0), 1, 1, 0));
+	this.actions.push(new Move(-1, this.id, "roll", 0, 1, shipPos.x, shipPos.y, 0, 0, this.getActionCost(0), 1, 1, 0));
 	this.rolling = !this.rolling;
 	this.setNotes();
 	this.resetMoveMode();
@@ -4088,7 +4082,7 @@ Ship.prototype.doRoll = function(){
 
 Ship.prototype.doFlip = function(){
 	var shipPos = this.getPlannedPos();
-	this.actions.push(new Move(-1, "flip", 1, shipPos.x, shipPos.y, 0, 0, this.getActionCost(1), 1, 1, 0));
+	this.actions.push(new Move(-1, this.id, "flip", 0, 1, shipPos.x, shipPos.y, 0, 0, this.getActionCost(1), 1, 1, 0));
 	this.flipping = !this.flipping;
 	this.setNotes();
 	this.resetMoveMode();
@@ -4101,7 +4095,7 @@ Ship.prototype.doIncreaseImpulse = function(){
 		this.actions.splice(this.actions.length-1, 1);
 	}
 	else {
-		var action = new Move(-1, "speed", 1, shipPos.x, shipPos.y, 0, 0, this.getImpulseChangeCost(), 1, 1, 0);
+		var action = new Move(-1, this.id, "speed", 0, 1, shipPos.x, shipPos.y, 0, 0, this.getImpulseChangeCost(), 1, 1, 0);
 		this.actions.push(action);
 	}
 	this.resetMoveMode();
@@ -4114,7 +4108,7 @@ Ship.prototype.doDecreaseImpulse = function(){
 		this.actions.splice(this.actions.length-1, 1);
 	}
 	else {
-		var action = new Move(-1, "speed", -1, shipPos.x, shipPos.y, 0, 0, this.getImpulseChangeCost(), 1, 1, 0);
+		var action = new Move(-1, this.id, "speed", 0, -1, shipPos.x, shipPos.y, 0, 0, this.getImpulseChangeCost(), 1, 1, 0);
 		this.actions.push(action);
 	}
 	this.resetMoveMode();

@@ -42,7 +42,7 @@ class bLaser extends Laser {
 	public $maxBoost = 1;
 	public $powerReq = 5;
 	public $integrity = 50;
-	public $traverse = 3;
+	public $tracking = 3;
 	public $rakes = 3;
 
 	function __construct($id, $parentId, $start, $end, $output = 5, $width = 1){
@@ -61,7 +61,7 @@ class bLaser extends Laser {
 		$this->powerReq = $this->powerReq - 5 + $output;
 		$this->effiency = ceil($this->powerReq/2);
 		$this->integrity = $this->integrity / 5 * $output;
-		$this->traverse = $this->traverse - 5 + $output;
+		$this->tracking = $this->tracking - 5 + $output;
 	}
 	
 	public function getDmgRangeMod($fire){
@@ -92,7 +92,7 @@ class LightParticleBeam extends Laser {
 	public $powerReq = 2;
 	public $rakes = 1;
 	public $integrity = 40;
-	public $traverse = 3;
+	public $tracking = 3;
 	
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -115,7 +115,7 @@ class HeavyPlasmaMaser extends Laser {
 	public $powerReq = 6;
 	public $effiency = 4;
 	public $integrity = 60;
-	public $traverse = 0;
+	public $tracking = 0;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -141,7 +141,7 @@ class LightLaser extends Laser {
 	public $maxBoost = 1;
 	public $rakes = 3;
 	public $integrity = 40;
-	public $traverse = 2;
+	public $tracking = 2;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -161,7 +161,7 @@ class MediumLaser extends LightLaser {
 	public $powerReq = 4;
 	public $effiency = 3;
 	public $integrity = 50;
-	public $traverse = 3;
+	public $tracking = 3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -182,7 +182,7 @@ class HeavyLaser extends LightLaser {
 	public $powerReq = 6;
 	public $effiency = 4;
 	public $integrity = 60;
-	public $traverse = 4;
+	public $tracking = 4;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -203,7 +203,7 @@ class SuperHeavyLaser extends HeavyLaser {
 	public $effiency = 5;
 	public $rakes = 3;
 	public $integrity = 70;
-	public $traverse = 5;
+	public $tracking = 5;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -228,7 +228,7 @@ class NeutronLaser extends Laser {
 	public $effiency = 3;
 	public $maxBoost = 1;
 	public $integrity = 52;
-	public $traverse = 3;
+	public $tracking = 3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -266,7 +266,7 @@ class HeavyAntimatterBeamProjector extends Laser {
 	public $powerReq = 14;
 	public $rakes = 4;
 	public $integrity = 62;
-	public $traverse = 5;
+	public $tracking = 5;
 	public $amBonus = 2;
 	public $amMax = 30;
 
@@ -302,7 +302,7 @@ class MolecularSlicer extends Laser {
 	public $powerReq = 4;
 	public $rakes = 3;
 	public $integrity = 52;
-	public $traverse = 3;
+	public $tracking = 3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);

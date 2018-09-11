@@ -633,7 +633,7 @@
 				//Debug::log("--> aShift: ".$aShift."°, psShift: ".$xShift."/".$yShift." (".$dist."px)");
 
 				$this->ships[$i]->actions[0]->resolved = 1;
-				$this->ships[$i]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, "jumpIn", $dist, $order->x + $xShift, $order->y + $yShift, $aShift, 0, 0, 0, 1, 1);
+				$this->ships[$i]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, "jumpIn", 0, $dist, $order->x + $xShift, $order->y + $yShift, $aShift, 0, 0, 0, 1, 1);
 				$new[] = $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1];
 			}
 		}
@@ -738,7 +738,7 @@
 				);
 
 				$this->ships[sizeof($this->ships)-1]->setUnitState($this->turn, $this->phase);
-				$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, "deploy", 0, $units[$i]["actions"][0]["x"], $units[$i]["actions"][0]["y"], $a, 0, 0, 0, 1, 1);
+				$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, "deploy", 0, 0, $units[$i]["actions"][0]["x"], $units[$i]["actions"][0]["y"], $a, 0, 0, 0, 1, 1);
 			}
 		}
 	}
@@ -826,19 +826,21 @@
 			Debug::log("handling fire: ".$this->fires[$i]->id.", weapon: ".$this->fires[$i]->weapon->display);
 			if ($this->fires[$i]->resolved){continue;}
 
-			$subFires = DmgCalc::createAreaFireOrders($this, $this->fires[$i]);
+			if ($this->fires[$i]->weapon->aoe){
+				$subFires = DmgCalc::createAreaFireOrders($this, $this->fires[$i]);
 
-			for ($j = 0; $j < sizeof($subFires); $j++){
-				//$subFires[$j]->target->resolveAreaFireOrder($subFires[$j]);
-				$subFires[$j]->target->resolveFireOrder($subFires[$j]);
-				$this->fires[$i]->hits++;
+				for ($j = 0; $j < sizeof($subFires); $j++){
+					//$subFires[$j]->target->resolveAreaFireOrder($subFires[$j]);
+					$subFires[$j]->target->resolveFireOrder($subFires[$j]);
+					$this->fires[$i]->hits++;
+				}
+				$this->fires[$i]->resolved = 1;
 			}
-			$this->fires[$i]->resolved = 1;
+			else {
+				$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
+			}
 		}
-		
-		Debug::log("handling data");
 		$this->handleResolvedFireData();
-		return;
 	}
 
 	public function handleShipMovement(){
@@ -1642,13 +1644,23 @@
 		Debug::log("handleResolvedFireData");
 		$newDmgs = $this->getAllNewDamages();
 		$newCrits = $this->getAllNewCrits();
+		$newMoves = $this->getAllNewForcedMoves();
 		$unitMorales = $this->getNewUnitMoraleCrits();
 
 		DBManager::app()->updateFireOrders($this->fires);
 		if (sizeof($newDmgs)){DBManager::app()->insertDamageEntries($newDmgs);}
 		if (sizeof($newCrits)){DBManager::app()->insertCritEntries($newCrits);}
+		if (sizeof($newMoves)){DBManager::app()->insertServerActions($newMoves);}
 		if (sizeof($unitMorales)){DBManager::app()->updateUnitStatusNotes($unitMorales);}
 		DBManager::app()->insertFleetMoraleCrits($this->playerstatus);
+	}
+
+	public function getAllNewForcedMoves(){
+		$data = array();
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			$data = array_merge($data, $this->ships[$i]->getNewForcedMoves($this->turn));
+		}
+		return $data;
 	}
 
 	public function getAllNewDamages(){

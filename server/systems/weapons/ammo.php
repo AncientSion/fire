@@ -45,10 +45,10 @@ class Warhead extends Weapon {
 	public $animation = "explosive";
 	public $linked = 1;
 
-	function __construct($id, $parentId, $traverse, $minDmg, $maxDmg, $fireMode = "Standard", $dmgType = "Standard", $melt = 0){
+	function __construct($id, $parentId, $tracking, $minDmg, $maxDmg, $fireMode = "Standard", $dmgType = "Standard", $melt = 0){
 		$this->id = $id;
 		$this->parentId = $parentId;
-		$this->traverse = $traverse;
+		$this->tracking = $tracking;
 		$this->minDmg = $minDmg;
 		$this->maxDmg = $maxDmg;
 		$this->fireMode = $fireMode;
@@ -71,14 +71,14 @@ class Vran extends Torpedo {
 	public static $prio = 0;
 	public $integrity = 4;
 	public $negation = 1;
-	public $traverse = 3;
+	public $tracking = 3;
 	public $maxRange = 700;
 	public $reload = 2;
 	public static $value = 0;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 28, 32);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 28, 32);
 	}
 }
 
@@ -86,14 +86,14 @@ class Vranoth extends Vran {
 	public $name = "Vranoth";
 	public $role = "Medium Particle Torpedo";
 	public static $prio = 0;
-	public $traverse = 4;
+	public $tracking = 4;
 	public $maxRange = 850;
 	public $reload = 3;
 	public static $value = 0;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 34, 46);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 34, 46);
 	}
 }
 
@@ -101,14 +101,14 @@ class VranothKa extends Vranoth {
 	public $name = "VranothKa";
 	public $role = "Heavy Particle Torpedo";
 	public static $prio = 0;
-	public $traverse = 5;
+	public $tracking = 5;
 	public $maxRange = 1000;
 	public $reload = 3;
 	public static $value = 0;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 54, 72);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 54, 72);
 	}
 }
 
@@ -123,11 +123,11 @@ class Hasta extends Missile {
 	public $integrity = 4;
 	public $negation = 0;
 	public static $value = 3;
-	public $traverse = 1;
+	public $tracking = 1;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 15, 18);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 15, 18);
 	}
 }
 
@@ -139,11 +139,11 @@ class Javelin extends Missile {
 	public $integrity = 8;
 	public $negation = 2;
 	public static $value = 4;
-	public $traverse = 3;
+	public $tracking = 3;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 32, 44);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 32, 44);
 	}
 }
 
@@ -155,11 +155,11 @@ class Triarii extends Missile {
 	public $integrity = 8;
 	public $negation = 2;
 	public static $value = 6;
-	public $traverse = 3;
+	public $tracking = 3;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 32, 44, "Standard", "Plasma", 50);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 32, 44, "Standard", "Plasma", 50);
 
 	}
 }
@@ -172,11 +172,11 @@ class Myrmidon extends Missile {
 	public $integrity = 10;
 	public $negation = 3;
 	public static $value = 7;
-	public $traverse = 4;
+	public $tracking = 4;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 54, 70);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 54, 70);
 	}
 }
 
@@ -188,11 +188,11 @@ class Vanguard extends Missile {
 	public $integrity = 4;
 	public $negation = 0;
 	public static $value = 3;
-	public $traverse = 0;
+	public $tracking = 0;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 9, 12);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 9, 12);
 	}
 }
 
@@ -204,11 +204,11 @@ class Needle extends Missile {
 	public $integrity = 4;
 	public $negation = 0;
 	public static $value = 3;
-	public $traverse = 1;
+	public $tracking = 1;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 15, 18);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 15, 18);
 	}
 }
 
@@ -220,11 +220,11 @@ class Naga extends Missile {
 	public $integrity = 8;
 	public $negation = 2;
 	public static $value = 4;
-	public $traverse = 3;
+	public $tracking = 3;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 30, 42);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 30, 42);
 	}
 }
 
@@ -236,11 +236,11 @@ class Cyclops extends Missile {
 	public $integrity = 10;
 	public $negation = 3;
 	public static $value = 6;
-	public $traverse = 4;
+	public $tracking = 4;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 50, 66);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 50, 66);
 	}
 }
 
@@ -252,11 +252,11 @@ class Titan extends Missile {
 	public $integrity = 14;
 	public $negation = 5;
 	public static $value = 8;
-	public $traverse = 5;
+	public $tracking = 5;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 70, 88);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 70, 88);
 	}
 }
 

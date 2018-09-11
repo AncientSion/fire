@@ -1,6 +1,7 @@
 <?php
 
 class Fighter extends Single {
+	public $traverse = 1;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

@@ -185,7 +185,8 @@ class Single {
 
 		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old.", rel: ".$dmg->rel.", Squad: ".$squad);
 
-		$crit = DmgCalc::critProcedure($this->parentId, $this->id, $turn, $dmg->rel, $this->critEffects, ($dmg->new + $dmg->old)*100);
+		$sumDmg = ($dmg->new + $dmg->old)*100;
+		$crit = DmgCalc::critProcedure($this->parentId, $this->id, $turn, $dmg->rel, $this->critEffects, $sumDmg);
 
 		if ($crit){
 			$this->destroyed = 1;

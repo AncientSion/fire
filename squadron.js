@@ -384,7 +384,7 @@ Squadron.prototype.getFireOrders = function(){
 	return fires;
 }
 
-Squadron.prototype.getPowerOrders = function(){
+Squadron.prototype.getAllPowerOrders = function(){
 	var powers = [];
 
 	for (var i = 0; i < this.structures.length; i++){

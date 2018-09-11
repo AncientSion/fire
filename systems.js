@@ -142,11 +142,7 @@ System.prototype.attachSysMods = function(ele){
   				if (!this.crits[i].inEffect()){continue;}
 
   				var html = "";
-
-  				if (this.crits[i].duration < 0){
-  					html =(this.crits[i].type + " " + (this.crits[i].value) + "% (Turn " + this.crits[i].turn + " Morale Fail)");
-  				}
-				else if (this.crits[i].type == "Disabled"){
+  				if (this.crits[i].type == "Disabled"){
 					if (this.crits[i].duration){html = (this.crits[i].type + " (Incl. Turn " + (this.crits[i].turn + this.crits[i].duration) + ")" + " (Turn " + this.crits[i].turn + ")");}
 					html = this.crits[i].type + " (Turn " + this.crits[i].turn + ")";
 				}
@@ -1786,7 +1782,7 @@ function Weapon(system){
 	this.reload = system.reload;
 	this.arc = system.arc;
 	this.priority = system.priority;
-	this.traverse = system.traverse;
+	this.tracking = system.tracking;
 	this.fireMode = system.fireMode;
 	this.dmgType = system.dmgType;
 	this.dmgLoss = system.dmgLoss;
@@ -1905,17 +1901,17 @@ Weapon.prototype.getAimData = function(target, final, dist, row){
 }
 
 Weapon.prototype.getAimDetailsUnit = function(target, final, accLoss, row){
-	var traverseMod = this.getTraverseMod(target);
+	var trackingMod = this.getTrackingMod(target);
 
-	if (!traverseMod){
-		row.append($("<td>").html("<span class='green'>Full Tracking</span>"));
-	} else row.append($("<td>").html("<span class='red'>-"+ Math.floor(final / 5 * traverseMod) + "% </span> (-" + traverseMod + ")"));
+	if (!trackingMod){
+		row.append($("<td>").html("<span class='green'>Full tracking</span>"));
+	} else row.append($("<td>").html("<span class='red'>-"+ Math.floor(final / 5 * trackingMod) + "% </span> (-" + trackingMod + ")"));
 
 	if (accLoss){
 		row.append($("<td>").addClass("red").html(accLoss*-1 + "%"));
 	} else row.append($("<td>").html(""));
 
-	final = Math.floor(final * (1-(traverseMod*0.2)) - accLoss);
+	final = Math.floor(final * (1-(trackingMod*0.2)) - accLoss);
 
 	this.validTarget = 1;
 	this.odds = final;
@@ -2031,12 +2027,12 @@ Weapon.prototype.getArcWidth = function(){
 	}
 }
 
-Weapon.prototype.getTraverseMod = function(target){
-	return Math.max(0, (this.traverse - target.traverse));
+Weapon.prototype.getTrackingMod = function(target){
+	return Math.max(0, (this.tracking - target.traverse));
 }
 
-Weapon.prototype.getTraverseRating = function(){
-	return this.traverse;
+Weapon.prototype.getTrackingRating = function(){
+	return this.tracking;
 }
 
 Weapon.prototype.getSysDiv = function(){
@@ -2063,7 +2059,7 @@ Weapon.prototype.getSysDiv = function(){
 	}
 	
 	$(table).append($("<tr>").append($("<td>").html("Loading")).append($("<td>").addClass("loading").html(this.getTimeLoaded() + " / " + this.reload)));
-	if (this.traverse >= 0){$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + getUnitType(this.getTraverseRating()))));}
+	if (this.tracking >= 0){$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTrackingRating() + " / " + getUnitType(this.getTrackingRating()))));}
 
 	if (this.fireMode == "Laser"){
 		$(table).append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").html(this.optRange + "px")));
@@ -2181,7 +2177,7 @@ function Warhead(data){
 	this.minDmg = data.minDmg;
 	this.maxDmg = data.maxDmg;
 	this.shots = data.shots;
-	this.traverse = data.traverse;
+	this.tracking = data.tracking;
 	this.animation = data.animation;
 	this.name = data.name;
 	this.display = data.display;
@@ -2226,7 +2222,7 @@ Warhead.prototype.getSysDiv = function(){
 				.append($("<td>").html(this.dmgType)))
 			.append($("<tr>")
 				.append($("<td>").html("Tracking"))
-				.append($("<td>").html(this.getTraverseRating() + " / " + getUnitType(this.getTraverseRating()))))
+				.append($("<td>").html(this.getTrackingRating() + " / " + getUnitType(this.getTrackingRating()))))
 			.append($("<tr>")
 				.append($("<td>").html("Damage"))
 				.append($("<td>").html(this.getDmgString()))))
@@ -2911,7 +2907,7 @@ Launcher.prototype.getSysDiv = function(){
 		$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).html(ammo.role)))
 		$(table).append($("<tr>").append($("<th>").attr("colSpan", 2).html(ammo.display)));
 		$(table).append($("<tr>").append($("<td>").html("Ammo amount")).append($("<td>").html("<span class='yellow'>" + this.getRemAmmo() + "</span> / " + this.getMaxAmmo()).attr("id", "ammo")));
-		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + getUnitType(this.getTraverseRating()))));
+		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTrackingRating() + " / " + getUnitType(this.getTrackingRating()))));
 		$(table).append($("<tr>").append($("<td>").html("Speed")).append($("<td>").html(this.getImpulseString())));
 		//$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("<span class='red' id='detailShots'>" + this.getOutput() + "</span> / " + this.launchRate[this.ammo])));
 		$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("Up to <span class='yellow'>" + this.launchRate[this.ammo] + "</span> / cycle")));
@@ -3014,8 +3010,8 @@ Launcher.prototype.getShots = function(){
 	return this.getOutput();
 }
 
-Launcher.prototype.getTraverseRating = function(){
-	return this.loads[this.ammo].traverse;
+Launcher.prototype.getTrackingRating = function(){
+	return this.loads[this.ammo].tracking;
 }
 
 Launcher.prototype.setFireOrder = function(targetid, pos){
@@ -3032,17 +3028,17 @@ Launcher.prototype.setFireOrder = function(targetid, pos){
 
 Launcher.prototype.getAimDetailsUnit = function(target, final, accLoss, row){
 	var final = 80;
-	var traverseMod = this.getTraverseMod(target);
+	var trackingMod = this.getTrackingMod(target);
 	
-	if (!traverseMod){
-		row.append($("<td>").html("<span class='green'>Full Tracking</span>"));
-	} else row.append($("<td>").html("<span class='red'>-"+ Math.floor(final / 5 * traverseMod) + "% </span> (-" + traverseMod + ")"))
+	if (!trackingMod){
+		row.append($("<td>").html("<span class='green'>Full tracking</span>"));
+	} else row.append($("<td>").html("<span class='red'>-"+ Math.floor(final / 5 * trackingMod) + "% </span> (-" + trackingMod + ")"))
 
 	if (accLoss){
 		row.append($("<td>").html(accLoss*-1 + "%"));
 	} else row.append($("<td>").html(""));
 
-	final = Math.floor(final * (1-(traverseMod*0.2)) - accLoss);
+	final = Math.floor(final * (1-(trackingMod*0.2)) - accLoss);
 	
 	this.validTarget = 1;
 	this.odds = final;
@@ -3130,9 +3126,9 @@ Launcher.prototype.select = function(e){
 	}
 }
 
-Launcher.prototype.getTraverseMod = function(target){
+Launcher.prototype.getTrackingMod = function(target){
 	if (this.ammo != -1){
-		return Math.max(0, (this.loads[this.ammo].traverse - target.traverse));
+		return Math.max(0, (this.loads[this.ammo].tracking - target.traverse));
 	}
 }
 
@@ -3276,7 +3272,7 @@ Launcher.prototype.initLauncherDiv = function(){
 				.append($("<td>")
 					.append($(this.loads[i].getElement(true)))
 				)
-				.append($("<td>").html(this.loads[i].systems[0].getTraverseRating() + "</br>(" + (getUnitType(this.loads[i].systems[0].getTraverseRating()) + ")")))
+				.append($("<td>").html(this.loads[i].systems[0].getTrackingRating() + "</br>(" + (getUnitType(this.loads[i].systems[0].getTrackingRating()) + ")")))
 				.append($("<td>").html(this.loads[i].cost))
 				.append($("<td>").html(this.launchRate[i] + " @ " + this.loads[i].reload + " turns"))
 				.append($("<td>")
@@ -3378,6 +3374,7 @@ Area.prototype.select = function(){
 
 
 Area.prototype.getDmgString = function(){
+	return Weapon.prototype.getDmgString.call(this) + " * target size";
 	return Weapon.prototype.getDmgString.call(this) + " per hit";
 }
 
@@ -3405,7 +3402,8 @@ Area.prototype.getAnimation = function(fire){
 	
 	for (var i = 0; i < fire.guns; i++){
 		var gunAnims = [];
-		var o = fire.shooter.getWeaponOrigin(fire.systems[i]);
+		//var o = fire.shooter.getWeaponOrigin(fire.systems[i]);
+		var o = fire.shooter.getTurnStartPos();
 		var ox = fire.shooter.drawX + o.x;
 		var oy = fire.shooter.drawY + o.y;
 
