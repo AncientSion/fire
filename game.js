@@ -941,20 +941,20 @@ function Game(data){
 
 		if (this.phase == 2){
 			for (var i = 0; i < this.ships.length; i++){
-				//if (this.ships[i].ship || this.ships[i].squad){this.ships[i].setSupportImage();}
 				this.ships[i].setSupportImage();
 				this.ships[i].getAttachDivs();
 				if (this.ships[i].flight && this.ships[i].hasPatrolLayout()){
 					this.ships[i].setPatrolLayout();
 					this.ships[i].setImage();
 				}
-				else if (this.ships[i].ship || this.ships[i].squad && !this.ships[i].animatesThisPhase()){
-					for (var j = 0; j < this.ships[i].actions.length; j++){
-						if (this.ships[i].actions[j].type == "roll"){this.ships[i].createActionEntry();}
-						else if (this.ships[i].actions[j].type == "flip"){this.ships[i].createActionEntry();}
-					}
-				}
+			}
+		}
 
+		for (var i = 0; i < this.ships.length; i++){
+			if (!this.ships[i].ship || this.ships[i].squad && !this.ships[i].hasMoved()){continue;}
+			for (var j = 0; j < this.ships[i].actions.length; j++){
+				if (this.ships[i].actions[j].type == "roll"){this.ships[i].createActionEntry();}
+				else if (this.ships[i].actions[j].type == "flip"){this.ships[i].createActionEntry();}
 			}
 		}
 
