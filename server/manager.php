@@ -224,7 +224,7 @@
 			case -1: 
 				for ($i = 0; $i < sizeof($this->ships); $i++){
 					if ($this->ships[$i]->userid == $this->userid){continue;}
-					$this->ships[$i]->hidePowers($this->turn);
+					$this->ships[$i]->hideAllPowers($this->turn);
 					$this->ships[$i]->hideFireOrders($this->turn, $this->phase);
 					$this->ships[$i]->hideActions($this->phase);
 				} break;
@@ -243,7 +243,7 @@
 					if ($this->ships[$i]->userid == $this->userid){continue;}
 					$this->ships[$i]->hideFireOrders($this->turn, $this->phase);
 					if ($this->ships[$i]->flight){ // flights pick dualmode in firing phase
-						$this->ships[$i]->hidePowers($this->turn);
+						$this->ships[$i]->hideAllPowers($this->turn);
 					}
 				} break;
 			case 3:

@@ -8,9 +8,9 @@ class Flight extends Mixed {
 	public $faction = false;
 	public $baseSize = 30;
 	public $unitSize = 5;
-	public $traverse = 1;
 
 	public $fSize = 15;
+	public $tracking = 1;
 	public $baseImpulse = 1000;
 
 	function __construct($data = false){
@@ -26,7 +26,7 @@ class Flight extends Mixed {
 	}
 
 	public function getMaxSpeed (){
-		return $this->baseImpulse*4;
+		return $this->baseImpulse*3;
 	}
 
 	public function setCurSpeed($turn, $phase){
@@ -39,13 +39,13 @@ class Flight extends Mixed {
 
 		if (!isset($this->mission) || empty($this->mission) || !sizeof($this->structures)){return;}
 
-		$elapsed = 4;
+		$elapsed = 1;
 		//var_export($this->mission);
 		//if (!$this->mission->arrived){
 			$elapsed += $turn - $this->mission->turn;
 		//}
 
-		$this->curImp = floor($this->baseImpulse * min(4, $elapsed + ($phase > 1)));
+		$this->curImp = floor($this->baseImpulse * min(3, $elapsed + ($phase > 1)));
 	}
 
 	public function setSize(){

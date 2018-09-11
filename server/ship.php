@@ -294,7 +294,7 @@ class Ship {
 			return floor($this->getBaseImpulse() / 8);
 	}
 
-	public function hidePowers($turn){
+	public function hideAllPowers($turn){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = sizeof($this->structures[$i]->powers)-1; $j >= 0; $j--){
 				if ($this->structures[$i]->powers[$j]->turn == $turn){
@@ -302,14 +302,7 @@ class Ship {
 				} else break;
 			}
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				for ($k = sizeof($this->structures[$i]->systems[$j]->powers)-1; $k >= 0; $k--){
-					if ($this->structures[$i]->systems[$j]->powers[$k]->turn == $turn){
-						if ($this->structures[$i]->systems[$j]->powers[$k]->type == 0){
-							$this->structures[$i]->systems[$j]->disabled = 0;
-						}
-						array_splice($this->structures[$i]->systems[$j]->powers, $k, 1);
-					} else break;
-				}
+				$this->structures[$i]->systems[$j]->doHidePowerOrders($turn);
 			}
 		}
 		//if (!$this->ship){return;}

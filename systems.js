@@ -2671,9 +2671,6 @@ Dual.prototype.init = function(){
 				if (this.powers[j].turn == game.turn && this.powers[j].type > 0){
 					w.powers.push(this.powers[j]);
 				}
-				//else if (this.powers[j].turn > game.turn){
-				//	break;
-				//}
 			}
 		}
 	}

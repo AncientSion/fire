@@ -79,7 +79,7 @@ Flight.prototype.setCurSpeed = function(){
 }
 
 Flight.prototype.getMaxSpeed = function(){
-	return this.baseImpulse*4;
+	return this.baseImpulse*3;
 }
 
 

@@ -195,20 +195,17 @@ class Squadron extends Ship {
 		}
 	}
 
-	public function hidePowers($turn){
+	public function hideAllPowers($turn){
 		//Debug::log("d");
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
 				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){
-					for ($l = sizeof($this->structures[$i]->structures[$j]->systems[$k]->powers)-1; $l >= 0; $l--){
-						if ($this->structures[$i]->structures[$j]->systems[$k]->powers[$l]->turn == $turn){
-							array_splice($this->structures[$i]->structures[$j]->systems[$k]->powers, $l, 1);
-						} else break;
-					}
+					$this->structures[$i]->structures[$j]->systems[$k]->doHidePowerOrders($turn);
 				}
 			}
 		}
+
 
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 			//Debug::log("s: ".sizeof($this->primary->systems));

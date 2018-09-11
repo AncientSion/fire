@@ -39,6 +39,7 @@ function Game(data){
 	this.animShip = 0;
 	this.animFlight = 0;
 	this.animSalvo = 0;
+	this.animForcedMoves = 0;
 	this.drawingEvents = 1;
 	this.mission;
 	this.timeout = 0;
@@ -964,7 +965,7 @@ function Game(data){
 			if (this.phase == 2){
 				game.timeout = setTimeout(function(){
 					//$($("#combatLog").find("td")[0]).attr("colSpan", 8)
-					game.resolvePostMoveFire();
+					game.resolvePostMoveFires();
 				}, 1000);
 			}
 			else if (this.phase == 1){
@@ -1776,8 +1777,8 @@ function Game(data){
 		}
 	}
 
-	this.animateUnitMovement = function(){
-		anim = window.requestAnimationFrame(game.animateUnitMovement.bind(this));
+	this.animateMovement = function(){
+		anim = window.requestAnimationFrame(game.animateMovement.bind(this));
 		window.now = Date.now();		
 		window.elapsed = window.now - window.then;
 		if (elapsed < window.fpsTicks){}
@@ -1800,7 +1801,7 @@ function Game(data){
 						if (game.ships[i].actions[j].turn == game.turn && !game.ships[i].actions[j].animated){
 							var action = game.ships[i].actions[j];
 
-							if (action.forced){
+							if (action.forced && !game.animForcedMoves){
 								action.animated = 1;
 								continue;
 							}
@@ -1893,35 +1894,69 @@ function Game(data){
 		}
 	}
 
+	this.handleForcedMoves = function(){
+		console.log("handleForcedMoves");
+
+		var need = 0;
+
+		for (var i = 0; i < this.ships.length; i++){
+			if (!this.ships[i].deployed){continue;}
+			for (var j = 0; j < this.ships[i].actions.length; j++){
+				if (this.ships[i].actions[j].forced){
+					need = 1;
+					this.ships[i].toAnimate = 1;
+					this.ships[i].actions[j].animated = 0;
+				}
+			}
+		}
+
+
+		if (need){
+			this.animShip = 1;
+			this.animFlight = 1;
+			this.animSalvo = 1;
+			this.animForcedMoves = 1;
+			this.animateMovement();
+		}
+		else this.animateUnitExplos();
+	}
+
 	this.finishMoveSubPhase = function(){
 		var time = 500;
 
-		if (game.phase == 2){
-			if (game.animShip){
+		if (this.animForcedMoves){
+			this.animShip = 0;
+			this.animFlight = 0;
+			this.animSalvo = 0;
+			this.animForcedMoves = 0;
+			this.animateUnitExplos();
+		}
+		else if (this.phase == 2){
+			if (this.animShip){
 				//console.log("ship done -> flight moves");
 				game.timeout = setTimeout(function(){
 					game.animShip = 0; game.animFlight = 1;
-					game.animateUnitMovement();
+					game.animateMovement();
 				}, time);
 			}
-			else if (game.animFlight){
+			else if (this.animFlight){
 				//console.log("flight done -> salvo moves");
 				game.timeout = setTimeout(function(){
 				//	game.endMoveSubPhase();
 					game.animFlight = 0; game.animSalvo = 1;
-					game.animateUnitMovement();
+					game.animateMovement();
 				}, time);
 			}
 			else {
-				game.endMoveSubPhase();
-				game.animFlight = 0; game.animSalvo = 0;
-				game.moveResolved();
+				this.endMoveSubPhase();
+				this.animFlight = 0; this.animSalvo = 0;
+				this.moveResolved();
 			}
 		}
 		else {
-			game.animShip = 0; 
-			game.endMoveSubPhase();
-			game.moveResolved();
+			this.animShip = 0; 
+			this.endMoveSubPhase();
+			this.moveResolved();
 		}
 	}
 
@@ -2013,8 +2048,8 @@ function Game(data){
 		this.createLogEntry("-- Initial Events concluded --")
 	}
 
-	this.resolvePostMoveFire = function(){
-		console.log("resolvePostMoveFire");
+	this.resolvePostMoveFires = function(){
+		console.log("resolvePostMoveFires");
 		
 		ui.combatLogWrapper
 			.find("#combatLogInnerWrapper").find("#combatLog")
@@ -2279,7 +2314,8 @@ function Game(data){
 		if (game.unitExploAnims.length){
 			this.createPlaceHolderEntry();
 		}
-		this.animateUnitExplos();
+
+		this.handleForcedMoves();
 	}
 
 	this.createFireFinalEntry = function(){
@@ -3415,7 +3451,7 @@ Game.prototype.doResolveMovement = function(){
 	this.doPositionLog("Movement Log", 600);
 	this.hideUI();
 
-	this.animateUnitMovement();
+	this.animateMovement();
 }
 
 Game.prototype.toggleUI = function(){

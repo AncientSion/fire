@@ -51,8 +51,12 @@ class Dual extends Weapon {
 		parent::setState($turn, $phase);
 		$this->setActiveSystem($turn);
 		$this->setProps();
-
 		//if ($this->id == 16 && $this->parentId == 4){var_export($this->getActiveSystem());}
+	}	
+
+	public function doHidePowerOrders($turn){
+		parent::doHidePowerOrders($turn);
+		$this->states = [1, 0];
 	}
 
 	public function setActiveSystem($turn){
