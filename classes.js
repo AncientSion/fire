@@ -176,8 +176,8 @@ function Crit(data){
 	this.value = data.value;
 
 	this.getString = function(){
-		if (this.duration == -2){return ("Morale Fail: " + this.type + " " + (this.value) + "% (Turn " + this.turn + ")");
-		if (this.type == "Disabled"){
+		if (this.duration == -2){return ("Morale Fail: " + this.type + " " + (this.value) + "% (Turn " + this.turn + ")");}
+		else if (this.type == "Disabled"){
 			if (this.duration){return (this.type + " (Incl. Turn " + (this.turn + this.duration) + ")" + " (Turn " + this.turn + ")");
 			} return this.type + " (Turn " + this.turn + ")";
 		}
