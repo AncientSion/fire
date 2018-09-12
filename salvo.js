@@ -391,7 +391,7 @@ Salvo.prototype.getShortInfo = function(){
 	} else $(ele).attr("class", "hostile");
 
 	ele
-	.append($("<div>").html("Flight #" + this.id))
+	.append($("<div>").html("Salvo #" + this.id))
 	.append($("<div>").html("Speed: " + this.getCurSpeed() + " / " + this.getIntactElements() + "x " + this.structures[0].name))
 	.append($("<div>").html("Base To-Hit: " + this.getStringHitChance()))
 

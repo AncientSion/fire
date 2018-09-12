@@ -3429,7 +3429,7 @@ Ship.prototype.getLockEffect = function(target){
 
 	if (target.ship || target.squad){
 		multi = 0.5;
-		multi += (0.6 / 10 * (this.tracking-4));
+		multi += (0.6 / 10 * (this.traverse-4));
 	}
 	else if (target.flight){
 		multi = 1;
