@@ -3,7 +3,7 @@
 class DmgCalc {
 
 	static function critProcedure($targetid, $systemid, $turn, $new, $effects, $magAdd){
-		//Debug::log("critProcedure $targetid, $systemid, $turn, $new, $magAdd");
+		Debug::log("critProcedure $targetid, $systemid, $turn, $new, $magAdd");
 
 		if ($targetid && $new < 0.15){return false;}
 		$chance = round((1-((1-$new)*(1-$new)))*100);
@@ -368,7 +368,7 @@ class DmgCalc {
 		$system;
 
 		if ($fire->target->ship){
-			$system = $fire->tawrget->primary;
+			$system = $fire->target->primary;
 		} else $system = $ignored;
 
 		$baseDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
