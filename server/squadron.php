@@ -101,7 +101,6 @@ class Squadron extends Ship {
 		//Debug::log("Squadron getRelDmg $rem/$max new: $new");
 
 		return new RelDmg($new, $max-$rem-$new, $max);
-;
 	}
 
 

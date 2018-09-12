@@ -4,6 +4,7 @@ class DmgCalc {
 
 	static function critProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd){
 
+		if ($unitid && $new < 0.15){return false;}
 		Debug::log("critProcedure $unitid, $systemid, $turn, $new, $magAdd");
 
 		if ($unitid && $new < 0.15){return false;}
