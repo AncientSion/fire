@@ -141,6 +141,10 @@ System.prototype.attachSysMods = function(ele){
 			for (var i = 0; i < this.crits.length; i++){
   				if (!this.crits[i].inEffect()){continue;}
 
+				$(table[0]).append($("<tr>").append($("<td>").html(this.crits[i].getString()).attr("colSpan", 2).addClass("negative")));
+				return;
+
+
   				var html = "";
   				if (this.crits[i].type == "Disabled"){
 					if (this.crits[i].duration){html = (this.crits[i].type + " (Incl. Turn " + (this.crits[i].turn + this.crits[i].duration) + ")" + " (Turn " + this.crits[i].turn + ")");}
