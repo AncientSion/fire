@@ -10,7 +10,7 @@ class Flight extends Mixed {
 	public $unitSize = 5;
 
 	public $fSize = 15;
-	public $tracking = 1;
+	public $traverse = 1;
 	public $baseImpulse = 1000;
 
 	function __construct($data = false){
