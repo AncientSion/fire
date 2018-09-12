@@ -1491,7 +1491,7 @@
 	public function testFleetMorale(){
 		//this->turn = 1;
 
-		$do = 5;
+		$do = 1;
 
 		while ($do){
 			Debug::log("-----------------testFleetMorale--------------");

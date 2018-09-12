@@ -4,12 +4,14 @@ class DmgCalc {
 
 	static function critProcedure($targetid, $systemid, $turn, $new, $effects, $magAdd){
 		//Debug::log("critProcedure $targetid, $systemid, $turn, $new, $magAdd");
+
+		if ($targetid && $new < 0.15){return false;}
 		$chance = round((1-((1-$new)*(1-$new)))*100);
 		$chanceRoll = mt_rand(0, 100);
 
 		if ($chanceRoll > $chance){
 			//Debug::log("___opening test SUCCESS, roll: ".$roll.", chance: ".$chance);
-			return;
+			return false;
 		}// else Debug::log("___opening test FAIL, roll: ".$roll.", chance: ".$chance);
 
 		$roll = mt_rand(0, 100);

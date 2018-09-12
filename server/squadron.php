@@ -26,7 +26,7 @@ class Squadron extends Ship {
 			if ($this->structures[$i]->destroyed){continue;}
 			$dmg = $this->structures[$i]->getRelDmg($turn);
 			if (!$dmg->new){continue;}
-			Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn." --- ".$this->structures[$i]->name." ".$i);
+			Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn." --- ".$this->structures[$i]->name." ".$i.", old/new ".$dmg->old."/".$dmg->new);
 			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
 				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){
 					$this->structures[$i]->structures[$j]->systems[$k]->determineCrit($dmg, $turn, 1);
