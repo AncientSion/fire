@@ -89,7 +89,7 @@
 
 	public function getClientData(){
 		//Debug::log("getClientData");
-		$this->testUnitMorale(); return;
+		//$this->testUnitMorale(); return;
 		//$this->setPostFireFocusValues(); return;
 		//$this->testFleetMorale();
 

@@ -4,7 +4,7 @@ class DmgCalc {
 
 	static function critProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd){
 
-		if ($unitid == 9){Debug::log("adjust"); $new = 0.46;}
+		//if ($unitid == 9){Debug::log("adjust"); $new = 0.46;}
 		Debug::log("critProcedure $unitid, $systemid, $turn, $new, $magAdd");
 
 		if ($unitid && $new < 0.15){return false;}
