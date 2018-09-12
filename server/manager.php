@@ -66,7 +66,7 @@
 
 		foreach ($files as $file){
 			$content = file("server/ships/".$file);
-			$ne////w = array();
+			$new = array();
 
 			foreach ($content as $line){
 				$entry = substr(trim($line), 8, 3);
