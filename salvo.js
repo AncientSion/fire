@@ -189,7 +189,7 @@ Salvo.prototype.createBaseDiv = function(){
 			.append($("<td>").html(this.getCurSpeed() + " (max: " + this.getMaxSpeed() + ")")))
 		.append($("<tr>")
 			.append($("<td>").html("Acceleration"))
-			.append($("<td>").html(" +" + this.baseImpulse + " per turn")))	
+			.append($("<td>").html(" +" + this.baseImpulse + " per turn")))
 		.append($("<tr>")
     		.append($("<td>").html("Tracking"))
 			.append($("<td>").html(getUnitType(this.structures[0].systems[0].tracking)).attr("colSpan", 3)))
@@ -239,83 +239,6 @@ Salvo.prototype.createBaseDiv = function(){
 	*/.drag();
 
 	return;
-
-
-	var table = document.createElement("table");
-		table.style.borderCollapse = "collapse";
-		table.style.margin = "auto";
-	var tr = document.createElement("tr");
-
-	var max = Math.min(6, this.structures.length);
-
-	/*var impact = false;
-	if (this.actions.length && this.actions[this.actions.length-1].type == "impact"){
-		impact = true;
-	}*/
-
-	for (var i = 0; i < this.structures.length; i++){
-		if (i % max === 0){
-		    var tbody = table.appendChild(document.createElement("tbody"));
-		    var tr1 = tbody.insertRow(-1);
-		    var tr2 = tbody.insertRow(-1);
-		}
-
-		var td = document.createElement("td");
-			td.className = "iconContainer"; 
-			$(td).data("id", this.structures[i].id);
-			td.addEventListener("click", function(){
-				console.log(game.getUnit(aUnit).getSystem($(this).data("id")));
-			})
-
-			if (this.structures[i].destroyed || this.structures[i].disabled){
-				var img = new Image();
-					img.className = "ammoOverlay";
-					img.src = "varIcons/destroyed.png";
-					td.appendChild(img);
-			}
-			/*else if (impact){
-				if (true){
-					img.src = "varIcons/ammoHit.png";
-				} else img.src = "varIcons/ammoMiss.png";
-			}*/
-			$(td).append($(this.structures[i].getBaseImage().cloneNode(true)).addClass("rotate270 size40"));
-
-		tr1.appendChild(td);
-
-		var td = document.createElement("td");
-			td.className = "iconIntegrity";
-
-		var rem = this.structures[i].getRemIntegrity();
-
-		var bgDiv = document.createElement("div");
-			bgDiv.className = "integrityAmount"; bgDiv.style.top = 2;
-			bgDiv.style.fontSize = "12px";
-			bgDiv.innerHTML = rem + " / " + this.structures[i].integrity;
-			td.appendChild(bgDiv);
-
-		var lowerDiv = document.createElement("div");
-			lowerDiv.className = "integrityNow"; lowerDiv.style.top = 0; lowerDiv.style.height = "100%";
-			lowerDiv.style.width = rem/this.structures[i].integrity * 100 + "%";
-			td.appendChild(lowerDiv);
-			
-		var upperDiv = document.createElement("div");
-			upperDiv.className = "integrityFull"; upperDiv.style.top = 0;
-			td.appendChild(upperDiv);
-
-		tr2.appendChild(td);
-	}
-	div.appendChild(table);
-
-	$(div).contextmenu(function(e){
-		e.stopPropagation();
-		e.preventDefault();
-		if (!aUnit ||aUnit != $(this).data("shipId")){
-			$(this).addClass("disabled");
-		};
-	}).drag();
-
-	document.body.appendChild(div);
-	//document.getElementById("game").appendChild(div);
 }
 
 Salvo.prototype.supplyAttachDiv = function(div){

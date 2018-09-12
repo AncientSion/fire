@@ -71,6 +71,10 @@ Mixed.prototype.getCurSpeed = function(){
 	return this.curImp;
 }
 
+Mixed.prototype.getMaxSpeed = function(){
+	return this.baseImpulse*3;
+}
+
 Mixed.prototype.getPostMovePos = function(){
 	return this.nextStep;
 }

@@ -78,10 +78,6 @@ Flight.prototype.setCurSpeed = function(){
 	this.curImp = Math.floor(this.baseImpulse * ((game.turn - start)+1));
 }
 
-Flight.prototype.getMaxSpeed = function(){
-	return this.baseImpulse*3;
-}
-
 
 Flight.prototype.getNewMission = function(){
 	if (this.mission.turn == game.turn){
