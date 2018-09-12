@@ -1176,7 +1176,7 @@ PrimarySystem.prototype.getCritLogString = function(){
 	var html = "";
 	for (let i = 0; i < this.crits.length; i++){
 		if (this.crits[i].turn != game.turn){continue;}
-		if (this.crits[i].duration == -1){continue;}
+		if (this.crits[i].duration < 0){continue;}
 		if (this.crits[i].type == "Overload"){continue;}
 		html += this.crits[i].display + "</br>";
 	}
