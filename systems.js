@@ -142,7 +142,7 @@ System.prototype.attachSysMods = function(ele){
   				if (!this.crits[i].inEffect()){continue;}
 
 				$(table[0]).append($("<tr>").append($("<td>").html(this.crits[i].getString()).attr("colSpan", 2).addClass("negative")));
-				return;
+				continue;
 
 
   				var html = "";
