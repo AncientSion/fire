@@ -1018,8 +1018,8 @@ function Game(data){
 			var pos = hostiles[0].getPlannedPos();
 
 			for (var j = 0; j < weapons.length; j++){
-				weapons[j].odds = 1;
-				weapons[j].validTarget = 1;
+				weapons[j].getActiveSystem().odds = 1;
+				weapons[j].getActiveSystem().validTarget = 1;
 				weapons[j].setFireOrder(target, pos);
 			}
 		}
