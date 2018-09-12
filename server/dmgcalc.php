@@ -4,23 +4,23 @@ class DmgCalc {
 
 	static function critProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd){
 
-		//if ($unitid == 9){Debug::log("adjust"); $new = 0.46;}
-		//Debug::log("critProcedure $unitid, $systemid, $turn, $new, $magAdd");
+		if ($unitid == 9){Debug::log("adjust"); $new = 0.46;}
+		Debug::log("critProcedure $unitid, $systemid, $turn, $new, $magAdd");
 
 		if ($unitid && $new < 0.15){return false;}
 		$chance = round((1-((1-$new)*(1-$new)))*100);
 		$chanceRoll = mt_rand(0, 100);
 
 		if ($chanceRoll > $chance){
-			Debug::log("___opening test SUCCESS, roll: ".$chanceRoll.", chance: ".$chance);
+			Debug::log("___opening test SUCCESS, chanceRoll: ".$chanceRoll.", chance: ".$chance);
 			return false;
-		} else Debug::log("___opening test FAIL, roll: ".$chanceRoll.", chance: ".$chance);
+		} else Debug::log("___opening test FAIL, chanceRoll: ".$chanceRoll.", chance: ".$chance);
 
-		$roll = mt_rand(0, 100);
-		$magnitude = $roll + $magAdd;
+		$magRoll = mt_rand(0, 100);
+		$magnitude = $magRoll + $magAdd;
 
 
-		Debug::log("chance to fail: $chance, rolled $chanceRoll, magRoll $roll, modifier $magAdd, total $magnitude");
+		Debug::log("chance to fail: $chance, rolled $chanceRoll, magRoll $magRoll, modifier $magAdd, total $magnitude");
 		if ($magnitude  < $effects[0][1]){return;}
 
 		for ($i = sizeof($effects)-1; $i >= 0; $i--){
