@@ -67,6 +67,10 @@ class System {
 		$this->isPowered($turn);
 	}
 
+	public function getHitChance(){
+		return $this->integrity*3;
+	}
+
 	public function doHidePowerOrders($turn){
 		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
 			if ($this->powers[$i]->turn == $turn){
