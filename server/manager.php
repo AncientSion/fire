@@ -66,7 +66,7 @@
 
 		foreach ($files as $file){
 			$content = file("server/ships/".$file);
-			$new = array();
+			$ne////w = array();
 
 			foreach ($content as $line){
 				$entry = substr(trim($line), 8, 3);
@@ -89,7 +89,7 @@
 
 	public function getClientData(){
 		//Debug::log("getClientData");
-		//$this->testUnitMorale(); return;
+		$this->testUnitMorale(); return;
 		//$this->setPostFireFocusValues(); return;
 		//$this->testFleetMorale();
 

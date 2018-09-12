@@ -1073,9 +1073,10 @@ class Ship {
 		$dmg = $this->getRelDmg($turn);
 		Debug::log("doTestMorale ".get_class($this)."# ".$this->id." remMorale: ".$this->morale->rem." #".$this->id.", newRel: ".$dmg->rel);
 
-		$crit = DmgCalc::critProcedure($this->id, 1, $turn, $dmg->rel, $this->critEffects, $this->baseMorale - $this->morale->rem);
+		$crit = DmgCalc::critProcedure($this->id, 1, $turn, $dmg->rel, $this->critEffects, 100 - $this->morale->rem);
 		if (!$crit){return;}
 
+		// 150, 89
 		if ($crit->type == "Rout"){$this->status = "jumpOut";}
 		else $this->getSystemByName("Command")->crits[] = $crit;
 	}
