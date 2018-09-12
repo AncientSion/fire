@@ -1520,7 +1520,7 @@ Ship.prototype.createCritLogEntry = function(){
 
 Ship.prototype.createMoraleLogEntry = function(){
 	if (!this.notes || this.flight || this.salvo){return false;}
-	var data = this.notes.slice(0, this.notes.length-1).split(";");
+	//var data = this.notes.slice(0, this.notes.length-1).split(";");
 	//var morale = "";
 	//for (var i = 0; i < data.length; i++){if (data[i][0] == "m"){morale = data[i].slice(1, data[i].length); break;}}
 	var morale = this.notes;
