@@ -11,7 +11,7 @@ class PrimarySystem extends System {
 	public $hitChance = 0;
 	public $hitPct = 0;
 	public $critEffects =  array( // type, mag, dura, effect
-		array("Output", 0, 0, 0)
+		array("Output", 40, 0, 0)
 	);
 
 	public function getCritModMax($relDmg){
@@ -251,6 +251,7 @@ class Hangar extends Weapon {
 	public $launchRate;
 	public $usage = -1;
 	public $loadout = 1;
+	public $critEffects = array();
 
 	function __construct($id, $parentId, $launchRate, $loads, $capacity, $width = 1){
 		parent::__construct($id, $parentId, 0, 0, 0, $width);
@@ -283,10 +284,6 @@ class Hangar extends Weapon {
 			}
 		}
 	}
-
-	public function doCritTestSelf($turn, $extra){
-		return;
-	}
 }
 
 class Bulkhead extends System {
@@ -295,6 +292,7 @@ class Bulkhead extends System {
 	public $display = "Bulkhead";
 	public $fireOrders = array();
 	public $powerReq = 0;
+	public $critEffects = array();
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
 		$this->integrity = $integrity;
@@ -303,10 +301,6 @@ class Bulkhead extends System {
 
 	public function getHitChance(){
 		return $this->integrity*4;
-	}
-
-	public function determineCrit($rel, $turn, $squad){
-		return;
 	}
 }
 

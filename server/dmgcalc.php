@@ -2,12 +2,12 @@
 
 class DmgCalc {
 
-	static function critProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd, $forShip = 0){
+	static function critProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd, $morale = 0){
 
 		//if ($unitid == 9){Debug::log("adjust"); $new = 0.46;}
-		Debug::log("critProcedure $unitid, $systemid, $turn, $new, $magAdd");
+		Debug::log("critProcedure $unitid, $systemid, $turn, $new, $magAdd, $morale");
 
-		if ($unitid && $new < 0.15){return false;}
+		if ($new < 0.15 && !$morale){return false;}
 		$chance = round((1-((1-$new)*(1-$new)))*100);
 		$chanceRoll = mt_rand(0, 100);
 
@@ -37,7 +37,7 @@ class DmgCalc {
 				1
 			);
 
-			if ($forShip){
+			if ($morale){
 				$crit->notes = $chanceRoll.";".$magRoll.";".$totalMag;
 			}
 			return $crit;
