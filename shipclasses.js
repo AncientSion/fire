@@ -1529,14 +1529,14 @@ Ship.prototype.createMoraleLogEntry = function(){
 
 	var effect = 0;
 	if (this.status == "jumpOut"){
-		html += "The unit <span class='yellow'> is routed (" + morale + " on D100)</span>.</td>";
+		html += "The unit <span class='yellow'> is routed ("+ morale + ")</span>.</td>";
 		effect = 1;
 	}
 	else {
 		var command = this.getSystemByName("Command");
 		for (var i = 0; i < command.crits.length; i++){
 			if (command.crits[i].turn != game.turn || command.crits[i].duration != -2){continue;}
-			html += "The unit suffers a permanent <span class='yellow'>" + command.crits[i].value + "% Morale penalty (" + morale + " on D100)</span>.</td>";
+			html += "The unit suffers a permanent <span class='yellow'>" + command.crits[i].value + "% Morale penalty ("+ morale + ")</span>.</td>";
 			effect = 1;
 		}
 	}
