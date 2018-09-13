@@ -253,7 +253,7 @@ class System {
 		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old.", rel: ".$dmg->rel.", Squad: ".$squad);
 
 		$sumDmg = ($dmg->new + $dmg->old)*100 + $squad*60;
-		$crit = DmgCalc::critProcedure($this->parentId, $this->id, $turn, $dmg->rel, $this->critEffects, $sumDmg);
+		$crit = DmgCalc::critProcedure($this->parentId, $this->id, $turn, $dmg->rel, $this->critEffects, $sumDmg, 0, $this->internal);
 
 		if ($crit){
 			//$crit->value = $this->getCritModMax($crit->value);

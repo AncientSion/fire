@@ -2,10 +2,10 @@
 
 class DmgCalc {
 
-	static function critProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd, $morale = 0){
+	static function critProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd, $morale = 0, $internal = 0){
 
 		//if ($unitid == 9){Debug::log("adjust"); $new = 0.46;}
-		Debug::log("critProcedure $unitid, $systemid, $turn, $new, $magAdd, $morale");
+		Debug::log("critProcedure $unitid, $systemid, $turn, $new, $magAdd, $morale, $internal");
 
 		if ($new < 0.15 && !$morale){return false;}
 		$chance = round((1-((1-$new)*(1-$new)))*100);
@@ -13,8 +13,14 @@ class DmgCalc {
 
 		if ($chanceRoll > $chance){
 			Debug::log("___opening test SUCCESS, chanceRoll: ".$chanceRoll.", chance: ".$chance);
-			return false;
-		} else Debug::log("___opening test FAIL, chanceRoll: ".$chanceRoll.", chance: ".$chance);
+			if ($internal){
+				Debug::log("but internal, +30 magnitude");
+				$magAdd += 30;
+			} else return false;
+		}
+		else {
+			Debug::log("___opening test FAIL, chanceRoll: ".$chanceRoll.", chance: ".$chance);
+		}
 
 		$magRoll = mt_rand(0, 100);
 		$totalMag = $magRoll + $magAdd;
