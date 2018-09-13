@@ -2,7 +2,7 @@
 
 class DmgCalc {
 
-	static function critProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd){
+	static function critProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd, $forShip = 0){
 
 		//if ($unitid == 9){Debug::log("adjust"); $new = 0.46;}
 		Debug::log("critProcedure $unitid, $systemid, $turn, $new, $magAdd");
@@ -17,24 +17,30 @@ class DmgCalc {
 		} else Debug::log("___opening test FAIL, chanceRoll: ".$chanceRoll.", chance: ".$chance);
 
 		$magRoll = mt_rand(0, 100);
-		$magnitude = $magRoll + $magAdd;
+		$totalMag = $magRoll + $magAdd;
 
 
-		Debug::log("chance to fail: $chance, rolled $chanceRoll, magRoll $magRoll, modifier $magAdd, total $magnitude");
-		if ($magnitude  < $effects[0][1]){return;}
+		Debug::log("chance to fail: $chance, rolled $chanceRoll, magRoll $magRoll, magAdd $magAdd, totalMag $totalMag");
+
+		if ($totalMag  < $effects[0][1]){return;}
 
 		for ($i = sizeof($effects)-1; $i >= 0; $i--){
-			if ($magnitude < $effects[$i][1]){continue;}
+			if ($totalMag < $effects[$i][1]){continue;}
 
 	
 			Debug::log("crit: ".$effects[$i][0]);
+
 			//($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
-			return 
-				new Crit(
-					0, $unitid, $systemid, $turn,
-					$effects[$i][0], $effects[$i][2], $effects[$i][3],
-					1
-				);
+			$crit = new Crit(
+				0, $unitid, $systemid, $turn,
+				$effects[$i][0], $effects[$i][2], $effects[$i][3],
+				1
+			);
+
+			if ($forShip){
+				$crit->notes = $chanceRoll.";".$magRoll.";".$totalMag;
+			}
+			return $crit;
 		}
 		return false;
 	}

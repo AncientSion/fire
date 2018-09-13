@@ -1511,8 +1511,6 @@
 					}
 				}
 
-
-
 				$dif = round($new / ($max-$old), 2);
 				//Debug::log("player ".$i.", old: ".$old.", new: ".$new.", dif: ".$dif);
 				if (!$dif){continue;}

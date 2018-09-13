@@ -315,6 +315,7 @@ class Crit {
 	public $value;
 	public $display = "";
 	public $new = 0;
+	public $notes = "";
 	
 	function __construct($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 		$this->id = $id;
