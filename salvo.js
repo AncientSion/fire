@@ -1,6 +1,6 @@
 function Salvo(data){
 	Mixed.call(this, data);
-	this.missiles = data.missile;
+	this.missile = data.missile;
 	this.torpedo = data.torpedo;
 	this.salvo = 1;
 
