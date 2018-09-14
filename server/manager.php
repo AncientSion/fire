@@ -1292,6 +1292,8 @@
 			$this->fires[$i]->shooter = $this->getUnit($this->fires[$i]->shooterid);
 			//var_export($this->fires[$i]->id);
 			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystem($this->fires[$i]->weaponid);
+			var_export($this->fires[$i]->id); echo "</br>";
+			//var_export($this->fires[$i]->id);
 			//Debug::log("weapon: ".get_class($this->fires[$i]->weapon));
 			$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
 			$this->fires[$i]->target = $this->getUnit($this->fires[$i]->targetid);
@@ -1516,7 +1518,7 @@
 				if (!$rel){continue;}
 
 				$crit = DmgCalc::moraleCritProcedure(0, 0, $this->turn, $rel, $this->const["morale"], $old+$new);
-				
+
 				$this->playerstatus[$i]["globals"][] = array(
 					"id" => 0,
 					"playerstatusid" => $this->playerstatus[$i]["id"],
