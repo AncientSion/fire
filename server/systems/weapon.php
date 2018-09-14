@@ -163,7 +163,7 @@ class Weapon extends System {
 	public function getAccuracyMod($fire){
 		$mod = 100;
 		$mod += $this->getCritMod("Accuracy", $fire->turn);
-		$mod += $this->getBoostEffect("Accuracy")* $this->getBoostLevel($fire->turn);
+		$mod -= $this->getBoostEffect("Accuracy")* $this->getBoostLevel($fire->turn);
 
 		//if ($mod != 100){Debug::log("weapon id: ".$this->id.", RANGE LOSS mod: ".$mod);}
 		return $mod / 100;

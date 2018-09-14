@@ -51,7 +51,7 @@ class DmgCalc {
 		$chanceRoll = mt_rand(0, 100);
 
 
-		$crit = new Crit(0, $unitid, $systemid, $turn, "", 0, 0);
+		$crit = new Crit(0, $unitid, $systemid, $turn, "", 0, 0, 1);
 
 		if ($chanceRoll > $chance){
 			Debug::log("___opening test SUCCESS, chanceRoll: ".$chanceRoll.", chance: ".$chance);
