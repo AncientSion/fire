@@ -46,7 +46,7 @@ class DmgCalc {
 	static function moraleCritProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd){
 		Debug::log("moraleCritProcedure $unitid, $systemid, $turn, $new, $magAdd");
 
-		if !sizeof($effects)){return;}
+		if (!sizeof($effects)){return;}
 		$chance = round((1-((1-$new)*(1-$new)))*100);
 		$chanceRoll = mt_rand(0, 100);
 
