@@ -1291,8 +1291,8 @@
 			//var_export($this->fires[$i]); echo "</br></br>";
 			$this->fires[$i]->shooter = $this->getUnit($this->fires[$i]->shooterid);
 			//var_export($this->fires[$i]->id);
-			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystem($this->fires[$i]->weaponid);
 			echo $this->fires[$i]->id; echo "</br>";
+			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystem($this->fires[$i]->weaponid);
 			//var_export($this->fires[$i]->id);
 			//Debug::log("weapon: ".get_class($this->fires[$i]->weapon));
 			$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
