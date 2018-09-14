@@ -1515,7 +1515,7 @@
 				//Debug::log("player ".$i.", old: ".$old.", new: ".$new.", dif: ".$dif);
 				if (!$dif){continue;}
 
-				$crit = DmgCalc::critProcedure(0, 0, $this->turn, $dif, $this->const["morale"], $old+$new);
+				$crit = DmgCalc::critProcedure(0, 0, $this->turn, $dif, $this->const["morale"], $old+$new, 1, 0);
 				if ($crit){
 					$this->playerstatus[$i]["globals"][] = array(
 						"id" => 0,
