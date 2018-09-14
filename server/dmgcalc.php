@@ -5,7 +5,7 @@ class DmgCalc {
 	static function critProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd, $internal = 0){
 		Debug::log("critProcedure $unitid, $systemid, $turn, $new, $magAdd, $internal");
 
-		if !sizeof($effects)){return;}
+		if (!sizeof($effects)){return;}
 		if ($new < 0.15){return false;}
 		$chance = round((1-((1-$new)*(1-$new)))*100);
 		$chanceRoll = mt_rand(0, 100);
