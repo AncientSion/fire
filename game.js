@@ -3626,6 +3626,7 @@ Game.prototype.showFleetMorale = function(e, userid){
 
 	for (var j = 0; j < this.playerstatus[i].globals.length; j++){
 		if (this.playerstatus[i].globals[j].type != "Morale"){continue;}
+		if (this.playerstatus[i].globals[j].value == 0){continue;}
 		var crit = this.playerstatus[i].globals[j];
 		table.append($("<tr>")
 			.append($("<td>").html("Turn " + crit.turn + " / " + crit.notes))
