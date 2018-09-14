@@ -1050,9 +1050,7 @@ function Game(data){
 
 		this.createCritLogEntries();
 		this.createUnitMoraleLogEntries();
-		this.createPlaceHolderEntry();
-		this.createUnitMoraleLogEntries();
-		this.createPlaceHolderEntry();
+		this.createFleetMoraleLogEntries();
 		this.createLogEntry("-- Fire Events concluded --");
 
 		this.showUI();
@@ -1098,14 +1096,20 @@ function Game(data){
 		}
 	}
 
-	this.createFleetMoraleEntries = function(){
+	this.createFleetMoraleLogEntries = function(){
 		var entries = 0;
 
 		this.createPlaceHolderEntry();
 
-		for (let i = 0; i < this.ships.length; i++){
-			let entry = this.ships[i].createMoraleLogEntry();
-			if (entry){entries++;}
+		var globals = this.getPlayerStatus().globals;
+
+		for (let i = 0; i < globals.length; i++){
+			if (this.globals[i].turn != game.turn){continue;}
+			entries = 1;
+				$("#combatLog").find("tbody")
+					.append($("<tr>")
+						.html(globals[i].type + " / " + globals[i].notes));
+
 		}
 
 		if (!entries){

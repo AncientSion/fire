@@ -1511,21 +1511,21 @@
 					}
 				}
 
-				$dif = round($new / ($max-$old), 2);
-				//Debug::log("player ".$i.", old: ".$old.", new: ".$new.", dif: ".$dif);
-				if (!$dif){continue;}
+				$rel = round($new / ($max-$old), 2);
+				Debug::log("player ".$i.", old: ".$old.", new: ".$new.", rel: ".$rel);
+				if (!$rel){continue;}
 
-				$crit = DmgCalc::critProcedure(0, 0, $this->turn, $dif, $this->const["morale"], $old+$new, 1, 0);
-				if ($crit){
-					$this->playerstatus[$i]["globals"][] = array(
-						"id" => 0,
-						"playerstatusid" => $this->playerstatus[$i]["id"],
-						"turn" => $crit->turn,
-						"type" => $crit->type,
-						"value" => $crit->value,
-						"notes" => "Morale Breakdown"
-					);
-				}
+				$crit = DmgCalc::moraleCritProcedure(0, 0, $this->turn, $rel, $this->const["morale"], $old+$new);
+				
+				$this->playerstatus[$i]["globals"][] = array(
+					"id" => 0,
+					"playerstatusid" => $this->playerstatus[$i]["id"],
+					"turn" => $crit->turn,
+					"type" => $crit->type,
+					"value" => $crit->value,
+					//"notes" => "Breakdown (".$crit->notes.")"
+					"notes" => $crit->notes
+				);
 			}
 		}
 	}

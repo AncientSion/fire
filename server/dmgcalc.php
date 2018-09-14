@@ -2,12 +2,11 @@
 
 class DmgCalc {
 
-	static function critProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd, $morale = 0, $internal = 0){
+	static function critProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd, $internal = 0){
+		Debug::log("critProcedure $unitid, $systemid, $turn, $new, $magAdd, $internal");
 
-		//if ($unitid == 9){Debug::log("adjust"); $new = 0.46;}
-		Debug::log("critProcedure $unitid, $systemid, $turn, $new, $magAdd, $morale, $internal");
-
-		if ($new < 0.15 && !$morale){return false;}
+		if !sizeof($effects)){return;}
+		if ($new < 0.15){return false;}
 		$chance = round((1-((1-$new)*(1-$new)))*100);
 		$chanceRoll = mt_rand(0, 100);
 
@@ -15,7 +14,7 @@ class DmgCalc {
 			Debug::log("___opening test SUCCESS, chanceRoll: ".$chanceRoll.", chance: ".$chance);
 			if ($internal){
 				Debug::log("but internal, +30 magnitude");
-				$magAdd += 30;
+				$magAdd -= 30;
 			} else return false;
 		}
 		else {
@@ -25,15 +24,12 @@ class DmgCalc {
 		$magRoll = mt_rand(0, 100);
 		$totalMag = $magRoll + $magAdd;
 
-
 		Debug::log("chance to fail: $chance, rolled $chanceRoll, magRoll $magRoll, magAdd $magAdd, totalMag $totalMag");
 
 		if ($totalMag  < $effects[0][1]){return;}
 
 		for ($i = sizeof($effects)-1; $i >= 0; $i--){
-			if ($totalMag < $effects[$i][1]){continue;}
-
-	
+			if ($totalMag < $effects[$i][1]){continue;}	
 			Debug::log("crit: ".$effects[$i][0]);
 
 			//($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
@@ -42,13 +38,52 @@ class DmgCalc {
 				$effects[$i][0], $effects[$i][2], $effects[$i][3],
 				1
 			);
-
-			if ($morale){
-				$crit->notes = $chanceRoll.";".$magRoll.";".$totalMag;
-			}
 			return $crit;
 		}
 		return false;
+	}
+
+	static function moraleCritProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd){
+		Debug::log("moraleCritProcedure $unitid, $systemid, $turn, $new, $magAdd");
+
+		if !sizeof($effects)){return;}
+		$chance = round((1-((1-$new)*(1-$new)))*100);
+		$chanceRoll = mt_rand(0, 100);
+
+
+		$crit = new Crit(0, $unitid, $systemid, $turn, "", 0, 0);
+
+		if ($chanceRoll > $chance){
+			Debug::log("___opening test SUCCESS, chanceRoll: ".$chanceRoll.", chance: ".$chance);
+			$crit->notes = "p;".$chance.";".$chanceRoll;
+		}
+		else {
+			Debug::log("___opening test FAIL, chanceRoll: ".$chanceRoll.", chance: ".$chance);
+			$crit->notes = "f;".$chance.";".$chanceRoll;
+		}
+
+		if ($totalMag < $effects[0][1]){
+			$magRoll = mt_rand(0, 100);
+			$totalMag = $magRoll + $magAdd;
+
+			Debug::log("chance to fail: $chance, rolled $chanceRoll, magRoll $magRoll, magAdd $magAdd, totalMag $totalMag");
+
+			for ($i = sizeof($effects)-1; $i >= 0; $i--){
+				if ($totalMag < $effects[$i][1]){continue;}
+		
+				Debug::log("crit: ".$effects[$i][0]);
+
+				//($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
+				$crit->type = $effects[$i][0];
+				$crit->duration = $effects[$i][2];
+				$crit->value = $effects[$i][3];
+
+				$crit->notes = ";".$magRoll.";".$totalMag;
+				break;
+			}
+		}
+
+		return $crit;
 	}
 
 
