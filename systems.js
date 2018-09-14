@@ -3091,7 +3091,7 @@ Launcher.prototype.select = function(e){
 		this.setupLauncherLoadout(e);
 	}
 	else if ((game.turn == 1 || game.turn == game.getUnit(this.parentId).available) || game.phase != -1  || game.deploying || this.getOutput() == 0){
-		//return false;
+		return false;
 	}
 	else if (game.phase == -1 && game.getUnit(aUnit).hasPlannedMoves()){popup("This system can only be used BEFORE planning movement</br>Please reverse movement plan.");return;}
 
