@@ -1212,7 +1212,7 @@ class Ship {
 	public function getNewForcedMoves($turn){
 		$moves = array();
 		for ($i = 0; $i < sizeof($this->actions); $i++){
-			if (!$this->actions[$i]->new){continue;}
+			if (!$this->actions[$i]->new || $this->actions[$i]->forced){continue;}
 			$moves[] = $this->actions[$i];
 		}
 		return $moves;

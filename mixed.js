@@ -239,7 +239,8 @@ Mixed.prototype.getTargetPos = function(){
 	} else return this.mission;
 }
 
-Mixed.prototype.contactThisTurn = function(){
+Mixed.prototype.contactImminent = function(){
+	if (this.torpedo && this.actions[this.actions.length-1].type == "move" && this.actions[this.actions.length-1].turn == game.turn){return false;}
 	var t = this.getTarget();
 
 	if (t.flight && t.mission.targetid == this.id){

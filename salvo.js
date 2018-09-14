@@ -324,7 +324,7 @@ Salvo.prototype.getShortInfo = function(){
 	.append($("<div>").html("Speed: " + this.getCurSpeed() + " / " + this.getIntactElements() + "x " + this.structures[0].name))
 	.append($("<div>").html("Base To-Hit: " + this.getStringHitChance()))
 
-	if (!this.mission.arrived && this.contactThisTurn()){
+	if (!this.mission.arrived && this.contactImminent()){
 		ele.append($("<div>").html("<span class='yellow'>contact imminent</span>"));
 	}
 }
