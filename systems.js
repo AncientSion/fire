@@ -2147,7 +2147,7 @@ Weapon.prototype.getFillStyle = function(x, y, dist){
 
 Weapon.prototype.getAccuracy = function(){
 	var mod = 100;
-		mod += this.getCritMod("Accuracy");
+		mod -= this.getCritMod("Accuracy");
 		mod -= this.getBoostEffect("Accuracy") * this.getBoostLevel();
 
 	return Math.round(this.accDecay * mod / 100);
