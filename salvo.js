@@ -173,6 +173,9 @@ Salvo.prototype.createBaseDiv = function(){
 
 	//if (target.traverse < this.structures[0].systems[0].tracking){lacking = 1;}
 
+	var speed = this.missile ? (this.getCurSpeed() + " (max: " + this.getMaxSpeed() + ")") : this.getCurSpeed();
+	var accel = this.missile ? " +" + this.baseImpulse + " per turn" : "Flat " + this.baseImpulse;
+
 	var table = $("<table>")
 		.append($("<tr>")
 			.append($("<th>").html(this.structures.length + "x '" + this.structures[0].name + "' #" + this.id).attr("colSpan", 4).addClass(headerC)))
@@ -186,10 +189,10 @@ Salvo.prototype.createBaseDiv = function(){
 			.append($("<td>").html(this.getProfileString()).attr("colSpan", 3)))
 		.append($("<tr>")
 			.append($("<td>").html("Current Speed"))
-			.append($("<td>").html(this.getCurSpeed() + " (max: " + this.getMaxSpeed() + ")")))
+			.append($("<td>").html(speed)))
 		.append($("<tr>")
 			.append($("<td>").html("Acceleration"))
-			.append($("<td>").html(" +" + this.baseImpulse + " per turn")))
+			.append($("<td>").html(accel)))
 		.append($("<tr>")
     		.append($("<td>").html("Tracking"))
 			.append($("<td>").html(getUnitType(this.structures[0].systems[0].tracking)).attr("colSpan", 3)))

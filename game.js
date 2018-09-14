@@ -1049,7 +1049,9 @@ function Game(data){
 		$(fxCanvas).css("opacity", 0.25);
 
 		this.createCritLogEntries();
-		this.createMoraleLogEntries();
+		this.createUnitMoraleLogEntries();
+		this.createPlaceHolderEntry();
+		this.createUnitMoraleLogEntries();
 		this.createPlaceHolderEntry();
 		this.createLogEntry("-- Fire Events concluded --");
 
@@ -1081,7 +1083,22 @@ function Game(data){
 		}
 	}
 
-	this.createMoraleLogEntries = function(){
+	this.createUnitMoraleLogEntries = function(){
+		var entries = 0;
+
+		this.createPlaceHolderEntry();
+
+		for (let i = 0; i < this.ships.length; i++){
+			let entry = this.ships[i].createMoraleLogEntry();
+			if (entry){entries++;}
+		}
+
+		if (!entries){
+			ui.combatLogWrapper.find("tr").last().remove();
+		}
+	}
+
+	this.createFleetMoraleEntries = function(){
 		var entries = 0;
 
 		this.createPlaceHolderEntry();
