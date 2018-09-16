@@ -53,7 +53,7 @@ function Game(data){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.animData = {jump: 5};
+	this.animData = {jump: 15};
 	this.commandChange = {old: 0, new: 0}
 	this.subPhase = 1;
 	this.exclusiveSystem = false;
@@ -739,87 +739,185 @@ function Game(data){
 	}
 
 	this.setupDeployZone = function(){
-		if (game.turn == 1){
-			for (var i = 0; i < this.playerstatus.length; i++){
+		for (var i = 0; i < this.playerstatus.length; i++){
 
-				var step = 1;
-				var h = 1000;
-				var w = 200;
-				var dist = 400;
-				var y = h/2;
+			var step = !(i % 2) ? -1 : 1;
+			var d = 500;
+			var center = {x: 0, y: 0}
+			var userid;
+			var color;
 
-				if (i % 2 == 0){step = -1;}
 
-				if (this.playerstatus[i].userid == this.userid){
-					var id = this.userid;
-					var color = "green";
+			if (this.playerstatus[i].userid == this.userid){
+				userid = this.userid;
+				color = "green";
+			}
+			else {
+				userid = 0;
+				color = "red";
+			}
+
+
+			if (game.turn > 1){
+				var count = 0;
+				for (var j = 0; j < this.ships.length; j++){
+					if (this.ships[j].flight || this.ships[j].salvo){continue;}
+					if (this.ships[j].available > game.turn){continue;}
+					d = Math.max(d, getDistance(this.ships[j], center));
+					center.x += this.ships[j].x;
+					center.y += this.ships[j].y;
+					count++;
 				}
-				else {
-					var id = 0;
-					var color = "red";
-				}
 
-				this.deployArea.push({
-					id: id,
-					x: 0 + (dist * step),
-					y: y/2*-1,
-					w: w * step,
-					h: h,
-					c: color
-				});
+				center.x /= count;
+				center.y /= count;
+				//console.log(center);
+
+				center.x = Math.round(center.x);
+				center.y = Math.round(center.y);
 			}
-		}
-		else if (game.turn > 1){
-			var center = {x: 0, y: 0};
-			var count = 0;
-			for (var i = 0; i < this.ships.length; i++){
-				if (this.ships[i].flight || this.ships[i].salvo){continue;}
-				if (this.ships[i].available > game.turn){continue;}
-				center.x += this.ships[i].x;
-				center.y += this.ships[i].y;
-				count++;
-			}
-
-			center.x /= count;
-			center.y /= count;
-			//console.log(center);
-
-			center.x = Math.round(center.x);
-			center.y = Math.round(center.y);
-
-			var d = 0;
-
-			for (var i = 0; i < this.ships.length; i++){
-				if (this.ships[i].flight || this.ships[i].salvo){continue;}
-				if (this.ships[i].available > game.turn){continue;}
-				d = Math.max(d, getDistance(this.ships[i], center));
-			}
-			//console.log(d);
 
 			this.deployArea.push({
-				id: this.userid,
+				userid: userid,
+				c: color,
 				x: center.x,
 				y: center.y,
 				s: 900,
 				b: Math.min(700, Math.round(d*2.5)),
-				c: "green"
-			});
-		}
-		else {
-			this.deployArea.push({
-				id: this.userid,
-				x: 0,
-				y: 0,
-				s: 750,
-				c: "green"
+				start: step == -1 ? 90 : 270,
+				end: step == -1 ? 270 : 90
 			});
 		}
 
+		return;
+
+
+
+			if (game.turn == 1){
+				for (var i = 0; i < this.playerstatus.length; i++){
+
+					var step = 1;
+					var h = 1000;
+					var w = 200;
+					var dist = 400;
+					var y = h/2;
+
+					if (i % 2 == 0){step = -1;}
+
+					if (this.playerstatus[i].userid == this.userid){
+						var id = this.userid;
+						var color = "green";
+					}
+					else {
+						var id = 0;
+						var color = "red";
+					}
+
+					this.deployArea.push({
+						id: id,
+						x: 0 + (dist * step),
+						y: y/2*-1,
+						w: w * step,
+						h: h,
+						c: color
+					});
+				}
+			}
+			else if (game.turn > 1){
+				var center = {x: 0, y: 0};
+				center.y = Math.round(center.y);
+
+				var d = 0;
+
+				for (var i = 0; i < this.ships.length; i++){
+					if (this.ships[i].flight || this.ships[i].salvo){continue;}
+					if (this.ships[i].available > game.turn){continue;}
+					d = Math.max(d, getDistance(this.ships[i], center));
+				}
+				//console.log(d);
+
+				this.deployArea.push({
+					id: this.userid,
+					x: center.x,
+					y: center.y,
+					s: 900,
+					b: Math.min(700, Math.round(d*2.5)),
+					c: "green"
+				});
+			}
+			else {
+				this.deployArea.push({
+					id: this.userid,
+					x: 0,
+					y: 0,
+					s: 750,
+					c: "green"
+				});
+			}
 
 
 	}
 
+
 	this.drawDeployZone = function(){
+		for (var i = 0; i < this.deployArea.length; i++){
+			drawCtx.translate(cam.o.x, cam.o.y)
+			drawCtx.scale(cam.z, cam.z)
+			drawCtx.beginPath();
+			drawCtx.arc(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].s, degreeToRadian(this.deployArea[i].start), degreeToRadian(this.deployArea[i].end));
+			drawCtx.closePath();
+			drawCtx.fillStyle = this.deployArea[i].c;
+			drawCtx.fill();
+
+		/*	drawCtx.beginPath();
+			drawCtx.arc(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].b, degreeToRadian(this.deployArea[i].start), degreeToRadian(this.deployArea[i].end));
+			drawCtx.closePath();
+			drawCtx.globalCompositeOperation = "destination-out";
+			drawCtx.fill();
+		*/	drawCtx.setTransform(1,0,0,1,0,0);
+			//drawCtx.globalCompositeOperation = "source-over";
+		}
+
+		var remove = {x: this.deployArea[0].x, y: this.deployArea[0].y, b: this.deployArea[0].b};
+
+		drawCtx.translate(cam.o.x, cam.o.y);
+		drawCtx.scale(cam.z, cam.z);
+		drawCtx.beginPath();
+		drawCtx.arc(remove.x, remove.y, remove.b, 0, 2*Math.PI);
+		drawCtx.closePath();
+		drawCtx.globalCompositeOperation = "destination-out";
+		drawCtx.fill();
+
+
+		drawCtx.setTransform(1,0,0,1,0,0);
+
+		var w = 600;
+		var h = 2000;
+
+		drawCtx.translate(cam.o.x, cam.o.y);
+		drawCtx.scale(cam.z, cam.z);
+		drawCtx.beginPath();
+		drawCtx.rect(remove.x - w/2, remove.y - h/2, w, h);
+		drawCtx.closePath();
+		drawCtx.globalCompositeOperation = "destination-out";
+		drawCtx.fill();
+
+		drawCtx.setTransform(1,0,0,1,0,0);
+		drawCtx.globalCompositeOperation = "source-over";
+
+		planCtx.clearRect(0, 0, res.x, res.y);
+		planCtx.globalAlpha = 0.3;
+		planCtx.drawImage(drawCanvas, 0, 0);
+		drawCtx.clearRect(0, 0, res.x, res.y);
+	}
+
+	this.getDeployArea = function(){
+		for (var i = 0; i < this.deployArea.length; i++){
+			if (this.deployArea[i].userid == this.userid){return this.deployArea[i];}
+		}
+	}
+
+	this.drawDeployZoneO = function(){
 		if (game.turn == 1){
 			for (var i = 0; i < this.deployArea.length; i++){
 				drawCtx.translate(cam.o.x, cam.o.y)
@@ -880,7 +978,6 @@ function Game(data){
 
 		if (game.turn == 1){return;}
 
-		this.doPositionLog("Turn Beginning Log", 600);
 		this.resolveDamageControl();
 	}
 
@@ -1049,17 +1146,13 @@ function Game(data){
 		$(fxCanvas).css("opacity", 0.25);
 
 		this.createCritLogEntries();
+		this.createDeathLogEntries();
 		this.createUnitMoraleLogEntries();
 		this.createFleetMoraleLogEntries();
+		this.createPlaceHolderEntry();
 		this.createLogEntry("-- Fire Events concluded --");
 
 		this.showUI();
-		ui.combatLogWrapper
-		.show()
-		.css("top", 200).css("left", 0)
-		.find("#combatLogInnerWrapper")
-			.css("overflow", "unset")
-			.css("max-height", "unset");
 
 		if (game.phase == 2){
 			this.autoIssueFireOrders();
@@ -1096,20 +1189,59 @@ function Game(data){
 		}
 	}
 
+	this.createDeathLogEntries = function(){
+		if (game.unitExploAnims.length){
+			this.createPlaceHolderEntry();
+			
+			for (var i = 0; i < game.unitExploAnims.length; i++){
+				ui.combatLogWrapper.find("#combatLog")
+					.find("tbody")
+						.append(
+						$("<tr>")
+							.append($("<th>").attr("colSpan", 9).html(game.unitExploAnims[i].html))
+							.data("shipid", game.unitExploAnims[i].id)
+							.hover(
+								function(){
+									var data = $(this).data();
+									game.getUnit($(this).data("shipid")).doHighlight()
+								}
+							)
+						)
+			}
+		}
+	}
+
 	this.createFleetMoraleLogEntries = function(){
 		var entries = 0;
 
 		this.createPlaceHolderEntry();
 
-		var globals = this.getPlayerStatus().globals;
+		for (let i = 0; i < this.playerstatus.length; i++){
+			var globals = this.playerstatus[i].globals;
 
-		for (let i = 0; i < globals.length; i++){
-			if (this.globals[i].turn != game.turn){continue;}
-			entries = 1;
+			for (let j = 0; j < globals.length; j++){ // then by crit rolling
+				if (globals[j].turn != game.turn || globals[j].scope != 2){continue;}
+				entries = 1;
+
+				var type = globals[j].notes[0];
+				var numbers = globals[j].notes.slice(2, globals[j].notes.length).split(";");
+
+				var html = "<td colSpan=9 style='padding: 10px'><span style='font-size: 12px; font-weight: bold'><span class='yellow'>" + this.playerstatus[i].username + "'</span> is subject to a fleetwide morale check.</br>";
+					html += "Chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] +" - ";
+
+				if (type == "p"){
+					html += " <span class='yellow'>Passed !</span class='yellow'>";
+				}
+				else {
+					html += "<span class='yellow'> Failed ! (Severity: " + numbers[3] +")</span></br>";
+					html += "The fleet is subject to <span class='yellow'>" + (globals[j].type == "Rout" ? "a complete rout." : globals[j].value + " % " + globals[j].type) + ".</span>";
+				}
+
 				$("#combatLog").find("tbody")
 					.append($("<tr>")
-						.html(globals[i].type + " / " + globals[i].notes));
+						.html(html));
 
+			}
 		}
 
 		if (!entries){
@@ -1931,7 +2063,6 @@ function Game(data){
 			}
 		}
 
-
 		if (need){
 			this.animShip = 1;
 			this.animFlight = 1;
@@ -1989,6 +2120,11 @@ function Game(data){
 				toDo = true;
 			}
 		}
+
+		ui.combatLogWrapper
+			.find(".combatLogHeader thead tr").last().remove().end()
+			.html("<th>Damage Control Resolution Log</th>").end().find("#combatLog tr").first().remove();
+		this.showUI();
 
 		if (toDo){
 			setFPS(30);
@@ -2104,14 +2240,8 @@ function Game(data){
 		this.getShotDetails();
 		this.getFireAnimationDetails();	
 		this.getAllUnitExplos();
-
-		//ui.combatLogWrapper.css("top", 0).show();
 		this.hideUI();
-		///this.doPositionLog(false, 800);
-
 		this.setFireGlobals();
-
-		//this.animateUnitExplos(); return;
 		this.animateAllFireOrders();
 
 	}
@@ -2331,11 +2461,6 @@ function Game(data){
 
 	this.handlePostFireOrderAnim = function(){
 		this.createFireFinalEntry();
-
-		if (game.unitExploAnims.length){
-			this.createPlaceHolderEntry();
-		}
-
 		this.handleForcedMoves();
 	}
 
@@ -2542,7 +2667,6 @@ function Game(data){
 					else {
 						game.unitExploAnims[i].done = 1;
 						game.unitExploAnims[i].animating = 0;
-						game.createExploLogEntry(i);
 					}
 				}
 			}
@@ -2553,22 +2677,6 @@ function Game(data){
 				game.fireResolved();
 			}
 		}
-	}
-
-	this.createExploLogEntry = function(i){
-		$("#combatLog")
-			.find("tbody")
-				.append(
-				$("<tr>")
-					.append($("<th>").attr("colSpan", 9).html(game.unitExploAnims[i].html))
-					.data("shipid", game.unitExploAnims[i].id)
-					.hover(
-						function(){
-							var data = $(this).data();
-							game.getUnit($(this).data("shipid")).doHighlight()
-						}
-					)
-				)
 	}
 
 	this.initIncomingTable = function(){
@@ -3248,8 +3356,6 @@ Game.prototype.resolveDeploy = function(){
 		}
 	}
 
-	this.doPositionLog("Initial Phase Log", 375);
-
 	var show = 0;
 
 	for (var i = 0; i < this.ships.length; i++){
@@ -3257,7 +3363,11 @@ Game.prototype.resolveDeploy = function(){
 		else if (this.ships[i].flight && this.ships[i].mission.turn == this.turn){show = 1; break;}
 	}
 	
-	this.setCamera();	
+	this.setCamera();
+	ui.combatLogWrapper
+		.css("width", 500)
+		.find(".combatLogHeader thead tr").last().remove().end()
+		.html("<th>Initial Phase Resolution Log</th>").end().find("#combatLog tr").first().remove();
 
 	if (!show){this.initialPhaseResolutionDone();}
 	else {
@@ -3268,35 +3378,6 @@ Game.prototype.resolveDeploy = function(){
 		this.animating = 1;
 		this.animateJumpIn();
 	}
-}
-
-Game.prototype.doPositionLog = function(html, length){
-	console.log("doPositionLog");
-	var w = ui.unitSelector.width();
-	var x = ui.unitSelector.css("left");
-	var x = Math.floor(x.substr(0, x.length-2));
-
-	var top;
-	var left;
-
-	if (x + w + 20 + 100 + length < res.x){
-		left = x + w + 20;
-		top = 0;
-	}
-	else {
-		left = x;
-		top = 80;
-	}
-
-	ui.combatLogWrapper
-		.show()
-		.width(length).css("top", top).css("left", left)
-
-	if (!html){return;}
-
-	ui.combatLogWrapper
-		.find(".combatLogHeader").html(html).end()
-		.find("#combatLog").children().children().remove();
 }
 
 Game.prototype.setCamera = function(){
@@ -3469,7 +3550,6 @@ Game.prototype.doResolveMovement = function(){
 	this.animFlight = 0;
 	this.animSalvo = 0;
 
-	this.doPositionLog("Movement Log", 600);
 	this.hideUI();
 
 	this.animateMovement();
@@ -3628,8 +3708,15 @@ Game.prototype.showFleetMorale = function(e, userid){
 		if (this.playerstatus[i].globals[j].type != "Morale"){continue;}
 		if (this.playerstatus[i].globals[j].value == 0){continue;}
 		var crit = this.playerstatus[i].globals[j];
+		var html = "";
+
+		if (crit.scope == 1){
+			html = crit.text;
+		} else {
+			html = "Morale Test";
+		}
 		table.append($("<tr>")
-			.append($("<td>").html("Turn " + crit.turn + " / " + crit.notes))
+			.append($("<td>").html(html + " (Turn " + crit.turn+")"))
 			.append($("<td>").html(crit.value)))
 	}
 
@@ -3642,7 +3729,7 @@ Game.prototype.showFleetMorale = function(e, userid){
 	.append($("<tr>")
 		.append($("<td>").attr("colSpan", 2).css("height", 12)))
 	.append($("<tr>")
-		.append($("<td>").attr("colSpan", 2).html("Morale Test triggered upon unit loss.</br>Rolls D100, subtracts morale.")))
+		.append($("<td>").attr("colSpan", 2).html("Morale Test triggered upon unit loss.</br>Rolls D100, adds 100, subtracts morale.")))
 	.append($("<tr>")
 		.append($("<td>").attr("colSpan", 2).css("height", 6)))
 

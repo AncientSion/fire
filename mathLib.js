@@ -65,7 +65,6 @@ function rotate(cx, cy, v, angle) {
 
 function adjustForFacing(facing, angle){
 	return angle - facing;
-
 }
 
 function targetInArc(shooter, oPos, tPos, oFacing, system){

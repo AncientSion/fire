@@ -189,6 +189,7 @@ class Primary {
 		$this->remaining -= $dmg->hullDmg;
 
 		if ($this->remaining < 1){
+			$dmg->hullDmg += $this->remaining;
 			$this->destroyed = 1;
 		}
 	}

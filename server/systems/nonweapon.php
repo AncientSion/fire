@@ -154,7 +154,7 @@ class Reactor extends PrimarySystem {
 
 			for ($i = 0; $i < sizeof($potential); $i++){
 				$all += $potential[$i];
-				$roll = mt_rand(0, 100);
+				$roll = mt_rand(1, 100);
 				$overload += round($potential[$i] / 100 * $roll, 2);
 			}
 

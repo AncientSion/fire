@@ -1190,7 +1190,7 @@
 			
 			$stmt = $this->connection->prepare("
 				 INSERT into globals 
-				 VALUES (0, :playerstatusid, :turn, :type, :value, :notes)
+				 VALUES (0, :playerstatusid, :unitid, :turn, :type, :scope, :value, :notes, :text)
 			");
 			
 			for ($i = 0; $i < sizeof($playerstatus); $i++){
@@ -1198,10 +1198,13 @@
 					if ($playerstatus[$i]["globals"][$j]["id"]){continue;}
 
 					$stmt->bindParam(":playerstatusid", $playerstatus[$i]["globals"][$j]["playerstatusid"]);
+					$stmt->bindParam(":unitid", $playerstatus[$i]["globals"][$j]["unitid"]);
 					$stmt->bindParam(":turn", $playerstatus[$i]["globals"][$j]["turn"]);
 					$stmt->bindParam(":type", $playerstatus[$i]["globals"][$j]["type"]);
+					$stmt->bindParam(":scope", $playerstatus[$i]["globals"][$j]["scope"]);
 					$stmt->bindParam(":value", $playerstatus[$i]["globals"][$j]["value"]);
 					$stmt->bindParam(":notes", $playerstatus[$i]["globals"][$j]["notes"]);
+					$stmt->bindParam(":text", $playerstatus[$i]["globals"][$j]["text"]);
 					//Debug::log("writing new entry");
 					$stmt->execute();
 

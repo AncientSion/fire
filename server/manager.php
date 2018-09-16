@@ -1290,7 +1290,6 @@
 			//Debug::log("fire: ".$this->fires[$i]->id);
 			//var_export($this->fires[$i]); echo "</br></br>";
 			$this->fires[$i]->shooter = $this->getUnit($this->fires[$i]->shooterid);
-			//var_export($this->fires[$i]->id);
 			//echo $this->fires[$i]->id; echo "</br>";
 			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystem($this->fires[$i]->weaponid);
 			//var_export($this->fires[$i]->id);
@@ -1480,11 +1479,17 @@
 					$this->playerstatus[$i]["globals"][] = array(
 						"id" => 0,
 						"playerstatusid" => $this->playerstatus[$i]["id"],
+						"unitid" => $this->ships[$j]->id,
 						"turn" => $this->turn,
 						"type" => "Morale",
+						"scope" => 1,
 						"value" => -$value,
-						"notes" => $this->ships[$j]->name.($this->ships[$i]->destroyed ? " destroyed" : " routed")
+						"notes" => $this->ships[$j]->notes,
+						"text" => $this->ships[$j]->getRoutString()
 					);
+
+					$this->ships[$j]->notes = "";
+
 				}
 			}
 		}
@@ -1522,11 +1527,13 @@
 				$this->playerstatus[$i]["globals"][] = array(
 					"id" => 0,
 					"playerstatusid" => $this->playerstatus[$i]["id"],
+					"unitid" => 0,
 					"turn" => $crit->turn,
 					"type" => $crit->type,
+					"scope" => 2,
 					"value" => $crit->value,
-					//"notes" => "Breakdown (".$crit->notes.")"
-					"notes" => $crit->notes
+					"notes" => $crit->notes,
+					"text" => ""
 				);
 			}
 		}
@@ -1604,7 +1611,7 @@
 	}
 
 	public function getNewFocusValue($playerstatus, $unit){
-		//Debug::log("getNewFocusValue turn:".$this->turn.", phase: ".$this->phase.", cmd: ".$unit->name." #".$unit->id);
+		Debug::log("getNewFocusValue turn:".$this->turn.", phase: ".$this->phase.", cmd: ".$unit->name." #".$unit->id);
 
 		$curFocus; $gainFocus;
 
@@ -1737,7 +1744,7 @@
 			case "Earth Alliance": 
 				$notes = array(
 					array("Inpenetrable", "By trading energy, units can temporary empower their armour, making them far more resistent to damage."),
-					array("Improvise", "Earth Force hierarchy relies on a flexible chain of command. Increase flexibility and decreased reaction times allows upscaling of Squadrons (9 -> slots)."),
+					array("Improvise", "Earth Force hierarchy relies on a flexible chain of command. Increase flexibility and decreased reaction times allows upscaling of Squadrons (9 -> 12 slots)."),
 					//array("Insurmountable", "An array of networked turrets will provide dedicated point defense to every unit."),
 				);
 			break;
@@ -1750,12 +1757,12 @@
 			case "Minbari Federation";
 				$notes = array(
 					array("Advanced", "Highly advanced tech allow easy overpowering of hostile sensors. EW is considered to be originating from a unit 2 levels higher."),
-					array("Enlightened", "Superior tactical capabilities and officer training result in a 30 % increased Focus gain as well as starting morale increased to 120.")
+					array("Enlightened", "Superior tactical capabilities and officer training result in a 30 % increased Focus gain as well as starting morale increased to 115.")
 				);
 			break;
 			case "Narn Regime";
 				$notes = array(
-					array("Iron Will", "Narn by nature will hardly ever flee from a battle until the very last moment. Unit starting morale is increased to 150."),
+					array("Iron Will", "Narn by nature will hardly ever flee from a battle until the very last moment. Unit starting morale is increased to 130."),
 					array("Tenacity", "Narn pilots are known for their reckless determination. Strikecraft are far less susceptible to dropping out (120 -> 160).")
 				);
 			break;

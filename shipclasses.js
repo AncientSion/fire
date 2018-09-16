@@ -140,6 +140,29 @@ Ship.prototype.canDeploy = function(){
 }
 
 Ship.prototype.canDeployHere = function(pos){
+	var valid = false;	
+
+	var deploy = game.getDeployArea();
+	console.log(deploy);
+
+	if (pos.x > deploy.x - 300 && pos.x < deploy.x + 300){
+		return false;
+	}
+
+	var a = getCompassHeadingOfPoint(deploy, pos, 0);
+	console.log(a);
+	if (isInArc(a, deploy.start, deploy.end)){
+		var d = getDistance(pos, deploy);
+		console.log(d);
+		if (d > deploy.b && d < deploy.s){
+			return true;
+		}
+	}
+	return false;
+}
+
+
+Ship.prototype.canDeployHereO = function(pos){
 	var valid = false;		
 	
 	/*
@@ -1519,31 +1542,94 @@ Ship.prototype.createCritLogEntry = function(){
 }
 
 Ship.prototype.createMoraleLogEntry = function(){
+	if (this.flight || this.salvo || this.destroyed){return false;}
+
+	var data;
+	var found = 0;
+	for (var i = 0; i < game.playerstatus.length; i++){
+		for (var j = 0; j < game.playerstatus[i].globals.length; j++){
+			if (game.playerstatus[i].globals[j].unitid == this.id && game.playerstatus[i].globals[j].turn == game.turn){
+				data = game.playerstatus[i].globals[j];
+				found = 1; break;
+			}
+		}
+		if (found){break;}
+	}
+
+	if (!found){return false;}
+
+
+	var type = data.notes[0];
+	var numbers = data.notes.slice(2, data.notes.length).split(";");
+
+	if (numbers[0] == 100){return;}
+
+	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Severe damage forces " + this.getLogTitleSpan() + " into a morale check.</br>";
+		html += "Chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] +" - ";
+
+
+	if (type == "p"){
+		html += " <span class='yellow'>Passed !</span class='yellow'>";
+	}
+	else {
+		html += " <span class='yellow'>Failed (Severity: " + number[3] +")</span>";
+		var effect = 0;
+		if (this.status == "jumpOut"){
+			html += "The unit <span class='yellow'> is routed</span>.</td>";
+			effect = 1;
+		}
+		else {
+			var command = this.getSystemByName("Command");
+			for (var i = 0; i < command.crits.length; i++){
+				if (command.cridts[i].turn != game.turn || command.crits[i].duration != -2){continue;}
+				html += "The unit is subject to <span class='yellow'>" + command.crits[i].value + "% " + command.crits[i].type + "</span>.</td>";
+				effect = 1;
+			}
+		}
+	}
+
+
+	//if (!effect){html += "The unit suffers no penalty.</td>";}
+
+	this.attachLogEntry(html);
+	return true;
+}
+
+Ship.prototype.createMoraleLogEntrys = function(){
 	if (!this.notes || this.flight || this.salvo){return false;}
 	//var data = this.notes.slice(0, this.notes.length-1).split(";");
 	//var morale = "";
 	//for (var i = 0; i < data.length; i++){if (data[i][0] == "m"){morale = data[i].slice(1, data[i].length); break;}}
-	var morale = this.notes;
+	var type = this.notes[0];
+	var numbers = this.notes.slice(2, this.notes.length).split(";");
+
+	if (numbers[0] == 100){return;}
+
 	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Severe damage forces " + this.getLogTitleSpan() + " into a morale check.</br>";
+		html += "Chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] + ".</br>"
 
-
-	var effect = 0;
-	if (this.status == "jumpOut"){
-		html += "The unit <span class='yellow'> is routed ("+ morale + ")</span>.</td>";
-		effect = 1;
+	if (type == "p"){
+		html += " <span class='yellow'>Passed !</span class='yellow'>";
 	}
 	else {
-		var command = this.getSystemByName("Command");
-		for (var i = 0; i < command.crits.length; i++){
-			if (command.crits[i].turn != game.turn || command.crits[i].duration != -2){continue;}
-			html += "The unit suffers a permanent <span class='yellow'>" + command.crits[i].value + "% Morale penalty ("+ morale + ")</span>.</td>";
+		html += "<span class='yellow'> Failed ! (Severity: " + numbers[3] +")</span></br>";
+		var effect = 0;
+		if (this.status == "jumpOut"){
+			html += "The unit <span class='yellow'> is routed</span>.</td>";
 			effect = 1;
+		}
+		else {
+			var command = this.getSystemByName("Command");
+			for (var i = 0; i < command.crits.length; i++){
+				if (command.crits[i].turn != game.turn || command.crits[i].duration != -2){continue;}
+				html += "The unit is subject to <span class='yellow'>" + command.crits[i].value + "% " + command.crits[i].type + "</span>.</td>";
+				effect = 1;
+			}
 		}
 	}
 
-	if (!effect){
-		html += "The unit however suffers no penalty for now.</td>";
-	} else html 
+
+	//if (!effect){html += "The unit suffers no penalty.</td>";}
 
 	this.attachLogEntry(html);
 	return true;
@@ -2250,7 +2336,7 @@ Ship.prototype.showMoraleDiv = function(e){
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 12)))
 			.append($("<tr>")
-				.append($("<td>").attr("colSpan", 2).html("Morale test triggered if damaged for more than 15% of remaining HP.</br>D100 + 100 - morale.")))
+				.append($("<td>").attr("colSpan", 2).html("Morale test triggered if damaged for more than 15% of remaining HP.</br>Rolls D100, adds 100, subtracts morale.")))
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
 			.append($("<tr>")
@@ -2299,6 +2385,7 @@ Ship.prototype.getDamageMoraleMalus = function(){
 }
 
 Ship.prototype.getBaseMorale = function(){
+	return this.morale.baseMorale;
 	return 100 + (this.faction == "Narn Regime" ? 50 : 0);
 }
 
@@ -2523,9 +2610,9 @@ Ship.prototype.getUnmoddedFocusGain = function(){
 
 Ship.prototype.getFocusIfCommand = function(){
 	var command = this.getSystemByName("Command");
-	command.output = 100;
+		command.output = 100;
 	var gain = Math.floor(game.settings.pv / 100 * command.getOutput() / 100 * (this.baseFocusRate + this.modFocusRate) * (this.faction == "Minbari Federation" ? 1.3 : 1));
-	command.output = 0;
+		command.output = 0;
 	return gain;
 }
 
@@ -3417,6 +3504,10 @@ Ship.prototype.readyForAnim = function(){
 	}
 }
 
+Ship.prototype.getSensorSizeRating = function(){
+	return (this.faction == "Minbari Federation" ? this.traverse -2 : this.traverse-4);
+}
+
 Ship.prototype.getLockEffect = function(target){
 	var sensor = this.getSystemByName("Sensor");
 	var ew = sensor.getEW();
@@ -3429,7 +3520,7 @@ Ship.prototype.getLockEffect = function(target){
 
 	if (target.ship || target.squad){
 		multi = 0.5;
-		multi += (0.6 / 10 * (this.traverse-4));
+		multi += (0.6 / 10 * (this.getSensorSizeRating()));
 	}
 	else if (target.flight){
 		multi = 1;
@@ -3467,7 +3558,7 @@ Ship.prototype.getMaskEffect = function(shooter){
 
 	if (shooter.ship || shooter.squad){
 		multi = 0.5;
-		multi += (0.6 / 10 * (this.traverse-4));
+		multi += (0.6 / 10 * (this.getSensorSizeRating()));
 	}
 	else if (shooter.flight){
 		return 0;

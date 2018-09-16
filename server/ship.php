@@ -142,15 +142,15 @@ class Ship {
 			$this->baseImpulseCost = ceil($this->baseImpulseCost * 0.8);
 		}
 		else if ($this->faction == "Narn Regime"){
-			$this->baseMorale = 150;
+			$this->baseMorale = 130;
 		}
 		else if ($this->faction == "Earth Alliance"){
 			if ($this->squad){$this->slots = 12;}
 		}
 		else if ($this->faction == "Minbari Federation"){
-			$this->baseMorale = 120;
+			$this->baseMorale = 115;
 		}
-		//Debug::log("setSpecialAbilities #".$this->id.", now: ".$this->baseImpulseCost);
+		//Debug::log("setSpecialAbilities #".$this->id.", now: ".$this->baseMorale);
 	}
 	
 	public function setUnitState($turn, $phase){
@@ -227,7 +227,7 @@ class Ship {
 	}
 
 	public function setMorale($turn){
-		//Debug::log("Morale ".$this->id);
+		//Debug::log("setMorale #".$this->id);
 		$command = $this->getSystemByName("Command");
 		$this->morale = new Morale(
 			$this->getBaseMorale(),
@@ -747,6 +747,10 @@ class Ship {
 		}
 	}
 
+	public function getRoutString(){
+		return $this->name." #".$this->id . ($this->destroyed ? " destroyed" : " routed");
+	}
+
 	public function calculateToHit($fire){ // shooter
 		//return 100;
 		$multi = 1;
@@ -919,9 +923,13 @@ class Ship {
 		return $this->baseHitChance;
 	}
 
+	public function getSensorSizeRating(){
+		return ($this->faction == "Minbari Federation" ? $this->traverse-2 : $this->traverse-4);
+	}
+
 	public function getLockEffect($target){
 		if ($target->ship || $target->squad){
-			return 0.5 + (0.06 * ($this->traverse-4));
+			return 0.5 + (0.06 * ($this->getSensorSizeRating()));
 		}
 		else if ($target->flight){
 			return 1;
@@ -933,7 +941,7 @@ class Ship {
 
 	public function getMaskEffect($target){
 		if ($target->ship || $target->squad){
-			return 0.5 + (0.06 * ($this->traverse-4));
+			return 0.5 + (0.06 * ($this->getSensorSizeRating()));
 		}
 		else if ($target->flight){
 			return 0;
@@ -1076,7 +1084,6 @@ class Ship {
 		$crit = DmgCalc::moraleCritProcedure($this->id, 2, $turn, $dmg->rel, $this->critEffects, 100 - $this->morale->rem);
 		if (!$crit){return;}
 
-		// 150, 89
 		$this->notes = $crit->notes;
 		if ($crit->type == "Rout"){$this->status = "jumpOut";}
 		else $this->getSystemByName("Command")->crits[] = $crit;
@@ -1362,7 +1369,8 @@ class Medium extends Ship {
 				}
 			}
 
-			if ($this->primary->isDestroyed()){$this->destroyed = 1;}
+			if ($this->primary->isDestroyed()){
+				$this->destroyed = 1;}
 		}
 	}
 }

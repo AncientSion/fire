@@ -8,7 +8,7 @@ class DmgCalc {
 		if (!sizeof($effects)){return;}
 		if ($new < 0.15){return false;}
 		$chance = round((1-((1-$new)*(1-$new)))*100);
-		$chanceRoll = mt_rand(0, 100);
+		$chanceRoll = mt_rand(1, 100);
 
 		if ($chanceRoll > $chance){
 			Debug::log("___opening test SUCCESS, chanceRoll: ".$chanceRoll.", chance: ".$chance);
@@ -21,7 +21,7 @@ class DmgCalc {
 			Debug::log("___opening test FAIL, chanceRoll: ".$chanceRoll.", chance: ".$chance);
 		}
 
-		$magRoll = mt_rand(0, 100);
+		$magRoll = mt_rand(1, 100);
 		$totalMag = $magRoll + $magAdd;
 
 		Debug::log("chance to fail: $chance, rolled $chanceRoll, magRoll $magRoll, magAdd $magAdd, totalMag $totalMag");
@@ -44,43 +44,44 @@ class DmgCalc {
 	}
 
 	static function moraleCritProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd){
-		Debug::log("moraleCritProcedure $unitid, $systemid, $turn, $new, $magAdd");
+		//Debug::log("moraleCritProcedure $unitid, $systemid, $turn, $new, $magAdd");
 
-		if (!sizeof($effects)){return;}
-		$chance = round((1-((1-$new)*(1-$new)))*100);
-		$chanceRoll = mt_rand(0, 100);
-
-
+		if (!sizeof($effects) || !$new || ($new < 0.15 && $unitid)){return;}
+		$failChance = round((1-((1-$new)*(1-$new)))*100);
+		$chanceRoll = mt_rand(1, 100);
 		$crit = new Crit(0, $unitid, $systemid, $turn, "", 0, 0, 1);
+		$failed = 0;
 
-		if ($chanceRoll > $chance){
-			Debug::log("___opening test SUCCESS, chanceRoll: ".$chanceRoll.", chance: ".$chance);
-			$crit->notes = "p;".$chance.";".$chanceRoll;
+		if ($chanceRoll <= $failChance){
+			$failed = 1;
+			$crit->notes = "f;".$failChance.";".$chanceRoll;
+			Debug::log("___opening test FAIL, failChance: ".$failChance.", rolled: ".$chanceRoll);
 		}
 		else {
-			Debug::log("___opening test FAIL, chanceRoll: ".$chanceRoll.", chance: ".$chance);
-			$crit->notes = "f;".$chance.";".$chanceRoll;
+			$crit->notes = "p;".$failChance.";".$chanceRoll;
+			Debug::log("___opening test SUCESS, failChance: ".$failChance.", rolled: ".$chanceRoll);
 		}
 
-		$magRoll = mt_rand(0, 100);
-		$totalMag = $magRoll + $magAdd;
+		if ($failed){
+			$magRoll = mt_rand(1, 100);
+			$totalMag = $magRoll + $magAdd;
+			$crit->notes .= ";".$magRoll.";".$totalMag;
+
+			//Debug::log("chance to fail: $chance, rolled $chanceRoll, magRoll $magRoll, magAdd $magAdd, totalMag $totalMag");
+			if ($totalMag >= $effects[0][1]){
+
+				for ($i = sizeof($effects)-1; $i >= 0; $i--){
+					if ($totalMag < $effects[$i][1]){continue;}
 			
-		if ($totalMag < $effects[0][1]){
+					//Debug::log("crit: ".$effects[$i][0]);
 
-			Debug::log("chance to fail: $chance, rolled $chanceRoll, magRoll $magRoll, magAdd $magAdd, totalMag $totalMag");
+					//($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
+					$crit->type = $effects[$i][0];
+					$crit->duration = $effects[$i][2];
+					$crit->value = $effects[$i][3];
 
-			for ($i = sizeof($effects)-1; $i >= 0; $i--){
-				if ($totalMag < $effects[$i][1]){continue;}
-		
-				Debug::log("crit: ".$effects[$i][0]);
-
-				//($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
-				$crit->type = $effects[$i][0];
-				$crit->duration = $effects[$i][2];
-				$crit->value = $effects[$i][3];
-
-				$crit->notes = ";".$magRoll.";".$totalMag;
-				break;
+					break;
+				}
 			}
 		}
 
@@ -264,6 +265,78 @@ class DmgCalc {
 	}
 
 	public static function doPulseDmg($fire, $hit, $system){
+		$destroyed = 0;
+		$remInt = $system->getRemIntegrity();
+		$okSystem = 0;
+
+		$negation = $fire->target->getArmour($fire, $system);
+
+		$total = 0;
+		$shield = 0;
+		$struct = 0;
+		$armour = 0;
+		$em = 0;
+
+		//$name = get_class($system);
+		//$hits = $fire->weapon->basePulses + min($fire->weapon->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $fire->weapon->grouping));
+		$hits = $fire->weapon->getMultiShotHits($fire, $system);
+
+		Debug::log("fire #".$fire->id.", doPulseDmg, weapon: ".$fire->weapon->name.", target #".$fire->target->id."/".$system->id."/".$system->name.", hits: ".$hits);
+
+		/*if ($negation["bonus"] > 1){
+			Debug::log("PulseDmg:</br>");
+			var_export($dmg);
+			echo "</br></br>";
+		}*/
+
+		for ($i = 0; $i < $hits; $i++){
+			$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
+			$dmg = DmgCalc::calcDmg($fire->weapon, $totalDmg, $negation);
+
+			Debug::log("hits ".($i+1).", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"].", armourDmg: ".$dmg->armourDmg);
+
+			$total += $totalDmg;
+			$shield += $dmg->shieldDmg;
+			$armour += $dmg->armourDmg;
+			$struct += $dmg->systemDmg;
+			$em += $dmg->emDmg;
+			//Debug::log("added hit ".($i+1).", ".$shield."/".$armour."/".$struct);
+		}
+		$dmg->notes .= ("v".$hits.";");
+		$dmg->shieldDmg = $shield;
+		$dmg->armourDmg = $armour;
+		$dmg->systemDmg = $struct;
+		$dmg->emDmg = $em;
+
+		$dmg = $system->setMaxDmg($fire, $dmg);
+
+		if ($remInt <= $dmg->systemDmg){ // destroyed
+			//Debug::log("destroying");
+			$destroyed = 1;
+			$okSystem = $fire->target->getOverkillSystem($fire);
+
+			if ($okSystem){
+				$dmg->hullDmg += abs($remInt - $struct);
+				$dmg->systemDmg -= $dmg->hullDmg;
+				//Debug::log(" => hit ".($i+1).", adding ".$dmg->systemDmg."/".$dmg->armourDmg." to overkill which is now: ".$dmg->hullDmg." pts");
+			}
+			else {
+				$dmg->systemDmg = $remInt;
+				Debug::log(" => destroying non-ship target system ".$system->name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->systemDmg);
+			}
+		}
+
+		$entry = new Damage(
+			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
+			$total, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
+		);
+
+		$fire->damages[] = $entry;
+		$fire->target->addTopDamage($entry);
+	}
+
+
+	public static function doPulseDmgO($fire, $hit, $system){
 		$destroyed = 0;
 		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 		$remInt = $system->getRemIntegrity();

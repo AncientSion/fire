@@ -163,8 +163,8 @@ class FusionCannon extends Particle {
 	public $display = "Medium Fusion Cannon";
 	public static $prio = 0;
 	public $minDmg = 34;
-	public $maxDmg = 45;
-	public $accDecay = 100;
+	public $maxDmg = 43;
+	public $accDecay = 120;
 	public $shots = 1;
 	public $reload = 2;
 	public $integrity = 40;
@@ -180,20 +180,16 @@ class FusionCannon extends Particle {
 	}
 }
 
-class HeavyFusionCannon extends Particle {
+class HeavyFusionCannon extends FusionCannon {
 	public $name = "HeavyFusionCannon";
 	public $display = "Heavy Fusion Cannon";
 	public static $prio = 0;
-	public $minDmg = 42;
-	public $maxDmg = 56;
-	public $accDecay = 100;
-	public $shots = 1;
-	public $reload = 2;
+	public $minDmg = 40;
+	public $maxDmg = 52;
 	public $integrity = 46;
 	public $powerReq = 3;
 	public $tracking = 3;
 
-	public $animColor = "green";
 	public $projSize = 4;
 	public $projSpeed = 7;
 
@@ -208,8 +204,9 @@ class AntimatterConverter extends Particle {
 	public $fireMode = "Flash";
 	//public $dmgType = "Antimatter";
 	public static $prio = 0;
-	public $minDmg = 12;
-	public $accDecay = -120;
+	public $minDmg = 150;
+	public $maxDmg = 150;
+	public $accDecay = 120;
 	public $shots = 1;
 	public $animColor = "#a1ff00";
 	public $projSize = 5;
@@ -223,8 +220,8 @@ class AntimatterConverter extends Particle {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $start, $end, $output, $width);
-        $this->setFlashData();
         $this->setAntimatterData();
+        $this->setFlashData();
 	}
 
 	public function getBonusDamage($fire, $baseDmg, $hit){

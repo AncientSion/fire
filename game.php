@@ -288,18 +288,18 @@
 			<table class="combatLogHeader">
 				<thead>
 					<tr>
-						<th style="border-bottom: 1px solid white;" colSpan=9>Combat Log</th>
+						<th style="border-bottom: 1px solid white;" colSpan=9></th>
 					</tr>
 					<tr>
-						<th style="border-left: 1px solid white;" width=50px>Type</th>
-						<th width=105px>Shooter</th>
-						<th width=105px>Target</th>
-						<th width=160px>Weapon</th>
-						<th width=70px>Chance</th>
-						<th width=60px>Hits</th>
-						<th width=70px>Armour</th>
-						<th width=70px>System</th>
-						<th style="border-right: 1px solid white" width=70px>Hull</th>
+						<td style="border-left: 1px solid white;" width=50px>Type</th>
+						<td width=105px>Shooter</th>
+						<td width=105px>Target</th>
+						<td width=160px>Weapon</th>
+						<td width=70px>Chance</th>
+						<td width=60px>Hits</th>
+						<td width=70px>Armour</th>
+						<td width=70px>System</th>
+						<td style="border-right: 1px solid white" width=70px>Hull</th>
 					</tr>
 				</thead>
 			</table>
@@ -320,13 +320,6 @@
 					</tbody>
 				</table>
 			</div>
-		</div>
-		<div id="deployLogWrapper" class="disabled">
-			<table id="deloyLog">
-				<tr>
-					<th width=100%>val</th>
-				</tr>
-			</table>
 		</div>
 		<div id="leftUnitWrapper">
 			<table id="deployTable">
@@ -604,8 +597,6 @@
 							for (var j = 0; j < game.unitExploAnims[i].entries.length; j++){
 								game.unitExploAnims[i].entries[j].u.doDestroy();
 							}
-							
-							game.createExploLogEntry(i);
 						}
 					}
 
