@@ -232,6 +232,7 @@ window.ajax = {
 					faction: game.faction
 				},
 			success: callback,
+			//success: function(data){console.log(data)},
 			error: ajax.error,
 		});
 	},

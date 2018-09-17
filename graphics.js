@@ -31,8 +31,10 @@ window.graphics = {
 			img.src = basePath + "eMine_2.png";
 		this.eMine.push(img);
 		*/
-		this.eMine= new Image();
-		this.eMine.src = "varIcons/explos/eMine.png";
+		this.EnergyMine = new Image();
+		this.EnergyMine.src = "varIcons/explos/EnergyMine.png";
+		this.GraviticMine = new Image();
+		this.GraviticMine.src = "varIcons/explos/GraviticMine.png";
 	},
 
 	preLoadVarious: function(){
@@ -318,7 +320,7 @@ function drawAreaEffect(weapon, anim){
 	//drawDamageNumbers(weapon, anim, fraction);
 	
 
-	fxCtx.drawImage(graphics.eMine, anim.tx -size/2, anim.ty -size/2, size, size);
+	fxCtx.drawImage(graphics[weapon.name], anim.tx -size/2, anim.ty -size/2, size, size);
 	fxCtx.globalAlpha = 1;
 	//fxCtx.setTransform(1,0,0,1,0,0);
 

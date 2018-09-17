@@ -3691,6 +3691,8 @@ Game.prototype.getUserMaxFocus = function(i){
 }
 
 Game.prototype.showFleetMorale = function(e, userid){
+
+	// scope 0 start, 1 morale test, 2 unit loss
 	var i;
 	for (i = 0; i < this.playerstatus.length; i++){
 		if (this.playerstatus[i].userid == userid){break;}
@@ -3701,10 +3703,10 @@ Game.prototype.showFleetMorale = function(e, userid){
 		.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 10)))
 		.append($("<tr>")
 			.append($("<td>").html("Initial Morale"))
-			.append($("<td>").html(100))
+			.append($("<td>").html(this.playerstatus[i].globals[0].value))
 		)
 
-	for (var j = 0; j < this.playerstatus[i].globals.length; j++){
+	for (var j = 1; j < this.playerstatus[i].globals.length; j++){
 		if (this.playerstatus[i].globals[j].type != "Morale"){continue;}
 		if (this.playerstatus[i].globals[j].value == 0){continue;}
 		var crit = this.playerstatus[i].globals[j];
@@ -3725,7 +3727,7 @@ Game.prototype.showFleetMorale = function(e, userid){
 		.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 10))))
 	.append($("<tr>")
 		.append($("<td>").html("Remaining Morale"))
-		.append($("<td>").addClass("yellow").html(100 + this.playerstatus[i].globals.map(x => x.value).reduce((l,r) => l+r, 0))))
+		.append($("<td>").addClass("yellow").html(this.playerstatus[i].globals.map(x => x.value).reduce((l,r) => l+r, 0))))
 	.append($("<tr>")
 		.append($("<td>").attr("colSpan", 2).css("height", 12)))
 	.append($("<tr>")
@@ -3825,10 +3827,13 @@ Game.prototype.getPlayerStatus = function(){
 
 Game.prototype.addPlayerInfo = function(){
 	for (let i = 0; i < this.playerstatus.length; i++){
-		var start = this.playerstatus[i].morale;
-			start = 100;
-		var reduce = this.playerstatus[i].globals.map(x => x.value).reduce((l,r) => l+r, 0)
-		var rem = (reduce ? (start + reduce)/start*100 : 100);
+		var start = this.playerstatus[i].globals[0].value;
+		for (let j = 1; j < this.playerstatus[i].globals.length; j++){
+			if (this.playerstatus[i].globals[j].type == "Morale"){
+				start += this.playerstatus[i].globals[j].value;
+			}
+		}
+		//var reduce = this.playerstatus[i].globals.map(x => x.value).reduce((l,r) => l+r, 0)
 
 
 		var div = $("<div>").addClass("playerInfo");
@@ -3839,7 +3844,7 @@ Game.prototype.addPlayerInfo = function(){
 				//.append($("<div>").addClass("fleetMoraleMax").data("userid", this.playerstatus[i].userid))
 				//.append($("<div>").addClass("fleetMoraleNow").css("width", rem + "%"))
 				//.append($("<div>").addClass("fleetMoraleInt").html(round(start + reduce)))
-				.append($("<div>").addClass("fleetMoraleInta").html(round(start + reduce)))
+				.append($("<div>").addClass("fleetMoraleInta").html(round(start)))
 				.hover(
 					function(e){game.showFleetMorale(e, $(this).data("userid"))},
 					function(){game.hideFleetMorale()}

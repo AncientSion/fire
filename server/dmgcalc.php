@@ -293,7 +293,7 @@ class DmgCalc {
 			$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 			$dmg = DmgCalc::calcDmg($fire->weapon, $totalDmg, $negation);
 
-			Debug::log("hits ".($i+1).", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"].", armourDmg: ".$dmg->armourDmg);
+			//Debug::log("hits ".($i+1).", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"].", armourDmg: ".$dmg->armourDmg);
 
 			$total += $totalDmg;
 			$shield += $dmg->shieldDmg;
@@ -749,6 +749,7 @@ class DmgCalc {
 		$emDmg = round($totalDmg - $shieldDmg - $armourDmg);
 		$armourDmg = 0;
 
+		Debug::log("EM Damage total: ".$totalDmg. ", armour: ".array_sum($negation)." ___ ".$shieldDmg."/".$armourDmg."/".$systemDmg."/".$emDmg);
 		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $systemDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
 	}
 

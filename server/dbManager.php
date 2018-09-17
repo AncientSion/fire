@@ -405,11 +405,38 @@
 			$this->insertUnits($userid, $gameid, $units);
 			$this->insertLoads($userid, $gameid, $units);
 			$this->setInitialFleetData($userid, $gameid, $units, $faction);
+			$this->setInitialMorale($userid, $gameid, $faction);
 			$this->setInitialCommandUnit($userid, $gameid, $units);
 			$this->setPlayerStatus($userid, $gameid, -1, -1, "ready");
 			Debug::log("processInitialBuy done");
 			return true;
 		}
+
+
+		public function setInitialMorale($userid, $gameid, $faction){
+			Debug::log("setInitialMorale");
+			$playerstatusid = $this->query("SELECT id FROM playerstatus WHERE gameid = $gameid AND userid = $userid");
+			$morale = 100 + (($faction == "Narn Regime") *10);
+
+
+			$playerstatus = array("globals" => array());
+
+			$playerstatus["globals"][] = array(
+											"playerstatusid" => $playerstatusid[0]["id"],
+											"unitid" => 0, 
+											"turn" => 0, 
+											"type" => "Morale", 
+											"scope" => 0, 
+											"value" => $morale,
+											"notes" => "", 
+											"text" => ""
+										);
+
+			if ($this->insertGlobalEntry(array($playerstatus))){
+				return true;
+			} else return false;
+		}
+
 
 		public function setInitialCommandUnit($userid, $gameid, $units){
 			//Debug::log("setInitialCommandUnit s:".sizeof($units));	
@@ -1183,10 +1210,11 @@
 
 				if ($stmt->errorCode() == 0){continue;}
 			}
+			return true;
 		}
 
-		public function insertFleetMoraleCrits($playerstatus){
-			Debug::log(" => DB insertFleetMoraleCrits");
+		public function insertGlobalEntry($playerstatus){
+			Debug::log(" => DB insertGlobalEntry");
 			
 			$stmt = $this->connection->prepare("
 				 INSERT into globals 
@@ -1423,7 +1451,7 @@
 					resolved = :resolved
 				WHERE
 					id = :id
-			");;
+			");
 
 			for ($i = 0; $i < sizeof($fires); $i++){
 				$stmt->bindParam(":id", $fires[$i]->id);

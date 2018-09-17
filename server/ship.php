@@ -142,7 +142,7 @@ class Ship {
 			$this->baseImpulseCost = ceil($this->baseImpulseCost * 0.8);
 		}
 		else if ($this->faction == "Narn Regime"){
-			$this->baseMorale = 130;
+			$this->baseMorale = 125;
 		}
 		else if ($this->faction == "Earth Alliance"){
 			if ($this->squad){$this->slots = 12;}

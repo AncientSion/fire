@@ -1504,11 +1504,11 @@
 			Debug::log("-----------------testFleetMorale--------------");
 			$do--;
 			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-				$max = 100;
+				$max = $this->playerstatus[$i]["globals"][0]["value"];
 				$old = 0;
 				$new = 0;
 				//echo ($this->playerstatus[$i]["globals"]."\n");
-				for ($j = 0; $j < sizeof($this->playerstatus[$i]["globals"]); $j++){
+				for ($j = 1; $j < sizeof($this->playerstatus[$i]["globals"]); $j++){
 					if ($this->playerstatus[$i]["globals"][$j]["turn"] < $this->turn){
 						$old -= $this->playerstatus[$i]["globals"][$j]["value"];
 					}
@@ -1518,6 +1518,9 @@
 					}
 				}
 
+				Debug::log("max: ".$max);
+				Debug::log("new: ".$new);
+				Debug::log("old: ".$old);
 				$rel = round($new / ($max-$old), 2);
 				Debug::log("player ".$i.", old: ".$old.", new: ".$new.", rel: ".$rel);
 				if (!$rel){continue;}
@@ -1661,7 +1664,7 @@
 		if (sizeof($newCrits)){DBManager::app()->insertCritEntries($newCrits);}
 		if (sizeof($newMoves)){DBManager::app()->insertServerActions($newMoves);}
 		if (sizeof($unitMorales)){DBManager::app()->updateUnitStatusNotes($unitMorales);}
-		DBManager::app()->insertFleetMoraleCrits($this->playerstatus);
+		DBManager::app()->insertGlobalEntry($this->playerstatus);
 	}
 
 	public function getAllNewForcedMoves(){
@@ -1762,7 +1765,7 @@
 			break;
 			case "Narn Regime";
 				$notes = array(
-					array("Iron Will", "Narn by nature will hardly ever flee from a battle until the very last moment. Unit starting morale is increased to 130."),
+					array("Iron Will", "Narn by nature will hardly ever flee from a battle until the very last moment. Starting morale for units 125, for fleet 110."),
 					array("Tenacity", "Narn pilots are known for their reckless determination. Strikecraft are far less susceptible to dropping out (120 -> 160).")
 				);
 			break;
