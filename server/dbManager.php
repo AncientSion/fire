@@ -1619,7 +1619,6 @@
 				AND turn >= :turn
 			");
 
-
 			for ($i = 0; $i < sizeof($units); $i++){
 
 				$stmt->bindParam(":shipid", $units[$i]->id);

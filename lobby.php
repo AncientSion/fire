@@ -18,7 +18,7 @@ if (isset($_POST["purge"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] 
 elseif (isset($_POST["dump"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
 	echo "doing !";
 
-	exec('mysqldump -u chris -p147147 spacecombat'.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
+	exec('mysqldump -u chris -p147147 spacecombat >'.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
 }
 
 //echo DmgCalc::setWeaponPriority(); return;
@@ -317,7 +317,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 					}
 
 					echo "<textarea readonly class='chatBox' rows=7>".$value."</textarea>";
-					echo "<textarea id='msg' class='sendWrapper' rows=1></textarea>";
+					echo "<textarea id='msg' class='sendWrapper' rows=2></textarea>";
 					echo "</div>";
 					echo "<script>var time = ".$last.";</script>";
 				?>

@@ -65,7 +65,7 @@
 			}
 
 			echo "<textarea readonly class='chatBox' rows=7>".$value."</textarea>";
-			echo "<textarea id='msg' class='sendWrapper' style='font-size: 12px' rows=1></textarea>";
+			echo "<textarea id='msg' class='sendWrapper' style='font-size: 12px' rows=2></textarea>";
 			echo "</div>";
 			echo "<script>var time = ".$last.";</script>";
 		?>
