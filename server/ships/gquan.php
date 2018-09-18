@@ -26,8 +26,8 @@ class GQuan extends Heavy {
 		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 20, 3);
 		$front->systems[] = new SuperHeavyLaser($this->getId(), $this->id, 330, 30);
 		//$front->systems[] = new MagCompressor($this->getId(), $this->id, 330, 30);
-		$front->systems[] = new GraviticMine($this->getId(), $this->id, 330, 30);
-		//$front->systems[] = new EnergyMine($this->getId(), $this->id, 330, 30);
+		//$front->systems[] = new GraviticMine($this->getId(), $this->id, 330, 30);
+		$front->systems[] = new EnergyMine($this->getId(), $this->id, 330, 30);
 		$front->systems[] = new SuperHeavyLaser($this->getId(), $this->id, 330, 30);
 		$structs[] = $front;
 

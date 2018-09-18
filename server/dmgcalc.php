@@ -159,7 +159,7 @@ class DmgCalc {
 		else {
 			$angle = Math::getAngle2($origin, $target);
 			$impact = $target;
-			Debug::log("angle from $origin->x / $origin->y to $target->x / $target->y: $angle");
+			Debug::log("angle from $origin->x / $origin->y to $impact->x / $impact->y: $angle");
 		}
 
 		$fire->notes = $impact->x.";".$impact->y.";";
@@ -174,21 +174,21 @@ class DmgCalc {
 		$newFires = array();
 
 		for ($i = 0; $i < sizeof($gd->ships); $i++){
-			$d = Math::getDist2($gd->ships[$i]->getCurPos(), $impact);
-			//Debug::log("eMine impact distance to ".$gd->ships[$i]->name." #".$gd->ships[$i]->id.": ".$d);
+			$dist = Math::getDist2($gd->ships[$i]->getCurPos(), $impact);
+			//Debug::log("eMine impact distance to ".$gd->ships[$i]->name." #".$gd->ships[$i]->id.": ".$dist);
 
-			if ($d + $fire->weapon->aoe <= $fire->weapon->aoe*2){
-				$a = round(Math::addAngle($gd->ships[$i]->getCurFacing() - $gd->ships[$i]->facing, Math::getAngle2($gd->ships[$i]->getCurPos(), $impact)));
+			if ($dist + $fire->weapon->aoe <= $fire->weapon->aoe*2){
+				$angle = round(Math::addAngle($gd->ships[$i]->getCurFacing() - $gd->ships[$i]->facing, Math::getAngle2($gd->ships[$i]->getCurPos(), $impact)));
 				//var_export($newTarget);var_export($gd->ships[$i]->x);var_export($gd->ships[$i]->y);
-				//Debug::log("hitting, dist to impact: ".$d.", impact from: ".$a);
+				//Debug::log("hitting, dist to impact: ".$dist.", impact from: ".$angle);
 
 				$subFire = new FireOrder(
 					$fire->id, 0, $gd->turn, $fire->shooterid, $gd->ships[$i]->id, $impact->x, $impact->y, $fire->weapon->id, $fire->shots, 0, "", 1, 0
 				);
 
 				$subFire->cc = 0;
-				$subFire->dist = $d;
-				$subFire->angle = $a;
+				$subFire->dist = $dist;
+				$subFire->angle = $angle;
 				$subFire->shooter = &$fire->shooter;
 				$subFire->target = $gd->ships[$i];
 				$subFire->weapon = $fire->weapon;

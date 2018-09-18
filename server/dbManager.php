@@ -22,9 +22,14 @@
 		}
 
 		public function doPurge($filename){
+			$dump = file($filename);
+
+			if (!$dump){return;}
 
 			$sql = "";	
 			$tables = array();
+
+
 
 			foreach ($this->query("show tables") as $result){
 				$tables[] = $result["Tables_in_spacecombat"];

@@ -1765,7 +1765,7 @@
 			break;
 			case "Narn Regime";
 				$notes = array(
-					array("Iron Will", "Narn by nature will hardly ever flee from a battle until the very last moment. Starting morale for units 125, for fleet 110."),
+					array("Iron Will", "Narn by nature will hardly ever flee from a battle unless all hope is lost. Starting morale for units 125, for fleet 110."),
 					array("Tenacity", "Narn pilots are known for their reckless determination. Strikecraft are far less susceptible to dropping out (120 -> 160).")
 				);
 			break;
