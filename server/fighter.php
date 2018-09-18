@@ -202,7 +202,7 @@ class Frazi extends Fighter {
 	public $mass = 34;
 	public $integrity = 26;
 	public $negation = 5;
-	public $baseImpulse = 1000;
+	public $baseImpulse = 95;
 	public $baseHitChance = 26;
 
 	function __construct($id, $parentId){
@@ -214,6 +214,13 @@ class Frazi extends Fighter {
 	);
 
 	public function addSystems(){
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
+			array(
+				array("FighterStandard", 1, 13, 17),
+				array("FighterStrafe", 1, 13, 17)
+			)
+		);
+		return;
 		$this->systems[] = new ParticleGun($this->getId(), $this->parentId, $this->id, 2, 1, 13, 17);
 	}
 }
