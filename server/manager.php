@@ -1877,7 +1877,7 @@
 			case "Minbari Federation";
 				$notes = array(
 					array("Advanced", "Highly advanced tech allow easy overpowering of hostile sensors. EW is considered to be originating from a unit 2 levels larger."),
-					array("Enlightened", "Superior tactical capabilities and officer training result in 30 % increased Focus gain. Unit starting morale increased to 110.")
+					array("Enlightened", "Superior tactical capabilities and officer training result in 30 % increased Focus gain. Unit starting morale increased to 115.")
 				);
 			break;
 			case "Narn Regime";
