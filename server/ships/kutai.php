@@ -7,11 +7,11 @@ class Kutai extends Medium {
 	public $size =  40;
 	public static $value = 400;
 	public $profile = array(0.9, 1.1);
-	public $mass = 3800;
+	public $mass = 2500;
 
-	public $integrity = 525;
-	public $vitalHP = 70;
-	public $ep = 80;
+	public $integrity = 500;
+	public $vitalHP = 65;
+	public $ep = 90;
 	public $ew = 650;
 
 	function __construct($data = false){

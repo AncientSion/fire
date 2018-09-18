@@ -7,7 +7,7 @@ class Demos extends Medium {
 	public $size =  45;
 	public static $value = 450;
 	public $profile = array(0.9, 1.1);
-	public $mass = 2500;
+	public $mass = 2750;
 
 	public $integrity = 550;
 	public $vitalHP = 70;
