@@ -1548,7 +1548,7 @@
 			for ($j = 0; $j < sizeof($this->ships); $j++){
 				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
 				if ($this->ships[$j]->focus){
-					$this->playerstatus[$i]["curFocus"] -= ceil($this->ships[$j]->cost);
+					$this->playerstatus[$i]["curFocus"] -= ceil($this->ships[$j]->moraleCost);
 				}
 			}
 		}
