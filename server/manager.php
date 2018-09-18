@@ -1743,34 +1743,6 @@
 		$return = array(array(), array(), array(), array(), array());
 		$specials = array();
 
-		switch ($faction){ // specials
-			case "Earth Alliance": 
-				$notes = array(
-					array("Inpenetrable", "By trading energy, units can temporary empower their armour, making them far more resistent to damage."),
-					array("Improvise", "Earth Force hierarchy relies on a flexible chain of command. Increase flexibility and decreased reaction times allows upscaling of Squadrons (9 -> 12 slots)."),
-					//array("Insurmountable", "An array of networked turrets will provide dedicated point defense to every unit."),
-				);
-			break;
-			case "Centauri Republic"; 
-				$notes = array(
-					array("Wolfpack", "Excelling at wolfpack tactics results in each Squadrons with at least 3 units being 15 % less expensive."),
-					array("Hit and Run", "Specialized battle doctrine and starship design yield a 20 % cost reduction for every non-turning move action.")
-				);
-			break;
-			case "Minbari Federation";
-				$notes = array(
-					array("Advanced", "Highly advanced tech allow easy overpowering of hostile sensors. EW is considered to be originating from a unit 2 levels higher."),
-					array("Enlightened", "Superior tactical capabilities and officer training result in a 30 % increased Focus gain as well as starting morale increased to 115.")
-				);
-			break;
-			case "Narn Regime";
-				$notes = array(
-					array("Iron Will", "Narn by nature will hardly ever flee from a battle unless all hope is lost. Starting morale for units 125, for fleet 110."),
-					array("Tenacity", "Narn pilots are known for their reckless determination. Strikecraft are far less susceptible to dropping out (120 -> 160).")
-				);
-			break;
-		}
-
 		switch ($faction){ // units and suqadies
 			case "Earth Alliance";
 				$units = array(
@@ -1904,13 +1876,13 @@
 			break;
 			case "Minbari Federation";
 				$notes = array(
-					array("Advanced", "Highly advanced tech allow easy overpowering of hostile sensors. EW is considered to be originating from a unit 2 levels higher."),
-					array("Enlightened", "Superior tactical capabilities and officer training result in 30 % increased Focus gain. Unit starting morale increased to 120.")
+					array("Advanced", "Highly advanced tech allow easy overpowering of hostile sensors. EW is considered to be originating from a unit 2 levels larger."),
+					array("Enlightened", "Superior tactical capabilities and officer training result in 30 % increased Focus gain. Unit starting morale increased to 110.")
 				);
 			break;
 			case "Narn Regime";
 				$notes = array(
-					array("Iron Will", "Narn by nature will hardly ever flee from a battle until the very last moment. Unit starting morale is increased to 150."),
+					array("Iron Will", "Narn by nature will hardly ever flee from a battle until the very last moment. Initital morale for units 125, for fleet 115."),
 					array("Tenacity", "Narn pilots are known for their reckless determination. Strikecraft are far less susceptible to dropping out (120 -> 160).")
 				);
 			break;

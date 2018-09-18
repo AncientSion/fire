@@ -421,7 +421,7 @@
 		public function setInitialMorale($userid, $gameid, $faction){
 			Debug::log("setInitialMorale");
 			$playerstatusid = $this->query("SELECT id FROM playerstatus WHERE gameid = $gameid AND userid = $userid");
-			$morale = 100 + (($faction == "Narn Regime") *10);
+			$morale = 100 + (($faction == "Narn Regime") *15);
 
 
 			$playerstatus = array("globals" => array());
