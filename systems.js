@@ -3406,8 +3406,8 @@ Area.prototype.getAnimation = function(fire){
 		var gunAnims = [];
 		//var o = fire.shooter.getWeaponOrigin(fire.systems[i]);
 		var o = fire.shooter.getTurnStartPos();
-		var ox = fire.shooter.drawX + o.x;
-		var oy = fire.shooter.drawY + o.y;
+		var ox = o.x;
+		var oy = o.y;
 
 		for (var k = 0; k < this.shots; k++){
 			var hit = 0;

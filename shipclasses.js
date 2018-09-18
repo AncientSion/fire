@@ -3478,6 +3478,7 @@ Ship.prototype.readyForAnim = function(){
 	//console.log(frameMod)
 	for (var i = 0; i < this.actions.length; i++){
 		var action = this.actions[i];
+		if (action.forced){console.log("ding");}
 		this.actions[i].animated = 0;
 
 		if (action.type == "speed" || action.type == "deploy" || action.type == "jumpIn"){

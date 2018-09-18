@@ -80,13 +80,12 @@ class GraviticMine extends Area {
 	function handleDmg($fire, $hit, $system){
 		Debug::log("handleDmg ".get_class($this)." versus ".$fire->target->name.", impact dist: ".$fire->dist.", angle: ".$fire->angle);
 
-		$origin = new Point($fire->target->x, $fire->target->y);
+		$impact = new Point($fire->target->x, $fire->target->y);
+		$angle = Math::getAngle2($impact, $fire->target->getCurPos());
 		$shiftDist = min($fire->dist, 50);
-		//push
-		$target = Math::getPointInDirection($shiftDist, $fire->angle, $origin->x, $origin->y);
-		//pull
-		//$target = Math::getPointInDirection($shiftDist, $fire->angle-180, $origin->x, $origin->y);
-		
+		//$target = Math::getPointInDirection($shiftDist, $angle, $impact->x, $impact->y); // pull
+		$target = Math::getPointInDirection($shiftDist, $angle-180, $impact->x, $impact->y); // push
+
 		$fire->target->actions[] = new Action(-1, $fire->target->id, $fire->turn, "move", 1, $shiftDist, $target->x, $target->y, 0, 0, 0, 0, 1, 1);
 	}
 }

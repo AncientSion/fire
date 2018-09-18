@@ -147,6 +147,8 @@ class DmgCalc {
 		$target = new Point($fire->x, $fire->y);
 		$dist = floor(Math::getDist2($origin, $target));
 
+		//Debug::log("impact: $fire->x / $fire->y");
+
 		if ($fire->weapon->deviate){
 			$maxDevi = $dist / 100 * $fire->weapon->accDecay / 10;
 			$devi = mt_rand(0, $maxDevi);
@@ -157,6 +159,7 @@ class DmgCalc {
 		else {
 			$angle = Math::getAngle2($origin, $target);
 			$impact = $target;
+			Debug::log("angle from $origin->x / $origin->y to $target->x / $target->y: $angle");
 		}
 
 		$fire->notes = $impact->x.";".$impact->y.";";

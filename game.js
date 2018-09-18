@@ -1056,6 +1056,11 @@ function Game(data){
 			}
 		}
 
+		ui.combatLogWrapper
+			.find(".combatLogHeader thead tr").last().remove().end()
+			.html("<th>Movement Resolution Log</th>").end().find("#combatLog tr").first().remove();
+		this.showUI();
+
 		this.createLogEntry("-- Movement concluded --");
 
 		if (this.events.length){
