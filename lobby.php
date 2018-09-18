@@ -15,6 +15,9 @@ if (isset($_POST["purge"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] 
 	echo DBManager::app()->doPurge($db);
 	header("Location: lobby.php");
 }
+elseif (isset($_POST["dump"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
+	exec('mysqldump --user=root --password=147147 --host=localhost spacecombat > dumb.sql');
+}
 
 //echo DmgCalc::setWeaponPriority(); return;
 
@@ -216,6 +219,12 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 					echo "<div class='lobbyDiv'>";
 						echo "<form method='post'>";
 							echo "<input type='submit' value='purge' name='purge'>";
+						echo "</form>";
+					echo "</div>";
+
+					echo "<div class='lobbyDiv'>";
+						echo "<form method='post'>";
+							echo "<input type='submit' value='dump' name='dump'>";
 						echo "</form>";
 					echo "</div>";
 				}

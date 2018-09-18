@@ -278,7 +278,7 @@ else header("Location: index.php");
 					squadron.setSubElements();
 					squadron.setStats();
 					squadron.setSubSystemState();
-					copy.expandElement();
+					copyfxpandElement();
 					copy.previewSetup();
 
 					game.setUnitTotal(squadron);
@@ -805,7 +805,7 @@ else header("Location: index.php");
 
 		$("#game").show();
 		$(unit.element)
-			.css("left", "450px").css("top", Math.max(240, $("#fleetInfo").height()+30)).removeClass("disabled")
+			.css("left", "450px").css("top", Math.max(240, $(".fleetBought").height()+30)).removeClass("disabled")
 			.find(".structContainer").show();
 
 		addNamingDiv(unit);
