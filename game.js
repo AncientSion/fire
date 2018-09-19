@@ -1105,6 +1105,7 @@ function Game(data){
 			}
 
 			if (hostiles.length != 1){continue;}
+			if (hostiles[0].ship || hostiles[0].squad){continue;}
 
 			var weapons = [];
 

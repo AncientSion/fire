@@ -47,7 +47,7 @@ class FighterStrafe extends FighterWeapon {
 	public $name = "FighterStrafe";
 	public $display = "Particle Gun / Strafing Attack";
 	public $animColor = "blue";
-	public $tracking = 4;
+	public $tracking = 3;
 	public $basePulses = 1;
 	public $extraPulses = 2;
 	public $grouping = 30;

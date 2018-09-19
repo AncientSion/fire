@@ -721,7 +721,8 @@ System.prototype.canChangeMode = function(){
 
 System.prototype.showOptions = function(){
 	if (game.phase == -1 && this.tiny || game.phase != -1 && !this.tiny){return;}
-	if (game.getUnit(this.parentId).userid != game.userid || this.destroyed || this.locked){return;}
+	//if (game.getUnit(this.parentId).userid != game.userid || this.destroyed || this.locked){return;}
+	if (this.destroyed || this.locked){return;}
 
 	var ele = $(this.element);
 	var boost = this.effiency;

@@ -278,7 +278,7 @@ else header("Location: index.php");
 					squadron.setSubElements();
 					squadron.setStats();
 					squadron.setSubSystemState();
-					copyfxpandElement();
+					copy.expandElement();
 					copy.previewSetup();
 
 					game.setUnitTotal(squadron);

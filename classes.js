@@ -996,6 +996,7 @@ function FireOrder(data){
 }
 
 FireOrder.prototype.setNumberAnim = function(){
+
 	var last;
 	var targets = 1;
 	var data = this.tr.data();
@@ -1005,11 +1006,11 @@ FireOrder.prototype.setNumberAnim = function(){
 	var aoe = this.weapon.aoe ? 1 : 0;
 
 	if (aoe){targets = data.end - data.start+1;}
-
-
-	last = this.anim[this.anim.length-1][this.anim[this.anim.length-1].length-1];
-
-	var len = Math.abs(last.n) + last.m;
+	//if (this.weapon instanceof Warhead && this.hits.reduce((a, b) => a +b, 0)){
+	//	last = 0;
+	//}
+	//else last = this.anim[this.anim.length-1][this.anim[this.anim.length-1].length-1];
+	//var len = Math.abs(last.n) + last.m;
 
 	//if (!last){return;}
 
