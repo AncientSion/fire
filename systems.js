@@ -758,7 +758,7 @@ System.prototype.showOptions = function(){
 
 System.prototype.hideOptions = function(){
 
-	if (this.destroyed || this.locked || game.getUnit(this.parentId).userid != game.userid){return;}
+	if (this.destroyed || this.locked){return;}
 	var ele = $(this.element);
 
 	if (game.phase == -2){

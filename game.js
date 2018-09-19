@@ -743,9 +743,11 @@ function Game(data){
 
 			var step = !(i % 2) ? -1 : 1;
 			var d = 500;
-			var center = {x: 0, y: 0}
+			var center = {x: 0 - (100*step), y: 0};
 			var userid;
 			var color;
+
+			console.log(center);
 
 
 			if (this.playerstatus[i].userid == this.userid){
@@ -756,7 +758,6 @@ function Game(data){
 				userid = 0;
 				color = "red";
 			}
-
 
 			if (game.turn > 1){
 				var count = 0;
@@ -784,6 +785,7 @@ function Game(data){
 				y: center.y,
 				s: 900,
 				b: Math.min(700, Math.round(d*2.5)),
+				deleteW: 900,
 				start: step == -1 ? 90 : 270,
 				end: step == -1 ? 270 : 90
 			});
@@ -878,32 +880,35 @@ function Game(data){
 			//drawCtx.globalCompositeOperation = "source-over";
 		}
 
-		var remove = {x: this.deployArea[0].x, y: this.deployArea[0].y, b: this.deployArea[0].b};
+		for (var i = 0; i < this.deployArea.length; i++){
+			var remove = {x: this.deployArea[i].x, y: this.deployArea[i].y, b: this.deployArea[i].b, w: this.deployArea[i].deleteW};
+
+			drawCtx.translate(cam.o.x, cam.o.y);
+			drawCtx.scale(cam.z, cam.z);
+			drawCtx.beginPath();
+			drawCtx.arc(remove.x, remove.y, remove.b, degreeToRadian(this.deployArea[i].start), degreeToRadian(this.deployArea[i].end));
+			drawCtx.closePath();
+			drawCtx.globalCompositeOperation = "destination-out";
+			drawCtx.fill();
+			drawCtx.setTransform(1,0,0,1,0,0);
+		}
+
+
+		var center = {x: (this.deployArea[0].x + this.deployArea[1].x)/2, y: (this.deployArea[0].y + this.deployArea[1].y)/2};
+		var deleteW = (this.deployArea[0].deleteW + this.deployArea[0].deleteW)/2;
 
 		drawCtx.translate(cam.o.x, cam.o.y);
 		drawCtx.scale(cam.z, cam.z);
 		drawCtx.beginPath();
-		drawCtx.arc(remove.x, remove.y, remove.b, 0, 2*Math.PI);
-		drawCtx.closePath();
-		drawCtx.globalCompositeOperation = "destination-out";
-		drawCtx.fill();
-
-
-		drawCtx.setTransform(1,0,0,1,0,0);
-
-		var w = 600;
-		var h = 2000;
-
-		drawCtx.translate(cam.o.x, cam.o.y);
-		drawCtx.scale(cam.z, cam.z);
-		drawCtx.beginPath();
-		drawCtx.rect(remove.x - w/2, remove.y - h/2, w, h);
+		drawCtx.rect(center.x - deleteW/2, center.y - 2000/2, deleteW, 2000);
 		drawCtx.closePath();
 		drawCtx.globalCompositeOperation = "destination-out";
 		drawCtx.fill();
 
 		drawCtx.setTransform(1,0,0,1,0,0);
 		drawCtx.globalCompositeOperation = "source-over";
+
+
 
 		planCtx.clearRect(0, 0, res.x, res.y);
 		planCtx.globalAlpha = 0.3;
