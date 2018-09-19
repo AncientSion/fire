@@ -1851,6 +1851,51 @@
 			} else return false;
 		}
 
+		public function checkPhaseSkip($userid, $gameid, $turn, $phase){
+			Debug::log("checkPhaseSkip game ".$gameid.", user confirming: ".$userid);
+
+			$sql = ("SELECT * FROM playerstatus where gameid = ".$gameid." AND userid <> ".$userid);
+
+			//Debug::log($sql);
+
+			$otherPlayers = $this->query($sql);
+			//var_export($result);
+
+			$stmt = $this->connection->prepare(
+				"SELECT * FROM units where userid = :userid AND focus = 1"
+			);
+
+			$phaseSkip = 1;
+
+			for ($i = 0; $i < sizeof($otherPlayers); $i++){
+				Debug::log("checking user ".$i);
+				$stmt->bindParam(":userid", $otherPlayers[$i]["userid"]);
+				$stmt->execute();
+
+				if ($stmt->errorCode() == 0){
+					$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+					if (!$result || sizeof($result)){
+						Debug::log("no focus units for user ".$otherPlayers[$i]["userid"]." found!");
+					} else $phaseSkip = 0; Debug::log("focus unit found :(");
+				} else Debug::log("error selecting!");
+			}
+
+
+			if ($phaseSkip){
+				$stmt = $this->connection->prepare(
+					"UPDATE playerstatus SET status = 'ready' where userid <> :userid"
+				);
+
+				$stmt->bindParam(":userid", $userid);
+				$stmt->execute();
+				if ($stmt->errorCode() == 0){
+					Debug::log("updated other players to ready!");
+				} else Debug::log("error updating!");
+			}
+
+			return;
+		}
+
 		public function addReinforceValue($userid, $gameid, $add){
 			Debug::log("addReinforceValue for user: ".$userid.": ".$add);
 			$stmt = $this->connection->prepare("

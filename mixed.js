@@ -737,7 +737,7 @@ Mixed.prototype.getRemSpeed = function(){
 
 Mixed.prototype.createDeployEntry = function(){
 	var html = this.flight ? " is being deployed" : " is launched";
-	this.attachLogEntry("<th colSpan=9><span><font color='" + this.getCodeColor()+ "'>" + this.name + "#" + this.id + "</font> " + html + " (" + this.structures.length + " units).</span></th>");
+	this.attachLogEntry("<th colSpan=9><span><font color='" + this.getCodeColor()+ "'>" + this.name + " #" + this.id + "</font> " + html + " (" + this.structures.length + " units).</span></th>");
 
 	$("#combatLog").find("tbody tr").last()
 		.hover(

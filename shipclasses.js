@@ -1171,8 +1171,9 @@ Ship.prototype.setPostMovePosition = function(){
 	this.drawY = this.actions[this.actions.length-1].y;
 }
 
-Ship.prototype.animatesThisPhase = function(){
+Ship.prototype.animatesThisSegment = function(){
 	if (!this.toAnimate){return false;}
+	if (this.focus && !game.animFocus){return false;}
 	if ((this.ship || this.squad) && !game.animShip){return false;}
 	if (this.flight && !game.animFlight || this.salvo && !game.animSalvo){return false;}
 	return true;

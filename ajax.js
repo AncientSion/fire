@@ -345,6 +345,7 @@ window.ajax = {
 					ships: ships
 				},
 			success: callback,
+			//success: function(echo){console.log(echo)},
 			error: ajax.error,
 		});
 	},

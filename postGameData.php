@@ -72,6 +72,10 @@ if (isset($_POST["type"])) {
 		$dbManager->deletePlannedMoves($_POST["ships"], $_POST["turn"]);
 		$dbManager->insertClientActions($_POST["ships"]);
 		$dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready");
+
+		if ($_POST["phase"] == 1){
+			echo $dbManager->checkPhaseSkip($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"]);
+		}
 	}
 	else if ($_POST["type"] == "firing"){
 		if (isset($_POST["powers"]) && sizeof($_POST["powers"])){
