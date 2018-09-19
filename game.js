@@ -743,7 +743,7 @@ function Game(data){
 
 			var step = !(i % 2) ? -1 : 1;
 			var d = 500;
-			var center = {x: 0 - (100*step), y: 0};
+			var center = {x: 0 , y: 0};
 			var userid;
 			var color;
 
@@ -783,9 +783,9 @@ function Game(data){
 				c: color,
 				x: center.x,
 				y: center.y,
-				s: 900,
-				b: Math.min(700, Math.round(d*2.5)),
-				deleteW: 900,
+				s: 800,
+				b: Math.min(550, Math.round(d*2.5)),
+				deleteW: 850,
 				start: step == -1 ? 90 : 270,
 				end: step == -1 ? 270 : 90
 			});
@@ -1748,42 +1748,10 @@ function Game(data){
 		if (unit.id != aUnit){unit.doHover();}
 	}
 
-	this.resetHover = function(e, loc, facing, pos){
+	this.resetHover = function(es){
 		ui.shortInfo.html("").hide();
 		this.shortInfo = false;
 		game.redraw();
-
-
-
-		return;
-
-		if (aUnit != this.shortInfo){
-			moveCtx.clearRect(0, 0, res.x, res.y);
-			salvoCtx.clearRect(0, 0, res.x, res.y);
-			this.drawEvents();
-		}
-		if (!aUnit){
-			planCtx.clearRect(0, 0, res.x, res.y);
-		}
-
-		if (aUnit != this.shortInfo){
-			var u = this.getUnit(aUnit);
-
-			if (u.ship || u.squad){
-				if (this.turnMode){u.handleTurning(e, loc, facing, pos);}
-				else {
-					u.drawEW();
-				}
-				
-				u.setMoveTranslation();
-				u.drawMoveArea();
-				u.drawVectorIndicator();
-				u.drawTurnArcs();
-				u.resetMoveTranslation();
-			}
-		}
-		this.shortInfo = false;
-		this.drawAllEW();
 	}
 	
 	this.draw = function(){
@@ -2266,6 +2234,11 @@ function Game(data){
 	}
 
 	this.showUI = function(){
+
+		if (ui.combatLogWrapper.find("#combatLog tr").children().length < 2){
+			ui.combatLogWrapper.css("width", 300)
+		}
+
 		ui.unitSelector.show();
 		ui.combatLogWrapper.show();
 		this.setLeftWrapperVisibility();

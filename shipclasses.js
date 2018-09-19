@@ -145,6 +145,12 @@ Ship.prototype.canDeployHere = function(pos){
 	var deploy = game.getDeployArea();
 	console.log(deploy);
 
+	var xDist = Math.abs(pos.x - deploy.x);
+	if (xDist < deploy.deleteW/2){
+		return false;
+	}
+
+	//if (pos.x > deploy.x - deploy.deleteW/2 && pos.x < deploy.x + deploy.deleteW/2){
 	if (pos.x > deploy.x - deploy.deleteW/2 && pos.x < deploy.x + deploy.deleteW/2){
 		return false;
 	}
