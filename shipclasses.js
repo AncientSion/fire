@@ -1548,11 +1548,11 @@ Ship.prototype.createCritLogEntry = function(){
 	return false;
 }
 
-Ship.prototype.createMoraleLogEntry = function(){
+Ship.prototype.createMoraleLogEntryO = function(){
 	if (this.flight || this.salvo || this.destroyed){return false;}
 
 	var data;
-/*	var found = 0;
+	var found = 0;
 	for (var i = 0; i < game.playerstatus.length; i++){
 		for (var j = 0; j < game.playerstatus[i].globals.length; j++){
 			if (game.playerstatus[i].globals[j].unitid == this.id && game.playerstatus[i].globals[j].turn == game.turn){
@@ -1564,8 +1564,6 @@ Ship.prototype.createMoraleLogEntry = function(){
 	}
 
 	if (!found){return false;}
-*/
-	if (data.length < 3){return false;}
 
 	var type = data.notes[0];
 	var numbers = data.notes.slice(2, data.notes.length).split(";");
@@ -1603,7 +1601,7 @@ Ship.prototype.createMoraleLogEntry = function(){
 	return true;
 }
 
-Ship.prototype.createMoraleLogEntrys = function(){
+Ship.prototype.createMoraleLogEntry = function(){
 	if (!this.notes || this.flight || this.salvo){return false;}
 	//var data = this.notes.slice(0, this.notes.length-1).split(";");
 	//var morale = "";
