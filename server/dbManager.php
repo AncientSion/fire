@@ -29,8 +29,6 @@
 			$sql = "";	
 			$tables = array();
 
-
-
 			foreach ($this->query("show tables") as $result){
 				$tables[] = $result["Tables_in_spacecombat"];
 			}
@@ -45,6 +43,12 @@
 					//echo "<div>dropping: ".$tables[$i]."</div>";
 				} else continue;
 			}
+
+			echo "trying";
+			exec('mysql -u chris -p147147 spacecombat <'.$_SERVER["DOCUMENT_ROOT"].'/fire/db.sql');
+			echo "inserted!";
+			return;
+
 
 			$dump = file($filename);
 			$sql = "";		

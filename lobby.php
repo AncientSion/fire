@@ -18,6 +18,7 @@ if (isset($_POST["purge"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] 
 elseif (isset($_POST["dump"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
 	echo "doing !";
 	exec('mysqldump -u chris -p147147 spacecombat >'.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
+	echo "done";
 }
 
 //echo DmgCalc::setWeaponPriority(); return;

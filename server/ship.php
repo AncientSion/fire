@@ -678,7 +678,7 @@ class Ship {
 	}	
 
 	public function triggersMoraleLoss(){
-		if ($this->destroyed || $this->$status == "jumpOut"){
+		if ($this->destroyed || $this->status == "jumpOut"){
 			return true;
 		}
 	}
