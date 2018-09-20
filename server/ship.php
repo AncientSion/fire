@@ -689,7 +689,7 @@ class Ship {
 		if ($this->destroyed){
 			$multi = 100;
 		} else if ($this->status == "jumpOut"){
-			if ($this->phase == -1){
+			if ($phase == 3){
 				$multi = 50;
 			} else $multi = 75;
 		}
