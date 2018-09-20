@@ -1547,60 +1547,6 @@ Ship.prototype.createCritLogEntry = function(){
 	}
 	return false;
 }
-
-Ship.prototype.createMoraleLogEntryO = function(){
-	if (this.flight || this.salvo || this.destroyed){return false;}
-
-	var data;
-	var found = 0;
-	for (var i = 0; i < game.playerstatus.length; i++){
-		for (var j = 0; j < game.playerstatus[i].globals.length; j++){
-			if (game.playerstatus[i].globals[j].unitid == this.id && game.playerstatus[i].globals[j].turn == game.turn){
-				data = game.playerstatus[i].globals[j];
-				found = 1; break;
-			}
-		}
-		if (found){break;}
-	}
-
-	if (!found){return false;}
-
-	var type = data.notes[0];
-	var numbers = data.notes.slice(2, data.notes.length).split(";");
-
-	if (numbers[0] == 100){return;}
-
-	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Severe damage forces " + this.getLogTitleSpan() + " into a morale check.</br>";
-		html += "Chance to fail: " + numbers[0] + "%, rolled: " + numbers[1];
-
-
-	if (type == "p"){
-		html += "<span class='yellow'>Passed !</span class='yellow'>";
-	}
-	else {
-		html += "<span class='yellow'>Failed (Severity: " + number[3] +")</span>";
-		var effect = 0;
-		if (this.status == "jumpOut"){
-			html += "The unit <span class='yellow'> is routed</span>.</td>";
-			effect = 1;
-		}
-		else {
-			var command = this.getSystemByName("Command");
-			for (var i = 0; i < command.crits.length; i++){
-				if (command.cridts[i].turn != game.turn || command.crits[i].duration != -2){continue;}
-				html += "The unit is subject to <span class='yellow'>" + command.crits[i].value + "% " + command.crits[i].type + "</span>.</td>";
-				effect = 1;
-			}
-		}
-	}
-
-
-	//if (!effect){html += "The unit suffers no penalty.</td>";}
-
-	this.attachLogEntry(html);
-	return true;
-}
-
 Ship.prototype.createMoraleLogEntry = function(){
 	if (!this.notes || this.flight || this.salvo){return false;}
 	//var data = this.notes.slice(0, this.notes.length-1).split(";");

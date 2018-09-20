@@ -1238,8 +1238,8 @@ function Game(data){
 				var numbers = globals[j].notes.slice(2, globals[j].notes.length).split(";");
 
 				var html = "<td colSpan=9 style='padding: 10px'><span style='font-size: 12px; font-weight: bold'><span class='yellow'>" + this.playerstatus[i].username + "'</span> is subject to a fleetwide morale check.</br>";
-					html += "Chance to fail: " + numbers[0] + "%, rolled: " + numbers[1];
-
+					html += "Chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] + ".</br>"
+				
 				if (type == "p"){
 					html += "<span class='yellow'>Passed !</span class='yellow'>";
 				}
