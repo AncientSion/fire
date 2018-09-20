@@ -1868,13 +1868,13 @@
 			$phaseSkip = 1;
 
 			for ($i = 0; $i < sizeof($otherPlayers); $i++){
-				Debug::log("checking user ".$i);
+				Debug::log("checking user ".$otherPlayers[$i]["userid"]);
 				$stmt->bindParam(":userid", $otherPlayers[$i]["userid"]);
 				$stmt->execute();
 
 				if ($stmt->errorCode() == 0){
 					$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-					if (!$result || sizeof($result)){
+					if (!$result || !(sizeof($result))){
 						Debug::log("no focus units for user ".$otherPlayers[$i]["userid"]." found!");
 					} else $phaseSkip = 0; Debug::log("focus unit found :(");
 				} else Debug::log("error selecting!");
