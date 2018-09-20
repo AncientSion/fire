@@ -1484,7 +1484,7 @@
 					"id" => 0,
 					"playerstatusid" => $this->playerstatus[$i]["id"],
 					"unitid" => $this->ships[$j]->id,
-					"turn" => $this->turn,
+					"turn" => $this->phase == 2 ? $this->turn : $this->turn+1,
 					"type" => "Morale",
 					"scope" => 1,
 					"value" => -$value,
