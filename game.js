@@ -3497,8 +3497,8 @@ Game.prototype.initialPhaseResolutionDone = function(){
 	var newMission = 0;
 
 	for (var i = 0; i < this.ships.length; i++){
-		if (this.ships[i].available == this.turn){newUnit = 1; break;
-		} else if (this.ships[i].flight && this.ships[i].mission.turn == game.turn){newMission = 1; break;}
+		if (this.ships[i].available == this.turn){newUnit = 1;
+		} else if (this.ships[i].flight && this.ships[i].mission.turn == game.turn){newMission = 1;}
 	}
 
 	if (newUnit){
