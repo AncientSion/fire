@@ -1427,12 +1427,12 @@
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->salvo && !$this->ships[$i]->isDestroyed()){
-				if ($this->ships[$i]->mission->arrived){
-					Debug::log("arrived!");
-					$target = $this->getUnit($this->ships[$i]->mission->targetid);
-					$fire = $this->ships[$i]->getFireOrder($this->gameid, $this->turn, $target);
-					$fires[] = $fire;
-				}
+				if (!$this->ships[$i]->mission->arrived){continue;}
+
+				Debug::log("salvo #".$this->ships[$i]->id." arrived!");
+				$target = $this->getUnit($this->ships[$i]->mission->targetid);
+				$fire = $this->ships[$i]->getFireOrder($this->gameid, $this->turn, $target);
+				$fires[] = $fire;
 			}
 		}
 
