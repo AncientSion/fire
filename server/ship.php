@@ -778,7 +778,7 @@ class Ship {
 			$html .= " routed";
 		} else $html .= " withdrawn";
 
-		return $hhml;
+		return $html;
 	}
 
 	public function calculateToHit($fire){ // shooter
