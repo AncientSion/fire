@@ -192,7 +192,6 @@ class HeavyLaser extends LightLaser {
 class SuperHeavyLaser extends HeavyLaser {
 	public $name = "SuperHeavyLaser";
 	public $display = "Super-Heavy Laser";
-	public $accDecay = -600;
 	public $rakeTime = 70;
 	public $beamWidth = 5;
 	public static $prio = 0;
