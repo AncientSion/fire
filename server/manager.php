@@ -1484,12 +1484,12 @@
 					"id" => 0,
 					"playerstatusid" => $this->playerstatus[$i]["id"],
 					"unitid" => $this->ships[$j]->id,
-					"turn" => $this->phase == 2 ? $this->turn : $this->turn+1,
+					"turn" => $this->turn,
 					"type" => "Morale",
 					"scope" => 1,
 					"value" => -$value,
 					"notes" => $this->ships[$j]->notes,
-					"text" => $this->ships[$j]->getRoutString()
+					"text" => $this->ships[$j]->getRoutString($this->phase)
 				);
 
 				$this->ships[$j]->notes = "";

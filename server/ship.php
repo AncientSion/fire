@@ -768,8 +768,17 @@ class Ship {
 		}
 	}
 
-	public function getRoutString(){
-		return $this->name." #".$this->id . ($this->destroyed ? " destroyed" : " routed");
+	public function getRoutString($phase){
+		$html = $this->name." #".$this->id;
+
+		if ($this->destroyed){
+			$html .= " destroyed";
+		}
+		else if ($phase == 2){
+			$html .= " routed";
+		} else $html .= " withdrawn";
+
+		return $thml;
 	}
 
 	public function calculateToHit($fire){ // shooter

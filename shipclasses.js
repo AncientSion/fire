@@ -1763,9 +1763,6 @@ Ship.prototype.animateSelfJumpOut = function(){
 
 	ctx.globalAlpha = sin;
 	ctx.drawImage(graphics.images.redVortex, this.drawX-s/2, this.drawY-s/2, s, s);
-	//drawCircle(this.drawX, this.drawY, this.size*0.8*sin, "source-over", "orange");
-	//drawCircle(this.drawX, this.drawY, this.size*0.3*sin/2, "lighter", "yellow");
-
 
 	if (fraction > 0.5){
 		ctx.globalAlpha = 1;
@@ -1776,7 +1773,6 @@ Ship.prototype.animateSelfJumpOut = function(){
 	this.drawSelf();
 	ctx.rotate(-this.getDrawFacing() * Math.PI/180);
 	ctx.translate(-this.drawX, -this.drawY);
-
 }
 
 Ship.prototype.draw = function(){

@@ -2146,7 +2146,6 @@ function Game(data){
 		ui.combatLogWrapper
 			.find(".combatLogHeader thead tr").last().remove().end()
 			.html("<th>Damage Control Resolution Log</th>").end().find("#combatLog tr").first().remove();
-		this.createFleetMoraleLogEntries();
 		this.showUI();
 
 		if (toDo){
@@ -2185,7 +2184,6 @@ function Game(data){
 					}
 				}
 				else this.ships[i].draw();
-
 			}
 
 			ctx.setTransform(1,0,0,1,0,0);
