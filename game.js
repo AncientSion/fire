@@ -1248,9 +1248,7 @@ function Game(data){
 					html += "The fleet is subject to <span class='yellow'>" + (globals[j].type == "Rout" ? "a complete rout." : globals[j].value + " % " + globals[j].type) + ".</span>";
 				}
 
-				$("#combatLog").find("tbody")
-					.append($("<tr>")
-						.html(html));
+			this.attachLogEntry(html);
 
 			}
 		}
