@@ -1087,7 +1087,6 @@ function Game(data){
 			this.animating = 0;
 			this.drawingEvents = 1;
 			this.draw();
-			this.showUI();
 			if (this.phase == 2){
 				this.autoIssueFireOrders();
 			}
@@ -2147,6 +2146,7 @@ function Game(data){
 		ui.combatLogWrapper
 			.find(".combatLogHeader thead tr").last().remove().end()
 			.html("<th>Damage Control Resolution Log</th>").end().find("#combatLog tr").first().remove();
+		this.createFleetMoraleLogEntries();
 		this.showUI();
 
 		if (toDo){
