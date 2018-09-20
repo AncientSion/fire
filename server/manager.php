@@ -555,6 +555,7 @@
 	
 	public function handleDeployPhase(){
 		Debug::log("handleDeployPhase");
+		$this->adjustFleetMorale();
 		$this->resolveJumpOutActions();
 		$this->handleInitialFireOrders();
 		$this->handleDeployActions();
@@ -1470,27 +1471,26 @@
 			for ($j = 0; $j < sizeof($this->ships); $j++){
 				if ($this->ships[$j]->flight || $this->ships[$j]->salvo || $this->ships[$j]->available > $this->turn){continue;}
 				if ($this->ships[$j]->userid != $this->playerstatus[$i]["userid"]){continue;}
+				if (!$this->ships[$j]->triggersMoraleLoss()){continue;}
 
+				$value = ceil($this->ships[$j]->getMoraleLossValue($this->phase) / $full * 100);
 
-				if ($this->ships[$j]->destroyed || $this->ships[$j]->status == "jumpOut"){
-					$value = ceil($this->ships[$j]->moraleCost / $full *100);
-					Debug::log("unit #".$this->ships[$j]->id.", moraleCost: ".$this->ships[$j]->moraleCost.", value: ".$value);
+				Debug::log("unit #".$this->ships[$j]->id.", moraleCost: ".$this->ships[$j]->moraleCost.", value: ".$value);
 
-					$this->playerstatus[$i]["globals"][] = array(
-						"id" => 0,
-						"playerstatusid" => $this->playerstatus[$i]["id"],
-						"unitid" => $this->ships[$j]->id,
-						"turn" => $this->turn,
-						"type" => "Morale",
-						"scope" => 1,
-						"value" => -$value,
-						"notes" => $this->ships[$j]->notes,
-						"text" => $this->ships[$j]->getRoutString()
-					);
+				$this->playerstatus[$i]["globals"][] = array(
+					"id" => 0,
+					"playerstatusid" => $this->playerstatus[$i]["id"],
+					"unitid" => $this->ships[$j]->id,
+					"turn" => $this->turn,
+					"type" => "Morale",
+					"scope" => 1,
+					"value" => -$value,
+					"notes" => $this->ships[$j]->notes,
+					"text" => $this->ships[$j]->getRoutString()
+				);
 
-					$this->ships[$j]->notes = "";
+				$this->ships[$j]->notes = "";
 
-				}
 			}
 		}
 	}

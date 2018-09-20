@@ -677,6 +677,27 @@ class Ship {
 		return false;
 	}	
 
+	public function triggersMoraleLoss(){
+		if ($this->destroyed || $this->$status == "jumpOut"){
+			return true;
+		}
+	}
+
+	public function getMoraleLossValue($phase){
+		$multi = 100;
+
+		if ($this->destroyed){
+			$multi = 100;
+		} else if ($this->status == "jumpOut"){
+			if ($this->phase == -1){
+				$multi = 50;
+			} else $multi = 75;
+		
+
+		Debug::log("getMoraleLossValue ".$this->id.", multi ".$multi)
+		return $this->moraleCost / 100  * $multi;
+	}
+
 	public function isCloseCombat($id){
 		for ($i = 0; $i < sizeof($this->cc); $i++){
 			if ($this->cc[$i] == $id){
