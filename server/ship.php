@@ -692,9 +692,9 @@ class Ship {
 			if ($this->phase == -1){
 				$multi = 50;
 			} else $multi = 75;
-		
+		}
 
-		Debug::log("getMoraleLossValue ".$this->id.", multi ".$multi)
+		Debug::log("getMoraleLossValue ".$this->id.", multi ".$multi);
 		return $this->moraleCost / 100  * $multi;
 	}
 
