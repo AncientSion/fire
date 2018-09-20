@@ -1671,9 +1671,9 @@
 	}
 
 	public function hasNewGlobalEntries(){
-		for ($i = 0; $i < sizeof($playerstatus); $i++){
-			for ($j = 0; $j < sizeof($playerstatus[$i]["globals"]); $j++){
-				if ($playerstatus[$i]["globals"][$j]["id"]){continue;}
+		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			for ($j = 0; $j < sizeof($this->playerstatus[$i]["globals"]); $j++){
+				if ($this->playerstatus[$i]["globals"][$j]["id"]){continue;}
 				return true;
 			}
 		}

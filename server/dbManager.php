@@ -1878,9 +1878,13 @@
 
 				if ($stmt->errorCode() == 0){
 					$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-					if (!$result || sizeof($result)){
+					if (!$result || !(sizeof($result))){
 						Debug::log("no focus units for user ".$otherPlayers[$i]["userid"]." found!");
-					} else $phaseSkip = 0; Debug::log("focus unit found :(");
+					}
+					else {
+						$phaseSkip = 0;
+						Debug::log("focus unit found :(");
+					}
 				} else Debug::log("error selecting!");
 			}
 
@@ -1895,7 +1899,7 @@
 				if ($stmt->errorCode() == 0){
 					Debug::log("updated other players to ready!");
 				} else Debug::log("error updating!");
-			}
+			} else Debug::log("cant forward!");
 
 			return;
 		}
