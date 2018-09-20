@@ -437,7 +437,7 @@
 											"text" => ""
 										);
 
-			if ($this->insertGlobalEntry(array($playerstatus))){
+			if ($this->insertNewGlobalEntries(array($playerstatus))){
 				return true;
 			} else return false;
 		}
@@ -1218,8 +1218,8 @@
 			return true;
 		}
 
-		public function insertGlobalEntry($playerstatus){
-			Debug::log(" => DB insertGlobalEntry");
+		public function insertNewGlobalEntries($playerstatus){
+			Debug::log(" => DB insertNewGlobalEntries");
 			
 			$stmt = $this->connection->prepare("
 				 INSERT into globals 

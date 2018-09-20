@@ -555,7 +555,6 @@
 	
 	public function handleDeployPhase(){
 		Debug::log("handleDeployPhase");
-		$this->adjustFleetMorale();
 		$this->resolveJumpOutActions();
 		$this->handleInitialFireOrders();
 		$this->handleDeployActions();
@@ -590,7 +589,11 @@
 			}
 		}
 
-		if ($needCheck){$this->freeFlights();}
+		if ($needCheck){
+			$this->freeFlights();
+			$this->adjustFleetMorale();	
+			DBManager::app()->insertNewGlobalEntries($this->playerstatus);
+		}
 	}
 
 	public function resolveJumpOutActions(){
@@ -1664,7 +1667,17 @@
 		if (sizeof($newCrits)){DBManager::app()->insertCritEntries($newCrits);}
 		if (sizeof($newMoves)){DBManager::app()->insertServerActions($newMoves);}
 		if (sizeof($unitMorales)){DBManager::app()->updateUnitStatusNotes($unitMorales);}
-		DBManager::app()->insertGlobalEntry($this->playerstatus);
+		if ($this->hasNewGlobalEntries()){DBManager::app()->insertNewGlobalEntries($this->playerstatus);}
+	}
+
+	public function hasNewGlobalEntries(){
+		for ($i = 0; $i < sizeof($playerstatus); $i++){
+			for ($j = 0; $j < sizeof($playerstatus[$i]["globals"]); $j++){
+				if ($playerstatus[$i]["globals"][$j]["id"]){continue;}
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public function getAllNewForcedMoves(){
