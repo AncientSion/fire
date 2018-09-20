@@ -1492,7 +1492,7 @@
 					"text" => $this->ships[$j]->getRoutString($this->phase)
 				);
 
-				$this->ships[$j]->notes = "";
+				//$this->ships[$j]->notes = "";
 
 			}
 		}

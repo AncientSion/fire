@@ -1571,14 +1571,14 @@ Ship.prototype.createMoraleLogEntryO = function(){
 	if (numbers[0] == 100){return;}
 
 	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Severe damage forces " + this.getLogTitleSpan() + " into a morale check.</br>";
-		html += "Chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] +" - ";
+		html += "Chance to fail: " + numbers[0] + "%, rolled: " + numbers[1];
 
 
 	if (type == "p"){
-		html += " <span class='yellow'>Passed !</span class='yellow'>";
+		html += "<span class='yellow'>Passed !</span class='yellow'>";
 	}
 	else {
-		html += " <span class='yellow'>Failed (Severity: " + number[3] +")</span>";
+		html += "<span class='yellow'>Failed (Severity: " + number[3] +")</span>";
 		var effect = 0;
 		if (this.status == "jumpOut"){
 			html += "The unit <span class='yellow'> is routed</span>.</td>";

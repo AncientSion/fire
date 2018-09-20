@@ -44,6 +44,7 @@ class DmgCalc {
 	}
 
 	static function moraleCritProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd){
+		Debug::log("moraleCritProcedure $unitid / $systemid, $turn, $new, $magAdd");
 		//Debug::log("moraleCritProcedure $unitid, $systemid, $turn, $new, $magAdd");
 
 		if (!sizeof($effects) || !$new || ($new < 0.15 && $unitid)){return;}
