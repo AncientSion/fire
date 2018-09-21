@@ -21,7 +21,8 @@
 	        return self::$instance;
 		}
 
-		public function aNew($data, $filename){
+		public function anew($filename){
+			$access = Debug::db();
 			$dump = file($filename);
 
 			if (!$dump){return;}
@@ -45,7 +46,7 @@
 			}
 
 			echo "trying";
-			exec('mysql -u '.$data[0].' -p'.$data[1].' spacecombat <'.$_SERVER["DOCUMENT_ROOT"].'/fire/db.sql');
+			exec('mysql -u '.$access[0].' -p'.$access[1].' spacecombat <'.$_SERVER["DOCUMENT_ROOT"].'/fire/db.sql');
 			echo "inserted!";
 			return;
 
@@ -68,8 +69,11 @@
 				}
 			}
 			//echo "<div>SQL file imported successfully.</div>";
+		}
 
-
+		public function dump(){
+			$access = Debug::db();
+			exec('mysqldump -u '.$access[0].' -p'.$access[1].' spacecombat >'.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
 		}
 
 		public function getLastInsertId(){

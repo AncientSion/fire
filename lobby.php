@@ -10,17 +10,13 @@ if (0){
 	return;
 }
 
-if (isset($_POST["purge"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
-	$data = Debug::db();
-
+if (isset($_POST["anew"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
 	$name = "dump.sql";
-	echo DBManager::app()->aNew($data, $name);
+	echo DBManager::app()->anew($data, $name);
 	header("Location: lobby.php");
 }
 elseif (isset($_POST["dump"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
-	$data = Debug::db();
-
-	exec('mysqldump -u '.$data[0].' -p'.$data[1].' spacecombat >'.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
+	echo DBManager::app()->dump();
 	header("Location: lobby.php");
 }
 
@@ -223,7 +219,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 				if (isset($_SESSION['userid']) && $_SESSION['userid'] == 1){
 					echo "<div class='lobbyDiv'>";
 						echo "<form method='post'>";
-							echo "<input type='submit' value='purge' name='purge'>";
+							echo "<input type='submit' value='anew' name='anew'>";
 						echo "</form>";
 					echo "</div>";
 
