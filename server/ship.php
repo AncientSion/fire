@@ -68,10 +68,11 @@ class Ship {
 	public $modFocusRate = 0;
 
 	public $critEffects = array( // type, min%, dura, effect
-		array("Morale", 30, -2, -5.00),
-		array("Morale", 60, -2, -15.00),
-		array("Morale", 100, -2, -25.00),
-		array("Rout", 150, -2, 0.00),
+		array("Rout", 10, -2, 0.00),
+		//array("Morale", 30, -2, -5.00),
+		//array("Morale", 60, -2, -15.00),
+		//array("Morale", 100, -2, -25.00),
+		//array("Rout", 150, -2, 0.00),
 	);
 
 	function __construct($data){
@@ -345,6 +346,13 @@ class Ship {
 		}
 	}
 
+	public function hideWithdrawal($phase){
+		if ($this->flight || $this->salvo){return;}
+		if (!$this->isWithdrawing()){return;}
+		if ($this->actions[sizeof($this->actions)-1]->forced){return;}
+		array_splice($this->actions, sizeof($this->actions)-1, 1);
+	}
+
 	public function getBaseImpulse(){
 		return $this->baseImpulse;
 	}
@@ -383,6 +391,7 @@ class Ship {
 		//Debug::log("getDeployState for ".$this->id);
 		return array(
 			"id" => $this->id,
+			"destroyed" => $this->destroyed,
 			"x" => $this->actions[sizeof($this->actions)-1]->x,
 			"y" => $this->actions[sizeof($this->actions)-1]->y,
 			"delay" => 0,
@@ -428,7 +437,20 @@ class Ship {
 
 		//Debug::log("getEndState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$facing.", rolling: ".$this->rolling.", rolled: ".$this->rolled);
 
-		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "facing" => $facing, "thrust" => $this->curImp, "rolling" => $this->isRolling(), "rolled" => $this->isRolled(), "flipped" => $this->flipped, "status" => $this->status, "notes" => "");
+		return array(
+			"id" => $this->id,
+			"destroyed" => $this->destroyed,
+			"x" => $this->actions[sizeof($this->actions)-1]->x,
+			"y" => $this->actions[sizeof($this->actions)-1]->y,
+			"delay" => $delay,
+			"facing" => $facing,
+			"thrust" => $this->getCurSpeed(),
+			"rolling" => $this->isRolling(),
+			"rolled" => $this->isRolled(),
+			"flipped" => $this->flipped,
+			"status" => $this->status,
+			"notes" => $this->notes,
+		);
 	}
 
 	public function isRolling(){
@@ -675,12 +697,22 @@ class Ship {
 		}
 
 		return false;
-	}	
+	}
 
-	public function triggersMoraleLoss(){
-		if ($this->destroyed || $this->status == "jumpOut"){
+	public function isWithdrawing(){
+		if (!sizeof($this->actions)){return false;}
+		$action = $this->actions[sizeof($this->actions)-1];
+
+		if ($action->type == "jumpOut"){
 			return true;
 		}
+	}
+
+	public function triggersMoraleLoss(){
+		if ($this->destroyed || $this->isWithdrawing()){
+			return true;
+		}
+		return false;
 	}
 
 	public function getMoraleLossValue($phase){
@@ -688,7 +720,7 @@ class Ship {
 
 		if ($this->destroyed){
 			$multi = 100;
-		} else if ($this->status == "jumpOut"){
+		} else if ($this->isWithdrawing()){
 			if ($phase == 3){
 				$multi = 50;
 			} else $multi = 75;
@@ -1115,7 +1147,9 @@ class Ship {
 		if (!$crit){return;}
 
 		$this->notes = $crit->notes;
-		if ($crit->type == "Rout"){$this->status = "jumpOut";}
+		if ($crit->type == "Rout"){
+			$this->actions[] = new Action(-1, $this->id, $turn, "jumpOut", 1, 0, $this->x, $this->y, 0, 0, 0, 0, 1, 1);
+		}
 		else $this->getSystemByName("Command")->crits[] = $crit;
 	}
 

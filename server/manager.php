@@ -249,6 +249,7 @@
 			case 3:
 				for ($i = 0; $i < sizeof($this->ships); $i++){
 					if ($this->ships[$i]->command > $this->turn){$this->ships[$i]->command = 0;}
+					$this->ships[$i]->hideWithdrawal($this->phase);
 				} break;
 			default: break;
 		}
@@ -583,13 +584,14 @@
 		$needCheck = false;
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->status == "jumpOut"){
-				Debug::log("check");
+			if ($this->ships[$i]->isWithdrawing()){
+				$this->ships[$i]->status = "jumpOut";
 				$needCheck = true;
 			}
 		}
 
 		if ($needCheck){
+			Debug::log("needCheck!");
 			$this->freeFlights();
 			$this->adjustFleetMorale();	
 			DBManager::app()->insertNewGlobalEntries($this->playerstatus);
@@ -602,13 +604,14 @@
 		$needCheck = false;
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->status == "jumpOut"){
-				$this->ships[$i]->destroyed = true;
-				$needCheck = true;
-			}
+			if ($this->ships[$i]->status != "jumpOut"){continue;}
+
+			$this->ships[$i]->destroyed = true;
+			$needCheck = true;
 		}
 
 		if ($needCheck){
+			Debug::log("needCheck!");
 			$this->doFullDestroyedCheck();
 		}
 	}
@@ -751,10 +754,9 @@
 
 	public function startMovementPhase(){
 		//Debug::log("startShipMovementPhase");
-		$dbManager = DBManager::app();
 		$this->phase = 0;
 
-		if ($dbManager->setGameTurnPhase($this->gameid, $this->turn, $this->phase)){
+		if (DBManager::app()->setGameTurnPhase($this->gameid, $this->turn, $this->phase)){
 			$this->updatePlayerStatus("waiting");
 			return true;
 		}
@@ -1587,6 +1589,17 @@
 				if (!$this->ships[$j]->command){continue;}
 				$units[] = $this->ships[$j];
 			}
+
+			if (!sizeof($units)){
+				$data[] = 
+						array(
+							"id" => $this->playerstatus[$i]["id"],
+							"curFocus" => 0,
+							"gainFocus" => 0, 
+							"maxFocus" => 0 * 4
+						);
+				continue;
+			}
 			
 			usort($units, function($a, $b){
 				return $b->command - $a->command;
@@ -1713,7 +1726,6 @@
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->destroyed || $this->ships[$i]->flight || $this->ships[$i]->salvo){continue;}
 			if (!strlen($this->ships[$i]->notes)){continue;}
-			//if ($this->ships[$i]->status != "jumpOut"){continue;}
 			$data[] = array("id" => $this->ships[$i]->id, "status" => $this->ships[$i]->status, "notes" => $this->ships[$i]->notes);
 		}
 		return $data;

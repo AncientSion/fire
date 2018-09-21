@@ -384,13 +384,19 @@ window.ajax = {
 
 	confirmDamageControl: function(callback){
 	
-		var jumpout = [];
+		var plannedMoves = [];
 		var focus = [];
 
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid != game.userid){continue;}
-			if (game.ships[i].status == "jumpOut"){
-				jumpout.push({id: game.ships[i].id, status: "jumpOut", notes: game.ships[i].notes});
+			if (game.ships[i].actions.length){
+				var action = game.ships[i].actions[game.ships[i].actions.length-1];
+				if (action.type == "jumpOut" && !action.forced){
+					plannedMoves.push({
+						actions: [action],
+						id: game.ships[i].id
+					});
+				}
 			}
 			if (game.ships[i].focus){
 				focus.push(game.ships[i].id);
@@ -407,7 +413,7 @@ window.ajax = {
 				userid: game.userid,
 				turn: game.turn,
 				phase: game.phase,
-				jumpout: jumpout,
+				plannedMoves: plannedMoves,
 				focus: focus,
 				commandChange: game.commandChange
 			},

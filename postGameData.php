@@ -88,8 +88,8 @@ if (isset($_POST["type"])) {
 	}
 	else if ($_POST["type"] == "damageControl"){
 		//Debug::log("damageControl");
-		if (sizeof($_POST["jumpout"])){
-			$dbManager->updateUnitStatusNotes($_POST["jumpout"]);
+		if (isset($_POST["plannedMoves"])){
+			$dbManager->insertClientActions($_POST["plannedMoves"]);
 		}
 		if (sizeof($_POST["focus"])){
 			$dbManager->updateFocusState($_POST["focus"]);

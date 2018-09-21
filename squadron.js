@@ -130,7 +130,7 @@ Squadron.prototype.createBaseDiv = function(){
 			.append($("<img>").addClass("jumpOut")
 				.attr("src", "varIcons/redVortex.png"))
 
-		if (this.canBeIssuedToJumpOut()){
+		if (this.needsWithdrawClickEvent()){
 			jumpDiv.find("img")
 			.click(function(){game.getUnit($(this).parent().parent().parent().parent().data("shipId")).requestJumpOut();
 			})

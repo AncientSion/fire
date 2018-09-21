@@ -550,7 +550,7 @@ function Game(data){
 	this.handleDmgControlWarnings = function(){
 		var hasCommand = this.userHasCommandUnit(this.getPlayerStatus().userid);
 		if (!hasCommand){
-			popup("Your fleet is lacking a Command unit.</br>Please select a unit to act as Fleet Command.");
+			popup("There is no Fleet Command set. </br>Please select a unit to act as Fleet Command.");
 			return true;
 		}
 		return false;
@@ -559,7 +559,7 @@ function Game(data){
 	this.userHasCommandUnit = function(userid){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid != userid){continue;}
-			if (this.ships[i].status == "jumpOut" || this.ships[i].isDestroyed()){continue;}
+			if (this.ships[i].isWithdrawing() || this.ships[i].isDestroyed()){continue;}
 			if (this.ships[i].command){return true;}
 		}
 		return false;
@@ -1239,12 +1239,13 @@ function Game(data){
 
 				var html = "<td colSpan=9 style='padding: 10px'><span style='font-size: 12px; font-weight: bold'><span class='yellow'>" + this.playerstatus[i].username + "'</span> is subject to a fleetwide morale check.</br>";
 					html += "Chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] + ".</br>"
-				
+
 				if (type == "p"){
 					html += "<span class='yellow'>Passed !</span class='yellow'>";
 				}
-				else {
-					html += "<span class='yellow'> Failed ! (Severity: " + numbers[3] +")</span></br>";
+				else {	
+					html += "<span class='yellow'> Failed ! (Severity: " + numbers[2] + " + " (numbers[3]-numbers[2]) + " = " + numbers[3] +")</span></br>";
+					//html += "<span class='yellow'> Failed ! (Severity: " + numbers[3] +")</span></br>";
 					html += "The fleet is subject to <span class='yellow'>" + (globals[j].type == "Rout" ? "a complete rout." : globals[j].value + " % " + globals[j].type) + ".</span>";
 				}
 
@@ -1775,7 +1776,10 @@ function Game(data){
 
 		if (aUnit){
 			var unit = this.getUnit(aUnit);
-			if (!unit.salvo){
+			if (unit.status == "jumpOut"){
+
+			}
+			else if (!unit.salvo){
 				unit.resetMoveMode();
 
 				if (unit.hasWeaponsSelected()){
@@ -1784,7 +1788,6 @@ function Game(data){
 				}
 
 				if (unit.ship || unit.squad){
-				//	unit.drawEW();
 					unit.setMoveTranslation();
 					unit.drawMoveArea();
 					unit.drawVectorIndicator();
@@ -2140,11 +2143,6 @@ function Game(data){
 			}
 		}
 
-		ui.combatLogWrapper
-			.find(".combatLogHeader thead tr").last().remove().end()
-			.html("<th>Damage Control Resolution Log</th>").end().find("#combatLog tr").first().remove();
-		this.showUI();
-
 		if (toDo){
 			setFPS(30);
 			window.then = Date.now();
@@ -2221,6 +2219,12 @@ function Game(data){
 			ui.reinforceWrapper.show();
 		}
 		this.createLogEntry("-- Initial Events concluded --")
+
+
+		ui.combatLogWrapper
+			.find(".combatLogHeader thead tr").last().remove().end()
+			.html("<th>Damage Control Resolution Log</th>").end().find("#combatLog tr").first().remove();
+		this.showUI(400);
 	}
 
 	this.resolvePostMoveFires = function(){
@@ -2272,10 +2276,11 @@ function Game(data){
 		$(".optionsWrapper").hide();
 	}
 
-	this.showUI = function(){
-
+	this.showUI = function(width){
 		if (ui.combatLogWrapper.find("#combatLog tr").children().length < 2){
 			ui.combatLogWrapper.css("width", 300)
+		} else if (width){
+			ui.combatLogWrapper.css("width", width)
 		}
 
 		ui.unitSelector.show();

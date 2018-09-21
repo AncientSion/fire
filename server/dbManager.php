@@ -8,7 +8,7 @@
 		function __construct(){
 			if ($this->connection === null){
 				$data = Debug::db();
-				$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$data[0],$data[1]);
+				$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat", $data[0],$data[1]);
 				$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 			}
@@ -21,7 +21,7 @@
 	        return self::$instance;
 		}
 
-		public function doPurge($filename){
+		public function aNew($data, $filename){
 			$dump = file($filename);
 
 			if (!$dump){return;}
@@ -45,7 +45,7 @@
 			}
 
 			echo "trying";
-			exec('mysql -u chris -p147147 spacecombat <'.$_SERVER["DOCUMENT_ROOT"].'/fire/db.sql');
+			exec('mysql -u '.$data[0].' -p'.$data[1].' spacecombat <'.$_SERVER["DOCUMENT_ROOT"].'/fire/db.sql');
 			echo "inserted!";
 			return;
 
@@ -1115,7 +1115,8 @@
 			Debug::log("updateUnitState s:".sizeof($states)." ".$turn."/".$phase);
 			$stmt = $this->connection->prepare("
 				UPDATE units
-				SET x = :x,
+				SET destroyed = :destroyed,
+					x = :x,
 					y = :y,
 					facing = :facing,
 					delay = :delay,
@@ -1133,6 +1134,7 @@
 			for ($i = 0; $i < sizeof($states); $i++){
 				//if ($states[$i]["id"] == 46){foreach ($states[$i] as $key => $value){Debug::log($key." / ".$value);}}
 
+				$stmt->bindParam(":destroyed", $states[$i]["destroyed"]);
 				$stmt->bindParam(":x", $states[$i]["x"]);
 				$stmt->bindParam(":y", $states[$i]["y"]);
 				$stmt->bindParam(":facing", $states[$i]["facing"]);

@@ -11,14 +11,17 @@ if (0){
 }
 
 if (isset($_POST["purge"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
-	$db = "db.sql";
-	echo DBManager::app()->doPurge($db);
+	$data = Debug::db();
+
+	$name = "dump.sql";
+	echo DBManager::app()->aNew($data, $name);
 	header("Location: lobby.php");
 }
 elseif (isset($_POST["dump"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
-	echo "doing !";
-	exec('mysqldump -u chris -p147147 spacecombat >'.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
-	echo "done";
+	$data = Debug::db();
+
+	exec('mysqldump -u '.$data[0].' -p'.$data[1].' spacecombat >'.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
+	header("Location: lobby.php");
 }
 
 //echo DmgCalc::setWeaponPriority(); return;

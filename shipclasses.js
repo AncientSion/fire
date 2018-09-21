@@ -1564,9 +1564,9 @@ Ship.prototype.createMoraleLogEntry = function(){
 		html += " <span class='yellow'>Passed !</span class='yellow'>";
 	}
 	else {
-		html += "<span class='yellow'> Failed ! (Severity: " + numbers[3] +")</span></br>";
+		html += "<span class='yellow'> Failed ! (Severity: " + numbers[2] + " + " (numbers[3]-numbers[2]) + " = " + numbers[3] +")</span></br>";
 		var effect = 0;
-		if (this.status == "jumpOut"){
+		if (this.actions.length && this.actions[this.actions.length-1].type == "jumpOut"){
 			html += "The unit <span class='yellow'> is routed</span>.</td>";
 			effect = 1;
 		}
@@ -1964,6 +1964,11 @@ Ship.prototype.getWeaponOrigin = function(id){
 	}
 	console.log("lacking gun origin");
 	return this.getSystem(id);
+}
+
+Ship.prototype.isWithdrawing = function(){
+	if (this.actions.length && this.actions[this.actions.length-1].type == "jumpOut"){return true;}
+	return false;
 }
 
 Ship.prototype.resetMoveMode = function(){
@@ -2577,7 +2582,7 @@ Ship.prototype.getUnitName = function(){
 Ship.prototype.trySetCommand = function(){
 	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace.");}
 	else {
-		popup("Reallocation Fleet Command will set saved Focus Points to 0 at end of turn.</br>Please confirm your order.</br><input type='button' class='popupEntryConfirm' value='Confirm Transfer' onclick='game.getUnit(aUnit).doSetCommand()'>");
+		popup("Relocating Fleet Command will set saved Focus Points to 0 at end of turn</br>(after Focus is spend, before Focus is gained).</br>Please confirm your order.</br><input type='button' class='popupEntryConfirm' value='Confirm Transfer' onclick='game.getUnit(aUnit).doSetCommand()'>");
 	}
 }
 
@@ -2982,7 +2987,7 @@ Ship.prototype.expandDiv = function(div){
 			.append($("<img>").addClass("jumpOut")
 				.attr("src", "varIcons/redVortex.png"));
 
-		if (this.canBeIssuedToJumpOut()){
+		if (this.needsWithdrawClickEvent()){
 			jumpDiv.find("img")
 			.click(function(){game.getUnit($(this).parent().parent().parent().data("shipId")).requestJumpOut();
 			});
@@ -3049,32 +3054,39 @@ Ship.prototype.setNotes = function(){
 	if (this.isFlipping()){this.addNoteEntry("FLIPPING");}
 }
 
-Ship.prototype.canBeIssuedToJumpOut = function(){
-	if (game.phase == 3 && this.friendly && this.status != "jumpOut"){return true;}
+Ship.prototype.needsWithdrawClickEvent = function(){
+	console.log("needsWithdrawClickEvent");
+	if (game.phase == 3 && this.friendly && this.actions[this.actions.length-1].type != "jumpOut"){return true;}
 	return false;
 }
 
 Ship.prototype.isJumpingOut = function(){
-	if (this.status == "jumpOut"){return true;}
+	console.log("isJumpingOut");
+	if (this.actions.length && this.actions[this.actions.length-1].type == "jumpOut"){return true;}
 	return false;
 }
 
 Ship.prototype.requestJumpOut = function(){
+	console.log("requestJumpOut");
 	if (!this.friendly){return;}
 	else if (this.destroyed){popup("Nice try, but you cant order this unit to withdraw.");}
 	else if (game.phase != 3){popup("You can only order withdrawal in </br>Phase 3 / Damage Control.");}
-	else if (this.status == "jumpOut"){this.doJumpOut();}
+	else if (this.isJumpingOut()){this.undoJumpOut();}
 	else instruct("Confirm if you really want to withdraw this unit from combat</p></p><div class='popupEntry buttonTD' style='font-size: 20px; width: 200px' onclick='game.getUnit(" + this.id + ").doJumpOut()'>Confirm Withdrawal</div>");
 }
 
 Ship.prototype.doJumpOut = function(){
-	if (this.status == "bought"){
-		this.status = "jumpOut";
-	} else this.status = "bought";
-
+	console.log("doJumpOut");
+	this.actions.push(new Move(-1, this.id, "jumpOut", 0, 0, this.x, this.y, this.drawFacing, 0, 0, 1, 1, 0));
 	if (this.hasFocus()){this.unsetUnitFocus();}
-	$(this.element).find(".jumpOut").toggleClass("selected");
+	$(this.element).find(".jumpOut").addClass("selected");
 	$("#instructWrapper").hide();
+}
+
+Ship.prototype.undoJumpOut = function(){
+	console.log("undoJumpOut");
+	this.actions.splice(this.actions.length-1, 1)
+	$(this.element).find(".jumpOut").removeClass("selected");
 }
 
 Ship.prototype.setFlipState = function(){
