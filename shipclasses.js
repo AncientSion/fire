@@ -3055,19 +3055,19 @@ Ship.prototype.setNotes = function(){
 }
 
 Ship.prototype.needsWithdrawClickEvent = function(){
-	console.log("needsWithdrawClickEvent");
+	//console.log("needsWithdrawClickEvent");
 	if (game.phase == 3 && this.friendly && this.actions[this.actions.length-1].type != "jumpOut"){return true;}
 	return false;
 }
 
 Ship.prototype.isJumpingOut = function(){
-	console.log("isJumpingOut");
+	//console.log("isJumpingOut");
 	if (this.actions.length && this.actions[this.actions.length-1].type == "jumpOut"){return true;}
 	return false;
 }
 
 Ship.prototype.requestJumpOut = function(){
-	console.log("requestJumpOut");
+	//console.log("requestJumpOut");
 	if (!this.friendly){return;}
 	else if (this.destroyed){popup("Nice try, but you cant order this unit to withdraw.");}
 	else if (game.phase != 3){popup("You can only order withdrawal in </br>Phase 3 / Damage Control.");}
@@ -3076,7 +3076,7 @@ Ship.prototype.requestJumpOut = function(){
 }
 
 Ship.prototype.doJumpOut = function(){
-	console.log("doJumpOut");
+	//console.log("doJumpOut");
 	this.actions.push(new Move(-1, this.id, "jumpOut", 0, 0, this.x, this.y, this.drawFacing, 0, 0, 1, 1, 0));
 	if (this.hasFocus()){this.unsetUnitFocus();}
 	$(this.element).find(".jumpOut").addClass("selected");
@@ -3084,7 +3084,7 @@ Ship.prototype.doJumpOut = function(){
 }
 
 Ship.prototype.undoJumpOut = function(){
-	console.log("undoJumpOut");
+	//console.log("undoJumpOut");
 	this.actions.splice(this.actions.length-1, 1)
 	$(this.element).find(".jumpOut").removeClass("selected");
 }
