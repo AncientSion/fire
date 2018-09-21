@@ -397,6 +397,7 @@ class Mixed extends Ship {
 			"status" => $this->status,
 			"notes" => $this->notes,
 		);
+	}
 }
 
 ?>
