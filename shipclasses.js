@@ -1564,7 +1564,7 @@ Ship.prototype.createMoraleLogEntry = function(){
 		html += " <span class='yellow'>Passed !</span class='yellow'>";
 	}
 	else {
-		html += "<span class='yellow'> Failed ! (Severity: " + numbers[2] + " + " (numbers[3]-numbers[2]) + " = " + numbers[3] +")</span></br>";
+		html += "<span class='yellow'> Failed ! (Severity: " + numbers[2] + " + " + (numbers[3]-numbers[2]) + " = " + numbers[3] +")</span></br>";
 		var effect = 0;
 		if (this.actions.length && this.actions[this.actions.length-1].type == "jumpOut"){
 			html += "The unit <span class='yellow'> is routed</span>.</td>";
