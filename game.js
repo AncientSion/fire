@@ -2070,6 +2070,8 @@ function Game(data){
 		for (var i = 0; i < this.ships.length; i++){
 			if (!this.ships[i].deployed){continue;}
 			for (var j = 0; j < this.ships[i].actions.length; j++){
+				if (!this.ships[i].actions[j].forced){continue;}
+				
 				if (this.ships[i].actions[j].forced && this.actions[i].type != "jumpOut"){
 					need = 1;
 					this.ships[i].toAnimate = 1;
