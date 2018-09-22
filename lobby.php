@@ -5,28 +5,31 @@ include_once $_SERVER["DOCUMENT_ROOT"]."/fire/global.php";
 //$dbManager = DBManager::app();
 //$dbManager->setInitialCommandUnit(1, 1, array(array("id" => 5, "name" => "Hyperion", "command" => 1)));
 
+
 if (0){
 	echo Manager::alterShipFiles();
 	return;
-}
-
-if (isset($_POST["anew"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
-	$name = "dump.sql";
-	echo DBManager::app()->anew($data, $name);
-	header("Location: lobby.php");
-}
-elseif (isset($_POST["dump"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
-	echo DBManager::app()->dump();
-	header("Location: lobby.php");
 }
 
 //echo DmgCalc::setWeaponPriority(); return;
 
 if (isset($_SESSION["userid"])){
 
+	$dbManager = DBManager::app();
+
+	if (isset($_POST["anew"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
+		echo $dbManager->anew();
+		header("Location: lobby.php");
+		return;
+	}
+	elseif (isset($_POST["dump"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
+		echo $dbManager->dump();
+		header("Location: lobby.php");
+		return;
+	}
+
 	$manager = new Manager(0, $_SESSION["userid"]);
 	$username = $manager->getUsername();
-	$dbManager = DBManager::app();
 
 	if (isset($_POST["gameName"]) && isset($_POST["pointValue"]) && isset($_POST["reinforceValue"]) && isset($_POST["reinforceTurn"])
 	&& isset($_POST["reinforceETA"])){

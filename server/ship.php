@@ -68,11 +68,11 @@ class Ship {
 	public $modFocusRate = 0;
 
 	public $critEffects = array( // type, min%, dura, effect
-		array("Rout", 10, -2, 0.00),
-		//array("Morale", 30, -2, -5.00),
-		//array("Morale", 60, -2, -15.00),
-		//array("Morale", 100, -2, -25.00),
-		//array("Rout", 150, -2, 0.00),
+		//array("Rout", 10, -2, 0.00),
+		array("Morale", 30, -2, -5.00),
+		array("Morale", 60, -2, -15.00),
+		array("Morale", 100, -2, -25.00),
+		array("Rout", 150, -2, 0.00),
 	);
 
 	function __construct($data){

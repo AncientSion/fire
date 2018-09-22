@@ -7,8 +7,8 @@
 
 		function __construct(){
 			if ($this->connection === null){
-				$data = Debug::db();
-				$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat", $data[0],$data[1]);
+				$access = Debug::access();
+				$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat", $access[0],$access[1]);
 				$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 			}
@@ -21,60 +21,53 @@
 	        return self::$instance;
 		}
 
-		public function anew($filename){
-			$access = Debug::db();
-			$dump = file($filename);
 
-			if (!$dump){return;}
+    public function dump(){
+    	$os = PHP_OS;
+		$access = Debug::access();
 
-			$sql = "";	
-			$tables = array();
+		if ($os != "WINNT"){
+			exec('mysqldump -u '.$access[0].' -p'.$access[1].' spacecombat > '.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
+		}
+		else {
+			exec('C:/xampp/mysql/bin/mysqldump -u '.$access[0].' -p'.$access[1].' spacecombat > '.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
+		}
+    }
 
-			foreach ($this->query("show tables") as $result){
-				$tables[] = $result["Tables_in_spacecombat"];
-			}
+    public function anew(){
+    	$os = PHP_OS;
+		$access = Debug::access();
+		
+		$dump = file("dump.sql");
 
-			for ($i = 0; $i < sizeof($tables); $i++){
-				$sql = "drop table ".$tables[$i];
+		if (!$dump){return;}
 
-				$stmt = $this->connection->prepare($sql);
-				$stmt->execute();
-				if ($stmt->errorCode() == 0){
-					$sql = "";
-					//echo "<div>dropping: ".$tables[$i]."</div>";
-				} else continue;
-			}
+		$sql = "";	
+		$tables = array();
 
-			echo "trying";
-			exec('mysql -u '.$access[0].' -p'.$access[1].' spacecombat <'.$_SERVER["DOCUMENT_ROOT"].'/fire/db.sql');
-			echo "inserted!";
-			return;
-
-
-			$dump = file($filename);
-			$sql = "";		
-
-			foreach ($dump as $line){
-				$startWith = substr(trim($line), 0 ,2);
-				$endWith = substr(trim($line), -1 ,1);
-				
-				if (empty($line) || $startWith == '--' || $startWith == '/*' || $startWith == '//' || $startWith == 'SE'){continue;}
-					
-				$sql = $sql.$line;
-				if ($endWith == ';'){
-					$stmt = $this->connection->prepare($sql);
-					$stmt->execute();
-					if ($stmt->errorCode() == 0){$sql = "";}
-					//else die("<div>Problem in executing the SQL query".$sql."</div>");
-				}
-			}
-			//echo "<div>SQL file imported successfully.</div>";
+		foreach ($this->query("show tables") as $result){
+			$tables[] = $result["Tables_in_spacecombat"];
 		}
 
-		public function dump(){
-			$access = Debug::db();
-			exec('mysqldump -u '.$access[0].' -p'.$access[1].' spacecombat >'.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
+		for ($i = 0; $i < sizeof($tables); $i++){
+			$sql = "drop table ".$tables[$i];
+
+			$stmt = $this->connection->prepare($sql);
+			$stmt->execute();
+			if ($stmt->errorCode() == 0){
+				$sql = "";
+				//echo "<div>dropping: ".$tables[$i]."</div>";
+			} else continue;
 		}
+
+
+		if ($os != "WINNT"){
+			exec('mysql -u '.$access[0].' -p'.$access[1].' spacecombat < '.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
+		}
+		else {
+			exec('C:/xampp/mysql/bin/mysql -u '.$access[0].' -p'.$access[1].' spacecombat < '.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
+		}
+	}
 
 		public function getLastInsertId(){
 			return $this->connection->lastInsertId();
