@@ -2519,7 +2519,7 @@ Pulse.prototype.getAnimation = function(fire){
 				oy += range(3, 6) * range(0, 1) * -1;
 				tx += range(3, 6) * range(0, 1) * -1;
 				ty += range(3, 6) * range(0, 1) * -1;
-				var shotAnim = new ShotVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
+				var shotAnim = new ShotVector({x: ox, y: oy}, {x: tx, y: ty}, speed, (k < subHits));
 					shotAnim.n = 0 - i*gunDelay - j*shotDelay
 				gunAnims.push(shotAnim);
 			}
