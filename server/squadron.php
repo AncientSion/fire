@@ -13,10 +13,6 @@ class Squadron extends Ship {
 	public $slots = 10;
 	public $baseFocusRate = 8;
 
-	public $critEffects =  array( // type, mag, dura, effect
-		array("Disabled", 140, 0, 0.00),
-	);
-
 	function __construct($data = false){
         parent::__construct($data);
 	}
@@ -32,6 +28,7 @@ class Squadron extends Ship {
 			$dmg = $this->structures[$i]->getRelDmg($turn);
 			if (!$dmg->new){continue;}
 			$this->structures[$i]->determineCrit($dmg, $turn, 0);
+			if ($this->structures[$i]->destroyed){continue;}
 
 			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
 				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){
@@ -342,7 +339,7 @@ class Squadron extends Ship {
 			}
 
 			for ($j = 0; $j < sizeof($this->structures); $j++){
-				/*
+				
 				if ($crits[$i]->systemid == $this->structures[$j]->id){
 					$this->structures[$j]->crits[] = $crits[$i];
 					if ($crits[$i]->type == "Disabled" && $crits[$i]->duration == 0){
@@ -351,7 +348,7 @@ class Squadron extends Ship {
 					$found = 1;
 					break;
 				}
-				*/
+				
 				for ($k = 0; $k < sizeof($this->structures[$j]->structures); $k++){
 					for ($l = 0; $l < sizeof($this->structures[$j]->structures[$k]->systems); $l++){
 						//Debug::log("system id: ".$this->structures[$j]->structures[$k]->systems[$l]->id);
