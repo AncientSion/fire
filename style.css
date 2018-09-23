@@ -1589,7 +1589,7 @@ tr.rowBorderBottom {
 	width: 100%;
 }
 
-.playerInfo div:first-child {
+.playerInfo .name {
 	font-size: 16px;
 }
 

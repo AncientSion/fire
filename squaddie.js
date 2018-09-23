@@ -80,6 +80,7 @@ Squaddie.prototype.getSysDiv = function(){
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
 		)
 
+	this.attachCritTypeInfo(div);
 	this.attachSysNotes(div);
 	this.attachSysMods(div);
 	return div;

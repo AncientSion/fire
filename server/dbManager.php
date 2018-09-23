@@ -1223,6 +1223,18 @@
 
 		public function insertNewGlobalEntries($playerstatus){
 			Debug::log(" => DB insertNewGlobalEntries");
+
+			$need = 0;
+			for ($i = 0; $i < sizeof($playerstatus); $i++){
+				for ($j = 0; $j < sizeof($playerstatus[$i]["globals"]); $j++){
+					if ($playerstatus[$i]["globals"][$j]["id"]){continue;}
+					$need = 1;
+				}
+			}
+
+			if (!$need){return;}
+			Debug::log("doing!");
+
 			
 			$stmt = $this->connection->prepare("
 				 INSERT into globals 

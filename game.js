@@ -55,7 +55,7 @@ function Game(data){
 	this.wave = data.wave;
 	this.arcRange = 1200;
 	this.animData = {jump: 15};
-	this.commandChange = {old: 0, new: 0}
+	this.commandChange = {old: 0, new: 0, original: 0}
 	this.subPhase = 1;
 	this.exclusiveSystem = false;
 
@@ -3657,18 +3657,26 @@ Game.prototype.setGameInfo = function(){
 
 Game.prototype.setFocusInfo = function(){
 	for (let i = 0; i < this.playerstatus.length; i++){
+		var ele = $("#upperGUI .playerInfo .focusInfo" + this.playerstatus[i].id);
+
 		if (game.turn == 1 && game.phase == -1 && this.playerstatus[i].userid != this.userid){
-			$("#upperGUI").find(".playerInfo").find(".focusInfo" + this.playerstatus[i].id).html("Unknown"); continue;
+
+			ele.find(".focusIncome").html("Unknown"); continue;
 		}
-		//var html = this.getUserCurFocus(i) + " + " + this.getUserFocusGain(i) + " / turn (max: " + this.getUserMaxFocus(i)+")";
+
 		var html = "<span class='yellow'>" + this.getUserCurFocus(i) + "</span> + " + this.getUserFocusGain(i) + " / turn";
-		$("#upperGUI").find(".playerInfo").find(".focusInfo" + this.playerstatus[i].id)
-			.html(html)
-			.data("userid", this.playerstatus[i].userid)
+
+		ele
 			.hover(
-				function(e){game.showFocusInfo(e, $(this).data("userid"));},
+				function(e){game.showFocusInfo(e, $(this).parent().data("userid"));},
 				function(){game.hideFocusInfo();}
 			)
+			.find(".focusIncome")
+				.html(html)
+				.data("userid", this.playerstatus[i].userid)
+			.end()
+			.find(".focusSpend")
+				.html("(0)");
 
 	}
 }
@@ -3848,6 +3856,11 @@ Game.prototype.getFocusSpending = function(){
 	}
 	return spend;
 }
+
+Game.prototype.setFocusSpendingInfo = function(userid){
+	$("#upperGUI .playerInfo .focusInfo" + this.playerstatus[i].id + " .focusSpend").html("(" + this.getFocusSpending() + ")");
+}
+
 Game.prototype.getPlayerStatus = function(){
 	for (let i = 0; i < this.playerstatus.length; i++){
 		if (this.playerstatus[i].userid == this.userid){return this.playerstatus[i];}
@@ -3866,22 +3879,25 @@ Game.prototype.addPlayerInfo = function(){
 		//var reduce = this.playerstatus[i].globals.map(x => x.value).reduce((l,r) => l+r, 0)
 
 
-		var div = $("<div>").addClass("playerInfo");
-			div.append($("<div>").html(this.playerstatus[i].username).addClass((this.playerstatus[i].userid == game.userid) ? "green" : "red")) //header
-			div.append($("<div>") // morale
+		var playerInfo = $("<div>").addClass("playerInfo").data("userid", this.playerstatus[i].userid)
+			playerInfo.append($("<div>").addClass("name").html(this.playerstatus[i].username).addClass((this.playerstatus[i].userid == game.userid) ? "green" : "red")) //header
+			playerInfo.append($("<div>") // morale
 				.addClass("fleetMorale")
 				.data("userid", this.playerstatus[i].userid)
-				//.append($("<div>").addClass("fleetMoraleMax").data("userid", this.playerstatus[i].userid))
-				//.append($("<div>").addClass("fleetMoraleNow").css("width", rem + "%"))
-				//.append($("<div>").addClass("fleetMoraleInt").html(round(start + reduce)))
 				.append($("<div>").addClass("fleetMoraleInta").html(round(start)))
 				.hover(
-					function(e){game.showFleetMorale(e, $(this).data("userid"))},
+					function(e){game.showFleetMorale(e, $(this).parent().data("userid"))},
 					function(){game.hideFleetMorale()}
 				)
-			)			
+			)
 
-			$(".playerInfoWrapper").append(div.append($("<div>").addClass("focusInfo" + this.playerstatus[i].id)));
+			playerInfo.append($("<div>")
+				.addClass("focusInfo" + this.playerstatus[i].id)
+				.append($("<div>")
+					.addClass("focusIncome"))
+				.append($("<div>")
+					.addClass("focusSpend")))
+			$(".playerInfoWrapper").append(playerInfo);
 	}
 
 	this.setFocusInfo()
@@ -4088,4 +4104,12 @@ Game.prototype.canSetNewCommandUnit = function(){
 		return true;
 	}
 	return false;
+}
+
+Game.prototype.userHasTransferedCommand = function(){
+	for (let i = 0; i < this.ships.length; i++){
+		if (this.ships[i].friendly && this.ships[i].command == game.turn +1){
+			return true;
+		}
+	} return false;
 }

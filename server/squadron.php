@@ -13,20 +13,26 @@ class Squadron extends Ship {
 	public $slots = 10;
 	public $baseFocusRate = 8;
 
+	public $critEffects =  array( // type, mag, dura, effect
+		array("Disabled", 140, 0, 0.00),
+	);
+
 	function __construct($data = false){
         parent::__construct($data);
 	}
 	
 	public function addAllSystems(){
 		$this->addPrimary();
-	}
+	}	
 
 	public function doTestCrits($turn){
+		//Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
 			$dmg = $this->structures[$i]->getRelDmg($turn);
 			if (!$dmg->new){continue;}
-			Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn." --- ".$this->structures[$i]->name." ".$i.", old/new ".$dmg->old."/".$dmg->new);
+			$this->structures[$i]->determineCrit($dmg, $turn, 0);
+
 			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
 				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){
 					$this->structures[$i]->structures[$j]->systems[$k]->determineCrit($dmg, $turn, 1);

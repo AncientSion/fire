@@ -709,20 +709,20 @@ class Ship {
 	}
 	
 	public function isReinforcing($turn, $phase){
-		Debug::log("isReinforcing! turn: ".$turn);
+		//Debug::log("isReinforcing! turn: ".$turn);
 		if ($phase == 3 && $this->available > 1 && $this->available == $turn+1){
-			Debug::log("y");
+			//Debug::log($this->id.": yes!");
 			return true;
 		} return false;
 	}
 
 	public function triggerMoraleChange($turn, $phase){
-		Debug::log("triggerMoraleChange #".$this->id);
-		if ($this->destroyed || $this->isWithdrawing() || $this->isReinforcing($turn, $turn)){
-			Debug::log("triggered!");
+		//Debug::log("triggerMoraleChange #".$this->id);
+		if ($this->destroyed || $this->isWithdrawing() || $this->isReinforcing($turn, $phase)){
+			//Debug::log("triggered!");
 			return true;
 		}
-		Debug::log("false");
+		//Debug::log("false");
 		return false;
 	}
 
@@ -739,7 +739,7 @@ class Ship {
 			$multi = 50;
 		}
 
-		Debug::log("getMoraleChangeValue ".$this->id.", multi ".$multi);
+		//Debug::log("getMoraleChangeValue ".$this->id.", multi ".$multi);
 		return $this->moraleCost / 100  * $multi;
 	}
 
@@ -813,7 +813,7 @@ class Ship {
 		}
 	}
 
-	public function getRoutString($phase){
+	public function getMoraleChangeString($turn, $phase){
 		$html = $this->name." #".$this->id;
 
 		if ($this->destroyed){
@@ -821,7 +821,11 @@ class Ship {
 		}
 		else if ($phase == 2){
 			$html .= " routed";
-		} else $html .= " withdrawn";
+		}
+		else if ($this->isReinforcing($turn, $phase)){
+			$html .= " reinforcing";
+		}
+		else $html .= " withdrawn";
 
 		return $html;
 	}

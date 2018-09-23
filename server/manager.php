@@ -557,7 +557,7 @@
 		$this->resolveJumpOutActions();
 		$this->handleInitialFireOrders();
 		$this->handleDeployActions();
-		$this->handleJumpInActions();
+		$this->handleJumpIn();
 		$this->assembleDeployStates();
 		$this->deleteAllReinforcements();
 		DBManager::app()->deleteEmptyLoads($this->gameid);
@@ -576,8 +576,8 @@
 		DBManager::app()->resolveDeployActions($data);
 	}
 
-	public function handleInitialEvents(){
-		Debug::log("handleInitialEvents");
+	public function handleJumpOut(){
+		Debug::log("handleJumpOut");
 
 		$needCheck = false;
 
@@ -585,17 +585,30 @@
 			if ($this->ships[$i]->isWithdrawing()){
 				$this->ships[$i]->status = "jumpOut";
 				$needCheck = true;
-			} else if ($this->ships[$i]->isReinforcing($this->turn, $this->phase)){
-				Debug::log("yep!");
+			}
+		}
+
+		if ($needCheck){
+			Debug::log("need");
+			$this->freeFlights();
+			$this->adjustFleetMorale();	
+		}
+	}
+
+	public function handleMoraleReinforcing(){
+		Debug::log("handleMoraleReinforcing");
+
+		$needCheck = false;
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->isReinforcing($this->turn, $this->phase)){
 				$needCheck = true;
 			}
 		}
 
 		if ($needCheck){
-			Debug::log("needCheck");
-			$this->freeFlights();
+			Debug::log("need");
 			$this->adjustFleetMorale();	
-			DBManager::app()->insertNewGlobalEntries($this->playerstatus);
 		}
 	}
 
@@ -616,8 +629,8 @@
 			$this->doFullDestroyedCheck();
 		}
 	}
-	public function handleJumpInActions(){
-		Debug::log("handleJumpInActions");
+	public function handleJumpIn(){
+		Debug::log("handleJumpIn");
 		$new = array();
 
 		$mod = 1;
@@ -999,7 +1012,10 @@
 	}
 	
 	public function handleDamageControlPhase(){
-		$this->handleInitialEvents();
+		$this->handleJumpOut();
+		$this->handleMoraleReinforcing();
+		DBManager::app()->insertNewGlobalEntries($this->playerstatus);
+		
 		return true;
 	}
 
@@ -1470,8 +1486,7 @@
 
 	public function adjustFleetMorale(){
 		Debug::log("-----------------adjustFleetMorale--------------");
-		Debug::log("ships: ".sizeof($this->ships));
-		Debug::log("reinforce: ".sizeof($this->reinforcements));
+
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			$full = $this->playerstatus[$i]["morale"];
 			Debug::log("max Morale: ".$full);
@@ -1480,8 +1495,6 @@
 				if ($this->ships[$j]->flight || $this->ships[$j]->salvo){continue;}
 				if ($this->ships[$j]->userid != $this->playerstatus[$i]["userid"]){continue;}
 				if (!$this->ships[$j]->triggerMoraleChange($this->turn, $this->phase)){continue;}
-
-				Debug::log("in");
 
 				$value = ceil($this->ships[$j]->getMoraleChangeValue($this->turn, $this->phase) / $full * 100);
 
@@ -1496,7 +1509,7 @@
 					"scope" => 1,
 					"value" => $value,
 					"notes" => $this->ships[$j]->notes,
-					"text" => $this->ships[$j]->getRoutString($this->phase)
+					"text" => $this->ships[$j]->getMoraleChangeString($this->turn, $this->phase)
 				);
 
 				//$this->ships[$j]->notes = "";
@@ -1557,9 +1570,9 @@
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			for ($j = 0; $j < sizeof($this->ships); $j++){
 				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
-				if ($this->ships[$j]->focus){
-					$this->playerstatus[$i]["curFocus"] -= ceil($this->ships[$j]->moraleCost);
-				}
+				if (!$this->ships[$j]->focus){continue;}
+
+				$this->playerstatus[$i]["curFocus"] -= ceil($this->ships[$j]->moraleCost);
 			}
 		}
 	}
@@ -1570,7 +1583,7 @@
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			$curFocus = $this->playerstatus[$i]["curFocus"];
-			$gainFocus = $this->playerstatus[$i]["gainFocus"];
+			$gainFocus = $this->userChangedCommandThisTurn($i) ? 0 : $this->playerstatus[$i]["gainFocus"];
 
 			$data[] = array(
 				"id" => $this->playerstatus[$i]["id"],
@@ -1582,6 +1595,15 @@
 
 		if (sizeof($data)){DBManager::app()->updateFocusValues($data);}
 	}		
+
+	public function userChangedCommandThisTurn($index){
+		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			if ($i == $index && $this->playerstatus[$i]["transfered"]){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public function setPostFireFocusValues(){
 		//Debug::log("setPostFireFocusValues");
@@ -1621,12 +1643,14 @@
 		$data = array();
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+				$this->playerstatus[$i]["transfered"] = false;
 			for ($j = 0; $j < sizeof($this->ships); $j++){
 				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
 				if ($this->ships[$j]->command != $this->turn){continue;}
 
 				$data[] = $this->getNewFocusValue($this->playerstatus[$i], $this->ships[$j]);
 
+				$this->playerstatus[$i]["transfered"] = true;
 				$this->playerstatus[$i]["curFocus"] = $data[sizeof($data)-1]["curFocus"];
 				$this->playerstatus[$i]["gainFocus"] = $data[sizeof($data)-1]["gainFocus"];
 				$this->playerstatus[$i]["maxFocus"] = $data[sizeof($data)-1]["maxFocus"];
@@ -1646,7 +1670,7 @@
 		else {
 			if ($this->phase == -1 && $this->turn > 1 && $unit->command == $this->turn){
 				Debug::log("Command has been transfered!");
-				$playerstatus["curFocus"] = 0;
+				//$playerstatus["curFocus"] = 0;
 			}
 
 			$output = 100;

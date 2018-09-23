@@ -742,22 +742,9 @@ Single.prototype.getSysDiv = function(){
 			.append($("<tr>").append($("<td>").html("Acceleration")).append($("<td>").html(this.baseImpulse)))
 			.append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html(this.getEMDmg())))
 			.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
-			.append($("<tr>")
-				.append($("<td>").attr("colSpan", 2).html("Critical test triggered if damaged for more than 15% of remaining HP.</br>D100 + own Damage%.")))
-			.append($("<tr>")
-				.append($("<td>").attr("colSpan", 2).css("height", 6)))
-			.append($("<tr>")
-				.append($("<th>").attr("colSpan", 2).html("Possible Effects")))
 		)
 
-	for (var i = 0; i < this.critEffects.length; i++){
-		div.find("tbody")			
-		.append($("<tr>")
-			.append($("<td>").html(">= " + this.critEffects[i][1]))
-			.append($("<td>").html(this.critEffects[i][0] + " " + (this.critEffects[i][3] ? this.critEffects[i][3] : ""))))
-	}
-
-
+	this.attachCritTypeInfo(div.find("tbody"));
 	this.attachSysNotes(div);
 	this.attachSysMods(div);
 	return div;
@@ -765,6 +752,23 @@ Single.prototype.getSysDiv = function(){
 
 Single.prototype.attachSysNotes = function(ele){
 	return;
+}
+
+Single.prototype.attachCritTypeInfo = function(ele){
+	ele
+	.append($("<tr>")
+		.append($("<td>").attr("colSpan", 2).html("Critical test if damaged for more than 15% of remaining HP.</br>D100 + Damage%.")))
+	.append($("<tr>")
+		.append($("<td>").attr("colSpan", 2).css("height", 6)))
+	.append($("<tr>")
+		.append($("<th>").attr("colSpan", 2).html("Possible Effects")))
+
+	for (var i = 0; i < this.critEffects.length; i++){
+		ele		
+		.append($("<tr>")
+			.append($("<td>").html(">= " + this.critEffects[i][1]))
+			.append($("<td>").html(this.critEffects[i][0] + " " + (this.critEffects[i][3] ? this.critEffects[i][3] : ""))))
+	}
 }
 
 Single.prototype.attachSysMods = function(ele){

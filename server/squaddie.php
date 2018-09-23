@@ -30,6 +30,10 @@ class Squaddie extends Single {
 	public $squaddie = 1;
 	public $traverse = 3;
 	
+	public $critEffects =  array( // type, mag, dura, effect
+		array("Disabled", 150, 0, 0.00),
+	);
+	
 	function __construct($id, $parentId){
 		$this->integrity = floor($this->integrity * 0.8);
 		parent::__construct($id, $parentId);
