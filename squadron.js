@@ -1003,3 +1003,20 @@ Squadron.prototype.getRemainingSlots = function(){
 Squadron.prototype.setSlotUsage = function(){
 	$(this.element).find(".squadSlots").html("Remaining Slots: " + this.getSlotsUsed() + " / " + this.getMaxSlots());
 }
+
+Squadron.prototype.getFocusCost = function(){
+	var cost = 0;
+	var recalculate = 0;
+	for (var i = 0; i < this.structures.length; i++){
+		cost += this.structures[i].cost;
+		if (this.structures[i].destroyed){
+			cost -= this.structures[i].cost;
+			recalculate = 1;
+		}
+	}
+
+	if (recalculate){
+		return cost;
+	}
+	return Math.ceil(this.moraleCost);
+}
