@@ -748,7 +748,7 @@ function Game(data){
 			var userid;
 			var color;
 
-			console.log(center);
+			//console.log(center);
 
 
 			if (this.playerstatus[i].userid == this.userid){
@@ -784,9 +784,9 @@ function Game(data){
 				c: color,
 				x: center.x,
 				y: center.y,
-				s: 800,
-				b: Math.min(550, Math.round(d*2.5)),
-				deleteW: 850,
+				s: 800 + (game.turn > 1)*200,
+				b: Math.min(550 + (game.turn > 1)*200, Math.round(d*2.5)),
+				deleteW: 850 + (game.turn > 1)*200,
 				start: step == -1 ? 90 : 270,
 				end: step == -1 ? 270 : 90
 			});
@@ -1062,9 +1062,6 @@ function Game(data){
 			}
 		}
 
-		ui.combatLogWrapper
-			.find(".combatLogHeader thead tr").last().remove().end()
-			.html("<th>Movement Resolution Log</th>").end().find("#combatLog tr").first().remove();
 		this.showUI();
 
 		this.createLogEntry("-- Movement concluded --");
@@ -1324,6 +1321,8 @@ function Game(data){
 	}
 
 	this.setLeftWrapperVisibility = function(){	
+
+		/*
 		$("#reinforce")
 			.data("on", 1)
 			.click(function(e){
@@ -1343,6 +1342,7 @@ function Game(data){
 					}
 				}
 			})
+		*/
 
 		var wrapper = $("#leftUnitWrapper");
 		var incoming = wrapper.find("#deployTable");
@@ -1350,19 +1350,12 @@ function Game(data){
 
 		if (game.turn != game.settings.reinforceTurn){avail.hide();}
 		else if (game.phase > -1){avail.hide();}
+		else ui.combatLogWrapper.css("top", 90).css("left", 240)
 		
 		if (incoming.find("tbody").children().length < 2){incoming.hide();}
 
 		if (!avail.is(":visible") && !incoming.is(":visible")){wrapper.hide();}
-
-	/*	if (incoming.children().children().length > 2 || avail.children().children().length > 3){
-			return;
-		} 
-		else {
-			$("#reinforce").data("on", 0);
-			wrapper.hide()
-		}
-	*/}
+	}
 
 	this.getUnitStatsNameString = function(unit){
 		var html = units[i].name + " #" + units[i].id;
@@ -2218,12 +2211,7 @@ function Game(data){
 			$("#leftUnitWrapper").show();
 			ui.reinforceWrapper.show();
 		}
-		this.createLogEntry("-- Initial Events concluded --")
-
-
-		ui.combatLogWrapper
-			.find(".combatLogHeader thead tr").last().remove().end()
-			.html("<th>Damage Control Resolution Log</th>").end().find("#combatLog tr").first().remove();
+		this.createLogEntry("-- Initial Events concluded --");
 		this.showUI(400);
 	}
 
@@ -2277,6 +2265,20 @@ function Game(data){
 	}
 
 	this.showUI = function(width){
+
+		var header = "";
+		if (game.phase == -1){header = "Damage Control Resolution Log";}
+		else if (game.phase == 0){header = "Initial Orders Resolution Log";}
+		if (game.phase == 1){header = "Base Movement Phase Resolution Log";}
+		if (game.phase == 2){header = "Focus Movement Control Resolution Log";}
+
+		if (game.phase != 3){
+		ui.combatLogWrapper
+			.find(".combatLogHeader thead tr").last().remove().end()
+			//.html("<th>Damage Control Resolution Log</th>").end().find("#combatLog tr").first().remove();
+			.html("<th>" + header + "</th>").end().find("#combatLog tr").first().remove();
+		}
+
 		if (ui.combatLogWrapper.find("#combatLog tr").children().length < 2){
 			ui.combatLogWrapper.css("width", 300)
 		} else if (width){
@@ -3392,10 +3394,6 @@ Game.prototype.resolveDeploy = function(){
 	}
 	
 	this.setCamera();
-	ui.combatLogWrapper
-		.css("width", 500)
-		.find(".combatLogHeader thead tr").last().remove().end()
-		.html("<th>Initial Phase Resolution Log</th>").end().find("#combatLog tr").first().remove();
 
 	if (!show){this.initialPhaseResolutionDone();}
 	else {
@@ -3827,8 +3825,12 @@ Game.prototype.showFocusInfo = function(e, userid){
 				.append($("<td>").attr("colSpan", 2).css("height", 10))
 			)
 			.append($("<tr>")
-				.append($("<th>").html("Final Focus Gain"))
-				.append($("<th>").html(this.playerstatus[i].gainFocus))
+				.append($("<td>").html("Final Focus Gain"))
+				.append($("<td>").html(this.playerstatus[i].gainFocus))
+			)
+			.append($("<tr>")
+				.append($("<td>").html("Max Focus"))
+				.append($("<td>").html(this.playerstatus[i].maxFocus))
 			)
 		))
 	return;

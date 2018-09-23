@@ -707,26 +707,39 @@ class Ship {
 			return true;
 		}
 	}
+	
+	public function isReinforcing($turn, $phase){
+		Debug::log("isReinforcing! turn: ".$turn);
+		if ($phase == 3 && $this->available > 1 && $this->available == $turn+1){
+			Debug::log("y");
+			return true;
+		} return false;
+	}
 
-	public function triggersMoraleLoss(){
-		if ($this->destroyed || $this->isWithdrawing()){
+	public function triggerMoraleChange($turn, $phase){
+		Debug::log("triggerMoraleChange #".$this->id);
+		if ($this->destroyed || $this->isWithdrawing() || $this->isReinforcing($turn, $turn)){
+			Debug::log("triggered!");
 			return true;
 		}
+		Debug::log("false");
 		return false;
 	}
 
-	public function getMoraleLossValue($phase){
-		$multi = 100;
+	public function getMoraleChangeValue($turn, $phase){
+		$multi = 0;
 
 		if ($this->destroyed){
-			$multi = 100;
+			$multi = -100;
 		} else if ($this->isWithdrawing()){
 			if ($phase == 3){
-				$multi = 50;
-			} else $multi = 75;
+				$multi = -50;
+			} else $multi = -75;
+		} else if ($this->isReinforcing($turn, $phase)){
+			$multi = 50;
 		}
 
-		Debug::log("getMoraleLossValue ".$this->id.", multi ".$multi);
+		Debug::log("getMoraleChangeValue ".$this->id.", multi ".$multi);
 		return $this->moraleCost / 100  * $multi;
 	}
 

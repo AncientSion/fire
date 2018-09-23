@@ -242,7 +242,7 @@
 				for ($i = 0; $i < sizeof($this->ships); $i++){
 					if ($this->ships[$i]->userid == $this->userid){continue;}
 					$this->ships[$i]->hideFireOrders($this->turn, $this->phase);
-					if ($this->ships[$i]->flight){ // flights pick dualmode in firing phase
+					if ($this->ships[$i]->flight){ // flights pick fpialmode in firing phase
 						$this->ships[$i]->hideAllPowers($this->turn);
 					}
 				} break;
@@ -541,8 +541,6 @@
 			}
 		}
 
-
-
 		//for ($i = 0; $i < sizeof($picks); $i++){
 		//	if ($picks[$i]["eta"] > 3){
 		//		$picks[$i]["cost"] *= 1 - ($picks[$i]["eta"] - 3)/20;
@@ -578,8 +576,8 @@
 		DBManager::app()->resolveDeployActions($data);
 	}
 
-	public function handleJumpOutActions(){
-		Debug::log("handleJumpOutActions");
+	public function handleInitialEvents(){
+		Debug::log("handleInitialEvents");
 
 		$needCheck = false;
 
@@ -587,11 +585,14 @@
 			if ($this->ships[$i]->isWithdrawing()){
 				$this->ships[$i]->status = "jumpOut";
 				$needCheck = true;
+			} else if ($this->ships[$i]->isReinforcing($this->turn, $this->phase)){
+				Debug::log("yep!");
+				$needCheck = true;
 			}
 		}
 
 		if ($needCheck){
-			Debug::log("needCheck!");
+			Debug::log("needCheck");
 			$this->freeFlights();
 			$this->adjustFleetMorale();	
 			DBManager::app()->insertNewGlobalEntries($this->playerstatus);
@@ -998,7 +999,7 @@
 	}
 	
 	public function handleDamageControlPhase(){
-		$this->handleJumpOutActions();
+		$this->handleInitialEvents();
 		return true;
 	}
 
@@ -1469,16 +1470,20 @@
 
 	public function adjustFleetMorale(){
 		Debug::log("-----------------adjustFleetMorale--------------");
+		Debug::log("ships: ".sizeof($this->ships));
+		Debug::log("reinforce: ".sizeof($this->reinforcements));
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			$full = $this->playerstatus[$i]["morale"];
 			Debug::log("max Morale: ".$full);
 
 			for ($j = 0; $j < sizeof($this->ships); $j++){
-				if ($this->ships[$j]->flight || $this->ships[$j]->salvo || $this->ships[$j]->available > $this->turn){continue;}
+				if ($this->ships[$j]->flight || $this->ships[$j]->salvo){continue;}
 				if ($this->ships[$j]->userid != $this->playerstatus[$i]["userid"]){continue;}
-				if (!$this->ships[$j]->triggersMoraleLoss()){continue;}
+				if (!$this->ships[$j]->triggerMoraleChange($this->turn, $this->phase)){continue;}
 
-				$value = ceil($this->ships[$j]->getMoraleLossValue($this->phase) / $full * 100);
+				Debug::log("in");
+
+				$value = ceil($this->ships[$j]->getMoraleChangeValue($this->turn, $this->phase) / $full * 100);
 
 				Debug::log("unit #".$this->ships[$j]->id.", moraleCost: ".$this->ships[$j]->moraleCost.", value: ".$value);
 
@@ -1489,7 +1494,7 @@
 					"turn" => $this->turn,
 					"type" => "Morale",
 					"scope" => 1,
-					"value" => -$value,
+					"value" => $value,
 					"notes" => $this->ships[$j]->notes,
 					"text" => $this->ships[$j]->getRoutString($this->phase)
 				);
