@@ -1372,6 +1372,10 @@ class Ship {
 	public function addMission($data, $userid, $turn, $phase){
 		return;
 	}
+	
+	public function getFocusCost(){
+		return $this->moraleCost;
+	}
 
 	public function doTestCrits($turn){
 		Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
@@ -1412,6 +1416,7 @@ class Ship {
 		}
 	}
 }
+
 
 class Medium extends Ship {
 	public $baseImpulse = 165;

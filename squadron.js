@@ -1007,16 +1007,22 @@ Squadron.prototype.setSlotUsage = function(){
 Squadron.prototype.getFocusCost = function(){
 	var cost = 0;
 	var recalculate = 0;
+	var centauri = 1;
+	var alive = 0;
 	for (var i = 0; i < this.structures.length; i++){
 		cost += this.structures[i].cost;
 		if (this.structures[i].destroyed){
 			cost -= this.structures[i].cost;
 			recalculate = 1;
+		} else alive++;
+
+		if (this.structures[i].faction != "Centauri Republic"){
+			centauri = 0;
 		}
 	}
 
 	if (recalculate){
-		return cost;
+		return Math.ceil(cost / 100 * (centauri && alive > 2) ? 85 : 100);
 	}
-	return Math.ceil(this.moraleCost);
+	else return Math.ceil(this.moraleCost);
 }

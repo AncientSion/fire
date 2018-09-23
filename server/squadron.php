@@ -409,6 +409,32 @@ class Squadron extends Ship {
 			}
 		}
 	}
+
+	public function getFocusCost(){
+		$cost = 0;
+		$recalculate = 0;
+		$centauri = 0;
+		$alive = 0;
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$cost += $this->structures[$i]->cost;
+
+			if ($this->structures[$i]->destroyed){
+				$cost -= $this->structures[$i]->cost;
+				$recalculate = 1;
+			}
+			else $alive++;
+
+			if ($this->structures[$i]->faction != "Centauri Republic"){
+				$centauri = 0;
+			}
+		}
+
+		if ($recalculate){
+			return ceil($cost / 100 * ($centauri && $alive > 2) ? 85 : 100);
+		}
+		return $this->moraleCost;
+	}
 }
 
 

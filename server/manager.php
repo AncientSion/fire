@@ -1572,7 +1572,7 @@
 				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
 				if (!$this->ships[$j]->focus){continue;}
 
-				$this->playerstatus[$i]["curFocus"] -= ceil($this->ships[$j]->moraleCost);
+				$this->playerstatus[$i]["curFocus"] -= ceil($this->ships[$j]->getFocusCost());
 			}
 		}
 	}
