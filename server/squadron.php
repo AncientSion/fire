@@ -431,7 +431,7 @@ class Squadron extends Ship {
 		}
 
 		if ($recalculate){
-			return ceil($cost / 100 * (($centauri && $alive > 2) ? 85 : 100));
+			return round($cost / 100 * (($centauri && $alive > 2) ? 85 : 100));
 		}
 		return $this->moraleCost;
 	}

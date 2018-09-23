@@ -1022,7 +1022,7 @@ Squadron.prototype.getFocusCost = function(){
 	}
 
 	if (recalculate){
-		return Math.ceil(cost / 100 * ((centauri && alive > 2) ? 85 : 100));
+		return Math.round(cost / 100 * ((centauri && alive > 2) ? 85 : 100));
 	}
-	else return Math.ceil(this.moraleCost);
+	else return Math.round(this.moraleCost);
 }
