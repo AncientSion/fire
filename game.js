@@ -3857,7 +3857,7 @@ Game.prototype.getFocusSpending = function(){
 	return spend;
 }
 
-Game.prototype.setFocusSpendingInfo = function(userid){
+Game.prototype.setFocusSpendingInfo = function(i){
 	$("#upperGUI .playerInfo .focusInfo" + this.playerstatus[i].id + " .focusSpend").html("(" + this.getFocusSpending() + ")");
 }
 
