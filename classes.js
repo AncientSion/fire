@@ -669,6 +669,21 @@ Single.prototype.doDestroy = function(){
 }
 
 Single.prototype.isDestroyedThisTurn = function(){
+	if (this.disabled || this.destroyed){
+		for (var j = this.crits.length-1; j >= 0; j--){
+			if (this.crits[j].type == "Disabled" && this.crits[j].turn == game.turn){
+				return true;
+			}
+		}
+		for (var j = this.damages.length-1; j >= 0; j--){
+			if (this.damages[j].destroyed == 1 && this.damages[j].turn == game.turn){
+				return true;
+			}
+		}					
+	}
+	return false;
+
+	
 	//if (this.parentId == 53 && this.id == 7){return true;}
 	if (this.disabled){
 		for (var j = this.crits.length-1; j >= 0; j--){

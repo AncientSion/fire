@@ -392,7 +392,7 @@ Mixed.prototype.setSubSystemState = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].crits.length; j++){
 			if (this.structures[i].crits[j].type == "Disabled"){
-				this.structures[i].disabled = true;
+				this.structures[i].destroyed = true;
 			}
 		}
 
@@ -400,12 +400,6 @@ Mixed.prototype.setSubSystemState = function(){
 			this.structures[i].doDraw = 0;
 			for (var k = 0; k < this.structures[i].systems.length; k++){
 				this.structures[i].systems[k].destroyed = true;
-			}
-		}
-		else if (this.structures[i].disabled){
-			this.structures[i].doDraw = 0;
-			for (var k = 0; k < this.structures[i].systems.length; k++){
-				this.structures[i].systems[k].disabled = true;
 			}
 		}
 	}
