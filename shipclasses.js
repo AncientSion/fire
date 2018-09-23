@@ -2652,7 +2652,7 @@ Ship.prototype.setUnitFocus = function(){
 	if (game.phase != 3){popup("Focus can only be issued in Phase 3 - Damage Control"); return;}
 	if (game.userHasTransferedCommand()){popup("Ongoing Fleet Command transfer prohibits Focus"); return;}
 	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace."); return;}
-	if (!this.canAffordFocus()){popup("You are lacking focus ressources for this action.</br>Have: " + game.getRemFocus() + "</br>Spending: " + game.getFocusSpending() + "</br>Need: " + this.getFocusCost()); return;}
+	if (!this.canAffordFocus()){popup("You are lacking focus ressources for this action.</br>Have: " + game.getRemFocus() + "</br>Spending: " + game.getTotalFocusSpending() + "</br>Need: " + this.getFocusCost()); return;}
 	if (!this.focus){
 		this.focus = 1;
 		$(this.element).find(".focusContainer").find("input").attr("value", "Has Focus (" + this.getFocusCost() + " FP)");
@@ -2671,7 +2671,7 @@ Ship.prototype.unsetUnitFocus = function(){
 }
 
 Ship.prototype.canAffordFocus = function(){
-	if (game.getRemFocus() - game.getFocusSpending() - this.getFocusCost() >= 0){
+	if (game.getRemFocus() - game.getTotalFocusSpending() - this.getFocusCost() >= 0){
 		return true;
 	} return false;
 }

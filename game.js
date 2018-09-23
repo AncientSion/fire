@@ -3848,17 +3848,17 @@ Game.prototype.hideFocusInfo = function(){
 	$("#sysDiv").remove();
 }
 
-Game.prototype.getFocusSpending = function(){
+Game.prototype.getTotalFocusSpending = function(){
 	var spend = 0;
 	for (let i = 0; i < this.ships.length; i++){
 		if (!this.ships[i].friendly){continue;}
-		if (this.ships[i].focus){spend += Math.ceil(this.ships[i].cost);}
+		if (this.ships[i].focus){spend += this.ships[i].getFocusCost();}
 	}
 	return spend;
 }
 
 Game.prototype.setFocusSpendingInfo = function(userid){
-	$("#upperGUI .playerInfo .focusInfo" + userid + " .focusSpend").html("(" + this.getFocusSpending() + ")");
+	$("#upperGUI .playerInfo .focusInfo" + userid + " .focusSpend").html("(" + this.getTotalFocusSpending() + ")");
 }
 
 Game.prototype.getPlayerStatus = function(){
