@@ -1113,20 +1113,19 @@ div.integrityFull {
 	height: 100%;
 }
 
-.singleDiv .overlay {
+.overlay {
     position: absolute;
     z-index: 10;
     height: 40px;
     width: 40px;
     left: 5px;
 }
+
 .squad .overlay {
-    position: relative;
-    z-index: 10;
-    height: 40%;
-    width: 40%;
-    top: 95px;
-    left: 30%;
+    left: 12px;
+    top: 3px;
+    height: 50px;
+    width: 50px;
 }
 
 .selectionHighlight {

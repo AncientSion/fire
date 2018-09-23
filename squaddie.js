@@ -89,19 +89,7 @@ Squaddie.prototype.getSysDiv = function(){
 Squaddie.prototype.expandElement = function(){
 
 	var img = $(this.getBaseImage().cloneNode(true)).addClass("size70 rotate270");
-
-	if (this.destroyed){ // RED X
-		$(this.element)
-			.append($("<img>")
-				.attr("src", "varIcons/destroyed.png")
-				.addClass("overlay")//.css("width", cWidth).css("height", cHeight)
-				.hover(function(e){
-					var data = $(this).closest(".unitContainer").data();
-					game.getUnit(data.shipId).getSystem(data.systemId).hover(e);
-				})
-			)
-	}
-	else {
+	if (!this.destroyed){
 		img
 		.click(function(){
 			var data = $(this).closest(".unitContainer").data();
@@ -119,6 +107,23 @@ Squaddie.prototype.expandElement = function(){
 	}
 
 
+	var imgCont = $("<div>")
+		.addClass("imageContainer")
+		.append(img);
+
+	if (this.destroyed){ // RED X
+		$(imgCont)
+			.append($("<img>")
+				.attr("src", "varIcons/destroyed.png")
+				.addClass("overlay")//.css("width", cWidth).css("height", cHeight)
+				.hover(function(e){
+					var data = $(this).closest(".unitContainer").data();
+					game.getUnit(data.shipId).getSystem(data.systemId).hover(e);
+				})
+			)
+	}
+
+
 	var pDiv = $("<div>")
 		.addClass("primaryDiv")
 	var cTable = $("<table>")
@@ -127,7 +132,7 @@ Squaddie.prototype.expandElement = function(){
 		.append(this.getArmourData())
 		.append($("<tr>")
 			.append($("<td>").attr("colspan", 3)
-				.append(img)
+				.append(imgCont)
 			)
 		)
 
