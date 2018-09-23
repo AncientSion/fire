@@ -3857,8 +3857,8 @@ Game.prototype.getFocusSpending = function(){
 	return spend;
 }
 
-Game.prototype.setFocusSpendingInfo = function(i){
-	$("#upperGUI .playerInfo .focusInfo" + this.playerstatus[i].id + " .focusSpend").html("(" + this.getFocusSpending() + ")");
+Game.prototype.setFocusSpendingInfo = function(userid){
+	$("#upperGUI .playerInfo .focusInfo" + userid + " .focusSpend").html("(" + this.getFocusSpending() + ")");
 }
 
 Game.prototype.getPlayerStatus = function(){
@@ -3883,7 +3883,6 @@ Game.prototype.addPlayerInfo = function(){
 			playerInfo.append($("<div>").addClass("name").html(this.playerstatus[i].username).addClass((this.playerstatus[i].userid == game.userid) ? "green" : "red")) //header
 			playerInfo.append($("<div>") // morale
 				.addClass("fleetMorale")
-				.data("userid", this.playerstatus[i].userid)
 				.append($("<div>").addClass("fleetMoraleInta").html(round(start)))
 				.hover(
 					function(e){game.showFleetMorale(e, $(this).parent().data("userid"))},
@@ -3892,7 +3891,7 @@ Game.prototype.addPlayerInfo = function(){
 			)
 
 			playerInfo.append($("<div>")
-				.addClass("focusInfo" + this.playerstatus[i].id)
+				.addClass("focusInfo" + this.playerstatus[i].userid)
 				.append($("<div>")
 					.addClass("focusIncome"))
 				.append($("<div>")
