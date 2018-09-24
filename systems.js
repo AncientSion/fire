@@ -2514,7 +2514,7 @@ Pulse.prototype.getAnimation = function(fire){
 
 			gunAnims.push(shotAnim);
 
-			if (linked){
+			if (linked && !fire.shooter.flight){
 				ox += range(3, 6) * range(0, 1) * -1;
 				oy += range(3, 6) * range(0, 1) * -1;
 				tx += range(3, 6) * range(0, 1) * -1;
