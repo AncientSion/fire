@@ -51,7 +51,7 @@
 		</div>
 
 		<?php
-			echo "<div class='chatWrapper disabled' style='width: 400px'>";
+			echo "<div class='chatWrapper disabled' style='width: 500px'>";
 			$value = "";
 			DBManager::app()->purgeChat();				
 			$chat = DBManager::app()->getFullChat();
