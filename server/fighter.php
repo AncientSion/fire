@@ -45,12 +45,10 @@ class Aurora extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new ParticleGun($this->getId(), $this->parentId, $this->id, 2, 1, 12, 16);
-		return;
 		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
 			array(
 				array("FighterStandard", 1, 12, 16),
-				array("FighterStrafe", 3, 12, 16)
+				array("FighterStrafe", 1, 12, 16)
 			)
 		);
 

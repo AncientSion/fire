@@ -55,13 +55,15 @@ class DmgCalc {
 
 		if ($chanceRoll <= $failChance){
 			$failed = 1;
-			$crit->notes = "f;".$failChance.";".$chanceRoll;
-			Debug::log("___opening test FAIL, failChance: ".$failChance.", rolled: ".$chanceRoll);
+			$crit->notes = "f;";
+			//Debug::log("___opening test FAIL, failChance: ".$failChance.", rolled: ".$chanceRoll);
 		}
 		else {
-			$crit->notes = "p;".$failChance.";".$chanceRoll;
-			Debug::log("___opening test SUCESS, failChance: ".$failChance.", rolled: ".$chanceRoll);
+			$crit->notes = "p;";
+			//Debug::log("___opening test SUCESS, failChance: ".$failChance.", rolled: ".$chanceRoll);
 		}
+
+		$crit->notes .= $failChance.";".$chanceRoll;
 
 		if ($failed){
 			$magRoll = mt_rand(1, 100);
@@ -273,7 +275,9 @@ class DmgCalc {
 		$remInt = $system->getRemIntegrity();
 		$okSystem = 0;
 
+		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 		$negation = $fire->target->getArmour($fire, $system);
+		$dmg = DmgCalc::calcDmg($fire->weapon, $totalDmg, $negation);
 
 		$total = 0;
 		$shield = 0;
@@ -293,7 +297,7 @@ class DmgCalc {
 			echo "</br></br>";
 		}*/
 
-		for ($i = 0; $i < $hits; $i++){
+		for ($i = 1; $i < $hits; $i++){
 			$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 			$dmg = DmgCalc::calcDmg($fire->weapon, $totalDmg, $negation);
 
@@ -306,6 +310,7 @@ class DmgCalc {
 			$em += $dmg->emDmg;
 			//Debug::log("added hit ".($i+1).", ".$shield."/".$armour."/".$struct);
 		}
+
 		$dmg->notes .= ("v".$hits.";");
 		$dmg->shieldDmg = $shield;
 		$dmg->armourDmg = $armour;

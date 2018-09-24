@@ -3025,8 +3025,10 @@ Game.prototype.doPositionChat = function(){
 }
 
 Game.prototype.initOptionsUI = function(){
-	//$(".optionsWrapper").css("top", 2).css("left", res.x - 10 - 85)
-	$(".optionsWrapper").css("top", res.y - 90).css("left", 2)
+
+	this.buildCheatSheet();
+
+	$(".optionsWrapper").css("top", res.y - 50).css("left", 2)
 	.find(".options").each(function(i){
 		$(this).mousedown(function(e){e.preventDefault();});
 		if (i == 0){
@@ -3048,13 +3050,110 @@ Game.prototype.initOptionsUI = function(){
 			})
 		}
 		else if (i == 2){
-			$(this).click(function(){game.toggleDrawMovePaths();})
+			$(this).click(function(){game.toggleDrawMovePaths();});
 			$(this).addClass("selected");
 		}
 		else if (i == 3){
-			$(this).click(function(){game.toggleDistMeter();})
+			$(this).click(function(){game.toggleDistMeter();});
+		}
+		else if (i == 4){
+			$(this).click(function(){game.toggleCheatSheet();});
 		}
 	}).end().drag();
+}
+
+Game.prototype.buildCheatSheet = function(){
+	$("#cheatSheet")
+		.css("top", res.y - 400)
+		.addClass("disabled")
+		.append($("<table>")
+			.append($("<thead>"))
+		/*		.append($("<tr>")
+					.append($("<th>")
+						.attr("colSpan", 4)
+						.html("Cheat Sheet")))
+				.append($("<tr>")
+					.append($("<th>")
+						.attr("colSpan", 4)
+						.html("EW effect")))
+		*/		.append($("<tr>")
+					.append($("<th>").css("width", 60).html("Shooter"))
+					.append($("<th>").css("width", 60).html("Type"))
+					.append($("<th>").css("width", 60).html("Target"))
+					.append($("<th>").css("width", 120).html("Effect")))
+			.append($("<tbody>")
+				.append($("<tr>")
+					.append($("<td>").attr("colSpan", 4).css("height", 20)))
+				.append($("<tr>")
+					.append($("<td>").html("Ship"))
+					.append($("<td>").html("OEW"))
+					.append($("<td>").html("Ship"))
+					.append($("<td>").html("+0.50 / +0.06")))
+				.append($("<tr>")
+					.append($("<td>"))
+					.append($("<td>"))
+					.append($("<td>")
+						.html("Flight"))
+					.append($("<td>")
+						.html("+1.00")))
+				.append($("<tr>")
+					.append($("<td>"))
+					.append($("<td>"))
+					.append($("<td>")
+						.html("Salvo"))
+					.append($("<td>")
+						.html("+3.00")))
+				.append($("<tr>")
+					.append($("<td>"))
+					.append($("<td>")
+						.html("DEW"))
+					.append($("<td>")
+						.html("Ship"))
+					.append($("<td>")
+						.html("-0.50 / -0.06")))
+				.append($("<tr>")
+					.append($("<td>"))
+					.append($("<td>"))
+					.append($("<td>")
+						.html("Flight"))
+					.append($("<td>")
+						.html("No effect")))
+				.append($("<tr>")
+					.append($("<td>"))
+					.append($("<td>"))
+					.append($("<td>")
+						.html("Salvo"))
+					.append($("<td>")
+						.html("-0.50")))
+				.append($("<tr>")
+					.append($("<td>").attr("colSpan", 4).css("height", 20)))
+				.append($("<tr>")
+					.append($("<td>").html("Flight"))
+					.append($("<td>").html("Attack Mission Target"))
+					.append($("<td>").html("Ship"))
+					.append($("<td>").html("+0.25")))
+				.append($("<tr>")
+					.append($("<td>").html(""))
+					.append($("<td>").html(""))
+					.append($("<td>").html("Flight"))
+					.append($("<td>").html("+1.00")))
+				.append($("<tr>")
+					.append($("<td>").html(""))
+					.append($("<td>").html(""))
+					.append($("<td>").html("Salvo"))
+					.append($("<td>").html("+2.00")))
+			))
+		.append($("<div>").css("height", 30))
+		.append($("<table>")
+			.append($("<tr>")
+				.append($("<td>")
+					.html("Flight / Salvo max speed: 3x Acceleration Value"))))
+}
+
+
+Game.prototype.toggleCheatSheet = function(){
+	$(".optionsWrapper .cheatSheet").toggleClass("selected");
+	$("#cheatSheet").toggleClass("disabled");
 }
 
 Game.prototype.toggleDistMeter = function(){
@@ -3657,10 +3756,9 @@ Game.prototype.setGameInfo = function(){
 
 Game.prototype.setFocusInfo = function(){
 	for (let i = 0; i < this.playerstatus.length; i++){
-		var ele = $("#upperGUI .playerInfo .focusInfo" + this.playerstatus[i].id);
+		var ele = $("#upperGUI .playerInfo .focusInfo" + this.playerstatus[i].userid);
 
 		if (game.turn == 1 && game.phase == -1 && this.playerstatus[i].userid != this.userid){
-
 			ele.find(".focusIncome").html("Unknown"); continue;
 		}
 
@@ -3883,7 +3981,7 @@ Game.prototype.addPlayerInfo = function(){
 			playerInfo.append($("<div>").addClass("name").html(this.playerstatus[i].username).addClass((this.playerstatus[i].userid == game.userid) ? "green" : "red")) //header
 			playerInfo.append($("<div>") // morale
 				.addClass("fleetMorale")
-				.append($("<div>").addClass("fleetMoraleInta").html(round(start)))
+				.append($("<div>").addClass("fleetMorale" + this.playerstatus[i].userid).html(round(start)))
 				.hover(
 					function(e){game.showFleetMorale(e, $(this).parent().data("userid"))},
 					function(){game.hideFleetMorale()}
@@ -3899,7 +3997,7 @@ Game.prototype.addPlayerInfo = function(){
 			$(".playerInfoWrapper").append(playerInfo);
 	}
 
-	this.setFocusInfo()
+	this.setFocusInfo();
 }
 
 Game.prototype.setConfirmInfo = function(){

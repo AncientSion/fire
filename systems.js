@@ -2470,7 +2470,8 @@ Pulse.prototype.getAnimation = function(fire){
 		}
 		else if (fire.shooter.flight){
 			grouping = 1;
-			gunDelay = 10;
+			gunDelay = 5;
+			fraction = 2;
 		}
 	}
 	else if (fire.dist < 200){

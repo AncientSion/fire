@@ -58,6 +58,7 @@ class FighterStrafe extends FighterWeapon {
 	}
 
 	public function getMultiShotHits($fire, $element){
+		//Debug::log("req: ".$fire->req.", roll: ".$fire->rolls[sizeof($fire->rolls)-1].", grouping: ".$this->grouping);
 		return $this->basePulses + min($this->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $this->grouping));
 	}
 }

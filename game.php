@@ -84,6 +84,9 @@
 			<div class="options distMeter">
 				<img src=varIcons/dist.png>
 			</div>
+			<div class="options cheatSheet">
+				<img src=varIcons/dist.png>
+			</div>
 		</div>
 		<div id="plusImpulse" class="ui disabled">
 			<img src="varIcons/plus.png" style="width: 25px; height: 25px">
@@ -156,6 +159,7 @@
 			-->
 			</table>
 		</div>
+		<div id="cheatSheet"></div>
 		<div id="epButton" class="turnEle ui disabled">
 			<table style="margin:auto; width: 100%;">
 				<tr>

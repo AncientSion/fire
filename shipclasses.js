@@ -3097,8 +3097,8 @@ Ship.prototype.requestJumpOut = function(){
 }
 
 Ship.prototype.doJumpOut = function(){
-	//console.log("doJumpOut");
-	this.actions.push(new Move(-1, this.id, "jumpOut", 0, 0, this.x, this.y, this.drawFacing, 0, 0, 1, 1, 0));
+	var p = this.getPlannedPos();
+	this.actions.push(new Move(-1, this.id, "jumpOut", 0, 0, p.x, p.y, this.drawFacing, 0, 0, 1, 1, 0));
 	if (this.hasFocus()){this.unsetUnitFocus();}
 	$(this.element).find(".jumpOut").addClass("selected");
 	$("#instructWrapper").hide();

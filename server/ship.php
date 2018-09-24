@@ -1160,7 +1160,7 @@ class Ship {
 		$dmg = $this->getRelDmg($turn);
 		Debug::log("doTestMorale ".get_class($this)."# ".$this->id." remMorale: ".$this->morale->rem." #".$this->id.", newRel: ".$dmg->rel);
 
-		$crit = DmgCalc::moraleCritProcedure($this->id, (1+$this->squad), $turn, $dmg->rel, $this->critEffects, 100 - $this->morale->rem);
+		$crit = DmgCalc::moraleCritProcedure($this->id, (2-$this->squad), $turn, $dmg->rel, $this->critEffects, 100 - $this->morale->rem);
 		if (!$crit){return;}
 
 		$this->notes = $crit->notes;

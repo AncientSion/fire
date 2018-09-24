@@ -1318,6 +1318,7 @@
 			//var_export($this->fires[$i]->id);
 			//Debug::log("weapon: ".get_class($this->fires[$i]->weapon));
 			$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
+			//Debug::log("shots: ".$this->fires[$i]->shots);
 			$this->fires[$i]->target = $this->getUnit($this->fires[$i]->targetid);
 			//var_export($this->fires[$i]->weapon); echo "</br></br>";
 			//var_export($this->fires[$i]->weapon->getBoostLevel($this->turn)); echo "</br></br>";
