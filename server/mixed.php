@@ -396,7 +396,7 @@ class Mixed extends Ship {
 			"rolled" => $this->isRolled(),
 			"flipped" => $this->flipped,
 			"status" => $this->status,
-			"notes" => $this->notes,
+			"notes" => "",
 		);
 	}
 }
