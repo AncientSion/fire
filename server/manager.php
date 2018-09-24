@@ -591,8 +591,8 @@
 		if ($needCheck){
 			Debug::log("need");
 			$this->freeFlights();
-			$this->adjustFleetMorale();	
-		}
+			return true;
+		} return false;
 	}
 
 	public function handleMoraleReinforcing(){
@@ -608,8 +608,8 @@
 
 		if ($needCheck){
 			Debug::log("need");
-			$this->adjustFleetMorale();	
-		}
+			return true;
+		} return false;
 	}
 
 	public function resolveJumpOutActions(){
@@ -1012,10 +1012,10 @@
 	}
 	
 	public function handleDamageControlPhase(){
-		$this->handleJumpOut();
-		$this->handleMoraleReinforcing();
-		DBManager::app()->insertNewGlobalEntries($this->playerstatus);
-		
+		if ($this->handleJumpOut() || $this->handleMoraleReinforcing()){
+			$this->adjustFleetMorale();
+			DBManager::app()->insertNewGlobalEntries($this->playerstatus);
+		}
 		return true;
 	}
 
