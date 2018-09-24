@@ -54,7 +54,7 @@ function Game(data){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.animData = {jump: 15};
+	this.animData = {jump: 30};
 	this.commandChange = {old: 0, new: 0, original: 0}
 	this.subPhase = 1;
 	this.exclusiveSystem = false;
@@ -3835,7 +3835,7 @@ Game.prototype.showFleetMorale = function(e, userid){
 		.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 10)))
 		.append($("<tr>")
 			.append($("<td>").html("Initial Morale"))
-			.append($("<td>").html(this.playerstatus[i].globals[0].value))
+			.append($("<td>").css("width", 50).html(this.playerstatus[i].globals[0].value))
 		)
 
 	for (var j = 1; j < this.playerstatus[i].globals.length; j++){
@@ -3875,11 +3875,12 @@ Game.prototype.showFleetMorale = function(e, userid){
 
 
 	for (var i = 0; i < this.const.morale.length; i++){
-			div.find("table")			
+		div
+		.append($("<table>")	
 			.append($("<tr>")
 				.append($("<td>").html(">= " + this.const.morale[i][1]))
-				.append($("<td>").html(this.const.morale[i][0] + " " + (this.const.morale[i][3] ? this.const.morale[i][3] : ""))))
-		}
+				.append($("<td>").css("width", 80).html(this.const.morale[i][0] + " " + (this.const.morale[i][3] ? this.const.morale[i][3] : "")))))
+	}
 	$(document.body).append(div);
 }
 
