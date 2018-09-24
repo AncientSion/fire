@@ -85,11 +85,6 @@ class Squadron extends Ship {
 			$command->getCrewLevel() * $command->getCrewEffect(),
 			$command->getCritMod("Morale", $turn)
 		);
-
-
-
-		$this->morale = new Morale($this->getBaseMorale(), $dmg, $this->command, $training, 0);
-		//var_export($this->morale);
 	 }
 
 
