@@ -3879,7 +3879,7 @@ Game.prototype.showFleetMorale = function(e, userid){
 		.append($("<table>")	
 			.append($("<tr>")
 				.append($("<td>").html(">= " + this.const.morale[i][1]))
-				.append($("<td>").css("width", 80).html(this.const.morale[i][0] + " " + (this.const.morale[i][3] ? this.const.morale[i][3] : "")))))
+				.append($("<td>").css("width", 100).html(this.const.morale[i][0] + " " + (this.const.morale[i][3] ? this.const.morale[i][3] : "")))))
 	}
 	$(document.body).append(div);
 }
