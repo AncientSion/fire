@@ -2386,7 +2386,7 @@ Particle.prototype.getAnimation = function(fire){
 		}
 		else if (fire.shooter.flight){
 			grouping = 1;
-			fraction = 1.5;
+			//fraction = 1.5;
 		}
 	}
 	else if (fire.dist < 200){
@@ -2470,7 +2470,7 @@ Pulse.prototype.getAnimation = function(fire){
 		}
 		else if (fire.shooter.flight){
 			grouping = 1;
-			fraction = 1.5;
+			//fraction = 1.5;
 		}
 	}
 	else if (fire.dist < 200){
