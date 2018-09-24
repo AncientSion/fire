@@ -2384,10 +2384,8 @@ Particle.prototype.getAnimation = function(fire){
 		if (fire.shooter.ship || fire.shooter.squad){
 			fraction = 2;
 		}
-		else if (fire.shooter.flight && (fire.target.ship || fire.target.squad)){
-			fraction = 1.5;
-		} 
 		else if (fire.shooter.flight){
+			grouping = 1;
 			fraction = 1.5;
 		}
 	}
@@ -2470,10 +2468,8 @@ Pulse.prototype.getAnimation = function(fire){
 		if (fire.shooter.ship || fire.shooter.squad){
 			fraction = 2;
 		}
-		else if (fire.shooter.flight && (fire.target.ship || fire.target.squad)){
-			fraction = 1.5;
-		} 
 		else if (fire.shooter.flight){
+			grouping = 1;
 			fraction = 1.5;
 		}
 	}
