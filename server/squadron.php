@@ -76,8 +76,17 @@ class Squadron extends Ship {
 			$dmg = ($integrity - $remaining) / $integrity * -100;
 		}
 
+		$command = $this->getSystemByName("Command");
+		
+		$this->morale = new Morale(
+			$this->getBaseMorale(),
+			$dmg,
+			$this->command,
+			$command->getCrewLevel() * $command->getCrewEffect(),
+			$command->getCritMod("Morale", $turn)
+		);
 
-		$training = $this->getSystemByName("Command")->getCrewLevel() * $this->getSystemByName("Command")->getCrewEffect();
+
 
 		$this->morale = new Morale($this->getBaseMorale(), $dmg, $this->command, $training, 0);
 		//var_export($this->morale);

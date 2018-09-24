@@ -1241,7 +1241,7 @@ function Game(data){
 					html += "<span class='yellow'>Passed !</span class='yellow'>";
 				}
 				else {	
-					html += "<span class='yellow'> Failed ! (Severity: " + numbers[2] + " + " + (numbers[3]-numbers[2]) + " = " + numbers[3] +")</span></br>";
+					html += "<span class='yellow'> Failed ! (Severity: Roll " + numbers[2] + " + " + (numbers[3]-numbers[2]) + " = " + numbers[3] +")</span></br>";
 					//html += "<span class='yellow'> Failed ! (Severity: " + numbers[3] +")</span></br>";
 					html += "The fleet is subject to <span class='yellow'>" + (globals[j].type == "Rout" ? "a complete rout." : globals[j].value + " % " + globals[j].type) + ".</span>";
 				}
