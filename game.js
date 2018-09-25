@@ -2259,6 +2259,7 @@ function Game(data){
 	this.hideUI = function(){
 		ui.combatLogWrapper.hide();
 		ui.unitSelector.hide();
+		$(".chatWrapper").hide();
 		$("#leftUnitWrapper").hide();
 		$("#upperGUI").hide()
 		$(".optionsWrapper").hide();
@@ -2290,6 +2291,7 @@ function Game(data){
 		this.setLeftWrapperVisibility();
 		$("#upperGUI").show()
 		$(".optionsWrapper").show();
+		$(".chatWrapper").show();
 	}
 
 	this.setFireGlobals = function(){
@@ -2997,7 +2999,7 @@ function Game(data){
 
 		var w = l*(s+6);
 
-		ui.unitSelector.width(Math.min(res.x - 240 - 20 - $(".chatWrapper").width())).removeClass("disabled");
+		ui.unitSelector.width(Math.min(res.x - 240 - 20 - $(".chatWrapper").width(), w)).removeClass("disabled");
 	}
 }
 
