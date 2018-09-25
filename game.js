@@ -2997,7 +2997,7 @@ function Game(data){
 
 		if (!l){return;}
 
-		var widthNeed = l*(s+4) + 2;
+		var widthNeed = (l+1)*(s+2) + 2;
 		var widthAvail = res.x - 245 - 40 - $(".chatWrapper").width();
 
 		console.log("need " + widthNeed);
@@ -3009,7 +3009,7 @@ function Game(data){
 		} 
 		else {
 			console.log("need > avail");
-			widthNeed = Math.floor(withAvail / (l*(s+4))) * (s+4)+2;
+			widthNeed = Math.floor(withAvail / ((l+1)*(s+4))) * (s+4)+2;
 			console.log("need " + widthNeed);
 			ui.unitSelector.width(widthNeed).removeClass("disabled");
 		}
