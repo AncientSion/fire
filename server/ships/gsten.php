@@ -60,7 +60,7 @@ class GSten extends Heavy {
 			"name" => "",
 			"cost" => static::$value,
 			"totalCost" => 0,
-			"moraleCost" = >0, 
+			"moraleCost" => 0, 
 			"gameid" => 0,
 			"userid" => 0,
 			"upgrades" => 
