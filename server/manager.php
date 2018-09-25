@@ -91,7 +91,7 @@
 		//Debug::log("getClientData");
 		//$this->testUnitMorale(); return;
 		//$this->setPostFireFocusValues(); return;
-		//$this->testFleetMorale();
+		$this->testFleetMorale();
 
 		if (!$this->settings || !$this->settings->turn){return false;}
 		
@@ -1529,25 +1529,18 @@
 			Debug::log("-----------------testFleetMorale--------------");
 			$do--;
 			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-				$max = $this->playerstatus[$i]["globals"][0]["value"];
+				$start = $this->playerstatus[$i]["globals"][0]["value"];
 				$old = 0;
 				$new = 0;
-				//echo ($this->playerstatus[$i]["globals"]."\n");
 				for ($j = 1; $j < sizeof($this->playerstatus[$i]["globals"]); $j++){
 					if ($this->playerstatus[$i]["globals"][$j]["turn"] < $this->turn){
 						$old -= $this->playerstatus[$i]["globals"][$j]["value"];
 					}
-					else {
-						//$old += $this->playerstatus[$i]["globals"][$j]["value"];
-						$new -= $this->playerstatus[$i]["globals"][$j]["value"];
-					}
+					else $new -= $this->playerstatus[$i]["globals"][$j]["value"];
 				}
 
-				Debug::log("max: ".$max);
-				Debug::log("new: ".$new);
-				Debug::log("old: ".$old);
-				$rel = round($new / ($max-$old), 2);
-				Debug::log("player ".$i.", old: ".$old.", new: ".$new.", rel: ".$rel);
+				$rel = round($new / ($start-$old), 2);
+				Debug::log("player ".$i.", start: ".$start.", old: ".$old.", new: ".$new.", rel: ".$rel);
 				if (!$rel){continue;}
 
 				$crit = DmgCalc::moraleCritProcedure(0, 0, $this->turn, $rel, $this->const["morale"], $old+$new);
