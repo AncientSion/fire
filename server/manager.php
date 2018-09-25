@@ -91,7 +91,7 @@
 		//Debug::log("getClientData");
 		//$this->testUnitMorale(); return;
 		//$this->setPostFireFocusValues(); return;
-		//$this->testFleetMorale();
+		$this->testFleetMorale();
 
 		if (!$this->settings || !$this->settings->turn){return false;}
 		
@@ -555,10 +555,12 @@
 	
 	public function handleDeployPhase(){
 		Debug::log("handleDeployPhase");
+
 		$this->resolveJumpOutActions();
 		$this->handleInitialFireOrders();
 		$this->handleDeployActions();
 		$this->handleJumpIn();
+		$this->handleJumpOut();
 		$this->assembleDeployStates();
 		$this->deleteAllReinforcements();
 
@@ -579,22 +581,24 @@
 	}
 
 	public function handleJumpOut(){
-		Debug::log("handleJumpOut");
+		Debug::log("handleForcedJumpOut");
 
 		$needCheck = false;
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->isWithdrawing()){
+			$l = sizeof($this->ships[$i]->actions)-1;
+			if ($l < 0){continue;}
+			if ($this->ships[$i]->actions[$l]->type == "jumpOut"){
 				$this->ships[$i]->status = "jumpOut";
 				$needCheck = true;
 			}
 		}
 
 		if ($needCheck){
-			Debug::log("need");
 			$this->freeFlights();
-			return true;
-		} return false;
+			$this->adjustFleetMorale();
+			DBManager::app()->insertNewGlobalEntries($this->playerstatus);
+		}
 	}
 
 	public function handleMoraleReinforcing(){
@@ -1020,10 +1024,7 @@
 	}
 	
 	public function handleDamageControlPhase(){
-		if ($this->handleJumpOut()){
-			$this->adjustFleetMorale();
-			DBManager::app()->insertNewGlobalEntries($this->playerstatus);
-		}
+		$this->handleJumpOut();
 		return true;
 	}
 
@@ -1494,7 +1495,9 @@
 	}
 
 	public function adjustFleetMorale(){
-		Debug::log("-----------------adjustFleetMorale--------------");
+		Debug::log("-----------------adjustFleetMorale----------- turn $this->turn/$this->phase");
+
+		$turn = $this->phase == 3 ? $this->turn +1 : $this->turn;
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			$full = $this->playerstatus[$i]["morale"];
@@ -1505,7 +1508,9 @@
 				if ($this->ships[$j]->userid != $this->playerstatus[$i]["userid"]){continue;}
 				if (!$this->ships[$j]->triggerMoraleChange($this->turn, $this->phase)){continue;}
 
+				$type = $this->ships[$j]->getUnitMoraleChangeType($this->turn, $this->phase);
 				$value = ceil($this->ships[$j]->getMoraleChangeValue($this->turn, $this->phase) / $full * 100);
+				$scope = ($type == "withdrawn" ? 3 : 1); // start entry, 1 unit trigger, 2 fleet morale effect, 3 non trigger withdrawal
 
 				Debug::log("unit #".$this->ships[$j]->id.", moraleCost: ".$this->ships[$j]->moraleCost.", value: ".$value);
 
@@ -1513,12 +1518,12 @@
 					"id" => 0,
 					"playerstatusid" => $this->playerstatus[$i]["id"],
 					"unitid" => $this->ships[$j]->id,
-					"turn" => $this->turn,
+					"turn" => $turn,
 					"type" => "Morale",
-					"scope" => 1,
+					"scope" => $scope,
 					"value" => $value,
 					"notes" => $this->ships[$j]->notes,
-					"text" => $this->ships[$j]->getMoraleChangeString($this->turn, $this->phase)
+					"text" => $this->ships[$j]->name." #".$this->ships[$j]->id." ".$type
 				);
 
 				//$this->ships[$j]->notes = "";
@@ -1539,7 +1544,18 @@
 				$start = $this->playerstatus[$i]["globals"][0]["value"];
 				$old = 0;
 				$new = 0;
+				$triggered = 0;
+
+
+
 				for ($j = 1; $j < sizeof($this->playerstatus[$i]["globals"]); $j++){
+					if ($this->playerstatus[$i]["globals"][$j]["scope"] == 3){continue;}
+
+					if ($this->playerstatus[$i]["globals"][$j]["turn"] == $this->turn && $this->playerstatus[$i]["globals"][$j]["value"] < 0){
+						Debug::log("triggered!");
+						$triggered = 1;
+					}
+
 					if ($this->playerstatus[$i]["globals"][$j]["turn"] < $this->turn){
 						$old -= $this->playerstatus[$i]["globals"][$j]["value"];
 					}
@@ -1548,7 +1564,7 @@
 
 				$rel = round($new / ($start-$old), 2);
 				Debug::log("player ".$i.", start: ".$start.", old: ".$old.", new: ".$new.", rel: ".$rel);
-				if (!$rel){continue;}
+				if (!$triggered || !$rel){continue;}
 
 				$crit = DmgCalc::moraleCritProcedure(0, 0, $this->turn, $rel, $this->const["morale"], $old+$new);
 

@@ -3843,7 +3843,7 @@ Game.prototype.getUserMaxFocus = function(i){
 
 Game.prototype.showFleetMorale = function(e, userid){
 
-	// scope 0 start, 1 morale test, 2 unit loss
+	// scope 0 start, 1 morale test, 2 unit loss, 3 non trigger manual withdrawal
 	var i;
 	for (i = 0; i < this.playerstatus.length; i++){
 		if (this.playerstatus[i].userid == userid){break;}
@@ -3863,11 +3863,10 @@ Game.prototype.showFleetMorale = function(e, userid){
 		var crit = this.playerstatus[i].globals[j];
 		var html = "";
 
-		if (crit.scope == 1){
-			html = crit.text;
-		} else {
+		if (crit.scope == 2){
 			html = "Morale Test";
-		}
+		} else html = crit.text;
+		
 		table.append($("<tr>")
 			.append($("<td>").html(html + " (Turn " + crit.turn+")"))
 			.append($("<td>").html(crit.value > 0 ? "+" + crit.value  : crit.value)))

@@ -388,6 +388,7 @@ class Mixed extends Ship {
 		return array(
 			"id" => $this->id,
 			"destroyed" => $this->destroyed,
+			"withdraw" => $this->withdraw,
 			"x" => $this->actions[sizeof($this->actions)-1]->x,
 			"y" => $this->actions[sizeof($this->actions)-1]->y,
 			"delay" => 0,

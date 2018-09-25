@@ -1233,7 +1233,6 @@
 			}
 
 			if (!$need){return;}
-			Debug::log("doing!");
 
 			
 			$stmt = $this->connection->prepare("
