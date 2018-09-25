@@ -3854,7 +3854,7 @@ Game.prototype.showFleetMorale = function(e, userid){
 		.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 10)))
 		.append($("<tr>")
 			.append($("<td>").html("Initial Morale"))
-			.append($("<td>").css("width", 50).html(this.playerstatus[i].globals[0].value))
+			.append($("<td>").css("width", 40).html(this.playerstatus[i].globals[0].value))
 		)
 
 	for (var j = 1; j < this.playerstatus[i].globals.length; j++){
