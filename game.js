@@ -2997,9 +2997,18 @@ function Game(data){
 
 		if (!l){return;}
 
-		var w = l*(s+5) + 4;
+		var widthNeed = l*(s+2) + 4;
+		var widthAvail = res.x - 240 - 20 - $(".chatWrapper").width();
 
-		ui.unitSelector.width(Math.min(res.x - 240 - 20 - $(".chatWrapper").width(), w)).removeClass("disabled");
+		if (widthNeed < widthAvail){
+			ui.unitSelector.width(widthNeed).removeClass("disabled");
+		} 
+		else {
+			var closest = Math.floor(widthAvail / s+2);
+			ui.unitSelector.width(closted*(s+2)).removeClass("disabled");
+		}
+
+		//ui.unitSelector.width(Math.min(res.x - 240 - 20 - $(".chatWrapper").width(), w)).removeClass("disabled");
 	}
 }
 
