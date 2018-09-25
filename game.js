@@ -2997,7 +2997,7 @@ function Game(data){
 
 		var w = l*(s+6);
 
-		ui.unitSelector.width(Math.min(res.x - 240 - 420, w)).removeClass("disabled");
+		ui.unitSelector.width(Math.min(res.x - 240 - 520, w)).removeClass("disabled");
 	}
 }
 
@@ -4142,9 +4142,9 @@ Game.prototype.create = function(data){
 	this.createReinforcementsTable();
 	this.initReinforceTable();
 	this.setLeftWrapperVisibility();
+	this.doPositionChat();
 	this.initSelectionWrapper();
 	this.initOptionsUI();
-	this.doPositionChat();
 	this.initEvents();
 	cam.setFocusToPos({x: 0, y: 0});
 	this.initPhase(this.phase);
