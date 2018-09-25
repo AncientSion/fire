@@ -91,7 +91,7 @@
 		//Debug::log("getClientData");
 		//$this->testUnitMorale(); return;
 		//$this->setPostFireFocusValues(); return;
-		$this->testFleetMorale();
+		//$this->testFleetMorale();
 
 		if (!$this->settings || !$this->settings->turn){return false;}
 		
