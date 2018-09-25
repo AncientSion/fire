@@ -3004,8 +3004,8 @@ function Game(data){
 			ui.unitSelector.width(widthNeed).removeClass("disabled");
 		} 
 		else {
-			var closest = Math.floor(widthAvail / s+2);
-			ui.unitSelector.width(closted*(s+2)).removeClass("disabled");
+			widthNeed = Math.floor(widthAvail / (s+2)+2);
+			ui.unitSelector.width(widthNeed).removeClass("disabled");
 		}
 
 		//ui.unitSelector.width(Math.min(res.x - 240 - 20 - $(".chatWrapper").width(), w)).removeClass("disabled");
