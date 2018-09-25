@@ -2997,7 +2997,7 @@ function Game(data){
 
 		if (!l){return;}
 
-		var w = l*(s+6);
+		var w = l*(s+5) + 4;
 
 		ui.unitSelector.width(Math.min(res.x - 240 - 20 - $(".chatWrapper").width(), w)).removeClass("disabled");
 	}
