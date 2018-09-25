@@ -3000,10 +3000,15 @@ function Game(data){
 		var widthNeed = l*(s+2) + 2;
 		var widthAvail = res.x - 240 - 20 - $(".chatWrapper").width();
 
+		console.log("need " + widthNeed);
+		console.log("avail " + widthAvail);
+
 		if (widthNeed < widthAvail){
+			console.log("need < avail");
 			ui.unitSelector.width(widthNeed).removeClass("disabled");
 		} 
 		else {
+			console.log("need > avail");
 			widthNeed = Math.floor(widthAvail / (s+2) + 2);
 			ui.unitSelector.width(widthNeed).removeClass("disabled");
 		}
