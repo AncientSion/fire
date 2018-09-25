@@ -158,7 +158,7 @@ Squadron.prototype.setSubElements = function(){
 	var cont = 160;
 
 	var w = this.structures.length == 4 ?  390 : Math.max(390, Math.min(3, Math.max(2, this.structures.length))*cont);
-	console.log(w);
+	//console.log(w);
 
 	$(this.element).css("width", w);
 

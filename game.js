@@ -3626,7 +3626,7 @@ Game.prototype.initialPhaseResolutionDone = function(){
 	}
 	//this.createPlaceHolderEntry();
 	this.createLogEntry("-- Initial Events concluded --");
-	this.showUI();
+	this.showUI(40);
 	this.draw();
 }
 
