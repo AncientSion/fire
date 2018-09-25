@@ -3870,7 +3870,7 @@ Game.prototype.showFleetMorale = function(e, userid){
 		}
 		table.append($("<tr>")
 			.append($("<td>").html(html + " (Turn " + crit.turn+")"))
-			.append($("<td>").html(crit.value)))
+			.append($("<td>").html(crit.value > 0 ? "+" + crit.value ? : crit.value)))
 	}
 
 	table
