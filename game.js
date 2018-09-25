@@ -54,7 +54,7 @@ function Game(data){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.animData = {jump: 40};
+	this.animData = {jump: 4};
 	this.commandChange = {old: 0, new: 0, original: 0}
 	this.subPhase = 1;
 	this.exclusiveSystem = false;
@@ -3010,6 +3010,7 @@ function Game(data){
 		else {
 			console.log("need > avail");
 			widthNeed = Math.floor(widthAvail / (s+2) + 2);
+			console.log("need " + widthNeed);
 			ui.unitSelector.width(widthNeed).removeClass("disabled");
 		}
 
