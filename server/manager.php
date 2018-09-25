@@ -561,6 +561,7 @@
 		$this->handleJumpIn();
 		$this->assembleDeployStates();
 		$this->deleteAllReinforcements();
+
 		DBManager::app()->deleteEmptyLoads($this->gameid);
 	}
 
@@ -665,7 +666,13 @@
 		if (sizeof($new)){
 			DBManager::app()->insertServerActions($new);
 		}
+
+		if ($this->turn > 1){
+			$this->adjustFleetMorale();
+			DBManager::app()->insertNewGlobalEntries($this->playerstatus);
+		}
 	}
+
 
 	public function handleInitialFireOrders(){
 		Debug::log("handleInitialFireOrders");
@@ -1013,7 +1020,7 @@
 	}
 	
 	public function handleDamageControlPhase(){
-		if ($this->handleJumpOut() || $this->handleMoraleReinforcing()){
+		if ($this->handleJumpOut()){
 			$this->adjustFleetMorale();
 			DBManager::app()->insertNewGlobalEntries($this->playerstatus);
 		}
