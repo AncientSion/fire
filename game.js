@@ -3011,7 +3011,7 @@ function Game(data){
 		} 
 		else {
 			console.log("need > avail");
-			widthNeed = Math.floor(widthAvail / ((l)*(s+6))) * (s+6)+2;
+			widthNeed = Math.floor(widthAvail / (s+6)) * (s+6)+2;
 			console.log("need " + widthNeed);
 			ui.unitSelector.width(widthNeed).removeClass("disabled");
 		}
