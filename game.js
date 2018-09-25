@@ -3004,7 +3004,7 @@ function Game(data){
 			ui.unitSelector.width(widthNeed).removeClass("disabled");
 		} 
 		else {
-			widthNeed = Math.floor(widthAvail / (s+2)+2);
+			widthNeed = Math.floor(widthAvail / (s+2));
 			ui.unitSelector.width(widthNeed).removeClass("disabled");
 		}
 
