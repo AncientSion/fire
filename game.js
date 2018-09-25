@@ -2998,7 +2998,7 @@ function Game(data){
 		if (!l){return;}
 
 		var widthNeed = (l+1)*(s+2) + 2;
-		var widthAvail = res.x - 240 - 20 - $(".chatWrapper").width();
+		var widthAvail = res.x - 245 - 20 - $(".chatWrapper").width();
 
 		console.log("need " + widthNeed);
 		console.log("avail " + widthAvail);
