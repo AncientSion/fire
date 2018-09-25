@@ -23,7 +23,6 @@ class Squadron extends Ship {
 
 	public function doTestCrits($turn){
 		//Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
-		$destroyed = 1;
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
@@ -39,10 +38,7 @@ class Squadron extends Ship {
 				}
 			}
 		}
-
-		if ($destroyed){
-			$this->destroyed = $destroyed;
-		}
+		$this->isDestroyed();
 	}
 
 	static function getKit($faction){

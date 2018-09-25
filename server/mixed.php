@@ -85,6 +85,7 @@ class Mixed extends Ship {
 			if (!$dmg->new){continue;}
 			$this->structures[$i]->determineCrit($dmg, $turn, 0);
 		}
+		$this->isDestroyed();
 	}
 
 	public function getNewDamages($turn){
