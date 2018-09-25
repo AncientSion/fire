@@ -2997,14 +2997,14 @@ function Game(data){
 
 		if (!l){return;}
 
-		var widthNeed = l*(s+2) + 4;
+		var widthNeed = l*(s+2) + 2;
 		var widthAvail = res.x - 240 - 20 - $(".chatWrapper").width();
 
 		if (widthNeed < widthAvail){
 			ui.unitSelector.width(widthNeed).removeClass("disabled");
 		} 
 		else {
-			widthNeed = Math.floor(widthAvail / (s+2));
+			widthNeed = Math.floor(widthAvail / (s+2) + 2);
 			ui.unitSelector.width(widthNeed).removeClass("disabled");
 		}
 
