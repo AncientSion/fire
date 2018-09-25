@@ -43,6 +43,8 @@ class Squadron extends Ship {
 			"id" => 0,
 			"name" => "",
 			"cost" => static::$value,
+			"totalCost" => 0,
+			"moraleCost" => 0,
 			"gameid" => 0,
 			"userid" => 0,
 			"upgrades" => static::getSubUnits($faction),

@@ -809,7 +809,6 @@ Squadron.prototype.setBuyData = function(){
 }
 
 Squadron.prototype.getBuyTableData = function(table){
-
 	var command =  this.primary.systems[0].getUpgradeData();
 	if (command.cost){
 		this.totalCost += command.cost;

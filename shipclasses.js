@@ -3670,6 +3670,7 @@ Ship.prototype.weaponHighlight = function(weapon){
 		weapon.drawSystemArc(angle, this.rolled, shipPos);
 	}
 }
+
 Ship.prototype.setBuyData = function(){
 	this.totalCost = this.cost;
 	this.moraleCost = this.cost;

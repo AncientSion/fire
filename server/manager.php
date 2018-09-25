@@ -518,6 +518,7 @@
 								foreach ($data["upgrades"][$j]["units"] as $entry){
 									//echo "name: ".$entry["name"].", value : ".$entry["name"]::$value.", amount: ".$entry["amount"]."</br>";
 									$data["totalCost"] += floor($entry["name"]::$value * $entry["amount"]);
+									$data["moraleCost"] += floor($entry["name"]::$value * $entry["amount"]);
 								}
 							} else $data["upgrades"][$j]["units"] = array();
 							

@@ -77,6 +77,8 @@ class Omega extends SuperHeavy {
 			"id" => 0,
 			"name" => "",
 			"cost" => static::$value,
+			"totalCost" => 0,
+			"moraleCost" = >0, 
 			"gameid" => 0,
 			"userid" => 0,
 			"upgrades" => 
@@ -99,6 +101,7 @@ class Omega extends SuperHeavy {
 					"active" => 0,
 					"chance" => 30,
 					"notes" => "Patrol (T-Bolt) Outfit",
+					"units" => array(),
 					"cost" => 450,
 					"loads" =>
 					array(
@@ -113,6 +116,7 @@ class Omega extends SuperHeavy {
 					"active" => 0,
 					"chance" => 10,
 					"notes" => "War (Aurora) Outfit",
+					"units" => array(),
 					"cost" => 800,
 					"loads" =>
 					array(
@@ -127,6 +131,7 @@ class Omega extends SuperHeavy {
 					"active" => 0,
 					"chance" => 10,
 					"notes" => "War (T-Bolt) Outfit",
+					"units" => array(),
 					"cost" => 900,
 					"loads" =>
 					array(
