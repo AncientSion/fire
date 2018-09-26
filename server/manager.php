@@ -1543,6 +1543,31 @@
 			Debug::log("-----------------testFleetMorale  $this->turn/$this->phase");
 			$do--;
 			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+				Debug::log("userid ".$this->playerstatus[$i]["userid"]);
+
+				for ($j = 0; $j < sizeof($this->ships); $j++){
+					$totalMoraleWorth = 0;
+					$moraleLost = 0;
+					if ($this->ships[$i]->userid != $this->playerstatus[$i]["userid"]){continue;}
+					if ($this->ships[$i]->flight || $this->ships[$i]->salvo]){continue;}
+
+					$totalMoraleWorth += $this->ships[$i]->moraleCost;
+
+					if (!$this->ships[$j]->triggerMoraleChange($this->turn, $this->phase)){continue;}
+					$moraleLost += $this->ships[$i]->moraleCost;
+				}				
+
+				$rel = round($moraleLost / $totalMoraleWorth), 2);
+
+				if (!$moraleLost){
+					Debug::log("no loss, continue"); continue;
+				} 
+				else if (!$rel){
+					Debug::log("no rel, continue"); continue;
+				} else Debug::log("loss!");
+
+
+				Debug::log("userid ".$this->playerstatus[$i]["userid"].", totalMoraleWorth ".$totalMoraleWorth.", moraleLost ".$moraleLost.", rel: ".$rel);
 
 				//$lastTurnValue = $this->playerstatus[$i]["globals"][0]["value"]);
 				$lastTurnValue = 100;
@@ -1558,33 +1583,16 @@
 
 					if ($entry["value"] < 0){
 						$totalLoss += abs($entry["value"]);
-						if ($entry["turn"] == $this->turn){
-							$newLoss += abs($entry["value"]);
-						}
 					}
 					else {
 						$totalGain += abs($entry["value"]);
-						if ($entry["turn"] == $this->turn){
-							 $newGain += $entry["value"];
-						}
 					}
 				}
-
-
-				$rel = round($newLoss / ($lastTurnValue + $newGain), 2);
-
-				if (!$newLoss){
-					Debug::log("no loss, continue"); continue;
-				} 
-				else if (!$rel){
-					Debug::log("no rel, continue"); continue;
-				} else Debug::log("loss!");
-
 
 				//$magMod = $totalGain - 100 + $totalLoss;
 				$magMod = 100 - $totalGain + $totalLoss; // (totalLoss was ABs above)
 
-				Debug::log("userid ".$this->playerstatus[$i]["userid"].", trueBaseMorale ".$lastTurnValue.", totalLoss ".$totalLoss.", totalGain ".$totalGain.", newLoss ".$newLoss.", newGain ".$newGain.", rel: ".$rel.", magMod: ".$magMod);
+				Debug::log("userid ".$this->playerstatus[$i]["userid"].", totalLoss ".$totalLoss.", totalGain ".$totalGain.", magMod: ".$magMod);
 
 				//continue;
 
