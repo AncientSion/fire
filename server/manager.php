@@ -1548,13 +1548,13 @@
 				for ($j = 0; $j < sizeof($this->ships); $j++){
 					$totalMoraleWorth = 0;
 					$moraleLost = 0;
-					if ($this->ships[$i]->userid != $this->playerstatus[$i]["userid"]){continue;}
-					if ($this->ships[$i]->flight || $this->ships[$i]->salvo){continue;}
+					if ($this->ships[$j]->userid != $this->playerstatus[$j]["userid"]){continue;}
+					if ($this->ships[$j]->flight || $this->ships[$j]->salvo){continue;}
 
-					$totalMoraleWorth += $this->ships[$i]->moraleCost;
+					$totalMoraleWorth += $this->ships[$j]->moraleCost;
 
 					if (!$this->ships[$j]->triggerMoraleChange($this->turn, $this->phase)){continue;}
-					$moraleLost += $this->ships[$i]->moraleCost;
+					$moraleLost += $this->ships[$j]->moraleCost;
 				}				
 
 				$rel = round($moraleLost / $totalMoraleWorth, 2);
