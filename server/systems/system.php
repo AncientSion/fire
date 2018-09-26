@@ -252,8 +252,10 @@ class System {
 		$crit = DmgCalc::critProcedure($this->parentId, $this->id, $turn, $dmg->rel, $this->critEffects, $sumDmg, $this->internal);
 
 		if ($crit){
-			//$crit->value = $this->getCritModMax($crit->value);
 			$crit->value = $this->getCritModMax($sumDmg);
+			if (!$squad && $crit->type[1] == "e"){
+				$crit->type = "Damage"; 
+			}
 			$this->crits[] = $crit;
 		}
 	}

@@ -31,7 +31,6 @@ class Squadron extends Ship {
 			$this->structures[$i]->determineCrit($dmg, $turn, 0);
 			if ($this->structures[$i]->destroyed){continue;}
 
-			$destroyed = 0;
 			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
 				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){
 					$this->structures[$i]->structures[$j]->systems[$k]->determineCrit($dmg, $turn, 1);
