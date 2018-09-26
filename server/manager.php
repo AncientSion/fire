@@ -91,8 +91,8 @@
 		//Debug::log("getClientData");
 		//$this->testUnitMorale(); return;
 		//$this->setPostFireFocusValues(); return;
-		$this->testFleetMorale();
-		if ($this->hasNewGlobalEntries()){DBManager::app()->insertNewGlobalEntries($this->playerstatus);}
+		//$this->testFleetMorale();
+		//if ($this->hasNewGlobalEntries()){DBManager::app()->insertNewGlobalEntries($this->playerstatus);}
 
 
 		if (!$this->settings || !$this->settings->turn){return false;}
