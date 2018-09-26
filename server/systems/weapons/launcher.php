@@ -77,6 +77,7 @@ class MissileLauncher extends Launcher {
 	public function setState($turn, $phase){
 		parent::setState($turn, $phase);
 
+		if ($this->ammo == -1){return;}
 		$reduction = ceil($this->capacity[$this->ammo] * $this->getCritMod("Ammo Amount"));
 		$this->output -= $reduction;
 
