@@ -91,7 +91,6 @@
 		//Debug::log("getClientData");
 		//$this->testUnitMorale(); return;
 		//$this->setPostFireFocusValues(); return;
-		//$this->turn = 14;
 		//$this->testFleetMorale();
 
 		if (!$this->settings || !$this->settings->turn){return false;}
@@ -196,9 +195,8 @@
 		//Debug::log("getUnitDataForClient");
 		//Debug::log("user: ".$this->userid.", turn: ".$this->turn.", phase: ".$this->phase);
 		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
-		if ($this->turn == 1 && $this->phase == -1){return $this->ships;}
+			if ($this->turn == 1 && $this->phase == -1){return $this->ships;}
 
-			//if ($this->ships[$i]->userid == $this->userid){continue;}
 
 			if ($this->phase == 3){$this->ships[$i]->focus = 0;}
 
@@ -208,18 +206,19 @@
 				}
 				else if ($this->turn > 1){
 					if ($this->ships[$i]->userid != $this->userid){
-						Debug::log("shiftA!");
+						Debug::log("a!");
 						$this->incoming[] = $this->ships[$i];
 						array_splice($this->ships, $i, 1);
 					}
 					else {
-						Debug::log("shiftB!");
+						Debug::log("b!");
 						$this->incoming[] = $this->ships[$i];
+					}
 				}
 			}
 			else if ($this->ships[$i]->available > $this->turn){
-						Debug::log("shiftC!");
 				$this->incoming[] = $this->ships[$i];
+				Debug::log("c!");
 				array_splice($this->ships, $i, 1);
 			}
 		}
@@ -1542,8 +1541,8 @@
 
 		$do = 1;
 
-		$this->getUnit(5)->destroyed = 1;
-		$this->playerstatus[1]["globals"][] = array("scope" => 1, "value" => -22);
+		//$this->getUnit(5)->destroyed = 1;
+		//$this->playerstatus[1]["globals"][] = array("scope" => 1, "value" => -22);
 
 
 		while ($do){
