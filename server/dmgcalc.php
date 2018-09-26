@@ -501,12 +501,17 @@ class DmgCalc {
 
 		if ($fire->target->ship){
 			$system = $fire->target->primary;
-		} else $system = $ignored;
+		}
+		else {
+			$system = $ignored;
+		}
+
+		$values = $fire->weapon->dmgs;
 
 		$baseDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 		$damageMod = $baseDmg / $fire->weapon->getBaseDamage($fire, $hit, $system);
 
-		Debug::log("fire #".$fire->id.", doFlashDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".get_class($system).", baseDmg: ".$baseDmg);
+		Debug::log("fire #".$fire->id.", doFlashDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".get_class($system).", baseDmg: ".$baseDmg.", damageMod: ".$damageMod);
 
 		static::doStandardDmg($fire, $hit, $system);
 
@@ -514,8 +519,7 @@ class DmgCalc {
 
 		$secondary = $fire->target->getFlashTargets($fire);
 		shuffle($secondary);
-		$values = $fire->weapon->dmgs;
-		$index = 1;
+		$index = 2;
 
 		for ($i = 0; $i < sizeof($secondary); $i++){
 			//$fire->hits++;
@@ -547,7 +551,7 @@ class DmgCalc {
 			$fire->target->addTopDamage($entry);
 			
 			//Debug::log("doing: ".$values[$index]."% to ".$system->name);
-			if ($index == 3){
+			if ($index == sizeof($values)-1){
 				$index = 1;
 			} else $index++;
 		}

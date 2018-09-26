@@ -44,11 +44,7 @@ class System {
 	public $loadout = 0;
 	public $dmgs = array();
 	public $system = true;
-	public $critEffects =  array( // type, mag, dura, effect
-		array("Accuracy", 100, 0, 0),
-		array("Damage", 120, 0, 0),
-		array("Destroyed", 180, 0, 1),
-	);
+	public $critEffects =  array();
 
 	function __construct($id, $parentId, $output = 0, $width = 1){
 		$this->id = $id;

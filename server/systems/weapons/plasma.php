@@ -24,7 +24,7 @@ class Plasma extends Weapon {
 	
 	public function getDmgRangeMod($fire){
 		$mod = 100;
-		$mod += $this->getBoostEffect("Damage Loss")* $this->getBoostLevel($fire->turn);
+		$mod += $this->getBoostEffect("Damage Loss") * $this->getBoostLevel($fire->turn);
 		$mod += $this->getCritMod("Damage Loss", $fire->turn);
 
 		//Debug::log("Plasma loss multi: ".$mod);
@@ -121,8 +121,8 @@ class MagCompressor extends Plasma {
 	public $usage = 2;
 	public $freeAim = 0;
 	public static $prio = 0;
-	public $minDmg = 100;
-	public $maxDmg = 100;
+	public $minDmg = 80;
+	public $maxDmg = 80;
 	public $accDecay = 120;
 	public $dmgLoss = 8;
 	public $shots = 1;
@@ -139,6 +139,11 @@ class MagCompressor extends Plasma {
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $start, $end, $output, $width);
 		$this->setFlashData();
+	}
+
+	public function getBaseDamage($fire, $hit, $system){
+		if ($fire->target->squad){return $this->dmgs[1];}
+		return mt_rand($this->getMinDamage(), $this->getMaxDamage());
 	}
 }
 

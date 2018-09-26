@@ -32,6 +32,12 @@ class Weapon extends System {
 	public $fireMode = "Standard";
 	public $dmgType = "Standard";
 
+	public $critEffects =  array( // type, mag, dura, effect
+		array("Accuracy", 100, 0, 0),
+		array("Damage", 120, 0, 0),
+		array("Destroyed", 180, 0, 1),
+	);
+
 	function __construct($id, $parentId, $start, $end, $output, $width){
 		$this->arc = array(0 => array($start, $end));
 		$this->priority = static::$prio;
@@ -59,7 +65,7 @@ class Weapon extends System {
 		$mod = $this->getDamageMod($fire);
 		$range = $this->getDmgRangeMod($fire);
 
-		//Debug::log("base: ".$base.", bonus: ".$bonus.", mod: ".$mod.", range: ".$range);
+		Debug::log("base: ".$base.", bonus: ".$bonus.", mod: ".$mod.", range: ".$range);
 		return floor(($base+$bonus)*$mod*$range);
 	}
 	
@@ -72,15 +78,17 @@ class Weapon extends System {
 	}
 
 	public function setFlashData(){
-		$data = array(100, 60, 30, 10);
+		$data = array(100, 140, 60, 30, 10); // main target
 
 		for ($i = 0; $i < sizeof($data); $i++){
 			$this->dmgs[$i] = floor($data[$i] / 100 * $this->minDmg);
 		}
 
 		$this->notes[] = "Intial hit scores ".$this->dmgs[0]." damage against</br>target hull.";
+		$this->notes[] = "</br><u>Squadron</u>";
+		$this->notes[] = "Instead ".$this->dmgs[1]." damage";
 		$this->notes[] = "</br><u>Ship</u>";
-		$this->notes[] = "Facing systems: Either</br>".$this->dmgs[1].", ".$this->dmgs[2]." or ".$this->dmgs[3]." damage each, no overkill";
+		$this->notes[] = "Facing systems: Either</br>".$this->dmgs[2].", ".$this->dmgs[3]." or ".$this->dmgs[4]." damage each, no overkill";
 	}
 
 	public function setShockData(){
