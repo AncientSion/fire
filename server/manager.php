@@ -1544,13 +1544,13 @@
 			$do--;
 			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 				Debug::log("userid ".$this->playerstatus[$i]["userid"]);
+				$totalMoraleWorth = 0;
+				$moraleLost = 0;
 
 				for ($j = 0; $j < sizeof($this->ships); $j++){
 					Debug::log("ship ".$j.", userid: ".$this->ships[$i]->userid);
-					$totalMoraleWorth = 0;
-					$moraleLost = 0;
 					if ($this->ships[$j]->userid != $this->playerstatus[$i]["userid"]){Debug::log("c"); continue;}
-					if ($this->ships[$j]->flight || $this->ships[$j]->salvo){cDebug::log("c"); ontinue;}
+					if ($this->ships[$j]->flight || $this->ships[$j]->salvo){Debug::log("c"); ontinue;}
 
 					$totalMoraleWorth += $this->ships[$j]->moraleCost;
 
