@@ -1550,7 +1550,7 @@
 				for ($j = 0; $j < sizeof($this->ships); $j++){
 					Debug::log("ship ".$j.", userid: ".$this->ships[$i]->userid);
 					if ($this->ships[$j]->userid != $this->playerstatus[$i]["userid"]){Debug::log("c"); continue;}
-					if ($this->ships[$j]->flight || $this->ships[$j]->salvo){Debug::log("c"); ontinue;}
+					if ($this->ships[$j]->flight || $this->ships[$j]->salvo){Debug::log("c"); continue;}
 
 					$totalMoraleWorth += $this->ships[$j]->moraleCost;
 
