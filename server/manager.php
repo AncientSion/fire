@@ -1543,14 +1543,14 @@
 			Debug::log("-----------------testFleetMorale  $this->turn/$this->phase");
 			$do--;
 			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-				Debug::log("userid ".$this->playerstatus[$i]["userid"]);
+				//Debug::log("userid ".$this->playerstatus[$i]["userid"]);
 				$totalMoraleWorth = 0;
 				$moraleLost = 0;
 
 				for ($j = 0; $j < sizeof($this->ships); $j++){
-					Debug::log("ship ".$j.", userid: ".$this->ships[$i]->userid);
-					if ($this->ships[$j]->userid != $this->playerstatus[$i]["userid"]){Debug::log("c"); continue;}
-					if ($this->ships[$j]->flight || $this->ships[$j]->salvo){Debug::log("c"); continue;}
+					//Debug::log("ship ".$j.", userid: ".$this->ships[$i]->userid);
+					if ($this->ships[$j]->userid != $this->playerstatus[$i]["userid"]){continue;}
+					if ($this->ships[$j]->flight || $this->ships[$j]->salvo){continue;}
 
 					$totalMoraleWorth += $this->ships[$j]->moraleCost;
 
