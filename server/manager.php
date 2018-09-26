@@ -1556,8 +1556,9 @@
 					if ($this->ships[$j]->destroyed || $this->ships[$j]->isFleeing() || $this->ships[$j]->isWithdrawing()){
 						$moraleLost += $this->ships[$j]->moraleCost;
 					}
-				}				
+				}
 
+				Debug::log("totalMoraleWorth ".$totalMoraleWorth.", ".$morale)
 				$rel = round($moraleLost / $totalMoraleWorth, 2);
 
 				if (!$moraleLost){
