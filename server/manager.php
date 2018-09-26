@@ -91,6 +91,7 @@
 		//Debug::log("getClientData");
 		//$this->testUnitMorale(); return;
 		//$this->setPostFireFocusValues(); return;
+		$this->turn = 14;
 		$this->testFleetMorale();
 
 		if (!$this->settings || !$this->settings->turn){return false;}
@@ -1539,7 +1540,7 @@
 		$do = 1;
 
 		while ($do){
-			Debug::log("-----------------testFleetMorale--------------");
+			Debug::log("-----------------testFleetMorale  $turn/$phase");
 			$do--;
 			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 
