@@ -3982,9 +3982,9 @@ Game.prototype.getPlayerStatus = function(userid){
 	if (userid == undefined){
 		userid = this.userid;
 	}
-	
+
 	for (let i = 0; i < this.playerstatus.length; i++){
-		if (this.playerstatus[i].userid == this.userid){return this.playerstatus[i];}
+		if (this.playerstatus[i].userid == userid){return this.playerstatus[i];}
 	}
 	return false;
 }
