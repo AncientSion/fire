@@ -1539,6 +1539,8 @@
 
 		$do = 1;
 
+		$this->getUnit(5)->destroyed = 1;
+
 		while ($do){
 			Debug::log("-----------------testFleetMorale  $this->turn/$this->phase");
 			$do--;
