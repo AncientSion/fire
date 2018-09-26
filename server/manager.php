@@ -1584,7 +1584,7 @@
 				//$magMod = $totalGain - 100 + $totalLoss;
 				$magMod = 100 - $totalGain + $totalLoss; // (totalLoss was ABs above)
 
-				Debug::log("userid ".$this->playerstatus[$i]["userid"].", trueBaseMorale ".$lastTurnValue.", totalLoss ".$totalLoss.", totalGain ".$totalGain.", magMod: ".$magMod.", newLoss ".$newLoss.", newGain ".$newGain.", magMod: ".$magMod);
+				Debug::log("userid ".$this->playerstatus[$i]["userid"].", trueBaseMorale ".$lastTurnValue.", totalLoss ".$totalLoss.", totalGain ".$totalGain.", newLoss ".$newLoss.", newGain ".$newGain.", rel: ".$rel.", magMod: ".$magMod);
 
 				//continue;
 
