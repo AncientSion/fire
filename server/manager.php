@@ -1540,6 +1540,8 @@
 		$do = 1;
 
 		$this->getUnit(5)->destroyed = 1;
+		$this->playerstatus[1]["globals"][] = array("scope" => 1, "value" => -22);
+
 
 		while ($do){
 			Debug::log("-----------------testFleetMorale  $this->turn/$this->phase");
