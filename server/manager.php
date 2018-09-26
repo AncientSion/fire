@@ -1553,8 +1553,9 @@
 
 					$totalMoraleWorth += $this->ships[$j]->moraleCost;
 
-					if (!$this->ships[$j]->triggerMoraleChange($this->turn, $this->phase)){continue;}
-					$moraleLost += $this->ships[$j]->moraleCost;
+					if ($this->ships[$j]->destroyed || $this->ships[$j]->isFleeing() || $this->ships[$j]->isWithdrawing()){
+						$moraleLost += $this->ships[$j]->moraleCost;
+					}
 				}				
 
 				$rel = round($moraleLost / $totalMoraleWorth, 2);
