@@ -3,7 +3,7 @@
 class DmgCalc {
 
 	static function critProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd, $internal = 0){
-		Debug::log("critProcedure $unitid, $systemid, $turn, $new, $magAdd, $internal");
+		//Debug::log("critProcedure $unitid, $systemid, $turn, $new, $magAdd, $internal");
 
 		if (!sizeof($effects)){return;}
 		if ($new < 0.15){return false;}
@@ -11,26 +11,26 @@ class DmgCalc {
 		$chanceRoll = mt_rand(1, 100);
 
 		if ($chanceRoll > $chance){
-			Debug::log("_____opening test SUCCESS, chanceRoll: ".$chanceRoll.", chance: ".$chance);
+			//Debug::log("_____opening test SUCCESS, chanceRoll: ".$chanceRoll.", chance: ".$chance);
 			if ($internal){
-				Debug::log("but internal, +30 magnitude");
+				//Debug::log("but internal, +30 magnitude");
 				$magAdd -= 30;
 			} else return false;
 		}
 		else {
-			Debug::log("_____opening test FAIL, chanceRoll: ".$chanceRoll.", chance: ".$chance);
+			//Debug::log("_____opening test FAIL, chanceRoll: ".$chanceRoll.", chance: ".$chance);
 		}
 
 		$magRoll = mt_rand(1, 100);
 		$totalMag = $magRoll + $magAdd;
 
-		Debug::log("chance to fail: $chance, rolled $chanceRoll, magRoll $magRoll, magAdd $magAdd, totalMag $totalMag");
+		//Debug::log("chance to fail: $chance, rolled $chanceRoll, magRoll $magRoll, magAdd $magAdd, totalMag $totalMag");
 
 		if ($totalMag  < $effects[0][1]){return;}
 
 		for ($i = sizeof($effects)-1; $i >= 0; $i--){
 			if ($totalMag < $effects[$i][1]){continue;}	
-			Debug::log("crit: ".$effects[$i][0]);
+			//Debug::log("crit: ".$effects[$i][0]);
 
 			//($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 			$crit = new Crit(
