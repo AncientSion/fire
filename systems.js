@@ -2983,13 +2983,16 @@ Launcher.prototype.getEffiency = function(){
 }
 
 Launcher.prototype.getRemAmmo = function(){
-	//var max = this.getMaxAmmo();
-	var max = this.output;
-	var loss = this.getCritMod("Ammo Amount");
+	return this.output;
 
-	//return this.output - Math.ceil((max/100*loss));
-	return Math.floor(max / 100 * (100+loss) - this.fireOrders.map(x => x.shots).reduce((l,r) => l+r, []));
+	
+	var max = this.getMaxAmmo();
+	var loss = this.getCritMod("Ammo Amount");
+	
 	return this.getMaxAmmo() - this.fireOrders.map(x => x.shots).reduce((l,r) => l+r, []);
+
+	var max = this.output;
+	return Math.floor(max / 100 * (100+loss) - this.fireOrders.map(x => x.shots).reduce((l,r) => l+r, []));
 }
 
 Launcher.prototype.getMaxAmmo = function(){

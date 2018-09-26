@@ -73,6 +73,15 @@ class MissileLauncher extends Launcher {
 			}
 		}
 	}
+
+	public function setState($turn, $phase){
+		parent::setState($turn, $phase);
+
+		$reduction = ceil($this->capacity[$this->ammo] * $this->getCritMod("Ammo Amount"));
+		$this->output -= $reduction;
+
+		//$this->output = floor($this->output / 100 * (100 - $this->getCritMod("Ammo Amount")));
+	}
 }
 
 class TorpedoLauncher extends MissileLauncher {
