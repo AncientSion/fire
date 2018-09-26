@@ -1557,7 +1557,7 @@
 					$moraleLost += $this->ships[$i]->moraleCost;
 				}				
 
-				$rel = round($moraleLost / $totalMoraleWorth), 2);
+				$rel = round($moraleLost / $totalMoraleWorth, 2);
 
 				if (!$moraleLost){
 					Debug::log("no loss, continue"); continue;
