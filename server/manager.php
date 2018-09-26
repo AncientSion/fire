@@ -208,16 +208,17 @@
 				}
 				else if ($this->turn > 1){
 					if ($this->ships[$i]->userid != $this->userid){
-						//Debug::log("shift!");
+						Debug::log("shiftA!");
 						$this->incoming[] = $this->ships[$i];
 						array_splice($this->ships, $i, 1);
 					}
 					else {
-						//Debug::log("shift!");
+						Debug::log("shiftB!");
 						$this->incoming[] = $this->ships[$i];
 				}
 			}
 			else if ($this->ships[$i]->available > $this->turn){
+						Debug::log("shiftC!");
 				$this->incoming[] = $this->ships[$i];
 				array_splice($this->ships, $i, 1);
 			}
