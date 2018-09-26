@@ -1548,7 +1548,7 @@
 				for ($j = 0; $j < sizeof($this->ships); $j++){
 					$totalMoraleWorth = 0;
 					$moraleLost = 0;
-					if ($this->ships[$j]->userid != $this->playerstatus[$j]["userid"]){continue;}
+					if ($this->ships[$j]->userid != $this->playerstatus[$i]["userid"]){continue;}
 					if ($this->ships[$j]->flight || $this->ships[$j]->salvo){continue;}
 
 					$totalMoraleWorth += $this->ships[$j]->moraleCost;
