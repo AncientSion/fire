@@ -31,7 +31,7 @@ class Squaddie extends Single {
 	public $traverse = 3;
 	
 	public $critEffects =  array( // type, mag, dura, effect
-		array("Disabled", 150, 0, 0.00),
+		array("Disabled", 140, 0, 0.00),
 	);
 	
 	function __construct($id, $parentId){

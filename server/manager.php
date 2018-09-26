@@ -1541,6 +1541,77 @@
 			Debug::log("-----------------testFleetMorale--------------");
 			$do--;
 			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+
+				//$lastTurnValue = $this->playerstatus[$i]["globals"][0]["value"]);
+				$lastTurnValue = 100;
+				$newLoss = 0;
+				$newGain = 0;
+				$totalLoss = 0;
+				$totalGain = $this->playerstatus[$i]["globals"][0]["value"];
+
+				for ($j = 1; $j < sizeof($this->playerstatus[$i]["globals"]); $j++){
+					if ($this->playerstatus[$i]["globals"][$j]["scope"] == 3){continue;}
+
+					$entry = $this->playerstatus[$i]["globals"][$j];
+
+					if ($entry["value"] < 0){
+						$totalLoss += abs($entry["value"]);
+						if ($entry["turn"] == $this->turn){
+							$newLoss += abs($entry["value"]);
+						}
+					}
+					else {
+						$totalGain += abs($entry["value"]);
+						if ($entry["turn"] == $this->turn){
+							 $newGain += $entry["value"];
+						}
+					}
+				}
+
+
+				$rel = round($newLoss / ($lastTurnValue + $newGain), 2);
+
+				if (!$newLoss){
+					Debug::log("no loss, continue"); continue;
+				} 
+				else if (!$rel){
+					Debug::log("no rel, continue"); continue;
+				} else Debug::log("loss!");
+
+
+				$magMod = $totalGain - 100 + $totalLoss;
+
+				Debug::log("userid ".$this->playerstatus[$i]["userid"].", lastTurnValue ".$lastTurnValue.", totalLoss ".$totalLoss.", totalGain ".$totalGain.", magMod: ".$magMod.", newLoss ".$newLoss.", newGain ".$newGain.", magMod: ".$magMod);
+
+				//continue;
+
+				$crit = DmgCalc::moraleCritProcedure(0, 0, $this->turn, $rel, $this->const["morale"], $magMod);
+				return;
+
+				$this->playerstatus[$i]["globals"][] = array(
+					"id" => 0,
+					"playerstatusid" => $this->playerstatus[$i]["id"],
+					"unitid" => 0,
+					"turn" => $crit->turn,
+					"type" => $crit->type,
+					"scope" => 2,
+					"value" => $crit->value,
+					"notes" => $crit->notes,
+					"text" => ""
+				);
+			}
+		}
+	}
+
+	public function testFleetMoraleO(){
+		//this->turn = 1;
+
+		$do = 1;
+
+		while ($do){
+			Debug::log("-----------------testFleetMorale--------------");
+			$do--;
+			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 				$start = $this->playerstatus[$i]["globals"][0]["value"];
 				$old = 0;
 				$new = 0;

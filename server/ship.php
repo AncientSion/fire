@@ -1396,7 +1396,7 @@ class Ship {
 	}
 
 	public function doTestCrits($turn){
-		Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
+		//Debug::log("__doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
 
 		if (1){
 

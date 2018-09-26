@@ -2939,7 +2939,7 @@ Launcher.prototype.setAmmo = function(){
 	for (var i = 0; i < this.loads.length; i++){
 		if (this.loads[i].amount > 0){
 			this.ammo = i;
-			this.output = this.loads[i].amount + this.getCritMod("Ammo Amount");
+			this.output = this.loads[i].amount;
 			return;
 		}
 	}
@@ -2983,10 +2983,12 @@ Launcher.prototype.getEffiency = function(){
 }
 
 Launcher.prototype.getRemAmmo = function(){
-	var max = this.getMaxAmmo();
+	//var max = this.getMaxAmmo();
+	var max = this.output;
 	var loss = this.getCritMod("Ammo Amount");
 
-	return this.output - Math.ceil((max/100*loss));
+	//return this.output - Math.ceil((max/100*loss));
+	return Math.floor(max / 100 * (100+loss) - this.fireOrders.map(x => x.shots).reduce((l,r) => l+r, []));
 	return this.getMaxAmmo() - this.fireOrders.map(x => x.shots).reduce((l,r) => l+r, []);
 }
 

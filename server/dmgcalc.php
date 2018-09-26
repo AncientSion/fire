@@ -11,14 +11,14 @@ class DmgCalc {
 		$chanceRoll = mt_rand(1, 100);
 
 		if ($chanceRoll > $chance){
-			Debug::log("___opening test SUCCESS, chanceRoll: ".$chanceRoll.", chance: ".$chance);
+			Debug::log("_____opening test SUCCESS, chanceRoll: ".$chanceRoll.", chance: ".$chance);
 			if ($internal){
 				Debug::log("but internal, +30 magnitude");
 				$magAdd -= 30;
 			} else return false;
 		}
 		else {
-			Debug::log("___opening test FAIL, chanceRoll: ".$chanceRoll.", chance: ".$chance);
+			Debug::log("_____opening test FAIL, chanceRoll: ".$chanceRoll.", chance: ".$chance);
 		}
 
 		$magRoll = mt_rand(1, 100);
