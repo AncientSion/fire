@@ -2013,26 +2013,6 @@
 			} 
 		}
 
-		public function getIncomingShips($gameid, $turn){
-			$stmt = $this->connection->prepare("
-				SELECT units.id, units.userid, units.available, units.name, units.display, actions.x, actions.y, actions.a FROM units
-				INNER JOIN actions ON
-					units.id = actions.shipid	
-				WHERE gameid = :gameid
-				AND available > :turn
-				AND status = 'bought'
-				ORDER BY userid ASC
-			");
-			
-			$stmt->bindParam(":gameid", $gameid);
-			$stmt->bindParam(":turn", $turn);
-			$stmt->execute();
-					
-			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			
-			return $result;
-		}
-
 		public function getActiveUnits($gameid, $turn){
 			$stmt = $this->connection->prepare("
 				SELECT * FROM units

@@ -91,8 +91,8 @@
 		//Debug::log("getClientData");
 		//$this->testUnitMorale(); return;
 		//$this->setPostFireFocusValues(); return;
-		$this->turn = 14;
-		$this->testFleetMorale();
+		//$this->turn = 14;
+		//$this->testFleetMorale();
 
 		if (!$this->settings || !$this->settings->turn){return false;}
 		
@@ -102,7 +102,7 @@
 			"phase" => $this->phase,
 			"ships" => $this->getUnitDataForClient(),
 			"reinforcements" => $this->reinforcements,
-			"incoming" =>$this->getIncomingData(),
+			"incoming" => $this->getIncomingData(),
 			"const" => $this->const,
 			"userid" => $this->userid,
 			"playerstatus" => $this->getPlayerStatus(),
@@ -167,7 +167,6 @@
 		$this->ships = $this->assembleUnits();
 		$this->setCC();
 		$this->reinforcements = $this->readyReinforcements();
-		//$this->incoming = $db->getIncomingShips($this->gameid, $this->turn);
 	}
 
 	public function setUserIndex(){
@@ -209,10 +208,13 @@
 				}
 				else if ($this->turn > 1){
 					if ($this->ships[$i]->userid != $this->userid){
+						//Debug::log("shift!");
 						$this->incoming[] = $this->ships[$i];
 						array_splice($this->ships, $i, 1);
 					}
-					else $this->incoming[] = $this->ships[$i];
+					else {
+						//Debug::log("shift!");
+						$this->incoming[] = $this->ships[$i];
 				}
 			}
 			else if ($this->ships[$i]->available > $this->turn){
