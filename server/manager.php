@@ -91,7 +91,9 @@
 		//Debug::log("getClientData");
 		//$this->testUnitMorale(); return;
 		//$this->setPostFireFocusValues(); return;
-		//$this->testFleetMorale();
+		$this->testFleetMorale();
+		if ($this->hasNewGlobalEntries()){DBManager::app()->insertNewGlobalEntries($this->playerstatus);}
+
 
 		if (!$this->settings || !$this->settings->turn){return false;}
 		
@@ -206,19 +208,19 @@
 				}
 				else if ($this->turn > 1){
 					if ($this->ships[$i]->userid != $this->userid){
-						Debug::log("a!");
+						//Debug::log("a!");
 						$this->incoming[] = $this->ships[$i];
 						array_splice($this->ships, $i, 1);
 					}
 					else {
-						Debug::log("b!");
+						//Debug::log("b!");
 						$this->incoming[] = $this->ships[$i];
 					}
 				}
 			}
 			else if ($this->ships[$i]->available > $this->turn){
 				$this->incoming[] = $this->ships[$i];
-				Debug::log("c!");
+				//Debug::log("c!");
 				array_splice($this->ships, $i, 1);
 			}
 		}
@@ -1606,58 +1608,7 @@
 				//continue;
 
 				$crit = DmgCalc::moraleCritProcedure(0, 0, $this->turn, $rel, $this->const["morale"], $magMod);
-				return;
-
-				$this->playerstatus[$i]["globals"][] = array(
-					"id" => 0,
-					"playerstatusid" => $this->playerstatus[$i]["id"],
-					"unitid" => 0,
-					"turn" => $crit->turn,
-					"type" => $crit->type,
-					"scope" => 2,
-					"value" => $crit->value,
-					"notes" => $crit->notes,
-					"text" => ""
-				);
-			}
-		}
-	}
-
-	public function testFleetMoraleO(){
-		//this->turn = 1;
-
-		$do = 1;
-
-		while ($do){
-			Debug::log("-----------------testFleetMorale--------------");
-			$do--;
-			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-				$start = $this->playerstatus[$i]["globals"][0]["value"];
-				$old = 0;
-				$new = 0;
-				$triggered = 0;
-
-
-
-				for ($j = 1; $j < sizeof($this->playerstatus[$i]["globals"]); $j++){
-					if ($this->playerstatus[$i]["globals"][$j]["scope"] == 3){continue;}
-
-					if ($this->playerstatus[$i]["globals"][$j]["turn"] == $this->turn && $this->playerstatus[$i]["globals"][$j]["value"] < 0){
-						Debug::log("triggered!");
-						$triggered = 1;
-					}
-
-					if ($this->playerstatus[$i]["globals"][$j]["turn"] < $this->turn){
-						$old -= $this->playerstatus[$i]["globals"][$j]["value"];
-					}
-					else $new -= $this->playerstatus[$i]["globals"][$j]["value"];
-				}
-
-				$rel = round($new / ($start-$old), 2);
-				Debug::log("player ".$i.", start: ".$start.", old: ".$old.", new: ".$new.", rel: ".$rel);
-				if (!$triggered || !$rel){continue;}
-
-				$crit = DmgCalc::moraleCritProcedure(0, 0, $this->turn, $rel, $this->const["morale"], $old+$new);
+				//return;
 
 				$this->playerstatus[$i]["globals"][] = array(
 					"id" => 0,
