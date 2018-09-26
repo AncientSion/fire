@@ -88,7 +88,6 @@ class Single {
 	public function isDestroyed(){
 		//Debug::log("isDestroyed ".get_class($this)." #".$this->id);
 		if ($this->destroyed){
-			//Debug::log("ding");
 			return true;
 		}
 		for ($i = 0; $i < sizeof($this->crits); $i++){
@@ -152,8 +151,9 @@ class Single {
 	}
 
 	public function setSubunitState($turn, $phase){
-		//Debug::log("setSubunitState ".get_class($this));
+		//Debug::log("setSubunitState ".get_class($this).", destroyed: ".$this->destroyed);
 		if ($this->isDestroyed()){
+			//Debug::log("destroyed = 1");
 			$this->destroyed = 1;
 		}
 		

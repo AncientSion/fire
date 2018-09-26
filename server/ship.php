@@ -78,6 +78,7 @@ class Ship {
 
 	function __construct($data){
 		//echo ("constructing!" .$data["id"]."\n");
+		//if (!(isset($data["withdraw"]))){Debug::trace();}
 		if (!$data){return;}
 		$this->id = $data["id"];
 		$this->userid = $data["userid"];
@@ -390,7 +391,7 @@ class Ship {
 	}
 
 	public function getDeployState($turn){
-		//Debug::log("getDeployState for ".$this->id);
+		Debug::log("getDeployState for ".$this->id.", destroyed: ".$this->destroyed);
 		return array(
 			"id" => $this->id,
 			"withdraw" => $this->withdraw,

@@ -294,6 +294,7 @@
 					"status" => $possible[$i]["status"],
 					"command" => $possible[$i]["command"],
 					"available" => $this->turn + $possible[$i]["available"],
+					"withdraw" => $possible[$i]["withdraw"],
 					"destroyed" => $possible[$i]["destroyed"],
 					"x" => $possible[$i]["x"],
 					"y" => $possible[$i]["y"],
@@ -753,8 +754,7 @@
 			$move = array("turn" => $this->turn, "type" => "deploy", "dist" => 0, "x" => $devi->x, "y" => $devi->y, "a" => $a, "cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
 			$upgrades = array(array("active" => 1, "shipid" => $this->fires[$i]->shooter->id, "systemid" => $this->fires[$i]->weapon->id, "units" => array(0 => array("amount" => $this->fires[$i]->shots, "name" => $name))));
 
-			$units[] = array("gameid" => $this->gameid, "userid" => $this->fires[$i]->shooter->userid, "type" => "Salvo", "name" => "Salvo", "display" => "", "totalCost" => 0, "moraleCost" => 0, "turn" => $this->turn, "eta" => 0,
-				"mission" => $mission, "actions" => array($move), "upgrades" => $upgrades);
+			$units[] = array("gameid" => $this->gameid, "userid" => $this->fires[$i]->shooter->userid, "type" => "Salvo", "name" => "Salvo", "display" => "", "totalCost" => 0, "moraleCost" => 0, "turn" => $this->turn, "eta" => 0, "mission" => $mission, "actions" => array($move), "upgrades" => $upgrades);
 
 
 		}
@@ -766,13 +766,14 @@
 				//$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "", "deployed", 0, 0, 0, 0, 0, 0, 0, 0, "");
 				$this->ships[] = new Salvo(
 					array(
-						"id" => $units[$i]["id"], "userid" => $units[$i]["userid"], "command" => 0, "available" => $this->turn, "display" => "", "totalCost" => 0, "moraleCost" => 0, "status" => "deployed",
-						"destroyed" => 0, "x" => 0, "y" => 0, "facing" => 270, "delay" => 0, "thrust" => 0, 
+						"id" => $units[$i]["id"], "userid" => $units[$i]["userid"], "command" => 0, "available" => $this->turn, "withdraw" => 0, "display" => "",
+						"totalCost" => 0, "moraleCost" => 0, "status" => "deployed", "destroyed" => 0, "x" => 0, "y" => 0, "facing" => 270, "delay" => 0, "thrust" => 0, 
 						"rolling" => 0, "rolled" => 0, "flipped" => 0, "focus" => 0, "notes" => ""
 					)
 				);
 
-				$this->ships[sizeof($this->ships)-1]->setUnitState($this->turn, $this->phase);
+			//	$this->ships[sizeof($this->ships)-1]->setUnitState($this->turn, $this->phase);
+
 				$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, "deploy", 0, 0, $units[$i]["actions"][0]["x"], $units[$i]["actions"][0]["y"], $a, 0, 0, 0, 1, 1);
 			}
 		}

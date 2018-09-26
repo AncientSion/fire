@@ -46,7 +46,7 @@ class Mixed extends Ship {
 	}
 
 	public function setUnitState($turn, $phase){
-		//Debug::log("setUnitState #".$this->id." ".get_class($this));
+		Debug::log("setUnitState #".$this->id." ".get_class($this));
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->setSubunitState($turn, $phase);
 		}
@@ -56,9 +56,11 @@ class Mixed extends Ship {
 	}
 
 	public function isDestroyed(){
+		//Debug::log($this->destroyed);
 		if ($this->destroyed){
 			return true;
 		}
+		//Debug::log($this->destroyed);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (!$this->structures[$i]->isDestroyed()){
 				return false;
