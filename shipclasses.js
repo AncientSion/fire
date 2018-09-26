@@ -2268,7 +2268,7 @@ Ship.prototype.showMoraleDiv = function(e){
 				.append($("<th>").attr("colSpan", 2).html("Morale Overview")))
 			.append($("<tr>")
 				.append($("<td>").html("Morale Value / Rel %"))
-				.append($("<td>").html(this.moraleCost + " / " + Math.floor((this.moraleCost / game.getPlayerStatus(this.userid).morale)*100))))
+				.append($("<td>").html(this.moraleCost + " / " + Math.floor((this.moraleCost / game.getPlayerStatus(this.userid).morale)*100) + "%")))
 			.append($("<tr>")
 				.append($("<td>").html("Base Morale"))
 				.append($("<td>").html(this.getBaseMorale())))
