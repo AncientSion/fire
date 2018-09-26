@@ -1549,7 +1549,7 @@
 					$totalMoraleWorth = 0;
 					$moraleLost = 0;
 					if ($this->ships[$i]->userid != $this->playerstatus[$i]["userid"]){continue;}
-					if ($this->ships[$i]->flight || $this->ships[$i]->salvo]){continue;}
+					if ($this->ships[$i]->flight || $this->ships[$i]->salvo){continue;}
 
 					$totalMoraleWorth += $this->ships[$i]->moraleCost;
 
