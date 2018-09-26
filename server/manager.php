@@ -1540,7 +1540,7 @@
 		$do = 1;
 
 		while ($do){
-			Debug::log("-----------------testFleetMorale  $turn/$phase");
+			Debug::log("-----------------testFleetMorale  $this->turn/$this->phase");
 			$do--;
 			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 
