@@ -1558,7 +1558,7 @@
 					}
 				}
 
-				Debug::log("totalMoraleWorth ".$totalMoraleWorth.", ".$morale)
+				Debug::log("totalMoraleWorth ".$totalMoraleWorth.", ".$morale);
 				$rel = round($moraleLost / $totalMoraleWorth, 2);
 
 				if (!$moraleLost){
