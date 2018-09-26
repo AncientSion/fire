@@ -3978,7 +3978,11 @@ Game.prototype.setFocusSpendingInfo = function(userid){
 	$("#upperGUI .playerInfo .focusInfo" + userid + " .focusSpend").html("(" + this.getTotalFocusSpending() + ")");
 }
 
-Game.prototype.getPlayerStatus = function(){
+Game.prototype.getPlayerStatus = function(userid){
+	if (userid == undefined){
+		userid = this.userid;
+	}
+	
 	for (let i = 0; i < this.playerstatus.length; i++){
 		if (this.playerstatus[i].userid == this.userid){return this.playerstatus[i];}
 	}
