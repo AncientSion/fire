@@ -2435,12 +2435,7 @@ function Game(data){
 		});
 		
 		for (var i = 0; i < this.fireOrders.length; i++){
-			if (this.fireOrders[i].notes == ""){
-				Debug::log("empty fire");
-			}
-			else {
-				this.fireOrders[i].anim = this.fireOrders[i].weapon.getAnimation(this.fireOrders[i]);
-			}
+			this.fireOrders[i].anim = this.fireOrders[i].weapon.getAnimation(this.fireOrders[i]);
 			this.fireOrders[i].createCombatLogEntry();
 			this.fireOrders[i].setNumberAnim();
 			//console.log(this.fireOrders[i].weapon.priority);
