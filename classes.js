@@ -1356,7 +1356,7 @@ FireOrder.prototype.getRollsString = function(rolls, allReq){
 
 	if (hits.length && miss.length){
 		divider = " --- ";
-	} else divier = "";
+	} else divider = "";
 
 	string = "<div class='rollWrapper'><div class='hits'>" + hits + "</div>" + divider + "<div class='miss'>" + miss + "</div>";
 	if (skipped){
