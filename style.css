@@ -1777,7 +1777,7 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 }
 
 .miss {
-	margin-left: 30px;
+	dmargin-left: 30px;
 }
 .overfire {
 	margin-left: 30px;
