@@ -1331,12 +1331,20 @@ FireOrder.prototype.addLogShieldEntry = function(log, shield){
 
 FireOrder.prototype.getRollsString = function(rolls, req){
 	var string = "";
+	var skipped = 0;
 	for (var i = 0; i < rolls.length; i++){
-		if (rolls[i] <= req){
+		if (rolls[i] == 0){
+			skipped++;
+		}
+		else if (rolls[i] <= req){
 			string += "<u>" + rolls[i] + "</u>";
 		} else string += rolls[i];
 
 		string += " / ";
+	}
+
+	if (skipped){
+		string += " --- " + skipped + "x skipped";
 	}
 	return string;
 }
