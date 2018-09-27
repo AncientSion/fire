@@ -2500,9 +2500,6 @@ function Game(data){
 
 	this.createNullFiresEntries = function(){
 		for (var i = 0; i < this.ships.length; i++){
-			if ((this.ships[i].ship || this.ships[i].squad) && this.ships[i].destroyed && this.ships[]){
-
-			}
 		}
 	}
 
