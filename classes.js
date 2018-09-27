@@ -1340,6 +1340,7 @@ FireOrder.prototype.getRollsString = function(rolls, allReq){
 	var skipped = 0;
 	var hits = "";
 	var miss = "";
+	var divider = "";
 	for (var i = 0; i < rolls.length; i++){
 		if (rolls[i] == 0){
 			skipped++; continue;
@@ -1355,8 +1356,8 @@ FireOrder.prototype.getRollsString = function(rolls, allReq){
 	if (miss.length){miss = miss.slice(0, miss.length-2);}
 
 	if (hits.length && miss.length){
-		divider = " --- ";
-	} else divider = "";
+		divider = " <---> ";
+	}
 
 	string = "<div class='rollWrapper'><div class='hits'>" + hits + "</div>" + divider + "<div class='miss'>" + miss + "</div>";
 	if (skipped){
