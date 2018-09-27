@@ -758,7 +758,7 @@ class Ship {
 
 	public function resolveFireOrder($fire){ // target
 		if ($this->destroyed){
-			Debug::log("STOP - resolveFireOrder #".$fire->id.", TARGET: ".get_class($this)." destroyed");
+			//Debug::log("STOP - resolveFireOrder #".$fire->id.", TARGET: ".get_class($this)." destroyed");
 		}
 		else if ($fire->weapon->aoe){
 			Debug::log("resolveFireOrder AREA - #".$fire->id.", TARGET ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);

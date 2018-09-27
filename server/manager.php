@@ -1376,7 +1376,7 @@
 			if ($this->fires[$i]->resolved){continue;}
 			if (!$this->fires[$i]->shooter->flight){continue;}
 			if ($this->fires[$i]->shooter->getStruct($this->fires[$i]->weapon->fighterId)->destroyed){
-				Debug::log("SKIPPING firorder, SINGLE (shooter) is destroyed");
+				//Debug::log("SKIPPING firorder, SINGLE (shooter) is destroyed");
 				$this->fires[$i]->resolved = 1;
 			}
 		}
@@ -1419,7 +1419,7 @@
 
 			if ($this->fires[$i]->shooter->flight == true && $this->fires[$i]->target->flight == false){
 				if ($this->fires[$i]->shooter->getStruct($this->fires[$i]->weapon->fighterId)->destroyed){
-					Debug::log("SKIPPING firorder, SINGLE (shooter) is destroyed");
+					//Debug::log("SKIPPING firorder, SINGLE (shooter) is destroyed");
 					$this->fires[$i]->resolved = 1;
 					continue;
 				}
@@ -1464,7 +1464,7 @@
 			if ($this->ships[$i]->salvo && !$this->ships[$i]->isDestroyed()){
 				if (!$this->ships[$i]->mission->arrived){continue;}
 
-				Debug::log("salvo #".$this->ships[$i]->id." arrived!");
+				//Debug::log("salvo #".$this->ships[$i]->id." arrived!");
 				$target = $this->getUnit($this->ships[$i]->mission->targetid);
 				$fire = $this->ships[$i]->getFireOrder($this->gameid, $this->turn, $target);
 				$fires[] = $fire;
@@ -1475,7 +1475,7 @@
 			DBManager::app()->insertFireOrders($fires);
 
 			for ($i = 0; $i < sizeof($fires); $i++){
-				Debug::log("ball fireorder ".$i);
+				//Debug::log("ball fireorder ".$i);
 				$fires[$i]->target->resolveFireOrder($fires[$i]);
 			}
 			$this->fires = array_merge($this->fires, $fires);

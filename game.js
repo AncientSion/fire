@@ -1112,6 +1112,7 @@ function Game(data){
 			var weapons = [];
 
 			for (var j = 0; j < this.ships[i].structures.length; j++){
+				if (this.ships[i].structures[j].destroyed){continue;}
 				for (var k = 0; j < this.ships[i].structures[j].systems[k].length; k++){
 					if (this.ships[i].structures[j].systems[k].reload > 1 || !this.ships[i].structures[j].systems[k].canFire()){continue;}
 				}
@@ -2434,7 +2435,12 @@ function Game(data){
 		});
 		
 		for (var i = 0; i < this.fireOrders.length; i++){
-			this.fireOrders[i].anim = this.fireOrders[i].weapon.getAnimation(this.fireOrders[i]);
+			if (this.fireOrders[i].notes == ""){
+				Debug::log("empty fire");
+			}
+			else {
+				this.fireOrders[i].anim = this.fireOrders[i].weapon.getAnimation(this.fireOrders[i]);
+			}
 			this.fireOrders[i].createCombatLogEntry();
 			this.fireOrders[i].setNumberAnim();
 			//console.log(this.fireOrders[i].weapon.priority);
@@ -2492,8 +2498,17 @@ function Game(data){
 	}
 
 	this.handlePostFireOrderAnim = function(){
+		this.createNullFiresEntries();
 		this.createFireFinalEntry();
 		this.handleForcedMoves();
+	}
+
+	this.createNullFiresEntries = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			if ((this.ships[i].ship || this.ships[i].squad) && this.ships[i].destroyed && this.ships[]){
+
+			}
+		}
 	}
 
 	this.createFireFinalEntry = function(){
