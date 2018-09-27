@@ -73,13 +73,21 @@ System.prototype.getResolvingFireOrders = function(){
 	if (game.phase != 3){return false;}
 	for (var i = this.fireOrders.length-1; i >= 0; i--){
 		if (this.fireOrders[i].turn == game.turn){
-			/*
+			return this.fireOrders[i];
+		} else return false;
+	}
+	return false;
+}
+
+System.prototype.getResolvingFireOrdersO = function(){
+	if (game.phase != 3){return false;}
+	for (var i = this.fireOrders.length-1; i >= 0; i--){
+		if (this.fireOrders[i].turn == game.turn){
 			for (var j = 0; j < this.fireOrders[i].req.length; j++){
 				if (this.fireOrders[i].req[j] > 0){
 					return this.fireOrders[i];
 				}
 			}
-			*/
 		} else return false;
 	}
 	return false;
