@@ -1139,6 +1139,10 @@ function Game(data){
 	this.fireResolved = function(){
 		console.log("fireResolved");
 
+		//for (var i = 0; i < 30; i++){this.createLogEntry("row " + i);}
+
+
+
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setPostFireImage();
 			this.ships[i].setSize();
@@ -2254,7 +2258,6 @@ function Game(data){
 		this.hideUI();
 		this.setFireGlobals();
 		this.animateAllFireOrders();
-
 	}
 
 	this.hideUI = function(){
@@ -2267,6 +2270,18 @@ function Game(data){
 	}
 
 	this.showUI = function(width){
+
+		ui.unitSelector.show();
+		ui.combatLogWrapper.show();
+		this.setLeftWrapperVisibility();
+		$("#upperGUI").show()
+		$(".optionsWrapper").show();
+		$(".chatWrapper").show();
+
+		this.doSizeLog(width);
+	}
+
+	this.doSizeLog = function(width){
 
 		var header = "";
 		if (game.phase == -1){header = "Damage Control Resolution Log";}
@@ -2287,12 +2302,22 @@ function Game(data){
 			ui.combatLogWrapper.css("width", width)
 		}
 
-		ui.unitSelector.show();
-		ui.combatLogWrapper.show();
-		this.setLeftWrapperVisibility();
-		$("#upperGUI").show()
-		$(".optionsWrapper").show();
-		$(".chatWrapper").show();
+
+		var top = ui.combatLogWrapper.css("top");
+			top = Math.floor(top.slice(0, top.length-2));
+
+		var h = ui.combatLogWrapper.height();
+		console.log(top);
+		console.log(h);
+		console.log(res.y);
+
+		if (top + h > res.y - 10){
+			console.log("overflow");
+			ui.combatLogWrapper.css("overflow", "auto").css("max-height", 500);
+		}
+		else {
+			console.log("fitting!");
+		}
 	}
 
 	this.setFireGlobals = function(){

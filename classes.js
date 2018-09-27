@@ -1129,7 +1129,7 @@ FireOrder.prototype.addLogStartEntry = function(log){
 	var reqString = this.getReqString(req);
 
 	var rolls = this.rolls.slice().sort((a, b) => a-b);
-	var rollString = this.getRollsString(rolls, req[0]);
+	var rollString = this.getRollsString(rolls, req);
 	
 	if (this.shooter.salvo){
 		shots = this.shooter.getShots();
@@ -1290,7 +1290,7 @@ FireOrder.prototype.addLogRollsEntry = function(log){
 	var reqString = this.getReqString(req);
 
 	var rolls = this.rolls.slice().sort((a, b) => a-b);
-	var rollString = this.getRollsString(rolls, req[0]);
+	var rollString = this.getRollsString(rolls, req);
 
 	$(log).append(
 		$("<tr>")
@@ -1300,12 +1300,12 @@ FireOrder.prototype.addLogRollsEntry = function(log){
 			.html("Rolls:")
 		)
 		.append($("<td>")
-			.attr("colSpan", 2)
+			.attr("colSpan", 3)
 			.css("textAlign", "left")
-			.html(rollString.slice(0, rollString.length-3))
+			.html(rollString)
 		)
 		.append($("<td>")
-			.attr("colSpan", 5)
+			.attr("colSpan", 4)
 		)
 	)
 
@@ -1329,27 +1329,74 @@ FireOrder.prototype.addLogShieldEntry = function(log, shield){
 	return true;
 }
 
-FireOrder.prototype.getRollsString = function(rolls, req){
+FireOrder.prototype.getRollsString = function(rolls, allReq){
+	var req = 0;
+	for (var i = 0; i < allReq.length; i++){
+		if (allReq[i] > 0){
+			req = allReq[i]; break;
+		}
+	}
 	var string = "";
 	var skipped = 0;
+	var hits = "";
+	var miss = "";
 	for (var i = 0; i < rolls.length; i++){
 		if (rolls[i] == 0){
-			skipped++;
+			skipped++; continue;
 		}
-		else if (rolls[i] <= req){
+		
+
+		if (rolls[i] <= req){
+			hits += rolls[i] + ", ";
+		} else miss += rolls[i] + ", ";
+	}
+
+	if (hits.length){hits = hits.slice(0, hits.length-2);}
+	if (miss.length){miss = miss.slice(0, miss.length-2);}
+
+	string = "<div class='rollWrapper'><div class='hits'>" + hits + "</div><div class='miss'>" + miss + "</div>";
+	if (skipped){
+		string += "<div class='overfire'>" + skipped + "x Overfire"
+	}
+	return string +"</div>";
+}
+
+FireOrder.prototype.getReqString = function(req){
+	console.log(req);
+	if (req.length == 1){
+		string = req;
+	}
+	else {
+		if (req[0] != 0){
+			if (req[0] == req[req.length-1]){
+				string = req[0];
+			}
+			else string = req + " % - " + req[req.length-1];
+		}
+		else {
+			if (req.length > 2){
+				string = req[1] + " % - " + req[req.length-1];
+			}
+			else string = req[1];
+		}
+	}
+
+	return string + " %"
+}
+
+FireOrder.prototype.getRollsStrinpg = function(rolls, req){
+	var string = "";
+	for (var i = 0; i < rolls.length; i++){
+		if (rolls[i] <= req){
 			string += "<u>" + rolls[i] + "</u>";
 		} else string += rolls[i];
 
 		string += " / ";
 	}
-
-	if (skipped){
-		string += " --- " + skipped + "x skipped";
-	}
 	return string;
 }
 
-FireOrder.prototype.getReqString = function(req){
+FireOrder.prototype.getReqStringp = function(req){
 	var string = req[0];
 
 	if (req.length > 1 && req[0] != req[req.length-1]){

@@ -759,6 +759,9 @@ class Ship {
 	public function resolveFireOrder($fire){ // target
 		if ($this->destroyed){
 			//Debug::log("STOP - resolveFireOrder #".$fire->id.", TARGET: ".get_class($this)." destroyed");
+			for ($i = 0; $i < $fire->shots; $i++){
+				$fire->rolls[] = 0;
+			}
 		}
 		else if ($fire->weapon->aoe){
 			Debug::log("resolveFireOrder AREA - #".$fire->id.", TARGET ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
@@ -779,6 +782,7 @@ class Ship {
 			$this->determineHits($fire);
 		}
 
+		$fire->notes = implode(";", $fire->rolls).";";
 		$fire->resolved = 1;
 	}
 
@@ -794,10 +798,12 @@ class Ship {
 	}
 
 	public function rollToHit($fire){
+		Debug::log("rollToHit");
 		for ($i = 0; $i < $fire->shots; $i++){
 			$roll = mt_rand(1, 100);
 			$fire->rolls[] = $roll;
-			$fire->notes .= $roll.";";
+			Debug::log("$i roll ".$roll);
+			//$fire->notes .= $roll.";";
 		}
 		return true;
 	}
@@ -807,7 +813,7 @@ class Ship {
 
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			if ($this->destroyed){
-				Debug::log("ERROR aborting shot resolution vs dead target #".$this->id);
+				$fire->cancelShotResolution($i);
 			}
 			else  if ($fire->rolls[$i] <= $fire->req){
 				$fire->hits++;

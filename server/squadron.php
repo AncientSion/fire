@@ -259,7 +259,7 @@ class Squadron extends Ship {
 	public function determineHits($fire){
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			if ($this->destroyed){
-				Debug::log("aborting shot resolution vs dead target #".$this->id);
+				$fire->cancelShotResolution($i);
 			}
 			else {
 				$target = $this->getHitSystem($fire);

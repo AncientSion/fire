@@ -261,6 +261,12 @@ class FireOrder {
 		$this->hits = $hits;
 		$this->resolved = $resolved;
 	}
+
+	public function cancelShotResolution($i){
+		Debug::log("cancelShotResolution $i");
+		$this->rolls[$i] = 0;
+	}
+
 }
 
 class Damage {

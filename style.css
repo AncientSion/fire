@@ -1769,6 +1769,20 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 	background-color: black;
 }
 
+.rollWrapper div {
+	display: inline;
+}
+
+.hits {
+}
+
+.miss {
+	margin-left: 30px;
+}
+.overfire {
+	margin-left: 30px;
+}
+
 #totalRequestCost {
 	font-size: 20px;
 	padding: 6px;
