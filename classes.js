@@ -1362,7 +1362,8 @@ FireOrder.prototype.getRollsString = function(rolls, allReq){
 }
 
 FireOrder.prototype.getReqString = function(req){
-	console.log(req);
+	//console.log(req);
+	var string = "";
 	if (req.length == 1){
 		string = req;
 	}
@@ -1371,7 +1372,7 @@ FireOrder.prototype.getReqString = function(req){
 			if (req[0] == req[req.length-1]){
 				string = req[0];
 			}
-			else string = req + " % - " + req[req.length-1];
+			else string = req[0] + " % - " + req[req.length-1];
 		}
 		else {
 			if (req.length > 2){
