@@ -287,7 +287,7 @@ class DmgCalc {
 
 		//$name = get_class($system);
 		//$hits = $fire->weapon->basePulses + min($fire->weapon->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $fire->weapon->grouping));
-		$hits = $fire->weapon->getMultiShotHits($fire, $system);
+		$hits = $fire->weapon->getMultiShotHits($fire, $hit, $system);
 
 		Debug::log("fire #".$fire->id.", doPulseDmg, weapon: ".$fire->weapon->name.", target #".$fire->target->id."/".$system->id."/".$system->name.", hits: ".$hits);
 
@@ -362,7 +362,7 @@ class DmgCalc {
 
 		//$name = get_class($system);
 		//$hits = $fire->weapon->basePulses + min($fire->weapon->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $fire->weapon->grouping));
-		$hits = $fire->weapon->getMultiShotHits($fire, $system);
+		$hits = $fire->weapon->getMultiShotHits($fire, $hit, $system);
 		$dmg->notes .= ("v".$hits.";");
 
 		Debug::log("fire #".$fire->id.", doPulseDmg, weapon: ".$fire->weapon->name.", target #".$fire->target->id."/".$system->id."/".$system->name.", hits: ".$hits.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"].", armourDmg: ".$dmg->armourDmg);
