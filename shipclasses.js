@@ -4047,7 +4047,10 @@ Ship.prototype.canDoAction = function(type){
 	return false;
 }
 Ship.prototype.canIncreaseImpulse = function(){
-	if (this.getRemEP() >= this.getImpulseChangeCost() / this.getImpulseMod()){
+	if (this.actions.length && this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == -1){
+		return true;
+	}
+	else if (this.getRemEP() >= this.getImpulseChangeCost() / this.getImpulseMod()){
 		if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship + this.squad)){
 			return true;
 		}
@@ -4058,15 +4061,15 @@ Ship.prototype.canIncreaseImpulse = function(){
 			return true;
 		}
 	}
-	else if (this.actions.length && this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == -1){
-		return true;
-	}
 
 	return false;
 }
 
 Ship.prototype.canDecreaseImpulse = function(){
-	if (this.getCurSpeed() <= 30){return false;}
+	if (this.actions.length && this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == 1){
+		return true;
+	}
+	else if (this.getCurSpeed() <= 30){return false;}
 	else if (this.getRemEP() >= this.getImpulseChangeCost() / this.getImpulseMod()){
 		if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship + this.squad)){
 			return true;
@@ -4077,9 +4080,6 @@ Ship.prototype.canDecreaseImpulse = function(){
 		else if (this.actions[0].type == "deploy" && this.actions.length == 1 && game.turn > 1 && this.available == game.turn){
 			return true;
 		}
-	}
-	else if (this.actions.length && this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == 1){
-		return true;
 	}
 
 	return false;
