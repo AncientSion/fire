@@ -798,11 +798,11 @@ class Ship {
 	}
 
 	public function rollToHit($fire){
-		Debug::log("rollToHit");
+		//Debug::log("rollToHit");
 		for ($i = 0; $i < $fire->shots; $i++){
 			$roll = mt_rand(1, 100);
 			$fire->rolls[] = $roll;
-			Debug::log("$i roll ".$roll);
+			//Debug::log("$i roll ".$roll);
 			//$fire->notes .= $roll.";";
 		}
 		return true;
