@@ -2119,6 +2119,17 @@ Ship.prototype.drawMoveArcs = function(center, rem){
 	}
 }
 
+Ship.prototype.getEngineOutput = function(){
+	var ep = 0;
+
+	for (var i = 0; i < this.primary.systems.length; i++){
+		if (this.primary.systems[i].name == "Engine"){
+			ep += this.primary.systems[i].getOutput();
+		}
+	}
+	return ep;
+}
+
 Ship.prototype.getEffEP = function(){
 	return Math.floor(this.getEngineOutput() / this.getImpulseMod());
 }
