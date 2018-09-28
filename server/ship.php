@@ -1290,7 +1290,7 @@ class Ship {
 		return $this->primary->integrity;
 	}
 
-	public function getEP(){
+	public function getEffEP(){
 		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 			if ($this->primary->systems[$j]->name == "Engine"){
 				return $this->primary->systems[$j]->output;

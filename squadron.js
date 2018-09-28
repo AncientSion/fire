@@ -658,7 +658,7 @@ Squadron.prototype.setStats = function(){
 		.find(".header")
 			.find(".profile").html(this.getStringHitChance()).end()
 			.find(".Thrust").html(this.getBaseImpulse()).end()
-			.find(".ep").html(this.getBaseEP()).end()
+			.find(".ep").html(this.getEngineOutput()).end()
 			.find(".change").html(this.getImpulseChangeCost() + ", " + this.getActionCost(0) + ", " + this.getActionCost(1)).end()
 }
 

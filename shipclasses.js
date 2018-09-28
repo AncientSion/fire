@@ -421,11 +421,7 @@ Ship.prototype.getRealActionCost = function(type){
 }
 
 Ship.prototype.getImpulseChangeCost = function(){
-	//return this.baseImpulseCost;
 	return Math.ceil(this.baseImpulseCost * (1 + ((1-(this.getBaseImpulse() / this.getCurSpeed())) / 2)));
-	return Math.ceil(this.baseImpulseCost * (1-((this.getImpulseMod()-1)/2)) * this.getImpulseMod());
-	return Math.floor(this.baseImpulseCost * this.getBaseEP() / this.getImpulseMod()/100);
-	return Math.floor(this.baseImpulseCost*(1-(1-this.getImpulseMod())/2) / this.getEffectiveEP() * this.getEP());
 }
 
 Ship.prototype.getRealImpulseChangeCost = function(){
@@ -2123,34 +2119,12 @@ Ship.prototype.drawMoveArcs = function(center, rem){
 	}
 }
 
-Ship.prototype.getEffectiveEP = function(){
-	var ep = 0;
-
-	for (var i = 0; i < this.primary.systems.length; i++){
-		if (this.primary.systems[i].name == "Engine"){
-			ep += this.primary.systems[i].getOutput();
-		}
-	}
-	return ep;
-}
-
-Ship.prototype.getBaseEP = function(){
-	var ep = 0;
-
-	for (var i = 0; i < this.primary.systems.length; i++){
-		if (this.primary.systems[i].name == "Engine"){
-			ep += this.primary.systems[i].output;
-		}
-	}
-	return ep;
-}
-
-Ship.prototype.getEP = function(){
-	return Math.floor(this.getEffectiveEP() / this.getImpulseMod());
+Ship.prototype.getEffEP = function(){
+	return Math.floor(this.getEngineOutput() / this.getImpulseMod());
 }
 
 Ship.prototype.getRemEP = function(){
-	var ep = this.getEP();
+	var ep = this.getEffEP();
 	
 	for (var i = 0; i < this.actions.length; i++){
 		if (this.actions[i].turn == game.turn){
@@ -2454,7 +2428,7 @@ Ship.prototype.createBaseDiv = function(){
 			.append($("<td>").html(this.getRemSpeed() + " / " + this.getCurSpeed()).addClass("speed")))
 		.append($("<tr>")
 			.append($("<td>").html("Maneuverability"))
-			.append($("<td>").html(this.getRemEP() + " / " + this.getEP()).addClass("ep")))
+			.append($("<td>").html(this.getRemEP() + " / " + this.getEffEP()).addClass("ep")))
 		.append($("<tr>")
 			.append($("<td>").html("Accel, Roll, Flip"))
 			.append($("<td>").html(this.getImpulseChangeCost() + ", " + this.getActionCost(0) + ", " + this.getActionCost(1)).addClass("change")))
@@ -3212,7 +3186,7 @@ Ship.prototype.previewSetup = function(){
 Ship.prototype.updateDiv = function(){
 	$(this.element)
 		.find(".thrust").html(this.getRemSpeed() + " / " + this.getCurSpeed()).end()
-		.find(".ep").html(this.getRemEP() + " / " + this.getEP()).end()
+		.find(".ep").html(this.getRemEP() + " / " + this.getEffEP()).end()
 		.find(".change").html(this.getRealImpulseChangeCost() + ", " + this.getRealActionCost(0) + ", " + this.getRealActionCost(1)).end()
 		.find(".delay").html(this.getRemDelay()).end()
 }
@@ -3724,7 +3698,7 @@ Ship.prototype.updateShipPower = function(system){
 	system.update();
 
 	if (system instanceof Engine){
-		$(this.element).find(".ep").html(this.getRemEP() + " / " + this.getEP()).end();
+		$(this.element).find(".ep").html(this.getRemEP() + " / " + this.getEffEP()).end();
 	}
 }
 
@@ -4030,7 +4004,7 @@ Ship.prototype.drawTurnUI = function(){
 		.css("left", p1.x * cam.z + cam.o.x - $(ui.turnButton).width()/2)
 		.css("top", p1.y * cam.z + cam.o.y - $(ui.turnButton).height()/2)
 		.find("#impulseMod").html("x " +turn.dif).end()
-		//.find("#remEP").html(this.getRemEP() + " / " + this.getEP()).addClass("green").end()
+		//.find("#remEP").html(this.getRemEP() + " / " + this.getEffEP()).addClass("green").end()
 }
 
 Ship.prototype.issuedActionThisTurn = function(type){
@@ -4110,7 +4084,7 @@ Ship.prototype.setTurnData = function(){
 	if (game.turnMode){
 		$(ui.turnButton)
 			$("#epButton")
-			.find("#remEP").html(this.getRemEP() + " / " + this.getEP()).addClass("green").end()
+			.find("#remEP").html(this.getRemEP() + " / " + this.getEffEP()).addClass("green").end()
 			.find("#impulseText").find("#impulseCost").html("");
 
 		this.drawDelay();

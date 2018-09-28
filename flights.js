@@ -50,7 +50,7 @@ Flight.prototype.setSize = function(){
 	}
 	this.size = max + 20;
 }
-Flight.prototype.getEP = function(){
+Flight.prototype.getEffEP = function(){
 	return this.ep;
 }
 

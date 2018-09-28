@@ -3774,7 +3774,7 @@ Game.prototype.setShortenInfo = function(e, unit, dist){
 	}
 	else {
 		short += "'green'>";
-		post += "<span class='green'>" + (remEP - cost) + "</span> / " + unit.getEP();
+		post += "<span class='green'>" + (remEP - cost) + "</span> / " + unit.getEffEP();
 	}
 	
 	short += cost + " TA</span>";

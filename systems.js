@@ -1383,7 +1383,7 @@ Engine.prototype.doUnboost = function(){
 Engine.prototype.update = function(){
 	System.prototype.update.call(this);
 	var unit = game.getUnit(aUnit);
-	$(unit.element).find(".ep").html(unit.getRemEP() + " / " + unit.getEP());
+	$(unit.element).find(".ep").html(unit.getRemEP() + " / " + unit.getEffEP());
 }
 
 Engine.prototype.getPowerDiv = function(){
