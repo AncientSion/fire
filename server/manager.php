@@ -1196,7 +1196,7 @@
 					if ($emitter->cc[$j] == $this->ships[$i]->id){
 						if ($this->ships[$i]->ship || $this->ships[$i]->squad){
 							if ($emitter->mission->targetid == $this->ships[$i]->id){ // strike fighter evades shots from its target (ship)
-								$emitter->masks[] = array($this->ships[$i]->id, $emitter->getMaskEffect($this->ships[$i]));
+								$emitter->masks[] = array($this->ships[$i]->id, $emitter->getLockEffect($this->ships[$i]));
 								//Debug::log("setting flight mask vs ship target");
 							}
 						}
