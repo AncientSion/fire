@@ -578,7 +578,7 @@ Ship.prototype.issueMove = function(pos, dist){
 	this.turnAngles = {}
 	$("#popupWrapper").hide();
 	this.unsetMoveMode();
-	if (!this.getRemactioned()){this.doAutoShorten();}
+	if (!this.getRemEP()){this.doAutoShorten();}
 	this.setMoveMode();
 	game.updateIntercepts(this.id);
 	game.redraw();
