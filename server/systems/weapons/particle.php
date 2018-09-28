@@ -105,7 +105,7 @@ class MediumShock extends Particle {
         $this->setShockData();
 	}
 
-	public function getMultiShotHits($fire, $element){
+	public function getMultiShotHits($fire, $hit, $element){
 		//Debug::log("getMultiShotHits versus ".$element->name.", system ? :".$element->system);
 		if ($element->system){return $this->dmgs[2];}
 		return $this->dmgs[$fire->target->traverse];

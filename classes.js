@@ -1340,6 +1340,7 @@ FireOrder.prototype.getRollsString = function(rolls, allReq){
 	var skipped = 0;
 	var hits = "";
 	var miss = "";
+	var divider = "";
 	for (var i = 0; i < rolls.length; i++){
 		if (rolls[i] == 0){
 			skipped++; continue;
@@ -1354,7 +1355,11 @@ FireOrder.prototype.getRollsString = function(rolls, allReq){
 	if (hits.length){hits = hits.slice(0, hits.length-2);}
 	if (miss.length){miss = miss.slice(0, miss.length-2);}
 
-	string = "<div class='rollWrapper'><div class='hits'>" + hits + "</div><div class='miss'>" + miss + "</div>";
+	if (hits.length && miss.length){
+		divider = " ----- ";
+	}
+
+	string = "<div class='rollWrapper'><div class='hits'>" + hits + "</div>" + divider + "<div class='miss'>" + miss + "</div>";
 	if (skipped){
 		string += "<div class='overfire'>" + skipped + "x Overfire"
 	}
@@ -1362,7 +1367,8 @@ FireOrder.prototype.getRollsString = function(rolls, allReq){
 }
 
 FireOrder.prototype.getReqString = function(req){
-	console.log(req);
+	//console.log(req);
+	var string = "";
 	if (req.length == 1){
 		string = req;
 	}
@@ -1371,7 +1377,7 @@ FireOrder.prototype.getReqString = function(req){
 			if (req[0] == req[req.length-1]){
 				string = req[0];
 			}
-			else string = req + " % - " + req[req.length-1];
+			else string = req[0] + " % - " + req[req.length-1];
 		}
 		else {
 			if (req.length > 2){

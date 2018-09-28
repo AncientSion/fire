@@ -16,8 +16,10 @@ class Pulse extends Weapon {
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 
-	public function getMultiShotHits($fire, $element){
-		return $this->basePulses + min($this->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $this->grouping));
+	public function getMultiShotHits($fire, $hit, $element){
+		//Debug::log("getMultiShotHits");
+		//Debug::log("req: ".$fire->req." last roll: ".$fire->rolls[$hit]);
+		return $this->basePulses + min($this->extraPulses, floor(($fire->req - $fire->rolls[$hit]) / $this->grouping));
 	}
 }
 
@@ -28,7 +30,7 @@ class LightPulse extends Pulse {
 	public $minDmg = 13;
 	public $maxDmg = 17;
 	public $accDecay = 180;
-	public $shots = 2;
+	public $shots = 1;
 	public $animColor = "brown";
 	public $projSize = 2;
 	public $projSpeed = 10;

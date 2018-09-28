@@ -1907,7 +1907,7 @@ Weapon.prototype.getAimData = function(target, final, dist, row){
 	}
 
 	if (target){
-		this.getAimDetailsUnit(target, final, accLoss, row);
+		this.getAimDetailsUnit(target, final, accLoss, dmgLoss, row);
 	}
 	else {
 		this.getAimDetailsLoc(accLoss, row);
@@ -1916,7 +1916,7 @@ Weapon.prototype.getAimData = function(target, final, dist, row){
 	//this.odds = 100;
 }
 
-Weapon.prototype.getAimDetailsUnit = function(target, final, accLoss, row){
+Weapon.prototype.getAimDetailsUnit = function(target, final, accLoss, dmgLoss, row){
 	var trackingMod = this.getTrackingMod(target);
 
 	if (!trackingMod){
@@ -1929,7 +1929,13 @@ Weapon.prototype.getAimDetailsUnit = function(target, final, accLoss, row){
 
 	final = Math.floor(final * (1-(trackingMod*0.2)) - accLoss);
 
-	this.validTarget = 1;
+	if (dmgLoss >= 100){
+		this.validTarget = 0;
+	}
+	else {
+		this.validTarget = 1;
+	}
+
 	this.odds = final;
 	row.append($("<td>").addClass("yellow").html(final + "%"));
 }
@@ -2541,7 +2547,8 @@ Pulse.prototype.getAnimation = function(fire){
 	var speed = this.projSpeed;
 	var linked = this.linked -1;
 	var gunDelay = 30;
-	var shotDelay = 4;
+	var shotDelay = 30;
+	var pulseDelay = 4;
 	var cc = 0;
 	var hits = 0;
 	var fraction = 1;
@@ -2568,6 +2575,7 @@ Pulse.prototype.getAnimation = function(fire){
 	speed /= fraction;
 	gunDelay *= fraction;
 	shotDelay *= fraction;
+	pulseDelay *= fraction;
 
 
 	var roll = -1;
@@ -2582,28 +2590,27 @@ Pulse.prototype.getAnimation = function(fire){
 		for (var j = 0; j < this.shots; j++){
 			roll++;
 			var hasHit = 0;
-			if (fire.hits[i] > j){
+			if (fire.rolls[roll] < fire.req[i]){
 				hasHit = 1;
 				hits++;
-			}			
+			}
 
 			var dest = fire.target.getFireDest(fire, hasHit, hits-1);
 			var tx = t.x + dest.x;
 			var ty = t.y + dest.y
 
-			var bonus = Math.floor((fire.req[i] - fire.rolls[roll]) / this.grouping);
-
-			var subHits = Math.min(this.basePulses + this.extraPulses, this.basePulses + bonus);;
-
+			var bonus = Math.max(0, Math.floor((fire.req[i] - fire.rolls[roll]) / this.grouping));
+			var subHits = hasHit * this.basePulses + Math.min(this.extraPulses, bonus);
+/*
 			console.log(fire.req[i]);
 			console.log(fire.rolls[roll]);
 			console.log((fire.req[i] - fire.rolls[roll]) / this.grouping);
 			console.log(subHits);
-
+*/
 			for (var k = 0; k < (this.basePulses + this.extraPulses); k++){
 				var devi = {x: range(-2, 2), y: range(-2, 2)};
 				var shotAnim = new ShotVector({x: ox, y: oy}, {x: tx + devi.x, y: ty + devi.y}, speed, (k < subHits));
-					shotAnim.n = 0 - (actualGunDelay + k*shotDelay);
+					shotAnim.n = 0 - (actualGunDelay + j*shotDelay + k*pulseDelay);
 
 				gunAnims.push(shotAnim);
 
@@ -3129,7 +3136,7 @@ Launcher.prototype.setFireOrder = function(targetid, pos){
 	this.setSystemBorder();
 }
 
-Launcher.prototype.getAimDetailsUnit = function(target, final, accLoss, row){
+Launcher.prototype.getAimDetailsUnit = function(target, final, accLoss, dmgLoss, row){
 	var final = 80;
 	var trackingMod = this.getTrackingMod(target);
 	
