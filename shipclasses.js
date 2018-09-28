@@ -421,6 +421,7 @@ Ship.prototype.getRealActionCost = function(type){
 }
 
 Ship.prototype.getImpulseChangeCost = function(){
+	return Math.ceil(this.baseImpulseCost * this.getImpulseMod());
 	return Math.ceil(this.baseImpulseCost * (1 + ((1-(this.getBaseImpulse() / this.getCurSpeed())) / 2)));
 }
 
