@@ -216,9 +216,10 @@ Squaddie.prototype.expandElement = function(){
 				)
 
 			if (this.destroyed){
-				$(ele).append($("<img>")
-					.attr("src", "varIcons/destroyed.png")
-					.addClass("overlay")
+				$(ele)
+					.append($("<img>")
+						.attr("src", "varIcons/destroyed.png")
+						.addClass("overlay"))
 						
 			}
 
