@@ -301,14 +301,14 @@ class DmgCalc {
 			$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 			$dmg = DmgCalc::calcDmg($fire->weapon, $totalDmg, $negation);
 
-			//Debug::log("hits ".($i+1).", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"].", armourDmg: ".$dmg->armourDmg);
+			Debug::log("hits ".($i+1).", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"].", armourDmg: ".$dmg->armourDmg);
 
 			$total += $totalDmg;
 			$shield += $dmg->shieldDmg;
 			$armour += $dmg->armourDmg;
 			$struct += $dmg->systemDmg;
 			$em += $dmg->emDmg;
-			//Debug::log("added hit ".($i+1).", ".$shield."/".$armour."/".$struct);
+			Debug::log("added hit ".($i+1).", ".$shield."/".$armour."/".$struct);
 		}
 
 		$dmg->notes .= ("v".$hits.";");
@@ -327,7 +327,7 @@ class DmgCalc {
 			if ($okSystem){
 				$dmg->hullDmg += abs($remInt - $struct);
 				$dmg->systemDmg -= $dmg->hullDmg;
-				//Debug::log(" => hit ".($i+1).", adding ".$dmg->systemDmg."/".$dmg->armourDmg." to overkill which is now: ".$dmg->hullDmg." pts");
+				Debug::log(" => hit ".($i+1).", adding ".$dmg->systemDmg."/".$dmg->armourDmg." to overkill which is now: ".$dmg->hullDmg." pts");
 			}
 			else {
 				$dmg->systemDmg = $remInt;

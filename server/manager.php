@@ -94,8 +94,6 @@
 		//$this->testFleetMorale();
 		//if ($this->hasNewGlobalEntries()){DBManager::app()->insertNewGlobalEntries($this->playerstatus);}
 
-		$this->getUnit(12)->getSystem(2)->getActiveSystem()->getTotalDamage(0, 0, 0);
-
 		if (!$this->settings || !$this->settings->turn){return false;}
 		
 		$data = array(
@@ -1720,7 +1718,7 @@
 	}
 
 	public function getNewFocusValue($playerstatus, $unit){
-		Debug::log("getNewFocusValue turn: ".$this->turn.", phase: ".$this->phase.", cmd: ".$unit->name." #".$unit->id);
+		Debug::log("getNewFocusValue turn:".$this->turn.", phase: ".$this->phase.", cmd: ".$unit->name." #".$unit->id);
 
 		$curFocus; $gainFocus;
 
