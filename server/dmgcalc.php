@@ -297,7 +297,7 @@ class DmgCalc {
 			echo "</br></br>";
 		}*/
 
-		for ($i = 1; $i < $hits; $i++){
+		for ($i = 1; $i <= $hits; $i++){
 			$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 			$dmg = DmgCalc::calcDmg($fire->weapon, $totalDmg, $negation);
 
