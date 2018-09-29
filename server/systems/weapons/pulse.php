@@ -162,8 +162,8 @@ class HeavyPlasmaPulse extends MediumPlasmaPulse {
 	public $name = "HeavyPlasmaPulse";
 	public $display = "Heavy Plasma Pulse Cannon";
 	public static $prio = 0;
-	public $minDmg = 69;
-	public $maxDmg = 74;
+	public $minDmg = 39;
+	public $maxDmg = 54;
 	public $accDecay = 80;
 	
 	public $projSize = 4;
@@ -172,7 +172,6 @@ class HeavyPlasmaPulse extends MediumPlasmaPulse {
 	public $integrity = 64;
 	public $powerReq = 6;
 	public $tracking = 5;
-	public $dmgLoss = 4;
 
 	public $effiency = 4;
 
