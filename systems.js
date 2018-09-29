@@ -13,6 +13,7 @@ function System(system){
 	this.armour = system.armour;
 	this.mount = system.mount;
 	this.disabled = system.disabled;
+	this.destroyed = system.destroyed;
 	this.locked = system.locked;
 	this.maxRange = system.maxRange;
 	this.loads = system.loads || [];
@@ -21,7 +22,6 @@ function System(system){
 	this.damages = [];
 	this.highlight = false;
 	this.selected = false;
-	this.destroyed = false;
 	this.weapon = false;
 	this.bonusNegation = 0;
 	this.cost = 0;

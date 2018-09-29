@@ -109,7 +109,6 @@ class Squaddie extends Single {
 	public function getNewCrits($turn){
 		$crits = array();
 
-
 		for ($i = 0; $i < sizeof($this->crits); $i++){
 			if ($this->crits[$i]->new){
 				$crits[] = $this->crits[$i];

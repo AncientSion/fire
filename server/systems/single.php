@@ -33,7 +33,7 @@ class Single {
 	public $system = false;
 	
 	public $critEffects =  array( // type, mag, dura, effect
-		array("Disabled", 120, 0, 0.00),
+		array("Disabled", 020, 0, 0.00),
 	);
 
 	function __construct($id, $parentId){
@@ -124,7 +124,6 @@ class Single {
 			if (!$this->destroyed && $this->emDmg >= $this->integrity){
 				//Debug::log("immediate disable");
 				$this->doDropout();
-
 			}
 		}
 
@@ -183,7 +182,7 @@ class Single {
 		if ($this->destroyed){return;}
 		if (!$dmg->rel){return;}
 
-		Debug::log("___determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old.", rel: ".$dmg->rel.", Squad: ".$squad);
+		//Debug::log("___determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old.", rel: ".$dmg->rel.", Squad: ".$squad);
 
 		$sumDmg = ($dmg->new + $dmg->old)*100;
 		$crit = DmgCalc::critProcedure($this->parentId, $this->id, $turn, $dmg->rel, $this->critEffects, $sumDmg);
