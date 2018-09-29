@@ -183,8 +183,8 @@ class Weapon extends System {
 
 	public function getDamageMod($fire){
 		$mod = 100;
-		$mod += $this->getBoostEffect("Damage") * $this->getBoostLevel($fire->turn);
-		$mod += $this->getCritMod("Damage", $fire->turn);
+		$mod += $this->getBoostEffect("Damage") * $this->getBoostLevel(21);
+		$mod += $this->getCritMod("Damage", 21);
 		return $mod / 100;
 	}
 
