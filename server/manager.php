@@ -1719,7 +1719,7 @@
 	}
 
 	public function getNewFocusValue($playerstatus, $unit){
-		Debug::log("getNewFocusValue turn:".$this->turn.", phase: ".$this->phase.", cmd: ".$unit->name." #".$unit->id);
+		Debug::log("getNewFocusValue turn: ".$this->turn.", phase: ".$this->phase.", cmd: ".$unit->name." #".$unit->id);
 
 		$curFocus; $gainFocus;
 

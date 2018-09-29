@@ -215,6 +215,13 @@ Squaddie.prototype.expandElement = function(){
 					.css("top", p.y - s/2 + pWidth/2 + oY)
 				)
 
+			if (this.destroyed){
+				$(ele).append($("<img>")
+					.attr("src", "varIcons/destroyed.png")
+					.addClass("overlay")
+						
+			}
+
 			if (oX){oX += shiftX + space +1;}
 			else if (oY){oY += shiftY + space*2;}
 

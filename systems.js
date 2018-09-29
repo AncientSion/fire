@@ -19,7 +19,6 @@ function System(system){
 	this.critEffects = system.critEffects;
 	this.crits = [];
 	this.damages = [];
-	this.detailsTable = false;
 	this.highlight = false;
 	this.selected = false;
 	this.destroyed = false;
