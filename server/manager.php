@@ -94,6 +94,7 @@
 		//$this->testFleetMorale();
 		//if ($this->hasNewGlobalEntries()){DBManager::app()->insertNewGlobalEntries($this->playerstatus);}
 
+		$this->getUnit(12)->getSystem(2)->getActiveSystem()->getTotalDamage(0, 0, 0);
 
 		if (!$this->settings || !$this->settings->turn){return false;}
 		

@@ -63,9 +63,9 @@ class Weapon extends System {
 		$base = $this->getBaseDamage($fire, $hit, $system);
 		$bonus = $this->getBonusDamage($fire, $base, $hit);
 		$mod = $this->getDamageMod($fire);
-		$range = $this->getDmgRangeMod($fire);
+		$range = 1; //$range = $this->getDmgRangeMod($fire);
 
-		//Debug::log("base: ".$base.", bonus: ".$bonus.", mod: ".$mod.", range: ".$range);
+		Debug::log("base: ".$base.", bonus: ".$bonus.", mod: ".$mod.", range: ".$range);
 		return max(0, floor(($base+$bonus)*$mod*$range));
 	}
 	
