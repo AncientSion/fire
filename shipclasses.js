@@ -1629,7 +1629,6 @@ Ship.prototype.createMoveStartEntry = function(type){
 			this.attachLogEntry("<th colSpan=9><span>" + this.getLogTitleSpan() + " has completed a full flip.</span></th>");
 			return;
 	}
-
 }
 
 Ship.prototype.createActionEntry = function(){
