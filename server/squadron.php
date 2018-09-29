@@ -352,10 +352,8 @@ class Squadron extends Ship {
 					$this->structures[$j]->crits[] = $crits[$i];
 					if ($crits[$i]->type == "Disabled" && $crits[$i]->duration == 0){
 						$this->structures[$j]->destroyed = 1;
-						Debug::log("disabled!");
 						for ($k = 0; $k < sizeof($this->structures[$j]->structures); $k++){
 							for ($l = 0; $l < sizeof($this->structures[$j]->structures[$k]->systems); $l++){
-								Debug::log("d");
 								$this->structures[$j]->structures[$k]->systems[$l]->destroyed = 1;
 							}
 						}
