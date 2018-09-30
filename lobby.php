@@ -343,7 +343,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 
 		var checkGames = setInterval(
 			function(){ajax.checkGameState();},
-		30000);
+		20000);
 
 		$("#instructWrapper")
 			.css("left", 225)

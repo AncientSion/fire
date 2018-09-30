@@ -421,6 +421,7 @@ Ship.prototype.getRealActionCost = function(type){
 }
 
 Ship.prototype.getImpulseChangeCost = function(){
+	return Math.ceil(this.baseImpulseCost);
 	return Math.ceil(this.baseImpulseCost * (1 + ((this.getImpulseMod()-1) / 2)));
 	return Math.ceil(this.baseImpulseCost * (1-((this.getImpulseMod()-1)/2)) * this.getImpulseMod());
 }
@@ -3198,7 +3199,7 @@ Ship.prototype.updateDiv = function(){
 	$(this.element)
 		.find(".thrust").html(this.getRemSpeed() + " / " + this.getCurSpeed()).end()
 		.find(".ep").html(this.getRemEP() + " / " + this.getEffEP()).end()
-		.find(".change").html(this.getRealImpulseChangeCost() + ", " + this.getRealActionCost(0) + ", " + this.getRealActionCost(1)).end()
+		.find(".change").html(this.getImpulseChangeCost() + ", " + this.getActionCost(0) + ", " + this.getActionCost(1)).end()
 		.find(".delay").html(this.getRemDelay()).end()
 }
 
@@ -4161,6 +4162,7 @@ Ship.prototype.doIncreaseImpulse = function(){
 		var action = new Move(-1, this.id, "speed", 0, 1, shipPos.x, shipPos.y, 0, 0, this.getImpulseChangeCost(), 1, 1, 0);
 		this.actions.push(action);
 	}
+	$(this.element).find(".speed").html(this.getRemSpeed() + " / " + this.getCurSpeed());
 	this.resetMoveMode();
 	game.redraw();
 }
@@ -4174,6 +4176,7 @@ Ship.prototype.doDecreaseImpulse = function(){
 		var action = new Move(-1, this.id, "speed", 0, -1, shipPos.x, shipPos.y, 0, 0, this.getImpulseChangeCost(), 1, 1, 0);
 		this.actions.push(action);
 	}
+	$(this.element).find(".speed").html(this.getRemSpeed() + " / " + this.getCurSpeed());
 	this.resetMoveMode();
 	game.redraw();
 }
