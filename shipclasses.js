@@ -585,7 +585,7 @@ Ship.prototype.issueMove = function(pos, dist){
 
 
 Ship.prototype.doAutoShorten = function(){
-	if (!this.getRemSpeed()){return;}
+	if (this.getRemSpeed()){return;}
 	var delay = this.getRemDelay();
 	if (!delay){return;}
 
