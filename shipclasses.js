@@ -585,13 +585,12 @@ Ship.prototype.issueMove = function(pos, dist){
 
 
 Ship.prototype.doAutoShorten = function(){
-	var ep = this.getRemEP();
-	if (!ep){return;}
+	if (!this.getSpeed()){return;}
 	var delay = this.getRemDelay();
 	if (!delay){return;}
 
-	var turn = this.getLastTurn();
 	var ep = this.getRemEP();
+	var turn = this.getLastTurn();
 	var mod = this.getImpulseMod();
 
 	var maxCut = Math.floor(ep / turn.cost * turn.delay);
