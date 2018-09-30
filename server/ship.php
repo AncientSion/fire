@@ -1030,7 +1030,7 @@ class Ship {
 	}
 
 	public function getSensorSizeRating(){
-		return ($this->faction == "Minbari Federation" ? $this->traverse-2 : $this->traverse-4);
+		return ($this->faction == "Minbari Federation" ? $this->traverse-1 : $this->traverse-4);
 	}
 
 	public function getLockEffect($target){

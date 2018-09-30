@@ -280,7 +280,10 @@ class HeavyAntimatterBeamProjector extends Laser {
 		//Debug::log("hit #".$hit);
 		//Debug::log("req: ".$fire->req);
 		//Debug::log("roll: ".$fire->rolls[$hit]);
-		return min($baseDmg / 100 * $this->amMax, ($fire->req - $fire->rolls[$hit]) * $this->amBonus);
+		$max = floor($baseDmg / 100 * $this->amMax);
+		$actual = floor(($fire->req - $fire->rolls[$hit]) * $this->amBonus);
+		//Debug::log("getBonusDamage____max ".$max.", actual ".$actual);
+		return min($max, $actual);
 	}
 }
 

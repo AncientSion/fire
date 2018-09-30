@@ -459,7 +459,7 @@ class DmgCalc {
 				}
 				$dmg->systemDmg = $remInt;
 				Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->systemDmg.", OK for: ".$dmg->hullDmg." dmg");
-				if ($okSystem->id  == 1 || $system->id == 1){
+				if (!$okSystem || $system->id == 1){
 					Debug::log("target destroyed!, abandon raking");
 					break;
 				}
