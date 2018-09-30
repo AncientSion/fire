@@ -1989,8 +1989,9 @@
 			break;
 			case "Minbari Federation";
 				$notes = array(
-					array("Advanced", "Highly advanced tech allow easy overpowering of hostile sensors. EW is considered to be originating from a unit 2 levels larger."),
-					array("Enlightened", "Superior tactical capabilities and officer training result in 30 % increased Focus gain. Unit starting morale increased to 115.")
+					array("Advanced Tech", "Highly advanced tech results in any EW being considered to be originating from a unit 3 levels larger."),
+					array("Mastermind", "Superior tactical capabilities and strategical brialliance result in 30 % increased Focus gain."),
+					array("Enlightened", "Lifelong training and an indefinite stride for for knowledge results in officer training being 30 % less expensive")
 				);
 			break;
 			case "Narn Regime";
@@ -2118,7 +2119,7 @@
 		if ($get["unit"] == "ship"){
 			$unit = new $get["name"](
 				array(
-					"id" => $get["purchases"], "userid" => 1, "command" => 0, "available" => 0, "display" => "", "status" => "", "totalCost" => 0,"moraleCost" => 0,
+					"id" => $get["purchases"], "userid" => 1, "command" => 0, "available" => 0, "withdraw" => 0, "display" => "", "status" => "", "totalCost" => 0,"moraleCost" => 0,
 					"destroyed" => 0, "x" => 0, "y" => 0, "facing" => 270, "delay" => 0, "thrust" => 0, 
 					"rolling" => 0, "rolled" => 0, "flipped" => 0, "focus" => 0, "notes" => ""
 				)

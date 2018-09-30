@@ -251,6 +251,10 @@ else header("Location: index.php");
 				ballistics: [],
 				settings: window.settings,
 
+				getPlayerStatus: function(){
+					return {morale: 0}
+				},
+
 				doCloneSquaddie: function(data){
 					var squadron = game.getUnit(aUnit);
 					var sub = squadron.getSystem(data.systemId);
@@ -275,10 +279,10 @@ else header("Location: index.php");
 					squadron.structures.push(copy);
 					squadron.index = id;
 					squadron.setLayout();
-					squadron.setSubElements();
+					squadron.positionSubUnits();
 					squadron.setStats();
 					squadron.setSubSystemState();
-					copy.expandElement();
+					copy.createSelfContainer();
 					copy.previewSetup();
 
 					game.setUnitTotal(squadron);
@@ -853,13 +857,13 @@ else header("Location: index.php");
 		unit.index = sub.index;
 		unit.size = (50 + unit.structures.length*10) * 0.7;
 		unit.setLayout();
-		unit.setSubElements();
+		unit.positionSubUnits();
 		unit.setStats();
 		unit.setSubSystemState();
 		unit.updateImage();
 		//unit.primary.systems[0].select();
 		//unit.doConfirmSystemLoadout();
-		sub.expandElement();
+		sub.createSelfContainer();
 		sub.previewSetup();
 		drawShipPreview();
 

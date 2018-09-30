@@ -33,7 +33,7 @@ class ParticleGun extends FighterWeapon {
 
 class FighterStandard extends FighterWeapon {
 	public $name = "FighterStandard";
-	public $display = "Particle Gun / Hit & Run";
+	public $display = "Fighter - Burst Attack";
 	public $animColor = "blue";
 	
 	function __construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg){
@@ -45,7 +45,7 @@ class FighterStrafe extends FighterWeapon {
 	public $type = "Pulse";
 	public $fireMode = "Pulse";
 	public $name = "FighterStrafe";
-	public $display = "Particle Gun / Strafing Attack";
+	public $display = "Fighter - Strafe Attack";
 	public $animColor = "blue";
 	public $tracking = 3;
 	public $basePulses = 1;

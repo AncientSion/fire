@@ -33,7 +33,7 @@ class Single {
 	public $system = false;
 	
 	public $critEffects =  array( // type, mag, dura, effect
-		array("Disabled", 020, 0, 0.00),
+		array("Disabled", 120, 0, 0.00),
 	);
 
 	function __construct($id, $parentId){

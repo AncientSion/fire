@@ -86,7 +86,7 @@ Squaddie.prototype.getSysDiv = function(){
 	return div;
 }
 
-Squaddie.prototype.expandElement = function(){
+Squaddie.prototype.createSelfContainer = function(){
 
 	var img = $(this.getBaseImage().cloneNode(true)).addClass("size70 rotate270");
 	if (!this.destroyed){
@@ -96,7 +96,8 @@ Squaddie.prototype.expandElement = function(){
 			console.log(game.getUnit(data.shipId).getSystem(data.systemId));
 		})
 		.contextmenu(function(){
-			game.doCloneSquaddie($(this).parent().parent().parent().parent().parent().parent().data());
+			var data = $(this).closest(".unitContainer").data();
+			game.doCloneSquaddie(data);
 		})
 		.hover(
 			function(e){

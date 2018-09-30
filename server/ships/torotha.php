@@ -9,7 +9,7 @@ class Torotha extends SuperLight {
 	public $mass = 1600;
 
 	public $integrity = 380;
-	public $ep = 100;
+	public $ep = 90;
 	public $ew = 600;
 	public $power = 0;
 	public $negation = 13;
@@ -27,11 +27,11 @@ class Torotha extends SuperLight {
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new TwinEMProjector($this->getId(), $this->parentId, 90, 270);
+		$right->systems[] = new TwinEMProjector($this->getId(), $this->parentId, 270, 90);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new TwinEMProjector($this->getId(), $this->parentId, 90, 270);
+		$left->systems[] = new TwinEMProjector($this->getId(), $this->parentId, 270, 90);
 		$structs[] = $left;
 		
 		for ($i = 0; $i < sizeof($structs); $i++){

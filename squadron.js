@@ -55,6 +55,7 @@ Squadron.prototype.getDrawFacing = function(){
 }
 
 Squadron.prototype.setLayout = function(){
+	console.log("ding");
 
 	var minX = 0;
 	var minY = 0;
@@ -145,19 +146,19 @@ Squadron.prototype.createBaseDiv = function(){
 	if (this.structures.length){
 		$(div).removeClass("disabled");
 		this.setLayout();
-		this.setSubElements();
+		this.positionSubUnits();
 		for (var i = 0; i < this.structures.length; i++){
-			this.structures[i].expandElement();
+			this.structures[i].createSelfContainer();
 		}
 		$(div).addClass("disabled");
 	}
 }
 
-Squadron.prototype.setSubElements = function(){
+Squadron.prototype.positionSubUnits = function(){
 
-	var cont = 160;
+	var contW = 160;
 
-	var w = this.structures.length == 4 ?  390 : Math.max(390, Math.min(3, Math.max(2, this.structures.length))*cont);
+	var w = this.structures.length == 4 ? 390 : Math.max(390, Math.min(3, Math.max(2, this.structures.length))*contW);
 	//console.log(w);
 
 	$(this.element).css("width", w);
@@ -174,44 +175,6 @@ Squadron.prototype.setSubElements = function(){
 		for (var i = 0; i < this.structures.length; i++){
 			$(this.structures[i].element).css("width", 160)
 		}
-	}
-	return;
-
-	var row = 0;
-	var col = -1;
-	var w = 160 + 3*3;
-
-	for (var i = 0; i < this.structures.length; i++){
-		if (col == 2){
-			row++;
-			col = 0;
-		} else col++;
-
-		$(this.structures[i].element)
-			.css("left", col * w)
-			.css("top", row * w)
-
-
-		$(this.element).find(".structContainer").append(this.structures[i].element);
-	}
-	return;
-	var w = $($(this.element).find(".structContainer")).width();
-	var h = $($(this.element).find(".structContainer")).height();
-
-	var offset = 0;
-	if (this.structures.length == 3){offset = 30;}
-
-	for (var i = 0; i < this.structures.length; i++){
-		$(this.element).find(".structContainer").append(this.structures[i].element);
-		var subW = $(this.structures[i].element).width();
-		var subH = $(this.structures[i].element).height();
-		var pos = rotate(0, 0, this.structures[i].layout, -90);
-			pos.x *= 1.9;
-			pos.y *= 1.9;
-
-		$(this.structures[i].element)
-			.css("left", pos.x + w/2 - subW/2)
-			.css("top", pos.y + h/2 - subH/2 + offset)
 	}
 }
 

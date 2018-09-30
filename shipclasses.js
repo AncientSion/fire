@@ -3477,7 +3477,7 @@ Ship.prototype.readyForAnim = function(){
 }
 
 Ship.prototype.getSensorSizeRating = function(){
-	return (this.faction == "Minbari Federation" ? this.traverse -2 : this.traverse-4);
+	return (this.faction == "Minbari Federation" ? this.traverse -1 : this.traverse-4);
 }
 
 Ship.prototype.getLockEffect = function(target){

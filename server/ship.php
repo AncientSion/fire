@@ -152,7 +152,11 @@ class Ship {
 			if ($this->squad){$this->slots = 12;}
 		}
 		else if ($this->faction == "Minbari Federation"){
-			$this->baseMorale = 115;
+			$this->baseMorale = 110;
+			$command = $this->getSystemByName("Command");
+			for ($i = 0; $i < sizeof($command->loads); $i++){
+				$command->loads[$i]["baseCost"] = ceil($command->loads[$i]["baseCost"] * 0.7);
+			}
 		}
 		//Debug::log("setSpecialAbilities #".$this->id.", now: ".$this->baseMorale);
 	}

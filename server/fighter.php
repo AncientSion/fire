@@ -137,7 +137,12 @@ class Nial extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new NeutronRepeater($this->getId(), $this->parentId, $this->id, 1, 3, 14, 18, 0, 360);
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
+			array(
+				array("FighterStandard", 1, 14, 18),
+				array("FighterStrafe", 1, 14, 18)
+			)
+		);
 	}
 }
 
@@ -157,7 +162,12 @@ class Tishat extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new NeutronRepeater($this->getId(), $this->parentId, $this->id, 1, 2, 13, 17, 0, 360);
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
+			array(
+				array("FighterStandard", 1, 13, 17),
+				array("FighterStrafe", 1, 13, 17)
+			)
+		);
 	}
 }
 
@@ -165,7 +175,7 @@ class Gorith extends Fighter {
 	public $name = "Gorith";
 	public $role = "Medium Fighter";
 	public $faction = "Narn Regime";
-	public static $value =  21;
+	public static $value =  23;
 	public $mass = 34;
 	public $integrity = 22;
 	public $negation = 3;
