@@ -577,6 +577,7 @@ Ship.prototype.issueMove = function(pos, dist){
 	$("#popupWrapper").hide();
 	this.unsetMoveMode();
 	this.setMoveMode();
+	this.doAutoShorten();
 	game.updateIntercepts(this.id);
 	game.redraw();
 	//game.drawShipOverlays();
