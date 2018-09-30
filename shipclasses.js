@@ -576,7 +576,6 @@ Ship.prototype.issueMove = function(pos, dist){
 	this.turnAngles = {}
 	$("#popupWrapper").hide();
 	this.unsetMoveMode();
-	if (!this.getRemEP()){this.doAutoShorten();}
 	this.setMoveMode();
 	game.updateIntercepts(this.id);
 	game.redraw();
@@ -585,6 +584,8 @@ Ship.prototype.issueMove = function(pos, dist){
 
 
 Ship.prototype.doAutoShorten = function(){
+	var ep = this.getRemEP();
+	if (!ep){return;}
 	var delay = this.getRemDelay();
 	if (!delay){return;}
 
@@ -603,36 +604,6 @@ Ship.prototype.doAutoShorten = function(){
 		turn.cost += cost
 		turn.delay -= Math.min(delay, Math.ceil(cost * this.baseTurnDelay));
 	}
-
-	return;	
-
-
-
-
-	if (!speed && delay){
-		while (this.canShortenOldTurn(move)){
-			move.cost = move.cost / move.costmod * (move.costmod + turn.step);
-			move.delay = move.delay * move.costmod / (move.costmod + turn.step);
-			move.costmod = round(move.costmod + turn.step, 1);
-			//console.log(move.cost, move.delay, move.costmod);
-		}
-	}
-	else if (speed && delay){
-		while (this.canShortenOldTurn(move)){
-			delay -= move.delay;
-			move.cost = move.cost / move.costmod * (move.costmod + turn.step);
-			move.delay = move.delay * move.costmod / (move.costmod + turn.step);
-			move.costmod = round(move.costmod + turn.step, 1);
-			delay += move.delay;
-			if (delay <= 0){
-				break;
-			}
-		}
-	}
-
-	move.cost = Math.round(move.cost);
-	move.delay = Math.round(move.delay);
-	this.setTurnData();
 }
 
 Ship.prototype.canShortenOldTurn = function(move){
