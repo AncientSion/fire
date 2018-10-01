@@ -71,7 +71,7 @@ System.prototype.getCritMod = function(type){
 System.prototype.getResolvingFireOrders = function(){
 	if (game.phase != 3){return false;}
 	for (var i = this.fireOrders.length-1; i >= 0; i--){
-		if (this.fireOrders[i].turn == game.turn || this.fireOrder[i].resolved == 1){
+		if (this.fireOrders[i].turn == game.turn || this.fireOrders[i].resolved == 1){
 			return this.fireOrders[i];
 		} else return false;
 	}
@@ -3797,7 +3797,7 @@ Area.prototype.drawSystemArc = function(facing, rolled, pos){
 Area.prototype.getResolvingFireOrders = function(){
 	if (game.phase != 2){return false;}
 	for (var i = this.fireOrders.length-1; i >= 0; i--){
-		if (this.fireOrders[i].turn == game.turn || this.fireOrder[i].resolved == 1){
+		if (this.fireOrders[i].turn == game.turn || this.fireOrders[i].resolved == 1){
 			return this.fireOrders[i];
 		}
 	}
