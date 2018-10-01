@@ -3892,7 +3892,7 @@ Game.prototype.showFleetMorale = function(e, userid){
 
 	for (var j = 1; j < this.playerstatus[i].globals.length; j++){
 		if (this.playerstatus[i].globals[j].type != "Morale"){continue;}
-		if (this.playerstatus[i].globals[j].value == 0){continue;}
+		//if (this.playerstatus[i].globals[j].value == 0){continue;}
 		var crit = this.playerstatus[i].globals[j];
 		var html = "";
 
@@ -3902,7 +3902,7 @@ Game.prototype.showFleetMorale = function(e, userid){
 		
 		table.append($("<tr>")
 			.append($("<td>").html(html + " (Turn " + crit.turn+")"))
-			.append($("<td>").html(crit.value > 0 ? "+" + crit.value  : crit.value)))
+			.append($("<td>").html(crit.value ? crit.notes : crit.value > 0 ? "+" + crit.value  : crit.value)))
 	}
 
 	table
