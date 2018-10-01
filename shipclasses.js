@@ -416,10 +416,6 @@ Ship.prototype.getActionCost = function(type){
 	return 1;
 }
 
-Ship.prototype.getRealActionCost = function(type){
-	return Math.ceil(this.getActionCost(type) / this.getImpulseMod());
-}
-
 Ship.prototype.getImpulseChangeCost = function(){
 	return Math.ceil(this.baseImpulseCost);
 	return Math.ceil(this.baseImpulseCost * (1 + ((this.getImpulseMod()-1) / 2)));
@@ -4005,7 +4001,7 @@ Ship.prototype.issuedActionThisTurn = function(type){
 }
 
 Ship.prototype.canDoAction = function(type){
-	if (this.getRemEP() >= this.getRealActionCost(type)){
+	if (this.getRemEP() >= this.getActionCost(type)){
 		if (this.issuedActionThisTurn(type)){return false;} // instead UNDO iit
 		else if (this.isRolling() && type == 1){return false;} // cant flip while you are rolling
 		else {
