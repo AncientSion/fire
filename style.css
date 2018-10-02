@@ -2261,6 +2261,9 @@ body {
 	margin-top: 10px;
 	border-top: 1px solid white;
 }
+.unitStats .header {
+	font-size: 15px;
+}
 
 .unitStats .header div:first-child {
 	float: left;
