@@ -1435,13 +1435,13 @@ function Game(data){
 
 
 			table
-				.append($("<tr>")
+			/*	.append($("<tr>")
 					.append($("<th>")
 						.attr("colSpan", 3)
 						.css("height", 5)
 					)
 				)
-			/*	.append($("<tr>")
+				.append($("<tr>")
 					.append($("<td>")
 						.html("Armour")
 					)
