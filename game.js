@@ -1453,7 +1453,7 @@ function Game(data){
 					.addClass("unitStats")
 					.append($("<tr>")
 						.append($("<th>")
-							addClass("header")
+							.addClass("header")
 							.attr("colSpan", 3)
 							.append($("<div>").html("left"))
 							.append($("<div>").html("mid"))
