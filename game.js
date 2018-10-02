@@ -1412,7 +1412,7 @@ function Game(data){
 			div = $("<div>").addClass("statsOverview");
 			wrapper.append(div);
 
-			for (j = 0; j < player[j].length; j++){
+			for (j = 0; j < player[i].length; j++){
 				aTotal += player[j].armourDmg;
 				sTotal += player[j].systemDmg;
 				sTotal += player[j].hullDmg
