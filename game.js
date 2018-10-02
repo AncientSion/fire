@@ -1383,7 +1383,7 @@ function Game(data){
 
 		var wrapper = $("<div>")
 			.attr("id", "statsWrapper")
-			.append($("<div>").html("Damage Statistics")
+			.append($("<div>").html("Statistics")
 				.css("margin-bottom", 10)
 				.css("font-size", 22)
 				.css("text-align", "center")
@@ -1419,9 +1419,9 @@ function Game(data){
 			}
 
 			div.append($("<div>").addClass("unitStats totalDmgDiv")
-				.append($("<div>").html("Damage dealt to"))
-				.append($("<div>").html("Armour: " + aTotal))
-				.append($("<div>").html("System & Hull: " + sTotal)))
+				.append($("<div>").html("Damage dealt"))
+				.append($("<div>").html("to Armour: " + aTotal))
+				.append($("<div>").html("to System & Hull: " + sTotal)))
 
 			for (j = 0; j < player[i].length; j++){
 
