@@ -1413,9 +1413,9 @@ function Game(data){
 			wrapper.append(div);
 
 			for (j = 0; j < player[i].length; j++){
-				aTotal += player[j].armourDmg;
-				sTotal += player[j].systemDmg;
-				sTotal += player[j].hullDmg
+				aTotal += player[i][j].armourDmg;
+				sTotal += player[i][j].systemDmg;
+				sTotal += player[i][j].hullDmg
 			}
 
 			div.append($("<div>").addClass("unitStats totalDmgDiv").html("System & Hull Damage dealt: " + sTotal))
