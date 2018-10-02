@@ -1404,14 +1404,15 @@ function Game(data){
 			}
 		}
 
-		var div;
-		var armourTotal = 0;
-		var nonArmourTotal = 0;
-		var salvoArmourTotal = 0;
-		var salvoSystemTotal = 0;
-		var salvoHullTotal = 0;
-
 		for (let i = 0; i < units.length; i++){
+
+			var div;
+			var armourTotal = 0;
+			var nonArmourTotal = 0;
+			var salvoArmourTotal = 0;
+			var salvoSystemTotal = 0;
+			var salvoHullTotal = 0;
+			
 			div = $("<div>").addClass("statsOverview").addClass(game.userid == game.playerstatus[i].userid ? "friendly" : "hostile")
 			wrapper.append(div);
 
@@ -1430,6 +1431,34 @@ function Game(data){
 				.append($("<div>").html("Damage dealt"))
 				.append($("<div>").html("to Armour: " + armourTotal + salvoArmourTotal))
 				.append($("<div>").html("to System & Hull: " + nonArmourTotal + salvoSystemTotal + salvoHullTotal)))
+
+			if (salvoArmourTotal || salvoSystemTotal || salvoHullTotal){
+				var table = $("<table>")
+					.addClass("unitStats salvo")
+					.append($("<tr>")
+						.append($("<th>")
+							.attr("colSpan", 3)
+							.css("font-size", 15)
+							.html("Combined Salvo Damage")))
+					.append($("<tr>")
+						.append($("<td>")
+							.css("color", "lightBlue")
+							.html(salvoArmourTotal)
+						)
+						.append($("<td>")
+							.css("color", "yellow")
+							.html(salvoSystemTotal)
+						)
+						.append($("<td>")
+							.css("color", "red")
+							.html(salvoHullTotal)
+						)
+					)
+
+					div.append(table);
+			}
+
+
 
 			for (j = 0; j < units[i].length; j++){
 
@@ -1469,31 +1498,6 @@ function Game(data){
 
 				div.append(table);
 			}
-
-			var table = $("<table>")
-				.addClass("unitStats")
-				.append($("<tr>")
-					.append($("<th>")
-						.attr("colSpan", 3)
-						.css("font-size", 15)
-						.html("Combined Ballistic Salvo")))
-				.append($("<tr>")
-					.append($("<td>")
-						.css("color", "lightBlue")
-						.html(salvoArmourTotal)
-					)
-					.append($("<td>")
-						.css("color", "yellow")
-						.html(salvoSystemTotal)
-					)
-					.append($("<td>")
-						.css("color", "red")
-						.html(salvoHullTotal)
-					)
-				)
-
-				div.append(table);
-
 
 
 
