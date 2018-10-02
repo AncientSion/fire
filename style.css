@@ -2237,6 +2237,7 @@ body {
 }
 
 .statsOverview {
+	width: 350px;
 	margin: auto;
 	border-radius: 5px;
 	border-collapse: collapse;
@@ -2257,7 +2258,7 @@ body {
 }
 
 .unitStats {
-	width: 300px;
+	width: 100%;
 	margin-top: 15px;
 	border-top: 1px solid white;
 }
