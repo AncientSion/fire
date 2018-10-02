@@ -1428,7 +1428,7 @@ function Game(data){
 				table.append($("<tr>")
 						.append($("<th>")
 							.attr("colSpan", 4)
-							.html(html.splice(units, units.length -2))
+							.html(html.splice(0, units.length -2))
 						)
 					)
 			}
