@@ -1364,12 +1364,12 @@ function Game(data){
 	}
 
 	this.getUnitStatsNameString = function(unit){
-		var html = units[i].name + " #" + units[i].id;
+		var html = unit.name + " #" + unit.id;
 
-		if (units[i].display != ""){
-			html += "  '" + units[i].display + "'";
+		if (unit.display != ""){
+			html += "  '" + unit.display + "'";
 		}
-		if (units[i].destroyed){
+		if (unit.destroyed){
 			html += "  (MIA)";
 		}
 		return html;
