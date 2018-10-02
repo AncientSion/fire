@@ -1399,7 +1399,7 @@ function Game(data){
 
 			for (let j = 0; j < data.length; j++){
 				if (game.playerstatus[i].userid != data[j].userid){continue;}
-				if (data[j].name == "Salvo"){salvos[i].push(data[j]);}
+				if (data[j].name == "Salvo"){salvos[i].push(data[j]); continue;}
 				units[i].push(data[j]);
 			}
 		}
