@@ -1438,7 +1438,7 @@ function Game(data){
 				if (player[i].units[j].subunits.length){
 					var html = "";
 					for (var k = 0; k < player[i].units[j].subunits.length; k++){
-						html += (player[i].units[j].subplayer[k].amount + "x " + player[i].units[j].subunits[k#äö.-,0].name+", ");
+						html += (player[i].units[j].subplayer[k].amount + "x " + player[i].units[j].subunits[k].name + ", ");
 					}
 					table.append($("<tr>").append($("<th>")	.attr("colSpan", 4)	.html(html.slice(0, html.length -2))
 							)
