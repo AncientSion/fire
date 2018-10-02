@@ -2232,6 +2232,10 @@ body {
 	max-height: 600px;
 }
 
+#statsWrapper div:last-child {
+	margin-left: 20px;
+}
+
 .statsOverview {
 	margin: auto;
 	border-radius: 5px;
@@ -2239,10 +2243,6 @@ body {
 	display: inline-block;
 	vertical-align: top;
 	padding: 5px;
-}
-
-.statsOverview div:first-child {
-	margin-right: 20px;
 }
 
 .totalDmgDiv {
