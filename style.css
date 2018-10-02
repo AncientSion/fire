@@ -2241,6 +2241,10 @@ body {
 	padding: 5px;
 }
 
+.statsOverview div:first-child {
+	margin-right: 20px;
+}
+
 .totalDmgDiv {
 	margin-top: 20px;
 	width: 300px;
