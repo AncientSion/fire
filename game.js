@@ -1395,9 +1395,9 @@ function Game(data){
 		for (let i = 0; i < game.playerstatus.length; i++){
 			player.push([]);
 
-			for (let j = 0; j < this.ships.length; j++){
-				if (this.playerstatus[i].userid != this.ships[j].userid){continue;}
-				player[i].push(this.ships[j]);
+			for (let j = 0; j < game.ships.length; j++){
+				if (game.playerstatus[i].userid != game.ships[j].userid){continue;}
+				player[i].push(game.ships[j]);
 			}
 		}
 
