@@ -2228,6 +2228,8 @@ body {
 	border-radius: 5px;
 	padding: 10px;
 	background-color: black;
+	overflow: auto;
+	max-height: 600px;
 }
 
 .statsOverview {
@@ -2237,8 +2239,6 @@ body {
 	border-collapse: collapse;
 	display: inline-block;
 	vertical-align: top;
-	overflow: auto;
-	max-height: 600px;
 }
 
 .unitStats {
