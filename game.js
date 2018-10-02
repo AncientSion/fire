@@ -1427,7 +1427,7 @@ function Game(data){
 					.addClass("unitStats")
 					.append($("<tr>")
 						.append($("<th>")
-							.attr("colSpan", 4)
+							.attr("colSpan", 3)
 							.css("font-size", 15)
 							.html(game.getUnitStatsNameString(player[i][j]))
 						)
@@ -1438,7 +1438,7 @@ function Game(data){
 					for (var k = 0; k < player[i][j].subunits.length; k++){
 						html += (player[i][j].subunits[k].amount + "x " + player[i][j].subunits[k].name + ", ");
 					}
-					table.append($("<tr>").append($("<th>")	.attr("colSpan", 4)	.html(html.slice(0, html.length -2))
+					table.append($("<tr>").append($("<th>")	.attr("colSpan", 3)	.html(html.slice(0, html.length -2))
 							)
 						)
 					}
