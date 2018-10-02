@@ -2240,9 +2240,14 @@ body {
 }
 
 .unitStats {
-	width: 320px;
+	width: 300px;
 	border-radius: 3px;
 	margin-top: 10px;
+}
+
+.unitStats td {
+	font-size: 14px;
+	font-weight: bold;
 }
 
 .totalDmgDiv {

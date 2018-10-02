@@ -1428,7 +1428,7 @@ function Game(data){
 				table.append($("<tr>")
 						.append($("<th>")
 							.attr("colSpan", 4)
-							.html(html.slice(0, units.length -2))
+							.html(html.slice(0, html.length -2))
 						)
 					)
 			}
@@ -1437,7 +1437,7 @@ function Game(data){
 			table
 				.append($("<tr>")
 					.append($("<th>")
-						.attr("colSpan", 4)
+						.attr("colSpan", 3)
 						.css("height", 5)
 					)
 				)
@@ -1468,9 +1468,9 @@ function Game(data){
 						.css("color", "red")
 						.html(units[i].hullDmg)
 					)
-					.append($("<td>")
-						.html(units[i].systemDmg + units[i].hullDmg)
-					)
+				//	.append($("<td>")
+				//		.html(units[i].systemDmg + units[i].hullDmg)
+				//	)
 				)
 
 				if (game.userid == units[i].userid){
@@ -1480,7 +1480,7 @@ function Game(data){
 			div.append(table);
 
 			if (i == units.length-1 || (i && units[i+1].userid != units[i].userid)){
-				div.append($("<div>").addClass("totalDmgDiv").html("Total Damage dealt: " + aTotal + " / " + sTotal))
+				div.append($("<div>").addClass("totalDmgDiv").html("Total Combined System & Hull Damage dealt: " + sTotal))
 				total = 0;
 			}
 		}
