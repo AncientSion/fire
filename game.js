@@ -1392,23 +1392,21 @@ function Game(data){
 
 		var player = [];
 
-		for (var i = 0; i < this.playerstatus[i].length; i++){
+		for (let i = 0; i < game.playerstatus[i].length; i++){
 			player.push([]);
 
-			for (var j = 0; j < this.ships.length; j++){
+			for (let j = 0; j < this.ships.length; j++){
 				if (this.playerstatus[i].userid != this.ships[j].userid){continue;}
 				player[i].push(this.ships[j]);
 			}
 		}
 
 
-
-
 		var div;
 		var aTotal = 0;
 		var sTotal = 0;		
 
-		for (i = 0; i < player.length; i++){
+		for (let i = 0; i < player.length; i++){
 			var	aTotal = 0;
 			var sTotal = 0;
 			div = $("<div>").addClass("statsOverview");
