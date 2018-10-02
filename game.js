@@ -1431,17 +1431,13 @@ function Game(data){
 					.append($("<tr>")
 						.append($("<td>")
 							.css("color", "lightBlue")
-							.html(salvoArmourTotal)
-						)
+							.html(salvoArmourTotal))
 						.append($("<td>")
 							.css("color", "yellow")
-							.html(salvoSystemTotal)
-						)
+							.html(salvoSystemTotal))
 						.append($("<td>")
 							.css("color", "red")
-							.html(salvoHullTotal)
-						)
-					)
+							.html(salvoHullTotal)))
 
 					div.append(table);
 			}
@@ -1460,29 +1456,27 @@ function Game(data){
 							.append($("<div>").html("right"))))
 			}
 
-				if (units[i][j].subunits.length){
-					var html = "";
-					for (var k = 0; k < units[i][j].subunits.length; k++){
-						html += (units[i][j].subunits[k].amount + "x " + units[i][j].subunits[k].name + ", ");
-					}
-					table.append($("<tr>").append($("<th>")	.attr("colSpan", 3)	.html(html.slice(0, html.length -2))))
+			if (units[i][j].subunits.length){
+				var html = "";
+				for (var k = 0; k < units[i][j].subunits.length; k++){
+					html += (units[i][j].subunits[k].amount + "x " + units[i][j].subunits[k].name + ", ");
 				}
-
-				table
-					.append($("<tr>")
-						.append($("<td>")
-							.css("color", "lightBlue")
-							.html(units[i][j].armourDmg))
-						.append($("<td>")
-							.css("color", "yellow")
-							.html(units[i][j].systemDmg))
-						.append($("<td>")
-							.css("color", "red")
-							.html(units[i][j].hullDmg))
-					)
-
-				div.append(table);
+				table.append($("<tr>").append($("<th>")	.attr("colSpan", 3)	.html(html.slice(0, html.length -2))))
 			}
+
+			table
+			.append($("<tr>")
+				.append($("<td>")
+					.css("color", "lightBlue")
+					.html(units[i][j].armourDmg))
+				.append($("<td>")
+					.css("color", "yellow")
+					.html(units[i][j].systemDmg))
+				.append($("<td>")
+					.css("color", "red")
+					.html(units[i][j].hullDmg)))
+
+			div.append(table);
 
 			$(document.body).append(wrapper)
 		}
