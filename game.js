@@ -1447,7 +1447,6 @@ function Game(data){
 			}
 
 
-
 			for (j = 0; j < units[i].length; j++){
 				var callSign = "";
 				var table = $("<table>")
@@ -1458,9 +1457,8 @@ function Game(data){
 							.attr("colSpan", 3)
 							.append($("<div>").html("left"))
 							.append($("<div>").html("mid"))
-							.append($("<div>").html("right"))
-						)
-					)
+							.append($("<div>").html("right"))))
+			}
 
 				if (units[i][j].subunits.length){
 					var html = "";
@@ -1474,22 +1472,17 @@ function Game(data){
 					.append($("<tr>")
 						.append($("<td>")
 							.css("color", "lightBlue")
-							.html(units[i][j].armourDmg)
-						)
+							.html(units[i][j].armourDmg))
 						.append($("<td>")
 							.css("color", "yellow")
-							.html(units[i][j].systemDmg)
-						)
+							.html(units[i][j].systemDmg))
 						.append($("<td>")
 							.css("color", "red")
-							.html(units[i][j].hullDmg)
-						)
+							.html(units[i][j].hullDmg))
 					)
 
 				div.append(table);
 			}
-
-
 
 			$(document.body).append(wrapper)
 		}
