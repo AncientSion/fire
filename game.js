@@ -1418,7 +1418,7 @@ function Game(data){
 				sTotal += player[i][j].hullDmg
 			}
 
-			div.append($("<div>").addClass("unitStats totalDmgDiv")
+			div.append($("<div>").addClass("totalDmgDiv")
 				.append($("<div>").html("Damage dealt"))
 				.append($("<div>").html("to Armour: " + aTotal))
 				.append($("<div>").html("to System & Hull: " + sTotal)))

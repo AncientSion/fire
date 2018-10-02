@@ -2241,6 +2241,17 @@ body {
 	padding: 5px;
 }
 
+.totalDmgDiv {
+	margin-top: 20px;
+	width: 300px;
+	border-radius: 3px;
+}
+
+.totalDmgDiv div {
+	text-align: center;
+	font-size: 20px;
+}
+
 .unitStats {
 	width: 300px;
 	border-radius: 3px;
@@ -2254,15 +2265,6 @@ body {
 
 .unitStats td {
 	width: 33%;
-}
-
-.totalDmgDiv {
-	margin-top: 20px;
-}
-
-.totalDmgDiv div {
-	text-align: center;
-	font-size: 20px;
 }
 
 .ammoDiv {
