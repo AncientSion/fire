@@ -2266,8 +2266,13 @@ body {
 	float: left;
 }
 
+.unitStats .header div:nth-child(2) {
+	display: inline;
+}
+
 .unitStats .header div:last-child {
 	float: right;
+	margin-left: unset;
 }
 
 .unitStats.ballistic {
