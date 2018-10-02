@@ -1369,10 +1369,10 @@ function Game(data){
 		if (unit.display != ""){
 			html += "  '" + unit.display + "'";
 		}
-		if (unit.destroyed){
-			html += "  (MIA)";
-		}
-		return html;
+		///if (unit.destroyed){
+		//	html += "  (MIA)";
+		//}
+		return html + "(" + unit.moraleCost + ")";
 	}
 
 	this.showStats = function(data){
@@ -1400,7 +1400,6 @@ function Game(data){
 				player[i].push(data[j]);
 			}
 		}
-
 
 		var div;
 		var aTotal = 0;

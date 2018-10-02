@@ -230,7 +230,7 @@
 			//Debug::log("getDamageStatistics, game: ".$gameid.", user: ".$user);
 			$stmt = $this->connection->prepare("
 				SELECT
-					units.name, units.display, units.id, units.userid, units.destroyed,
+					units.name, units.display, units.id, units.userid, units.destroyed, units.moraleCost
 					COALESCE(SUM(damages.armourDmg), 0) as armourDmg,
 					COALESCE(SUM(damages.systemDmg), 0) as systemDmg,
 					COALESCE(SUM(damages.hullDmg), 0) as hullDmg
