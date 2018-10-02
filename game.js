@@ -1412,7 +1412,7 @@ function Game(data){
 			var salvoArmourTotal = 0;
 			var salvoSystemTotal = 0;
 			var salvoHullTotal = 0;
-			
+
 			div = $("<div>").addClass("statsOverview").addClass(game.userid == game.playerstatus[i].userid ? "friendly" : "hostile")
 			wrapper.append(div);
 
@@ -1429,8 +1429,8 @@ function Game(data){
 
 			div.append($("<div>").addClass("totalDmgDiv")
 				.append($("<div>").html("Damage dealt"))
-				.append($("<div>").html("to Armour: " + armourTotal + salvoArmourTotal))
-				.append($("<div>").html("to System & Hull: " + nonArmourTotal + salvoSystemTotal + salvoHullTotal)))
+				.append($("<div>").html("to Armour: " + (armourTotal + salvoArmourTotal)))
+				.append($("<div>").html("to System & Hull: " + (nonArmourTotal + salvoSystemTotal + salvoHullTotal))))
 
 			if (salvoArmourTotal || salvoSystemTotal || salvoHullTotal){
 				var table = $("<table>")
