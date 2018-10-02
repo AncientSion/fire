@@ -1409,7 +1409,7 @@ function Game(data){
 		for (let i = 0; i < player.length; i++){
 			var	aTotal = 0;
 			var sTotal = 0;
-			div = $("<div>").addClass("statsOverview").addClass(game.userid == player[i].userid ? "friendly" : "hostile")
+			div = $("<div>").addClass("statsOverview").addClass(game.userid == game.playerstatus[i].userid ? "friendly" : "hostile")
 			wrapper.append(div);
 
 			for (j = 0; j < player[i].length; j++){
