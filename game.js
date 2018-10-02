@@ -1434,7 +1434,7 @@ function Game(data){
 
 			if (salvoArmourTotal || salvoSystemTotal || salvoHullTotal){
 				var table = $("<table>")
-					.addClass("unitStats salvo")
+					.addClass("unitStats ballistic")
 					.append($("<tr>")
 						.append($("<th>")
 							.attr("colSpan", 3)
