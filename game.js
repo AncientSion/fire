@@ -1409,7 +1409,8 @@ function Game(data){
 		for (let i = 0; i < player.length; i++){
 			var	aTotal = 0;
 			var sTotal = 0;
-			div = $("<div>").addClass("statsOverview");
+			var class = "";
+			div = $("<div>").addClass("statsOverview").addClass(game.userid == player[i][j].userid ? "friendly" : "hostile")
 			wrapper.append(div);
 
 			for (j = 0; j < player[i].length; j++){
@@ -1460,10 +1461,6 @@ function Game(data){
 							.html(player[i][j].hullDmg)
 						)
 					)
-
-					if (game.userid == player[i][j].userid){
-						table.addClass("friendly")
-					} else table.addClass("hostile");
 
 				div.append(table);
 			}
