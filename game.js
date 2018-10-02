@@ -1363,18 +1363,6 @@ function Game(data){
 		if (!avail.is(":visible") && !incoming.is(":visible")){wrapper.hide();}
 	}
 
-	this.getUnitStatsNameString = function(unit){
-		var html = unit.name + " #" + unit.id;
-
-		if (unit.display != ""){
-			html += "  '" + unit.display + "'";
-		}
-		///if (unit.destroyed){
-		//	html += "  (MIA)";
-		//}
-		return html + "(" + unit.moraleCost + ")";
-	}
-
 	this.showStats = function(data){
 		data = JSON.parse(data);
 		//units.sort(function(a, b){
@@ -1461,14 +1449,16 @@ function Game(data){
 
 
 			for (j = 0; j < units[i].length; j++){
-
+				var callSign = 
 				var table = $("<table>")
 					.addClass("unitStats")
 					.append($("<tr>")
 						.append($("<th>")
+							addClass("header")
 							.attr("colSpan", 3)
-							.css("font-size", 15)
-							.html(game.getUnitStatsNameString(units[i][j]))
+							.append($("<div>").html("left"))
+							.append($("<div>").html("mid"))
+							.append($("<div>").html("right"))
 						)
 					)
 

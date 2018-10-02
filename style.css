@@ -2262,6 +2262,14 @@ body {
 	border-top: 1px solid white;
 }
 
+.unitStats .header div:first-child {
+	float: left;
+}
+
+.unitStats .header div:last-child {
+	float: right;
+}
+
 .unitStats.ballistic {
 	margin-top: 20px;
 	margin-bottom: 20px;
