@@ -1451,9 +1451,9 @@ function Game(data){
 						.append($("<th>")
 							.addClass("header")
 							.attr("colSpan", 3)
-							.append($("<div>").html("left"))
-							.append($("<div>").html("mid"))
-							.append($("<div>").html("right"))))
+							.append($("<div>").html(units[i][j].name + " #" + units[i][j].id))
+							.append($("<div>").html(units[i][j].display))
+							.append($("<div>").html("("+units[i][j].moraleCost+")"))))
 
 				if (units[i][j].subunits.length){
 					var html = "";

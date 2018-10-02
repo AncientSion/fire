@@ -2268,6 +2268,7 @@ body {
 
 .unitStats .header div:nth-child(2) {
 	display: inline;
+	text-align: center;
 }
 
 .unitStats .header div:last-child {
