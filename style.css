@@ -2254,8 +2254,8 @@ body {
 
 .unitStats {
 	width: 300px;
-	border-radius: 3px;
 	margin-top: 10px;
+	border-top: 1px solid white;
 }
 
 .unitStats td {
