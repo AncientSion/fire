@@ -1449,7 +1449,7 @@ function Game(data){
 
 
 			for (j = 0; j < units[i].length; j++){
-				var callSign = 
+				var callSign = "";
 				var table = $("<table>")
 					.addClass("unitStats")
 					.append($("<tr>")
