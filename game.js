@@ -1376,10 +1376,10 @@ function Game(data){
 	}
 
 	this.showStats = function(data){
-		units = JSON.parse(data);
-		units.sort(function(a, b){
-			return a.userid - b.userid || a.id - b.id
-		});
+		data = JSON.parse(data);
+		//units.sort(function(a, b){
+		//	return a.userid - b.userid || a.id - b.id
+		//});
 
 		var wrapper = $("<div>")
 			.attr("id", "statsWrapper")
@@ -1390,102 +1390,88 @@ function Game(data){
 				.css("margin", "auto"))
 			.drag();
 
-		var div;
-		var aTotal = 0;
-		var sTotal = 0;
+		var player = [];
 
-		for (i = 0; i < units.length; i++){
-			//console.log(units[i]);
+		for (var i = 0; i < this.playerstatus[i].length; i++){
+			player.push([]);
 
-			if (!i || units[i].userid != units[i-1].userid){
-				div = $("<div>")
-					.addClass("statsOverview");
-				wrapper.append(div);
-
-				aTotal = 0;
-				sTotal = 0;
-			}
-
-			aTotal += units[i].armourDmg;
-			sTotal += units[i].systemDmg;
-			sTotal += units[i].hullDmg
-
-			var table = $("<table>")
-				.addClass("unitStats")
-				.append($("<tr>")
-					.append($("<th>")
-						.attr("colSpan", 4)
-						.css("font-size", 15)
-						.html(game.getUnitStatsNameString(units[i]))
-					)
-				)
-
-			if (units[i].subunits.length){
-				var html = "";
-				for (var j = 0; j < units[i].subunits.length; j++){
-					html += (units[i].subunits[j].amount + "x " + units[i].subunits[j].name+", ");
-				}
-				table.append($("<tr>")
-						.append($("<th>")
-							.attr("colSpan", 4)
-							.html(html.slice(0, html.length -2))
-						)
-					)
-			}
-
-
-			table
-			/*	.append($("<tr>")
-					.append($("<th>")
-						.attr("colSpan", 3)
-						.css("height", 5)
-					)
-				)
-				.append($("<tr>")
-					.append($("<td>")
-						.html("Armour")
-					)
-					.append($("<td>")
-						.html("Systems")
-					)
-					.append($("<td>")
-						.html("Structure")
-					)
-					.append($("<td>")
-						.html("S+S total")
-					)
-				)
-			*/	.append($("<tr>")
-					.append($("<td>")
-						.css("color", "lightBlue")
-						.html(units[i].armourDmg)
-					)
-					.append($("<td>")
-						.css("color", "yellow")
-						.html(units[i].systemDmg)
-					)
-					.append($("<td>")
-						.css("color", "red")
-						.html(units[i].hullDmg)
-					)
-				//	.append($("<td>")
-				//		.html(units[i].systemDmg + units[i].hullDmg)
-				//	)
-				)
-
-				if (game.userid == units[i].userid){
-					table.addClass("friendly")
-				} else table.addClass("hostile");
-
-			div.append(table);
-
-			if (i == units.length-1 || (i && units[i+1].userid != units[i].userid)){
-				div.append($("<div>").addClass("unitStats totalDmgDiv").html("System & Hull Damage dealt: " + sTotal))
-				total = 0;
+			for (var j = 0; j < this.ships.length; j++){
+				if (this.playerstatus[i].userid != this.ships[j].userid){continue;}
+				player[i].push(this.ships[j]);
 			}
 		}
 
-		$(document.body).append(wrapper)
+
+
+
+		var div;
+		var aTotal = 0;
+		var sTotal = 0;		
+
+		for (i = 0; i < player.length; i++){
+			var	aTotal = 0;
+			var sTotal = 0;
+			div = $("<div>").addClass("statsOverview");
+			wrapper.append(div);
+
+			for (j = 0; j < player[i].units.length; j++){
+				aTotal += player[i].units[j].armourDmg;
+				sTotal += player[i].units[j].systemDmg;
+				sTotal += player[i].units[j].hullDmg
+			}
+
+			div.append($("<div>").addClass("unitStats totalDmgDiv").html("System & Hull Damage dealt: " + sTotal))
+
+
+			for (j = 0; j < player[i].units.length; j++){
+
+				var table = $("<table>")
+					.addClass("unitStats")
+					.append($("<tr>")
+						.append($("<th>")
+							.attr("colSpan", 4)
+							.css("font-size", 15)
+							.html(game.getUnitStatsNameString(player[i].units[j]))
+						)
+					)
+
+				if (player[i].units[j].subunits.length){
+					var html = "";
+					for (var k = 0; k < player[i].units[j].subunits.length; k++){
+						html += (player[i].units[j].subplayer[k].amount + "x " + player[i].units[j].subunits[k].name+", ");
+					}
+					table.append($("<tr>")
+							.append($("<th>")
+								.attr("colSpan", 4)
+								.html(html.slice(0, html.length -2))
+							)
+						)
+				}
+
+				table
+					.append($("<tr>")
+						.append($("<td>")
+							.css("color", "lightBlue")
+							.html(player[i].units[j].armourDmg)
+						)
+						.append($("<td>")
+							.css("color", "yellow")
+							.html(player[i].units[j].systemDmg)
+						)
+						.append($("<td>")
+							.css("color", "red")
+							.html(player[i].units[j].hullDmg)
+						)
+					)
+
+					if (game.userid == player[i].units[j].userid){
+						table.addClass("friendly")
+					} else table.addClass("hostile");
+
+				div.append(table);
+			}
+
+			$(document.body).append(wrapper)
 	}
 
 	this.setInitialFacing = function(units){
@@ -4219,7 +4205,7 @@ Game.prototype.setCommandUnits = function(){
 		}
 		units.sort(function(a, b){return b.command - a.command});
 		for (var j = 1; j < units.length; j++){
-			units[j].command = 0;
+			player[i].units[j].command = 0;
 		}
 	}
 }
