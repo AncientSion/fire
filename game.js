@@ -1392,7 +1392,7 @@ function Game(data){
 
 		var player = [];
 
-		for (let i = 0; i < game.playerstatus[i].length; i++){
+		for (let i = 0; i < game.playerstatus.length; i++){
 			player.push([]);
 
 			for (let j = 0; j < this.ships.length; j++){
