@@ -118,6 +118,7 @@ class Ship {
 
 	public function getId(){
 		$this->index++;
+		Debug::log("returning index: ".$this->index);
 		return $this->index;
 	}
 
@@ -1188,7 +1189,7 @@ class Ship {
 		Debug::log("doTestMorale ".get_class($this)."# ".$this->id." remMorale: ".$this->morale->rem." #".$this->id.", newRel: ".$dmg->rel);
 
 		if (!$dmg->rel){return;}
-		$crit = DmgCalc::moraleCritProcedure($this->id, (2-$this->squad), $turn, $dmg->rel, $this->critEffects, 100 - $this->morale->rem);
+		$crit = DmgCalc::moraleCritProcedure($this->id, 2, $turn, $dmg->rel, $this->critEffects, 100 - $this->morale->rem);
 		if (!$crit){return;}
 
 		$this->notes = $crit->notes;

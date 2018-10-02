@@ -117,7 +117,7 @@ class Squadron extends Ship {
 
 	public function addPrimary(){
 		//Debug::log("addPrimary #".$this->id.", index: ".$this->index);
-		$this->primary = new Shared();
+		$this->primary = new Shared($this->getId());
 		$this->primary->systems[] = new Command($this->getId(), $this->id, 0, 0, $this->ship);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 0, 0, 0);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 0, 1000, 0);

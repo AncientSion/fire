@@ -33,6 +33,11 @@ class RelDmg {
 
 class Shared {
 	public $systems = array();
+	public $id;
+
+	function __construct($id){
+		$this->id = $id;
+	}
 }
 
 class Section {
