@@ -1412,16 +1412,16 @@ function Game(data){
 			div = $("<div>").addClass("statsOverview");
 			wrapper.append(div);
 
-			for (j = 0; j < player[i].units.length; j++){
-				aTotal += player[i].units[j].armourDmg;
-				sTotal += player[i].units[j].systemDmg;
-				sTotal += player[i].units[j].hullDmg
+			for (j = 0; j < player[i][j].length; j++){
+				aTotal += player[i][j].armourDmg;
+				sTotal += player[i][j].systemDmg;
+				sTotal += player[i][j].hullDmg
 			}
 
 			div.append($("<div>").addClass("unitStats totalDmgDiv").html("System & Hull Damage dealt: " + sTotal))
 
 
-			for (j = 0; j < player[i].units.length; j++){
+			for (j = 0; j < player[i][j].length; j++){
 
 				var table = $("<table>")
 					.addClass("unitStats")
@@ -1429,14 +1429,14 @@ function Game(data){
 						.append($("<th>")
 							.attr("colSpan", 4)
 							.css("font-size", 15)
-							.html(game.getUnitStatsNameString(player[i].units[j]))
+							.html(game.getUnitStatsNameString(player[i][j]))
 						)
 					)
 
-				if (player[i].units[j].subunits.length){
+				if (player[i][j].subunits.length){
 					var html = "";
-					for (var k = 0; k < player[i].units[j].subunits.length; k++){
-						html += (player[i].units[j].subplayer[k].amount + "x " + player[i].units[j].subunits[k].name + ", ");
+					for (var k = 0; k < player[i][j].subunits.length; k++){
+						html += (player[i][j].subplayer[k].amount + "x " + player[i][j].subunits[k].name + ", ");
 					}
 					table.append($("<tr>").append($("<th>")	.attr("colSpan", 4)	.html(html.slice(0, html.length -2))
 							)
@@ -1447,19 +1447,19 @@ function Game(data){
 					.append($("<tr>")
 						.append($("<td>")
 							.css("color", "lightBlue")
-							.html(player[i].units[j].armourDmg)
+							.html(player[i][j].armourDmg)
 						)
 						.append($("<td>")
 							.css("color", "yellow")
-							.html(player[i].units[j].systemDmg)
+							.html(player[i][j].systemDmg)
 						)
 						.append($("<td>")
 							.css("color", "red")
-							.html(player[i].units[j].hullDmg)
+							.html(player[i][j].hullDmg)
 						)
 					)
 
-					if (game.userid == player[i].units[j].userid){
+					if (game.userid == player[i][j].userid){
 						table.addClass("friendly")
 					} else table.addClass("hostile");
 
@@ -4201,7 +4201,7 @@ Game.prototype.setCommandUnits = function(){
 		}
 		units.sort(function(a, b){return b.command - a.command});
 		for (var j = 1; j < units.length; j++){
-			player[i].units[j].command = 0;
+			player[i][j].command = 0;
 		}
 	}
 }
