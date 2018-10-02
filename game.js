@@ -1465,9 +1465,9 @@ function Game(data){
 
 				div.append(table);
 			}
-		}
 
-		$(document.body).append(wrapper)
+			$(document.body).append(wrapper)
+		}
 	}
 
 	this.setInitialFacing = function(units){
