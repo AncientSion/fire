@@ -1383,7 +1383,7 @@ function Game(data){
 
 		var wrapper = $("<div>")
 			.attr("id", "statsWrapper")
-			.append($("<div>").html("Match Damage-by-source Statistics")
+			.append($("<div>").html("Damage Statistics")
 				.css("margin-bottom", 10)
 				.css("font-size", 22)
 				.css("text-align", "center")

@@ -2234,11 +2234,11 @@ body {
 
 .statsOverview {
 	margin: auto;
-	padding: 3px;
 	border-radius: 5px;
 	border-collapse: collapse;
 	display: inline-block;
-	vertical-align: top;
+	vertical-align: top
+	padding: 5px;
 }
 
 .unitStats {
@@ -2260,7 +2260,7 @@ body {
 .totalDmgDiv {
 	text-align: center;
 	margin-top: 20px;
-	font-size: 22px;
+	font-size: 20px;
 }
 
 .ammoDiv {
