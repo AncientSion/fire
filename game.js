@@ -1419,9 +1419,9 @@ function Game(data){
 			}
 
 			div.append($("<div>").addClass("unitStats totalDmgDiv")
+				.append($("<div>").html("Damage dealt to"))
 				.append($("<div>").html("Armour: " + aTotal))
-				.append($("<div>").html("System & Hull: " + sTotal))
-				.append($("<div>").html("Damage dealt to")))
+				.append($("<div>").html("System & Hull: " + sTotal)))
 
 			for (j = 0; j < player[i].length; j++){
 

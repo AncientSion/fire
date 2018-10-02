@@ -2258,8 +2258,11 @@ body {
 }
 
 .totalDmgDiv {
-	text-align: center;
 	margin-top: 20px;
+}
+
+.totalDmgDiv div {
+	text-align: center;
 	font-size: 20px;
 }
 
