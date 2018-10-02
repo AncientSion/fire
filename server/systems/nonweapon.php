@@ -111,7 +111,6 @@ class Command extends PrimarySystem {
 
 		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$rel->new.", old: ".$rel->old.", rel: ".$rel->new.", Squad: ".$squad);
 
-
         $options = array("Morale", "Focus", "Engine", "Sensor", "Reactor");
         $multi = array(1, 1, 0.75, 1, 0.75);
 		$roll = mt_rand(0, sizeof($options)-1);

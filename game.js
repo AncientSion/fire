@@ -1409,7 +1409,6 @@ function Game(data){
 		for (let i = 0; i < player.length; i++){
 			var	aTotal = 0;
 			var sTotal = 0;
-			var class = "";
 			div = $("<div>").addClass("statsOverview").addClass(game.userid == player[i][j].userid ? "friendly" : "hostile")
 			wrapper.append(div);
 
