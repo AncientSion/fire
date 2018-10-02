@@ -2229,7 +2229,7 @@ body {
 	padding: 10px;
 	background-color: black;
 	overflow: auto;
-	max-height: 600px;
+	max-height: 700px;
 }
 
 #statsWrapper div:last-child {
@@ -2258,23 +2258,23 @@ body {
 
 .unitStats {
 	width: 300px;
-	margin-top: 10px;
+	margin-top: 15px;
 	border-top: 1px solid white;
-}
-.unitStats .header div {
-	font-size: 15px;
 }
 
 .unitStats .header div:first-child {
+	font-size: 16px;
 	float: left;
 }
 
 .unitStats .header div:nth-child(2) {
+	font-size: 14px;
 	display: inline;
 	text-align: center;
 }
 
 .unitStats .header div:last-child {
+	font-size: 14px;
 	float: right;
 	margin-left: unset;
 }
@@ -2285,7 +2285,7 @@ body {
 }
 
 .unitStats td {
-	font-size: 16px;
+	font-size: 20px;
 	font-weight: bold;
 }
 
