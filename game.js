@@ -1390,39 +1390,48 @@ function Game(data){
 				.css("margin", "auto"))
 			.drag();
 
-		var player = [];
+		var units = [];
+		var salvos = [];
 
 		for (let i = 0; i < game.playerstatus.length; i++){
-			player.push([]);
+			units.push([]);
+			salvos.push([]);
 
 			for (let j = 0; j < data.length; j++){
 				if (game.playerstatus[i].userid != data[j].userid){continue;}
-				player[i].push(data[j]);
+				if (data[j].name == "Salvo"){salvos.push(data[j]);}
+				units[i].push(data[j]);
 			}
 		}
 
 		var div;
-		var aTotal = 0;
-		var sTotal = 0;		
+		var armourTotal = 0;
+		var nonArmourTotal = 0;
+		var salvoArmourTotal = 0;
+		var salvoSystemTotal = 0;
+		var salvoHullTotal = 0;
 
-		for (let i = 0; i < player.length; i++){
-			var	aTotal = 0;
-			var sTotal = 0;
+		for (let i = 0; i < units.length; i++){
 			div = $("<div>").addClass("statsOverview").addClass(game.userid == game.playerstatus[i].userid ? "friendly" : "hostile")
 			wrapper.append(div);
 
-			for (j = 0; j < player[i].length; j++){
-				aTotal += player[i][j].armourDmg;
-				sTotal += player[i][j].systemDmg;
-				sTotal += player[i][j].hullDmg
+			for (j = 0; j < units[i].length; j++){
+				armourTotal += units[i][j].armourDmg;
+				nonArmourTotal += units[i][j].systemDmg;
+				nonArmourTotal += units[i][j].hullDmg
+			}
+			for (j = 0; j < salvos[i].length; j++){
+				salvoArmourTotal += salvos[i][j].armourDmg;
+				salvoSystemTotal += salvos[i][j].systemDmg;
+				salvoHullTotal += salvos[i][j].hullDmg
 			}
 
 			div.append($("<div>").addClass("totalDmgDiv")
 				.append($("<div>").html("Damage dealt"))
-				.append($("<div>").html("to Armour: " + aTotal))
-				.append($("<div>").html("to System & Hull: " + sTotal)))
+				.append($("<div>").html("to Armour: " + armourTotal + salvoArmourTotal))
+				.append($("<div>").html("to System & Hull: " + nonArmourTotal + salvoSystemTotal + salvoHullTotal)))
 
-			for (j = 0; j < player[i].length; j++){
+			for (j = 0; j < units[i].length; j++){
 
 				var table = $("<table>")
 					.addClass("unitStats")
@@ -1430,38 +1439,63 @@ function Game(data){
 						.append($("<th>")
 							.attr("colSpan", 3)
 							.css("font-size", 15)
-							.html(game.getUnitStatsNameString(player[i][j]))
+							.html(game.getUnitStatsNameString(units[i][j]))
 						)
 					)
 
-				if (player[i][j].subunits.length){
+				if (units[i][j].subunits.length){
 					var html = "";
-					for (var k = 0; k < player[i][j].subunits.length; k++){
-						html += (player[i][j].subunits[k].amount + "x " + player[i][j].subunits[k].name + ", ");
+					for (var k = 0; k < units[i][j].subunits.length; k++){
+						html += (units[i][j].subunits[k].amount + "x " + units[i][j].subunits[k].name + ", ");
 					}
-					table.append($("<tr>").append($("<th>")	.attr("colSpan", 3)	.html(html.slice(0, html.length -2))
-							)
-						)
-					}
+					table.append($("<tr>").append($("<th>")	.attr("colSpan", 3)	.html(html.slice(0, html.length -2))))
+				}
 
 				table
 					.append($("<tr>")
 						.append($("<td>")
 							.css("color", "lightBlue")
-							.html(player[i][j].armourDmg)
+							.html(units[i][j].armourDmg)
 						)
 						.append($("<td>")
 							.css("color", "yellow")
-							.html(player[i][j].systemDmg)
+							.html(units[i][j].systemDmg)
 						)
 						.append($("<td>")
 							.css("color", "red")
-							.html(player[i][j].hullDmg)
+							.html(units[i][j].hullDmg)
 						)
 					)
 
 				div.append(table);
 			}
+
+			var table = $("<table>")
+				.addClass("unitStats")
+				.append($("<tr>")
+					.append($("<th>")
+						.attr("colSpan", 3)
+						.css("font-size", 15)
+						.html("Combined Ballistic Salvo")))
+				.append($("<tr>")
+					.append($("<td>")
+						.css("color", "lightBlue")
+						.html(salvoArmourTotal)
+					)
+					.append($("<td>")
+						.css("color", "yellow")
+						.html(salvoSystemTotal)
+					)
+					.append($("<td>")
+						.css("color", "red")
+						.html(salvoHullTotal)
+					)
+				)
+
+				div.append(table);
+
+
+
 
 			$(document.body).append(wrapper)
 		}
