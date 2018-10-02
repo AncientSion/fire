@@ -1480,7 +1480,7 @@ function Game(data){
 			div.append(table);
 
 			if (i == units.length-1 || (i && units[i+1].userid != units[i].userid)){
-				div.append($("<div>").addClass("unitStats totalDmgDiv").html("Combined System & Hull Damage dealt: " + sTotal))
+				div.append($("<div>").addClass("unitStats totalDmgDiv").html("System & Hull Damage dealt: " + sTotal))
 				total = 0;
 			}
 		}
