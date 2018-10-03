@@ -93,14 +93,48 @@ Squadron.prototype.setLayout = function(){
 	//$(this.element).find(".structContainer").css("height", h + 20 + ((this.structures.length > 2) * 70));
 }
 
+Squadron.prototype.setStringHitChance = function(){
+	//console.log("setStringHitChance #" + this.id);
+	var string = "";
+	var chances = [];
+	var shared = 1;
+
+	if (!this.structures.length){return "";}
+
+	for (let i = 0; i < this.structures.length; i++){
+		if (this.structures[i].destroyed){continue;}
+		chances.push(this.structures[i].baseHitChance);
+	}
+
+	for (var i = 1; i < chances.length; i++){
+		if (chances[0] == chances[i]){continue;}
+		shared = 0; break;
+	}
+
+	if (shared){
+		string = chances[0];
+		this.stringHitChance = string + "%";
+	}
+	else {
+		for (var i = 0; i < chances.length; i++){
+			string += chances[i] + "%, ";
+		}
+		this.stringHitChance = string.slice(0, string.length-2);
+	}
+}
+
 Squadron.prototype.createBaseDiv = function(){
 	Ship.prototype.createBaseDiv.call(this);
 
 	var w = $(this.element).find(".coreContainer").width();
 	var h = $(this.element).find(".coreContainer").height();
 
-	var x = 10;
-	var y = 20;
+
+	// JUMP OUT
+	$(this.element).find(".coreContainer").append(this.getJumpDiv());
+
+	var x = 60;
+	var y = 10;
 
 	for (var i = 0; i < this.primary.systems.length; i++){
 		this.index++;
@@ -114,33 +148,14 @@ Squadron.prototype.createBaseDiv = function(){
 			}
 		}
 		$(this.element).find(".coreContainer").append(div)
-		$(div).css("margin-left", x).css("margin-top", y);
-		//$(div).css("margin-top", 30).css("margin-left", 10 + (i*50));
+	//	$(div).css("left", x).css("top", y);
 
-		x += 50;
-		if (i == 0){
-			y += 70;
+		if (i == 1){
 			x = 10;
+			y += 50;
 		}
-	}
+		x += 50;
 
-	// JUMP OUT
-	if (!this.destroyed && game.turn && game.phase == 3){
-		var jumpDiv = 
-			$("<div>").addClass("info").css("top", 18).css("margin-left", 52)
-			.append($("<img>").addClass("jumpOut")
-				.attr("src", "varIcons/redVortex.png"))
-
-		if (this.needsWithdrawClickEvent()){
-			jumpDiv.find("img")
-			.click(function(){game.getUnit($(this).parent().parent().parent().parent().data("shipId")).requestJumpOut();
-			})
-		}
-		else if (this.isJumpingOut()){
-			jumpDiv.find("img").toggleClass("selected");
-		}
-
-		$(this.element).find(".coreContainer").append(jumpDiv);
 	}
 
 	if (this.structures.length){
@@ -592,9 +607,11 @@ Squadron.prototype.setStats = function(){
 	var ep = 1000;
 
 	var hitAndRun = true;
+	var narn = true;
 
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].faction != "Centauri Republic"){hitAndRun = false;}
+		if (this.structures[i].faction != "Narn Regime"){narn = false;}
 
 		this.slots[0] += this.structures[i].space;
 		this.baseImpulseCost = Math.max(this.baseImpulseCost, this.structures[i].baseImpulseCost);
@@ -610,10 +627,16 @@ Squadron.prototype.setStats = function(){
 		this.baseImpulseCost = Math.floor(this.baseImpulseCost * 0.8);
 	}
 
+	if (narn){
+		this.morale.baseMorale = 125;
+	} else this.morale.baseMorale = 100;
+
 	this.primary.systems[1].output = ew;
 	this.primary.systems[1].update();
 	this.primary.systems[2].output = ep;
 	this.primary.systems[2].update();
+
+	$(this.element).find(".curMorale").html(this.morale.baseMorale);
 
 	this.setStringHitChance();
 
@@ -891,6 +914,7 @@ Squadron.prototype.getSelfExplo = function(){
 }
 
 Squadron.prototype.getDamageMoraleMalus = function(){
+	return this.morale.damage;
 	var dmg = 100;
 	if (this.structures.length){
 		var integrity = 0;

@@ -23,6 +23,7 @@ class Trakk extends SuperLight {
 
 		$front = new Section(300, 60);
 		$front->systems[] = new MediumPlasmaPulse($this->getId(), $this->parentId, 315, 45);
+		$front->systems[] = new TwinParticleBolter($this->getId(), $this->parentId, 270, 90);
 		$front->systems[] = new MediumPlasmaPulse($this->getId(), $this->parentId, 315, 45);
 		$structs[] = $front;
 		

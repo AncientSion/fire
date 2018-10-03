@@ -27,7 +27,7 @@ class Mixed extends Ship {
 		$this->setRemDelay($turn);
 	}	
 
-	public function setMorale($turn){
+	public function setMorale($turn, $phase){
 		return;
 	}
 

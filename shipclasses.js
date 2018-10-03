@@ -15,8 +15,10 @@ function Ship(data){
 	this.totalCost = data.totalCost;
 	this.moraleCost = data.moraleCost;
 	this.size = data.size * 0.7;
+	this.index = data.index;
 	this.userid = data.userid;
 	this.available = data.available;
+	this.withdraw = data.withdraw;
 	this.baseHitChance = data.baseHitChance || 0;
 	this.baseImpulse = data.baseImpulse || 0;
 	this.traverse = data.traverse;
@@ -31,7 +33,6 @@ function Ship(data){
 	this.modFocusRate = data.modFocusRate;
 	this.critEffects = data.critEffects;
 	this.cc = [];
-	this.index = 0;
 	this.upgrades = [];
 	this.stringHitChance = "";
 
@@ -1451,8 +1452,6 @@ Ship.prototype.setSubSystemState = function(){
 }
 
 Ship.prototype.setStringHitChance = function(){
-	//console.log("setStringHitChance #" + this.id);
-	if (this.squad){return Mixed.prototype.setStringHitChance.call(this); }
 	this.stringHitChance = Math.floor(this.baseHitChance * this.profile[0]) + " - " + Math.floor(this.baseHitChance * this.profile[1]) + "%"
 }
 
@@ -2212,7 +2211,13 @@ Ship.prototype.getCurMorale = function(){
 	return this.morale.current;
 }
 
-Ship.prototype.showMoraleDiv = function(e){
+Ship.prototype.getRelativeMoraleValue = function(){
+	if (game.playerstatus){
+		return (this.moraleCost + " / " + Math.floor((this.moraleCost / game.getPlayerStatus(this.userid).morale)*100) + "%");
+	} else return "";
+}
+
+Ship.prototype.showUnitMoraleDiv = function(e){
 	var div = $("<div>")
 		.css("left", e.clientX - 90)
 		.css("top", e.clientY + 40)
@@ -2222,7 +2227,7 @@ Ship.prototype.showMoraleDiv = function(e){
 				.append($("<th>").attr("colSpan", 2).html("Morale Overview")))
 			.append($("<tr>")
 				.append($("<td>").html("Morale Value / Rel %"))
-				.append($("<td>").html(this.moraleCost + " / " + Math.floor((this.moraleCost / game.getPlayerStatus(this.userid).morale)*100) + "%")))
+				.append($("<td>").html(this.getRelativeMoraleValue())))
 			.append($("<tr>")
 				.append($("<td>").html("Base Morale"))
 				.append($("<td>").html(this.getBaseMorale())))
@@ -2273,7 +2278,7 @@ Ship.prototype.getMoraleTrigger = function(){
 }
 
 Ship.prototype.getFlagshipMoraleBonus = function(){
-	return this.command ? 10 : 0;
+	return this.command ? 10 : "";
 }
 
 Ship.prototype.getOfficerMoraleBonus = function(){
@@ -2289,6 +2294,7 @@ Ship.prototype.getCriticalMoraleMalus = function(){
 }
 
 Ship.prototype.getDamageMoraleMalus = function(){
+	return this.morale.damage;
 	var dmg = (100 - Math.floor(this.primary.remaining / this.primary.integrity * 100))*-1;
 	//if (!dmg){return ""}
 	return dmg;
@@ -2396,7 +2402,7 @@ Ship.prototype.createBaseDiv = function(){
 					.html(this.getSumMoraleModifers()))
 					.hover(
 						function(e){
-							game.getUnit($(this).parent().parent().parent().parent().parent().data("shipId")).showMoraleDiv(e);
+							game.getUnit($(this).parent().parent().parent().parent().parent().data("shipId")).showUnitMoraleDiv(e);
 						},
 						function(e){
 							game.getUnit($(this).parent().parent().parent().parent().parent().data("shipId")).hideMoraleDiv(e);
@@ -2424,7 +2430,7 @@ Ship.prototype.createBaseDiv = function(){
 
 	$(this.expandDiv($(div[0])))
 		.find(".structContainer")
-			.contextmenu(function(e){e.stopPropagation(); e.preventDefault()})
+			//.contextmenu(function(e){e.stopPropagation(); e.preventDefault()})
 			.end()
 		.find(".header")
 			.contextmenu(function(e){
@@ -2631,6 +2637,29 @@ Ship.prototype.canAffordFocus = function(){
 	if (game.getRemFocus() - game.getTotalFocusSpending() - this.getFocusCost() >= 0){
 		return true;
 	} return false;
+}
+
+Ship.prototype.getJumpDiv = function(){
+
+	var name = this.squad ? "system jumpDiv" : "jumpDiv";
+	var jumpDiv = 
+		$("<div>").addClass(name)
+			.append($("<img>")
+				.addClass("jumpOut")
+				.attr("src", "varIcons/redVortex.png"))
+			.append($("<div>")
+				.addClass("outputMask")
+				.attr("src", "varIcons/redVortex.png"))
+
+	if (this.needsWithdrawClickEvent()){
+		jumpDiv.find("img")
+		.click(function(){game.getUnit($(this.closest(".shipDiv")).data("shipId")).requestJumpOut();
+		})
+	}
+	else if (this.isJumpingOut()){
+		jumpDiv.find("img").toggleClass("selected");
+	}
+	return jumpDiv
 }
 
 Ship.prototype.expandDiv = function(div){
@@ -2919,12 +2948,6 @@ Ship.prototype.expandDiv = function(div){
 		.css("left", primX)
 		.css("top", primY);
 
-
-
-
-
-
-
 	var width = 0;
 	var height = 0;
 	$(div).find(".structDiv").each(function(){
@@ -2941,7 +2964,7 @@ Ship.prototype.expandDiv = function(div){
 	structContainer.css("height", Math.max($(primaryDiv).position().top + $(primaryDiv).height(), height) + 20);
 
 
-	//$(structContainer).append($("<div>").addClass("mainPower").html(this.getSystemByName("Reactor").getOutput()));
+	//$(structContainer).append($("<div>").addClass("unusedPower").html(this.getSystemByName("Reactor").getOutput()));
 
 	var top = 0;
 	var left = structContainer.width() - 55;
@@ -2950,32 +2973,16 @@ Ship.prototype.expandDiv = function(div){
 	}
 	// POWER
 	structContainer
-		.append($("<div>").addClass("info").css("top", top + 5)
-			.append($("<img>").attr("src", "varIcons/mainPower.png")
-				.addClass("mainPowerIcon"))
+		.append($("<div>").addClass("unusedPowerDiv").css("top", top + 5)
+			.append($("<img>").attr("src", "varIcons/powerIcon.png")
+				.addClass("unusedPowerIcon"))
 			.append($("<div>")
-				.addClass("mainPower")
+				.addClass("unusedPower")
 				.html(this.getSystemByName("Reactor").getOutput())))
 		//console.log($(structContainer).width());
 
 	// JUMP OUT
-	if (!this.destroyed && game.turn && game.phase == 3){
-		var jumpDiv = 
-		$("<div>").addClass("info").css("top", top + 5).css("left", left)
-			.append($("<img>").addClass("jumpOut")
-				.attr("src", "varIcons/redVortex.png"));
-
-		if (this.needsWithdrawClickEvent()){
-			jumpDiv.find("img")
-			.click(function(){game.getUnit($(this).parent().parent().parent().data("shipId")).requestJumpOut();
-			});
-		}
-		else if (this.isJumpingOut()){
-			jumpDiv.find("img").addClass("selected");
-		}
-
-		$(structContainer).append(jumpDiv);
-	}
+	$(structContainer).append(this.getJumpDiv().css("top", top+5).css("left", left));
 
 
 	// System options positioning
@@ -3034,7 +3041,7 @@ Ship.prototype.setNotes = function(){
 
 Ship.prototype.needsWithdrawClickEvent = function(){
 	//console.log("needsWithdrawClickEvent");
-	if (game.phase == 3 && this.friendly && this.actions[this.actions.length-1].type != "jumpOut"){return true;}
+	if (!this.destroyed && game.turn && game.phase == 3 && this.friendly && this.actions[this.actions.length-1].type != "jumpOut"){return true;}
 	return false;
 }
 
@@ -3056,9 +3063,15 @@ Ship.prototype.requestJumpOut = function(){
 Ship.prototype.doJumpOut = function(){
 	var p = this.getPlannedPos();
 	this.actions.push(new Move(-1, this.id, "jumpOut", 0, 0, p.x, p.y, this.drawFacing, 0, 0, 1, 1, 0));
+	this.withdraw = game.turn + 2;
+	this.setJumpOutTimer();
 	if (this.hasFocus()){this.unsetUnitFocus();}
 	$(this.element).find(".jumpOut").addClass("selected");
 	$("#instructWrapper").hide();
+}
+
+Ship.prototype.setJumpOutTimer = function(){
+	$(this.element).find(".jumpDiv").find(".outputMark").html(this.withdraw - game.turn);
 }
 
 Ship.prototype.undoJumpOut = function(){
@@ -3673,7 +3686,7 @@ Ship.prototype.updateShipPower = function(system){
 	var reactor = this.getSystemByName("Reactor");
 	var s = reactor.getOutput();
 	$(reactor.element).find(".outputMask").html(s);
-	$(this.element).find(".mainPower").html(s).end();
+	$(this.element).find(".unusedPower").html(s).end();
 	system.update();
 
 	if (system instanceof Engine){
@@ -3770,7 +3783,7 @@ Ship.prototype.enableCrewPurchase = function(command){
 
 		this.getSystemByName("Command").setTotalBuyData();
 	}
-	$(div).data("systemid", this.id).css("left", 650).css("top", 400).removeClass("disabled");
+	$(div).data("systemid", this.id).css("left", 750).css("top", 400).removeClass("disabled");
 }
 
 

@@ -51,40 +51,37 @@ class DmgCalc {
 		$failChance = round((1-((1-$new)*(1-$new)))*100);
 		$chanceRoll = mt_rand(1, 100);
 		$crit = new Crit(0, $unitid, $systemid, $turn, "", 0, 0, 1);
-		$failed = 0;
 
 		if ($chanceRoll <= $failChance){
-			$failed = 1;
 			$crit->notes = "f;";
 			//Debug::log("___opening test FAIL, failChance: ".$failChance.", rolled: ".$chanceRoll);
 		}
 		else {
 			$crit->notes = "p;";
+			$magAdd -= 30;
 			//Debug::log("___opening test SUCESS, failChance: ".$failChance.", rolled: ".$chanceRoll);
 		}
 
 		$crit->notes .= $failChance.";".$chanceRoll;
 
-		if ($failed){
-			$magRoll = mt_rand(1, 100);
-			$totalMag = $magRoll + $magAdd;
-			$crit->notes .= ";".$magRoll.";".$totalMag;
+		$magRoll = mt_rand(1, 100);
+		$totalMag = $magRoll + $magAdd;
+		$crit->notes .= ";".$magRoll.";".$totalMag;
 
-			//Debug::log("chance to fail: $chance, rolled $chanceRoll, magRoll $magRoll, magAdd $magAdd, totalMag $totalMag");
-			if ($totalMag >= $effects[0][1]){
+		//Debug::log("chance to fail: $chance, rolled $chanceRoll, magRoll $magRoll, magAdd $magAdd, totalMag $totalMag");
+		if ($totalMag >= $effects[0][1]){
 
-				for ($i = sizeof($effects)-1; $i >= 0; $i--){
-					if ($totalMag < $effects[$i][1]){continue;}
-			
-					//Debug::log("crit: ".$effects[$i][0]);
+			for ($i = sizeof($effects)-1; $i >= 0; $i--){
+				if ($totalMag < $effects[$i][1]){continue;}
+		
+				//Debug::log("crit: ".$effects[$i][0]);
 
-					//($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
-					$crit->type = $effects[$i][0];
-					$crit->duration = $effects[$i][2];
-					$crit->value = $effects[$i][3];
+				//($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
+				$crit->type = $effects[$i][0];
+				$crit->duration = $effects[$i][2];
+				$crit->value = $effects[$i][3];
 
-					break;
-				}
+				break;
 			}
 		}
 

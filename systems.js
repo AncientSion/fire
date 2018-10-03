@@ -938,25 +938,11 @@ System.prototype.getDiv = function(){
 		div.className = "bgloadlevel";
 		returnDiv.appendChild(div);
 
-	/*
-	var lowerDiv = document.createElement("div");
-		lowerDiv.className = "integrityNow";
-		lowerDiv.style.width = this.getRemIntegrity() /  this.integrity * 100 + "%";
-		returnDiv.appendChild(lowerDiv);
+	var outputDiv = $("<div>").addClass("outputMask")
 
-	var div = document.createElement("div");
-		div.className = "integrityFull";
-		returnDiv.appendChild(div);
-	*/
-	if (1){		
-		var outputDiv = $("<div>")
-		if (this instanceof PrimarySystem){
-			outputDiv.addClass("outputMask top")
-		} else outputDiv.addClass("outputMask")
-		if (this.internal || this.getActiveSystem().canBeBoosted()){
-			outputDiv.html(this.getOutput());
-		} else outputDiv.hide();
-	}	
+	if (this.internal || this.getActiveSystem().canBeBoosted()){
+		outputDiv.html(this.getOutput());
+	} else outputDiv.hide();
 	
 	$(returnDiv).append(outputDiv).data("systemId", this.id);
 	this.element = returnDiv;

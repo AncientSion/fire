@@ -1155,7 +1155,8 @@ function Game(data){
 
 		this.animating = 0;
 		this.drawingEvents = 1;
-		this.draw();
+
+		this.setCamera();
 		
 		$(fxCanvas).css("opacity", 0.25);
 

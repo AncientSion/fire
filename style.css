@@ -712,7 +712,7 @@ table, th, tr, td {
 	display: block;
 }
 
-.squad .outputMask.top {
+.squad .outputMask.tdop {
 	top: -50px;
 	width: 100%;
 	font-size: 14px;
@@ -740,7 +740,6 @@ table, th, tr, td {
 .unitContainer .powerDiv {
 	z-index: 15;
 	position: absolute;
-	left: 21px;
 	top: -5px;
 }
 
@@ -1209,6 +1208,11 @@ div.integrityFull {
 	display: inline-block;
 	width: 100px;
 	border-left: 1px solid white;
+	position: relative;
+}
+
+.coreContainer .system:first-child {
+	border: none;
 }
 
 .shipDiv .notes {
@@ -1229,9 +1233,12 @@ div.integrityFull {
 	border-left: 1px solid white;
 }
 
-.coreContainer  .system {
-	width: 30px;
-	height: 30px;
+.coreContainer .system {
+	width: 36px;
+	height: 36px;
+	position: relative;
+	margin-left: 8px;
+	margin-top: 25px;
 }
 
 .optionsWrapper {
@@ -1282,12 +1289,12 @@ div.integrityFull {
 	padding: 2px;
 }
 
-.coreContainer  .system img {
-	width: 30px;
-	height: 30px;
+.coreContainer .system img {
+	width: 100%;
+	height: 100%;
 }
 
-.coreContainer  .mode img {
+.coreContainer .mode img {
 	width: 20px;
 	height: 20px;
 }
@@ -1850,22 +1857,29 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 	color: #ff3d00;
 }
 
-.info {
+.unusedPowerDiv, .jumpDiv {
 	display: inline-block;
 	width: 50px;
 	height: 50px;
 	position: absolute;
 }
 
-.squad .info {
+.squad .unusedPowerDiv {
 	top: 5px;
 	width: 30px;
 	height: 30px;
 }
 
-.squad .coreContainer .info {
-	width: 45px;
-	height: 45px;
+.squad .jumpOut {
+	width: 40px;
+	height: 40px;
+	display: block;
+	margin: auto;
+}
+
+.squad .jumpOut img {
+	width: 100%;
+	height: 100%;
 }
 
 .jumpOut {
@@ -1879,14 +1893,14 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 	box-shadow: inset 0 0 0.25em 0.25em #27e627;
 }
 
-.mainPowerIcon {
+.unusedPowerIcon {
 	width: 80%;
 	height: 80%;
 	display: block;
 	margin: auto;
 }
 
-.mainPower {
+.unusedPower {
 	color: white;
 	font-size: 16px;
 	width: 100%;

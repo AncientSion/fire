@@ -50,8 +50,8 @@ class Squaddie extends Single {
 	}
 
 	public function setBaseStats($phase, $turn){
-		$this->baseHitChance = Math::getBaseHitChance($this->mass);
-		$this->baseTurnDelay = Math::getBaseTurnDelay($this->mass);
+		//$this->baseHitChance = Math::getBaseHitChance($this->mass);
+		//$this->baseTurnDelay = Math::getBaseTurnDelay($this->mass);
 	}
 
 	public function setSubunitState($turn, $phase){
@@ -159,6 +159,8 @@ class Squaddie extends Single {
 class Light extends Squaddie {
 	public $baseImpulse = 175;
 	public $baseImpulseCost = 30;
+	public $baseTurnDelay = 1.3;
+	public $baseHitChance = 60;
 	public $size = 48;
 	public $space = 4;
 	
@@ -170,6 +172,8 @@ class Light extends Squaddie {
 class SuperLight extends Light {
 	public $size = 42;
 	public $space = 3;
+	public $baseTurnDelay = 1.2;
+	public $baseHitChance = 55;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -179,6 +183,8 @@ class SuperLight extends Light {
 class UltraLight extends SuperLight {
 	public $size = 37;
 	public $space = 2;
+	public $baseTurnDelay = 1.1;
+	public $baseHitChance = 50;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

@@ -262,7 +262,7 @@ else header("Location: index.php");
 					if (squadron.getSlotsUsed() + sub.space > squadron.getMaxSlots()){return;}
 
 					var copy = initSquaddie(JSON.parse(JSON.stringify(sub)));
-						copy.index = squadron.index +1;
+						copy.index = squadron.index;
 						copy.id = copy.index;
 						copy.create();
 
@@ -843,7 +843,6 @@ else header("Location: index.php");
 
 	function addCostDiv(unit){
 		$(unit.element).append($("<div>").css("border", "1px solid white").append($("<table>").attr("id", "totalShipCost")))
-
 	}
 
 	function addUnitToSquadron(data){

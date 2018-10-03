@@ -78,7 +78,7 @@ class Weapon extends System {
 	}
 
 	public function setFlashData(){
-		$data = array(100, 140, 60, 30, 10); // main target
+		$data = array(100, 140, 50, 30, 20); // main target
 
 		for ($i = 0; $i < sizeof($data); $i++){
 			$this->dmgs[$i] = floor($data[$i] / 100 * $this->minDmg);

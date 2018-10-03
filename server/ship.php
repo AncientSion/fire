@@ -118,7 +118,6 @@ class Ship {
 
 	public function getId(){
 		$this->index++;
-		Debug::log("returning index: ".$this->index);
 		return $this->index;
 	}
 
@@ -235,7 +234,7 @@ class Ship {
 		return $this->baseMorale;
 	}
 
-	public function setMorale($turn){
+	public function setMorale($turn, $phasr){
 		//Debug::log("setMorale #".$this->id);
 		$command = $this->getSystemByName("Command");
 		$this->morale = new Morale(

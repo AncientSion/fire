@@ -64,21 +64,23 @@ class Squadron extends Ship {
 		}
 	}
 
-	public function setMorale($turn){
-		//Debug::log("setMorale ".$this->id);
-		$dmg = 100;
-		if (sizeof($this->structures)){
-			$integrity = 0;
-			$remaining = 0;
+	public function setMorale($turn, $phase){
+		Debug::log("setMorale ".$this->id.", turn: ".$turn);
+		if ($turn){
+			$dmg = 100;
+			if (sizeof($this->structures)){
+				$integrity = 0;
+				$remaining = 0;
 
-			for ($i = 0; $i < sizeof($this->structures); $i++){
-				$integrity += $this->structures[$i]->integrity;
-				
-				if ($this->structures[$i]->isDestroyed()){continue;}
-				$remaining += max(0, $this->structures[$i]->remaining);
+				for ($i = 0; $i < sizeof($this->structures); $i++){
+					$integrity += $this->structures[$i]->integrity;
+					
+					if ($this->structures[$i]->isDestroyed()){continue;}
+					$remaining += max(0, $this->structures[$i]->remaining);
+				}
+				$dmg = ($integrity - $remaining) / $integrity * -100;
 			}
-			$dmg = ($integrity - $remaining) / $integrity * -100;
-		}
+		} else $dmg = 0;
 
 		$command = $this->getSystemByName("Command");
 		

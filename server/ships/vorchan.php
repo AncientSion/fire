@@ -7,7 +7,7 @@ class Vorchan extends SuperLight {
 	public $faction = "Centauri Republic";
 	public static $value = 280;
 	public $mass = 1250;
-	public $integrity = 400;
+	public $integrity = 370;
 	
 	public $ep = 120;
 	public $ew = 525;

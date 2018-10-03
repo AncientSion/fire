@@ -188,10 +188,9 @@ Mixed.prototype.setStringHitChance = function(){
 	}
 	var min = 1000; var max = 0;
 	for (var i = 0; i < this.structures.length; i++){
-		if (!this.structures[i].destroyed){
-			min = Math.min(min, this.structures[i].baseHitChance);
-			max = Math.max(max, this.structures[i].baseHitChance);
-		}
+		if (this.structures[i].destroyed){continue;}
+		min = Math.min(min, this.structures[i].baseHitChance);
+		max = Math.max(max, this.structures[i].baseHitChance);
 	}
 	if (min == max){
 		this.stringHitChance = (min + "%");

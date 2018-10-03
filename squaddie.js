@@ -140,11 +140,11 @@ Squaddie.prototype.createSelfContainer = function(){
 	// power icon
 	if (!this.destroyed){
 		$(this.element)
-		.append($("<div>").addClass("info")
-			.append($("<img>").attr("src", "varIcons/mainPower.png")
-				.addClass("mainPowerIcon"))
+		.append($("<div>").addClass("unusedPowerDiv")
+			.append($("<img>").attr("src", "varIcons/powerIcon.png")
+				.addClass("unusedPowerIcon"))
 			.append($("<div>")
-				.addClass("mainPower")
+				.addClass("unusedPower")
 				.html(this.getUnusedPower())))
 	}
 
@@ -268,7 +268,7 @@ Squaddie.prototype.getUnusedPower = function(){
 }
 
 Squaddie.prototype.updateShipPower = function(system){
-	$(this.element).find(".mainPower").html(this.getUnusedPower()).end();
+	$(this.element).find(".unusedPower").html(this.getUnusedPower()).end();
 	system.update();
 }
 
