@@ -486,7 +486,7 @@
 		}
 
 		public function updateCommandUnit($data){
-			//Debug::log("updateCommandUni:".$data["commandChange"]["new"].", ".$data["turn"]);
+			Debug::log("updateCommandUni:".$data["commandChange"]["new"].", ".$data["turn"]);
 			//$_POST["userid"], $_POST["gameid"], $_POST["commandChange"]["old"], $_POST["commandChange"]["new"
 
 			$stmt = $this->connection->prepare("
@@ -1112,6 +1112,8 @@
 			$stmt = $this->connection->prepare("
 				UPDATE units
 				SET destroyed = :destroyed,
+					withdraw = :withdraw,
+					manual = :manual,
 					x = :x,
 					y = :y,
 					facing = :facing,
@@ -1131,6 +1133,8 @@
 				//if ($states[$i]["id"] == 46){foreach ($states[$i] as $key => $value){Debug::log($key." / ".$value);}}
 
 				$stmt->bindParam(":destroyed", $states[$i]["destroyed"]);
+				$stmt->bindParam(":withdraw", $states[$i]["withdraw"]);
+				$stmt->bindParam(":manual", $states[$i]["manual"]);
 				$stmt->bindParam(":x", $states[$i]["x"]);
 				$stmt->bindParam(":y", $states[$i]["y"]);
 				$stmt->bindParam(":facing", $states[$i]["facing"]);

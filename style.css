@@ -702,13 +702,16 @@ table, th, tr, td {
 	border: none;
 }
 
-.squad .outputMask {
+.outputMask {
 	margin: auto;
+	text-align: center;
 	width: 100%;
+	vertical-align: middle;
+}
+
+.squad .outputMask {
 	font-size: 14px;
 	color: white;
-	text-align: center;
-	vertical-align: middle;
 	display: block;
 }
 
@@ -717,8 +720,6 @@ table, th, tr, td {
 	width: 100%;
 	font-size: 14px;
 	color: white;
-	text-align: center;
-	vertical-align: middle;
 	position: relative;
 }
 
@@ -958,11 +959,8 @@ div.integrityFull {
 	margin: auto;
 	position: absolute;
 	top: 5px;
-	width: 100%;
 	font-size: 14px;
     color: white;
-	text-align: center;
-	vertical-align: middle;
 	display: table-cell;
 }
 
@@ -1211,10 +1209,6 @@ div.integrityFull {
 	position: relative;
 }
 
-.coreContainer .system:first-child {
-	border: none;
-}
-
 .shipDiv .notes {
 	display: inline-block;
 	position: relative;
@@ -1225,20 +1219,14 @@ div.integrityFull {
 	border-top: 1px solid black;
 }
 
-.shipDiv.squad .notes {
-}
-
 .shipDiv .iconContainer {
 	width: 80px;
 	border-left: 1px solid white;
 }
 
 .coreContainer .system {
-	width: 36px;
-	height: 36px;
-	position: relative;
-	margin-left: 8px;
-	margin-top: 25px;
+    width: 32px;
+    height: 32px;
 }
 
 .optionsWrapper {
@@ -1870,27 +1858,27 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 	height: 30px;
 }
 
-.squad .jumpOut {
+.jumpOutButton {
+	width: 100%;
+	height: 100%;
+	display: block;
+	margin: auto;
+}
+
+.jumpDiv.active {
+	box-shadow: inset 0 0 0.25em 0.25em #27e627;
+}
+
+.squad .jumpOutButton {
 	width: 40px;
 	height: 40px;
 	display: block;
 	margin: auto;
 }
 
-.squad .jumpOut img {
+.squad .jumpOutButton img {
 	width: 100%;
 	height: 100%;
-}
-
-.jumpOut {
-	width: 100%;
-	height: 100%;
-	display: block;
-	margin: auto;
-}
-
-.jumpOut.selected {
-	box-shadow: inset 0 0 0.25em 0.25em #27e627;
 }
 
 .unusedPowerIcon {

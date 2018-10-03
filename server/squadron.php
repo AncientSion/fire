@@ -65,7 +65,7 @@ class Squadron extends Ship {
 	}
 
 	public function setMorale($turn, $phase){
-		Debug::log("setMorale ".$this->id.", turn: ".$turn);
+		//Debug::log("setMorale ".$this->id.", turn: ".$turn);
 		if ($turn){
 			$dmg = 100;
 			if (sizeof($this->structures)){

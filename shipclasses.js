@@ -19,6 +19,7 @@ function Ship(data){
 	this.userid = data.userid;
 	this.available = data.available;
 	this.withdraw = data.withdraw;
+	this.manual = data.manual;
 	this.baseHitChance = data.baseHitChance || 0;
 	this.baseImpulse = data.baseImpulse || 0;
 	this.traverse = data.traverse;
@@ -1579,6 +1580,10 @@ Ship.prototype.createDeployEntry = function(){
 		)
 }
 
+Ship.prototype.createPrepareJumpEntry = function(){
+	this.attachLogEntry("<th colSpan=9><span>" + this.getLogTitleSpan() + " is preparing to jump into hyperspace.</span></th>");
+}
+
 Ship.prototype.createUndeployEntry = function(){
 	this.attachLogEntry("<th colSpan=9><span>" + this.getLogTitleSpan() + " jumps into hyperspace and leaves the battlefield.</span></th>");
 }
@@ -1930,8 +1935,15 @@ Ship.prototype.getWeaponOrigin = function(id){
 	return this.getSystem(id);
 }
 
-Ship.prototype.isWithdrawing = function(){
+Ship.prototype.jumpIsImminent = function(){
+	if (this.withdraw == game.turn+1){return true;}
+	//if (this.actions.length && this.actions[this.actions.length-1].type == "jumpOut"){return true;}
+	return false;
+}
+
+Ship.prototype.isPreparingJump = function(){
 	if (this.actions.length && this.actions[this.actions.length-1].type == "jumpOut"){return true;}
+	if (this.withdraw){return true;}
 	return false;
 }
 
@@ -2545,7 +2557,7 @@ Ship.prototype.getUnitName = function(){
 Ship.prototype.trySetCommand = function(){
 	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace.");}
 	else {
-		var html = "Transfering Fleet Commands incurs no penalty to Focus, but will block issueing it this turn.</br>";
+		var html = "Transfering Fleet Commands will void Focus generation for this turn as well as blocking any Focus setups. </br>";
 			html += "Please confirm your order.</br></br><input type='button' class='popupEntryConfirm' value='Confirm Transfer' onclick='game.getUnit(aUnit).doSetCommand()'>";
 			popup(html);
 			//popup("Relocating Fleet Command will set saved Focus Points to 0 at end of turn</br>(after Focus is spend, before Focus is gained).</br></br>Please confirm your order.</br><input type='button' class='popupEntryConfirm' value='Confirm Transfer' onclick='game.getUnit(aUnit).doSetCommand()'>");
@@ -2556,7 +2568,7 @@ Ship.prototype.doSetCommand = function(){
 	//console.log("setCommand");
 
 	for (var i = 0; i < game.ships.length; i++){
-		if (!game.ships[i].friendly || game.ships[i].flight || game.ships[i].salvo){continue;}
+		if (!game.ships[i].friendly || game.ships[i].flight || game.ships[i].salvo || !game.ships[i].command){continue;}
 		game.ships[i].command = 0;
 		game.commandChange.old = game.ships[i].id;
 		if (!game.commandChange.original){game.commandChange.original = game.ships[i].id;}
@@ -2645,7 +2657,7 @@ Ship.prototype.getJumpDiv = function(){
 	var jumpDiv = 
 		$("<div>").addClass(name)
 			.append($("<img>")
-				.addClass("jumpOut")
+				.addClass("jumpOutButton")
 				.attr("src", "varIcons/redVortex.png"))
 			.append($("<div>")
 				.addClass("outputMask")
@@ -3025,9 +3037,6 @@ Ship.prototype.expandDiv = function(div){
 			)
 	//rolling ?
 
-	this.setNotes();
-
-
 	$(div).addClass("disabled");
 	return div;
 }
@@ -3037,6 +3046,7 @@ Ship.prototype.setNotes = function(){
 	if (this.isRolled()){this.addNoteEntry("ROLLED");}
 	if (this.isRolling()){this.addNoteEntry("ROLLING");}
 	if (this.isFlipping()){this.addNoteEntry("FLIPPING");}
+	if (this.isPreparingJump()){this.addNoteEntry("Preparing Jump");}
 }
 
 Ship.prototype.needsWithdrawClickEvent = function(){
@@ -3047,16 +3057,18 @@ Ship.prototype.needsWithdrawClickEvent = function(){
 
 Ship.prototype.isJumpingOut = function(){
 	//console.log("isJumpingOut");
-	if (this.actions.length && this.actions[this.actions.length-1].type == "jumpOut"){return true;}
+	if (this.actions.length && this.actions[this.actions.length-1].type == "jumpOut" || this.withdraw){return true;}
 	return false;
 }
 
 Ship.prototype.requestJumpOut = function(){
-	//console.log("requestJumpOut");
-	if (!this.friendly){return;}
-	else if (this.destroyed){popup("Nice try, but you cant order this unit to withdraw.");}
-	else if (game.phase != 3){popup("You can only order withdrawal in </br>Phase 3 / Damage Control.");}
-	else if (this.isJumpingOut()){this.undoJumpOut();}
+
+	if (this.isJumpingOut()){
+		var last = this.actions[this.actions.length-1];
+		if (last.type == "jumpOut" && !last.forced){
+			this.undoJumpOut();
+		}
+	}
 	else instruct("Confirm if you really want to withdraw this unit from combat</p></p><div class='popupEntry buttonTD' style='font-size: 20px; width: 200px' onclick='game.getUnit(" + this.id + ").doJumpOut()'>Confirm Withdrawal</div>");
 }
 
@@ -3065,22 +3077,34 @@ Ship.prototype.doJumpOut = function(){
 	this.actions.push(new Move(-1, this.id, "jumpOut", 0, 0, p.x, p.y, this.drawFacing, 0, 0, 1, 1, 0));
 	this.withdraw = game.turn + 2;
 	this.setJumpOutTimer();
-	if (this.hasFocus()){this.unsetUnitFocus();}
-	$(this.element).find(".jumpOut").addClass("selected");
+	this.setNotes();
+	//if (this.hasFocus()){this.unsetUnitFocus();}
+	$(this.element).find(".jumpDiv").addClass("active");
 	$("#instructWrapper").hide();
 }
 
-Ship.prototype.setJumpOutTimer = function(){
-	$(this.element).find(".jumpDiv").find(".outputMark").html(this.withdraw - game.turn);
+Ship.prototype.undoJumpOut = function(){
+	this.actions.splice(this.actions.length-1, 1)
+	this.withdraw = 0;
+	this.setJumpOutTimer();
+	this.setNotes();
+	$(this.element).find(".jumpDiv").removeClass("active");
 }
 
-Ship.prototype.undoJumpOut = function(){
-	//console.log("undoJumpOut");
-	this.actions.splice(this.actions.length-1, 1)
-	$(this.element).find(".jumpOut").removeClass("selected");
+Ship.prototype.setJumpOutTimer = function(){
+	$(this.element).find(".jumpDiv").find(".outputMask").html(this.withdraw ? "ETA " + (this.withdraw - game.turn) : "");
 }
 
 Ship.prototype.setFlipState = function(){
+}
+
+Ship.prototype.setVarious = function(){
+	if (this.isPreparingJump()){
+		if (!this.withdraw){this.withdraw = game.turn+2;}
+		this.setJumpOutTimer();
+		$(this.element).find(".jumpDiv").addClass("active");
+	}
+	this.setNotes();
 }
 
 Ship.prototype.addNoteEntry = function(val){

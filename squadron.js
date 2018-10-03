@@ -129,12 +129,12 @@ Squadron.prototype.createBaseDiv = function(){
 	var w = $(this.element).find(".coreContainer").width();
 	var h = $(this.element).find(".coreContainer").height();
 
-
-	// JUMP OUT
-	$(this.element).find(".coreContainer").append(this.getJumpDiv());
-
 	var x = 60;
 	var y = 10;
+
+	// JUMP OUT
+	$(this.element).find(".coreContainer").append(this.getJumpDiv().css("top", y).css("left", 8));
+
 
 	for (var i = 0; i < this.primary.systems.length; i++){
 		this.index++;
@@ -148,13 +148,12 @@ Squadron.prototype.createBaseDiv = function(){
 			}
 		}
 		$(this.element).find(".coreContainer").append(div)
-	//	$(div).css("left", x).css("top", y);
+		$(div).css("left", x).css("top", y);
 
-		if (i == 1){
-			x = 10;
-			y += 50;
-		}
-		x += 50;
+		if (i == 0){
+			x = 8;
+			y += 80;
+		} else x += 50;
 
 	}
 
@@ -225,8 +224,7 @@ Squadron.prototype.expandDiv = function(div){
 					}
 				}));
 		
-	this.setNotes();
-	//document.getElementById("game").appendChild(div);
+
 	$(document.body).append(div);
 	$(div).css("position", "absolute").css("top", 300);
 

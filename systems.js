@@ -47,6 +47,12 @@ function System(system){
 	this.width = system.width;
 }
 
+System.prototype.getActiveState = function(){
+	for (var i = 0; i < this.states.length; i++){
+		if (this.states[i]){return i;}
+	}
+}
+
 System.prototype.setTotalBuyData = function(){
 	return;
 }
@@ -1349,9 +1355,9 @@ PrimarySystem.prototype.updateSysDiv = function(){
 		}
 	})
 
-	if (this instanceof Sensor){
-		$("#sysDiv").find(".sensorMode").html(this.getEWMode()).end().find(".sensorEffect").html(this.getEWModeEffect());
-	}
+	//if (this instanceof Sensor){
+	//	$("#sysDiv").find(".sensorMode").html(this.getEWMode()).end().find(".sensorEffect").html(this.getEWModeEffect());
+	//}
 	this.attachSysMods(ele);
 }
 
@@ -1484,14 +1490,10 @@ function Sensor(system){
 }
 Sensor.prototype = Object.create(PrimarySystem.prototype);
 
-function Cyber(system){
-	Sensor.call(this, system)
-	this.ew = system.ew;
-	this.modes = system.modes;
-	this.states = system.states;
-	this.used = 0;
+Sensor.prototype.canChangeMode = function(){
+	if (game.getUnit(this.parentId).isPreparingJump()){return false;}
+	return true;
 }
-Cyber.prototype = Object.create(Sensor.prototype);
 
 Sensor.prototype.switchMode = function(id){
 	if (this.destroyed || this.disabled || this.locked){return false;}
@@ -1515,7 +1517,7 @@ Sensor.prototype.switchMode = function(id){
 }
 
 Sensor.prototype.setEWMode = function(){
-	if (this.disabled || game.phase == -2){return "NONE";}
+	//if (this.disabled || game.phase == -2){return "NONE";}
 
 	var d = 0;
 	var w = 0;
@@ -1531,7 +1533,7 @@ Sensor.prototype.setEWMode = function(){
 	}
 	this.updateSysDiv();
 }
-
+/*
 Sensor.prototype.getEWMode = function(){
 	if (this.disabled || game.phase == -2){return "NONE";}
 
@@ -1551,18 +1553,20 @@ Sensor.prototype.getEWModeEffect = function(){
 		//case 0: return ("Increases chance to hit targets within red sensor arc by " + (game.const.ew.effect[this.ew[this.ew.length-1].type]*100) + "%");
 		//case 1: return ("Decreases chance to be hit by starships within blue sensor arc by " + (game.const.ew.effect[this.ew[this.ew.length-1].type]*100) + "%");
 	}
-}
+}*/
 
 Sensor.prototype.setState = function(){
 	System.prototype.setState.call(this);
 	if (game.phase == -1 && !this.locked){
+
+		//console.log("active: " + this.getActiveState());
 		this.setEW({
 			angle: -1,
 			dist: Math.ceil(this.getOutput() / Math.pow(180/game.const.ew.len, 1/game.const.ew.p)),
 			turn: game.turn,
 			unitid: this.parentId,
 			systemid: this.id,
-			type: 0
+			type: this.getActiveState()
 		});
 	}
 }

@@ -6,6 +6,7 @@ class Ship {
 	public $userid;
 	public $available;
 	public $withdraw;
+	public $manual;
 	public $display;
 	public $status;
 	public $destroyed;
@@ -90,6 +91,7 @@ class Ship {
 		$this->command = $data["command"];
 		$this->available = $data["available"];
 		$this->withdraw = $data["withdraw"];
+		$this->manual = $data["manual"];
 		$this->destroyed = $data["destroyed"];
 		$this->x = $data["x"];
 		$this->y = $data["y"];
@@ -184,6 +186,11 @@ class Ship {
 					}
 					else if ($this->primary->systems[$i]->disabled){
 						$this->doUnpowerAllSystems($turn);
+					}
+					break;
+				case "Sensor":
+					if ($this->withdraw){
+						$this->primary->systems[$i]->states = [0, 1];
 					}
 					break;
 			}
@@ -353,13 +360,6 @@ class Ship {
 		}
 	}
 
-	public function hideWithdrawal($phase){
-		if ($this->flight || $this->salvo){return;}
-		if (!$this->isWithdrawing()){return;}
-		if ($this->actions[sizeof($this->actions)-1]->forced){return;}
-		array_splice($this->actions, sizeof($this->actions)-1, 1);
-	}
-
 	public function getBaseImpulse(){
 		return $this->baseImpulse;
 	}
@@ -448,6 +448,7 @@ class Ship {
 		return array(
 			"id" => $this->id,
 			"withdraw" => $this->withdraw,
+			"manual" => $this->manual,
 			"destroyed" => $this->destroyed,
 			"x" => $this->actions[sizeof($this->actions)-1]->x,
 			"y" => $this->actions[sizeof($this->actions)-1]->y,
@@ -708,14 +709,14 @@ class Ship {
 		return false;
 	}
 
-	public function triggerMoraleChange($turn, $phase){
+	public function triggersMoraleChange($turn, $phase){
 		if ($phase == 2){
-			if ($this->destroyed || $this->isFleeing()){
+			if ($this->destroyed){
 				return true;
 			}
 		}
 		else if ($phase == 3){
-			if ($this->isWithdrawing()){
+			if ($turn+1 == $this->withdraw){
 				return true;
 			}
 		}
@@ -726,22 +727,55 @@ class Ship {
 		}
 	}
 
-	public function isFleeing(){
-		if (!sizeof($this->actions)){return false;}
-		$action = $this->actions[sizeof($this->actions)-1];
-		if ($action->type == "jumpOut" && $action->forced){
-			return true;
+	public function triggersFleetMoraleTest($turn, $phase){
+		if ($phase == 2){
+			if ($this->destroyed){
+				return true;
+			}
+		}
+		else if ($phase == 3){
+			if ($turn+1 == $this->withdraw && $this->manual){
+				return true;
+			}
+		}
+		else if ($phase == -1){
+			if ($this->isReinforcing($turn, $phase)){
+				return true;
+			}
 		}
 	}
 
-	public function isWithdrawing(){
-		if (!sizeof($this->actions)){return false;}
-		$action = $this->actions[sizeof($this->actions)-1];
-		if ($action->type == "jumpOut" && !$action->forced){
-			return true;
+	public function getUnitMoraleChangeType($turn, $phase){
+		if ($this->destroyed){
+			return "destroyed";
 		}
+		else if ($phase == 2){
+			return "routed";
+		}
+		else if ($this->isReinforcing($turn, $phase)){
+			return "reinforcing";
+		}
+		else return "withdrawn";
 	}
-	
+
+	public function getMoraleChangeValue($turn, $phase){
+		$multi = 0;
+
+		if ($this->destroyed){
+			$multi = -100;
+		}
+		else if ($phase == 2){
+			$multi = -75;
+		}
+		else if ($this->isReinforcing($turn, $phase)){
+			$multi = 50;
+		}
+		else $multi = -50;
+
+		//Debug::log("getMoraleChangeValue ".$this->id.", multi ".$multi);
+		return $this->moraleCost / 100  * $multi;
+	}
+
 	public function isReinforcing($turn, $phase){
 		//Debug::log("isReinforcing! turn: ".$turn);
 		if ($phase == -1 && $this->available > 1 && $this->available == $turn){
@@ -824,37 +858,6 @@ class Ship {
 				DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
 			}
 		}
-	}
-
-	public function getUnitMoraleChangeType($turn, $phase){
-		if ($this->destroyed){
-			return "destroyed";
-		}
-		else if ($phase == 2){
-			return "routed";
-		}
-		else if ($this->isReinforcing($turn, $phase)){
-			return "reinforcing";
-		}
-		else return "withdrawn";
-	}
-
-	public function getMoraleChangeValue($turn, $phase){
-		$multi = 0;
-
-		if ($this->destroyed){
-			$multi = -100;
-		}
-		else if ($phase == 2){
-			$multi = -75;
-		}
-		else if ($this->isReinforcing($turn, $phase)){
-			$multi = 50;
-		}
-		else $multi = -50;
-
-		//Debug::log("getMoraleChangeValue ".$this->id.", multi ".$multi);
-		return $this->moraleCost / 100  * $multi;
 	}
 
 	public function calculateToHit($fire){ // shooter
@@ -1194,6 +1197,7 @@ class Ship {
 		$this->notes = $crit->notes;
 		if ($crit->type == "Rout"){
 			$this->actions[] = new Action(-1, $this->id, $turn, "jumpOut", 1, 0, $this->x, $this->y, 0, 0, 0, 0, 1, 1);
+			$this->withdraw = $turn +2;
 		}
 		else $this->getSystemByName("Command")->crits[] = $crit;
 	}

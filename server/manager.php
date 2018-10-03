@@ -33,7 +33,7 @@
 				"len" => 10,
 				"effect" => array(0 => 0.5, 1 => 0.5, 2 => 0.25),
 			),
-			"morale" => array(
+			"fleetMoraleEffects" => array(
 				array("Morale", 30, 0, -5.00),
 				array("Morale", 60, 0, -15.00),
 				array("Morale", 100, 0, -25.00),
@@ -253,7 +253,7 @@
 			case 3:
 				for ($i = 0; $i < sizeof($this->ships); $i++){
 					if ($this->ships[$i]->command > $this->turn){$this->ships[$i]->command = 0;}
-					$this->ships[$i]->hideWithdrawal($this->phase);
+					//$this->ships[$i]->hideWithdrawal($this->phase);
 				} break;
 			default: break;
 		}
@@ -561,15 +561,27 @@
 	public function handleDeployPhase(){
 		Debug::log("handleDeployPhase");
 
-		$this->resolveJumpOutActions();
 		$this->handleInitialFireOrders();
 		$this->handleDeployActions();
 		$this->handleJumpIn();
-		$this->handleJumpOut();
+		$this->destroyJumpedUnits();
 		$this->assembleDeployStates();
 		$this->deleteAllReinforcements();
 
 		DBManager::app()->deleteEmptyLoads($this->gameid);
+	}
+
+	public function handleJumpOutAction(){
+		Debug::log("handleJumpOutAction");
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			$l = sizeof($this->ships[$i]->actions)-1;
+			if ($l < 0){continue;}
+			if ($this->ships[$i]->actions[$l]->type == "jumpOut"){
+				$this->ships[$i]->withdraw = $this->turn +2;
+				$this->ships[$i]->manual = 1;
+			}
+		}
 	}
 
 	public function handleDeployActions(){
@@ -585,24 +597,22 @@
 		DBManager::app()->resolveDeployActions($data);
 	}
 
-	public function handleJumpOut(){
-		Debug::log("handleForcedJumpOut");
+	public function destroyJumpedUnits(){
+		Debug::log("destroyJumpedUnits");
 
 		$needCheck = false;
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$l = sizeof($this->ships[$i]->actions)-1;
-			if ($l < 0){continue;}
-			if ($this->ships[$i]->actions[$l]->type == "jumpOut"){
+			if ($this->ships[$i]->withdraw == $this->turn){
 				$this->ships[$i]->status = "jumpOut";
+				$this->ships[$i]->destroyed = true;
 				$needCheck = true;
 			}
 		}
 
 		if ($needCheck){
 			$this->freeFlights();
-			$this->adjustFleetMorale();
-			DBManager::app()->insertNewGlobalEntries($this->playerstatus);
+			$this->doFullDestroyedCheck();
 		}
 	}
 
@@ -623,23 +633,6 @@
 		} return false;
 	}
 
-	public function resolveJumpOutActions(){
-		Debug::log("resolveJumpOutActions");
-
-		$needCheck = false;
-
-		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->status != "jumpOut"){continue;}
-
-			$this->ships[$i]->destroyed = true;
-			$needCheck = true;
-		}
-
-		if ($needCheck){
-			Debug::log("needCheck!");
-			$this->doFullDestroyedCheck();
-		}
-	}
 	public function handleJumpIn(){
 		Debug::log("handleJumpIn");
 		$new = array();
@@ -706,7 +699,7 @@
 		Debug::log("handleUnusedFires");
 		for ($i = 0; $i < sizeof($this->fires); $i++){
 			if ($this->fires[$i]->weapon instanceof Hangar){
-				$this->fires[$i]->resolved = 1;
+				$this->fires[$i]->resolved = 2;
 			}
 		}
 	}
@@ -723,7 +716,7 @@
 			if ($this->fires[$i]->resolved){continue;}
 			else if ($this->fires[$i]->weapon instanceof Launcher){
 				$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
-				$this->fires[$i]->resolved = 1;
+				$this->fires[$i]->resolved = 2;
 			} else continue;
 
 			$name = $this->fires[$i]->weapon->getAmmo()->name;
@@ -1029,8 +1022,27 @@
 	}
 	
 	public function handleDamageControlPhase(){
-		$this->handleJumpOut();
+		$this->handleJumpOutAction();
+		$this->handleJumpImminentUnits();
 		return true;
+	}
+
+	public function handleJumpImminentUnits(){
+		Debug::log("handleJumpImminentUnits");
+
+		$needCheck = false;
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->withdraw == $this->turn+1){
+				$this->ships[$i]->status = "jumpOut";
+				$needCheck = true;
+			}
+		}
+
+		if ($needCheck){
+			$this->adjustFleetMorale();
+			DBManager::app()->insertNewGlobalEntries($this->playerstatus);
+		}
 	}
 
 	public function endTurn(){
@@ -1510,7 +1522,9 @@
 			for ($j = 0; $j < sizeof($this->ships); $j++){
 				if ($this->ships[$j]->flight || $this->ships[$j]->salvo){continue;}
 				if ($this->ships[$j]->userid != $this->playerstatus[$i]["userid"]){continue;}
-				if (!$this->ships[$j]->triggerMoraleChange($this->turn, $this->phase)){continue;}
+				if (!$this->ships[$j]->triggersMoraleChange($this->turn, $this->phase)){continue;}
+
+				Debug::log("triggerin!");
 
 				$type = $this->ships[$j]->getUnitMoraleChangeType($this->turn, $this->phase);
 				$value = ceil($this->ships[$j]->getMoraleChangeValue($this->turn, $this->phase) / $full * 100);
@@ -1554,15 +1568,12 @@
 				$moraleLost = 0;
 
 				for ($j = 0; $j < sizeof($this->ships); $j++){
-					//Debug::log("ship ".$j.", userid: ".$this->ships[$i]->userid);
-					if ($this->ships[$j]->userid != $this->playerstatus[$i]["userid"]){continue;}
 					if ($this->ships[$j]->flight || $this->ships[$j]->salvo){continue;}
-
+					if ($this->ships[$j]->userid != $this->playerstatus[$i]["userid"]){continue;}
 					$totalMoraleWorth += $this->ships[$j]->moraleCost;
 
-					if ($this->ships[$j]->destroyed || $this->ships[$j]->isFleeing() || $this->ships[$j]->isWithdrawing()){
-						$moraleLost += $this->ships[$j]->moraleCost;
-					}
+					if (!$this->ships[$j]->triggersFleetMoraleTest($this->turn, $this->phase)){continue;}
+					$moraleLost += $this->ships[$j]->moraleCost;
 				}
 
 				Debug::log("totalMoraleWorth ".$totalMoraleWorth.", moraleLost ".$moraleLost);
@@ -1586,7 +1597,9 @@
 				$totalGain = $this->playerstatus[$i]["globals"][0]["value"];
 
 				for ($j = 1; $j < sizeof($this->playerstatus[$i]["globals"]); $j++){
-					if ($this->playerstatus[$i]["globals"][$j]["scope"] == 3){continue;}
+					if ($this->playerstatus[$i]["globals"][$j]["scope"] == 3){
+						if ($this->playerstatus[$i]["globals"][$j]["turn"] == $this->turn){continue;} // manually routed units dont alter mag on jump turn
+					}
 
 					$entry = $this->playerstatus[$i]["globals"][$j];
 
@@ -1599,13 +1612,13 @@
 				}
 
 				//$magMod = $totalGain - 100 + $totalLoss;
-				$magMod = 100 - $totalGain + $totalLoss; // (totalLoss was ABs above)
+				$magMod = 100 - $totalGain + $totalLoss; // (totalLoss was ABSs above)
 
 				Debug::log("userid ".$this->playerstatus[$i]["userid"].", totalLoss ".$totalLoss.", totalGain ".$totalGain.", magMod: ".$magMod);
 
 				//continue;
 
-				$crit = DmgCalc::moraleCritProcedure(0, 0, $this->turn, $rel, $this->const["morale"], $magMod);
+				$crit = DmgCalc::moraleCritProcedure(0, 0, $this->turn, $rel, $this->const["fleetMoraleEffects"], $magMod);
 				//return;
 
 				$this->playerstatus[$i]["globals"][] = array(
@@ -1655,11 +1668,12 @@
 	}		
 
 	public function userChangedCommandThisTurn($index){
-		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-			if ($i == $index && $this->playerstatus[$i]["transfered"]){
-				return true;
-			}
+		Debug::log("userChangedCommandThisTurn");
+		if ($this->playerstatus[$index]["transfered"]){
+			Debug::log("yay");
+			return true;
 		}
+		Debug::log("nay");
 		return false;
 	}
 

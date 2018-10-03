@@ -54,7 +54,7 @@ function Game(data){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.animData = {jump: 4};
+	this.animData = {jump: 15};
 	this.commandChange = {old: 0, new: 0, original: 0}
 	this.subPhase = 1;
 	this.exclusiveSystem = false;
@@ -550,7 +550,7 @@ function Game(data){
 	this.handleDmgControlWarnings = function(){
 		var hasCommand = this.userHasCommandUnit(this.getPlayerStatus().userid);
 		if (!hasCommand){
-			popup("There is no Fleet Command set. </br>Please select a unit to act as Fleet Command.");
+			popup("There is no legal Fleet Command for the next turn.</br>Please select a unit to act as Fleet Command.");
 			return true;
 		}
 		return false;
@@ -559,7 +559,7 @@ function Game(data){
 	this.userHasCommandUnit = function(userid){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid != userid){continue;}
-			if (this.ships[i].isWithdrawing() || this.ships[i].isDestroyed()){continue;}
+			if (this.ships[i].jumpIsImminent() || this.ships[i].isDestroyed()){continue;}
 			if (this.ships[i].command){return true;}
 		}
 		return false;
@@ -1108,7 +1108,7 @@ function Game(data){
 			}
 
 			if (hostiles.length != 1){continue;}
-			if (hostiles[0].ship || hostiles[0].squad){continue;}
+			//if (hostiles[0].ship || hostiles[0].squad){continue;}
 
 			var weapons = [];
 
@@ -1123,6 +1123,20 @@ function Game(data){
 
 			var target = hostiles[0].id;
 			var pos = hostiles[0].getPlannedPos();
+
+			var desired = 0;
+
+			if (hostiles[0].ship || hostiles[0].squad){
+				desired = 1;
+			}
+
+			for (var j = 0; j < weapons.length; j++){
+				var state = weapons[j].getActiveState();
+				if (state != desired){
+					weapons[j].switchMode();
+				}
+			}
+			$("#sysDiv").remove();
 
 			for (var j = 0; j < weapons.length; j++){
 				weapons[j].getActiveSystem().odds = 1;
@@ -1244,17 +1258,19 @@ function Game(data){
 				var html = "<td colSpan=9 style='padding: 10px'><span style='font-size: 12px; font-weight: bold'><span class='yellow'>" + this.playerstatus[i].username + "'</span> is subject to a fleetwide morale check.</br>";
 					html += "Chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] + ".</br>"
 
-				if (type == "p"){
-					html += "<span class='yellow'>Passed !</span class='yellow'>";
-				}
-				else {	
-					html += "<span class='yellow'> Failed ! (Severity: Roll " + numbers[2] + " + " + (numbers[3]-numbers[2]) + " = " + numbers[3] +")</span></br>";
-					//html += "<span class='yellow'> Failed ! (Severity: " + numbers[3] +")</span></br>";
+					html += "<span class='yellow'>" + ((type == "p") ? " Passed " : " Failed ") +" initially !</span></br>";
+
+				if (globals[j].type == "Rout " || globals[j].type == "Morale" && globals[j].value != 0){
 					html += "The fleet is subject to <span class='yellow'>" + (globals[j].type == "Rout" ? "a complete rout." : globals[j].value + " % " + globals[j].type) + ".</span>";
 				}
+				else {
+					html += "The fleet suffers no effect.</span>";
+				}
+				html += "</br><span>(Severity: Roll " + numbers[2] + " + " + (numbers[3]-numbers[2]) + " = " + numbers[3] +")</span></br>";
+			}	
 
 			$("#combatLog").find("tbody")
-				.append($("<tr>").html(html))}
+				.append($("<tr>").html(html))
 		}
 
 		if (!entries){
@@ -2132,9 +2148,12 @@ function Game(data){
 	this.resolveDamageControl = function(){
 		var toDo = false;
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].status == "jumpOut"){
+			if (this.ships[i].withdraw == this.turn){
 				this.ships[i].deployAnim = [0, game.animData.jump];
 				toDo = true;
+			}
+			else if (this.ships[i].isPreparingJump()){
+				this.ships[i].createPrepareJumpEntry();
 			}
 		}
 
@@ -3922,12 +3941,12 @@ Game.prototype.showFleetMorale = function(e, userid){
 
 
 
-	for (var i = 0; i < this.const.morale.length; i++){
+	for (var i = 0; i < this.const.fleetMoraleEffects.length; i++){
 		div
 		.append($("<table>")	
 			.append($("<tr>")
-				.append($("<td>").html(">= " + this.const.morale[i][1]))
-				.append($("<td>").css("width", 100).html(this.const.morale[i][0] + " " + (this.const.morale[i][3] ? this.const.morale[i][3] : "")))))
+				.append($("<td>").html(">= " + this.const.fleetMoraleEffects[i][1]))
+				.append($("<td>").css("width", 100).html(this.const.fleetMoraleEffects[i][0] + " " + (this.const.fleetMoraleEffects[i][3] ? this.const.fleetMoraleEffects[i][3] : "")))))
 	}
 	$(document.body).append(div);
 }
@@ -4154,6 +4173,7 @@ Game.prototype.create = function(data){
 		this.ships[i].createBaseDiv();
 		this.ships[i].getAttachDivs();
 		this.ships[i].setSupportImage();
+		this.ships[i].setVarious();
 	}
 
 	if (game.turn == 1 && game.phase == -1){this.setInitialFacing(this.ships);}
@@ -4214,7 +4234,7 @@ Game.prototype.setCommandUnits = function(){
 		}
 		units.sort(function(a, b){return b.command - a.command});
 		for (var j = 1; j < units.length; j++){
-			player[i][j].command = 0;
+			units[j].command = 0;
 		}
 	}
 }
