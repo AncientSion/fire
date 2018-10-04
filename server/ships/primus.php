@@ -38,7 +38,7 @@ class Primus extends SuperHeavy {
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 900, 19, 3);
 		$aft->systems[] = new MediumParticle($this->getId(), $this->id, 120, 240);
-		$aft->systems[] = new MediumParticle($this->getId(), $this->id, 120, 240);
+		$aft->systems[] = new LightParticle($this->getId(), $this->id, 90, 270);
 		$aft->systems[] = new MediumParticle($this->getId(), $this->id, 120, 240);
 		$structs[] = $aft;
 

@@ -199,6 +199,8 @@ class Ship {
 		$this->getSystemByName("Engine")->setPowerReq($this->mass);
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
 
+		Debug::log("need: ".$this->getPowerReq());
+
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				$rem = $this->structures[$i]->getRemNegation();

@@ -36,13 +36,13 @@ class LightParticle extends Particle {
 	public $name = "LightParticle";
 	public $display = "Light Particle Bolter Array";
 	public static $prio = 0;
-	public $minDmg = 12;
-	public $maxDmg = 16;
+	public $minDmg = 11;
+	public $maxDmg = 15;
 	public $accDecay = 180;
 	public $shots = 4;	
 	public $reload = 2;
 	public $integrity = 28;
-	public $powerReq = 2;
+	public $powerReq = 3;
 	public $tracking = 1;
 	public $effiency = 3;
 	public $maxBoost = 1;
@@ -67,7 +67,7 @@ class MediumParticle extends LightParticle {
 	public $shots = 2;
 	public $reload = 3;
 	public $integrity = 36;
-	public $powerReq = 3;
+	public $powerReq = 4;
 	public $tracking = 3;
 	public $effiency = 3;
 
@@ -77,38 +77,6 @@ class MediumParticle extends LightParticle {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-	}
-}
-
-class MediumShock extends Particle {
-	public $name = "MediumShock";
-	public $display = "MediumShock";
-	public $fireMode = "Shockwave";
-	public static $prio = 0;
-	public $minDmg = 16;
-	public $maxDmg = 18;
-	public $accDecay = 120;
-	public $shots = 1;
-	public $reload = 3;
-	public $integrity = 36;
-	public $powerReq = 3;
-	public $tracking = 3;
-	public $effiency = 3;
-
-	public $animColor = "orange";
-	public $projSize = 3;
-	public $projSpeed = 7;
-
-	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
-        parent::__construct($id, $parentId, $start, $end, $output, $width);
-		$this->notes = array("Area of Effect");
-        $this->setShockData();
-	}
-
-	public function getMultiShotHits($fire, $hit, $element){
-		//Debug::log("getMultiShotHits versus ".$element->name.", system ? :".$element->system);
-		if ($element->system){return $this->dmgs[2];}
-		return $this->dmgs[$fire->target->traverse];
 	}
 }
 
@@ -155,6 +123,38 @@ class SuperHeavyParticle extends HeavyParticle {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
+	}
+}
+
+class MediumShock extends Particle {
+	public $name = "MediumShock";
+	public $display = "MediumShock";
+	public $fireMode = "Shockwave";
+	public static $prio = 0;
+	public $minDmg = 16;
+	public $maxDmg = 18;
+	public $accDecay = 120;
+	public $shots = 1;
+	public $reload = 3;
+	public $integrity = 36;
+	public $powerReq = 3;
+	public $tracking = 3;
+	public $effiency = 3;
+
+	public $animColor = "orange";
+	public $projSize = 3;
+	public $projSpeed = 7;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+		$this->notes = array("Area of Effect");
+        $this->setShockData();
+	}
+
+	public function getMultiShotHits($fire, $hit, $element){
+		//Debug::log("getMultiShotHits versus ".$element->name.", system ? :".$element->system);
+		if ($element->system){return $this->dmgs[2];}
+		return $this->dmgs[$fire->target->traverse];
 	}
 }
 

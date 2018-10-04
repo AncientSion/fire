@@ -848,26 +848,24 @@ else header("Location: index.php");
 	function addUnitToSquadron(data){
 
 		game.openRequest = 0;
-		var unit = game.getUnit(aUnit);
-		var sub = initSquaddie (JSON.parse(data));
+		var squadron = game.getUnit(aUnit);
+		var sub = initSquaddie(JSON.parse(data));
 			sub.create();			
 
-		unit.structures.push(sub);
-		unit.index = sub.index;
-		unit.size = (50 + unit.structures.length*10) * 0.7;
-		unit.setLayout();
-		unit.positionSubUnits();
-		unit.setStats();
-		unit.setSubSystemState();
-		unit.updateImage();
-		//unit.primary.systems[0].select();
-		//unit.doConfirmSystemLoadout();
+		squadron.structures.push(sub);
+		squadron.index = sub.index;
+		squadron.size = (50 + squadron.structures.length*10) * 0.7;
+		squadron.setLayout();
+		squadron.positionSubUnits();
+		squadron.setStats();
+		squadron.setSubSystemState();
+		squadron.updateImage();
 		sub.createSelfContainer();
 		sub.previewSetup();
 		drawShipPreview();
 
-		unit.recalcCommandUpgrades();
-		game.setUnitTotal(unit);
+		squadron.recalcCommandUpgrades();
+		game.setUnitTotal(squadron);
 	}
 
 	function initPreviewCanvas(){

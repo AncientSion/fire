@@ -1236,6 +1236,10 @@ PrimarySystem.prototype.getOutput = function(){
 		mod += this.getCritMod("Output");
 		mod += this.getCritMod("Overload");
 
+	if (mod == 100){
+		return this.output - usage;
+	}
+
 	return Math.floor(this.output / 100 * mod) - usage;
 }
 

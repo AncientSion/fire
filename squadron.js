@@ -55,8 +55,6 @@ Squadron.prototype.getDrawFacing = function(){
 }
 
 Squadron.prototype.setLayout = function(){
-	console.log("ding");
-
 	var minX = 0;
 	var minY = 0;
 	var maxX = 0;
@@ -598,20 +596,31 @@ Squadron.prototype.getDmgByFire = function(fire){
 	return dmgs;
 }
 
+Squadron.prototype.setFaction = function(){
+	var ea = 1; var cr = 1; var nr = 1; var mf = 1;
+
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].faction != "Earth Alliance"){ea = 0;}
+		if (this.structures[i].faction != "Centauri Republic"){cr = 0;}
+		if (this.structures[i].faction != "Narn Regime"){nr = 0;}
+		if (this.structures[i].faction != "Minbari Federation"){mf = 0;}
+	}
+
+	if (ea){this.faction = "Earth Alliance";}
+	else if (cr){this.faction = "Centauri Republic";}
+	else if (nr){this.faction = "Narn Regime";}
+	else if (mf){this.faction = "Minbari Federation";}
+	else this.faction = "Mixed";
+}
+
 Squadron.prototype.setStats = function(){
-	this.slots[0] = 0;
+	this.setFaction();
+	this.slots = 0;
 
 	var ew = 0;
 	var ep = 1000;
 
-	var hitAndRun = true;
-	var narn = true;
-
 	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].faction != "Centauri Republic"){hitAndRun = false;}
-		if (this.structures[i].faction != "Narn Regime"){narn = false;}
-
-		this.slots[0] += this.structures[i].space;
 		this.baseImpulseCost = Math.max(this.baseImpulseCost, this.structures[i].baseImpulseCost);
 		this.baseTurnDelay = Math.max(this.baseTurnDelay, this.structures[i].baseTurnDelay);
 		this.baseImpulse = Math.min(this.baseImpulse, this.structures[i].baseImpulse);
@@ -621,13 +630,24 @@ Squadron.prototype.setStats = function(){
 		ep = Math.min(ep, this.structures[i].ep);
 	}
 
-	if (hitAndRun){
-		this.baseImpulseCost = Math.floor(this.baseImpulseCost * 0.8);
-	}
+	this.morale.baseMorale = 100;
+	this.slots = 10;
 
-	if (narn){
-		this.morale.baseMorale = 125;
-	} else this.morale.baseMorale = 100;
+	switch (this.faction){
+		case "Earth Alliance":
+			this.slots = 12;
+			break;
+		case "Centauri Republic":
+			this.baseImpulseCost = Math.floor(this.baseImpulseCost * 0.8);
+			break;
+		case "Narn Regime":
+			this.morale.baseMorale = 125;
+			break;
+		case "Minbari Federation":
+			this.morale.baseMorale = 110;
+			break;
+		default: break;
+	}
 
 	this.primary.systems[1].output = ew;
 	this.primary.systems[1].update();
@@ -805,10 +825,8 @@ Squadron.prototype.getBuyTableData = function(table){
 		)
 	}
 
-	var wolfPack = true;
 
 	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].faction != "Centauri Republic"){wolfPack = false;}
 
 		this.totalCost += this.structures[i].cost;
 		this.moraleCost += this.structures[i].cost;
@@ -845,7 +863,7 @@ Squadron.prototype.getBuyTableData = function(table){
 		}
 	}
 
-	if (wolfPack && this.structures.length >= 3){
+	if (this.faction == "Centauri Republic" && this.structures.length >= 3){ //wolfpack
 		$(table)
 		.append(
 			$("<tr>")
@@ -929,7 +947,7 @@ Squadron.prototype.getDamageMoraleMalus = function(){
 }
 
 Squadron.prototype.getCrewBaseCost = function(i){
-	return Math.floor(this.structures.map(x => x.cost).reduce((l,r) => l+r, 0)/12);
+	return Math.ceil((this.structures.map(x => x.cost).reduce((l,r) => l+r, 0)/12) * (this.faction == "Minbari Federation" ? 0.7 : 1));
 }
 
 Squadron.prototype.getPurchaseHeader = function(){
@@ -968,16 +986,7 @@ Squadron.prototype.getSlotsUsed = function(){
 }
 
 Squadron.prototype.getMaxSlots = function(){
-	var ea = this.structures.length;
-
-	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].faction != "Earth Alliance"){
-			ea = 0; break;
-		}
-	}
-
-	if (!ea){return this.slots;}
-	return 12;
+	return this.slots;
 }
 
 Squadron.prototype.getRemainingSlots = function(){
