@@ -159,6 +159,9 @@ window.graphics = {
 		this.images.tinashi = new Image();
 		this.images.tinashi.src = "shipIcons/tinashi.png";
 
+		this.images.esharan = new Image();
+		this.images.esharan.src = "shipIcons/tinashi.png";
+
 		this.images.rolentha = new Image();
 		this.images.rolentha.src = "shipIcons/rolentha.png";
 

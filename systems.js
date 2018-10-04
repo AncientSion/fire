@@ -597,18 +597,15 @@ System.prototype.doBoost = function(){
 		turn: game.turn,type: 1, cost: this.getEffiency(), new: 1
 	})
 	if (this.getBoostEffect("Reload")){this.setTimeLoaded();}
-	if (this.getBoostEffect("Shots")){this.updateSysDiv();}
-	if (this.weapon && this.dmgType == "Plasma"){
-		if (this.selected || this.highlight){
-			this.redrawSystemArc();
-		}
-	}
+	if (this.getBoostEffect("Damage Loss")){this.redrawSystemArc();}
 }
 
 System.prototype.doUnboost = function(){
 	if (this.powers[this.powers.length-1].turn == game.turn){
 		this.powers.splice(this.powers.length-1, 1);
 	}
+	if (this.getBoostEffect("Reload")){this.setTimeLoaded();}
+	if (this.getBoostEffect("Damage Loss")){this.redrawSystemArc();}
 }
 
 System.prototype.redrawSystemArc = function(){
@@ -1807,17 +1804,6 @@ function Weapon(system){
 }
 Weapon.prototype = Object.create(System.prototype);
 
-Weapon.prototype.doUnboost = function(){
-	System.prototype.doUnboost.call(this);
-	
-	if (this.getBoostEffect("Reload")){this.setTimeLoaded();}
-	if (this.weapon && this.dmgType == "Plasma"){
-		if (this.selected || this.highlight){
-			this.redrawSystemArc();
-		}
-	}
-}
-
 Weapon.prototype.getDmgsPerShot = function(fire){
 	if (this.fireMode == "Laser"){
 		if (fire.target.ship || fire.target.squad){return this.output;}
@@ -2078,14 +2064,14 @@ Weapon.prototype.getSysDiv = function(){
 
 	if (this.fireMode == "Laser"){
 		$(table).append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").html(this.optRange + "px")));
-		$(table).append($("<tr>").append($("<td>").html("Damage Loss")).append($("<td>").html(this.getDmgLoss(this.optRange+100) + "% per 100px")));
+		$(table).append($("<tr>").append($("<td>").html("Damage Loss")).append($("<td>").addClass("dmgLoss").html(this.getDmgLoss(this.optRange+100) + "% per 100px")));
 	}
 	else if (!this.tiny && this.dmgType == "Plasma"){
 		$(table).append($("<tr>").append($("<td>").html("Damage Loss")).append($("<td>").html(this.getDmgLoss(100) + "% per 100px")));
 	}
 
 
-	if (this.accDecay){$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").html(this.getAccuracy() + "% per 100px")));}
+	if (this.accDecay){$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html(this.getAccuracy() + "% per 100px")));}
 
 	if (this.linked > 1){
 		$(table).append($("<tr>").append($("<td>").html("Linked Guns")).append($("<td>").html(this.linked)));
@@ -2113,17 +2099,28 @@ Weapon.prototype.getSysDiv = function(){
 
 
 Weapon.prototype.updateSysDiv = function(){
-	var dmg = this.getDmgString();
-	var acc = this.getAccuracy();
-	var power = this.getPowerReqString()
-	var shots = this.getShots();
+	/*	var x = $("#sysDiv").css("left");
+		var y = $("#sysDiv").css("top");
+
+		this.hideSysDiv();
+		this.showSysDiv({clientX: Math.floor(x.slice(0, x.length-2)), clientY: Math.floor(y.slice(0, y.length-2))});
+		return;
+	*/
 	var ele = $("#sysDiv");
 
+
+	var dmg = this.getDmgString();
+	var acc = this.getAccuracy();
+	var dmgLoss = this.getDmgLoss((this.optRange ? this.optRange : 0) +100);
+	var power = this.getPowerReqString()
+	var shots = this.getShots();
+
 	(ele)
-	.find(".powerReq").html(power).end()
-	.find(".accuracy").html(acc + "% per 100px").end()
-	.find(".shots").html(this.getShots()).end()
 	.find(".damage").html(dmg).end()
+	.find(".accuracy").html(acc + "% per 100px").end()
+	.find(".dmgLoss").html(dmgLoss + "% per 100px").end()
+	.find(".powerReq").html(power).end()
+	.find(".shots").html(this.getShots()).end()
 
 	this.attachSysMods(ele);
 }

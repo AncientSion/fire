@@ -1,8 +1,8 @@
 <?php
 
-class Tinashi extends Medium {
-	public $name = "Tinashi";
-	public $display = "Tinashi";
+class Esharan extends Medium {
+	public $name = "Esharan";
+	public $display = "Esharan";
 	public $faction = "Minbari Federation";
 	public $size =  70;
 	public static $value = 600;
@@ -12,7 +12,7 @@ class Tinashi extends Medium {
 	public $integrity = 650;
 	public $vitalHP = 85;
 	public $ep = 80;
-	public $ew = 750;
+	public $ew = 650;
 
 
 	function __construct($data = false){
@@ -23,23 +23,21 @@ class Tinashi extends Medium {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 475, 20, 3);
-			$front->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
-			$front->systems[] = new TwinEMProjector($this->getId(), $this->id, 270, 90);
-			$front->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
+			$front->systems[] = new TwinEMProjector($this->getId(), $this->id, 240, 60);
+			$front->systems[] = new MediumPlasma($this->getId(), $this->id, 0, 120);
+			$front->systems[] = new TwinEMProjector($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 400, 17, 1);
-			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$right->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
-			$right->systems[] = new FusionCannon($this->getId(), $this->id, 60, 180);
+			$right->systems[] = new TwinEMProjector($this->getId(), $this->id, 0, 180);
 			$right->systems[] = new TwinEMProjector($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 475, 17, 1);
-			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
-			$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
-			$left->systems[] = new FusionCannon($this->getId(), $this->id, 180, 300);
-			$left->systems[] = new TwinEMProjector($this->getId(), $this->id, 180, 360);
+			$left->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
+			$left->systems[] = new TwinEMProjector($this->getId(), $this->id, 180, 0);
+			$left->systems[] = new TwinEMProjector($this->getId(), $this->id, 180, 0);
 		$structs[] = $left;
 
 

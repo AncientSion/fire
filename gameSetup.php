@@ -943,7 +943,6 @@ else header("Location: index.php");
 		game.buildBallisticList(data[4], tbody);
 		game.setFactionSpecials(data[5], tbody);
 
-
 		showFactionData(i);
 	}
 

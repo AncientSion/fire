@@ -1932,7 +1932,7 @@
 						"Sharlin",
 						"Tigara",
 						"Tinashi",
-						//"Rolentha",
+						"Esharan",
 					),
 					array(
 						"WhiteStar",
@@ -1971,17 +1971,6 @@
 					),
 				);
 				break;
-			case "The Shadows";
-				$units = array(
-					array(
-						"Battlecrab",
-					),
-					array(
-					),
-					array(
-					),
-				);
-				break;
 			default:
 				break;
 		}
@@ -1990,7 +1979,7 @@
 			case "Earth Alliance": 
 				$notes = array(
 					array("Inpenetrable", "By trading energy, units can temporary empower their armour, making them far more resistent to damage."),
-					array("Coordination", "Rapid response times within the existing chain of command grants increased flexibility for formation tactics.</br> Squadrons have a total of 12 slot points."),
+					array("Team Effort", "Humans excel when working as a group with a shared goal. Squadrons have 12 slot points.</br>Squadrons receive +5 starting morale for every containing unit after the second."),
 					//array("Insurmountable", "An array of networked turrets will provide dedicated point defense to every unit."),
 				);
 			break;
@@ -2094,9 +2083,9 @@
 				$units = array(
 					array("Primus", 3, 6),
 					array("Centurion", 7, 6),
-					array("Kutai", 10, 3),
 					array("Altarian", 10, 3),
 					array("Demos", 10, 3),
+					array("Kutai", 7, 3),
 					array("Squadron", 15, 2),
 				);
 				break;
@@ -2105,6 +2094,7 @@
 					array("Sharlin", 2, 4),
 					array("Tigara", 3, 4),
 					array("Tinashi", 4, 3),
+					array("Esharan", 4, 3),
 					array("Squadron", 10, 2),
 				);
 				break;

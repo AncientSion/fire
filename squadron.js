@@ -636,6 +636,7 @@ Squadron.prototype.setStats = function(){
 	switch (this.faction){
 		case "Earth Alliance":
 			this.slots = 12;
+			this.morale.baseMorale += Math.max(0, 5*(this.structures.length-2));
 			break;
 		case "Centauri Republic":
 			this.baseImpulseCost = Math.floor(this.baseImpulseCost * 0.8);

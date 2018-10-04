@@ -168,7 +168,7 @@ class FusionCannon extends Particle {
 	public $shots = 1;
 	public $reload = 2;
 	public $integrity = 40;
-	public $powerReq = 2;
+	public $powerReq = 3;
 	public $tracking = 3;
 
 	public $animColor = "green";
@@ -187,7 +187,7 @@ class HeavyFusionCannon extends FusionCannon {
 	public $minDmg = 40;
 	public $maxDmg = 52;
 	public $integrity = 46;
-	public $powerReq = 3;
+	public $powerReq = 4;
 	public $tracking = 3;
 
 	public $projSize = 4;
@@ -259,7 +259,7 @@ class TwinEMProjector extends Particle {
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
         $this->setEMData();
-		$this->boostEffect[] = new Effect("Reload", -1);
+		$this->boostEffect[] = new Effect("Accuracy", 50);
 	}
 }
 

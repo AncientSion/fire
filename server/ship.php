@@ -151,7 +151,11 @@ class Ship {
 			$this->baseMorale = 125;
 		}
 		else if ($this->faction == "Earth Alliance"){
-			if ($this->squad){$this->slots = 12;}
+			if ($this->squad){
+				$this->slots = 12;
+				$this->baseMorale = 100 + max(0, 5*(sizeof($this->structures)-2));
+			}
+
 		}
 		else if ($this->faction == "Minbari Federation"){
 			$this->baseMorale = 110;
