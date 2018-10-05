@@ -474,8 +474,7 @@
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			$data = array();
-			$faction = $this->playerstatus[$i]["faction"];
-			$entries = $this->getReinforcements($faction);
+			$entries = $this->getReinforcements($this->playerstatus[$i]["faction"]);
 			$value = $this->playerstatus[$i]["value"];
 			$total = 0;
 
@@ -492,9 +491,9 @@
 				//Debug::log("roll: ".$roll);
 
 				foreach ($entries as $entry){
-					$current += $entry[1];
+					$current += $entry::$odds;
 					if ($roll > $current){continue;}
-					$data = $entry[0]::getKit($faction);
+					$data = $entry[0]::getKit($this->playerstatus[$i]["faction"]);
 					$data["name"] = $entry[0];
 					$data["totalCost"] = $data["cost"];
 					$data["moraleCost"] = $data["cost"];
@@ -1858,16 +1857,11 @@
 	}
 
 	public function getFactions(){
-		return array("Earth Alliance", "Centauri Republic", "Minbari Federation", "Narn Regime");
+		return array("Earth Alliance", "Centauri Republic", "Minbari Federation", "Narn Regime", "Vree Guilds");
 	}
 
-	public function getFactionData($faction){
-		//Debug::log("getFactionData");
-
-		$notes = array();
-		$units = array(array(), array(), array(), array());
-		$return = array(array(), array(), array(), array(), array());
-		$specials = array();
+	public function getUnitsForFaction($faction){
+		$units;
 
 		switch ($faction){ // units and suqadies
 			case "Earth Alliance";
@@ -1933,6 +1927,7 @@
 						"Tigara",
 						"Tinashi",
 						"Esharan",
+						"Rolentha",
 					),
 					array(
 						"WhiteStar",
@@ -1975,6 +1970,17 @@
 				break;
 		}
 
+		return $units;
+	}
+
+	public function getFactionData($faction){
+		//Debug::log("getFactionData");
+
+		$notes = array();
+		$units = $this->getUnitsForFaction($faction);
+		$return = array(array(), array(), array(), array(), array());
+		$specials = array();
+
 		switch ($faction){ // specials
 			case "Earth Alliance": 
 				$notes = array(
@@ -2002,23 +2008,6 @@
 					array("Tenacity", "Narn pilots are known for their reckless determination. Strikecraft are far less susceptible to dropping out (120 -> 160).")
 				);
 			break;
-		}
-
-		switch ($faction){
-			case "Earth Alliance";
-				$specials = array("squadronSlots" => 12);
-				break;
-			case "Centauri Republic";
-				$specials = array("squadronSlots" => 10);
-				break;
-			case "Minbari Federation";
-				$specials = array("squadronSlots" => 10);
-				break;
-			case "Narn Regime";
-				$specials = array("squadronSlots" => 10);
-				break;
-			default:
-				break;
 		}
 
 		$return[0] = $notes; // notes
@@ -2065,8 +2054,8 @@
 	}
 
 	public function getReinforcements($faction){
-		//Debug::log("getUnitsForFaction");
-		$units = array();
+		$units = $this->getUnitsForFaction($faction);
+		return $units[0][0];
 
 		switch ($faction){
 			case "Earth Alliance";

@@ -203,7 +203,6 @@ class Ship {
 		$this->getSystemByName("Engine")->setPowerReq($this->mass);
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
 
-		Debug::log("need: ".$this->getPowerReq());
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
@@ -1462,6 +1461,7 @@ class Medium extends Ship {
 	public $baseImpulse = 165;
 	public $traverse = 4;
 	public $baseFocusRate = 10;
+	static $odds = 10;
 
 	function __construct($data){
 		parent::__construct($data);
@@ -1504,6 +1504,7 @@ class Heavy extends Medium {
 	public $baseImpulse = 155;
 	public $traverse = 5;
 	public $baseFocusRate = 11;
+	static $odds = 7;
 	
 	function __construct($data = false){
         parent::__construct($data);
@@ -1514,6 +1515,7 @@ class SuperHeavy extends Heavy {
 	public $baseImpulse = 140;
 	public $traverse = 6;
 	public $baseFocusRate = 12;
+	static $odds = 4;
 	
 	function __construct($data = false){
         parent::__construct($data);
@@ -1524,6 +1526,7 @@ class UltraHeavy extends SuperHeavy {
 	public $baseImpulse = 130;
 	public $traverse = 7;
 	public $baseFocusRate = 13;
+	static $odds = 2;
 	
 	function __construct($data = false){
         parent::__construct($data);

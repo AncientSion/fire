@@ -11,7 +11,7 @@ class Rolentha extends Medium {
 
 	public $integrity = 575;
 	public $vitalHP = 70;
-	public $ep = 70;
+	public $ep = 60;
 	public $ew = 800;
 
 
@@ -30,13 +30,13 @@ class Rolentha extends Medium {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 14, 1);
-			$right->systems[] = new LightEMNeedler($this->getId(), $this->id, 0, 180);
-			$right->systems[] = new LightEMNeedler($this->getId(), $this->id, 0, 180);
+			$right->systems[] = new TwinEMProjector($this->getId(), $this->id, 0, 180);
+			$right->systems[] = new TwinEMProjector($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 14, 1);
-			$left->systems[] = new LightEMNeedler($this->getId(), $this->id, 180, 0);
-			$left->systems[] = new LightEMNeedler($this->getId(), $this->id, 180, 0);
+			$left->systems[] = new TwinEMProjector($this->getId(), $this->id, 180, 0);
+			$left->systems[] = new TwinEMProjector($this->getId(), $this->id, 180, 0);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

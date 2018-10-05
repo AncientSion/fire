@@ -656,7 +656,7 @@ else header("Location: index.php");
 									$(this).toggleClass("highlight");
 								})
 								.append($("<td>").html(data[i]["name"]))
-								.append($("<td>").html(data[i]["space"] + " slots"))
+								.append($("<td>").html(data[i]["space"]))
 								.append($("<td>").html(data[i]["ep"]))
 								.append($("<td>").html(data[i]["ew"]))
 								.append($("<td>").html(data[i]["value"]))
@@ -685,10 +685,6 @@ else header("Location: index.php");
 						var ballistic = initBallistic(data[i]);
 						this.ballistics.push(ballistic);
 					}
-				},
-
-				setFactionSpecials: function(data, t){
-					t.find(".squadron").html("Provides a total of " + data["squadronSlots"] + " slots points.")
 				}
 			}
 
@@ -699,7 +695,7 @@ else header("Location: index.php");
 
 	function initFactionAvail(){
 		console.log("initFactionAvail");
-		var icons = [graphics.images.earth, graphics.images.centauri, graphics.images.minbari, graphics.images.narn];
+		var icons = [graphics.images.earth, graphics.images.centauri, graphics.images.minbari, graphics.images.narn, graphics.images.vree];
 		window.isset = [];
 
 		for (var i = 0; i < factions.length; i++){
@@ -941,7 +937,6 @@ else header("Location: index.php");
 		game.buildSquadList(data[2], tbody);
 		game.buildFighterList(data[3], tbody);
 		game.buildBallisticList(data[4], tbody);
-		game.setFactionSpecials(data[5], tbody);
 
 		showFactionData(i);
 	}

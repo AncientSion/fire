@@ -207,6 +207,8 @@ window.graphics = {
 		this.images.minbari.src = "factionIcons/minbari.png";
 		this.images.narn = new Image();
 		this.images.narn.src = "factionIcons/narn.png";
+		this.images.vree = new Image();
+		this.images.vree.src = "factionIcons/vree.png";
 		this.images.shadows = new Image();
 		this.images.shadows.src = "factionIcons/shadows.png";
 	}
