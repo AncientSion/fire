@@ -164,6 +164,14 @@ class Ship {
 				$command->loads[$i]["baseCost"] = ceil($command->loads[$i]["baseCost"] * 0.7);
 			}
 		}
+		else if ($this->faction == "Vree Conglomerate"){
+			if ($this->ship){
+				$this->slipAngle = 60;
+			}
+			else if ($this->squad){
+				$this->slipAngle = 90;
+			}
+		}
 		//Debug::log("setSpecialAbilities #".$this->id.", now: ".$this->baseMorale);
 	}
 	

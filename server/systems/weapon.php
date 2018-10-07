@@ -105,9 +105,9 @@ class Weapon extends System {
 		$this->notes[] = "<u>Flight</u>: ".$this->dmgs[1]." damage each";
 		$this->notes[] = "<u>Squadron</u>: ".$this->dmgs[3]." damage each";
 
-		$html = "</br><u>Ship target</u></br>";
-		$html .= "Hull: ".$this->dmgs[4]." damage + " .$this->dmgs[0]." damage pending size</br>";
-		$html .= "Facing systems: ".$this->dmgs[0]." damage each no overkill";	
+		$html = "</br><u>Ship</u></br>";
+		$html .= "Hull: ".$this->dmgs[4]." damage</br>Extra " .$this->dmgs[0]." damage per size > Medium</br>";
+		$html .= "Facing systems: ".$this->dmgs[0]." damage each</br>No overkill";	
 		$this->notes[] = $html;
 		//$this->notes[] = "Armour applies, no Overkill";
 	}
@@ -152,11 +152,9 @@ class Weapon extends System {
 		$this->notes[] = $html;
 	}
 
-	public function setAntimatterData(){		
-		$this->amBonus = 2;
-		$this->amMax = 30;
-		$this->notes[] = "<span class='yellow'>".$this->amBonus."</span> points of extra damage per 1 point of passing the to-hit roll.";
-		$this->notes[] = "Extra damage is capped at <span class='yellow'>".$this->amMax."%</span> of base damage";
+	public function setAntimatterData(){
+		$this->notes[] = "<span class='yellow'>".$this->amBonus."</span> extra damage per 1 point of passing the to-hit roll.";
+		$this->notes[] = "Extra damage is capped at <span class='yellow'>".$this->amMax."%</span>";
 	}
 
 	public function setEMData(){

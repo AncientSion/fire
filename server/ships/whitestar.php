@@ -11,7 +11,6 @@ class WhiteStar extends Light {
 	public $integrity = 420;
 	public $ep = 140;
 	public $ew = 700;
-	public $power = 3;
 	public $negation = 16;
 
 	function __construct($id, $parentId){
@@ -23,15 +22,16 @@ class WhiteStar extends Light {
 
 		$front = new Section(300, 60);
 		$front->systems[] = new AssaultNeutronlaser($this->getId(), $this->parentId, 330, 30);
-		$front->systems[] = new TwinEMProjector($this->getId(), $this->parentId, 270, 90);
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
 		$right->systems[] = new PulseFusionCannon($this->getId(), $this->parentId, 315, 45);
+		$right->systems[] = new TwinEMProjector($this->getId(), $this->parentId, 270, 90);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
 		$left->systems[] = new PulseFusionCannon($this->getId(), $this->parentId, 315, 45);
+		$left->systems[] = new TwinEMProjector($this->getId(), $this->parentId, 270, 90);
 		$structs[] = $left;
 		
 		for ($i = 0; $i < sizeof($structs); $i++){

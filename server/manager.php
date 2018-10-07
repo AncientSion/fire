@@ -1857,7 +1857,7 @@
 	}
 
 	public function getFactions(){
-		return array("Earth Alliance", "Centauri Republic", "Minbari Federation", "Narn Regime", "Vree Guilds");
+		return array("Earth Alliance", "Centauri Republic", "Minbari Federation", "Narn Regime", "Vree Conglomerate");
 	}
 
 	public function getUnitsForFaction($faction){
@@ -1932,6 +1932,7 @@
 					array(
 						"WhiteStar",
 						"Torotha",
+						"Shaveen",
 					),
 					array(
 						"Nial",
@@ -1945,6 +1946,7 @@
 					array(
 						"GQuan",
 						"GSten",
+						"Varnic",
 						"KaToc",
 						"Rongoth",
 						"DagKar",
@@ -1963,6 +1965,20 @@
 						"Vran",
 						"Vranoth",
 						"VranothKa",
+					),
+				);
+				break;
+			case "Vree Conglomerate";
+				$units = array(
+					array(
+						"Xill",
+					),
+					array(
+						"Xvell",
+					),
+					array(
+					),
+					array(
 					),
 				);
 				break;
@@ -2006,6 +2022,11 @@
 				$notes = array(
 					array("Iron Will", "Narn by nature will hardly ever flee from a battle until the very last moment. Initital morale for units 125, for fleet 115."),
 					array("Tenacity", "Narn pilots are known for their reckless determination. Strikecraft are far less susceptible to dropping out (120 -> 160).")
+				);
+			case "Vree Conglomerate";
+				$notes = array(
+					array("Anti-Gravity Mastery", "Vree mastered anti-gravity and utilize it as a basic means of movement. Instead of 30 degree each, starships can slip up to 60 degree, squadrons up to 90 degree"),
+					array("Perpetual Motion", "Vree units are in constant motion, even when not moving per se. At end of turn, the facing is adjusted by 120 degree without altering heading"),
 				);
 			break;
 		}

@@ -28,10 +28,9 @@ class EnergyMine extends Area {
 	public $reload = 5;
 	public $maxBoost = 1;
 	public $maxRange = 1000;
-	public $effiency = 4;
 	public $integrity = 56;
 	public $powerReq = 6;
-	public $tracking = -1;
+	public $effiency = 4;
 	public $aoe = 65;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
@@ -52,6 +51,25 @@ class EnergyMine extends Area {
 		$multi = $system->traverse;
 		Debug::log("AREA getBaseDamage ".get_class($system)." baseDmg " .$base.", multi ".$multi);
 		return $base * $multi;
+	}
+}
+
+class LightEnergyMine extends EnergyMine {
+	public $name = "LightEnergyMine";
+	public $display = "Light Energy Mine";
+	public static $prio = 0;
+	public $minDmg = 14;
+	public $maxDmg = 22;
+	public $reload = 4;
+	public $maxBoost = 1;
+	public $maxRange = 800;
+	public $integrity = 46;
+	public $powerReq = 4;
+	public $effiency = 3;
+	public $aoe = 50;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 

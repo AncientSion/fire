@@ -52,8 +52,6 @@ window.graphics = {
 	},
 
 	preloadShips: function(){
-		this.images.battlecrab = new Image();
-		this.images.battlecrab.src = "shipIcons/battlecrab.png";
 
 		this.images.squadron = new Image();
 		this.images.squadron.src = "shipIcons/squadron.png";
@@ -135,6 +133,9 @@ window.graphics = {
 		this.images.gsten = new Image();
 		this.images.gsten.src = "shipIcons/gsten.png";
 
+		this.images.varnic = new Image();
+		this.images.varnic.src = "shipIcons/varnic.png";
+
 		this.images.rongoth = new Image();
 		this.images.rongoth.src = "shipIcons/rongoth.png";
 
@@ -170,6 +171,15 @@ window.graphics = {
 
 		this.images.torotha = new Image();
 		this.images.torotha.src = "shipIcons/torotha.png";
+
+		this.images.shaveen = new Image();
+		this.images.shaveen.src = "shipIcons/shaveen.png";
+		
+
+		this.images.xill = new Image();
+		this.images.xill.src = "shipIcons/xill.png";
+		this.images.xvell = new Image();
+		this.images.xvell.src = "shipIcons/xvell.png";
 	},
 
 	preLoadFighters: function(){

@@ -5,7 +5,7 @@ class Torotha extends SuperLight {
 	public $display = "Torotha";
 	public $role = "Assault Frigate";
 	public $faction = "Minbari Federation";
-	public static $value = 320;
+	public static $value = 300;
 	public $mass = 1600;
 
 	public $integrity = 380;
@@ -22,9 +22,9 @@ class Torotha extends SuperLight {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new HeavyFusionCannon($this->getId(), $this->parentId, 300, 60);
+		$front->systems[] = new FusionCannon($this->getId(), $this->parentId, 300, 60);
+		$front->systems[] = new AntimatterConverter($this->getId(), $this->parentId, 315, 45);
 		$front->systems[] = new TwinEMProjector($this->getId(), $this->parentId, 270, 90);
-		$front->systems[] = new HeavyFusionCannon($this->getId(), $this->parentId, 300, 60);
 		$structs[] = $front;
 
 	/*	$right = new Section(60, 180);

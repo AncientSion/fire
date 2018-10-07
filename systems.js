@@ -2130,7 +2130,16 @@ Weapon.prototype.getAccuracyLoss = function(dist){
 }
 
 Weapon.prototype.getFillStyle = function(x, y, dist){
-	if (this.dmgType == "Plasma"){
+	if (!this.dmgLoss){return "green";}
+
+	if (this.fireMode[0] == "L"){ // laser
+		var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
+		grad.addColorStop(0, "green");
+		grad.addColorStop((this.optRange/1200*dist) / dist, "green");
+		grad.addColorStop(((this.optRange/1200*dist)+dist) / 2 / dist, "yellow");
+		grad.addColorStop(1, "red");
+	}
+	else if (this.dmgType[0] == "P" || this.dmgType[0] == "E"){
 		var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
 		var loss = this.dmgLoss * this.getRangeDmgMod();
 		var	red = 0.7/loss*10000/dist;
@@ -2140,17 +2149,8 @@ Weapon.prototype.getFillStyle = function(x, y, dist){
 		grad.addColorStop((Math.min(1, red) + Math.max(0, green))/2, "yellow");
 		grad.addColorStop(Math.max(0, green), "green");
 		grad.addColorStop(green, "green");	
-		return grad;
 	}
-	else if (this.fireMode == "Laser" && this.dmgLoss){
-		var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
-		grad.addColorStop(0, "green");
-		grad.addColorStop((this.optRange/1200*dist) / dist, "green");
-		grad.addColorStop(((this.optRange/1200*dist)+dist) / 2 / dist, "yellow");
-		grad.addColorStop(1, "red");
-		return grad;
-	}
-	return "green";
+	return grad;
 }
 
 Weapon.prototype.getAccuracy = function(){

@@ -184,11 +184,11 @@ class HeavyFusionCannon extends FusionCannon {
 	public $name = "HeavyFusionCannon";
 	public $display = "Heavy Fusion Cannon";
 	public static $prio = 0;
-	public $minDmg = 40;
-	public $maxDmg = 52;
+	public $minDmg = 44;
+	public $maxDmg = 56;
 	public $integrity = 46;
 	public $powerReq = 4;
-	public $tracking = 3;
+	public $tracking = 4;
 
 	public $projSize = 4;
 	public $projSpeed = 7;
@@ -202,21 +202,20 @@ class AntimatterConverter extends Particle {
 	public $name = "AntimatterConverter";
 	public $display = "Antimatter-Converter";
 	public $fireMode = "Flash";
-	//public $dmgType = "Antimatter";
 	public static $prio = 0;
-	public $minDmg = 150;
-	public $maxDmg = 150;
+	public $minDmg = 90;
+	public $maxDmg = 90;
 	public $accDecay = 120;
 	public $shots = 1;
 	public $animColor = "#a1ff00";
-	public $projSize = 5;
+	public $projSize = 3.5;
 	public $projSpeed = 6;
 	public $reload = 3;
 	public $integrity = 60;
-	public $powerReq = 7;
-	public $tracking = 5;
+	public $powerReq = 4;
+	public $tracking = 4;
 	public $amBonus = 2;
-	public $amMax = 80;
+	public $amMax = 30;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -224,11 +223,33 @@ class AntimatterConverter extends Particle {
         $this->setFlashData();
 	}
 
+	public function getBaseDamage($fire, $hit, $system){
+		if ($fire->target->squad){return $this->dmgs[1];}
+		return mt_rand($this->getMinDamage(), $this->getMaxDamage());
+	}
+
 	public function getBonusDamage($fire, $baseDmg, $hit){
 		//Debug::log("hit #".$hit);
 		//Debug::log("req: ".$fire->req);p
 		//Debug::log("roll: ".$fire->rolls[$hit]);
 		return min($baseDmg / 100 * $this->amMax, ($fire->req - $fire->rolls[$hit]) * $this->amBonus);
+	}
+}
+class HeavyAntimatterConverter extends AntimatterConverter {
+	public $name = "HeavyAntimatterConverter";
+	public $display = "Heavy Antimatter-Converter";
+	public static $prio = 0;
+	public $minDmg = 150;
+	public $maxDmg = 150;
+	public $projSize = 5;
+	public $projSpeed = 6;
+	public $reload = 3;
+	public $integrity = 60;
+	public $powerReq = 7;
+	public $tracking = 5;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+		parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -245,6 +266,7 @@ class TwinEMProjector extends Particle {
 	public $integrity = 24;
 	public $powerReq = 3;
 	public $tracking = 0;
+	public $dmgLoss = 20;
 	public $effiency = 3;
 	public $maxBoost = 1;
 
@@ -259,27 +281,30 @@ class TwinEMProjector extends Particle {
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
         $this->setEMData();
-		$this->boostEffect[] = new Effect("Accuracy", 50);
+		$this->boostEffect[] = new Effect("Damage Loss", -50);
 	}
 }
 
-class MediumEMDissipator extends Particle {
-	public $name = "MediumEMDissipator";
-	public $display = "Medium EM Dissipator";
+class EMSubjugator extends Particle {
+	public $name = "EMSubjugator";
+	public $display = "EM Subjugator";
 	public static $prio = 0;
-	public $minDmg = 20;
-	public $maxDmg = 24;
-	public $accDecay = 120;
-	public $shots = 1;
-	public $reload = 2;
-	public $integrity = 34;
-	public $powerReq = 3;
-	public $tracking = 0;
+	public $minDmg = 22;
+	public $maxDmg = 28;
+	public $accDecay = 180;
+	public $shots = 3;
+	public $reload = 3;
+	public $integrity = 24;
+	public $powerReq = 5;
+	public $tracking = 3;
+	public $dmgLoss = 20;
+	public $effiency = 3;
+	public $maxBoost = 1;
 
 	public $animation = "em";
 	public $animColor = "lightBlue";
 	public $projSize = 3;
-	public $projSpeed = 7;
+	public $projSpeed = 10;
 
 	public $em = 1;
 	public $dmgType = "EM";
@@ -287,6 +312,7 @@ class MediumEMDissipator extends Particle {
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
         $this->setEMData();
+		$this->boostEffect[] = new Effect("Damage Loss", -50);
 	}
 }
 

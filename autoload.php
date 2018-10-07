@@ -68,6 +68,7 @@ spl_autoload_register(
                 'rolentha' => '/server/ships/rolentha.php',
                 'whitestar' => '/server/ships/whitestar.php',
                 'torotha' => '/server/ships/torotha.php',
+                'shaveen' => '/server/ships/shaveen.php',
 
                 'omega' => '/server/ships/omega.php',
                 'avenger' => '/server/ships/avenger.php',
@@ -81,6 +82,7 @@ spl_autoload_register(
 
                 'gquan' => '/server/ships/gquan.php',
                 'gsten' => '/server/ships/gsten.php',
+                'varnic' => '/server/ships/varnic.php',
                 'katoc' => '/server/ships/katoc.php',
                 'rongoth' => '/server/ships/rongoth.php',
                 'dagkar' => '/server/ships/dagkar.php',
@@ -88,6 +90,9 @@ spl_autoload_register(
                 'thentus' => '/server/ships/thentus.php',
                 'shokos' => '/server/ships/shokos.php',
                 'shokov' => '/server/ships/shokov.php',
+
+                'xill' => '/server/ships/xill.php',
+                'xvell' => '/server/ships/xvell.php',
 
                 'battlecrab' => '/server/ships/battlecrab.php',
 
@@ -149,6 +154,7 @@ spl_autoload_register(
                 'lightempulse' => '/server/systems/weapons/pulse.php',
                 
                 'twinemprojector' => '/server/systems/weapons/particle.php',
+                'EMSubjugator' => '/server/systems/weapons/particle.php',
                 'mediumemdissipator' => '/server/systems/weapons/particle.php',
                 'shockcannon' => '/server/systems/weapons/particle.php',
 
@@ -162,11 +168,13 @@ spl_autoload_register(
                 'heavyfusioncannon' => '/server/systems/weapons/particle.php',
 
                 'antimatterconverter' => '/server/systems/weapons/particle.php',
+                'heavyantimatterconverter' => '/server/systems/weapons/particle.php',
 
                 'mediumshock' => '/server/systems/weapons/particle.php',
 
                 'area' => '/server/systems/weapons/area.php',
                 'energymine' => '/server/systems/weapons/area.php',
+                'lightenergymine' => '/server/systems/weapons/area.php',
                 'graviticmine' => '/server/systems/weapons/area.php',
 
                 'launcher' => '/server/systems/weapons/launcher.php',

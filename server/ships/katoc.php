@@ -11,7 +11,7 @@ class KaToc extends Medium {
 
 	public $integrity = 670;
 	public $vitalHP = 80;
-	public $ep = 85;
+	public $ep = 90;
 	public $ew = 700;
 
 	function __construct($data = false){
