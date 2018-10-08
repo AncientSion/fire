@@ -1844,10 +1844,10 @@ Weapon.prototype.hasFireOrder = function(){
 
 Weapon.prototype.getRangeDmgMod = function(){
 	var mod = 100;
-	if (this.fireMode == "Laser" || this.dmgType == "Plasma"){
+	//if (this.fireMode == "Laser" || this.dmgType == "Plasma"){
 		mod += this.getCritMod("Damage Loss");
 		mod += this.getBoostEffect("Damage Loss") * this.getBoostLevel();
-	}
+	//}
 	return mod / 100;
 }
 	
@@ -1862,6 +1862,10 @@ Weapon.prototype.getDmgLoss = function(dist){
 	else return 0;
 
 	return Math.ceil(this.dmgLoss * dist / 100 * this.getRangeDmgMod());
+}
+
+Weapon.prototype.getUIDmgLoss = function(){
+	return this.dmgLoss / 1 * this.getRangeDmgMod();
 }
 
 Weapon.prototype.getMaxRange = function(){
@@ -2064,12 +2068,11 @@ Weapon.prototype.getSysDiv = function(){
 
 	if (this.fireMode == "Laser"){
 		$(table).append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").html(this.optRange + "px")));
-		$(table).append($("<tr>").append($("<td>").html("Damage Loss")).append($("<td>").addClass("dmgLoss").html(this.getDmgLoss(this.optRange+100) + "% per 100px")));
-	}
-	else if (!this.tiny && this.dmgType == "Plasma"){
-		$(table).append($("<tr>").append($("<td>").html("Damage Loss")).append($("<td>").html(this.getDmgLoss(100) + "% per 100px")));
 	}
 
+	if (this.dmgLoss){
+		$(table).append($("<tr>").append($("<td>").html("Damage Loss")).append($("<td>").addClass("dmgLoss").html(this.getUIDmgLoss() + "% per 100px")));
+	}
 
 	if (this.accDecay){$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html(this.getAccuracy() + "% per 100px")));}
 

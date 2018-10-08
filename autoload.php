@@ -153,6 +153,7 @@ spl_autoload_register(
                 'heavyplasmapulse' => '/server/systems/weapons/pulse.php',
                 'lightempulse' => '/server/systems/weapons/pulse.php',
                 
+                'em' => '/server/systems/weapons/em.php',
                 'twinemprojector' => '/server/systems/weapons/particle.php',
                 'EMSubjugator' => '/server/systems/weapons/particle.php',
                 'mediumemdissipator' => '/server/systems/weapons/particle.php',

@@ -253,13 +253,29 @@ class HeavyAntimatterConverter extends AntimatterConverter {
 	}
 }
 
-class TwinEMProjector extends Particle {
+class EM extends Particle {
+	public $animation = "em";
+	public $animColor = "lightBlue";
+	public $projSize = 2;
+	public $projSpeed = 10;
+	public $em = 1;
+	public $dmgType = "EM";
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+        $this->setEMData();
+		$this->boostEffect[] = new Effect("Damage Loss", -50);
+	}
+
+}
+
+class TwinEMProjector extends EM {
 	public $name = "TwinEMProjector";
 	public $display = "Twin EM Projector";
 	public static $prio = 0;
 	public $minDmg = 11;
 	public $maxDmg = 14;
-	public $accDecay = 240;
+	public $accDecay = 180;
 	public $shots = 1;
 	public $linked = 2;
 	public $reload = 2;
@@ -270,28 +286,18 @@ class TwinEMProjector extends Particle {
 	public $effiency = 3;
 	public $maxBoost = 1;
 
-	public $animation = "em";
-	public $animColor = "lightBlue";
-	public $projSize = 2;
-	public $projSpeed = 10;
-
-	public $em = 1;
-	public $dmgType = "EM";
-
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
-        parent::__construct($id, $parentId, $start, $end, $output, $width);
-        $this->setEMData();
-		$this->boostEffect[] = new Effect("Damage Loss", -50);
+		parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
-class EMSubjugator extends Particle {
+class EMSubjugator extends EM {
 	public $name = "EMSubjugator";
 	public $display = "EM Subjugator";
 	public static $prio = 0;
 	public $minDmg = 22;
 	public $maxDmg = 28;
-	public $accDecay = 180;
+	public $accDecay = 120;
 	public $shots = 3;
 	public $reload = 3;
 	public $integrity = 24;
@@ -301,18 +307,8 @@ class EMSubjugator extends Particle {
 	public $effiency = 3;
 	public $maxBoost = 1;
 
-	public $animation = "em";
-	public $animColor = "lightBlue";
-	public $projSize = 3;
-	public $projSpeed = 10;
-
-	public $em = 1;
-	public $dmgType = "EM";
-
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
-        parent::__construct($id, $parentId, $start, $end, $output, $width);
-        $this->setEMData();
-		$this->boostEffect[] = new Effect("Damage Loss", -50);
+		parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
