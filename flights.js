@@ -89,7 +89,7 @@ Flight.prototype.setCallSign = function(){
 	var names = ["Blue", "yellow", "Red", "Green", "Silver", "Tiger", "Eagle", "Dragon", "Wyvern", "Phoenix", "Rampage", "Assault", "Onslaught"];
 	var signs = ["Alpha", "Beta", "Gamma", "Epsilon", "Sigma", "Phi"];
 
-	this.call = (names[range(0, names.length-1)] + "-" + signs[range(0, signs.length-1)]);
+	this.callsign = (names[range(0, names.length-1)] + "-" + signs[range(0, signs.length-1)]);
 }
 
 Flight.prototype.createBaseDiv = function(){

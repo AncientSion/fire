@@ -266,7 +266,6 @@ class EM extends Particle {
         $this->setEMData();
 		$this->boostEffect[] = new Effect("Damage Loss", -50);
 	}
-
 }
 
 class TwinEMProjector extends EM {

@@ -712,15 +712,8 @@ table, th, tr, td {
 .squad .outputMask {
 	font-size: 14px;
 	color: white;
-	display: block;
-}
-
-.squad .outputMask.tdop {
-	top: -50px;
-	width: 100%;
-	font-size: 14px;
-	color: white;
 	position: relative;
+	top: 1px;
 }
 
 .unitContainer .primaryDiv .primaryTable {
@@ -1584,7 +1577,7 @@ tr.rowBorderBottom {
 	box-shadow: inset 0 0 4px 3px #ffeb3e
 }
 
-#unitSelector img:hover, .requestReinforcements img:hover, .deployNow img:hover {
+#unitSelector img:hover, tr.requestReinforcements:hover td, tr.deployNow:hover td {
 	background-color: white;
 }
 

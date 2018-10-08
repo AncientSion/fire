@@ -292,13 +292,14 @@
 					array(
 					"id" => -$possible[$i]["id"],
 					"userid" => $possible[$i]["userid"],
-					"display" => $possible[$i]["display"],
+					"callsign" => $possible[$i]["callsign"],
 					"totalCost" => $possible[$i]["totalCost"],
 					"moraleCost" => $possible[$i]["moraleCost"],
 					"status" => $possible[$i]["status"],
 					"command" => $possible[$i]["command"],
 					"available" => $this->turn + $possible[$i]["available"],
 					"withdraw" => $possible[$i]["withdraw"],
+					"manual" => $possible[$i]["manual"],
 					"destroyed" => $possible[$i]["destroyed"],
 					"x" => $possible[$i]["x"],
 					"y" => $possible[$i]["y"],
@@ -475,26 +476,28 @@
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			$data = array();
 			$entries = $this->getReinforcements($this->playerstatus[$i]["faction"]);
+			$entries[] = "Squadron";
 			$value = $this->playerstatus[$i]["value"];
 			$total = 0;
 
 			Debug::log("player: ".$this->playerstatus[$i]["userid"]." has ".$value." available");
 
-			foreach ($entries as $entry){$total += $entry[1];}
+			foreach ($entries as $entry){$total += $entry::$odds;}
 
-			//Debug::log("total: ".$total);
+			Debug::log("totalOdds: ".$total);
 			$add = $this->settings->reinforceAmount;
-
+			$add = 5;
 			while ($add){
 				$current = 0;
 				$roll = mt_rand(0, $total);
-				//Debug::log("roll: ".$roll);
+				Debug::log("roll: ".$roll);
 
-				foreach ($entries as $entry){
+				foreach ($entries as $entry){Debug::log("current at ".$current.", adding ".$entry::$odds." for ".$entry);
 					$current += $entry::$odds;
-					if ($roll > $current){continue;}
-					$data = $entry[0]::getKit($this->playerstatus[$i]["faction"]);
-					$data["name"] = $entry[0];
+					if ($roll > $current){Debug::log("rolled higher"); continue;}
+					Debug::log("picking!");
+					$data = $entry::getKit($this->playerstatus[$i]["faction"]);
+					$data["name"] = $entry;
 					$data["totalCost"] = $data["cost"];
 					$data["moraleCost"] = $data["cost"];
 					$data["notes"] = "";
@@ -537,7 +540,7 @@
 
 					if (floor($data["totalCost"]) > floor($this->playerstatus[$i]["value"])){$add--; continue;}
 
-
+					Debug::log("adding pick: ".$data["name"]);
 					$picks[] = $data;
 					$add--;
 					//Debug::log("picking");
@@ -750,7 +753,7 @@
 			$move = array("turn" => $this->turn, "type" => "deploy", "dist" => 0, "x" => $devi->x, "y" => $devi->y, "a" => $a, "cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
 			$upgrades = array(array("active" => 1, "shipid" => $this->fires[$i]->shooter->id, "systemid" => $this->fires[$i]->weapon->id, "units" => array(0 => array("amount" => $this->fires[$i]->shots, "name" => $name))));
 
-			$units[] = array("gameid" => $this->gameid, "userid" => $this->fires[$i]->shooter->userid, "type" => "Salvo", "name" => "Salvo", "display" => "", "totalCost" => 0, "moraleCost" => 0, "turn" => $this->turn, "eta" => 0, "mission" => $mission, "actions" => array($move), "upgrades" => $upgrades);
+			$units[] = array("gameid" => $this->gameid, "userid" => $this->fires[$i]->shooter->userid, "type" => "Salvo", "name" => "Salvo", "callsign" => "", "totalCost" => 0, "moraleCost" => 0, "turn" => $this->turn, "eta" => 0, "mission" => $mission, "actions" => array($move), "upgrades" => $upgrades);
 
 
 		}
@@ -762,7 +765,7 @@
 				//$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "", "deployed", 0, 0, 0, 0, 0, 0, 0, 0, "");
 				$this->ships[] = new Salvo(
 					array(
-						"id" => $units[$i]["id"], "userid" => $units[$i]["userid"], "command" => 0, "available" => $this->turn, "withdraw" => 0, "display" => "",
+						"id" => $units[$i]["id"], "userid" => $units[$i]["userid"], "command" => 0, "available" => $this->turn, "withdraw" => 0, "callsign" => "",
 						"totalCost" => 0, "moraleCost" => 0, "status" => "deployed", "destroyed" => 0, "x" => 0, "y" => 0, "facing" => 270, "delay" => 0, "thrust" => 0, 
 						"rolling" => 0, "rolled" => 0, "flipped" => 0, "focus" => 0, "notes" => ""
 					)
@@ -1667,12 +1670,12 @@
 	}		
 
 	public function userChangedCommandThisTurn($index){
-		Debug::log("userChangedCommandThisTurn");
+		//Debug::log("userChangedCommandThisTurn");
 		if ($this->playerstatus[$index]["transfered"]){
-			Debug::log("yay");
+			//Debug::log("yay");
 			return true;
 		}
-		Debug::log("nay");
+		//Debug::log("nay");
 		return false;
 	}
 
@@ -1983,6 +1986,7 @@
 				);
 				break;
 			default:
+				$units = array(array(), array(), array(), array()); 
 				break;
 		}
 
@@ -2014,20 +2018,20 @@
 			case "Minbari Federation";
 				$notes = array(
 					array("Advanced Tech", "Highly advanced tech results in any EW being considered to be originating from a unit 3 levels larger."),
-					array("Mastermind", "Superior tactical capabilities and strategical brilliance result in 30 % increased Focus gain."),
-					array("Enlightened", "Lifelong training and an indefinite stride for for knowledge results in officer training being 30 % less expensive.")
+					array("Enlightened", "Hundreds of years of preparation for the old enemy make Minbari commanders especially potent at making decisions regardless of circumstances. Focus gain is increased by 30 %."),
+					array("Dedicated", "Minbari are born to a caste and each dedicates itself to their particular role within society, excelling in their particular trade. Officer training is 30 % less costly.")
 				);
 			break;
 			case "Narn Regime";
 				$notes = array(
-					array("Iron Will", "Narn by nature will hardly ever flee from a battle until the very last moment. Initital morale for units 125, for fleet 115."),
+					array("Iron Will", "Narn will almost never flee from a battle, regardless of odds or enemy. Initital morale for units 125, for fleet 115."),
 					array("Tenacity", "Narn pilots are known for their reckless determination. Strikecraft are far less susceptible to dropping out (120 -> 160).")
 				);
 			break;
 			case "Vree Conglomerate";
 				$notes = array(
-					array("Anti-Gravity Mastery", "Vree mastered anti-gravity and utilize it as a basic means of movement. Instead of 30 degree each, starships can slip up to 60 degree, squadrons up to 90 degree"),
-					array("Perpetual Motion", "Vree units are in constant motion, even when not moving per se. At end of turn, the facing is adjusted by 120 degree without altering heading"),
+					array("Anti-Gravity Mastery", "Vree mastered anti-gravity and, amongst othes, utilize it as a basic means of movement. Instead of 30 degree each, starships can slip up to 60 degree, squadrons up to 90 degree."),
+					array("Perpetual Motion", "Vree units are in constant motion, even when not moving per se. At end of turn, each vree' unit facing is adjusted by 120 degree without altering unit heading."),
 				);
 			break;
 		}
@@ -2039,11 +2043,13 @@
 			$unit = new $name(1, 0, 0, 0, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "");
 			$data = array(
 				"name" => $unit->name,
+				"display" => $unit->display,
 				"value" => $unit::$value,
 				"ep" => $unit->ep,
 				"ew" => $unit->ew,
 				"eta" => 0
 			);
+			//return $unit;
 			$return[1][] = $data;
 		}
 
@@ -2051,6 +2057,7 @@
 			$unit = new $units[1][$j](1, 1);
 			$data = array(
 				"name" => $unit->name,
+				"display" => $unit->display,
 				"value" => $unit::$value,
 				"ep" => $unit->ep,
 				"ew" => $unit->ew,
@@ -2077,63 +2084,16 @@
 
 	public function getReinforcements($faction){
 		$units = $this->getUnitsForFaction($faction);
-		return $units[0][0];
-
-		switch ($faction){
-			case "Earth Alliance";
-				$units = array(
-					array("Omega", 3, 6),
-					array("Hyperion", 7, 5),
-					array("Avenger", 3, 6),
-					array("Artemis", 10, 3),
-					array("Olympus", 10, 3),
-					array("Squadron", 15, 2),
-				);
-				break;
-			case "Centauri Republic";
-				$units = array(
-					array("Primus", 3, 6),
-					array("Centurion", 7, 6),
-					array("Altarian", 10, 3),
-					array("Demos", 10, 3),
-					array("Kutai", 7, 3),
-					array("Squadron", 15, 2),
-				);
-				break;
-			case "Minbari Federation";
-				$units = array(
-					array("Sharlin", 2, 4),
-					array("Tigara", 3, 4),
-					array("Tinashi", 4, 3),
-					array("Esharan", 4, 3),
-					array("Squadron", 10, 2),
-				);
-				break;
-			case "Narn Regime";
-				$units = array(
-					array("GQuan", 3, 2),
-					array("GSten", 6, 3),
-					array("KaToc", 8, 3),
-					array("Rongoth", 8, 3),
-					array("DagKar", 4, 3),
-					array("Squadron", 15, 2),
-				);
-
-				break;
-			default:
-				break;
-		}
-
-		return $units;
-
+		return $units[0];
 	}
+	
 	public function getPreviewData($get){
 		//Debug::log("asking for preview of: ".$get["name"].", index: ".$get["index"]);
 		$unit;
 		if ($get["unit"] == "ship"){
 			$unit = new $get["name"](
 				array(
-					"id" => $get["purchases"], "userid" => 1, "command" => 0, "available" => 0, "withdraw" => 0, "manual" => 0, "display" => "", "status" => "", "totalCost" => 0,"moraleCost" => 0,
+					"id" => $get["purchases"], "userid" => 1, "command" => 0, "available" => 0, "withdraw" => 0, "manual" => 0, "callsign" => "", "status" => "", "totalCost" => 0,"moraleCost" => 0,
 					"destroyed" => 0, "x" => 0, "y" => 0, "facing" => 270, "delay" => 0, "thrust" => 0, 
 					"rolling" => 0, "rolled" => 0, "flipped" => 0, "focus" => 0, "notes" => ""
 				)

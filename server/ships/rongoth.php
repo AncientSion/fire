@@ -2,7 +2,7 @@
 
 class Rongoth extends Medium {
 	public $name = "Rongoth";
-	public $display = "Rongoth";
+	public $display = "Ron'Goth";
 	public $faction = "Narn Regime";
 	public $size =  55;
 	public static $value = 420;
@@ -29,13 +29,13 @@ class Rongoth extends Medium {
 		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 15, 1);
 		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 335, 115);
 		$right->systems[] = new Bulkhead($this->getId(), $this->id, 50, 0, 1);
-		$right->systems[] = new TwinParticleBolter($this->getId(), $this->id, 90, 270);
+		$right->systems[] = new TwinParticleBolter($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 15, 1);
 		$left->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 245, 5);
 		$left->systems[] = new Bulkhead($this->getId(), $this->id, 50, 0, 1);
-		$left->systems[] = new TwinParticleBolter($this->getId(), $this->id, 90, 270);
+		$left->systems[] = new TwinParticleBolter($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

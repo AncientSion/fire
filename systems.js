@@ -1296,38 +1296,39 @@ PrimarySystem.prototype.getSysDiv = function(){
 
 	if (unit.squad){
 		if (this.name == "Command"){
-			$(table).append($("<tr>").append($("<td>").html("Stock Focus Gain")).append($("<td>").html(unit.getUnmoddedFocusGain())));
-			$(table).append($("<tr>").append($("<td>").html("Actual Focus Gain")).append($("<td>").html(unit.getFocusIfCommand())));
+			table.append($("<tr>").append($("<td>").html("Stock Focus Gain")).append($("<td>").html(unit.getUnmoddedFocusGain())));
+			table.append($("<tr>").append($("<td>").html("Actual Focus Gain")).append($("<td>").html(unit.getFocusIfCommand())));
 		}
 		
 		if (this.output){
-			$(table).append($("<tr>").append($("<td>").html("Current Output")).append($("<td>").addClass("output").html(this.getOutputString())));
+			table.append($("<tr>").append($("<td>").html("Current Output")).append($("<td>").addClass("output").html(this.getOutputString())));
 		}
 	}
 	else if (unit.ship){
-		$(table).append($("<tr>").append($("<td>").css("width", "55%").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
-		$(table).append($("<tr>").append($("<td>").html("Hit Chance")).append($("<td>").html(this.hitPct + "%")));
-		$(table).append($("<tr>").append($("<td>").html("Max Damage / hit")).append($("<td>").html(this.maxDmg)));
-		$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
+		table.append($("<tr>").append($("<td>").css("width", "55%").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
+		table.append($("<tr>").append($("<td>").html("Hit Chance")).append($("<td>").html(this.hitPct + "%")));
+		table.append($("<tr>").append($("<td>").html("Max Damage / hit")).append($("<td>").html(this.maxDmg)));
+		table.append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html(this.getEMDmg())))
+		table.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
 
 		if (this.name == "Command"){
-			$(table).append($("<tr>").append($("<td>").html("Stock Focus Gain")).append($("<td>").html(unit.getUnmoddedFocusGain())));
-			$(table).append($("<tr>").append($("<td>").html("Actual Focus Gain")).append($("<td>").html(unit.getFocusIfCommand())));
+			table.append($("<tr>").append($("<td>").html("Stock Focus Gain")).append($("<td>").html(unit.getUnmoddedFocusGain())));
+			table.append($("<tr>").append($("<td>").html("Actual Focus Gain")).append($("<td>").html(unit.getFocusIfCommand())));
 		}
 
 		if (this.output){
-			$(table).append($("<tr>").append($("<td>").html("Current Output")).append($("<td>").addClass("output").html(this.getOutputString())));
+			table.append($("<tr>").append($("<td>").html("Current Output")).append($("<td>").addClass("output").html(this.getOutputString())));
 		}
 		if (this.powerReq){
-			$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
+			table.append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
 		}
 		if (this.effiency){
-			$(table).append($("<tr>").addClass("rowBorderTop").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency())));
+			table.append($("<tr>").addClass("rowBorderTop").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency())));
 			this.getBoostEffectElements(table);
 		}
 		//if (this.modes.length){
-		//	$(table).append($("<tr>").append($("<td>").html("Sensor Mode")).append($("<td>").addClass("sensorMode negative").html(this.getEWMode())));
-			//$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("sensorEffect").html(this.getEWModeEffect())));
+		//	table.append($("<tr>").append($("<td>").html("Sensor Mode")).append($("<td>").addClass("sensorMode negative").html(this.getEWMode())));
+			//table.append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("sensorEffect").html(this.getEWModeEffect())));
 		//}
 	}
 		
@@ -1852,15 +1853,12 @@ Weapon.prototype.getRangeDmgMod = function(){
 }
 	
 Weapon.prototype.getDmgLoss = function(dist){
-	if (this.fireMode == "Laser"){
-		if (dist <= this.optRange){
-			dist = 0;
-		} else dist = dist - this.optRange;
-	}
-	else if (this.dmgType == "Plasma"){
-	}
-	else return 0;
+	if (!this.dmgLoss){return 0;}
 
+	if (this.fireMode[0] == "L"){
+		if (dist <= this.optRange){return 0;}
+		else dist = dist - this.optRange;
+	}
 	return Math.ceil(this.dmgLoss * dist / 100 * this.getRangeDmgMod());
 }
 

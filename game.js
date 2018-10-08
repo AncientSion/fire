@@ -377,7 +377,7 @@ function Game(data){
 					serverId: 0,
 					type: "Flight",
 					name: "Flight",
-					call: this.ships[i].call,
+					callsign: this.ships[i].callsign,
 					display: "",
 					totalCost: this.ships[i].getCost(),
 					moraleCost: this.ships[i].getCost(),
@@ -1469,7 +1469,7 @@ function Game(data){
 							.addClass("header")
 							.attr("colSpan", 3)
 							.append($("<div>").html(units[i][j].name + " #" + units[i][j].id))
-							.append($("<div>").html(units[i][j].display.length ? "'"+units[i][j].display+"'" : ""))
+							.append($("<div>").html(units[i][j].callsign.length ? "'"+units[i][j].callsign+"'" : ""))
 							.append($("<div>").html("("+units[i][j].moraleCost+")"))))
 
 				if (units[i][j].subunits.length){
@@ -2853,7 +2853,7 @@ function Game(data){
 					)
 					.append($("<td>")
 						.addClass("green font14")
-						.html(this.incoming[i].name + " " + this.incoming[i].display)
+						.html(this.incoming[i].name + " " + this.incoming[i].callsign)
 					)
 					.append($("<td>")
 						.addClass("green font14")
@@ -4176,9 +4176,6 @@ Game.prototype.create = function(data){
 		this.ships[i].setVarious();
 	}
 
-	if (game.turn == 1 && game.phase == -1){this.setInitialFacing(this.ships);}
-	this.setInitialFacing(data.reinforcements);
-
 	for (var i = 0; i < data.reinforcements.length; i++){
 		this.reinforcements[i] = window.initUnit(data.reinforcements[i]);
 		this.reinforcements[i].create();
@@ -4206,6 +4203,8 @@ Game.prototype.create = function(data){
 		//this.incoming[i].deployed = 0;
 	}
 
+	if (game.turn == 1 && game.phase == -1){this.setInitialFacing(this.ships);}
+	if (this.reinforcements.length){this.setInitialFacing(this.reinforcements);}
 	if (game.phase != 2){this.checkUnitOffsetting();}
 
 	this.extractPlayerStatusData();

@@ -230,7 +230,7 @@
 			//Debug::log("getDamageStatistics, game: ".$gameid.", user: ".$user);
 			$stmt = $this->connection->prepare("
 				SELECT
-					units.name, units.display, units.id, units.userid, units.destroyed, units.moraleCost,
+					units.name, units.callsign, units.id, units.userid, units.destroyed, units.moraleCost,
 					COALESCE(SUM(damages.armourDmg), 0) as armourDmg,
 					COALESCE(SUM(damages.systemDmg), 0) as systemDmg,
 					COALESCE(SUM(damages.hullDmg), 0) as hullDmg
@@ -459,6 +459,7 @@
 			}
 
 			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
+			return;
 			$rows = $this->update($sql);
 			//Debug::log("Command set, rows updates: ".$rows);
 
@@ -541,9 +542,9 @@
 
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
-					(gameid, userid, ship, ball, name, display, totalCost, moraleCost, status, available, destroyed)
+					(gameid, userid, ship, ball, name, callsign, totalCost, moraleCost, status, available, destroyed)
 				VALUES
-					(:gameid, :userid, :ship, :ball, :name, :display, :totalCost, :moraleCost, :status, :available, :destroyed)
+					(:gameid, :userid, :ship, :ball, :name, :callsign, :totalCost, :moraleCost, :status, :available, :destroyed)
 			");
 
 			$missions = array();
@@ -575,7 +576,7 @@
 				$stmt->bindParam(":ship", $ship);
 				$stmt->bindParam(":ball", $ball);
 				$stmt->bindParam(":name", $units[$i]["name"]);
-				$stmt->bindParam(":display", $units[$i]["display"]);
+				$stmt->bindParam(":callsign", $units[$i]["callsign"]);
 				$stmt->bindParam(":totalCost", $units[$i]["totalCost"]);
 				$stmt->bindParam(":moraleCost", $units[$i]["moraleCost"]);
 				$stmt->bindParam(":status", $status);
@@ -717,9 +718,9 @@
 			//Debug::log("insertReinforcements: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
-					(gameid, userid, ship, ball, name, display, totalCost, moraleCost, status, available, destroyed, turn, phase, notes)
+					(gameid, userid, ship, ball, name, callsign, totalCost, moraleCost, status, available, destroyed, turn, phase, notes)
 				VALUES
-					(:gameid, :userid, :ship, :ball, :name, :display, :totalCost, :moraleCost, :status, :available, :destroyed, :turn, :phase, :notes)
+					(:gameid, :userid, :ship, :ball, :name, :callsign, :totalCost, :moraleCost, :status, :available, :destroyed, :turn, :phase, :notes)
 			");
 
 			$ship = 1;
@@ -727,7 +728,7 @@
 			$status = "reinforce";
 			$destroyed = 0;
 			$phase = -2;
-			$display = "";
+			$callsign = "";
 
 
 			for ($i = 0; $i < sizeof($data); $i++){
@@ -738,7 +739,7 @@
 				$stmt->bindParam(":ship", $ship);
 				$stmt->bindParam(":ball", $ball);
 				$stmt->bindParam(":name", $data[$i]["name"]);
-				$stmt->bindParam(":display", $display);
+				$stmt->bindParam(":callsign", $callsign);
 				$stmt->bindParam(":totalCost", $data[$i]["totalCost"]);
 				$stmt->bindParam(":moraleCost", $data[$i]["moraleCost"]);
 				$stmt->bindParam(":status", $status);

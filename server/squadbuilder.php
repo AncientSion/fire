@@ -157,7 +157,7 @@ class SquadBuilder {
 		return array(
 			array(
 				"active" => 0,
-				"chance" => 30,
+				"chance" => 33,
 				"notes" => "2x White Star",
 				"units" =>
 					array(
@@ -175,7 +175,7 @@ class SquadBuilder {
 			),
 			array(
 				"active" => 0,
-				"chance" => 70,
+				"chance" => 33,
 				"notes" => "2x Torotha",
 				"units" =>
 					array(
@@ -185,6 +185,24 @@ class SquadBuilder {
 						),
 						array(
 							"name" => "Torotha",
+							"amount" => 1,
+						),
+					),
+				"loads" =>
+					array(),
+			),
+			array(
+				"active" => 0,
+				"chance" => 33,
+				"notes" => "2x Shaveen",
+				"units" =>
+					array(
+						array(
+							"name" => "Shaveen",
+							"amount" => 1,
+						),
+						array(
+							"name" => "Shaveen",
 							"amount" => 1,
 						),
 					),
@@ -295,6 +313,7 @@ class SquadBuilder {
 			),
 		);
 	}
+
 }
 
 

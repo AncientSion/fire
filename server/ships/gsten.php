@@ -2,7 +2,7 @@
 
 class GSten extends Heavy {
 	public $name = "GSten";
-	public $display = "GSten";
+	public $display = "G'Sten";
 	public $faction = "Narn Regime";
 	public $size =  70;
 	public static $value = 750;

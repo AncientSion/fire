@@ -2,7 +2,7 @@
 
 class KaToc extends Medium {
 	public $name = "KaToc";
-	public $display = "KaToc";
+	public $display = "Ka'Toc";
 	public $faction = "Narn Regime";
 	public $size =  55;
 	public static $value = 460;
@@ -11,7 +11,7 @@ class KaToc extends Medium {
 
 	public $integrity = 670;
 	public $vitalHP = 80;
-	public $ep = 90;
+	public $ep = 85;
 	public $ew = 700;
 
 	function __construct($data = false){
@@ -35,8 +35,9 @@ class KaToc extends Medium {
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 15, 1);
-		$aft->systems[] = new Hangar($this->getId(), $this->id, 6, array("Gorith"), 6);
-		$aft->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 90, 270);
+		//$aft->systems[] = new Hangar($this->getId(), $this->id, 6, array("Gorith"), 6);
+		$aft->systems[] = new TwinParticleBolter($this->getId(), $this->id, 90, 270);
+		$aft->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 120, 240);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 325, 15, 1);

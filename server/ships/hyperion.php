@@ -2,7 +2,7 @@
 
 class Hyperion extends Heavy {
 	public $name = "Hyperion";
-	public $display = "Hyperion Light Cruiser";
+	public $display = "Hyperion";
 	public $faction = "Earth Alliance";
 	public $size =  80;
 	public static $value = 775;

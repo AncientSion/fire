@@ -645,7 +645,7 @@ Squadron.prototype.setStats = function(){
 			this.morale.baseMorale = 125;
 			break;
 		case "Minbari Federation":
-			this.morale.baseMorale = 110;
+			this.morale.baseMorale = 105;
 			break;
 		default: break;
 	}

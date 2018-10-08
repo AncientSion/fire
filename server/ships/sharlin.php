@@ -13,6 +13,7 @@ class Sharlin extends SuperHeavy {
 	public $vitalHP = 180;
 	public $ep = 50;
 	public $ew = 1000;
+	public $manual = 0;
 
 	function __construct($data = false){
         parent::__construct($data);

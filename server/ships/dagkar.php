@@ -2,7 +2,7 @@
 
 class DagKar extends Medium {
 	public $name = "DagKar";
-	public $display = "DagKar";
+	public $display = "Dag'Kar";
 	public $faction = "Narn Regime";
 	public $size =  50;
 	public static $value = 420;

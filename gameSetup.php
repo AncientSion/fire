@@ -303,7 +303,7 @@ else header("Location: index.php");
 				},
 
 				doConfirmUnitPurchase: function(unit){
-					unit.display = $("#nameWrapper").find("input").val();
+					unit.callsign = $("#nameWrapper").find("input").val();
 
 					if (this.refit){
 						//console.log("confirmRefit");
@@ -434,7 +434,7 @@ else header("Location: index.php");
 							type: game.shipsBought[i].getUnitClass(),
 							name:game.shipsBought[i].getUnitName(),
 							command: game.shipsBought[i].command,
-							display: game.shipsBought[i].display,
+							callsign: game.shipsBought[i].callsign,
 							faction: game.shipsBought[i].faction,
 							totalCost: game.shipsBought[i].totalCost,
 							moraleCost: game.shipsBought[i].moraleCost,
@@ -607,7 +607,7 @@ else header("Location: index.php");
 								.hover(function(){
 									$(this).toggleClass("highlight");
 								})
-								.append($("<td>").html(data[i]["name"]))
+								.append($("<td>").html(data[i]["display"]))
 								.append($("<td>").html(""))
 								.append($("<td>").html(data[i]["ep"]))
 								.append($("<td>").html(data[i]["ew"]))
@@ -618,7 +618,7 @@ else header("Location: index.php");
 										.attr("value", "Select")
 										.data("name", data[i]["name"])
 										.data("value", data[i]["value"])
-										.click(function(){requestBaseUnitData($(this).data("name"));})
+										.click(function(){requestBaseUnitData($(this).data());})
 									)
 								)
 							)
@@ -644,7 +644,7 @@ else header("Location: index.php");
 									.attr("value", "Select")
 									.data("name", "Squadron")
 									.data("value", 0)
-									.click(function(){requestBaseUnitData($(this).data("name"));})
+									.click(function(){requestBaseUnitData($(this).data());})
 								)
 							)
 					)
@@ -667,7 +667,7 @@ else header("Location: index.php");
 										.data("name", data[i]["name"])
 										.data("value", data[i]["value"])
 										.data("space", data[i]["space"])
-										.click(function(){requestSubUnit($(this))})
+										.click(function(){requestSubUnit($(this).data())})
 									)
 								)
 							)
@@ -727,7 +727,7 @@ else header("Location: index.php");
 		}
 	}
 
-	function requestBaseUnitData(name){
+	function requestBaseUnitData(data){
 		//console.log("requestBaseUnitData");
 		if (game.refit){$(game.getUnit(game.refit).tr).removeClass("selected");}
 		game.refit = 0;
@@ -739,18 +739,18 @@ else header("Location: index.php");
 					type: "unitdata",
 					unit: "ship",
 					purchases: game.purchases,
-					name: name,
+					name: data.name,
 					},
 			success: prepShowShipDiv,
 			error: ajax.error,
 		});
 	}
 
-	function requestSubUnit(ele){
+	function requestSubUnit(data){
 		var unit = game.getUnit(aUnit);
 		if (!unit || !unit.squad){return;}
 		if (game.openRequest){return;}
-		if (unit.getRemainingSlots() < $(ele).data("space")){
+		if (unit.getRemainingSlots() < data.space){
 			popup("Insufficent slot space remaining</br>" + $(unit.element).find(".squadSlots").html()); return;
 		}
 
@@ -768,7 +768,7 @@ else header("Location: index.php");
 					unit: "squaddie",
 					purchases: purchase,
 					index: unit.index,
-					name: $(ele).data("name"),
+					name: data.name,
 				},
 			success: addUnitToSquadron,
 			error: ajax.error,
@@ -816,7 +816,7 @@ else header("Location: index.php");
 	}
 
 	function addNamingDiv(unit){
-		var name = unit.display;
+		var callsign = unit.callsign;
 
 		$(unit.element).append(
 			$($("<div>")
@@ -825,7 +825,7 @@ else header("Location: index.php");
 				.append($("<tr>")
 					.append($("<td>").css("width", 60).html("Name: "))
 					.append($("<td>")
-						.append($("<input>").attr("type", "text").prop("value", name).click(function(e){e.stopPropagation();})))))))
+						.append($("<input>").attr("type", "text").prop("value", callsign).click(function(e){e.stopPropagation();})))))))
 	}
 
 	function addSquadronSlotsDiv(unit){

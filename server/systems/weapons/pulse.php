@@ -126,14 +126,6 @@ class LightPlasmaPulse extends LightPulse {
 		//$this->boostEffect[] = new Effect("Damage", 10);
 		$this->notes[] = ($this->melt."% of total damage is added as extra damage to armour");
 	}
-	
-	public function getDmgRangeMod($fire){
-		$boost = (100 + ($this->getBoostEffect("Damage Loss") * $this->getBoostLevel($fire->turn))) / 100;
-		$loss = $fire->dist * ($this->dmgLoss * $boost) / 10000;
-
-		Debug::log(get_class($this).", weapon id: ".$this->id.", boost: ".$boost.", final multi: ".(1-$loss)." @ dist: ".$fire->dist);
-		return 1-$loss;
-	}
 }
 
 class MediumPlasmaPulse extends LightPlasmaPulse {

@@ -2,7 +2,7 @@
 
 class Saggitarius extends Medium {
 	public $name = "Saggitarius";
-	public $display = "Saggitarius Missile Destroyer";
+	public $display = "Saggitarius";
 	public $faction = "Earth Alliance";
 	public $size =  60;
 	public static $value = 400;

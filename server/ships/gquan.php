@@ -2,7 +2,7 @@
 
 class GQuan extends Heavy {
 	public $name = "GQuan";
-	public $display = "GQuan";
+	public $display = "G'Quan";
 	public $faction = "Narn Regime";
 	public $size =  85;
 	public static $value = 850;

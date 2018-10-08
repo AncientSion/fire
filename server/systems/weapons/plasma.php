@@ -21,15 +21,6 @@ class Plasma extends Weapon {
 		//$this->boostEffect[] = new Effect("Damage", 10);
 		$this->notes = array($this->melt."% of total damage is added as extra damage to armour");
 	}
-	
-	public function getDmgRangeMod($fire){
-		$mod = 100;
-		$mod += $this->getBoostEffect("Damage Loss") * $this->getBoostLevel($fire->turn);
-		$mod += $this->getCritMod("Damage Loss", $fire->turn);
-
-		//Debug::log("Plasma loss multi: ".$mod);
-		return 1 - (($fire->dist * $this->dmgLoss / 1000000)  * $mod);
-	}
 }
 
 class LightPlasmaShredder extends Plasma {

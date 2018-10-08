@@ -15,64 +15,6 @@ class Laser extends Weapon {
 		$this->notes = array("Damage evenly spreads over ".$this->rakes." rakes.");
 		$this->boostEffect[] = new Effect("Damage", 20);
 	}
-	
-	public function getDmgRangeMod($fire){
-		if ($fire->dist <= $this->optRange){
-			return 1;
-		}
-
-		$mod = 1-(($fire->dist - $this->optRange) * $this->dmgLoss / 10000);
-		//Debug::log(get_class($this).", weapon id: ".$this->id.", RANGE DMG mod: ".$mod);
-		return $mod;
-	}
-}
-
-class bLaser extends Laser {
-	public $name = "bLaser";
-	public $rakeTime = 60;
-	public $beamWidth = 3;
-	public static $prio = 0;
-	public $minDmg = 80;
-	public $maxDmg = 110;
-	public $optRange = 400;
-	public $dmgLoss = 6;
-	public $accDecay = 60;
-	public $shots = 1;
-	public $reload = 3;
-	public $maxBoost = 1;
-	public $powerReq = 5;
-	public $integrity = 50;
-	public $tracking = 3;
-	public $rakes = 3;
-
-	function __construct($id, $parentId, $start, $end, $output = 5, $width = 1){
-        parent::__construct($id, $parentId, $start, $end, $output, $width);
-        $this->display = "Laser - Scale " . $output;
-		$this->beamWidth = $this->beamWidth / 5 * $output;
-		//$this->minDmg = ($this->minDmg / 5) * (5 + ((($output / 5) - 1)*1.5));
-		//$this->maxDmg = ($this->maxDmg / 5) * (5 + ((($output / 5) - 1)*1.5));
-		//$this->minDmg = $this->minDmg / 5 * 5 + (($output - 5)*10);
-		//$this->maxDmg = $this->maxDmg / 5 * 5 + (($output - 5)*10);
-		$this->minDmg = $this->minDmg / 5 * 5 + (($output - 5)*10);
-		$this->maxDmg = $this->maxDmg / 5 * 5 + (($output - 5)*10);
-		$this->optRange = $this->optRange / 5 * $output;
-		$this->dmgLoss = $this->dmgLoss * 5 / $output;
-		//$this->accDecay = $this->accDecay * 5 / $output;
-		$this->powerReq = $this->powerReq - 5 + $output;
-		$this->effiency = ceil($this->powerReq/2);
-		$this->integrity = $this->integrity / 5 * $output;
-		$this->tracking = $this->tracking - 5 + $output;
-	}
-	
-	public function getDmgRangeMod($fire){
-		if ($fire->dist <= $this->optRange){
-			return 1;
-		}
-
-		$mod = 1-(($fire->dist - $this->optRange) * $this->dmgLoss / 10000);
-		//Debug::log(get_class($this).", weapon id: ".$this->id.", RANGE DMG mod: ".$mod);
-		return $mod;
-	}
 }
 
 class LightParticleBeam extends Laser {

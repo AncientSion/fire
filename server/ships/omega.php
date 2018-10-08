@@ -2,7 +2,7 @@
 
 class Omega extends SuperHeavy {
 	public $name = "Omega";
-	public $display = "Omega Destroyer";
+	public $display = "Omega";
 	public $faction = "Earth Alliance";
 	public $size =  90;
 	public static $value = 1100;

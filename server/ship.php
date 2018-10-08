@@ -7,7 +7,6 @@ class Ship {
 	public $available;
 	public $withdraw;
 	public $manual;
-	public $display;
 	public $status;
 	public $destroyed;
 	public $x;
@@ -31,6 +30,8 @@ class Ship {
 	public $baseMorale = 100;
 
 	public $name = "";
+	public $display = "";
+	public $callsign = "";
 	public $faction = "";
 	public $notes = "";
 	public $size;
@@ -79,11 +80,12 @@ class Ship {
 
 	function __construct($data){
 		//echo ("constructing!" .$data["id"]."\n");
-		//if (!(isset($data["withdraw"]))){Debug::trace();}
+		//if (!(isset($data["manual"]))){Debug::trace();}
+		//if (!(isset($data["manual"]))){Debug::log("ding"); Debug::log($this->name);}
 		if (!$data){return;}
 		$this->id = $data["id"];
 		$this->userid = $data["userid"];
-		$this->display = $data["display"];
+		$this->callsign = $data["callsign"];
 		$this->cost = static::$value;
 		$this->totalCost = $data["totalCost"];
 		$this->moraleCost = $data["moraleCost"];
@@ -158,7 +160,7 @@ class Ship {
 
 		}
 		else if ($this->faction == "Minbari Federation"){
-			$this->baseMorale = 110;
+			$this->baseMorale = 105;
 			$command = $this->getSystemByName("Command");
 			for ($i = 0; $i < sizeof($command->loads); $i++){
 				$command->loads[$i]["baseCost"] = ceil($command->loads[$i]["baseCost"] * 0.7);
@@ -960,10 +962,9 @@ class Ship {
 				if (!$struct->systems[$i]->destroyed){
 					$current += $struct->systems[$i]->getHitChance();
 					//Debug::log("current: ".$current);
-					if ($roll <= $current){
-						//Debug::log("EXTERNAL HIT: ".$struct->systems[$i]->name." #".$struct->systems[$i]->id);
-						return $struct->systems[$i];
-					}
+					if ($roll > $current){continue;}
+					//Debug::log("EXTERNAL HIT: ".$struct->systems[$i]->name." #".$struct->systems[$i]->id);
+					return $struct->systems[$i];
 				}
 			}
 		}

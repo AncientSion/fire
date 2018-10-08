@@ -3,6 +3,7 @@ function Ship(data){
 
 	this.id = data.id;
 	this.name = data.name;
+	this.callsign = data.callsign;
 	this.display = data.display;
 	this.notes = data.notes;
 	this.x = data.x || 0;
@@ -1277,7 +1278,7 @@ Ship.prototype.getHeader = function(){
 	var div = $("<div>");
 	div
 	.append($("<div>")
-		.append($("<div>").css("display", "inline").html(this.name + " #" + this.id))
+		.append($("<div>").css("display", "inline").html(this.display + " #" + this.id))
 		.append($("<div>").css("display", "inline").css("margin-left", 30).html("(" + this.getFocusCost() + ")")))
 
 	var html = "";
@@ -1554,10 +1555,10 @@ Ship.prototype.createMoraleLogEntry = function(){
 }
 
 Ship.prototype.getCallSign = function(){
-	if (this.display.length > 3){
-		return " - " + this.display + " - ";
+	if (this.callsign.length > 3){
+		return " - " + this.callsign + " - ";
 	}
-	return this.display;
+	return this.callsign;
 }
 
 Ship.prototype.getLogTitleSpan = function(){
@@ -1565,7 +1566,7 @@ Ship.prototype.getLogTitleSpan = function(){
 }
 
 Ship.prototype.getLogNameEntry = function(){
-	if (this.display.length > 3){
+	if (this.callsign.length > 3){
 		return this.getCallSign();
 	}
 	return "";
@@ -4548,7 +4549,7 @@ Ship.prototype.enableMissionMode = function(){
 
 Ship.prototype.getPurchaseHeader = function(){
 	//return "this";
-	return "<span style='font-size: 16px;'>" + this.name + "</span>" + (this.display ? "<span class='green'> -- " + this.display + " -- </span>" : "<span class='green'></span>");
+	return "<span style='font-size: 16px;'>" + this.name + "</span>" + (this.callsign ? "<span class='green'> -- " + this.callsign + " -- </span>" : "<span class='green'></span>");
 }
 
 Ship.prototype.getIncomingHeader = function(){
