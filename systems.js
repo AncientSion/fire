@@ -2039,60 +2039,58 @@ Weapon.prototype.getTrackingRating = function(){
 }
 
 Weapon.prototype.getSysDiv = function(){
-	var div = document.createElement("div");
-		div.id = "sysDiv";
-	var table = document.createElement("table");
+	var div = $("<div>").attr("id", "sysDiv");
+	var table = $("<table>");
 	
-	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
-	$(table).append($("<tr>").append($("<td>").html("Firing Mode").css("width", "50%")).append($("<td>").html(this.fireMode)));
-	$(table).append($("<tr>").append($("<td>").html("Damage Type")).append($("<td>").html(this.dmgType)));
-
+	table.append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
+	table.append($("<tr>").append($("<td>").html("Firing Mode").css("width", "50%")).append($("<td>").html(this.fireMode)));
+	table.append($("<tr>").append($("<td>").html("Damage Type")).append($("<td>").html(this.dmgType)));
 
 	if (!this.tiny){
 		if (game.getUnit(this.parentId).ship){
-			$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
-			//$(table).append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html(this.getEMDmg())));
-			$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
+			table.append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
+			if (this.getEMDmg()){table.append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html(this.getEMDmg())));}
+			table.append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
 		}
-		$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
+		table.append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
 		if (this.boostEffect.length){
-			$(table).append($("<tr>").addClass("rowBorderTop").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency() + " (max: " + this.maxBoost + ")")));
+			table.append($("<tr>").addClass("rowBorderTop").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency() + " (max: " + this.maxBoost + ")")));
 			this.getBoostEffectElements(table);
 		}
 	}
 	
-	$(table).append($("<tr>").append($("<td>").html("Loading")).append($("<td>").addClass("loading").html(this.getTimeLoaded() + " / " + this.reload)));
-	if (this.tracking >= 0){$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTrackingRating() + " / " + getUnitType(this.getTrackingRating()))));}
+	table.append($("<tr>").append($("<td>").html("Loading")).append($("<td>").addClass("loading").html(this.getTimeLoaded() + " / " + this.reload)));
+	if (this.tracking >= 0){table.append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTrackingRating() + " / " + getUnitType(this.getTrackingRating()))));}
 
 	if (this.fireMode == "Laser"){
-		$(table).append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").html(this.optRange + "px")));
+		table.append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").html(this.optRange + "px")));
 	}
 
 	if (this.dmgLoss){
-		$(table).append($("<tr>").append($("<td>").html("Damage Loss")).append($("<td>").addClass("dmgLoss").html(this.getUIDmgLoss() + "% per 100px")));
+		table.append($("<tr>").append($("<td>").html("Damage Loss")).append($("<td>").addClass("dmgLoss").html(this.getUIDmgLoss() + "% per 100px")));
 	}
 
-	if (this.accDecay){$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html(this.getAccuracy() + "% per 100px")));}
+	if (this.accDecay){table.append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html(this.getAccuracy() + "% per 100px")));}
 
 	if (this.linked > 1){
-		$(table).append($("<tr>").append($("<td>").html("Linked Guns")).append($("<td>").html(this.linked)));
+		table.append($("<tr>").append($("<td>").html("Linked Guns")).append($("<td>").html(this.linked)));
 	}
 	
 	if (this.fireMode == "Laser"){
-		$(table).append($("<tr>").append($("<td>").html("Shots & Rakes")).append($("<td>").html(this.getShots() + " w/ " + this.output + " rakes")));
+		table.append($("<tr>").append($("<td>").html("Shots & Rakes")).append($("<td>").html(this.getShots() + " w/ " + this.output + " rakes")));
 	}
 	else if (this.fireMode == "Pulse"){
-			$(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots())));
-			$(table).append($("<tr>").append($("<td>").html("Volley")).append($("<td>").html(this.basePulses + "+1 (max " + (this.basePulses+this.extraPulses)  +") per " + this.grouping + "%")))
+			table.append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots())));
+			table.append($("<tr>").append($("<td>").html("Volley")).append($("<td>").html(this.basePulses + "+1 (max " + (this.basePulses+this.extraPulses)  +") per " + this.grouping + "%")))
 	}
 	else if (this.area){
 	}
-	else $(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots())));
+	else table.append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots())));
 
-	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));
-	if (this.priority){$(table).append($("<tr>").append($("<td>").html("Priority (low->early)")).append($("<td>").html(this.priority)));}
+	table.append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));
+	if (this.priority){table.append($("<tr>").append($("<td>").html("Priority (low->early)")).append($("<td>").html(this.priority)));}
 
-	div.appendChild(table);
+	div.append(table);
 	this.attachSysNotes(div);
 	this.attachSysMods(div);
 	return div;

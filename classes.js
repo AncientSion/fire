@@ -595,9 +595,15 @@ Primary.prototype.getSysDiv = function(){
 				.append($("<td>").html(this.remaining + " / " + this.integrity)))
 			.append($("<tr>")
 				.append($("<td>"))
-				.append($("<td>").html(Math.floor(this.remaining / this.integrity * 100) + " %"))));
+				.append($("<td>").html(Math.floor(this.remaining / this.integrity * 100) + " %")))
+			.append($("<tr>")
+				.append($("<td>").html("EM Damage"))
+				.append($("<td>").html(this.getEMDmg()))));
 }
 
+Primary.prototype.getEMDmg = function(){
+	return System.prototype.getEMDmg.call(this);
+}
 
 Primary.prototype.getRemIntegrity = function(){
 	var integrity = this.integrity;

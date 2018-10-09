@@ -1430,6 +1430,10 @@ class Ship {
 
 		if (1){
 
+			if ($this->primary->emDmg){
+				Debug::log("primary EM dmg ".$this->primary->emDmg);
+			}
+
 			for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 				if ($this->primary->systems[$i]->destroyed){continue;}
 				$dmg = $this->primary->systems[$i]->getRelDmg($turn);

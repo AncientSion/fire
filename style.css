@@ -734,7 +734,9 @@ table, th, tr, td {
 .unitContainer .powerDiv {
 	z-index: 15;
 	position: absolute;
+	left: 25px;
 	top: -5px;
+
 }
 
 .unitContainer .modeDiv {

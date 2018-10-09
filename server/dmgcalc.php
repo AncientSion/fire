@@ -763,7 +763,7 @@ class DmgCalc {
 		$emDmg = round($totalDmg - $shieldDmg - $armourDmg);
 		$armourDmg = 0;
 
-		Debug::log("EM Damage total: ".$totalDmg. ", armour: ".array_sum($negation)." ___ ".$shieldDmg."/".$armourDmg."/".$systemDmg."/".$emDmg);
+		//Debug::log("EM Damage total: ".$totalDmg. ", armour: ".array_sum($negation)." ___ ".$shieldDmg."/".$armourDmg."/".$systemDmg."/".$emDmg);
 		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $systemDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
 	}
 

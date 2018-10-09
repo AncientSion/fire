@@ -9,7 +9,7 @@ class Shaveen extends SuperLight {
 
 	public $integrity = 310;
 	public $ep = 120;
-	public $ew = 500;
+	public $ew = 550;
 	public $power = 0;
 	public $negation = 12;
 
