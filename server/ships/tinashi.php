@@ -15,7 +15,6 @@ class Tinashi extends Medium {
 	public $ew = 750;
 	public $power = 2;
 
-
 	function __construct($data = false){
         parent::__construct($data);
 	}
@@ -42,7 +41,6 @@ class Tinashi extends Medium {
 			$left->systems[] = new TwinEMProjector($this->getId(), $this->id, 180, 360);
 			$left->systems[] = new FusionCannon($this->getId(), $this->id, 180, 300);
 		$structs[] = $left;
-
 
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];

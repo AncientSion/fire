@@ -523,10 +523,7 @@ Primary.prototype.getTableData = function(){
 		//td.colSpan = 2;
 
 	var span = document.createElement("div");
-		span.className = "integrityAmount";
-		if (this.integrity > 999){
-			span.className += " font15";
-		} else span.className += " font18";
+		span.className = "integrityAmount font18";
 		span.innerHTML = this.remaining + " / " + this.integrity;
 		td.appendChild(span);
 
@@ -1303,7 +1300,7 @@ FireOrder.prototype.addLogRollsEntry = function(log){
 		.hide()
 		.append($("<td>"))
 		.append($("<td>")
-			.html("Rolls:")
+			.html("")
 		)
 		.append($("<td>")
 			.attr("colSpan", 3)
@@ -1346,30 +1343,33 @@ FireOrder.prototype.getRollsString = function(rolls, allReq){
 	var skipped = 0;
 	var hits = "";
 	var miss = "";
-	var divider = "";
+	var jammed = "";
+	var divider = "<div class='rollSeparator yellow'></div>";
 	for (var i = 0; i < rolls.length; i++){
 		if (rolls[i] == 0){
 			skipped++; continue;
 		}
 		
-
-		if (rolls[i] <= req){
+		if (rolls[i] < 0){
+			jammed += (rolls[i]*-1) + ", ";
+		}
+		else if (rolls[i] <= req){
 			hits += rolls[i] + ", ";
 		} else miss += rolls[i] + ", ";
 	}
 
-	if (hits.length){hits = hits.slice(0, hits.length-2);}
-	if (miss.length){miss = miss.slice(0, miss.length-2);}
-
-	if (hits.length && miss.length){
-		divider = " ----- ";
-	}
+	if (hits.length){hits = hits.slice(0, hits.length-2); hits = "Hits: " + hits;}
+	if (miss.length){miss = miss.slice(0, miss.length-2); miss = "Misses: " + miss;}
+	if (jammed.length){jammed = jammed.slice(0, jammed.length-2); jammed = "Jammed: " + jammed;}
 
 	string = "<div class='rollWrapper'><div class='hits'>" + hits + "</div>" + divider + "<div class='miss'>" + miss + "</div>";
-	if (skipped){
-		string += "<div class='overfire'>" + skipped + "x Overkill"
+	if (jammed){
+		string += divider +"<div class='jammed'>" + jammed + "</div>";
 	}
-	return string +"</div>";
+	if (skipped){
+		string += divider +"<div class='overfire'>" + skipped + "x Overkill</div>"
+	}
+	return string;
 }
 
 FireOrder.prototype.getReqString = function(req){

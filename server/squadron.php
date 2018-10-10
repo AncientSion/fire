@@ -1,6 +1,6 @@
 <?php
 
-class Squadron extends Ship {
+class Squadron extends Mixed {
 	public $ship = false;
 	public $squad = true;
 	public $name = "Squadron";
@@ -260,25 +260,8 @@ class Squadron extends Ship {
 		//Debug::log("ERROR squadron getSystem: ".$id);
 	}
 
-	public function determineHits($fire){
-		for ($i = 0; $i < sizeof($fire->rolls); $i++){
-			if ($this->destroyed){
-				$fire->cancelShotResolution($i);
-			}
-			else {
-				$target = $this->getHitSystem($fire);
-				$fire->singleid = $target->id;
-				$fire->req = $fire->shooter->calculateToHit($fire);
-				if ($fire->rolls[$i] <= $fire->req){
-					$fire->hits++;
-					DmgCalc::doDmg($fire, $i, $target);
-				}
-			}
-		}
-	}
-
 	public function getHitChance($fire){
-		return $this->getStruct($fire->singleid)->getSubHitChance($fire);
+		return $this->getStruct($fire->subtargetid)->getSubHitChance($fire);
 	}
 
 	public function getFacingElement($fire){

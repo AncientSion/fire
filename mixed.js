@@ -166,14 +166,6 @@ Mixed.prototype.isDestroyed = function(){
 	return true;
 }
 
-Mixed.prototype.hasLockOnUnit = function(){
-	return false;
-}
-
-Mixed.prototype.isMaskedFromUnit = function(){
-	return false;
-}
-
 Mixed.prototype.getImpulseMod = function(){
 	return 1;
 }

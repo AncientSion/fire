@@ -275,6 +275,10 @@
 					<td></td>
 					<td></td>
 				</tr>
+				<tr>
+					<td id="targetDataC" colSpan=6 style="height: 30px">						
+					</td>
+				</tr>
 			</table>
 			<table id="weaponInfo">
 				<thead>

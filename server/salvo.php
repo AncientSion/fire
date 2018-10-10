@@ -26,10 +26,6 @@ class Salvo extends Mixed {
 		return $fire;
 	}
 
-	public function setMass(){
-		return;
-	}
-
 	public function setSize(){
 		$this->size = 18;
 	}

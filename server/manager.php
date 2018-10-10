@@ -1164,6 +1164,7 @@
 			$this->ships[$i]->setPosition();
 			$this->ships[$i]->setImpulseProfileMod();
 			$this->ships[$i]->setBonusNegation($this->turn);
+			$this->ships[$i]->setJamming();
 		}
 
 		//set dist and angle for each ship to speed up fire resolution
@@ -2019,7 +2020,7 @@
 				$notes = array(
 					array("Advanced Tech", "Highly advanced tech results in any EW being considered to be originating from a unit 3 levels larger."),
 					array("Enlightened", "Hundreds of years of preparation for the old enemy make Minbari commanders especially potent at making decisions regardless of circumstances. Focus gain is increased by 30 %."),
-					array("Dedicated", "Minbari are born to a caste and each dedicates itself to their particular role within society, excelling in their particular trade. Officer training is 30 % less costly.")
+					array("Dedicated", "Minbari are born to a caste and dedicate themselves to their particular role within society. As such every Minbari is a specalist by nature. Officer training is 30 % less costly.")
 				);
 			break;
 			case "Narn Regime";

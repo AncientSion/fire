@@ -22,6 +22,7 @@ class Weapon extends System {
 	public $aoe = 0;
 
 	public $melt = 0;
+	public $armourSkip = 0;
 	public $dmgLoss = 0;
 	public $flashDiv;
 
@@ -42,6 +43,11 @@ class Weapon extends System {
 		$this->arc = array(0 => array($start, $end));
 		$this->priority = static::$prio;
 		//Debug::log("setting priority to: ".$this->priority.", from static: ".static::$prio);
+
+		if ($this->armourSkip){
+			$this->notes[] = ("Ignores <span style='font-color='green'>".$this->armourSkip."%</span> of target armour");
+		}
+
         parent::__construct($id, $parentId, $output, $width);
 	}
 

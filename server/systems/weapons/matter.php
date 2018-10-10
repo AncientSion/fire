@@ -4,10 +4,9 @@ class Matter extends Weapon {
 	public $type = "Particle";
 	public $animation = "projectile";
 
-	public $notes = array("Ignores <span style='font-color='green'>50%</span> of target armour");
-
 	public $fireMode = "Standard";
 	public $dmgType = "Matter";
+	public $armourSkip = 50;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);

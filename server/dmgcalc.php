@@ -91,11 +91,11 @@ class DmgCalc {
 
 	public static function setWeaponPriority(){
 		$names = array(
-			"SuperHeavyLaser", "HeavyLaser", "MediumLaser", "LightLaser", "LightParticleBeam", "NeutronLaser", "AssaultNeutronLaser", "HeavyAntimatterBeamProjector",
+			"SuperHeavyLaser", "HeavyLaser", "MediumLaser", "LightLaser", "LightParticleBeam", "NeutronLaser", "PhasedNeutronLaser", "HeavyNeutronBeamProjector",
 			"SuperHeavyParticle", "HeavyParticle", "MediumParticle", "LightParticle", "TwinParticleBolter", "FusionCannon", "HeavyFusionCannon",
 			"HeavyPlasma", "MediumPlasma", "LightPlasma", "LightPlasmaShredder",
 			"AntimatterConverter", "MagCompressor",
-			"LightPulse", "MediumPulse", "HeavyPulse", "PulseFusionCannon",
+			"LightPulse", "MediumPulse", "HeavyPulse", "FusionPulseCannon",
 			"LightPlasmaPulse", "MediumPlasmaPulse", "HeavyPlasmaPulse",
 			"MediumRailGun", "HeavyRailGun"
 		);
@@ -202,6 +202,7 @@ class DmgCalc {
 		switch ($weapon->dmgType){
 			case "Standard": return static::calcStandardDmg($weapon, $totalDmg, $negation);
 			case "Matter": return static::calcMatterDmg($weapon, $totalDmg, $negation);
+			case "Phased": return static::calcMatterDmg($weapon, $totalDmg, $negation);
 			case "Plasma": return static::calcPlasmaDmg($weapon, $totalDmg, $negation);
 			case "Molecular": return static::calcMolecularDmg($weapon, $totalDmg, $negation);
 			case "EM": return static::calcEMDmg($weapon, $totalDmg, $negation);
@@ -798,15 +799,17 @@ class DmgCalc {
 		$emDmg = 0;
 		$notes = "";
 
+		$skip = 1 - ($weapon->armourSkip / 100);
+
 		if ($totalDmg <= array_sum($negation)){ 
 			$notes = "b;";
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
-			$armourDmg = round($totalDmg/2);
+			$armourDmg = round($totalDmg / 2);
 		}
 		else {
 			$notes = "p;";
-			$shieldDmg = round(min($totalDmg, $negation["bonus"]/2));
-			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]/2));
+			$shieldDmg = round(min($totalDmg, $negation["bonus"] * $skip));
+			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"] * $skip));
 			$systemDmg = round($totalDmg - $shieldDmg - $armourDmg);
 		}
 		

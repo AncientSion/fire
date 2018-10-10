@@ -113,7 +113,6 @@ spl_autoload_register(
 
                 'dual' => '/server/systems/weapons/dual.php',
                 'fighterdual' => '/server/systems/weapons/dual.php',
-                'dualpulseion' => '/server/systems/weapons/dual.php',
 
                 'plasma' => '/server/systems/weapons/plasma.php',
                 'lightplasmashredder' => '/server/systems/weapons/plasma.php',
@@ -132,7 +131,7 @@ spl_autoload_register(
                 'superheavylaser' => '/server/systems/weapons/laser.php',
                 'neutronlaser' => '/server/systems/weapons/laser.php',
                 'assaultneutronlaser' => '/server/systems/weapons/laser.php',
-                'heavyantimatterbeamprojector' => '/server/systems/weapons/laser.php',
+                'heavyneutronbeamprojector' => '/server/systems/weapons/laser.php',
                 'molecularslicer' => '/server/systems/weapons/laser.php',
 
                 'matter' => '/server/systems/weapons/matter.php',
@@ -146,7 +145,7 @@ spl_autoload_register(
                 'lightpulse' => '/server/systems/weapons/pulse.php',
                 'mediumpulse' => '/server/systems/weapons/pulse.php',
                 'heavypulse' => '/server/systems/weapons/pulse.php',
-                'pulsedusioncannon' => '/server/systems/weapons/pulse.php',
+                'fusionpulsecannon' => '/server/systems/weapons/pulse.php',
 
                 'lightplasmapulse' => '/server/systems/weapons/pulse.php',
                 'mediumplasmapulse' => '/server/systems/weapons/pulse.php',
@@ -155,7 +154,7 @@ spl_autoload_register(
                 
                 'em' => '/server/systems/weapons/em.php',
                 'twinemprojector' => '/server/systems/weapons/particle.php',
-                'EMSubjugator' => '/server/systems/weapons/particle.php',
+                'emsubjugator' => '/server/systems/weapons/particle.php',
                 'mediumemdissipator' => '/server/systems/weapons/particle.php',
                 'shockcannon' => '/server/systems/weapons/particle.php',
 

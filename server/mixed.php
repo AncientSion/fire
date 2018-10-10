@@ -21,11 +21,15 @@ class Mixed extends Ship {
 	public function setProps($turn, $phase){
 		$this->setBaseStats($phase, $turn);
 		$this->setSize();
-		$this->setMass();
+		//$this->setMass();
 		$this->setCurSpeed($turn, $phase);
 		$this->setRemImpulse($turn);
 		$this->setRemDelay($turn);
 	}	
+
+	public function setSize(){
+		return;
+	}
 
 	public function setMorale($turn, $phase){
 		return;
@@ -279,28 +283,6 @@ class Mixed extends Ship {
 
 		Debug::log("got no ANGLE set on ".$this->id." targeted by #".$fire->shooter->id);
 	}
-
-	public function determineHits($fire){
-		for ($i = 0; $i < sizeof($fire->rolls); $i++){
-			if ($this->destroyed){
-				$fire->cancelShotResolution($i);
-			}
-			else {
-				$target = $this->getHitSystem($fire);
-				$fire->singleid = $target->id;
-				$fire->req = $fire->shooter->calculateToHit($fire);
-				if ($fire->rolls[$i] <= $fire->req){
-					$fire->hits++;
-					DmgCalc::doDmg($fire, $i, $target);
-				}
-			}
-		}
-	}
-
-
-	public function hasLockOn($id){
-		return false;
-	}
 	
 	public function getRemIntegrity($fire){
 		return $this->getStruct($fire->hitSystem->id)->getRemIntegrity();
@@ -366,8 +348,40 @@ class Mixed extends Ship {
 		}
 	}
 
+	public function determineHits($fire){
+		for ($i = 0; $i < sizeof($fire->rolls); $i++){
+			if ($this->destroyed){
+				$fire->cancelShotResolution($i);
+			}
+			else {
+				$target = $this->getHitSystem($fire);
+				$fire->subtargetid = $target->id;
+				$fire->req = $fire->shooter->calculateToHit($fire);
+				if ($fire->rolls[$i] <= $fire->req){
+					if ($fire->target->jamming){
+						//Debug::log("hit but active jammer");
+						$roll = mt_rand(1, 100);
+						if ($roll <= 20){
+							//Debug::log("failed jamming roll ".$roll);
+							$fire->rolls[$i] *= -1;
+						}
+						else {
+							//Debug::log("passed jamming roll");
+							$fire->hits++;
+							DmgCalc::doDmg($fire, $i, $target);
+						}
+					}
+					else {
+						$fire->hits++;
+						DmgCalc::doDmg($fire, $i, $target);
+					}
+				}
+			}
+		}
+	}
+
 	public function getHitChance($fire){
-		return $this->getStruct($fire->singleid)->getSubHitChance($fire);
+		return $this->getStruct($fire->subtargetid)->getSubHitChance($fire);
 	}
 
 	public function setImpulseProfileMod(){

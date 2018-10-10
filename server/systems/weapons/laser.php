@@ -12,7 +12,7 @@ class Laser extends Weapon {
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 
-		$this->notes = array("Damage evenly spreads over ".$this->rakes." rakes.");
+		$this->notes[] = ("Damage evenly spreads over ".$this->rakes." rakes.");
 		$this->boostEffect[] = new Effect("Damage", 20);
 	}
 }
@@ -158,8 +158,8 @@ class NeutronLaser extends Laser {
 	public $animColor = "#ffeb3e";
 	public static $prio = 0;
 	public $beamWidth = 2;
-	public $minDmg = 95;
-	public $maxDmg = 130;
+	public $minDmg = 96;
+	public $maxDmg = 131;
 	public $optRange = 600;
 	public $dmgLoss = 4;
 	public $accDecay = 60;
@@ -170,31 +170,33 @@ class NeutronLaser extends Laser {
 	public $effiency = 3;
 	public $maxBoost = 1;
 	public $integrity = 52;
-	public $tracking = 3;
+	public $tracking = 4;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
-class AssaultNeutronlaser extends NeutronLaser {
-	public $name = "AssaultNeutronLaser";
-	public $display = "Assault Neutron Laser";
-	public $minDmg = 80;
-	public $maxDmg = 105;
+class PhasedNeutronLaser extends NeutronLaser {
+	public $name = "PhasedNeutronLaser";
+	public $display = "Phased Neutron Laser";
+	public $dmgType = "Phased";
+	public $minDmg = 82;
+	public $maxDmg = 108;
 	public $reload = 2;
-	public $optRange = 400;
-	public $dmgLoss = 6;
+	public $optRange = 300;
+	public $dmgLoss = 8;
 	public $integrity = 46;
+	public $armourSkip = 75;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
-class HeavyAntimatterBeamProjector extends Laser {
-	public $name = "HeavyAntimatterBeamProjector";
-	public $display = "Heavy Antimatter Beam Projector";
+class HeavyNeutronBeamProjector extends Laser {
+	public $name = "HeavyNeutronBeamProjector";
+	public $display = "Heavy Neutron Beam Projector";
 	public $animColor = "#a1ff00";
 	public static $prio = 0;
 	public $beamWidth = 4;
@@ -215,10 +217,10 @@ class HeavyAntimatterBeamProjector extends Laser {
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 		$this->boostEffect = array();
-        $this->setAntimatterData();
+        //$this->setAntimatterData();
 	}
 
-	public function getBonusDamage($fire, $baseDmg, $hit){
+	public function getBonusDjamage($fire, $baseDmg, $hit){
 		//Debug::log("hit #".$hit);
 		//Debug::log("req: ".$fire->req);
 		//Debug::log("roll: ".$fire->rolls[$hit]);

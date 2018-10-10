@@ -86,20 +86,20 @@ class HeavyPulse extends Pulse {
 	}
 }
 
-class PulseFusionCannon extends Pulse {
-	public $name = "PulseFusionCannon";
-	public $display = "Pulse Fusion Cannon";
+class FusionPulseCannon extends Pulse {
+	public $name = "FusionPulseCannon";
+	public $display = "Fusion Pulse Cannon";
 	public static $prio = 0;
-	public $minDmg = 26;
-	public $maxDmg = 34;
-	public $accDecay = 140;
+	public $minDmg = 24;
+	public $maxDmg = 32;
+	public $accDecay = 120;
 	public $animColor = "green";
 	public $projSize = 2;
 	public $projSpeed = 9;
 	public $reload = 3;
 	public $integrity = 36;
 	public $powerReq = 4;
-	public $tracking = 3;
+	public $tracking = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);

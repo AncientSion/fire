@@ -17,14 +17,6 @@ class Flight extends Mixed {
         parent::__construct($data);
 	}
 
-	public function setMass(){
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if (!$this->structures[$i]->destroyed){
-				$this->mass = max($this->mass, $this->structures[$i]->mass);
-			}
-		}
-	}
-
 	public function getMaxSpeed (){
 		return $this->baseImpulse*3;
 	}
@@ -90,9 +82,9 @@ class Flight extends Mixed {
 		$req = $base * $multi * $tracking;
 		//Debug::log("CALCULATE TO HIT - angle: ".$fire->angle.", base: ".$base.", trav: ".$tracking.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
 
-		if ($fire->target->ship && $this->mission->targetid == $fire->target->id && $this->mission->arrived){
+		//if ($fire->target->ship && $this->mission->targetid == $fire->target->id && $this->mission->arrived){
 			//Debug::log("strike flight attacking ship");
-		}
+		//}
 
 		return ceil($req);
 	}

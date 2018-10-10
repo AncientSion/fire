@@ -2302,8 +2302,8 @@ function Game(data){
 		var header = "";
 		if (game.phase == -1){header = "Damage Control Resolution Log";}
 		else if (game.phase == 0){header = "Initial Orders Resolution Log";}
-		if (game.phase == 1){header = "Base Movement Phase Resolution Log";}
-		if (game.phase == 2){header = "Focus Movement Control Resolution Log";}
+		if (game.phase == 1){header = "Base Movement Resolution Log";}
+		if (game.phase == 2){header = "Focus Movement Resolution Log";}
 
 		if (game.phase != 3){
 		ui.combatLogWrapper

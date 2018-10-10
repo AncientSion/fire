@@ -128,9 +128,10 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	}
 	
 	var shooterPos = shooter.getPlannedPos();
-	var facing = shooter.getPlannedFacing();					
+	var facing = shooter.getPlannedFacing();
 	var targetDataA = ui.aimDiv.find("#targetDataA");
 	var targetDataB = ui.aimDiv.find("#targetDataB");
+	var targetDataC = ui.aimDiv.find("#targetDataC");
 	var weaponInfo = ui.aimDiv.find("#weaponInfo");
 	var dist;
 	var drop = 0;
@@ -166,6 +167,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			var lockString = "";// = "<span class ='red'>0.0</span>";
 			var mask;
 			var maskString = "";// = "<span class ='green'>0.0</span>";
+			var jammed = target.getSystemByName("Sensor").jamming;
 			var valid = false;
 			var target;
 			var section;
@@ -234,7 +236,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 
 			multi = round(multi, 2);
 			final = Math.floor(baseHit * multi);
-			targetDataA
+			ui.targetDataA
 				.empty()
 				.append($("<td>").addClass("red").html(target.name))
 				.append($("<td>").html(getUnitType(target.traverse) + " (" + target.traverse + ")"))
@@ -242,7 +244,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 				.append($("<td>").html(target.getSectionString(angle)))
 				.append($("<td>").html(dist));
 
-			targetDataB
+			ui.targetDataB
 				.empty()
 				.append($("<td>").html(impulseString))
 				.append($("<td>").html(lockString))
@@ -250,6 +252,10 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 				.append($("<td>").addClass("green").html(baseHit + "%"))
 				.append($("<td>"))
 				.append($("<td>").addClass("final").html("<div>x" + multi + "</div><div>" + final + "%</div>"));
+		
+			if (jammed){
+				ui.targetDataC.html("Target under effect of passive jamming screen.</br>Every otherwise successful hit has a 20 % chance to miss.").show();
+			} else ui.targetDataC.empty();
 		}
 	}
 	else {
@@ -258,7 +264,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			pos = target.getPlannedPos();
 		}
 		dist = Math.round(getDistance(shooter.getPlannedPos(), pos));
-		targetDataA
+		ui.targetDataA
 		.empty()
 		.append($("<td>").html(""))
 		.append($("<td>").html(""))
@@ -266,13 +272,15 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 		.append($("<td>").html(""))
 		.append($("<td>").html(dist));
 
-		targetDataB
+		ui.targetDataB
 		.empty()
 		.append($("<td>").html(""))
 		.append($("<td>").html(""))
 		.append($("<td>").html(""))
 		.append($("<td>").html(""))
 		.append($("<td>").html(""));
+
+		ui.targetDataC.empty();
 	}
 
 	weaponInfo.children().children().each(function(i){

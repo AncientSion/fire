@@ -2845,7 +2845,7 @@ Ship.prototype.expandDiv = function(div){
 				offsetY -= 20;
 			}
 			else if (max == 1){
-				offsetX += 40;
+				offsetX += 30;
 			}
 		}
 		else if (this.structures.length == 5 && (a == 78 || a == 282)){
@@ -2907,7 +2907,7 @@ Ship.prototype.expandDiv = function(div){
 		primaryTable.appendChild(this.primary.getTableData());
 
 		var systems = 0;
-		var max = 2;
+		var max = 3;
 		primaryTable.childNodes[0].childNodes[0].colSpan = max;
 
 		for (var i = 0; i < this.primary.systems.length; i++){
@@ -3482,6 +3482,7 @@ Ship.prototype.readyForAnim = function(){
 }
 
 Ship.prototype.getSensorSizeRating = function(){
+	return this.traverse;
 	return (this.faction == "Minbari Federation" ? this.traverse -1 : this.traverse-4);
 }
 

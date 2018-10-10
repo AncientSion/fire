@@ -26,7 +26,10 @@ class Ship {
 	public $curImp;
 	public $remImp;
 	public $baseImpulse;
+
 	public $impulseHitMod = 0;
+	public $jamming = 0;
+
 	public $baseMorale = 100;
 
 	public $name = "";
@@ -118,6 +121,8 @@ class Ship {
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, $this->vitalHP, $this->ep);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, $this->vitalHP, $this->ew);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, $this->vitalHP);
+		//$this->primary->systems[] = new Sensor($this->getId(), $this->id, $this->vitalHP, $this->ew);
+		//$this->primary->systems[] = new Reactor($this->getId(), $this->id, $this->vitalHP);
 	}
 
 	public function getId(){
@@ -165,6 +170,8 @@ class Ship {
 			for ($i = 0; $i < sizeof($command->loads); $i++){
 				$command->loads[$i]["baseCost"] = ceil($command->loads[$i]["baseCost"] * 0.7);
 			}
+			$this->getSystemByName("Sensor")->jamming = 1;
+			$this->getSystemByName("Sensor")->display = "Sensor & Analyzing & Jamming";
 		}
 		else if ($this->faction == "Vree Conglomerate"){
 			if ($this->ship){
@@ -813,7 +820,8 @@ class Ship {
 		if ($this->destroyed){
 			//Debug::log("STOP - resolveFireOrder #".$fire->id.", TARGET: ".get_class($this)." destroyed");
 			for ($i = 0; $i < $fire->shots; $i++){
-				$fire->rolls[] = 0;
+				$fire->cancelShotResolution[$i];
+				//$fire->rolls[] = 0;
 			}
 		}
 		else if ($fire->weapon->aoe){
@@ -869,8 +877,23 @@ class Ship {
 				$fire->cancelShotResolution($i);
 			}
 			else  if ($fire->rolls[$i] <= $fire->req){
-				$fire->hits++;
-				DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
+				if ($fire->target->jamming){
+					//Debug::log("hit but active jammer");
+					$roll = mt_rand(1, 100);
+					if ($roll <= 20){
+						///Debug::log("failed jamming roll ".$roll);
+						$fire->rolls[$i] *= -1;
+					}
+					else {
+						//Debug::log("passed jamming roll");
+						$fire->hits++;
+						DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
+					}
+				}
+				else {
+					$fire->hits++;
+					DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
+				}
 			}
 		}
 	}
@@ -1047,6 +1070,7 @@ class Ship {
 	}
 
 	public function getSensorSizeRating(){
+		return $this->traverse;
 		return ($this->faction == "Minbari Federation" ? $this->traverse-1 : $this->traverse-4);
 	}
 
@@ -1088,6 +1112,14 @@ class Ship {
 
 	public function getImpulseProfileMod(){
 		return $this->impulseHitMod;
+	}
+
+	public function setJamming(){
+		$sensor = $this->getSystemByName("Sensor");
+
+		if (!$sensor->jamming || $sensor->destroyed || $sensor->disabled){
+			$this->jamming = 0;
+		} else $this->jamming = 1;
 	}
 
 	public function getOffensiveBonus($id){

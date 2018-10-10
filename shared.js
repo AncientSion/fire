@@ -31,7 +31,10 @@ $(document).ready(function(){
 		doShorten: $("#doShorten"),
 		turnButton: $("#turnButton"),
 		unitSelector: $("#unitSelector"),
-		aimDiv: $("#aimDiv")
+		aimDiv: $("#aimDiv"),
+		targetDataA: $("#aimDiv").find("#targetDataA"),
+		targetDataB: $("#aimDiv").find("#targetDataB"),
+		targetDataC: $("#aimDiv").find("#targetDataC")
 	}
 })
 

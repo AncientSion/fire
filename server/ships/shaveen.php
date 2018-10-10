@@ -5,7 +5,7 @@ class Shaveen extends SuperLight {
 	public $display = "Shaveen";
 	public $role = "Police Frigate";
 	public $faction = "Minbari Federation";
-	public static $value = 280;
+	public static $value = 260;
 
 	public $integrity = 310;
 	public $ep = 120;
@@ -21,15 +21,15 @@ class Shaveen extends SuperLight {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new EMSubjugator($this->getId(), $this->parentId, 315, 45);
+		$front->systems[] = new FusionCannon($this->getId(), $this->parentId, 270, 90);
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new FusionCannon($this->getId(), $this->parentId, 270, 90);
+			$right->systems[] = new TwinEMProjector($this->getId(), $this->id, 300, 120);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new FusionCannon($this->getId(), $this->parentId, 270, 90);
+			$left->systems[] = new TwinEMProjector($this->getId(), $this->id, 240, 60);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

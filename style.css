@@ -866,15 +866,15 @@ div.system {
 }
 
 .primaryTable .system div.integrityNow {
-	top: 33px;
+	top: 31px;
 }
 
 .primaryTable .system div.integrityFull {
-	top: 33px;
+	top: 31px;
 }
 
 .primaryTable .system div.outputMask {
-	top: 13px;
+	top: 16px;
 }
 
 .primaryTable .struct .integrityNow, .integrityNow {
@@ -978,8 +978,8 @@ div.integrityFull {
 
 .primaryTable .system img {
 	color: black;
-	width: 40px;
-	height: 40px;
+	width: 36px;
+	height: 36px;
 }
 
 .notesHeader {
@@ -1773,6 +1773,13 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 	margin-left: 40px;
 }
 
+div.rollSeparator {
+	width: 40px;
+	text-align: center;
+	margin: auto;
+	display: inline-block;
+}
+
 #totalRequestCost {
 	font-size: 20px;
 	padding: 6px;
@@ -1951,12 +1958,8 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 	font-size: 14px;
 }
 
-#targetInfo {
-	margin-bottom: 10px;
-}
-
-#targetInfo td {
-	padding: 5px;
+#targetDataC {
+	color: yellow;
 	font-size: 14px;
 }
 

@@ -459,8 +459,8 @@
 			}
 
 			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
-			return;
 			$rows = $this->update($sql);
+			return;
 			//Debug::log("Command set, rows updates: ".$rows);
 
 
