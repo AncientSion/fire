@@ -358,15 +358,15 @@ class Mixed extends Ship {
 				$fire->subtargetid = $target->id;
 				$fire->req = $fire->shooter->calculateToHit($fire);
 				if ($fire->rolls[$i] <= $fire->req){
-					if ($fire->target->jamming){
-						//Debug::log("hit but active jammer");
+					if ($target->jamming){
+						Debug::log("hit but active jammer ".$target->jamming);
 						$roll = mt_rand(1, 100);
 						if ($roll <= 20){
-							//Debug::log("failed jamming roll ".$roll);
+							Debug::log("failed jamming roll ".$roll);
 							$fire->rolls[$i] *= -1;
 						}
 						else {
-							//Debug::log("passed jamming roll");
+							Debug::log("passed jamming roll");
 							$fire->hits++;
 							DmgCalc::doDmg($fire, $i, $target);
 						}

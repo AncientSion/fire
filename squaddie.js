@@ -107,7 +107,6 @@ Squaddie.prototype.createSelfContainer = function(){
 		)
 	}
 
-
 	var imgCont = $("<div>")
 		.addClass("imageContainer")
 		.append(img);
@@ -137,8 +136,9 @@ Squaddie.prototype.createSelfContainer = function(){
 			)
 		)
 
-	// power icon
+	
 	if (!this.destroyed){
+		// power icon
 		$(this.element)
 		.append($("<div>").addClass("unusedPowerDiv")
 			.append($("<img>").attr("src", "varIcons/powerIcon.png")
@@ -146,6 +146,16 @@ Squaddie.prototype.createSelfContainer = function(){
 			.append($("<div>")
 				.addClass("unusedPower")
 				.html(this.getUnusedPower())))
+
+		if (this.jamming){
+			$(this.element)
+			.append($("<div>").addClass("jammingDiv")
+				.append($("<img>").attr("src", "varIcons/jammerIcon.png")
+					.addClass("jammingIcon"))
+				.append($("<div>")
+					.addClass("jammingOutput")
+					.html(this.jamming)))
+		}
 	}
 
 	//core div and core table

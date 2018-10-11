@@ -131,13 +131,14 @@ class Nial extends Fighter {
 	public $negation = 7;
 	public $baseImpulse = 150;
 	public $baseHitChance = 26;
+	public $jamming = 15;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
 	}
 
 	public function addSystems(){
-		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 3, 
 			array(
 				array("FighterStandard", 1, 14, 18),
 				array("FighterStrafe", 1, 14, 18)
@@ -156,6 +157,7 @@ class Tishat extends Fighter {
 	public $negation = 6;
 	public $baseImpulse = 150;
 	public $baseHitChance = 24;
+	public $jamming = 15;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

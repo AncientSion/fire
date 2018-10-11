@@ -181,11 +181,24 @@ Squadron.prototype.positionSubUnits = function(){
 
 	if (this.structures.length == 4){
 		for (var i = 0; i < this.structures.length; i++){
-			$(this.structures[i].element).css("width", 194)
+			//$(this.structures[i].element).css("width", 194)
 		}
 	} else {
 		for (var i = 0; i < this.structures.length; i++){
 			$(this.structures[i].element).css("width", 160)
+		}
+	}
+
+	if (this.structures.length == 2){
+		$(this.structures[1].element).css("float", "right")
+	}
+	else if (this.structures.length == 4){
+		$(this.structures[1].element).css("float", "right")
+		$(this.structures[3].element).css("float", "right")
+	}
+	else {
+		for (var i = 0; i < this.structures.length; i++){
+			$(this.structures[i].element).css("float", "unset")
 		}
 	}
 }
@@ -1031,4 +1044,8 @@ Squadron.prototype.hasPassiveJamming = function(){
 		}
 	}
 	return false;
+}
+
+Squadron.prototype.getJammerStrength = function(){
+	return (this.structures[0].jamming ? this.structures[0].jamming : this.structures[1].jamming);
 }

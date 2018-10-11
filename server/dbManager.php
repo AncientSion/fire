@@ -335,7 +335,7 @@
 
 			if ($units){
 				for ($i = 0; $i < sizeof($units); $i++){
-					if ($units[$i]["name"] == "Flight" || $units[$i]["name"] == "Squadron" || $units[$i]["ball"]){
+					if ($units[$i]["type"] && $units[$i]["type"] < 4){
 						$units[$i]["subunits"] = $this->getSubUnits($units[$i]);
 					}
 				}
@@ -542,46 +542,46 @@
 
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
-					(gameid, userid, ship, ball, name, callsign, totalCost, moraleCost, status, available, destroyed)
+					(gameid, userid, type, name, callsign, totalCost, moraleCost, status, available)
 				VALUES
-					(:gameid, :userid, :ship, :ball, :name, :callsign, :totalCost, :moraleCost, :status, :available, :destroyed)
+					(:gameid, :userid, :type, :name, :callsign, :totalCost, :moraleCost, :status, :available)
 			");
 
 			$missions = array();
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				$ship = 0;
-				$ball = 0;
-				$status = "";
-				$destroyed = 0;
+				$type = 0;
+				$status = "deployed";
 
+				if ($units[$i]["type"] == "Salvo"){
+					$type = 1;
+				}
 				if ($units[$i]["type"] == "Flight"){
-					$status = "deployed";
+					$type = 2;
 				}
-				else if ($units[$i]["type"] == "Salvo"){
-					$ball = 1;
-					$status = "deployed";
-				}
-				else {
-					$ship = 1;
+				else if ($units[$i]["type"] == "Squadron"){
+					$type = 3;
 					$status = "bought";
 				}
-
+				else if ($units[$i]["type"] == "Ship"){
+					$type = 4;
+					$status = "bought";
+				}
+				else $type = 0;
+				
 				if (isset($units[$i]["userid"])){
 					$userid = $units[$i]["userid"];
 				}
 
 				$stmt->bindParam(":gameid", $gameid);
 				$stmt->bindParam(":userid", $userid);
-				$stmt->bindParam(":ship", $ship);
-				$stmt->bindParam(":ball", $ball);
+				$stmt->bindParam(":type", $type);
 				$stmt->bindParam(":name", $units[$i]["name"]);
 				$stmt->bindParam(":callsign", $units[$i]["callsign"]);
 				$stmt->bindParam(":totalCost", $units[$i]["totalCost"]);
 				$stmt->bindParam(":moraleCost", $units[$i]["moraleCost"]);
 				$stmt->bindParam(":status", $status);
 				$stmt->bindValue(":available", (floor($units[$i]["turn"]) + floor($units[$i]["eta"])));
-				$stmt->bindParam(":destroyed", $destroyed);
 				$stmt->execute();
 				
 				if ($stmt->errorCode() == 0){
@@ -589,16 +589,13 @@
 					$units[$i]["id"] = $id;
 					//Debug::log("i: ".$i.", id: ".$id);
 
-					if (!$ship){
+					if ($type && $type < 3){
 						$units[$i]["mission"]["unitid"] = $id;
 
-						if (!$ball){ // salvo or flight launched, negative id on client yet
-							//Debug::log("no ship, self clientId: ".$units[$i]["clientId"]);
+						if ($type == 1){ // new salvo or flight, negative id on client yet
 							for ($j = 0; $j < sizeof($units); $j++){
-								//Debug::log("comparing to: ".$units[$j]["clientId"]);
 								if (isset($units[$j]["mission"]) && $units[$j]["mission"]["targetid"] == $units[$i]["clientId"]){
 									$units[$j]["mission"]["targetid"] = $id;
-									//Debug::log("adjusting mission id!");
 									break;
 								}
 							}
@@ -718,26 +715,25 @@
 			//Debug::log("insertReinforcements: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
-					(gameid, userid, ship, ball, name, callsign, totalCost, moraleCost, status, available, destroyed, turn, phase, notes)
+					(gameid, userid, type, name, callsign, totalCost, moraleCost, status, available, destroyed, turn, phase, notes)
 				VALUES
-					(:gameid, :userid, :ship, :ball, :name, :callsign, :totalCost, :moraleCost, :status, :available, :destroyed, :turn, :phase, :notes)
+					(:gameid, :userid, :type, :name, :callsign, :totalCost, :moraleCost, :status, :available, :destroyed, :turn, :phase, :notes)
 			");
 
-			$ship = 1;
-			$ball = 0;
+			$type = 0;
 			$status = "reinforce";
 			$destroyed = 0;
 			$phase = -2;
 			$callsign = "";
 
-
 			for ($i = 0; $i < sizeof($data); $i++){
-				//var_export($data);
-				//echo "</br></br>";
+				if ($data[$i]["name"] == "Squadron"){
+					$type = 3;
+				} else $type = 4;
+
 				$stmt->bindParam(":gameid", $gameid);
 				$stmt->bindParam(":userid", $data[$i]["userid"]);
-				$stmt->bindParam(":ship", $ship);
-				$stmt->bindParam(":ball", $ball);
+				$stmt->bindParam(":type", $type);
 				$stmt->bindParam(":name", $data[$i]["name"]);
 				$stmt->bindParam(":callsign", $callsign);
 				$stmt->bindParam(":totalCost", $data[$i]["totalCost"]);
@@ -881,6 +877,21 @@
 
 		public function startGame($gameid){
 			Debug::log("startGame #".$gameid);
+
+
+			$obstacles = array();
+
+			for ($i = 0; $i < 3; $i++){
+				$x = mt_rand(100, 400) * (1 - (mt_rand(0, 1)*2));
+				$y = mt_rand(100, 400) * (1 - (mt_rand(0, 1)*2));
+				$a = mt_rand(0, 360);
+
+				$move = array("turn" => 1, "type" => "deploy", "dist" => 0, "x" => $x, "y" => $y, "a" => $a, "cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
+				$obstacles[] = array("gameid" => $this->gameid, "userid" => 0, "type" => "Obstacle", "name" => "Obstacle", "callsign" => "", "totalCost" => 0, "moraleCost" => 0, "turn" => 1, "eta" => 0, "actions" => array($move));
+			}
+
+			$this->insertUnits(0, $gameid, $obstacles);
+
 
 			$stmt = $this->connection->prepare("
 				UPDATE games 
@@ -1095,6 +1106,7 @@
 			");
 
 			for ($i = 0; $i < sizeof($data); $i++){
+				//Debug::log("mission #".$data[$i]->id.", targetid ".$data[$i]->targetid);
 				$stmt->bindParam(":type", $data[$i]->type);
 				$stmt->bindParam(":turn", $data[$i]->turn);
 				$stmt->bindParam(":targetid", $data[$i]->targetid);
@@ -2039,10 +2051,10 @@
 
 			
 			for ($i = 0; $i < sizeof($units); $i++){
-				if ($units[$i]["name"] == "Flight" || $units[$i]["name"] == "Squadron" || $units[$i]["ball"]){
-					$units[$i]["subunits"] = $this->getSubUnits($units[$i]);
-					$units[$i]["mission"] = $this->getMission($units[$i]);
-				}
+				if ($units[$i]["type"] == 0 || $units[$i]["type"] == 4){continue;}	
+				$units[$i]["subunits"] = $this->getSubUnits($units[$i]);
+				if ($units[$i]["type"] == 3 ){continue;}
+				$units[$i]["mission"] = $this->getMission($units[$i]);
 			}
 			return $units;
 		}

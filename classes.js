@@ -658,6 +658,10 @@ Single.prototype.hasPassiveJamming = function(){
 	return false;
 }
 
+Single.prototype.getJammerStrength = function(){
+	return this.jamming;
+}
+
 Single.prototype.getBaseImage = function(){
 	if (this.variant.length > 2){
 		return graphics.images[this.variant.toLowerCase()];

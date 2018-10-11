@@ -3012,6 +3012,19 @@ Ship.prototype.expandDiv = function(div){
 		}
 	}
 
+	for (var i = 0; i < this.primary.systems.length; i++){
+		var s = $(this.primary.systems[i].element)
+		var w = s.width();
+		var h = s.height();
+
+		s
+		.find(".boostDiv").css("left", -16).css("top", 0).end()
+		.find(".powerDiv").css("left", w).css("top", 0).end()
+		.find(".modeDiv").css("left", w/2 - 9).css("top", h);
+	}
+
+
+
 	var con = $(div).find(".topDiv").find(".iconContainer")
 	var leftWidth = $(div).find(".header").width()
 	if (widen){$(con).css("width", widen-leftWidth-4)}
@@ -4561,4 +4574,9 @@ Ship.prototype.hasPassiveJamming = function(){
 	if (!jammer || jammer.destroyed || jammer.disabled){
 		return false;
 	} return true;
+}
+
+Ship.prototype.getJammerStrength = function(){
+	var jammer = this.getSystemByName("Jammer");
+	return jammer.getOutput();
 }

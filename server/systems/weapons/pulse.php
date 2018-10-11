@@ -86,9 +86,9 @@ class HeavyPulse extends Pulse {
 	}
 }
 
-class FusionPulseCannon extends Pulse {
-	public $name = "FusionPulseCannon";
-	public $display = "Fusion Pulse Cannon";
+class FusionPulseCannonAS extends Pulse {
+	public $name = "FusionPulseCannonAS";
+	public $display = "Fusion Cannon (Pulse Mode)";
 	public static $prio = 0;
 	public $minDmg = 24;
 	public $maxDmg = 32;
@@ -99,6 +99,28 @@ class FusionPulseCannon extends Pulse {
 	public $reload = 3;
 	public $integrity = 36;
 	public $powerReq = 4;
+	public $tracking = 3;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+	}
+}
+
+class FusionPulseCannonAF extends Particle {
+	public $name = "FusionPulseCannonAF";
+	public $display = "Fusion Cannon (Scatter Mode)";
+	public static $prio = 0;
+	public $minDmg = 24;
+	public $maxDmg = 32;
+	public $accDecay = 180;
+	public $animColor = "green";
+	public $projSize = 2;
+	public $projSpeed = 9;
+	public $reload = 3;
+	public $integrity = 36;
+	public $powerReq = 4;
+
+	public $shots = 2;
 	public $tracking = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){

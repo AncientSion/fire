@@ -184,7 +184,7 @@ class PhasedNeutronLaser extends NeutronLaser {
 	public $minDmg = 82;
 	public $maxDmg = 108;
 	public $reload = 2;
-	public $optRange = 300;
+	public $optRange = 400;
 	public $dmgLoss = 8;
 	public $integrity = 46;
 	public $armourSkip = 75;
@@ -202,17 +202,17 @@ class HeavyNeutronBeamProjector extends Laser {
 	public $beamWidth = 4;
 	public $minDmg = 265;
 	public $maxDmg = 335;
-	public $optRange = 1000;
+	public $optRange = 800;
 	public $dmgLoss = 2;
-	public $accDecay = 50;
+	public $accDecay = 40;
 	public $shots = 1;
 	public $reload = 4;
 	public $powerReq = 14;
 	public $rakes = 4;
 	public $integrity = 62;
 	public $tracking = 5;
-	public $amBonus = 2;
-	public $amMax = 30;
+	//public $amBonus = 2;
+	//public $amMax = 30;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);

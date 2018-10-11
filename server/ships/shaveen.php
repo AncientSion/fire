@@ -12,7 +12,7 @@ class Shaveen extends SuperLight {
 	public $ew = 550;
 	public $power = 0;
 	public $negation = 12;
-	public $jamming = 1;
+	public $jamming = 20;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

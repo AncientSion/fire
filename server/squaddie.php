@@ -15,7 +15,6 @@ class Squaddie extends Single {
 	public $ep = 0;
 	public $ew = 0;
 	public $power = 0;
-	public $slipAngle = 15;
 
 	public $powers = array();
 	public $boostEffect = array();
@@ -50,8 +49,6 @@ class Squaddie extends Single {
 	}
 
 	public function setBaseStats($phase, $turn){
-		//$this->baseHitChance = Math::getBaseHitChance($this->mass);
-		//$this->baseTurnDelay = Math::getBaseTurnDelay($this->mass);
 	}
 
 	public function setSubunitState($turn, $phase){

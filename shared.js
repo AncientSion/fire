@@ -120,6 +120,7 @@ function initUnit(data){
 	else if (data.squad){unit = window.initSquadron(data);}
 	else if (data.flight){unit = window.initFlight(data);}
 	else if (data.salvo){unit = window.initSalvo(data);}
+	else if (data.obstacle){unit = window.initObstacle(data);}
 	return unit;
 
 }
@@ -141,13 +142,36 @@ function initFlight(data){
 }
 
 
-
-
 function initFighter(data){return new Fighter(data);}
 
 function initBallistic(data){return new Ballistic(data);}
 
 function initSquadron(data){
+	var squadron = new Squadron(data);
+	for (var i = 0; i < data.primary.systems.length; i++){
+		var primSystem = new window[data.primary.systems[i].name](data.primary.systems[i]);
+
+		for (var j = 0; j < data.primary.systems[i].powers.length; j++){
+			primSystem.powers.push(new Power(data.primary.systems[i].powers[j]));
+		}
+		for (var j = 0; j < data.primary.systems[i].crits.length; j++){
+			primSystem.crits.push(new Crit(data.primary.systems[i].crits[j]));
+		}
+		squadron.primary.systems.push(primSystem);
+	}
+	for (var i = 0; i < data.structures.length; i++){
+		var sub = initSquaddie(data.structures[i]);
+			sub.create()
+		squadron.structures.push(sub)
+		//squadron.addSubElement(sub);
+	}
+	return squadron;
+}
+
+function initObstacle(data){
+	var obstacle = new Obstacle(data);
+	return obstacle;
+	return;
 	var squadron = new Squadron(data);
 	for (var i = 0; i < data.primary.systems.length; i++){
 		var primSystem = new window[data.primary.systems[i].name](data.primary.systems[i]);

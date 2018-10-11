@@ -95,7 +95,7 @@ class DmgCalc {
 			"SuperHeavyParticle", "HeavyParticle", "MediumParticle", "LightParticle", "TwinParticleBolter", "FusionCannon", "HeavyFusionCannon",
 			"HeavyPlasma", "MediumPlasma", "LightPlasma", "LightPlasmaShredder",
 			"AntimatterConverter", "MagCompressor",
-			"LightPulse", "MediumPulse", "HeavyPulse", "FusionPulseCannon",
+			"LightPulse", "MediumPulse", "HeavyPulse", "FusionPulseCannonAS", "FusionPulseCannonAF",
 			"LightPlasmaPulse", "MediumPlasmaPulse", "HeavyPlasmaPulse",
 			"MediumRailGun", "HeavyRailGun"
 		);
@@ -415,7 +415,8 @@ class DmgCalc {
 		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 		$okSystem = 0;
 		$rakes = $fire->weapon->rakes;
-		$reduce = 1 + ($rakes-1) * $fire->target instanceof Mixed;
+		//$reduce = 1 + ($rakes-1) * $fire->target instanceof Mixed;
+		$reduce = (($fire->target->flight || $fire->target->salvo) ? $rakes : 1);
 		$systems = array();
 		$entry;
 

@@ -3,17 +3,19 @@
 class Squadron extends Mixed {
 	public $ship = false;
 	public $squad = true;
+	public $mission = false;
 	public $name = "Squadron";
 	public $display = "Squadron";
 	public static $value = 0;
 	public $baseImpulse = 185;
 	public $turnAngle = 45;
+	public $turnStep = 1;
+	public $slipAngle = 15;
 	public $traverse = 3;
 	public static $space;
 	public $slots = 10;
 	static $odds = 11;
 	public $baseFocusRate = 8;
-
 
 	function __construct($data = false){
         parent::__construct($data);
@@ -24,7 +26,7 @@ class Squadron extends Mixed {
 	}	
 
 	public function doTestCrits($turn){
-		Debug::log("__doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
+		//Debug::log("__doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
@@ -186,9 +188,6 @@ class Squadron extends Mixed {
 			if (($this->structures[$i]->destroyed && !$this->structures[$i]->isDestroyedThisTurn($turn)) || $this->structures[$i]->disabled){continue;}
 
 			$this->baseTurnDelay = max($this->baseTurnDelay, $this->structures[$i]->baseTurnDelay);
-			//$this->baseImpulseCost = max($this->baseImpulseCost, $this->structures[$i]->baseImpulseCost);
-			//$this->baseImpulse = min($this->baseImpulse, $this->structures[$i]->baseImpulse);
-			//$this->slipAngle = min($this->slipAngle, $this->structures[$i]->slipAngle);
 
 			$this->primary->systems[1]->output = max($this->primary->systems[1]->output, $this->structures[$i]->ew);
 			$this->primary->systems[2]->output = min($this->primary->systems[2]->output, $this->structures[$i]->ep);
@@ -396,15 +395,7 @@ class Squadron extends Mixed {
 		}
 		return $dmgs;
 	}
-
-	public function getSystemByName($name){
-		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
-			if ($this->primary->systems[$i]->name == $name){
-				return $this->primary->systems[$i];
-			}
-		}
-	}
-
+	
 	public function getFocusCost(){
 		$cost = 0;
 		$recalculate = 0;

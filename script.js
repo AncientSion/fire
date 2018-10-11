@@ -167,7 +167,6 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			var lockString = "";// = "<span class ='red'>0.0</span>";
 			var mask;
 			var maskString = "";// = "<span class ='green'>0.0</span>";
-			var jammed = target.hasPassiveJamming();
 			var valid = false;
 			var target;
 			var section;
@@ -253,14 +252,10 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 				.append($("<td>"))
 				.append($("<td>").addClass("final").html("<div>x" + multi + "</div><div>" + final + "%</div>"));
 
-			Ship.prototype.getJammerStrength = function(){
-				var jammer = this.getSystemByName("Jammer");
-				return jammer.getOutput();
-			}
-
+			var jamming = target.hasPassiveJamming();
 		
-			if (jammed){
-				ui.targetDataC.html("Target under effect of passive jamming screen.</br>Every otherwise successful hit has a " + target.getJammerStrength() + " chance to miss.").show();
+			if (jamming){
+				ui.targetDataC.html("---- Passing jamming detected (<span class='yellow'>" + target.getJammerStrength() + " % chance to miss</span>) ----").show();
 			} else ui.targetDataC.empty();
 		}
 	}

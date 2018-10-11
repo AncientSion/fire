@@ -9,6 +9,8 @@ spl_autoload_register(
                 'ultraheavy' => '/server/ship.php',
                 'heavy' => '/server/ship.php',
                 'medium' => '/server/ship.php',
+                
+                'obstacle' => '/server/obstacle.php',
 
                 'warhead' => '/server/systems/weapons/ammo.php',
                 'hasta' => '/server/systems/weapons/ammo.php',
@@ -145,7 +147,8 @@ spl_autoload_register(
                 'lightpulse' => '/server/systems/weapons/pulse.php',
                 'mediumpulse' => '/server/systems/weapons/pulse.php',
                 'heavypulse' => '/server/systems/weapons/pulse.php',
-                'fusionpulsecannon' => '/server/systems/weapons/pulse.php',
+                'fusionpulsecCannonas' => '/server/systems/weapons/pulse.php',
+                'fusionpulsecCannonaf' => '/server/systems/weapons/pulse.php',
 
                 'lightplasmapulse' => '/server/systems/weapons/pulse.php',
                 'mediumplasmapulse' => '/server/systems/weapons/pulse.php',
@@ -192,7 +195,6 @@ spl_autoload_register(
 
                 'fighterstandard' => '/server/systems/weapons/linked.php',
                 'fighterstrafe' => '/server/systems/weapons/linked.php',
-
 
                 'structure' => '/server/systems/structure.php',
                 'primary' => '/server/systems/structure.php',

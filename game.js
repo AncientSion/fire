@@ -10,6 +10,7 @@ function Game(data){
 	this.const = data.const;
 	this.ships = [];
 	this.incoming = [];
+	this.obstacles = [];
 	this.reinforcements = [];
 	this.ships = [];
 	this.reinforcements = [];
@@ -3938,9 +3939,6 @@ Game.prototype.showFleetMorale = function(e, userid){
 		.css("top", e.clientY + 30).css("left", e.clientX - 50)
 		.append(table);
 
-
-
-
 	for (var i = 0; i < this.const.fleetMoraleEffects.length; i++){
 		div
 		.append($("<table>")	
@@ -4281,4 +4279,8 @@ Game.prototype.userHasTransferedCommand = function(){
 			return true;
 		}
 	} return false;
+}
+
+Game.prototype.doCloneSquaddie = function(data){
+	return;
 }

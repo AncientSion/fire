@@ -7,7 +7,7 @@ class PrimarySystem extends System {
 	public $internal = 1;
 	public $crewEffect = 0;
 	public $maxDmg = 20;
-	public $hitMod = 4;
+	public $hitMod = 3;
 	public $hitChance = 0;
 	public $hitPct = 0;
 	public $critEffects =  array( // type, mag, dura, effect
@@ -241,9 +241,11 @@ class Sensor extends PrimarySystem {
 class Jammer extends PrimarySystem {
 	public $name = "Jammer";
 	public $display = "Passive Jamming Suite";
+	public $hitMod = 1.5;
+	public $effiency = 6;
 
 	function __construct($id, $parentId, $integrity, $output = 20, $width = 1){
-		$this->boostEffect[] = new Effect("Output", 25);
+		$this->boostEffect[] = new Effect("Output", 20);
         parent::__construct($id, $parentId, $integrity/2, $output, $width);
     }
 }

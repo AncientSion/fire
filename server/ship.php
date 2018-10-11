@@ -46,6 +46,7 @@ class Ship {
 	public $salvo = false;
 	public $squad = false;
 	public $system = false;
+	public $mission = false;
 	public $traverse = 0;
 	public $mass = 0;
 	public $profile = array();
@@ -67,6 +68,7 @@ class Ship {
 	public $damaged = 0;
 	public $moveSet = 0;
 	public $move = 0;
+	public $obstacle = 0;
 
 	public $ep = 0;
 	public $ew = 0;
@@ -124,7 +126,7 @@ class Ship {
 
 		if ($this->faction == "Minbari Federation"){
 			$jammer = new Jammer($this->getId(), $this->id, $this->vitalHP);
-			$jammer->powerReq = floor($this->traverse*2);
+			$jammer->powerReq = floor(2 + $this->traverse*1.5);
 			$this->primary->systems[] = $jammer;
 			//$jammer->effiency = floor($this->powerReq/9)+2;
 		}
@@ -881,14 +883,14 @@ class Ship {
 			}
 			else  if ($fire->rolls[$i] <= $fire->req){
 				if ($fire->target->jamming){
-					//Debug::log("hit but active jam");
+					Debug::log("hit but active jam ".$fire->target->jamming);
 					$roll = mt_rand(1, 100);
-					if ($roll <= 20){
-						///Debug::log("failed jamming roll ".$roll);
+					if ($roll <= $fire->target->jamming){
+						Debug::log("failed jamming roll ".$roll);
 						$fire->rolls[$i] *= -1;
 					}
 					else {
-						//Debug::log("passed jamming roll");
+						Debug::log("passed jamming roll");
 						$fire->hits++;
 						DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
 					}
@@ -1117,12 +1119,13 @@ class Ship {
 		return $this->impulseHitMod;
 	}
 
-	public function setJamming(){
+	public function setJamming($turn){
+		if (!$this->ship){return;}
 		$jammer = $this->getSystemByName("Jammer");
 
-		if (!$jammer || !$sensor->jamming || $sensor->destroyed || $sensor->disabled){
+		if (!$jammer || $jammer->destroyed || $jammer->disabled){
 			$this->jamming = 0;
-		} else $this->jamming = 1;
+		} else $this->jamming = $jammer->getOutput($turn); Debug::log("jamming ".$this->jamming);
 	}
 
 	public function getOffensiveBonus($id){
@@ -1292,11 +1295,17 @@ class Ship {
 	}
 
 	public function getSystemByName($name){
+
+		if (!$this->primary->systems[0]){
+			Debug::log($this->name."/".$name);
+		}
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 			if ($this->primary->systems[$i]->name == $name){
 				return $this->primary->systems[$i];
 			}
 		}
+
+		if (!$this->ship){return false;}
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if ($this->structures[$i]->systems[$j]->name == $name){

@@ -1,3 +1,158 @@
+function Obstacle(data){
+	Mixed.call(this, data);
+}
+Obstacle.prototype = Object.create(Mixed.prototype);
+
+Obstacle.prototype.setPostMoveFacing = function(){
+	this.drawFacing = this.facing;
+	for (var i = 0; i < this.actions.length; i++){
+		//if (this.actions[i].type == "turn"){
+			this.drawFacing += this.actions[i].a;
+		//}
+	}
+}
+
+
+Ship.prototype.createBaseDiv = function(){
+	var className = "obstacleDiv";
+	if (this.squad){className += " squad";}
+	if (game.phase > -2){
+		if (this.userid != game.userid){className += " hostile";}
+		else className += " friendly";
+	}
+
+	var div = $("<div>").addClass(className).data("shipId", this.id)
+
+	this.element = div[0];
+
+	var topDiv = $("<div>").addClass("topDiv");
+	var subDiv = $("<div>").addClass("header");
+	var table = $("<table>")
+	var headerC = "red";
+	if (this.friendly){headerC = "green";}
+
+
+	subDiv.append(table);
+	topDiv.append(subDiv)
+	div.append(topDiv);
+
+	$(this.expandDiv($(div[0])))
+		.find(".structContainer")
+			//.contextmenu(function(e){e.stopPropagation(); e.preventDefault()})
+			.end()
+		.find(".header")
+			.contextmenu(function(e){
+				//e.stopImmediatePropagation(); e.preventDefault();
+				$(this).parent().find($(".structContainer")).toggle();
+			})
+			.end()
+		.find(".iconContainer")
+			.contextmenu(function(e){
+				e.stopImmediatePropagation(); e.preventDefault();
+				if ($(this).parent().parent().data("shipId") != aUnit){
+					game.zIndex--;
+					$(this).parent().parent().addClass("disabled");
+				}
+			})
+
+	if (game.turn){div.drag();}
+
+	if (game.phase == 2){
+		$(div).find(".structContainer").show();
+	}
+}
+
+
+
+Obstacle.prototype.expandDiv = function(div){
+	var structContainer = $("<div>").addClass("structContainer");
+	$(div).append(structContainer);
+	$(document.body).append(div);
+
+	var times = 5;
+
+	for (var i = 0; i < 5; i++){
+		var x = range(0, 200);
+		var y = range(0, 200);
+		$(structContainer)
+		.append($("<div>")
+			.addClass("obstacle")
+			.css("left", x)
+			.css("top", y)
+			.append($("<img>").attr("src", "varIcons/destroyed.png"))
+		)
+
+	}
+
+
+	return div;
+}
+
+
+
+
+
+Obstacle.prototype.getElement = function(isBuy){
+	var div = $("<div>")
+		.addClass("singleDiv")
+		.data("subId", this.id)
+		.append($(this.getBaseImage().cloneNode(true))
+			.addClass("rotate270 img80pct"))
+
+	var alive = 1;
+	if (this.destroyed || this.disabled){alive = 0;}
+	if (!alive){
+		div
+			.append($("<img>")
+				.attr("src", "varIcons/destroyed.png")
+				.addClass("overlay"))
+	}
+
+	this.addMainDivEvents(div, alive, isBuy);
+
+	var wrap = document.createElement("div");
+		wrap.className = "iconIntegrity"; wrap.style.height = 12;
+
+	var rem = this.getRemIntegrity();
+
+	var bgDiv = document.createElement("div");
+		bgDiv.className = "integrityAmount"; bgDiv.style.textAlign = "center"; bgDiv.style.fontSize = 12; bgDiv.style.top = 0;
+		bgDiv.innerHTML = rem + " / " + this.integrity;
+		wrap.appendChild(bgDiv);
+
+	var lowerDiv = document.createElement("div");
+		lowerDiv.className = "integrityNow"; lowerDiv.style.top = 0; lowerDiv.style.height = "100%";
+		lowerDiv.style.width = rem/this.integrity * 100 + "%";
+		wrap.appendChild(lowerDiv);
+		
+	var upperDiv = document.createElement("div");
+		upperDiv.className = "integrityFull"; upperDiv.style.top = 0;
+		wrap.appendChild(upperDiv);
+
+	div.append(wrap);
+
+	var s = 20;
+	for (var i = 0; i < this.systems.length; i++){
+		var ele = $(this.systems[i].getFighterSystemData(true));
+		var modeDiv = this.systems[i].getModeDiv();
+		if (modeDiv){ele.append(modeDiv);}
+
+		this.addSysEvents(ele, isBuy)
+		div.append(ele);
+	}
+
+	return div;
+}
+
+
+
+
+
+
+
+
+
+
 function Salvo(data){
 	Mixed.call(this, data);
 	this.missile = data.missile;
@@ -128,21 +283,6 @@ function Salvo(data){
 }
 
 Salvo.prototype = Object.create(Mixed.prototype);
-
-Salvo.prototype.setUniddtState = function(){
-	if (this.userid == game.userid){
-		this.friendly = 1;
-	}
-	
-	this.deployed = 1;
-	this.isReady = 1;
-}
-
-Salvo.prototype.getSpeedString = function(){
-	if (this.structures[0].missile){
-		return (this.getCurSpeed() + "(+" + Math.floor(this.getBaseImpulse()) + " per Turn)");
-	} else return ("fixed " + this.getCurSpeed());
-}
 
 Salvo.prototype.createBaseDiv = function(){
 	var owner = "friendly";

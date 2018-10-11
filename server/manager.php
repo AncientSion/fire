@@ -14,7 +14,7 @@
 		public $value = 0;
 		public $wave = 0;
 
-		public $units = array();
+		public $ships = array();
 		public $ballistics = array();
 		public $fires = array();
 		public $playerstatus = array();
@@ -93,6 +93,10 @@
 		//$this->setPostFireFocusValues(); return;
 		//$this->testFleetMorale();
 		//if ($this->hasNewGlobalEntries()){DBManager::app()->insertNewGlobalEntries($this->playerstatus);}
+
+		//foreach ($this->ships as $ship){
+		//	if (isset($ship->mission)){var_export($ship->mission);}
+		//}
 
 		if (!$this->settings || !$this->settings->turn){return false;}
 		
@@ -337,7 +341,6 @@
 		$units = array();
 
 		for ($i = 0; $i < sizeof($db); $i++){
-			//Debug::log($db[$i]["name"]);
 			$unit = new $db[$i]["name"]($db[$i]);
 			$unit->addAllSystems();
 
@@ -469,7 +472,7 @@
 	
 	public function pickReinforcements(){
 		if ($this->turn != $this->settings->reinforceTurn){return;}
-		Debug::log("pickReinforcements");
+		//Debug::log("pickReinforcements");
 		$picks = array();
 		$eta = $this->settings->reinforceETA;
 
@@ -480,22 +483,23 @@
 			$value = $this->playerstatus[$i]["value"];
 			$total = 0;
 
-			Debug::log("player: ".$this->playerstatus[$i]["userid"]." has ".$value." available");
+			//Debug::log("player: ".$this->playerstatus[$i]["userid"]." has ".$value." available");
 
 			foreach ($entries as $entry){$total += $entry::$odds;}
 
-			Debug::log("totalOdds: ".$total);
+			//Debug::log("totalOdds: ".$total);
 			$add = $this->settings->reinforceAmount;
 			$add = 5;
 			while ($add){
 				$current = 0;
 				$roll = mt_rand(0, $total);
-				Debug::log("roll: ".$roll);
+				//Debug::log("roll: ".$roll);
 
-				foreach ($entries as $entry){Debug::log("current at ".$current.", adding ".$entry::$odds." for ".$entry);
+				foreach ($entries as $entry){
+					//Debug::log("current at ".$current.", adding ".$entry::$odds." for ".$entry);
 					$current += $entry::$odds;
 					if ($roll > $current){Debug::log("rolled higher"); continue;}
-					Debug::log("picking!");
+					//Debug::log("picking!");
 					$data = $entry::getKit($this->playerstatus[$i]["faction"]);
 					$data["name"] = $entry;
 					$data["totalCost"] = $data["cost"];
@@ -540,7 +544,7 @@
 
 					if (floor($data["totalCost"]) > floor($this->playerstatus[$i]["value"])){$add--; continue;}
 
-					Debug::log("adding pick: ".$data["name"]);
+					//Debug::log("adding pick: ".$data["name"]);
 					$picks[] = $data;
 					$add--;
 					//Debug::log("picking");
@@ -817,7 +821,7 @@
 		$data = array();
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if (isset($this->ships[$i]->mission)){
+			if ($this->ships[$i]->mission){
 				$data[] = $this->ships[$i]->mission;
 			}
 		}
@@ -1056,7 +1060,7 @@
 	}
 	
 	public function freeFlights(){
-		//Debug::log("freeFlights");
+		Debug::log("freeFlights");
 		$data = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (!$this->ships[$i]->flight){continue;}
@@ -1164,7 +1168,7 @@
 			$this->ships[$i]->setPosition();
 			$this->ships[$i]->setImpulseProfileMod();
 			$this->ships[$i]->setBonusNegation($this->turn);
-			$this->ships[$i]->setJamming();
+			$this->ships[$i]->setJamming($this->turn);
 		}
 
 		//set dist and angle for each ship to speed up fire resolution

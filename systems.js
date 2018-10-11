@@ -2037,11 +2037,11 @@ Weapon.prototype.getArcWidth = function(){
 }
 
 Weapon.prototype.getTrackingMod = function(target){
-	return Math.max(0, (this.tracking - target.traverse));
+	return Math.max(0, (this.getTrackingRating() - target.traverse));
 }
 
 Weapon.prototype.getTrackingRating = function(){
-	return this.tracking;
+	return this.tracking + this.getBoostEffect("Tracking") * this.getBoostLevel();
 }
 
 Weapon.prototype.getSysDiv = function(){
