@@ -1021,3 +1021,14 @@ Squadron.prototype.getFocusCost = function(){
 	}
 	else return Math.round(this.moraleCost);
 }
+
+Squadron.prototype.hasPassiveJamming = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].destroyed){continue}
+
+		if (this.structures[i].hasPassiveJamming()){
+			return true;
+		}
+	}
+	return false;
+}

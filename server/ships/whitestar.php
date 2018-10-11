@@ -12,6 +12,7 @@ class WhiteStar extends Light {
 	public $ep = 140;
 	public $ew = 700;
 	public $negation = 16;
+	public $jamming = 1;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

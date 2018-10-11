@@ -147,7 +147,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			drop = 1;
 		}
 	}
-
+	
 	if (target && !drop){
 		var multi = 1;
 		if (target.userid != shooter.userid){
@@ -167,7 +167,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			var lockString = "";// = "<span class ='red'>0.0</span>";
 			var mask;
 			var maskString = "";// = "<span class ='green'>0.0</span>";
-			var jammed = target.getSystemByName("Sensor").jamming;
+			var jammed = target.hasPassiveJamming();
 			var valid = false;
 			var target;
 			var section;
@@ -252,9 +252,15 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 				.append($("<td>").addClass("green").html(baseHit + "%"))
 				.append($("<td>"))
 				.append($("<td>").addClass("final").html("<div>x" + multi + "</div><div>" + final + "%</div>"));
+
+			Ship.prototype.getJammerStrength = function(){
+				var jammer = this.getSystemByName("Jammer");
+				return jammer.getOutput();
+			}
+
 		
 			if (jammed){
-				ui.targetDataC.html("Target under effect of passive jamming screen.</br>Every otherwise successful hit has a 20 % chance to miss.").show();
+				ui.targetDataC.html("Target under effect of passive jamming screen.</br>Every otherwise successful hit has a " + target.getJammerStrength() + " chance to miss.").show();
 			} else ui.targetDataC.empty();
 		}
 	}

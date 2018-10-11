@@ -13,6 +13,7 @@ class Torotha extends SuperLight {
 	public $ew = 600;
 	public $power = 0;
 	public $negation = 13;
+	public $jamming = 1;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

@@ -1482,6 +1482,12 @@ function LifeSupport(system){
 	this.effiency = 0;
 }
 LifeSupport.prototype = Object.create(PrimarySystem.prototype);
+
+function Jammer(system){
+	PrimarySystem.call(this, system)
+	this.used = 0;
+}
+Jammer.prototype = Object.create(PrimarySystem.prototype);
 				
 function Sensor(system){
 	PrimarySystem.call(this, system)
@@ -1489,13 +1495,8 @@ function Sensor(system){
 	this.modes = system.modes;
 	this.states = system.states;
 	this.used = 0;
-	this.jamming = system.jamming;
 }
 Sensor.prototype = Object.create(PrimarySystem.prototype);
-
-Sensor.prototype.getImageName = function(){
-	return (this.jamming ? "Jammer" : "Sensor");
-}
 
 Sensor.prototype.canChangeMode = function(){
 	if (game.getUnit(this.parentId).isPreparingJump()){return false;}

@@ -642,6 +642,7 @@ function Single(data){
 	this.tracking = data.tracking;
 	this.baseImpulse = data.baseImpulse;
 	this.critEffects = data.critEffects;
+	this.jamming = data.jamming;
 	this.damages = [];
 	this.crits = [];
 	this.systems = [];
@@ -650,6 +651,11 @@ function Single(data){
 	this.fighter = 0;
 	this.missile = 0;
 	this.squaddie = 0;
+}
+
+Single.prototype.hasPassiveJamming = function(){
+	if (this.jamming){return true;}
+	return false;
 }
 
 Single.prototype.getBaseImage = function(){

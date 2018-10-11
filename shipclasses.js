@@ -2852,8 +2852,7 @@ Ship.prototype.expandDiv = function(div){
 			offsetX += 25; offsetY -= 30;
 		}
 		else if (a == 60 || a == 300 || noAft){
-			if (sides > 1){offsetX += 10;}
-			else offsetX += 20;
+			offsetX += 10;
 		}
 		
 		var pos = getPointInDir(130 - offsetX, a-90, conWidth/2, conHeight/2-40);
@@ -4555,4 +4554,11 @@ Ship.prototype.getPurchaseHeader = function(){
 
 Ship.prototype.getIncomingHeader = function(){
 	return this.name + (this.notes ? "</br>" + this.notes : "");
+}
+
+Ship.prototype.hasPassiveJamming = function(){
+	var jammer = this.getSystemByName("Jammer");
+	if (!jammer || jammer.destroyed || jammer.disabled){
+		return false;
+	} return true;
 }

@@ -192,7 +192,6 @@ class Sensor extends PrimarySystem {
 	public $hitMod = 2;
 	public $modes = array("Lock", "Mask");
 	public $states = array(0, 0);
-	public $jamming = 0;
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
 		$this->powerReq = floor($output/60);
@@ -239,6 +238,16 @@ class Sensor extends PrimarySystem {
 	}
 }
 
+class Jammer extends PrimarySystem {
+	public $name = "Jammer";
+	public $display = "Passive Jamming Suite";
+
+	function __construct($id, $parentId, $integrity, $output = 20, $width = 1){
+		$this->boostEffect[] = new Effect("Output", 25);
+        parent::__construct($id, $parentId, $integrity/2, $output, $width);
+    }
+}
+
 class Hangar extends Weapon {
 	public $type = "Hangar";
 	public $name = "Hangar";
@@ -257,7 +266,6 @@ class Hangar extends Weapon {
 		$this->launchRate = $launchRate;
 		$this->capacity = $capacity;
 		$this->powerReq = 0;
-		//$this->powerReq = floor($launchRate/3);
 		$this->integrity = $capacity*8;
 
 

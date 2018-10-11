@@ -121,8 +121,13 @@ class Ship {
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, $this->vitalHP, $this->ep);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, $this->vitalHP, $this->ew);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, $this->vitalHP);
-		//$this->primary->systems[] = new Sensor($this->getId(), $this->id, $this->vitalHP, $this->ew);
-		//$this->primary->systems[] = new Reactor($this->getId(), $this->id, $this->vitalHP);
+
+		if ($this->faction == "Minbari Federation"){
+			$jammer = new Jammer($this->getId(), $this->id, $this->vitalHP);
+			$jammer->powerReq = floor($this->traverse*2);
+			$this->primary->systems[] = $jammer;
+			//$jammer->effiency = floor($this->powerReq/9)+2;
+		}
 	}
 
 	public function getId(){
@@ -170,8 +175,6 @@ class Ship {
 			for ($i = 0; $i < sizeof($command->loads); $i++){
 				$command->loads[$i]["baseCost"] = ceil($command->loads[$i]["baseCost"] * 0.7);
 			}
-			$this->getSystemByName("Sensor")->jamming = 1;
-			$this->getSystemByName("Sensor")->display = "Sensor & Analyzing & Jamming";
 		}
 		else if ($this->faction == "Vree Conglomerate"){
 			if ($this->ship){
@@ -878,7 +881,7 @@ class Ship {
 			}
 			else  if ($fire->rolls[$i] <= $fire->req){
 				if ($fire->target->jamming){
-					//Debug::log("hit but active jammer");
+					//Debug::log("hit but active jam");
 					$roll = mt_rand(1, 100);
 					if ($roll <= 20){
 						///Debug::log("failed jamming roll ".$roll);
@@ -1115,9 +1118,9 @@ class Ship {
 	}
 
 	public function setJamming(){
-		$sensor = $this->getSystemByName("Sensor");
+		$jammer = $this->getSystemByName("Jammer");
 
-		if (!$sensor->jamming || $sensor->destroyed || $sensor->disabled){
+		if (!$jammer || !$sensor->jamming || $sensor->destroyed || $sensor->disabled){
 			$this->jamming = 0;
 		} else $this->jamming = 1;
 	}
