@@ -56,6 +56,7 @@ function Ship(data){
 	this.flight = data.flight;
 	this.salvo = data.salvo;
 	this.squad = data.squad;
+	this.obstacle = data.obstacle;
 	this.focus= data.move;
 	this.command = data.command;
 	this.focus = data.focus;
@@ -970,7 +971,7 @@ Ship.prototype.resetMoveTranslation = function(){
 }
 
 Ship.prototype.setMoveMode = function(){
-	if (this.salvo || this.flight){return;}
+	if (this.salvo || this.flight || this.obstacle){return;}
 	else if (this.focus> game.phase && game.phase > -1){instruct("Focus Unit!");}
 	else if (this.focus== 0 && game.phase == 1){return;}
 	//console.log("ding!");
@@ -1472,7 +1473,6 @@ Ship.prototype.setLayout = function(){
 
 Ship.prototype.setImage = function(){
 	this.img = graphics.images[this.name.toLowerCase()];
-	return;
 }
 
 Ship.prototype.getCodeColor = function(){
@@ -1798,7 +1798,7 @@ Ship.prototype.drawMarker = function(x, y, c, context){
 	context.beginPath();
 	context.arc(x, y, (this.size-2)/2, 0, 2*Math.PI, false);
 	context.closePath();
-	context.lineWidth = 1 + (this.salvo *1) + Math.floor(this.selected*2 + (this.focus == 1)*2);
+	context.lineWidth = 1 + (this.salvo *1) + (this.obstacle*2)+ Math.floor(this.selected*2 + (this.focus == 1)*2);
 	context.globalAlpha = 0.7 + (this.focus == 1) * 0.1;
 	context.globalCompositeOperation = "source-over";
 	context.strokeStyle = c;
@@ -4496,7 +4496,6 @@ Ship.prototype.getEvents = function(){
 	}
 	return data;
 }
-
 
 Ship.prototype.getSelfExplo = function(){
 

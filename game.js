@@ -2766,7 +2766,7 @@ function Game(data){
 		//	wrapper.hide(); return;
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].salvo || this.ships[i].flight){continue;}
+			if (this.ships[i].salvo || this.ships[i].flight || this.ships[i].obstacle){continue;}
 			else if (this.ships[i].available != this.turn){continue;}
 			else if (this.ships[i].available == this.turn && this.phase > 0){continue;}
 
@@ -3421,26 +3421,17 @@ Game.prototype.drawHostileEW = function(){
 	this.showHostileEW = 0;
 }
 
-Game.prototype.setShipTransform = function(){
-	//console.log("setShipTransform");
+Game.prototype.setUnitTransform = function(){
 	ctx.translate(cam.o.x, cam.o.y);
 	ctx.scale(cam.z, cam.z);
-
-	/*
-	ctx.beginPath();
-	ctx.arc(0, 0, 10, 0, 2*Math.PI);
-	ctx.closePath();
-	ctx.fillStyle = "yellow";
-	ctx.fill();
-	*/
 }
 
-Game.prototype.resetShipTransform = function(){
+Game.prototype.resetUnitTransform = function(){
 	ctx.setTransform(1,0,0,1,0,0);
 }
 
 Game.prototype.drawShips = function(){
-	this.setShipTransform();
+	this.setUnitTransform();
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].draw();
 	}
@@ -3448,9 +3439,7 @@ Game.prototype.drawShips = function(){
 	for (var i = 0; i < this.incoming.length; i++){
 		this.incoming[i].drawIncomingPreview();
 	}
-
-	this.resetShipTransform();
-
+	this.resetUnitTransform();
 }
 
 Game.prototype.drawEvents = function(){

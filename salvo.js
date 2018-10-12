@@ -1,5 +1,7 @@
 function Obstacle(data){
 	Mixed.call(this, data);
+	this.vector = data.vector;
+	this.size = data.size;
 }
 Obstacle.prototype = Object.create(Mixed.prototype);
 
@@ -12,29 +14,47 @@ Obstacle.prototype.setPostMoveFacing = function(){
 	}
 }
 
+Obstacle.prototype.getShortInfo = function(){
+	var ele = ui.shortInfo;
+	if (this.userid == game.userid){
+		$(ele).attr("class", "friendly");
+	} else $(ele).attr("class", "hostile");
 
-Ship.prototype.createBaseDiv = function(){
-	var className = "obstacleDiv";
-	if (this.squad){className += " squad";}
-	if (game.phase > -2){
-		if (this.userid != game.userid){className += " hostile";}
-		else className += " friendly";
-	}
+	var impulse = this.getCurSpeed();
 
-	var div = $("<div>").addClass(className).data("shipId", this.id)
+	ele.append(this.getHeader())
+}
+
+Obstacle.prototype.getCurSpeed = function(){
+	return 50;
+}
+
+Obstacle.prototype.getHeader = function(){
+	var ele = ui.shortInfo;
+	if (this.userid == game.userid){
+		$(ele).attr("class", "friendly");
+	} else $(ele).attr("class", "hostile");
+
+	ele
+	.append($("<div>").html(this.display + " #" + this.id))
+	.append($("<div>").html("Speed: " + this.getCurSpeed()))
+}
+
+Obstacle.prototype.createBaseDiv = function(){
+	var div = $("<div>").addClass("obstacleDiv hostile").data("shipId", this.id)
 
 	this.element = div[0];
 
-	var topDiv = $("<div>").addClass("topDiv");
-	var subDiv = $("<div>").addClass("header");
 	var table = $("<table>")
-	var headerC = "red";
-	if (this.friendly){headerC = "green";}
 
+	$(table)
+		.append($("<tr>")
+			.append($("<th>").html(this.name.toUpperCase() + " #" + this.id).attr("colSpan", 2)))
+		.append($("<tr>")
+			.append($("<td>").html("td1"))
+			.append($("<td>").html("td2")))
 
-	subDiv.append(table);
-	topDiv.append(subDiv)
-	div.append(topDiv);
+	div.append(table);
 
 	$(this.expandDiv($(div[0])))
 		.find(".structContainer")
@@ -62,35 +82,33 @@ Ship.prototype.createBaseDiv = function(){
 	}
 }
 
-
-
 Obstacle.prototype.expandDiv = function(div){
 	var structContainer = $("<div>").addClass("structContainer");
 	$(div).append(structContainer);
 	$(document.body).append(div);
 
-	var times = 5;
+	var height = structContainer.height();
+	var width = structContainer.width();
 
-	for (var i = 0; i < 5; i++){
-		var x = range(0, 200);
-		var y = range(0, 200);
+	console.log(height);
+	console.log(width);
+
+	for (var i = 0; i < this.structures.length; i++){
+		console.log(this.structures[i].layout)
 		$(structContainer)
 		.append($("<div>")
 			.addClass("obstacle")
-			.css("left", x)
-			.css("top", y)
+			.css("width", this.structures[i].size)
+			.css("height", this.structures[i].size)
+			.css("left", width/2 + this.structures[i].layout.x)
+			.css("top", height/2 + this.structures[i].layout.y)
 			.append($("<img>").attr("src", "varIcons/destroyed.png"))
 		)
-
 	}
 
-
+	$(div).addClass("disabled");
 	return div;
 }
-
-
-
-
 
 Obstacle.prototype.getElement = function(isBuy){
 	var div = $("<div>")
@@ -144,14 +162,102 @@ Obstacle.prototype.getElement = function(isBuy){
 	return div;
 }
 
+Obstacle.prototype.setUnitState = function(){
+	this.friendly = 0;
+	this.deployed = 1;
+	this.isReady = 1;
+}
+
+Obstacle.prototype.create = function(){
+	this.setUnitState();
+	this.x = this.actions[0].x;
+	this.y = this.actions[0].y;
+	this.drawX = this.actions[0].x;
+	this.drawY = this.actions[0].y;
+}
+
+Obstacle.prototype.draw = functiasdon(){
+	this.drawPositionMarker();
+	ctx.translate(this.drawX, this.drawY);
+	ctx.rotate(this.getDrawFacing() * Math.PI/180);
+
+	//console.log("draw #" + this.id);
+ 	if (this.doDraw){this.drawSelf();}
+
+	this.drawEscort();
+	ctx.rotate(-this.getDrawFacing() * Math.PI/180);
+	ctx.translate(-this.drawX, -this.drawY);
+}
 
 
+Obstacle.prototype.setLayout = function(){
+	var max = 75;
+	for (var i = 0; i < this.structures.length; i++){
+		//this.structures[i].layout.x = range(0, max/2) * (1 - (range(0, 1)*2));
+		//this.structures[i].layout.y = range(0, max/2)* (1 - (range(0, 1)*2));
+		this.structures[i].layout = getPointInDir(range(20, max), range(0, 360), 0, 0)
+		//console.log(this.structures[i].layout)
+	}
+		//this.structures[i].layout = getPointInDir(height/2, range(0, 360), 0, 0)
+}
 
+Obstacle.prototype.setImage = function(){
+	//console.log("Obstacle setImage");
+	var t = document.createElement("canvas");
+		t.width = this.size*2;
+		t.height = this.size*2;
+	var ctx = t.getContext("2d");
+		ctx.translate(t.width/2, t.height/2);
 
+	for (var i = 0; i < this.structures.length; i++){
+		if (!this.structures[i].doDraw){continue;}
 
+		var x = this.structures[i].layout.x/2;
+		var y = this.structures[i].layout.y/2;
 
+		//var x = this.structures[i].layout.x / 75 * this.size/2;
+		//var y = this.structures[i].layout.y / 75 * this.size/2;
 
+		ctx.translate(x, y);
 
+		//ctx.rotate(-90 * (Math.PI/180))
+		ctx.drawImage(
+			this.structures[i].getBaseImage(),
+			0 -this.structures[i].size/2,
+			0 -this.structures[i].size/2,
+			this.structures[i].size, 
+			this.structures[i].size
+		)
+		//ctx.rotate(+90 * (Math.PI/180))
+		ctx.translate(-this.structures[i].layout.x/2, -this.structures[i].layout.y/2);
+	}		
+	ctx.setTransform(1,0,0,1,0,0);
+	this.img = t;
+}
+
+Obstacle.prototype.getBaseImage = function(){
+	return this.img;
+}
+
+function Asteroid(data){
+	this.layout = data.layout;
+	this.systems = data.systems;
+	this.size = data.size;
+	this.doDraw = 1;
+	this.img;
+
+	this.setBaseImage();
+}
+
+Asteroid.prototype.setBaseImage = function(){
+	var image = new Image();
+		image.src = "varIcons/destroyed.png";
+	this.img = image;
+}
+
+Asteroid.prototype.getBaseImage = function(){
+	return this.img;
+}
 
 function Salvo(data){
 	Mixed.call(this, data);

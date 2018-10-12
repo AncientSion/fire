@@ -746,9 +746,6 @@ Squadron.prototype.hasInvalidPower = function(){
 
 Squadron.prototype.getBaseImage = function(){
 	return this.img;
-	var img = new Image();
-		img.src = this.img.toDataURL();
-	return img;
 }
 
 Squadron.prototype.getUnitSelectorIcon = function(){

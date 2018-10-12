@@ -1141,14 +1141,20 @@ div.integrityFull {
 	border-radius: 5px;
 	z-index: 10;
 	background-color: black;
-	height: 300px;
-	width: 300px;
+	width: 200px;
+}
+
+.obstacleDiv table {
+	width: 100%;
 }
 
 .obstacle {
 	position: absolute;
-	height: 50px;
-	width: 50px;
+}
+
+.obstacleDiv .structContainer {
+	height: 200px;
+	width: 200px;
 }
 
 .obstacle img {

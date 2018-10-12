@@ -878,16 +878,17 @@
 		public function startGame($gameid){
 			Debug::log("startGame #".$gameid);
 
-
 			$obstacles = array();
 
 			for ($i = 0; $i < 3; $i++){
 				$x = mt_rand(100, 400) * (1 - (mt_rand(0, 1)*2));
 				$y = mt_rand(100, 400) * (1 - (mt_rand(0, 1)*2));
 				$a = mt_rand(0, 360);
+				$vector = mt_rand(0, 360);
+				$size = mt_rand(100, 250);
 
 				$move = array("turn" => 1, "type" => "deploy", "dist" => 0, "x" => $x, "y" => $y, "a" => $a, "cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
-				$obstacles[] = array("gameid" => $this->gameid, "userid" => 0, "type" => "Obstacle", "name" => "Obstacle", "callsign" => "", "totalCost" => 0, "moraleCost" => 0, "turn" => 1, "eta" => 0, "actions" => array($move));
+				$obstacles[] = array("gameid" => $this->gameid, "userid" => 0, "type" => "Obstacle", "name" => "Obstacle", "callsign" => "", "totalCost" => $vector, "moraleCost" => $size, "turn" => 1, "eta" => 0, "actions" => array($move));
 			}
 
 			$this->insertUnits(0, $gameid, $obstacles);

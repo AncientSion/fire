@@ -170,27 +170,16 @@ function initSquadron(data){
 
 function initObstacle(data){
 	var obstacle = new Obstacle(data);
-	return obstacle;
-	return;
-	var squadron = new Squadron(data);
-	for (var i = 0; i < data.primary.systems.length; i++){
-		var primSystem = new window[data.primary.systems[i].name](data.primary.systems[i]);
-
-		for (var j = 0; j < data.primary.systems[i].powers.length; j++){
-			primSystem.powers.push(new Power(data.primary.systems[i].powers[j]));
-		}
-		for (var j = 0; j < data.primary.systems[i].crits.length; j++){
-			primSystem.crits.push(new Crit(data.primary.systems[i].crits[j]));
-		}
-		squadron.primary.systems.push(primSystem);
-	}
 	for (var i = 0; i < data.structures.length; i++){
-		var sub = initSquaddie(data.structures[i]);
-			sub.create()
-		squadron.structures.push(sub)
-		//squadron.addSubElement(sub);
+		var asteroid = initAsteroid(data.structures[i]);
+		obstacle.structures.push(asteroid);
 	}
-	return squadron;
+	return obstacle;
+}
+
+function initAsteroid(data){
+	var asteroid = new Asteroid(data);
+	return asteroid;
 }
 
 function initSquaddie(data){

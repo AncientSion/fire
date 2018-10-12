@@ -16,6 +16,7 @@ class Mixed extends Ship {
 	}
 	
 	public function addAllSystems(){
+		return;
 	}
 
 	public function setProps($turn, $phase){

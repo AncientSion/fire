@@ -2,14 +2,30 @@
 
 class Obstacle extends Mixed {
 	
+	public $name = "Obstacle";
+	public $display = "Asteroid Swarm";
 	public $obstacle = 1;
+	public $traverse = 10;
+	public $size = 300;
+	public $vector = 0;
 
 	function __construct($data = false){
         parent::__construct($data);
+        $this->vector = $data["totalCost"];
+        $this->size = $data["moraleCost"];
+        $this->totalCost = 0;
+        $this->moaleCost = 0;
 	}
 
 	function addAllSystems(){
+		$this->addStructures();
 		return;
+	}
+
+	public function addStructures(){
+		for ($i = 0; $i < 5; $i++){
+			$this->structures[] = new Asteroid(0, 0);
+		}
 	}
 	
 	public function setUnitState($turn, $phase){
@@ -36,4 +52,13 @@ class Obstacle extends Mixed {
 	}
 }
 
+class Asteroid {
+	public $size = 30;
+	public $layout;
+	public $systems = array();
+
+	function __construct($x, $y){
+		$this->layout = new Point($x, $y);
+	}
+}
 ?>
