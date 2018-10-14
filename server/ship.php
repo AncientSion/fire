@@ -53,10 +53,12 @@ class Ship {
 	public $index = 0; 
 	public $actions = array();
 	public $structures = array();
+
 	public $locks = array();
 	public $masks = array();
 	public $distances = array();
 	public $angles = array();
+	public $blocks = array();
 
 	public $turnAngle = 30;
 	public $slipAngle = 15;
@@ -878,9 +880,47 @@ class Ship {
 		$fire->req = $fire->shooter->calculateToHit($fire);
 
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
-			if ($this->destroyed){
-				$fire->cancelShotResolution($i);
+			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
+			else if ($fire->rolls[$i] <= $fire->req){
+				if ($this->doTestDefenses($fire, $i, $this)){
+					$fire->hits++;
+					DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
+				}
 			}
+		}
+	}
+
+	public function doTestDefenses($fire, $shot, &$target){
+		for ($i = 0; $i < sizeof($this->blocks); $i++){
+			if ($this->blocks[$i][0] == $fire->shooterid){
+				Debug::log("active obstacle found: ".$this->blocks[$i][0].", worth ".$this->blocks[$i][1]);
+				$roll = mt_rand(1, 100);
+				if ($roll <= $this->blocks[$i][1]){
+					Debug::log("failed obstacle roll ".$roll);
+					$fire->rolls[$shot] -= 100;
+					return false;
+				}
+			}
+		}
+
+		if ($target->jamming){
+			Debug::log("active jam ".$fire->target->jamming);
+			$roll = mt_rand(1, 100);
+			if ($roll <= $target->jamming){
+				Debug::log("failed jamming roll ".$roll);
+				$fire->rolls[$shot] -= 200;
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public function determineHitsa($fire){ // target
+		$fire->req = $fire->shooter->calculateToHit($fire);
+
+		for ($i = 0; $i < sizeof($fire->rolls); $i++){
+			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
 			else  if ($fire->rolls[$i] <= $fire->req){
 				if ($fire->target->jamming){
 					Debug::log("hit but active jam ".$fire->target->jamming);
@@ -902,6 +942,7 @@ class Ship {
 			}
 		}
 	}
+
 
 	public function calculateToHit($fire){ // shooter
 		//return 100;
@@ -1125,7 +1166,7 @@ class Ship {
 
 		if (!$jammer || $jammer->destroyed || $jammer->disabled){
 			$this->jamming = 0;
-		} else $this->jamming = $jammer->getOutput($turn); Debug::log("jamming ".$this->jamming);
+		} else $this->jamming = $jammer->getOutput($turn);// Debug::log("jamming ".$this->jamming);
 	}
 
 	public function getOffensiveBonus($id){
@@ -1448,12 +1489,8 @@ class Ship {
 	}
 
 	public function setBonusNegation($turn){
-		if ($this->salvo){return;}
-		else if ($this->flight){return;}
-		else {
-			for ($i = 0; $i < sizeof($this->structures); $i++){
-				$this->structures[$i]->setBonusNegation($turn);
-			}
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$this->structures[$i]->setBonusNegation($turn);
 		}
 	}
 

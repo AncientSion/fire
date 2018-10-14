@@ -605,8 +605,6 @@
 					continue;
 				}
 				else {
-					//Debug::log($stmt->errorCode());
-					//Debug::log("ERROR insertUnits");
 					return false;
 				}
 			}
@@ -875,23 +873,56 @@
 			return false;
 		}
 
+
+		public function createObstacles($gameid){
+			//Debug::log("createObstacles #".$gameid);
+			$rocks = array();
+
+			for ($i = 1; $i <= 6; $i++){
+				//Debug::log("rock ".$i);
+				
+				$attempts = 3;
+
+				while ($attempts){
+					$attempts--;
+					//Debug::log("attempts left ".$attempts);
+					$x = mt_rand(100, 400) * (1 - (mt_rand(0, 1)*2));
+					$y = mt_rand(100, 500) * (1 - (mt_rand(0, 1)*2));
+					$size = mt_rand(50, 200);
+
+					$redo = 0;
+
+					for ($j = 0; $j < sizeof($rocks); $j++){
+						$dist = Math::getDist($rocks[$j][0], $rocks[$j][1], $x, $y);
+
+
+						if ($dist + $size/2 < $rocks[$j][2]){
+							//Debug::log("retry, dist $dist, size $size, next $rocks[$j][2])");
+							$redo = 1;
+							break;
+						}
+					}
+
+					if ($redo){
+						continue;
+					} else $attempts = 0;
+
+					$vector = mt_rand(0, 360);
+					$speed = floor(mt_rand(30, 60) / 50 * $size);
+					$rocks[] = array($x, $y, $size, $vector, $speed);
+					//Debug::log("!!!!!!!!!!!!!");
+
+					$sql = "INSERT into UNITS values (0, $gameid, 0, 0, 'Obstacle', '', 0, 0, 'deployed', 0, 1, 0, 0, 0, $x, $y, $vector, $size, $speed, 0, 0, 0, 1, -1, 0, '')";
+					$result = $this->query($sql);
+				}
+			}
+		}
+
+
 		public function startGame($gameid){
 			Debug::log("startGame #".$gameid);
 
-			$obstacles = array();
-
-			for ($i = 0; $i < 3; $i++){
-				$x = mt_rand(100, 400) * (1 - (mt_rand(0, 1)*2));
-				$y = mt_rand(100, 400) * (1 - (mt_rand(0, 1)*2));
-				$a = mt_rand(0, 360);
-				$vector = mt_rand(0, 360);
-				$size = mt_rand(100, 250);
-
-				$move = array("turn" => 1, "type" => "deploy", "dist" => 0, "x" => $x, "y" => $y, "a" => $a, "cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
-				$obstacles[] = array("gameid" => $this->gameid, "userid" => 0, "type" => "Obstacle", "name" => "Obstacle", "callsign" => "", "totalCost" => $vector, "moraleCost" => $size, "turn" => 1, "eta" => 0, "actions" => array($move));
-			}
-
-			$this->insertUnits(0, $gameid, $obstacles);
+			$this->createObstacles($gameid);
 
 
 			$stmt = $this->connection->prepare("
@@ -1027,7 +1058,6 @@
 
 			$this->addReinforceValue($userid, $gameid, -$cost);
 			$this->insertClientActions($picks);
-			//$this->insertUnits($userid, $gameid, $ships);
 		}
 
 

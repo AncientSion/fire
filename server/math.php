@@ -5,6 +5,31 @@ class Math {
 	function __construct(){
 	}
 
+	static function isInPath($shooter, $target, $obstacle, $size) {
+		// Calculate the euclidean distance between a & b
+		$shooterToTargetDist = sqrt( pow($target->x - $shooter->x, 2) + pow($target->y - $shooter->y, 2) );
+		$shooterToObstacleDist = sqrt( pow($target->x - $shooter->x, 2) + pow($target->y - $shooter->y, 2) );
+
+		// compute the direction vector d from a to b
+		$d = new Point(($target->x - $shooter->x)/$eDistAtoB, ($target->y - $shooter->y)/$eDistAtoB);
+
+		// Now the line equation is x = dx*t + ax, y = dy*t + ay with 0 <= t <= 1.
+
+		// compute the value t of the closest point to the circle center (cx, cy)
+		$t = ($d->x * ($obstacle->x - $shooter->x)) + ($d->y * ($obstacle->y - $shooter->y));
+
+		$closestPoint = new Point($t * $d->x + $shooter->x, $t * $d->y + $shooter->y);
+		$dist = floor(Math::getDist2($obstacle, $closestPoint));
+		//Debug::log("dist ".$dist.", size ".$size);
+		if ($shooterToTargetDist < $shooterToObstacleDist - $size){
+			return false;
+		}
+		else if ($dist < $size){
+			return array(true, $dist);
+		}
+		return false;
+	}
+
 	static function getPointInDirection($dist, $a, $oX, $oY){
 		$x = round($oX + $dist * cos($a * M_PI / 180));
 		$y = round($oY + $dist * sin($a * M_PI / 180));
@@ -129,7 +154,7 @@ class Math {
 	}
 
 	static function getBaseHitChance($mass){
-		return ceil(pow($mass, 0.4)*1.5) + 30;
+		return ceil(pow($mass, 0.4)*1.5) + 130;
 	}
 
 	static function getBaseTurnDelay($mass){

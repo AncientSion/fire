@@ -90,8 +90,30 @@ function BeamVector(o, a, b, n, m, h){
 	this.setup();
 }
 
-
 function Vector(a, b){
+	this.x;
+	this.y;
+	this.nx;
+	this.ny;
+	this.m;
+	
+	this.setup = function(){
+		this.x = b.x - a.x;
+		this.y = b.y - a.y;
+		
+		var x = Math.pow(this.x, 2);
+		var y = Math.pow(this.y, 2);
+		
+		this.m = Math.sqrt(x+y);	
+		this.nx = this.x/this.m;
+		this.ny = this.y/this.m;
+	}
+	
+	this.setup();
+}
+
+
+function MoveVector(a, b){
 	this.x;
 	this.y;
 	this.nx;
@@ -1354,14 +1376,20 @@ FireOrder.prototype.getRollsString = function(rolls, allReq){
 	var hits = "";
 	var miss = "";
 	var jammed = "";
+	var blocked = "";
 	var divider = "<div class='rollSeparator yellow'></div>";
 	for (var i = 0; i < rolls.length; i++){
 		if (rolls[i] == 0){
 			skipped++; continue;
 		}
-		
+
 		if (rolls[i] < 0){
-			jammed += (rolls[i]*-1) + ", ";
+			if (rolls[i] >= -99){
+				blocked += (rolls[i]*-1) + ", ";
+			}
+			else if (rolls[i] >= 199){
+				jammed += (rolls[i]*-1) + ", ";
+			}
 		}
 		else if (rolls[i] <= req){
 			hits += rolls[i] + ", ";
@@ -1371,10 +1399,14 @@ FireOrder.prototype.getRollsString = function(rolls, allReq){
 	if (hits.length){hits = hits.slice(0, hits.length-2); hits = "Hits: " + hits;}
 	if (miss.length){miss = miss.slice(0, miss.length-2); miss = "Misses: " + miss;}
 	if (jammed.length){jammed = jammed.slice(0, jammed.length-2); jammed = "Jammed: " + jammed;}
+	if (blocked.length){blocked = blocked.slice(0, blocked.length-2); blocked = "Blocked: " + blocked;}
 
 	string = "<div class='rollWrapper'><div class='hits'>" + hits + "</div>" + divider + "<div class='miss'>" + miss + "</div>";
 	if (jammed){
 		string += divider +"<div class='jammed'>" + jammed + "</div>";
+	}
+	if (blocked){
+		string += divider +"<div class='blocked'>" + blocked + "</div>";
 	}
 	if (skipped){
 		string += divider +"<div class='overfire'>" + skipped + "x Overkill</div>"

@@ -42,6 +42,17 @@ window.graphics = {
 		this.images.redVortex.src = "varIcons/redVortex.png";
 		this.images.blueVortex = new Image();
 		this.images.blueVortex.src = "varIcons/blueVortex.png";
+
+		this.images.vector = new Image();
+		this.images.vector.src = "varIcons/vector.png";
+
+		this.images.rocks = [];
+
+		for (var i = 1; i <= 11; i++){
+			var img = new Image();
+				img.src = "varIcons/rocks/rock" + i + ".png";
+			this.images.rocks.push(img);
+		}
 	},
 
 	preLoadBallistics: function(){
@@ -173,8 +184,7 @@ window.graphics = {
 		this.images.torotha.src = "shipIcons/torotha.png";
 
 		this.images.shaveen = new Image();
-		this.images.shaveen.src = "shipIcons/shaveen.png";
-		
+		this.images.shaveen.src = "shipIcons/shaveen.png";		
 
 		this.images.xill = new Image();
 		this.images.xill.src = "shipIcons/xill.png";
@@ -244,6 +254,17 @@ function drawVector(origin, target, dist, angle){
 	.css("left", target.x - 45 + "px")
 	.css("top", target.y + 60 + "px")
 	.removeClass("disabled");
+}
+
+function drawAimVector(origin, target){
+	mouseCtx.clearRect(0, 0, res.x, res.y);
+	mouseCtx.beginPath();
+	mouseCtx.moveTo(origin.x * cam.z + cam.o.x, origin.y * cam.z + cam.o.y);
+	mouseCtx.lineTo(target.x * cam.z + cam.o.x, target.y * cam.z + cam.o.y);
+	mouseCtx.closePath();
+	mouseCtx.strokeStyle = "yellow";
+	mouseCtx.lineWidth = 2;
+	mouseCtx.stroke();
 }
 
 function drawProjectile(weapon, anim){

@@ -89,6 +89,7 @@
 
 	public function getClientData(){
 		//Debug::log("getClientData");
+		//var_export($this->setupShips()); return;
 		//$this->testUnitMorale(); return;
 		//$this->setPostFireFocusValues(); return;
 		//$this->testFleetMorale();
@@ -803,7 +804,7 @@
 		}
 	}
 
-	public function handleNewActions(){
+	public function handleServerNewActions(){
 		$new = array();
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -840,7 +841,8 @@
 		$this->handleShipMovement();
 		$this->handleFlightMovement();
 		$this->handleSalvoMovement();
-		$this->handleNewActions();
+		$this->handleObstacleMovement();
+		$this->handleServerNewActions();
 
 		$this->handlePostMoveFires();
 		$this->updateMissions();
@@ -849,14 +851,12 @@
 	public function handlePostMoveFires(){
 		Debug::log("handlePostMoveFires: ".sizeof($this->fires));
 
-
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$this->ships[$i]->setFacing();
 			$this->ships[$i]->setPosition();
 			$this->ships[$i]->setImpulseProfileMod();
 			$this->ships[$i]->setBonusNegation($this->turn);
 		}
-
 		
 		$this->setFireOrderDetails();
 
@@ -884,7 +884,7 @@
 	public function handleShipMovement(){
 		Debug::log("handleShipMovement");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->flight || $this->ships[$i]->salvo){continue;}
+			if ($this->ships[$i]->flight || $this->ships[$i]->salvo || $this->ships[$i]->obstacle){continue;}
 			if (!$this->ships[$i]->focus && $this->phase != 0){continue;}
 			if ($this->ships[$i]->focus && $this->phase != 1){continue;}
 			
@@ -933,27 +933,6 @@
 		}
 
 		return;
-
-		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if (!$this->ships[$i]->flight){continue;}
-			$this->ships[$i]->setMove($this);
-		}
-
-
-		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if (!$this->ships[$i]->flight){continue;}
-
-			$this->mission->target = &$this->getUnit($this->mission->targetid);
-
-			if ($this->mission->target->ship || $this->mission->target->squad){
-				$this->ships[$i]->setMove($this);
-			}
-		}
-
-		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if (!$this->ships[$i]->flight){continue;}
-			$this->ships[$i]->setMove($this);
-		}
 	}
 
 	public function handleSalvoMovement(){
@@ -967,11 +946,20 @@
 		}
 	}
 
+	public function handleObstacleMovement(){
+		Debug::log("handleObstacleMovement");
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if (!$this->ships[$i]->obstacle){continue;}
+			$this->ships[$i]->setMove($this);
+		}
+	}
+
 	public function assembleDeployStates(){
 		Debug::log("assembleDeployStates");
 		$states = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->available != $this->turn){continue;}
+			if ($this->ships[$i]->available != $this->turn || $this->ships[$i]->obstacle){continue;}
 			$states[] = $this->ships[$i]->getDeployState($this->turn);
 		}
 
@@ -1162,6 +1150,9 @@
 	}
 
 	public function setupShips(){
+		$data = array();
+
+
 		Debug::log("setupShips");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$this->ships[$i]->setFacing();
@@ -1171,8 +1162,8 @@
 			$this->ships[$i]->setJamming($this->turn);
 		}
 
-		//set dist and angle for each ship to speed up fire resolution
 		for ($i = 0; $i < sizeof($this->ships); $i++){
+			//Debug::log("comparing ".$this->ships[$i]->id." / " .$this->ships[$i]->display);
 			$aPos = $this->ships[$i]->getCurPos();
 			//Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
 			for ($j = $i+1; $j < sizeof($this->ships); $j++){
@@ -1185,8 +1176,40 @@
 
 				$this->ships[$i]->angles[] = array($this->ships[$j]->id, round(Math::getAngle2($aPos, $bPos)));
 				$this->ships[$j]->angles[] = array($this->ships[$i]->id, round(Math::getAngle2($bPos, $aPos)));
+
+				$obstacles = array();
+
+				if ($this->ships[$i]->obstacle || $this->ships[$j]->obstacle){continue;}
+				//Debug::log("to ".$this->ships[$j]->id." / " .$this->ships[$j]->display);
+
+				for ($k = 0; $k < sizeof($this->ships); $k++){
+					if (!$this->ships[$k]->obstacle){continue;}
+					//if ($this->ships[$k]->id != 25){continue;}
+
+					//Debug::log("checking if ".$this->ships[$k]->display." / " .$this->ships[$k]->id." is in path");
+
+					$result = Math::isInPath($aPos, $bPos, $this->ships[$k]->getCurPos(), $this->ships[$k]->size/2);
+
+					if ($result){
+						/*$data = array(
+							"id" => $this->ships[$k]->id, 
+							"dist" => $result[1],
+							"size" => $this->ships[$k]->size,
+							"exposure" => round((1-($result[1] / ($this->ships[$k]->size/2)))*100),
+							"block" => $this->ships[$k]->block
+						);*/
+						
+						$effect = $this->ships[$k]->block / 100 * round((1-($result[1] / ($this->ships[$k]->size/2)))*100);
+
+						$this->ships[$i]->blocks[] = array($this->ships[$j]->id, $effect);
+						$this->ships[$j]->blocks[] = array($this->ships[$i]->id, $effect);
+					}
+				}
 			}
 		}
+
+		return $data;
+
 
 		/*
 		for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1205,7 +1228,7 @@
 	}
 
 	public function setLocks($emitter){
-		if ($emitter->salvo){}
+		if ($emitter->salvo || $emitter->obstacle){}
 		else if ($emitter->flight && $emitter->mission->arrived){
 			//Debug::log("setLocks for FLIGHT #".$emitter->id);
 			for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1780,13 +1803,13 @@
 		Debug::log("handleResolvedFireData");
 		$newDmgs = $this->getAllNewDamages();
 		$newCrits = $this->getAllNewCrits();
-		$newMoves = $this->getAllNewForcedMoves();
+		$newForcedMoves = $this->getAllNewForcedMoves();
 		$unitMorales = $this->getNewUnitMoraleCrits();
 
 		DBManager::app()->updateFireOrders($this->fires);
 		if (sizeof($newDmgs)){DBManager::app()->insertDamageEntries($newDmgs);}
 		if (sizeof($newCrits)){DBManager::app()->insertCritEntries($newCrits);}
-		if (sizeof($newMoves)){DBManager::app()->insertServerActions($newMoves);}
+		if (sizeof($newForcedMoves)){DBManager::app()->insertServerActions($newForcedMoves);}
 		if (sizeof($unitMorales)){DBManager::app()->updateUnitStatusNotes($unitMorales);}
 		if ($this->hasNewGlobalEntries()){DBManager::app()->insertNewGlobalEntries($this->playerstatus);}
 	}
@@ -1832,7 +1855,7 @@
 		//Debug::log("getNewUnitMoraleCrits");
 		$data = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->destroyed || $this->ships[$i]->flight || $this->ships[$i]->salvo){continue;}
+			if ($this->ships[$i]->destroyed || $this->ships[$i]->flight || $this->ships[$i]->salvo || $this->ships[$i]->obstacle){continue;}
 			if (!strlen($this->ships[$i]->notes)){continue;}
 			$data[] = array("id" => $this->ships[$i]->id, "status" => $this->ships[$i]->status, "notes" => $this->ships[$i]->notes);
 		}

@@ -51,7 +51,7 @@ class MediumPulse extends Pulse {
 	public $minDmg = 23;
 	public $maxDmg = 30;
 	public $accDecay = 120;
-	public $shots = 1;
+	public $shots = 2;
 	public $animColor = "brown";
 	public $projSize = 3;
 	public $projSpeed = 9;

@@ -37,10 +37,13 @@ function Game(data){
 	this.sensorMode = 0;
 	this.target = 0;
 	this.deploys = data.deploys;
+
 	this.animShip = 0;
 	this.animFlight = 0;
 	this.animSalvo = 0;
+	this.animObstacles = 0;
 	this.animFocus = 0;
+
 	this.animForcedMoves = 0;
 	this.drawingEvents = 1;
 	this.mission;
@@ -59,20 +62,21 @@ function Game(data){
 	this.commandChange = {old: 0, new: 0, original: 0}
 	this.subPhase = 1;
 	this.exclusiveSystem = false;
+	this.obstacleDataSet = 0;
 
 	this.hasSnapCenterline = function(shooter, shooterAngle, target){
 		if (game.phase > 0){
 			if (shooter.focus && target && !target.focus && !shooter.getRemSpeed()){
-				console.log("angle to target: " + shooterAngle);
+				//console.log("angle to target: " + shooterAngle);
 				if (shooterAngle == 0 || shooterAngle == 360 || (shooterAngle > 0 && shooterAngle < 0.2)|| (shooterAngle < 360 && shooterAngle > 359.8)){
-					console.log("snap!");
+					//console.log("snap!");
 					return true;
 				}
 			}
 		}
 		else if (game.phase == -1){
 			if (Math.round(shooterAngle) == 360 || Math.round(shooterAngle) == 0){
-				console.log("snap!");
+				//console.log("snap!");
 					return true;
 			}
 		}
@@ -502,7 +506,7 @@ function Game(data){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid != this.userid || this.ships[i].flight || this.ships[i].salvo){continue;}
 			if (this.ships[i].focus != game.phase){continue;}
-			if (this.ships[i].getRemSpeed() > 0){
+			if (this.ships[i].getRemSpeed()){
 				if (aUnit){
 					this.getUnit(aUnit).doUnselect();
 				}
@@ -1007,6 +1011,7 @@ function Game(data){
 		//console.log("endMoveSubPhase")
 		for (var i = 0; i < this.ships.length; i++){
 			if (!this.ships[i].toAnimate){continue;}
+
 			if (this.ships[i].flight && this.animFlight || this.ships[i].salvo && this.animSalvo){
 				this.ships[i].setPostMovePosition();
 				this.ships[i].setPostMoveFacing();
@@ -1021,7 +1026,10 @@ function Game(data){
 				}
 			}
 			else if ((this.ships[i].ship || this.ships[i].squad) && this.animShip){
-				//if (this.ships[i].focus){console.log("ding")}
+				this.ships[i].setPostMovePosition();
+				this.ships[i].setPostMoveFacing();
+			}
+			else if (this.ships[i].obstacle && this.animObstacles){
 				this.ships[i].setPostMovePosition();
 				this.ships[i].setPostMoveFacing();
 			}
@@ -1087,6 +1095,7 @@ function Game(data){
 			this.drawingEvents = 1;
 			this.draw();
 			if (this.phase == 2){
+				this.setObstacleData();
 				this.autoIssueFireOrders();
 			}
 		}
@@ -1149,6 +1158,7 @@ function Game(data){
 	}
 
 	this.initDamageControl = function(){
+		this.setObstacleData();
 		this.resolveFire();
 	}
 
@@ -1534,7 +1544,7 @@ function Game(data){
 	}
 
 	this.setCC = function(){
-		console.log("setCC");
+		//console.log("setCC");
 		if (this.turn == 1 && this.phase == -1){return;}
 		if (this.phase == 1 && game.phase == 2){return;}
 
@@ -1606,7 +1616,7 @@ function Game(data){
 	}
 
 	this.setPostMoveCC = function(){
-		console.log("setPostMoveCC");
+		//console.log("setPostMoveCC");
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].cc = [];
 		}
@@ -1865,7 +1875,7 @@ function Game(data){
 	this.setUnitMoveDetails = function(){
 		if (game.phase == 1){
 			for (var i = 0; i < this.ships.length; i++){
-				if (this.ships[i].focus || this.ships[i].flight || this.ships[i].salvo){continue;}
+				if (this.ships[i].focus || this.ships[i].flight || this.ships[i].salvo || this.ships[i].obstacle){continue;}
 				this.ships[i].toAnimate = true;
 			}
 		}
@@ -2107,6 +2117,7 @@ function Game(data){
 			this.animShip = 0;
 			this.animFlight = 0;
 			this.animSalvo = 0;
+			this.animObstacles = 0;
 			this.animForcedMoves = 0;
 			this.animateUnitExplos();
 		}
@@ -2128,14 +2139,20 @@ function Game(data){
 			else if (this.animFlight){
 				//console.log("flight done -> salvo moves");
 				game.timeout = setTimeout(function(){
-				//	game.endMoveSubPhase();
 					game.animFlight = 0; game.animSalvo = 1;
 					game.animateMovement();
 				}, time);
 			}
-			else {
+			else if (this.animSalvo){
+				//console.log("salvo done -> obstacles moves");
+				game.timeout = setTimeout(function(){
+					game.animSalvo = 0; game.animObstacles = 1;
+					game.animateMovement();
+				}, time);
+			}
+			else if (this.animObstacles){
 				this.endMoveSubPhase();
-				this.animFlight = 0; this.animSalvo = 0;
+				this.animObstacles = 0;
 				this.moveResolved();
 			}
 		}
@@ -2324,16 +2341,16 @@ function Game(data){
 			top = Math.floor(top.slice(0, top.length-2));
 
 		var h = ui.combatLogWrapper.height();
-		console.log(top);
-		console.log(h);
-		console.log(res.y);
+		//console.log(top);
+		//console.log(h);
+		//console.log(res.y);
 
 		if (top + h > res.y - 10){
-			console.log("overflow");
+			//console.log("overflow");
 			ui.combatLogWrapper.css("overflow", "auto").css("max-height", 500);
 		}
 		else {
-			console.log("fitting!");
+			//console.log("fitting!");
 		}
 	}
 
@@ -2353,7 +2370,7 @@ function Game(data){
 	}
 
 	this.resetImageData = function(){
-		console.log("resetImageData");
+		//console.log("resetImageData");
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setPreFireImage();
 			// if (!this.ships[i].ship){this.ships[i].setPreFireImage();}
@@ -2560,7 +2577,7 @@ function Game(data){
 		fxCtx.setTransform(1,0,0,1,0,0)
 		fxCtx.clearRect(0, 0, res.x, res.y);
 		fxCtx.translate(cam.o.x, cam.o.y);
-		fxCtx.scale(cam.z, cam.z)
+		fxCtx.scale(cam.z, cam.z);
 
 		if (!game.fireOrders[i].animating){
 			game.fireOrders[i].animating = 1;
@@ -2920,7 +2937,7 @@ function Game(data){
 	}
 
 	this.initReinforceTable = function(){
-		console.log("initReinforceTable");
+		//console.log("initReinforceTable");
 		$("#leftUnitWrapper").find("#reinforceBody").find(".requestReinforcements").each(function(i){
 			$(this)
 			.data("id", game.reinforcements[i]["id"])
@@ -2973,7 +2990,7 @@ function Game(data){
 		});
 	
 		for (var i = 0; i < this.ships.length; i++){
-			if (!this.ships[i].isReady){continue}
+			if (!this.ships[i].isReady || this.ships[i].obstacle){continue}
 
 			var type = "friendly";
 			if (this.ships[i].userid != game.userid){type = "hostile";}
@@ -3046,22 +3063,22 @@ function Game(data){
 
 		if (!l){return;}
 
-		console.log("l " + l);
+		//console.log("l " + l);
 
 		var widthNeed = (l)*(s+6) + 2;
 		var widthAvail = res.x - 245 - 40 - $(".chatWrapper").width();
 
-		console.log("need " + widthNeed);
-		console.log("avail " + widthAvail);
+		//console.log("need " + widthNeed);
+		//console.log("avail " + widthAvail);
 
 		if (widthNeed < widthAvail){
-			console.log("need < avail");
+			//console.log("need < avail");
 			ui.unitSelector.width(widthNeed).removeClass("disabled");
 		} 
 		else {
-			console.log("need > avail");
+			//console.log("need > avail");
 			widthNeed = Math.floor(widthAvail / (s+6)) * (s+6)+2;
-			console.log("need " + widthNeed);
+			//console.log("need " + widthNeed);
 			ui.unitSelector.width(widthNeed).removeClass("disabled");
 		}
 
@@ -3276,10 +3293,9 @@ Game.prototype.getUnitByClick = function(pos){
 	var max = 100;
 
 	for (var i = 0; i < this.ships.length; i++){
-		var r = Math.max(10, this.ships[i].size/5);
-		if (this.ships[i].destroyed){continue;}
-		if (!this.ships[i].isReady){continue;}
+		if (this.ships[i].destroyed || !this.ships[i].isReady){continue;}
 
+		var r = Math.max(10, this.ships[i].size/5);
 		var shipPos = this.ships[i].getDrawPos();
 		if (pos.x < shipPos.x + r && pos.x > shipPos.x - r){
 			if (pos.y > shipPos.y - r && pos.y < shipPos.y + r){
@@ -3291,10 +3307,79 @@ Game.prototype.getUnitByClick = function(pos){
 		}
 	}
 
-	if (!pick){
-		return false;
-	}
+	if (!pick){return false;}
 	return this.getUnit(pick).getParent();
+}
+
+Game.prototype.getObstructionPoint = function(fire){
+	var pick = fire.target.blocks[range(0, fire.target.blocks.length-1)];
+	return pick.path[2][range(0, 2)]
+
+}
+
+Game.prototype.setObstacleData = function(){
+	//console.log("setObstacleData");
+	return;
+	for (var i = 0; i < this.ships.length; i++){
+		if (this.ships[i].obstacle){continue;}
+		var oPos = this.ships[i].getGamePos();
+
+		for (var j = i+1; j < this.ships.length; j++){
+		if (this.ships[j].obstacle){continue;}
+			if (this.ships[i].userid == this.ships[j].userid){continue;}
+			var tPos = this.ships[j].getGamePos();
+
+			for (var k = 0; k < this.ships.length; k++){
+				if (!this.ships[k].obstacle){continue;}
+
+				var result = isInPath(oPos, tPos, this.ships[k].getPlannedPos(), this.ships[k].size/2);
+
+				if (!result){continue;}
+
+				var effectiveBlock = this.ships[k].block / 100 * Math.round(round((1-(result[1] / (this.ships[k].size/2))), 2)*100);
+
+				this.ships[i].blocks.push({id: this.ships[j].id, obstacleId: this.ships[k].id, dist: result[1], effectiveBlock: effectiveBlock, path: result});
+				this.ships[j].blocks.push({id: this.ships[i].id, obstacleId: this.ships[k].id, dist: result[1], effectiveBlock: effectiveBlock, path: result});
+
+			}
+		}
+	}
+
+	this.obstacleDataSet = 1;
+}
+
+Game.prototype.hasObstacleInVector = function(oPos, tPos){
+
+	var inPath = [];
+	for (var j = 0; j < this.ships.length; j++){
+		if (!this.ships[j].obstacle){continue;}
+		//if (this.ships[j].id != 24){continue;}
+
+		var result = isInPath(oPos, tPos, this.ships[j].getPlannedPos(), this.ships[j].size/2);
+		if (result){
+			//console.log(result);
+			var effectiveBlock = this.ships[j].block / 100 * Math.round(round((1-(result[1] / (this.ships[j].size/2))), 2)*100);	
+
+			inPath.push({
+				obstacleId: this.ships[j].id, 
+				dist: result[1],
+				size: this.ships[j].size,
+				effectiveBlock: Math.round(effectiveBlock),
+				exposure: Math.round(round((1-(result[1] / (this.ships[j].size/2))), 2)*100),
+				block: this.ships[j].block,
+			})
+		}
+	}
+	return inPath;
+}
+
+Ship.prototype.getSavedObstacles = function(shooterid){
+	for (var i = 0; i < this.blocks.length; i++){
+		if (this.blocks[i].id == shooterid){
+			return this.blocks[i];
+		}
+	}
+	return false;
 }
 
 Game.prototype.snapByTurnAttempt = function(pos){
@@ -3302,10 +3387,9 @@ Game.prototype.snapByTurnAttempt = function(pos){
 	var max = 100;
 
 	for (var i = 0; i < this.ships.length; i++){
-		var r = 5;
-
 		if (this.ships[i].destroyed){continue;}
 		if (!this.ships[i].isReady){continue;}
+		var r = 5;
 
 		var shipPos = this.ships[i].getDrawPos();
 		if (pos.x < shipPos.x + r && pos.x > shipPos.x - r){
@@ -3536,6 +3620,7 @@ Game.prototype.getFireDistance = function(a, b){
 Game.prototype.resolveDeploy = function(){
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].deployed = true;
+		if (this.ships[i].obstacle){continue;}
 		if (this.ships[i].available == this.turn){
 			this.ships[i].deployAnim = [0, game.animData.jump];
 			this.ships[i].deployed = false;
@@ -3731,6 +3816,7 @@ Game.prototype.doResolveMovement = function(){
 	this.animShip = 1;
 	this.animFlight = 0;
 	this.animSalvo = 0;
+	this.animObstacles = 0;
 
 	this.hideUI();
 

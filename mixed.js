@@ -483,15 +483,7 @@ Mixed.prototype.setPreFireImage = function(){
 }
 
 Mixed.prototype.setPreFireSize = function(){
-	if (this.salvo){return;}
-	console.log("setPreFireSize #" + this.id);
-	var max = 0;
-	for (var i = 0; i < this.structures.length; i++){
-		if (!this.structures[i].doDraw){continue;}
-		max = Math.max(max, Math.abs(this.structures[i].layout.x));
-		max = Math.max(max, Math.abs(this.structures[i].layout.y));
-	}
-	this.size = max + 20;
+	return;
 }
 
 Mixed.prototype.hasPatrolLayout = function(){
@@ -843,12 +835,12 @@ Mixed.prototype.readyForAnim = function(){
 			else {
 				this.actions[i].animated = 0;
 				if (i == 0 && action.type == "move"){
-					var v = new Vector({x: this.x, y: this.y}, {x: action.x, y: action.y});
+					var v = new MoveVector({x: this.x, y: this.y}, {x: action.x, y: action.y});
 					v.t = [0, action.dist * frameMod];
 					this.actions[i].v = v;
 				}
 				else if (action.type == "move"){
-					var v = new Vector({x: this.actions[i-1].x, y: this.actions[i-1].y}, {x: action.x, y: action.y});
+					var v = new MoveVector({x: this.actions[i-1].x, y: this.actions[i-1].y}, {x: action.x, y: action.y});
 						v.t = [0, action.dist * frameMod];
 					this.actions[i].v = v;
 				}

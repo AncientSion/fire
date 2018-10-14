@@ -25,6 +25,7 @@
 	<script src='classes.js'></script>
 	<script src='mixed.js'></script>
 	<script src='salvo.js'></script>
+	<script src='obstacle.js'></script>
 	<script src='flights.js'></script>
 	<script src='squaddie.js'></script>
 	<script src='squadron.js'></script>
@@ -619,11 +620,11 @@
 						if (game.ships[i].focus+1 > game.phase){continue;}
 						game.ships[i].setPostMovePosition();
 						game.ships[i].drawFacing = game.ships[i].getPlannedFacing();
-					}
+				1}
 */
-					game.animShip = 1; game.animFlight = 1; game.animSalvo = 1;
+					game.animShip = 1; game.animFlight = 1; game.animSalvo = 1; game.animObstacles = 1;
 					game.endMoveSubPhase();
-					game.animShip = 0; game.animFlight = 0; game.animSalvo = 0;
+					game.animShip = 0; game.animFlight = 0; game.animSalvo = 0; game.animObstacles = 0;
 
 					game.moveResolved();
 					game.draw();

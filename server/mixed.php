@@ -28,6 +28,10 @@ class Mixed extends Ship {
 		$this->setRemDelay($turn);
 	}	
 
+	public function setBonusNegation($turn){
+		return;
+	}
+
 	public function setSize(){
 		return;
 	}
@@ -111,12 +115,18 @@ class Mixed extends Ship {
 	public function getNewCrits($turn){
 		$crits = array();
 
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			for ($j = 0; $j < sizeof($this->structures[$i]->crits); $j++){
-				if ($this->structures[$i]->crits[$j]->new){
-					$crits[] = $this->structures[$i]->crits[$j];
+		if ($this->squad){
+			for ($k = 0; $k < sizeof($this->primary->systems); $k++){
+				for ($l = 0; $l < sizeof($this->primary->systems[$k]->crits); $l++){
+					if ($this->primary->systems[$k]->crits[$l]->new){
+						$crits[] = $this->primary->systems[$k]->crits[$l];
+					}// else break;
 				}
 			}
+		}
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$crits = array_merge($crits, $this->structures[$i]->getNewCrits($turn));
 		}
 		return $crits;
 	}
@@ -349,11 +359,9 @@ class Mixed extends Ship {
 		}
 	}
 
-	public function determineHits($fire){
+	public function determineHitso($fire){
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
-			if ($this->destroyed){
-				$fire->cancelShotResolution($i);
-			}
+			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
 			else {
 				$target = $this->getHitSystem($fire);
 				$fire->subtargetid = $target->id;
@@ -362,7 +370,7 @@ class Mixed extends Ship {
 					if ($target->jamming){
 						Debug::log("hit but active jammer ".$target->jamming);
 						$roll = mt_rand(1, 100);
-						if ($roll <= 20){
+						if ($roll <= $fire->target->jamming){
 							Debug::log("failed jamming roll ".$roll);
 							$fire->rolls[$i] *= -1;
 						}
@@ -380,6 +388,25 @@ class Mixed extends Ship {
 			}
 		}
 	}
+
+	public function determineHits($fire){
+		for ($i = 0; $i < sizeof($fire->rolls); $i++){
+			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
+			else {
+				$target = $this->getHitSystem($fire);
+				$fire->subtargetid = $target->id;
+				$fire->req = $fire->shooter->calculateToHit($fire);
+				if ($fire->rolls[$i] <= $fire->req){
+					if ($this->doTestDefenses($fire, $i, $target)){
+						$fire->hits++;
+						DmgCalc::doDmg($fire, $i, $target);
+					}
+				}
+			}
+		}
+	}
+
+
 
 	public function getHitChance($fire){
 		return $this->getStruct($fire->subtargetid)->getSubHitChance($fire);

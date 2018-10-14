@@ -52,6 +52,8 @@ function Ship(data){
 	this.moveAngles = {};
 	this.attachAnims = [];
 
+	this.blocks = [];
+
 	this.ship = data.ship;
 	this.flight = data.flight;
 	this.salvo = data.salvo;
@@ -1135,7 +1137,6 @@ Ship.prototype.setPreMovePosition = function(){
 
 Ship.prototype.setPostMovePosition = function(){
 	//console.log("setPostMovePosition");
-	//this.setPreMovePosition(); return;
 	if (!this.actions.length){return;}
 	this.drawX = this.actions[this.actions.length-1].x;
 	this.drawY = this.actions[this.actions.length-1].y;
@@ -1145,7 +1146,9 @@ Ship.prototype.animatesThisSegment = function(){
 	if (!this.toAnimate){return false;}
 	if (this.focus && !game.animFocus){return false;}
 	if ((this.ship || this.squad) && !game.animShip){return false;}
-	if (this.flight && !game.animFlight || this.salvo && !game.animSalvo){return false;}
+	if (this.flight && !game.animFlight){return false;}
+	if (this.salvo && !game.animSalvo){return false;}
+	if (this.obstacle && !game.animObstacles){return false;}
 	return true;
 }
 
@@ -3480,11 +3483,11 @@ Ship.prototype.readyForAnim = function(){
 		}
 		else {
 			if (i == 0){
-				var v = new Vector({x: this.x, y: this.y}, {x: action.x, y: action.y});
+				var v = new MoveVector({x: this.x, y: this.y}, {x: action.x, y: action.y});
 					v.t = [0, action.dist * frameMod];
 			}
 			else {
-				var v = new Vector({x: this.actions[i-1].x, y: this.actions[i-1].y}, {x: action.x, y: action.y});
+				var v = new MoveVector({x: this.actions[i-1].x, y: this.actions[i-1].y}, {x: action.x, y: action.y});
 					v.t = [0, action.dist * frameMod];
 			}
 

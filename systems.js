@@ -1956,7 +1956,6 @@ Weapon.prototype.hasUnresolvedFireOrder = function(){
 }
 
 Weapon.prototype.select = function(e){
-	console.log(this);
 	var unit;
 
 	if (game.sensorMode){
@@ -1985,6 +1984,7 @@ Weapon.prototype.select = function(e){
 		return false;
 	}
 	else {
+		console.log(this);
 		unit = game.getUnit(this.parentId);
 		if (unit.flight && !unit.cc.length || unit.ship && unit.hasSystemSelected("Sensor")){
 			return false;
@@ -2411,6 +2411,7 @@ Particle.prototype.getAnimation = function(fire){
 	gunDelay *= fraction;
 	shotDelay *= fraction;
 	
+	var roll = -1;
 	for (var i = 0; i < fire.guns; i++){
 		var gunAnims = [];
 		var o = fire.shooter.getWeaponOrigin(fire.systems[i]);
@@ -2418,90 +2419,26 @@ Particle.prototype.getAnimation = function(fire){
 		var oy = fire.shooter.drawY + o.y;
 
 		for (var j = 0; j < this.shots; j++){
+			roll++;
 			var hasHit = 0;
 			if (fire.hits[i] > j){
 				hasHit = 1;
 				hits++;
 			}
-			
-			var dest = fire.target.getFireDest(fire, hasHit, hits-1);
-			
-			var tx = t.x + dest.x;
-			var ty = t.y + dest.y;
 
-			var shotAnim = new ShotVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hasHit);
-				shotAnim.n = 0 - i*gunDelay - j*shotDelay;
+			var tx, ty;
 
-			gunAnims.push(shotAnim);
-
-			if (linked){
-				ox += range(3, 6) * range(0, 1) * -1;
-				oy += range(3, 6) * range(0, 1) * -1;
-				tx += range(3, 6) * range(0, 1) * -1;
-				ty += range(3, 6) * range(0, 1) * -1;
-				var shotAnim = new ShotVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hasHit);
-					shotAnim.n = 0 - i*gunDelay - j*shotDelay
-				gunAnims.push(shotAnim);
+			if (fire.rolls[roll] < 0 && fire.rolls[roll] > -100){
+				//console.log("obstacle roll");
+				var dest = game.getObstructionPoint(fire);
+				tx = dest.x;
+				ty = dest.y;
 			}
-		}
-		allAnims.push(gunAnims)
-	}
-
-	return allAnims;
-}
-Particle.prototype.getAnimationa = function(fire){
-	if (this.fireMode == "Flash"){return Flash.prototype.getAnimation.call(this, fire);}
-	if (this.fireMode == "ShockWave" && fire.target.ship){return Flash.prototype.getAnimation.call(this, fire);}
-
-	var allAnims = [];
-	var grouping = 2;
-	var speed = this.projSpeed;
-	var linked = this.linked -1;
-	var gunDelay = Math.max(20, this.shots * 10);
-	var shotDelay = 8;
-	var cc = 0;
-	var hits = 0;
-	var fraction = 1;
-	var t = fire.target.getDrawPos();
-		
-	if (game.isCloseCombat(fire.shooter, fire.target)){
-		cc = 1;
-		if (fire.shooter.ship || fire.shooter.squad){
-			fraction = 2;
-		}
-		else if (fire.shooter.flight){
-			grouping = 1;
-			gunDelay = 10;
-		}
-	}
-	else if (fire.dist < 200){
-		fraction = Math.min(3, 200 / fire.dist);
-	}
-	else if (fire.dist > 600){
-		fraction = Math.max(0.5, 600 / fire.dist);
-	}
-
-	speed /= fraction;
-	gunDelay *= fraction;
-	shotDelay *= fraction;
-	
-	for (var i = 0; i < fire.guns; i++){
-		var gunAnims = [];
-		var o = fire.shooter.getWeaponOrigin(fire.systems[i]);
-		var ox = fire.shooter.drawX + o.x;
-		var oy = fire.shooter.drawY + o.y;
-
-		for (var j = 0; j < this.shots; j++){
-			var hasHit = 0;
-			if (fire.hits[i] > j){
-				hasHit = 1;
-				hits++;
+			else {
+				var dest = fire.target.getFireDest(fire, hasHit, hits-1);
+				tx = t.x + dest.x;
+				ty = t.y + dest.y;
 			}
-			
-			var dest = fire.target.getFireDest(fire, hasHit, hits-1);
-			
-			var tx = t.x + dest.x;
-			var ty = t.y + dest.y;
 
 			var shotAnim = new ShotVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hasHit);
 				shotAnim.n = 0 - i*gunDelay - j*shotDelay;
@@ -2581,27 +2518,36 @@ Pulse.prototype.getAnimation = function(fire){
 		var ox = fire.shooter.drawX + o.x;
 		var oy = fire.shooter.drawY + o.y;
 
-
 		for (var j = 0; j < this.shots; j++){
 			roll++;
 			var hasHit = 0;
-			if (fire.rolls[roll] < fire.req[i]){
+			if (fire.hits[i] > j){
 				hasHit = 1;
 				hits++;
 			}
 
-			var dest = fire.target.getFireDest(fire, hasHit, hits-1);
-			var tx = t.x + dest.x;
-			var ty = t.y + dest.y
+			var tx, ty;
+
+			if (fire.rolls[roll] < 0 && fire.rolls[roll] > -100){
+				//console.log("obstacle roll");
+				var dest = game.getObstructionPoint(fire);
+				tx = dest.x;
+				ty = dest.y;
+			}
+			else {
+				var dest = fire.target.getFireDest(fire, hasHit, hits-1);
+				tx = t.x + dest.x;
+				ty = t.y + dest.y;
+			}
+
+
+			//var dest = fire.target.getFireDest(fire, hasHit, hits-1);
+			//var tx = t.x + dest.x;
+			//var ty = t.y + dest.y
 
 			var bonus = Math.max(0, Math.floor((fire.req[i] - fire.rolls[roll]) / this.grouping));
-			var subHits = hasHit * this.basePulses + Math.min(this.extraPulses, bonus);
-/*
-			console.log(fire.req[i]);
-			console.log(fire.rolls[roll]);
-			console.log((fire.req[i] - fire.rolls[roll]) / this.grouping);
-			console.log(subHits);
-*/
+			var subHits = hasHit * (this.basePulses + Math.min(this.extraPulses, bonus));
+
 			for (var k = 0; k < (this.basePulses + this.extraPulses); k++){
 				var devi = {x: range(-2, 2), y: range(-2, 2)};
 				var shotAnim = new ShotVector({x: ox, y: oy}, {x: tx + devi.x, y: ty + devi.y}, speed, (k < subHits));

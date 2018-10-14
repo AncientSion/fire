@@ -365,36 +365,6 @@ class Squadron extends Mixed {
 		}
 		return true;
 	}
-
-	public function getNewCrits($turn){
-		$crits = array();
-
-		for ($k = 0; $k < sizeof($this->primary->systems); $k++){
-			for ($l = 0; $l < sizeof($this->primary->systems[$k]->crits); $l++){
-				if ($this->primary->systems[$k]->crits[$l]->new){
-					$crits[] = $this->primary->systems[$k]->crits[$l];
-				}// else break;
-			}
-		}
-
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			$crits = array_merge($crits, $this->structures[$i]->getNewCrits($turn));
-		}
-		return $crits;
-	}
-
-	public function getNewDamages($turn){
-		$dmgs = array();
-
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			for ($j = 0; $j < sizeof($this->structures[$i]->damages); $j++){
-				if ($this->structures[$i]->damages[$j]->new){
-					$dmgs[] = $this->structures[$i]->damages[$j];
-				}
-			}
-		}
-		return $dmgs;
-	}
 	
 	public function getFocusCost(){
 		$cost = 0;

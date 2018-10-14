@@ -53,6 +53,30 @@ class Single {
 		return static::$value;
 	}
 
+	public function getNewCrits($turn){
+		$crits = array();
+
+		for ($i = 0; $i < sizeof($this->crits); $i++){
+			if ($this->crits[$i]->new){
+				$crits[] = $this->crits[$i];
+			}	
+		}
+
+		if ($this->squaddie){
+			for ($i = 0; $i < sizeof($this->structures); $i++){
+				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+					for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->crits); $k++){
+						if ($this->structures[$i]->systems[$j]->crits[$k]->new){
+							$crits[] = $this->structures[$i]->systems[$j]->crits[$k];
+						}
+					}
+				}
+			}
+		}
+		
+		return $crits;
+	}
+
 	public function getId(){
 		$this->index++;
 		return $this->index;

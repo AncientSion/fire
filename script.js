@@ -11,7 +11,7 @@ function initCanvas(){
 }
 
 function sizeCanvas(){
-	console.log("sizeCanvas");
+	//console.log("sizeCanvas");
 	var canv = document.getElementsByClassName("gameCanvas");
 
 	for (var i = 0; i < canv.length; i++){
@@ -27,7 +27,7 @@ function sizeCanvas(){
 }
 
 function scopeCanvas(){
-	console.log("scopeCanvas");
+	//console.log("scopeCanvas");
 	var canv = document.getElementsByClassName("gameCanvas");
 
 	canvas = canv[0];
@@ -57,8 +57,6 @@ function scopeCanvas(){
 	fxCtx.textAlign = "center";
 	ctx.font = "26px Arial";
 	ctx.textAlign = "center";
-
-
 }
 
 function init(data){
@@ -122,7 +120,7 @@ function mouseCanvasZoom(e){
 
 function handleWeaponAimEvent(shooter, target, e, pos){
 
-	if (shooter.userid == target.userid || target && target.isDestroyed()){
+	if (shooter.userid == target.userid || target && (target.isDestroyed() || target.obstacle)){
 		ui.aimDiv.hide();
 		return;
 	}
@@ -151,14 +149,8 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	if (target && !drop){
 		var multi = 1;
 		if (target.userid != shooter.userid){
-			if (game.target == target.id){
-				//console.log("breaking");
-				return;
-			}
-			else {
-				game.target = target.id;
-				//console.log("setting");
-			}
+			if (game.target == target.id){return;}
+			else game.target = target.id;			
 
 			var baseHit;
 			var impulse;
@@ -171,7 +163,8 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			var target;
 			var section;
 			var angle;
-			var shooterAngle = addAngle(facing, getAngleFromTo(shooterPos, target.getPlannedPos()));
+			var targetPos = target.getPlannedPos()
+			var shooterAngle = addAngle(facing, getAngleFromTo(shooterPos, targetPos));
 
 			//dist = Math.max(50, game.getFireDistance(shooter, target));
 			dist = game.getFireDistance(shooter, target);
@@ -255,7 +248,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			var jamming = target.hasPassiveJamming();
 		
 			if (jamming){
-				ui.targetDataC.html("---- Passing jamming detected (<span class='yellow'>" + target.getJammerStrength() + " % chance to miss</span>) ----").show();
+				ui.targetDataC.html("---- Passing jamming detected (<span class='yellow'>" + target.getJammerStrength() + "% chance to miss</span>) ----").show();
 			} else ui.targetDataC.empty();
 		}
 	}
@@ -327,6 +320,28 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 						.html("- Targeting a mixed unit, chance to hit will slightly difer -")));
 		}
 
+	/*
+	var obstacles;
+	if (game.obstacleDataSet){
+		obstacles = target.getSavedObstacles(shooter.id);
+	}
+	else obstacles = game.hasObstacleInVector(shooterPos, pos);
+	*/ 
+
+	var obstacles = game.hasObstacleInVector(shooterPos, pos);
+
+	if (obstacles.length){
+		var html = "";
+		for (var i = 0; i < obstacles.length; i++){
+			//html += "Roid #" + obstacles[i].id + ", size " + obstacles[i].size + ", dist " + obstacles[i].dist + ", density " + obstacles[i].density + "% </br>";
+			//html += "Actual effect <span class='yellow'>" + Math.ceil(obstacles[i].block / 100 * obstacles[i].density) + " % chance to miss</span></br></br>";
+			html += "Obstacle #" + obstacles[i].obstacleId + " - Exposure " + obstacles[i].exposure + "%, ";
+			html += "<span class='yellow'>" + obstacles[i].effectiveBlock + "% chance to miss</span></br>";
+		}
+		ui.targetDataC.html(html).show();
+	} else ui.targetDataC.empty();
+			
+
 		for (var i = 0; i < active.length; i++){
 			var system = active[i].getSystem();
 			var inArc = 1;
@@ -368,8 +383,9 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 
 			weaponInfo.append(row);
 		}
-	}
-				
+	}		
+
+	drawAimVector(shooterPos, targetPos || pos);
 	var w = $(ui.aimDiv).width()/2;
 	var top = (e.clientY) + 100;
 	var left = (e.clientX) - w;

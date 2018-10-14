@@ -22,10 +22,6 @@ function getAngleFromTo(a, b){
 	return radianToDegree(Math.atan2(b.y-a.y, b.x-a.x));;
 }
 
-function getAngle(ax, ay, bx, by){
-	return radianToDegree(Math.atan2(by-ay, bx-ax));;
-} 
-
 function addAngle(f, a){
 	ret = 360 - f + a;
 	while (ret > 360){
@@ -36,6 +32,121 @@ function addAngle(f, a){
 	}
 	//console.log(ret);
 	return ret;
+}
+
+function mag(v){
+	return Math.sqrt(v.x * v.x + v.y * v.y);
+}
+
+function norm(v){
+	var m = mag(v);
+	return {x: v.x/m, y: v.y/m};
+}
+
+function dot(a, b){
+	return (a.x * b.x) + (a.y * b.y); 
+}
+
+// GEOMETRIC function to get the intersections
+function isInPath(shooter, target, obstacle, size) {
+	// Calculate the euclidean distance between a & b
+	var shooterToTargetDist = Math.sqrt( Math.pow(target.x-shooter.x, 2) + Math.pow(target.y-shooter.y, 2) );
+	var shooterToObstacleDist = Math.sqrt( Math.pow(obstacle.x-shooter.x, 2) + Math.pow(obstacle.y-shooter.y, 2) );
+
+	// compute the direction vector d from a to b
+	var d = {x: (target.x-shooter.x)/shooterToTargetDist, y: (target.y-shooter.y)/shooterToTargetDist};
+
+	// Now the line equation is x = dx*t + ax, y = dy*t + ay with 0 <= t <= 1.
+
+	// compute the value t of the closest point to the circle center (cx, cy)
+	var t = (d.x * (obstacle.x-shooter.x)) + (d.y * (obstacle.y-shooter.y));
+
+	// compute the coordinates of the point e on line and closest to c
+	var closestPoint = {x: round(t * d.x + shooter.x), y: round(t * d.y + shooter.y)};
+	var dist = Math.floor(getDistance(obstacle, closestPoint));
+	//console.log(dist);
+	if (shooterToTargetDist < shooterToObstacleDist - size){
+		return false;
+	}
+	else if (dist < size){
+		var points = [closestPoint];
+
+		var distToClosestIntersection = Math.sqrt( Math.pow(size, 2) - Math.pow(dist, 2));
+
+		if (distToClosestIntersection <= size){
+		    points.push({
+		    	x: round(((t-distToClosestIntersection) * d.x) + shooter.x),
+		    	y: round(((t-distToClosestIntersection) * d.y) + shooter.y)
+		    });
+
+		    points.push({
+		    	x: round(((t+distToClosestIntersection) * d.x) + shooter.x),
+		    	y: round(((t+distToClosestIntersection) * d.y) + shooter.y)
+		    });
+
+			return [true, dist, points];
+		}
+	}
+	return false;
+}
+
+// GEOMETRIC function to get the intersections
+function getIntersectioans(a, b, c, size) {
+	// Calculate the euclidean distance between a & b
+	eDistAtoB = Math.sqrt( Math.pow(b.x-a.x, 2) + Math.pow(b.y-a.y, 2) );
+
+	// compute the direction vector d from a to b
+	d = {x: (b.x-a.x)/eDistAtoB, y: (b.y-a.y)/eDistAtoB};
+
+	// Now the line equation is x = dx*t + ax, y = dy*t + ay with 0 <= t <= 1.
+
+	// compute the value t of the closest point to the circle center (cx, cy)
+	t = (d.x * (c.x-a.x)) + (d.y * (c.y-a.y));
+
+	// compute the coordinates of the point e on line and closest to c
+    var e = {coords:[], onLine:false};
+	e.coords.x = (t * d.x) + a.x;
+	e.coords.y = (t * d.y) + a.y;
+
+	// Calculate the euclidean distance between c & e
+	eDistCtoE = Math.sqrt( Math.pow(e.coords.x-c.x, 2) + Math.pow(e.coords.y-c.y, 2) );
+
+	// test if the line intersects the circle
+	if( eDistCtoE < size ) {
+		// compute distance from t to circle intersection point
+	    dt = Math.sqrt( Math.pow(size, 2) - Math.pow(eDistCtoE, 2));
+
+	    // compute first intersection point
+	    var f = {coords:[], onLine:false};
+	    f.coords.x = ((t-dt) * d.x) + a.x;
+	    f.coords.y = ((t-dt) * d.y) + a.y;
+	    // check if f lies on the line
+	    f.onLine = is_on(a,b,f.coords);
+
+	    // compute second intersection point
+	    var g = {coords:[], onLine:false};
+	    g.coords.x = ((t+dt) * d.x) + a.x;
+	    g.coords.y = ((t+dt) * d.y) + a.y;
+	    // check if g lies on the line
+	    g.onLine = is_on(a,b,g.coords);
+
+		return {points: {intersection1:f, intersection2:g}, pointOnLine: e};
+
+	} else if (parseInt(eDistCtoE) === parseInt(size)) {
+		// console.log("Only one intersection");
+		return {points: false, pointOnLine: e};
+	} else {
+		// console.log("No intersection");
+		return {points: false, pointOnLine: e};
+	}
+}
+
+// BASIC GEOMETRIC functions
+function distance(a,b) {
+	return Math.sqrt( Math.pow(a.x-b.x, 2) + Math.pow(a.y-b.y, 2) )
+}
+function is_on(a, b, c) {
+	return distance(a,c) + distance(c,b) == distance(a,b);
 }
 
 function addToDirection(current, add){
