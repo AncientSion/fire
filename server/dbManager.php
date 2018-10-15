@@ -879,13 +879,13 @@
 			$rocks = array();
 
 			for ($i = 1; $i <= 6; $i++){
-				Debug::log("rock ".$i);
+				//Debug::log("rock ".$i);
 				
 				$attempts = 3;
 
 				while ($attempts){
 					$attempts--;
-					Debug::log("attempts left ".$attempts);
+					//Debug::log("attempts left ".$attempts);
 					$x = mt_rand(100, 400) * (1 - (mt_rand(0, 1)*2));
 					$y = mt_rand(100, 500) * (1 - (mt_rand(0, 1)*2));
 					$size = mt_rand(50, 200);
@@ -896,8 +896,8 @@
 						$dist = Math::getDist($rocks[$j][0], $rocks[$j][1], $x, $y);
 
 
-						if ($dist + $size/2 < $rocks[$j][2]){
-							Debug::log("retry, dist $dist, size $size, next $rocks[$j][2])");
+						if ($dist + $size/2 < $rocks[$j][4]){
+							//Debug::log("retry, dist $dist, size $size, next $rocks[$j][2])");
 							$redo = 1;
 							break;
 						}
@@ -907,52 +907,48 @@
 						continue;
 					} else $attempts = 0;
 
-					$vector = mt_rand(0, 360);
+					$facing = mt_rand(0, 360);
 					$speed = floor(mt_rand(30, 60) / 50 * $size);
-					$rocks[] = array($x, $y, $size, $vector, $speed);
-					Debug::log("!!!!!!!!!!!!!");
-
-					$sql = "INSERT into UNITS values (0, $gameid, 0, 0, 'Obstacle', '', 0, 0, 'deployed', 0, 1, 0, 0, 0, $x, $y, $vector, $size, $speed, 0, 0, 0, 1, -1, 0, '')";
-					Debug::log($sql);
-					$result = $this->query($sql);
+					$rocks[] = array($x, $y, $facing, $speed, $size);
 				}
 			}
 
 
-
+			Debug::log("rocks ".sizeof($rocks));
 			$stmt = $this->connection->prepare("
 				INSERT INTO units
 				(gameid, name, status, x, y, facing, delay, thrust, turn, phase)
 				VALUES
-				(:gameid, :name, :status, :x, :y, :facing, :delay, :thrust, :turn, :phase)
+				(:gameid, 'Obstacle', 'deployed', :x, :y, :facing, :delay, :thrust, 1, -1)
 			");
 
-			$status = "deployed";
-			$turn = 1;
-			$phase = -1;
-
 			for ($i = 0; $i < sizeof($rocks); $i++){
-				$status = "active";
-				$turn = 1;
+				Debug::log("insert rock ".$i);
 
-				$stmt->bindParam(":status", $status);
-				$stmt->bindParam(":turn", $turn);
 				$stmt->bindParam(":gameid", $gameid);
+				$stmt->bindParam(":x", $rocks[$i][0]);
+				$stmt->bindParam(":y", $rocks[$i][1]);
+				$stmt->bindParam(":facing", $rocks[$i][2]);
+				$stmt->bindParam(":thrust", $rocks[$i][3]);
+				$stmt->bindParam(":delay", $rocks[$i][4]);
 
 				$stmt->execute();
 
 				if ($stmt->errorCode() == 0){
-					$this->setStartGamePlayerStatus($gameid);
-					return true;
-				}
+					continue;
+				} else return false;
 			}
+
+			return true;
 		}
 
 
 		public function startGame($gameid){
 			Debug::log("startGame #".$gameid);
 
-			$this->createObstacles($gameid);
+			if (!$this->createObstacles($gameid)){
+				return false;
+			}
 
 
 			$stmt = $this->connection->prepare("
