@@ -428,6 +428,7 @@ class Ship {
 		return array(
 			"id" => $this->id,
 			"withdraw" => $this->withdraw,
+			"manual" => $this->manual,
 			"destroyed" => $this->destroyed,
 			"x" => $this->actions[sizeof($this->actions)-1]->x,
 			"y" => $this->actions[sizeof($this->actions)-1]->y,

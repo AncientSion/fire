@@ -908,7 +908,7 @@
 					} else $attempts = 0;
 
 					$facing = mt_rand(0, 360);
-					$speed = floor(mt_rand(30, 60) / 50 * $size);
+					$speed = floor(mt_rand(30, 60) / $size * 50);
 					$rocks[] = array($x, $y, $facing, $speed, $size);
 				}
 			}
