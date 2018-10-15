@@ -875,17 +875,17 @@
 
 
 		public function createObstacles($gameid){
-			//Debug::log("createObstacles #".$gameid);
+			Debug::log("createObstacles #".$gameid);
 			$rocks = array();
 
 			for ($i = 1; $i <= 6; $i++){
-				//Debug::log("rock ".$i);
+				Debug::log("rock ".$i);
 				
 				$attempts = 3;
 
 				while ($attempts){
 					$attempts--;
-					//Debug::log("attempts left ".$attempts);
+					Debug::log("attempts left ".$attempts);
 					$x = mt_rand(100, 400) * (1 - (mt_rand(0, 1)*2));
 					$y = mt_rand(100, 500) * (1 - (mt_rand(0, 1)*2));
 					$size = mt_rand(50, 200);
@@ -897,7 +897,7 @@
 
 
 						if ($dist + $size/2 < $rocks[$j][2]){
-							//Debug::log("retry, dist $dist, size $size, next $rocks[$j][2])");
+							Debug::log("retry, dist $dist, size $size, next $rocks[$j][2])");
 							$redo = 1;
 							break;
 						}
@@ -910,12 +910,13 @@
 					$vector = mt_rand(0, 360);
 					$speed = floor(mt_rand(30, 60) / 50 * $size);
 					$rocks[] = array($x, $y, $size, $vector, $speed);
-					//Debug::log("!!!!!!!!!!!!!");
+					Debug::log("!!!!!!!!!!!!!");
 
 					$sql = "INSERT into UNITS values (0, $gameid, 0, 0, 'Obstacle', '', 0, 0, 'deployed', 0, 1, 0, 0, 0, $x, $y, $vector, $size, $speed, 0, 0, 0, 1, -1, 0, '')";
 					$result = $this->query($sql);
 				}
 			}
+			Debug::log("done!");
 		}
 
 
