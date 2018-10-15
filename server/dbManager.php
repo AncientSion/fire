@@ -917,7 +917,35 @@
 					$result = $this->query($sql);
 				}
 			}
-			Debug::log("done!");
+
+
+
+			$stmt = $this->connection->prepare("
+				INSERT INTO units
+				(gameid, name, status, x, y, facing, delay, thrust, turn, phase)
+				VALUES
+				(:gameid, :name, :status, :x, :y, :facing, :delay, :thrust, :turn, :phase)
+			");
+
+			$status = "deployed";
+			$turn = 1;
+			$phase = -1;
+
+			for ($i = 0; $i < sizeof($rocks); $i++){
+				$status = "active";
+				$turn = 1;
+
+				$stmt->bindParam(":status", $status);
+				$stmt->bindParam(":turn", $turn);
+				$stmt->bindParam(":gameid", $gameid);
+
+				$stmt->execute();
+
+				if ($stmt->errorCode() == 0){
+					$this->setStartGamePlayerStatus($gameid);
+					return true;
+				}
+			}
 		}
 
 
