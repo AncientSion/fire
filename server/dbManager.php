@@ -907,23 +907,27 @@
 						continue;
 					} else $attempts = 0;
 
+					$speedMulti = 1 / $size * 125;
+
 					$facing = mt_rand(0, 360);
-					$speed = floor(mt_rand(30, 60) / $size * 50);
-					$rocks[] = array($x, $y, $facing, $speed, $size);
+					$speed = floor(mt_rand(30, 70) * $speedMulti);
+					$interference = mt_rand(40, 70);
+					$collision = mt_rand(40, 60);
+					$rocks[] = array($x, $y, $facing, $speed, $size, $interference, $collision);
 				}
 			}
 
 
-			Debug::log("rocks ".sizeof($rocks));
+			//Debug::log("rocks ".sizeof($rocks));
 			$stmt = $this->connection->prepare("
 				INSERT INTO units
-				(gameid, name, status, x, y, facing, delay, thrust, turn, phase)
+				(gameid, name, status, x, y, facing, delay, thrust, rolling, rolled, turn, phase)
 				VALUES
-				(:gameid, 'Obstacle', 'deployed', :x, :y, :facing, :delay, :thrust, 1, -1)
+				(:gameid, 'Obstacle', 'deployed', :x, :y, :facing, :delay, :thrust, :rolling, :rolled, 1, -1)
 			");
 
 			for ($i = 0; $i < sizeof($rocks); $i++){
-				Debug::log("insert rock ".$i);
+				//Debug::log("insert rock ".$i.", rolling: ".$rocks[$i][5]);
 
 				$stmt->bindParam(":gameid", $gameid);
 				$stmt->bindParam(":x", $rocks[$i][0]);
@@ -931,6 +935,8 @@
 				$stmt->bindParam(":facing", $rocks[$i][2]);
 				$stmt->bindParam(":thrust", $rocks[$i][3]);
 				$stmt->bindParam(":delay", $rocks[$i][4]);
+				$stmt->bindParam(":rolling", $rocks[$i][5]);
+				$stmt->bindParam(":rolled", $rocks[$i][6]);
 
 				$stmt->execute();
 

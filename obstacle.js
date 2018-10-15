@@ -2,6 +2,7 @@ function Obstacle(data){
 	Mixed.call(this, data);
 	this.size = data.size;
 	this.block = data.block;
+	this.collision = data.collision;
 }
 Obstacle.prototype = Object.create(Mixed.prototype);
 
@@ -85,8 +86,9 @@ Obstacle.prototype.getShortInfo = function(){
 
 	ele
 	.append(this.getHeader())
-	.append($("<div>").html("Obfuscation " + this.block + "%"))
-	.append($("<div>").html("Speed " + this.getCurSpeed() + " / " + this.facing + " degree"));
+	.append($("<div>").html("Interference " + this.block + "%"))
+	.append($("<div>").html("Collision " + this.collision + "%"))
+	.append($("<div>").html("Speed " + this.getCurSpeed()));
 }
 
 Obstacle.prototype.getHeader = function(){
@@ -124,7 +126,10 @@ Obstacle.prototype.createBaseDiv = function(){
 			.append($("<td>").html("Speed"))
 			.append($("<td>").html(this.getCurSpeed())))
 		.append($("<tr>")
-			.append($("<td>").html("Center Obfuscation"))
+			.append($("<td>").html("Base Interference Chance"))
+			.append($("<td>").html(this.block + "%")))
+		.append($("<tr>")
+			.append($("<td>").html("Base Collision Chance"))
 			.append($("<td>").html(this.block + "%")))
 
 	div.append(table);
@@ -165,14 +170,9 @@ Obstacle.prototype.expandDiv = function(div){
 
 	var iconWidth = 100;
 	var iconHeight = 100;
-
 	$(structContainer)
 	.append($("<div>")
 		.addClass("obstacle")
-		.css("width", width/2)
-		.css("height", height/2)
-		.css("left", width/2 - iconWidth/2)
-		.css("top", height/2 - iconHeight/2)
 		.append(this.structures[0].getBaseImage().cloneNode(true)))
 
 

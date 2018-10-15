@@ -1141,7 +1141,7 @@ div.integrityFull {
 	border-radius: 5px;
 	z-index: 10;
 	background-color: black;
-	width: 200px;
+	width: 250px;
 }
 
 .obstacleDiv table {
@@ -1149,17 +1149,18 @@ div.integrityFull {
 }
 
 .obstacle {
-	position: absolute;
+	margin: auto;
+	width: 100px;
 }
 
 .obstacleDiv .structContainer {
-	height: 200px;
-	width: 200px;
+	height: 100px;
+	width: 100%;
 }
 
 .obstacle img {
-	width: 100%;
-	height: 100%;
+	width: 100px;
+	height: 100px;
 }
 
 .shipDiv {

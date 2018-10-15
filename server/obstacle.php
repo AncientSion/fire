@@ -6,12 +6,14 @@ class Obstacle extends Mixed {
 	public $display = "Asteroid Swarm";
 	public $obstacle = 1;
 	public $traverse = 10;
-	public $block = 60;
+	public $block = 0;
+	public $collision = 0;
 
 	function __construct($data = false){
         parent::__construct($data);
         $this->size = $data["delay"];
-        $this->delay = 0;
+        $this->block = $data["rolling"];
+        $this->collision = $data["rolled"];
 	}
 
 	function addAllSystems(){
@@ -20,7 +22,7 @@ class Obstacle extends Mixed {
 
 	public function addStructures(){
 		$amount = floor($this->size/10);
-		Debug::log("add ".$amount);
+		//Debug::log("add ".$amount);
 		for ($i = 1; $i <= $amount; $i++){
 			$this->structures[] = new Asteroid(0, 0);
 		}

@@ -60,6 +60,8 @@ function scopeCanvas(){
 }
 
 function init(data){
+	if (data.turn == -1){window.location = "lobby.php"; return;}
+
 	console.time("time");
 
 	res.x = window.innerWidth-1;
