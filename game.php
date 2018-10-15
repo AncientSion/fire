@@ -79,6 +79,9 @@
 			<div class="options drawHostileEW">
 				<img src=sysIcons/Sensor.png style="background-color: red">
 			</div>
+			<div class="options drawObstaclesMoves">
+				<img src=sysIcons/Sensor.png style="background-color: red">
+			</div>
 			<div class="options drawMoves">
 				<img src=varIcons/plan.png>
 			</div>

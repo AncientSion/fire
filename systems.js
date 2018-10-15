@@ -2404,7 +2404,7 @@ Particle.prototype.getAnimation = function(fire){
 		fraction = Math.min(3, 200 / fire.dist);
 	}
 	else if (fire.dist > 600){
-		fraction = Math.max(0.5, 600 / fire.dist);
+		fraction = Math.min(0.8, 600 / fire.dist);
 	}
 
 	speed /= fraction;
@@ -2421,21 +2421,21 @@ Particle.prototype.getAnimation = function(fire){
 		for (var j = 0; j < this.shots; j++){
 			roll++;
 			var hasHit = 0;
-			if (fire.hits[i] > j){
-				hasHit = 1;
-				hits++;
-			}
-
+			var dest;
 			var tx, ty;
 
-			if (fire.rolls[roll] < 0 && fire.rolls[roll] > -100){
-				//console.log("obstacle roll");
-				var dest = game.getObstructionPoint(fire);
+			if (fire.rolls[roll] < 0 && fire.rolls[roll] > -100){ // jam
+				dest = game.getObstructionPoint(fire);
 				tx = dest.x;
 				ty = dest.y;
 			}
 			else {
-				var dest = fire.target.getFireDest(fire, hasHit, hits-1);
+				if (fire.rolls[roll] >= 0 && fire.rolls[roll] < fire.req[i]){ // hit
+					hasHit = 1;
+					hits++;
+				}
+
+				dest = fire.target.getFireDest(fire, hasHit, hits-1);
 				tx = t.x + dest.x;
 				ty = t.y + dest.y;
 			}

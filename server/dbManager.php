@@ -878,7 +878,7 @@
 			Debug::log("createObstacles #".$gameid);
 			$rocks = array();
 
-			for ($i = 1; $i <= 6; $i++){
+			for ($i = 1; $i <= 4; $i++){
 				//Debug::log("rock ".$i);
 				
 				$attempts = 3;
@@ -911,8 +911,8 @@
 
 					$facing = mt_rand(0, 360);
 					$speed = floor(mt_rand(30, 70) * $speedMulti);
-					$interference = mt_rand(40, 70);
-					$collision = mt_rand(40, 60);
+					$interference = mt_rand(15, 40);
+					$collision = mt_rand(20, 80);
 					$rocks[] = array($x, $y, $facing, $speed, $size, $interference, $collision);
 				}
 			}

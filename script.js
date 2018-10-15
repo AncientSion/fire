@@ -122,7 +122,7 @@ function mouseCanvasZoom(e){
 
 function handleWeaponAimEvent(shooter, target, e, pos){
 
-	if (shooter.userid == target.userid || target && (target.isDestroyed() || target.obstacle)){
+	if (shooter.userid == target.userid || target && (target.isDestroyed())){
 		ui.aimDiv.hide();
 		return;
 	}
@@ -148,7 +148,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 		}
 	}
 	
-	if (target && !drop){
+	if (target && !drop && !target.obstacle){
 		var multi = 1;
 		if (target.userid != shooter.userid){
 			if (game.target == target.id){return;}
@@ -335,9 +335,9 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	if (obstacles.length){
 		var html = "";
 		for (var i = 0; i < obstacles.length; i++){
-			//html += "Roid #" + obstacles[i].id + ", size " + obstacles[i].size + ", dist " + obstacles[i].dist + ", density " + obstacles[i].density + "% </br>";
-			//html += "Actual effect <span class='yellow'>" + Math.ceil(obstacles[i].block / 100 * obstacles[i].density) + " % chance to miss</span></br></br>";
-			html += "Obstacle #" + obstacles[i].obstacleId + " - Exposure " + obstacles[i].exposure + "%, ";
+			//html += "Obstacle #" + obstacles[i].obstacleId + " - Exposure " + obstacles[i].exposure + "%, ";
+			//html += "<span class='yellow'>" + obstacles[i].effectiveBlock + "% chance to miss</span></br>";
+			html += "Obstacle #" + obstacles[i].obstacleId + ", penetration need: " + obstacles[i].dist + " --- ";
 			html += "<span class='yellow'>" + obstacles[i].effectiveBlock + "% chance to miss</span></br>";
 		}
 		ui.targetDataC.html(html).show();

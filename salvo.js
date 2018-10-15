@@ -59,13 +59,11 @@ Salvo.prototype.createBaseDiv = function(){
 	var div = $("<div>")
 			.addClass("ammoDiv " + owner + " disabled")
 			.data("shipId", this.id)
-			/*.contextmenu(function(e){
+			.contextmenu(function(e){
 				e.stopImmediatePropagation(); e.preventDefault();
-				if ($(this).data("shipId") != aUnit){
-					game.zIndex--;
-					$(this).addClass("disabled");
-				}
-			})*/
+				game.zIndex--;
+				$(this).addClass("disabled");
+			});
 
 
 	this.element = div;

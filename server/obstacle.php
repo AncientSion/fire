@@ -21,10 +21,9 @@ class Obstacle extends Mixed {
 	}
 
 	public function addStructures(){
-		$amount = floor($this->size/10);
-		//Debug::log("add ".$amount);
+		$amount = ceil(20 * $this->size / 4 * $this->block / 250 * $this->collision) / 100;
 		for ($i = 1; $i <= $amount; $i++){
-			$this->structures[] = new Asteroid(0, 0);
+			$this->structures[] = new Asteroid($this->size, $amount);
 		}
 	}
 	
@@ -70,11 +69,11 @@ class Obstacle extends Mixed {
 			"manual" => $this->manual,
 			"x" => $this->actions[sizeof($this->actions)-1]->x,
 			"y" => $this->actions[sizeof($this->actions)-1]->y,
-			"delay" => 0,
 			"facing" => $this->facing,
 			"thrust" => $this->getCurSpeed(),
-			"rolling" => $this->isRolling(),
-			"rolled" => $this->isRolled(),
+			"delay" => $this->size,
+			"rolling" => $this->block,
+			"rolled" => $this->collision,
 			"flipped" => $this->flipped,
 			"status" => $this->status,
 			"notes" => "",
@@ -86,11 +85,10 @@ class Asteroid {
 	public $size;
 	public $layout;
 	public $systems = array();
-	public $cirts = array();
+	public $crits = array();
 
-	function __construct($x, $y){
-		$this->layout = new Point($x, $y);
-		$this->size = mt_rand(30, 70);
+	function __construct($parentSize, $amount){
+		$this->size = mt_rand(10, 30) / 100 * $parentSize;
 	}
 }
 ?>

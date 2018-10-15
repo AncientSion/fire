@@ -10,6 +10,8 @@ class Mixed extends Ship {
 	public $turnAngle = 0;
 	public $slipAngle = 0;
 	public $turnStep = 0;
+	
+	public $critEffects =  array();
 
 	function __construct($data = false){
         parent::__construct($data);

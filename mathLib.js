@@ -48,7 +48,7 @@ function dot(a, b){
 }
 
 // GEOMETRIC function to get the intersections
-function isInPath(shooter, target, obstacle, size) {
+function isInPatha(shooter, target, obstacle, size) {
 	// Calculate the euclidean distance between a & b
 	var shooterToTargetDist = Math.sqrt( Math.pow(target.x-shooter.x, 2) + Math.pow(target.y-shooter.y, 2) );
 	var shooterToObstacleDist = Math.sqrt( Math.pow(obstacle.x-shooter.x, 2) + Math.pow(obstacle.y-shooter.y, 2) );
@@ -91,62 +91,59 @@ function isInPath(shooter, target, obstacle, size) {
 }
 
 // GEOMETRIC function to get the intersections
-function getIntersectioans(a, b, c, size) {
+function isInPath(a, b, c, size) {
 	// Calculate the euclidean distance between a & b
-	eDistAtoB = Math.sqrt( Math.pow(b.x-a.x, 2) + Math.pow(b.y-a.y, 2) );
+	var eDistAtoB = Math.sqrt( Math.pow(b.x-a.x, 2) + Math.pow(b.y-a.y, 2) );
 
 	// compute the direction vector d from a to b
-	d = {x: (b.x-a.x)/eDistAtoB, y: (b.y-a.y)/eDistAtoB};
+	var d = {x: (b.x-a.x)/eDistAtoB, y: (b.y-a.y)/eDistAtoB};
 
 	// Now the line equation is x = dx*t + ax, y = dy*t + ay with 0 <= t <= 1.
 
 	// compute the value t of the closest point to the circle center (cx, cy)
-	t = (d.x * (c.x-a.x)) + (d.y * (c.y-a.y));
+	var t = (d.x * (c.x-a.x)) + (d.y * (c.y-a.y));
 
 	// compute the coordinates of the point e on line and closest to c
     var e = {coords:[], onLine:false};
-	e.coords.x = (t * d.x) + a.x;
-	e.coords.y = (t * d.y) + a.y;
+		e.x = (t * d.x) + a.x;
+		e.y = (t * d.y) + a.y;
 
 	// Calculate the euclidean distance between c & e
-	eDistCtoE = Math.sqrt( Math.pow(e.coords.x-c.x, 2) + Math.pow(e.coords.y-c.y, 2) );
+	var eDistCtoE = Math.sqrt( Math.pow(e.x-c.x, 2) + Math.pow(e.y-c.y, 2) );
 
 	// test if the line intersects the circle
-	if( eDistCtoE < size ) {
+	if (eDistCtoE <= size ) {
+	
+		//console.log("eDistCtoE " + eDistCtoE + " below size " + size);
 		// compute distance from t to circle intersection point
-	    dt = Math.sqrt( Math.pow(size, 2) - Math.pow(eDistCtoE, 2));
+		var dt = Math.sqrt( Math.pow(size, 2) - Math.pow(eDistCtoE, 2));
 
-	    // compute first intersection point
-	    var f = {coords:[], onLine:false};
-	    f.coords.x = ((t-dt) * d.x) + a.x;
-	    f.coords.y = ((t-dt) * d.y) + a.y;
-	    // check if f lies on the line
-	    f.onLine = is_on(a,b,f.coords);
+		var f = {x: 0, y: 0, onLine: false};
+			f.x = ((t-dt) * d.x) + a.x;
+			f.y = ((t-dt) * d.y) + a.y;
+			f.onLine = is_on( a, b, f);
 
-	    // compute second intersection point
-	    var g = {coords:[], onLine:false};
-	    g.coords.x = ((t+dt) * d.x) + a.x;
-	    g.coords.y = ((t+dt) * d.y) + a.y;
-	    // check if g lies on the line
-	    g.onLine = is_on(a,b,g.coords);
+		var g = {x: 0, y: 0, onLine: false};
+			g.x = ((t+dt) * d.x) + a.x;
+			g.y = ((t+dt) * d.y) + a.y;
+			g.onLine = is_on(a, b, g);
 
-		return {points: {intersection1:f, intersection2:g}, pointOnLine: e};
-
-	} else if (parseInt(eDistCtoE) === parseInt(size)) {
-		// console.log("Only one intersection");
-		return {points: false, pointOnLine: e};
-	} else {
-		// console.log("No intersection");
-		return {points: false, pointOnLine: e};
+		if (f.onLine || g.onLine){
+			var data = {dist: dt, points: []};
+			if (f.onLine){
+				data.points.push(f);
+			}
+			else if (g.onLine){
+				data.points.push(g);
+			}
+			return data;
+		}
 	}
+	return false;
 }
 
-// BASIC GEOMETRIC functions
-function distance(a,b) {
-	return Math.sqrt( Math.pow(a.x-b.x, 2) + Math.pow(a.y-b.y, 2) )
-}
 function is_on(a, b, c) {
-	return distance(a,c) + distance(c,b) == distance(a,b);
+	return (Math.round(getDistance(a,c) + getDistance(c,b)) == Math.round(getDistance(a,b)));
 }
 
 function addToDirection(current, add){
@@ -396,22 +393,6 @@ function drawAndRotate(posX, posY, w, h, iw, ih, angle, img){
 
 function range(min, max){
 	return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function drawText(ctx, color, text, size, p){
-	ctx.beginPath();
-	ctx.font = "bolder " + size + "pt Trebuchet MS,Tahoma,Verdana,Arial,sans-serif";
-	ctx.textAlign = "center";
-	ctx.textBaseline = 'middle';
-	ctx.closePath();
-	ctx.fillStyle = color;
-	ctx.fillText(
-					text,
-					p.x,
-					p.y
-					);	
-				
-	ctx.fillStyle = "black";
 }
 
 function getSystemArcDir(element){

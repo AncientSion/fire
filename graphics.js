@@ -426,7 +426,7 @@ function drawBaseSpriteExplo(wpn, anim){
 
 	fxCtx.setTransform(1,0,0,1,0,0);
 }					
-//function drawExplosion(weapon, x, y, now, max, explo){  // 150, 150, 30
+
 function drawExplosion(weapon, anim){  // 150, 150, 30
 	var fraction = anim.n/anim.m;
 	var sin = weapon.exploSize*1*Math.sin(Math.PI*fraction);
@@ -460,60 +460,8 @@ function drawExplosion(weapon, anim){  // 150, 150, 30
 	fxCtx.beginPath(); fxCtx.arc(anim.tx, anim.ty, sin*0.66, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = mid; fxCtx.fill();
 	fxCtx.beginPath(); fxCtx.arc(anim.tx, anim.ty, sin*0.35, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = inner; fxCtx.fill();
 
-
-	/*
-	var width = 90;
-	var parts = 15;
-	for (var i = -width/2; i < width; i += width/parts){
-		var a = i;
-		var p = getPointInDir(30*fraction, a, 0, 0);
-
-		fxCtx.beginPath();
-		fxCtx.moveTo(anim.tx, anim.ty);
-		fxCtx.lineTo(anim.tx + p.x, anim.ty + p.y);
-		fxCtx.closePath();
-		fxCtx.strokeStyle = "yellow";
-		fxCtx.stroke();
-	}
-	*/
-
-
-	//drawDamageNumbers(weapon, anim, fraction);
-
 	fxCtx.globalAlpha = 1;
 	fxCtx.globalCompositeOperation = "source-over";
-	//fxCtx.setTransform(1,0,0,1,0,0);
-	//var font = "Damage!";
-
-	//fxCtx.font = "30px Arial";
-	//fxCtx.fillText(font, anim.tx, anim.ty - 20 * fraction);
-
-	/*if (weapon instanceof Plasma){
-		for (i = 0; i < 6; i++){
-			var d = getPointInDir(2*sin, 360/6*i + range(-15, 15), x, y)
-
-			fxCtx.beginPath();
-			fxCtx.moveTo(x, y);
-			fxCtx.lineTo(d.x, d.y);
-			fxCtx.strokeStyle = "orange";
-			fxCtx.lineWidth = 1;
-			fxCtx.stroke();
-			fxCtx.closePath()
-		}
-	}
-	if (weapon instanceof Plasma){
-		for (i = 0; i < 4; i++){
-			var d = getPointInDir((3 + range(-1, 1))*sin, (getAngle(anim.ox, anim.oy, anim.tx, anim.ty)+(180-(4/2*10) + i*10)), anim.tx, anim.ty)
-
-			fxCtx.beginPath();
-			fxCtx.moveTo(anim.tx, anim.ty);
-			fxCtx.lineTo(d.x, d.y);
-			fxCtx.strokeStyle = "orange";
-			fxCtx.lineWidth = 1;
-			fxCtx.stroke();
-			fxCtx.closePath()
-		}
-	}*/
 }
 
 function drawDamageNumbers(weapon, anim){

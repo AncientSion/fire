@@ -5,29 +5,54 @@ class Math {
 	function __construct(){
 	}
 
-	static function isInPath($shooter, $target, $obstacle, $size) {
+	static function isInPath($a, $b, $c, $size) {
 		// Calculate the euclidean distance between a & b
-		$shooterToTargetDist = sqrt( pow($target->x - $shooter->x, 2) + pow($target->y - $shooter->y, 2) );
-		$shooterToObstacleDist = sqrt( pow($target->x - $shooter->x, 2) + pow($target->y - $shooter->y, 2) );
+		$eDistAtoB = sqrt(pow($b->x - $a->x, 2) + pow($b->y - $a->y, 2));
 
 		// compute the direction vector d from a to b
-		$d = new Point(($target->x - $shooter->x)/$eDistAtoB, ($target->y - $shooter->y)/$eDistAtoB);
+		$d = new Point(($b->x-$a->x) / $eDistAtoB, ($b->y-$a->y) / $eDistAtoB);
 
 		// Now the line equation is x = dx*t + ax, y = dy*t + ay with 0 <= t <= 1.
 
 		// compute the value t of the closest point to the circle center (cx, cy)
-		$t = ($d->x * ($obstacle->x - $shooter->x)) + ($d->y * ($obstacle->y - $shooter->y));
+		$t = ($d->x * ($c->x - $a->x)) + ($d->y * ($c->y - $a->y));
 
-		$closestPoint = new Point($t * $d->x + $shooter->x, $t * $d->y + $shooter->y);
-		$dist = floor(Math::getDist2($obstacle, $closestPoint));
-		//Debug::log("dist ".$dist.", size ".$size);
-		if ($shooterToTargetDist < $shooterToObstacleDist - $size){
-			return false;
-		}
-		else if ($dist < $size){
-			return array(true, $dist);
+		// compute the coordinates of the point e on line and closest to c
+		$e = array(new Point(($t * $d->x) + $a->x, ($t * $d->y) + $a->y), 0);
+
+		// Calculate the euclidean distance between c & e
+		$eDistCtoE = sqrt(pow($e[0]->x - $c->x, 2) + pow($e[0]->y - $c->y, 2));
+
+		// test if the line intersects the circle
+		if ($eDistCtoE <= $size){
+			//Debug::log("eDistCtoE ".$eDistCtoE." below size ".$size);
+			// compute distance from t to circle intersection point
+			$dt = sqrt( pow($size, 2) - pow($eDistCtoE, 2));
+
+			$f = array(
+				new Point(
+					(($t-$dt) * $d->x) + $a->x, 
+					(($t-$dt) * $d->y) + $a->y
+				), 0);
+			$f[1] = static::is_on($a, $b, $f[0]);
+
+			$g = array(
+				new Point(
+					(($t+$dt) * $d->x) + $a->x, 
+					(($t+$dt) * $d->y) + $a->y
+				), 0);
+			$g[1] = static::is_on($a, $b, $g[0]);
+
+			if ($f[1] || $g[1]){
+				return array($dt, $f, $g);
+			//return {active: true, dist: dt, f, g}
+			} else return array($dt, $f, $g);
 		}
 		return false;
+	}
+
+	static function is_on($a, $b, $c) {
+		return (round(static::getDistA($a, $c) + static::getDistA($c, $b)) == round(static::getDistA($a, $b)));
 	}
 
 	static function getPointInDirection($dist, $a, $oX, $oY){
@@ -42,6 +67,10 @@ class Math {
 
 	static function getDist2($a, $b){
 		return ceil(sqrt ( pow($b->x - $a->x, 2) + pow($b->y - $a->y, 2) ) );
+	}
+
+	static function getDistA($a, $b){
+		return sqrt ( pow($b->x - $a->x, 2) + pow($b->y - $a->y, 2) );
 	}
 
 	static function getAngle($ax, $ay, $bx, $by){

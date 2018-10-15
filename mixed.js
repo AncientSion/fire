@@ -848,3 +848,27 @@ Mixed.prototype.readyForAnim = function(){
 		}
 	}
 }
+
+Mixed.prototype.isRolled = function(){
+	return false;
+}
+
+Mixed.prototype.isRolling = function(){
+	return false;
+}
+
+Mixed.prototype.hasStoppedRolling = function(){
+	return false;
+}
+
+Mixed.prototype.isFlipping = function(){
+	return false;
+}
+
+Mixed.prototype.hasFlipped = function(){
+	return false;
+}
+
+Mixed.prototype.doesContinueRolling = function(){
+	return false;
+}

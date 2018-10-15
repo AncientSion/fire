@@ -842,6 +842,7 @@
 		$this->handleFlightMovement();
 		$this->handleSalvoMovement();
 		$this->handleObstacleMovement();
+		$this->handleCollisions();
 		$this->handleServerNewActions();
 
 		$this->handlePostMoveFires();
@@ -952,6 +953,27 @@
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (!$this->ships[$i]->obstacle){continue;}
 			$this->ships[$i]->setMove($this);
+		}
+	}
+
+	public function handleCollisions(){
+		Debug::log("handleCollisions");
+		$this->setupShips();
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if (!$this->ships[$i]->obstacle){continue;}
+			Debug::log("--comparing Obstacle #".$this->ships[$i]->id);
+
+			for ($j = 0; $j < sizeof($this->ships); $j++){
+				if ($this->ships[$j]->obstacle){continue;}
+				Debug::log("-----versus Unit #".$this->ships[$j]->id);
+
+				for ($k = 0; $k < sizeof($this->ships[$j]->distances); $k++){
+					if ($this->ships[$j]->distances[$k][0] != $this->ships[$i]->id){continue;}
+					Debug::log("-----------Dist: ".$this->ships[$j]->distances[$k][1]);
+					Debug::log("-----------Angle: ".$this->ships[$j]->angles[$k][1]);
+				}
+			}
 		}
 	}
 
@@ -1152,7 +1174,6 @@
 	public function setupShips(){
 		$data = array();
 
-
 		Debug::log("setupShips");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$this->ships[$i]->setFacing();
@@ -1163,11 +1184,12 @@
 		}
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			//Debug::log("comparing ".$this->ships[$i]->id." / " .$this->ships[$i]->display);
 			$aPos = $this->ships[$i]->getCurPos();
+			//Debug::log("comparing ".$this->ships[$i]->id." / " .$this->ships[$i]->display);
 			//Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
 			for ($j = $i+1; $j < sizeof($this->ships); $j++){
 				if ($this->ships[$i]->userid == $this->ships[$j]->userid){continue;}
+				//Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
 				$bPos = $this->ships[$j]->getCurPos();
 				$dist = Math::getDist2($aPos, $bPos);
 				
@@ -1181,28 +1203,37 @@
 
 				if ($this->ships[$i]->obstacle || $this->ships[$j]->obstacle){continue;}
 				//Debug::log("to ".$this->ships[$j]->id." / " .$this->ships[$j]->display);
+				//Debug::log("POSITION #".$this->ships[$j]->id.": ".$bPos->x."/".$bPos->y);
 
 				for ($k = 0; $k < sizeof($this->ships); $k++){
 					if (!$this->ships[$k]->obstacle){continue;}
 					//if ($this->ships[$k]->id != 25){continue;}
 
+					$blockPos = $this->ships[$k]->getCurPos();
 					//Debug::log("checking if ".$this->ships[$k]->display." / " .$this->ships[$k]->id." is in path");
+					//Debug::log("POSITION #".$this->ships[$j]->id.": ".$blockPos->x."/".$blockPos->y);
 
-					$result = Math::isInPath($aPos, $bPos, $this->ships[$k]->getCurPos(), $this->ships[$k]->size/2);
+					$result = Math::isInPath($aPos, $bPos, $blockPos, $this->ships[$k]->size/2);
+
+					//$data[] = $result;
+					//continue;
 
 					if ($result){
+						$effectiveBlock = round($this->ships[$k]->block / 100 * $result[0]*2);
+						//$effectiveBlock = 100;
+						//Debug::log("effectiveBlock ".$effectiveBlock);
+						$this->ships[$i]->blocks[] = array($this->ships[$j]->id, $effectiveBlock);
+						$this->ships[$j]->blocks[] = array($this->ships[$i]->id, $effectiveBlock);
+
 						/*$data = array(
 							"id" => $this->ships[$k]->id, 
-							"dist" => $result[1],
+							"dist" => $result[1]*2,
 							"size" => $this->ships[$k]->size,
 							"exposure" => round((1-($result[1] / ($this->ships[$k]->size/2)))*100),
+							"effectiveBlock" => round($this->ships[$k]->block / 100 * $result[1]*2),
 							"block" => $this->ships[$k]->block
 						);*/
 						
-						$effect = $this->ships[$k]->block / 100 * round((1-($result[1] / ($this->ships[$k]->size/2)))*100);
-
-						$this->ships[$i]->blocks[] = array($this->ships[$j]->id, $effect);
-						$this->ships[$j]->blocks[] = array($this->ships[$i]->id, $effect);
 					}
 				}
 			}

@@ -3460,7 +3460,6 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 	ctx.setTransform(1,0,0,1,0,0);
 }
 
-
 Ship.prototype.readyForAnim = function(){
 	this.setPreMovePosition();
 	this.setPreMoveFacing();	
@@ -3469,7 +3468,7 @@ Ship.prototype.readyForAnim = function(){
 	//console.log(frameMod)
 	for (var i = 0; i < this.actions.length; i++){
 		var action = this.actions[i];
-		if (action.forced){console.log("ding");}
+		if (action.forced){console.log("forced move!");}
 		this.actions[i].animated = 0;
 
 		if (action.type == "speed" || action.type == "deploy" || action.type == "jumpIn"){

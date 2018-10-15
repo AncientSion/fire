@@ -21,7 +21,7 @@ Obstacle.prototype.doHover = function(){
 }
 
 Obstacle.prototype.drawMovePlan = function(){
-	if (!game.drawMoves || game.turn == 1 && game.phase < 2){return;}
+	if (!game.drawMoves || !game.showObstacleMoves){return;}
 
 	this.setMoveTranslation();
 
@@ -62,20 +62,33 @@ Obstacle.prototype.drawNextMove = function(){
 
 	planCtx.globalAlpha = 0.7;
 	planCtx.beginPath();
-	planCtx.moveTo(this.x, this.y);
+	planCtx.moveTo(this.drawX, this.drawY);
 
-	var target = getPointInDir(this.getCurSpeed(), this.facing, this.x, this.y);
+	var nextMove = this.getPlannedPos();
 
-	planCtx.lineTo(target.x, target.y);
+	planCtx.lineTo(nextMove.x, nextMove.y);
 	planCtx.stroke();
 	planCtx.closePath();
 	planCtx.lineWidth = 1;
 	planCtx.strokeStyle = "black";
 	planCtx.globalAlpha = 1;
 
-	this.drawMarker(target.x, target.y, "red", planCtx);
+	this.drawMarker(nextMove.x, nextMove.y, "red", planCtx);
 
 	this.resetMoveTranslation();
+}
+
+Obstacle.prototype.setNextMove = function(){
+	var p;
+
+	if (this.actions.length){
+		p = this.getPlannedPos();
+		p = getPointInDir(this.getCurSpeed(), this.facing, p.x, p.y);
+	}
+	else {
+		p = getPointInDir(this.getCurSpeed(), this.facing, this.x, this.y);
+	}
+	this.actions.push(new Move(-1, this.id, "move", 0, this.getCurSpeed(), p.x, p.y, 0, 0, 0, 1, 1, 0));
 }
 
 Obstacle.prototype.getShortInfo = function(){
@@ -107,7 +120,14 @@ Obstacle.prototype.select = function(){
 }
 
 Obstacle.prototype.createBaseDiv = function(){
-	var div = $("<div>").addClass("obstacleDiv hostile").data("shipId", this.id)
+	var div = $("<div>")
+		.addClass("obstacleDiv hostile")
+		.data("shipId", this.id)
+		.contextmenu(function(e){
+			e.stopImmediatePropagation(); e.preventDefault();
+			game.zIndex--;
+			$(this).addClass("disabled");
+		});
 
 	this.element = div[0];
 
@@ -127,10 +147,10 @@ Obstacle.prototype.createBaseDiv = function(){
 			.append($("<td>").html(this.getCurSpeed())))
 		.append($("<tr>")
 			.append($("<td>").html("Base Interference Chance"))
-			.append($("<td>").html(this.block + "%")))
+			.append($("<td>").html(this.block + "% per 100px")))
 		.append($("<tr>")
 			.append($("<td>").html("Base Collision Chance"))
-			.append($("<td>").html(this.block + "%")))
+			.append($("<td>").html(this.collision + "%")))
 
 	div.append(table);
 
@@ -179,8 +199,11 @@ Obstacle.prototype.expandDiv = function(div){
 	$(div).addClass("disabled");
 	return div;
 }
+
 Obstacle.prototype.create = function(){
 	this.setUnitState();
+	if (game.phase == 2 || game.phase == 3){return;}
+	this.setNextMove();
 }
 
 Obstacle.prototype.setUnitState = function(){
@@ -194,7 +217,6 @@ Obstacle.prototype.setPreMovePosition = function(){
 	this.drawX = this.x;
 	this.drawY = this.y;
 }
-
 
 Obstacle.prototype.setPreMoveFacing = function(){
 }
@@ -219,7 +241,7 @@ Obstacle.prototype.setLayout = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		//this.structures[i].layout.x = range(0, max/2) * (1 - (range(0, 1)*2));
 		//this.structures[i].layout.y = range(0, max/2)* (1 - (range(0, 1)*2));
-		var dist = range(this.size/5, this.size*1.5);
+		var dist = range(this.size/3, this.size*1.5);
 		this.structures[i].layout = getPointInDir(dist, range(0, 360), 0, 0)
 		//this.structures[i].layout = getPointInDir(range(30, this.size), 360/this.structures.length*i, 0, 0)
 	}
@@ -234,19 +256,11 @@ Obstacle.prototype.setImage = function(){
 		ctx.translate(t.width/2, t.height/2);
 
 	for (var i = 0; i < this.structures.length; i++){
+		if (!this.structures[i].doDraw){continue;}
 
 		var rota = range(0, 360);
 
-		if (!this.structures[i].doDraw){continue;}
-
-	//	var x = this.structures[i].layout.x/2 / this.size/2 * this.size;
-	//	var y = this.structures[i].layout.y/2 / this.size/2 * this.size;
-
-		var x = this.structures[i].layout.x /2;
-		var y = this.structures[i].layout.y /2;
-
-		ctx.translate(x, y);
-
+		ctx.translate(this.structures[i].layout.x/2, this.structures[i].layout.y/2);
 		ctx.rotate(rota * (Math.PI/180))
 		ctx.drawImage(
 			this.structures[i].getBaseImage(),
@@ -259,16 +273,10 @@ Obstacle.prototype.setImage = function(){
 		ctx.translate(-this.structures[i].layout.x/2, -this.structures[i].layout.y/2);
 	}
 
-	//ctx.save();
-	//ctx.setTransform(1,0,0,1,0,0);
-
-	//var vectorSize = Math.min(this.size/1.5, 120);
 	var vectorSize = 80;
 	var vectorPos = getPointInDir(this.size - vectorSize/2, this.facing, 0, 0);
 
 	ctx.translate(vectorPos.x, vectorPos.y);
-	//ctx.globalAlpha = 0.8;
-
 	ctx.rotate(this.facing * (Math.PI/180));
 	ctx.drawImage(
 		graphics.images.vector,
@@ -279,7 +287,14 @@ Obstacle.prototype.setImage = function(){
 	);
 
 	ctx.rotate(-this.facing * (Math.PI/180));
-	//ctx.globalAlpha = 1;
+	ctx.translate(-vectorPos.x, -vectorPos.y);
+
+	ctx.fillStyle = "yellow";
+	ctx.font = "30px Arial";
+	ctx.textAlign = "center";
+	ctx.fillText("I: " + this.block + "%", 0, -10);
+	ctx.fillText("C: " + this.collision + "%", 0, 30);
+
 	ctx.setTransform(1,0,0,1,0,0);
 	this.img = t;
 }

@@ -1379,7 +1379,7 @@ FireOrder.prototype.getRollsString = function(rolls, allReq){
 	var blocked = "";
 	var divider = "<div class='rollSeparator yellow'></div>";
 	for (var i = 0; i < rolls.length; i++){
-		if (rolls[i] == 0){
+		if (rolls[i] == 999){
 			skipped++; continue;
 		}
 

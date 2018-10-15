@@ -50,10 +50,13 @@ function Game(data){
 	this.timeout = 0;
 	this.canSubmit = 0;
 	this.canConfirm = 1;
+
 	this.drawCircle = 1;
 	this.drawMoves = 1;
 	this.showFriendlyEW = 0;
 	this.showHostileEW = 0;
+	this.showObstacleMoves = 1;
+
 	this.snapTurn = 0;
 	this.events = [];
 	this.wave = data.wave;
@@ -1049,6 +1052,7 @@ function Game(data){
 		console.log("moveResolved");
 
 		this.subPhase = 2;
+		this.animating = 0;
 		this.setPostMoveCC();
 		this.checkUnitOffsetting();
 
@@ -1076,25 +1080,23 @@ function Game(data){
 
 		this.createLogEntry("-- Movement concluded --");
 
-		if (this.events.length){
+		if (this.events.length){ // ramming, emines AFTER moving anim
 			if (this.phase == 2){
 				game.timeout = setTimeout(function(){
 					//$($("#combatLog").find("td")[0]).attr("colSpan", 8)
 					game.resolvePostMoveFires();
 				}, 1000);
 			}
-			else if (this.phase == 1){
-				this.animating = 0;
+			else if (this.phase == 1){ // firing eMine
 				this.drawingEvents = 1;
 				this.logWeaponEvents();
 				this.draw();
 			}
 		}
 		else {
-			this.animating = 0;
 			this.drawingEvents = 1;
 			this.draw();
-			if (this.phase == 2){
+			if (this.phase == 2){ // player control now, setup fire
 				this.setObstacleData();
 				this.autoIssueFireOrders();
 			}
@@ -1165,13 +1167,10 @@ function Game(data){
 	this.fireResolved = function(){
 		console.log("fireResolved");
 
-		//for (var i = 0; i < 30; i++){this.createLogEntry("row " + i);}
-
-
-
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setPostFireImage();
 			this.ships[i].setSize();
+			if (this.ships[i].obstacle){this.ships[i].setNextMove();}
 		}
 
 		for (var i = 0; i < this.ships.length; i++){
@@ -2434,6 +2433,7 @@ function Game(data){
 			this.fireOrders[i].weapon = this.fireOrders[i].shooter.getSystem(this.fireOrders[i].weaponid).getActiveSystem();
 			this.fireOrders[i].damages = this.fireOrders[i].target.getDmgByFire(this.fireOrders[i]);
 			this.fireOrders[i].systems.push(this.fireOrders[i].weaponid);
+			this.fireOrders[i].angle = getAngleFromTo(this.fireOrders[i].shooter.getGamePos(), this.fireOrders[i].target.getGamePos());
 		}
 
 		for (var i = 0; i < this.fireOrders.length; i++){
@@ -3135,13 +3135,25 @@ Game.prototype.initOptionsUI = function(){
 			})
 		}
 		else if (i == 2){
-			$(this).click(function(){game.toggleDrawMovePaths();});
-			$(this).addClass("selected");
+			$(this)
+				.addClass("selected")
+				.hover(
+					function(){game.drawAllObstacleMoves();},
+					function(){game.redraw();
+				})
+				.click(function(){
+					game.toggleDrawObstacleMoves();
+			})
 		}
 		else if (i == 3){
-			$(this).click(function(){game.toggleDistMeter();});
+			$(this)
+				.addClass("selected")
+				.click(function(){game.toggleDrawMovePaths();});
 		}
 		else if (i == 4){
+			$(this).click(function(){game.toggleDistMeter();});
+		}
+		else if (i == 5){
 			$(this).click(function(){game.toggleCheatSheet();});
 		}
 	}).end().drag();
@@ -3312,14 +3324,29 @@ Game.prototype.getUnitByClick = function(pos){
 }
 
 Game.prototype.getObstructionPoint = function(fire){
-	var pick = fire.target.blocks[range(0, fire.target.blocks.length-1)];
-	return pick.path[2][range(0, 2)]
+	var valid = [];
+	for (var i = 0; i < fire.target.blocks.length; i++){
+		if (fire.target.blocks[i].id == fire.shooter.id){
+			valid.push(fire.target.blocks[i]);
+		}
+	}
 
+
+	var pick = valid[range(0, valid.length-1)];
+	//console.log(pick.path.points);
+	var subpick = range(0, pick.path.points.length-1);
+	//console.log(subpick);
+
+	var real = pick.path.points[subpick];
+
+	var dist = getDistance(real, fire.target.getGamePos());
+	return getPointInDir(range(30, Math.min(100, dist)), fire.angle, real.x, real.y);
+	console.log(dist);
+	return 
 }
 
 Game.prototype.setObstacleData = function(){
-	//console.log("setObstacleData");
-	return;
+	console.log("setObstacleData");
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].obstacle){continue;}
 		var oPos = this.ships[i].getGamePos();
@@ -3332,14 +3359,17 @@ Game.prototype.setObstacleData = function(){
 			for (var k = 0; k < this.ships.length; k++){
 				if (!this.ships[k].obstacle){continue;}
 
-				var result = isInPath(oPos, tPos, this.ships[k].getPlannedPos(), this.ships[k].size/2);
+				//var obstaclePos = game.phase == 3 ? {x: this.ships[k].x, y: this.ships[k].y} : this.ships[k].gePlannedPos();
+				var obstaclePos = this.ships[k].getPlannedPos();
+
+				var result = isInPath(oPos, tPos, obstaclePos, this.ships[k].size/2);
 
 				if (!result){continue;}
 
-				var effectiveBlock = this.ships[k].block / 100 * Math.round(round((1-(result[1] / (this.ships[k].size/2))), 2)*100);
+				var effectiveBlock = Math.round(this.ships[k].block / 100 * result.dist*2);
 
-				this.ships[i].blocks.push({id: this.ships[j].id, obstacleId: this.ships[k].id, dist: result[1], effectiveBlock: effectiveBlock, path: result});
-				this.ships[j].blocks.push({id: this.ships[i].id, obstacleId: this.ships[k].id, dist: result[1], effectiveBlock: effectiveBlock, path: result});
+				this.ships[i].blocks.push({id: this.ships[j].id, obstacleId: this.ships[k].id, effectiveBlock: effectiveBlock, path: result});
+				this.ships[j].blocks.push({id: this.ships[i].id, obstacleId: this.ships[k].id, effectiveBlock: effectiveBlock, path: result});
 
 			}
 		}
@@ -3356,16 +3386,17 @@ Game.prototype.hasObstacleInVector = function(oPos, tPos){
 		//if (this.ships[j].id != 24){continue;}
 
 		var result = isInPath(oPos, tPos, this.ships[j].getPlannedPos(), this.ships[j].size/2);
+
 		if (result){
-			//console.log(result);
-			var effectiveBlock = this.ships[j].block / 100 * Math.round(round((1-(result[1] / (this.ships[j].size/2))), 2)*100);	
+			//console.log(result.dist);
 
 			inPath.push({
 				obstacleId: this.ships[j].id, 
-				dist: result[1],
+				dist: Math.round(result.dist*2),
 				size: this.ships[j].size,
-				effectiveBlock: Math.round(effectiveBlock),
-				exposure: Math.round(round((1-(result[1] / (this.ships[j].size/2))), 2)*100),
+				//effectiveBlock: Math.round(effectiveBlock),
+				effectiveBlock: Math.round(this.ships[j].block / 100 * result.dist*2),
+				exposure: Math.round(round((1-(result.dist / (this.ships[j].size/2))), 2)*100),
 				block: this.ships[j].block,
 			})
 		}
@@ -3436,13 +3467,13 @@ Game.prototype.drawShipOverlays = function(){
 	var sensor = 0;
 	var moves = 0;
 
-	if (game.phase == -1){
+	if (this.phase == -1){
 		sensor = 1;
-	} else if (game.phase == 0 || game.phase == 1){
+	} else if (this.phase == 0 || this.phase == 1){
 		moves = 1;
 	}
 
-	if (!game.deploying && !game.animating){
+	if (!this.deploying && !this.animating){
 		salvoCtx.clearRect(0, 0, res.x, res.y);
 		planCtx.clearRect(0, 0, res.x, res.y);
 		for (var i = 0; i < this.ships.length; i++){
@@ -3450,7 +3481,7 @@ Game.prototype.drawShipOverlays = function(){
 			else if (!this.ships[i].ship || moves && ships[i].friendly){
 				this.ships[i].drawMovePlan();
 			}
-			else if (sensor && game.ships[i].friendly){
+			else if (sensor && this.ships[i].friendly){
 				this.ships[i].drawEW();
 			}
 		}
@@ -3458,7 +3489,7 @@ Game.prototype.drawShipOverlays = function(){
 }
 
 Game.prototype.toggleFriendlyEW = function(){
-	if (game.animating || game.sensorMode){return;}
+	if (this.animating || this.sensorMode){return;}
 	this.showFriendlyEW = !this.showFriendlyEW;
 	$(".optionsWrapper .drawFriendlyEW").toggleClass("selected");
 	salvoCtx.clearRect(0, 0, res.x, res.y);
@@ -3466,11 +3497,19 @@ Game.prototype.toggleFriendlyEW = function(){
 }
 
 Game.prototype.toggleHostileEW = function(){
-	if (game.animating || game.sensorMode){return;}
+	if (this.animating || this.sensorMode){return;}
 	this.showHostileEW = !this.showHostileEW;
 	$(".optionsWrapper .drawHostileEW").toggleClass("selected");
 	salvoCtx.clearRect(0, 0, res.x, res.y);
 	this.drawAllEW();
+}
+
+Game.prototype.toggleDrawObstacleMoves = function(){
+	if (this.animating || this.sensorMode){return;}
+	this.showObstacleMoves = !this.showObstacleMoves;
+	$(".optionsWrapper .drawObstaclesMoves").toggleClass("selected");
+	salvoCtx.clearRect(0, 0, res.x, res.y);
+	this.redraw();
 }
 
 Game.prototype.drawAllEW = function(){
@@ -3482,9 +3521,8 @@ Game.prototype.drawAllEW = function(){
 }
 
 Game.prototype.drawFriendlyEW = function(){
-	if (game.animating || game.sensorMode || this.showFriendlyEW){return;}
+	if (this.animating || this.sensorMode || this.showFriendlyEW){return;}
 	this.showFriendlyEW = 1;
-	if (this.animating || this.sensorMode){return;}
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].flight || this.ships[i].salvo || !this.ships[i].deployed){continue;}
 		if (!this.ships[i].friendly){continue;}
@@ -3494,15 +3532,22 @@ Game.prototype.drawFriendlyEW = function(){
 }
 
 Game.prototype.drawHostileEW = function(){
-	if (game.animating || game.sensorMode || this.showHostileEW){return;}
+	if (this.animating || this.sensorMode || this.showHostileEW){return;}
 	this.showHostileEW = 1;
-	if (this.animating || this.sensorMode){return;}
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].flight || this.ships[i].salvo || !this.ships[i].deployed){continue;}
 		if (this.ships[i].friendly){continue;}
 		this.ships[i].drawEW();
 	}
 	this.showHostileEW = 0;
+}
+
+Game.prototype.drawAllObstacleMoves = function(){
+	if (this.animating || this.sensorMode){return;}
+	for (var i = 0; i < this.ships.length; i++){
+		if (!this.ships[i].obstacle){continue;}
+		this.ships[i].drawNextMove();
+	}
 }
 
 Game.prototype.setUnitTransform = function(){
