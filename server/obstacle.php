@@ -6,7 +6,7 @@ class Obstacle extends Mixed {
 	public $display = "Asteroid Swarm";
 	public $obstacle = 1;
 	public $traverse = 10;
-	public $block = 100;
+	public $block = 60;
 
 	function __construct($data = false){
         parent::__construct($data);
