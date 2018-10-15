@@ -913,6 +913,7 @@
 					Debug::log("!!!!!!!!!!!!!");
 
 					$sql = "INSERT into UNITS values (0, $gameid, 0, 0, 'Obstacle', '', 0, 0, 'deployed', 0, 1, 0, 0, 0, $x, $y, $vector, $size, $speed, 0, 0, 0, 1, -1, 0, '')";
+					Debug::log($sql);
 					$result = $this->query($sql);
 				}
 			}
