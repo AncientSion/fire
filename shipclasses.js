@@ -1801,7 +1801,7 @@ Ship.prototype.drawMarker = function(x, y, c, context){
 	context.beginPath();
 	context.arc(x, y, (this.size-2)/2, 0, 2*Math.PI, false);
 	context.closePath();
-	context.lineWidth = 1 + (this.salvo *1) + (this.obstacle*2)+ Math.floor(this.selected*2 + (this.focus == 1)*2);
+	context.lineWidth = 1 + (this.salvo *1) + Math.floor(this.selected*2 + (this.focus == 1)*2);
 	context.globalAlpha = 0.7 + (this.focus == 1) * 0.1;
 	context.globalCompositeOperation = "source-over";
 	context.strokeStyle = c;

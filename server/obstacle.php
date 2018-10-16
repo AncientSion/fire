@@ -26,7 +26,7 @@ class Obstacle extends Mixed {
 	public function addPrimary(){
 		//Debug::log("addPrimary #".$this->id.", index: ".$this->index);
 		$this->primary = new Shared($this->getId());
-		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, 0, 360);
+		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, 0, 360, 15);
 	}
 
 	public function addStructures(){

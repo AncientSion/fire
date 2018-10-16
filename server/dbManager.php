@@ -1517,7 +1517,7 @@
 			");
 
 			for ($i = 0; $i < sizeof($fires); $i++){
-				//Debug::log("fire id: ".$fires[$i]->id.", resolved: ".$fires[$i]->resolved);
+				Debug::log("fire id: ".$fires[$i]->id.", notes: ".$fires[$i]->notes);
 				$stmt->bindParam(":shots", $fires[$i]->shots);
 				$stmt->bindParam(":req", $fires[$i]->req);
 				$stmt->bindParam(":notes", $fires[$i]->notes);

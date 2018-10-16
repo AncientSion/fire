@@ -298,7 +298,7 @@ class Damage {
 	
 	function __construct($id, $fireid, $gameid, $shipid, $structureid, $systemid, $turn, $type, $totalDmg, $shieldDmg, $armourDmg, $systemDmg, $hullDmg, $emDmg, $negation, $destroyed, $notes, $new){
 		$this->id = $id;
-		$this->fireid = $fireid;
+		$this->fireid = abs($fireid);
 		$this->gameid = $gameid;
 		$this->shipid = $shipid;
 		$this->structureid = $structureid;

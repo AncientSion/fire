@@ -92,11 +92,14 @@ System.prototype.getCritMod = function(type){
 
 System.prototype.getResolvingFireOrders = function(){
 	if (game.phase != 3){return false;}
+	var ret = [];
 	for (var i = this.fireOrders.length-1; i >= 0; i--){
 		if (this.fireOrders[i].turn == game.turn && this.fireOrders[i].resolved == 1){
-			return this.fireOrders[i];
-		} else return false;
+			ret.push(this.fireOrders[i]);
+		}
+		else if (this.fireOrders[i].turn < game.turn){break;}
 	}
+	if (ret.length){return ret;}
 	return false;
 }
 
@@ -2208,18 +2211,29 @@ function AsteroidRam(system){
 } 
 AsteroidRam.prototype = Object.create(Weapon.prototype)
 
-AsteroidRam.prototype.hasEvent = function(){
-	if (game.phase == 3){return false;}
+AsteroidRam.prototype.getResolvingFireOrders = function(){
+	if (game.phase != 2){return false;}
+	var ret = [];
 	for (var i = this.fireOrders.length-1; i >= 0; i--){
-		if (this.fireOrders[i].turn == game.turn){
-			return true;
+		if (this.fireOrders[i].turn == game.turn && this.fireOrders[i].resolved == 1){
+			ret.push(this.fireOrders[i]);
 		}
+		else if (this.fireOrders[i].turn < game.turn){break;}
 	}
+	if (ret.length){return ret;}
 	return false;
 }
 
 AsteroidRam.prototype.drawSingleEvent = function(){
 	return;
+}
+
+AsteroidRam.prototype.getAnimation = function(fire){
+	return Warhead.prototype.getAnimation.call(this, fire);
+}
+
+AsteroidRam.prototype.getShots = function(){
+	return this.output;
 }
 
 function Warhead(data){
@@ -2299,7 +2313,7 @@ Warhead.prototype.getAnimation = function(fire){
 	var hits = 0;
 
 	var o = game.getUnit(this.parentId);
-	var t = game.getUnit(o.mission.targetid);
+	var t = game.getUnit(fire.targetid);
 	var p = t.getPlannedPos();
 	//var d = getDistance(o, t.getPlannedPos());
 	var a = getAngleFromTo(t.getPlannedPos(), o);
@@ -2323,17 +2337,6 @@ Warhead.prototype.getAnimation = function(fire){
 				dest.x += p.x;
 				dest.y += p.y;
 			}
-			/*
-			var tx = traj.x + range(-t.size/8, t.size/8);
-			var ty = traj.y + range(-t.size/8, t.size/8);
-
-
-			var t = fire.target.getFireDest(fire, hit, hits-1);
-				tx = p.x + t.x;
-				ty = p.y + t.y;
-				
-			var shotAnim = {tx: tx, ty: ty, m: 35, n: 0 - ((j / grouping) * gunDelay + k*shotDelay)};
-			*/
 
 			var shotAnim = {tx: dest.x, ty: dest.y, m: 35, n: 0 - ((j / grouping) * gunDelay + k*shotDelay)};
 			
@@ -3700,11 +3703,15 @@ Area.prototype.drawSystemArc = function(facing, rolled, pos){
 
 Area.prototype.getResolvingFireOrders = function(){
 	if (game.phase != 2){return false;}
+	var ret = [];
 	for (var i = this.fireOrders.length-1; i >= 0; i--){
+		if (this.fireOrders[i].targetid == -1){continue;}
 		if (this.fireOrders[i].turn == game.turn && this.fireOrders[i].resolved == 1){
-			return this.fireOrders[i];
+			ret.push(this.fireOrders[i]);
 		}
+		else if (this.fireOrders[i].turn < game.turn){break;}
 	}
+	if (ret.length){return ret;}
 	return false;
 }
 

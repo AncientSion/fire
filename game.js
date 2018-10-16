@@ -2253,39 +2253,15 @@ function Game(data){
 	}
 
 	this.resolvePostMoveFires = function(){
-		console.log("resolvePostMoveFires");
-		
-		ui.combatLogWrapper
-			.find("#combatLogInnerWrapper").find("#combatLog")
-				.append($("<tr>"))
-				.append($("<tr>")
-					.append($("<td>").attr("colSpan", 9).css("font-size", 18).html("Event Log")))
-				.append($("<tr>")
-				.append($("<th>").attr("colSpan", 5).css("width", 335).html("Event Type"))
-				.append($("<th>").html("Hits").css("width", 40))
-				.append($("<th>").html("Armour").css("width", 70))
-				.append($("<th>").html("System").css("width", 70))
-				.append($("<th>").html("Structure").css("width", 90)))
-
-		this.getAllResolvingFireOrders();
-		this.getAreaShotDetails();
-		this.getFireAnimationDetails();
-		this.getAllUnitExplos();
-
-
-		this.drawingEvents = 0;
-		this.setFireGlobals();
-
-
-		this.timeout = setTimeout(function(){
-			game.animateAllFireOrders()
-		}, 500);
+		this.resolveFire();
 	}
 
 	this.resolveFire = function(){
 		this.getAllResolvingFireOrders();
 		this.getShotDetails();
-		this.getFireAnimationDetails();	
+		this.getFireAnimationDetails();
+		this.adjustAreaFires();	
+		this.sortFireOrders();	
 		this.getAllUnitExplos();
 		this.hideUI();
 		this.setFireGlobals();
@@ -2322,7 +2298,7 @@ function Game(data){
 		if (game.phase == 1){header = "Base Movement Resolution Log";}
 		if (game.phase == 2){header = "Focus Movement Resolution Log";}
 
-		if (game.phase != 3){
+		if (game.phase < 2){
 		ui.combatLogWrapper
 			.find(".combatLogHeader thead tr").last().remove().end()
 			//.html("<th>Damage Control Repsolution Log</th>").end().find("#combatLog tr").first().remove();
@@ -2385,8 +2361,13 @@ function Game(data){
 		this.fireOrders = [];
 		for (var i = 0; i < this.ships.length; i++){
 			var fires = this.ships[i].getAllResolvingFireOrders();
-			this.fireOrders = this.fireOrders.concat(fires);
+			if (fires.length){
+				for (var j = 0; j < fires.length; j++){
+					this.fireOrders = this.fireOrders.concat(fires[j]);
+				}
+			}
 		}
+		console.log(this.fireOrders);
 	}
 
 	this.getAreaShotDetails = function(){
@@ -2427,13 +2408,21 @@ function Game(data){
 	}
 
 	this.getShotDetails = function(){
+
 		for (var i = 0; i < this.fireOrders.length; i++){
-			this.fireOrders[i].target = game.getUnit(this.fireOrders[i].targetid);
 			this.fireOrders[i].shooter = game.getUnit(this.fireOrders[i].shooterid);
 			this.fireOrders[i].weapon = this.fireOrders[i].shooter.getSystem(this.fireOrders[i].weaponid).getActiveSystem();
+			this.fireOrders[i].target = game.getUnit(this.fireOrders[i].targetid);
 			this.fireOrders[i].damages = this.fireOrders[i].target.getDmgByFire(this.fireOrders[i]);
 			this.fireOrders[i].systems.push(this.fireOrders[i].weaponid);
 			this.fireOrders[i].angle = getAngleFromTo(this.fireOrders[i].shooter.getGamePos(), this.fireOrders[i].target.getGamePos());
+		/*	this.fireOrders[i].setTarget() = game.getUnit(this.fireOrders[i].targetid);
+			this.fireOrders[i].setShooter() = game.getUnit(this.fireOrders[i].shooterid);
+			this.fireOrders[i].setWeapon() = this.fireOrders[i].shooter.getSystem(this.fireOrders[i].weaponid).getActiveSystem();
+			this.fireOrders[i].setDamages() = this.fireOrders[i].target.getDmgByFire(this.fireOrders[i]);
+			this.fireOrders[i].setSystems() systems.push(this.fireOrders[i].weaponid);
+			this.fireOrders[i].setAngle() angle = getAngleFromTo(this.fireOrders[i].shooter.getGamePos(), this.fireOrders[i].target.getGamePos());
+		*/
 		}
 
 		for (var i = 0; i < this.fireOrders.length; i++){
@@ -2480,8 +2469,37 @@ function Game(data){
 		}
 	}
 
-	this.getFireAnimationDetails = function(){	
+	this.getFireAnimationDetails = function(){
+		for (var i = 0; i < this.fireOrders.length; i++){
+			this.fireOrders[i].anim = this.fireOrders[i].weapon.getAnimation(this.fireOrders[i]);
+			this.fireOrders[i].createCombatLogEntry();
+			this.fireOrders[i].setNumberAnim();
+			//console.log(this.fireOrders[i].weapon.priority);
+		}
+    }
 
+	this.adjustAreaFires = function(){	
+		if (game.phase != 2){return;}
+		for (var i = 0; i < this.fireOrders.length; i++){
+			if (!this.fireOrders[i].weapon.aoe){continue;}	
+			for (var j = i+1; j < this.fireOrders.length; j++){
+				if (!this.fireOrders[i].weapon.aoe){continue;}
+
+				if (this.fireOrders[i].shooterid != this.fireOrders[j].shooterid){continue;}
+				if (this.fireOrders[i].weaponid != this.fireOrders[j].weaponid){continue;}
+
+				console.log("same !");
+				this.fireOrders[i].numbers = this.fireOrders[i].numbers.concat(this.fireOrders[j].numbers);
+
+				this.fireOrders[j].numbers = [];
+				this.fireOrders[j].anim = [[], []];
+				this.fireOrders[j].animating = 1;
+				this.fireOrders[j].animated = 1;
+			}
+		}
+	}
+
+	this.sortFireOrders = function(){
 		this.fireOrders.sort(function(a, b){
 			return (
 				a.shooter.salvo - b.shooter.salvo ||
@@ -2492,30 +2510,7 @@ function Game(data){
 				a.shooterid - b.shooterid
 			)
 		});
-		
-		for (var i = 0; i < this.fireOrders.length; i++){
-			this.fireOrders[i].anim = this.fireOrders[i].weapon.getAnimation(this.fireOrders[i]);
-			this.fireOrders[i].createCombatLogEntry();
-			this.fireOrders[i].setNumberAnim();
-			//console.log(this.fireOrders[i].weapon.priority);
-		}
-
-		/*	usort($this->fires, function($a, $b){
-			if ($a->targetid != $b->targetid){
-				return $a->targetid - $b->targetid;
-			}
-			else if ($a->weapon->priority != $b->weapon->priority){
-				return $a->weapon->priority - $b->weapon->priority;
-			}
-			else return $a->shooterid - $b->shooterid;
-		});	*/
-
-		//for (var i = 0; i < this.fireOrders.length; i++){
-		//	console.log(this.fireOrders[i].weapon.priority);
-		//}
-		//console.log("------------------");
-
-    }
+	}
 
     this.getRandomExplo = function(){
     	return graphics.explos[range(0, 2)];
@@ -2539,9 +2534,9 @@ function Game(data){
 	this.animateAllFireOrders = function(){
 		for (var i = 0; i < this.fireOrders.length; i++){
 			//if (this.fireOrders[i].shooterid != 16){continue;}
-			if (!this.fireOrders[i].animated){
-				//this.fireOrders[i].weapon.createCombatLogEntry(this.fireOrders[i]);				
 				this.fireOrders[i].tr.show();
+			if (!this.fireOrders[i].animated){
+				//this.fireOrders[i].weapon.createCombatLogEntry(this.fireOrders[i]);
 				this.animateSingleFireOrder(i, 1);
 				return;
 			}
@@ -2648,7 +2643,7 @@ function Game(data){
 				}
 				else if (game.fireOrders[i].weapon.animation == "explosive"){
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
-						game.fireOrders[i].anim[j][k].n += 1;
+						game.fireOrders[i].anim[j][k].n += 30;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
 							drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]); // EXPLO
 							if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
@@ -2659,7 +2654,7 @@ function Game(data){
 				}
 				else if (game.fireOrders[i].weapon.animation == "area"){
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
-						game.fireOrders[i].anim[j][k].n += 1;
+						game.fireOrders[i].anim[j][k].n += 30;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
 							if (game.fireOrders[i].anim[j][k].p == 0){
 								drawAreaProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]); // projectile
@@ -2676,7 +2671,7 @@ function Game(data){
 
 		//console.log("ding");
 
-		var allAnimated = 1;		
+		var allAnimated = 1;
 		for (var j = 0; j < game.fireOrders[i].anim.length; j++){
 			for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){
 				if (! game.fireOrders[i].anim[j][k].done){

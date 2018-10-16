@@ -842,37 +842,49 @@
 		$this->handleFlightMovement();
 		$this->handleSalvoMovement();
 		$this->handleObstacleMovement();
-		$this->setupShips();
-		$this->handleCollisions();
 		$this->handleServerNewActions();
 
-		$this->handlePostMoveFires();
+		$this->setupShips();
+		$this->handleCollisions();
+
+		$this->setFireOrderDetails();
+		$this->handlePostMoveAreaFires();
+
+		$this->setFireOrderDetails();
+		$this->resolveShipFireOrders();
+
+		$newDmgs = $this->getAllNewDamages();
+		$newForcedMoves = $this->getAllNewForcedMoves();
+		DBManager::app()->updateFireOrders($this->fires);
+		if (sizeof($newDmgs)){DBManager::app()->insertDamageEntries($newDmgs);}
+		if (sizeof($newForcedMoves)){DBManager::app()->insertServerActions($newForcedMoves);}
+
 		$this->updateMissions();
 	}
 
-	public function handlePostMoveFires(){
-		Debug::log("handlePostMoveFires: ".sizeof($this->fires));
-		
-		$this->setFireOrderDetails();
+	public function handlePostMoveAreaFires(){
+		Debug::log("handlePostMoveAreaFires: ".sizeof($this->fires));
+
+		$newFires = array();
 
 		for ($i = 0; $i < sizeof($this->fires); $i++){
-			Debug::log("handling fire: ".$this->fires[$i]->id.", weapon: ".$this->fires[$i]->weapon->display);
 			if ($this->fires[$i]->resolved){continue;}
 
-			if ($this->fires[$i]->weapon->aoe){
+			if ($this->fires[$i]->targetid == 0){
 				$subFires = DmgCalc::createAreaFireOrders($this, $this->fires[$i]);
+				//Debug::log("got ".sizeof($subFires)." new fires");
+				$newFires = array_merge($newFires, $subFires);
 
-				for ($j = 0; $j < sizeof($subFires); $j++){
-					$subFires[$j]->target->resolveFireOrder($subFires[$j]);
-					$this->fires[$i]->hits++;
-				}
 				$this->fires[$i]->resolved = 1;
 			}
-			else {
-				$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
-			}
 		}
-		$this->handleResolvedFireData();
+
+		if (sizeof($newFires)){
+			//Debug::log("merging to this->fires");
+			//Debug::log("putting into DB and merging to this->fires");
+			DBManager::app()->insertFireOrders($newFires);
+			$this->fires = array_merge($this->fires, $newFires);
+		}	
 	}
 
 	public function handleShipMovement(){

@@ -12,6 +12,7 @@ class Particle extends Weapon {
 class AsteroidRam extends Particle {
 	public $name = "AsteroidRam";
 	public $display = "Asteroid Ram Display";
+	public $animation = "explosive";
 	public static $prio = 0;
 	public $minDmg = 25;
 	public $maxDmg = 35;
@@ -33,7 +34,7 @@ class AsteroidRam extends Particle {
 	}
 
 	public function getShots($target){
-		return 10;
+		return $this->output;
 	}
 }
 

@@ -154,12 +154,12 @@ class DmgCalc {
 			$devi = mt_rand(0, $maxDevi);
 			$angle = mt_rand(0, 360);
 			$impact = Math::getPointInDirection($devi, $angle, $target->x, $target->y);
-			Debug::log("dist: ".$dist.", maxDevi: ".$maxDevi."px, devi: ".$devi."px, angle: ".$angle);
+			//Debug::log("dist: ".$dist.", maxDevi: ".$maxDevi."px, devi: ".$devi."px, angle: ".$angle);
 		}
 		else {
 			$angle = Math::getAngle2($origin, $target);
 			$impact = $target;
-			Debug::log("angle from $origin->x / $origin->y to $impact->x / $impact->y: $angle");
+			//Debug::log("angle from $origin->x / $origin->y to $impact->x / $impact->y: $angle");
 		}
 
 		$fire->notes = $impact->x.";".$impact->y.";";
@@ -183,7 +183,7 @@ class DmgCalc {
 				//Debug::log("hitting, dist to impact: ".$dist.", impact from: ".$angle);
 
 				$subFire = new FireOrder(
-					$fire->id, $gd->gameid, $gd->turn, $fire->shooterid, $gd->ships[$i]->id, $impact->x, $impact->y, $fire->weapon->id, 0, 0, "", 1, 0
+					$fire->id, $gd->gameid, $gd->turn, $fire->shooterid, $gd->ships[$i]->id, $impact->x, $impact->y, $fire->weapon->id, 0, 0, ($impact->x.";".$impact->y.";"), 1, 0
 				);
 
 				$subFire->cc = 0;
@@ -192,7 +192,12 @@ class DmgCalc {
 				$subFire->shooter = &$fire->shooter;
 				$subFire->target = &$gd->ships[$i];
 				$subFire->weapon = &$fire->weapon;
+
+				$fire->notes .= $subFire->targetid.";";
+				$fire->hits++;;
+
 				$newFires[] = $subFire;
+
 			}
 		}
 		return $newFires;

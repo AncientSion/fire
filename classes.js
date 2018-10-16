@@ -1049,17 +1049,66 @@ function FireOrder(data){
 	this.numbers = [];
 }
 
+
+FireOrder.prototype.setTarget = function(){
+}
+FireOrder.prototype.setShooter = function(){
+}
+FireOrder.prototype.setWeapon = function(){
+}
+FireOrder.prototype.setDamages = function(){
+}
+FireOrder.prototype.setSystems = function(){
+}
+FireOrder.prototype.setAngle = function(){
+}
+
+
 FireOrder.prototype.setNumberAnim = function(){
 
 	var last;
 	var targets = 1;
 	var data = this.tr.data();
 	var row = data.row;
-	this.numbers = [];
 
-	var aoe = this.weapon.aoe ? 1 : 0;
+	for (var i = 0; i < targets; i++){
+		var tr = $("#combatLog tr").eq(row+i);
+		var drawPos = game.getUnit(tr.data("targetid")).getDrawPos();
+		var odds = tr.find("td").eq(4).html();
+		var shots = tr.find("td").eq(5).html();
+		var armour = tr.find("td").eq(6).html();
+		var system = tr.find("td").eq(7).html();
+		var hull = tr.find("td").eq(8).html();
 
-	if (aoe){targets = data.end - data.start+1;}
+		this.numbers.push(
+			{
+				x: drawPos.x + range(-10, 10),
+				y: drawPos.y,
+				//n: Math.floor(len*0.4)*-1,
+				n: 0,
+				m: 70,
+				shots: shots,
+				armour: armour,
+				system: system,
+				hull: hull,
+				odds: odds,
+				done: 0
+			}
+		);
+
+		//console.log(this.numbers[0].n + " / " +this.numbers[0].m);
+	}
+}
+
+
+FireOrder.prototype.setNumberAnima = function(){
+
+	var last;
+	var targets = 1;
+	var data = this.tr.data();
+	var row = data.row;
+
+	if (this.weapon.aoe){targets = data.end - data.start+1;}
 	//if (this.weapon instanceof Warhead && this.hits.reduce((a, b) => a +b, 0)){
 	//	last = 0;
 	//}
@@ -1069,13 +1118,13 @@ FireOrder.prototype.setNumberAnim = function(){
 	//if (!last){return;}
 
 	for (var i = 0; i < targets; i++){
-		var tr = $("#combatLog tr").eq(row+aoe+i);
+		var tr = $("#combatLog tr").eq(row+i);
 		var drawPos = game.getUnit(tr.data("targetid")).getDrawPos();
 		var odds = aoe ? "" : tr.find("td").eq(4).html();
 		var shots = aoe ? "" : tr.find("td").eq(5).html();
-		var armour = tr.find("td").eq(6 - aoe*3).html();
-		var system = tr.find("td").eq(7 - aoe*3).html();
-		var hull = tr.find("td").eq(8 - aoe*3).html();
+		var armour = tr.find("td").eq(6).html();
+		var system = tr.find("td").eq(7).html();
+		var hull = tr.find("td").eq(8).html();
 
 		this.numbers.push(
 			{
@@ -1099,8 +1148,8 @@ FireOrder.prototype.setNumberAnim = function(){
 
 FireOrder.prototype.createCombatLogEntry = function(){
 	var log = $($("#combatLog").find("tbody")[0]);
-	var start = log.children().length;
 	var inflicted = this.addLogStartEntry(log);
+	var start = log.children().length;
 
 	var dmgs = this.assembleDmgData();
 	var depth = Object.keys(dmgs).length-1;
@@ -1109,10 +1158,10 @@ FireOrder.prototype.createCombatLogEntry = function(){
 	if (this.addLogRollsEntry(log)){depth++;}
 
 	//dmg Details
-	$($(log.children())[start])
+	$($(log.children())[start-1])
 		.data("expanded", 0)
-		.data("start", start+1)
-		.data("end", start+1 + depth)
+		.data("start", start)
+		.data("end", start + depth)
 
 	//console.log(dmgs);
 
@@ -1125,19 +1174,16 @@ FireOrder.prototype.createCombatLogEntry = function(){
 			.append($("<td>")
 			)
 			.append($("<td>")
-				.attr("colSpan", this.weapon.aoe ? 4 : 2)
+				.attr("colSpan", 2)
 				.html(i + dmgs[i][6]) // system name
 			)
 
 
-		if (!this.weapon.aoe){
-			var string = "";
-			if (dmgs[i][0]){string += "Kills: " + dmgs[i][0]};
-			if (string.length > 2 && dmgs[i][1]){string += " / "};
-			if (dmgs[i][1]){string += "Overload: " + dmgs[i][1]}
-			$(sub).append($("<td>").attr("colSpan", 2).html(string));
-		}
-
+		var string = "";
+		if (dmgs[i][0]){string += "Kills: " + dmgs[i][0]};
+		if (string.length > 2 && dmgs[i][1]){string += " / "};
+		if (dmgs[i][1]){string += "Overload: " + dmgs[i][1]}
+		$(sub).append($("<td>").attr("colSpan", 2).html(string));
 
 		for (var j = 2; j < dmgs[i].length-2; j++){
 			$(sub) 
@@ -1228,7 +1274,6 @@ FireOrder.prototype.addLogStartEntry = function(log){
 		}
 
 
-
 		var tableHeight = 10;
 		for (var i = 0; i < endRow; i++){
 			if ($(rows[i]).is(":visible")){tableHeight += 22;}
@@ -1239,38 +1284,28 @@ FireOrder.prototype.addLogStartEntry = function(log){
 	})
 
 
-	if (!this.weapon.aoe){
-		tr.hover(function(){
-			var data = $(this).data();
-			if (data.targetid == ""){return;}
-			game.getUnit(data.shooterid).doHighlight();
-			game.getUnit(data.targetid).doHighlight();
-		})
+	tr.hover(function(){
+		var data = $(this).data();
+		if (data.targetid == ""){return;}
+		game.getUnit(data.shooterid).doHighlight();
+		game.getUnit(data.targetid).doHighlight();
+	})
 
-		var req = this.req.slice();
-			req.sort(function(a, b){return a-b});
-		var reqString = this.getReqString(req);
+	var req = this.req.slice();
+		req.sort(function(a, b){return a-b});
+	var reqString = this.getReqString(req);
 
-		tr
-		.append($("<td>").html(this.type))
-		.append($("<td>").html("<font color='" + this.shooter.getCodeColor() + "'>" + this.shooter.name + " #" + this.shooter.id + "</font>"))
-		.append($("<td>").html("<font color='" + this.target.getCodeColor() + "'>" + this.target.name + " #" + this.target.id + "</font>"))
-		.append($("<td>").html(this.weapon.getDisplay()))
-		.append($("<td>").html(reqString))
-		.append($("<td>").html(hits + " / " + shots))
-		.append($("<td>").html(armour ? armour : ""))
-		.append($("<td>").html(system || em || ""))
-		.append($("<td>").html(hull ? hull : ""))
-	}
-	else {
-		tr
-		.append($("<td>").html("Interrupt").css("width", 70))
-		.append($("<td>").attr("colSpan", 4).html("<font color='" + this.shooter.getCodeColor() + "'>" + this.shooter.name + " #" + this.shooter.id + "</font> firing " + this.weapon.getDisplay()))
-		.append($("<td>").html(this.damages.length))
-		.append($("<td>").html(armour ? armour : ""))
-		.append($("<td>").html(system || em || ""))
-		.append($("<td>").html(hull ? hull : ""))
-	}
+	tr
+	.append($("<td>").html(this.type))
+	.append($("<td>").html("<font color='" + this.shooter.getCodeColor() + "'>" + this.shooter.name + " #" + this.shooter.id + "</font>"))
+	.append($("<td>").html("<font color='" + this.target.getCodeColor() + "'>" + this.target.name + " #" + this.target.id + "</font>"))
+	//.append($("<td>").html("this"))
+	.append($("<td>").html(this.weapon.getDisplay()))
+	.append($("<td>").html(reqString))
+	.append($("<td>").html(hits + " / " + shots))
+	.append($("<td>").html(armour ? armour : ""))
+	.append($("<td>").html(system || em || ""))
+	.append($("<td>").html(hull ? hull : ""))
 
 	$(log).append(tr);
 	this.tr = tr;
@@ -1366,6 +1401,7 @@ FireOrder.prototype.addLogShieldEntry = function(log, shield){
 
 FireOrder.prototype.getRollsString = function(rolls, allReq){
 	var req = 0;
+	if (allReq.length == 1 && allReq[0] == 0){return "";} //area emine auto hit
 	for (var i = 0; i < allReq.length; i++){
 		if (allReq[i] > 0){
 			req = allReq[i]; break;
@@ -1418,7 +1454,7 @@ FireOrder.prototype.getReqString = function(req){
 	//console.log(req);
 	var string = "";
 	if (req.length == 1){
-		string = req;
+		string = req[0];
 	}
 	else {
 		if (req[0] != 0){
@@ -1435,7 +1471,7 @@ FireOrder.prototype.getReqString = function(req){
 		}
 	}
 
-	return string + " %"
+	return (string == "0" ? "" : string + " %"); //area emine auto hit
 }
 
 FireOrder.prototype.getRollsStrinpg = function(rolls, req){

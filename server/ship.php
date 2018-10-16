@@ -856,7 +856,7 @@ class Ship {
 			$this->determineHits($fire);
 		}
 
-		$fire->notes = implode(";", $fire->rolls).";";
+		$fire->notes .= implode(";", $fire->rolls).";";
 		$fire->resolved = 1;
 	}
 

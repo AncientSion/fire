@@ -124,6 +124,20 @@ Obstacle.prototype.select = function(){
 	return;
 }
 
+Obstacle.prototype.drawMarker = function(x, y, c, context){
+	context.beginPath();
+	context.arc(x, y, (this.size-2)/2, 0, 2*Math.PI, false);
+	context.closePath();
+	context.lineWidth = 2;
+	context.globalAlpha = 0.7;
+	context.globalCompositeOperation = "source-over";
+	context.strokeStyle = "blue";
+	context.stroke();
+	context.globalAlpha = 1;
+	context.lineWidth = 1;
+	context.strokeStyle = "black";
+}
+
 Obstacle.prototype.createBaseDiv = function(){
 	var div = $("<div>")
 		.addClass("obstacleDiv hostile")
