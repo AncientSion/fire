@@ -1,5 +1,6 @@
 function Obstacle(data){
 	Mixed.call(this, data);
+	this.primary = {"systems": []};
 	this.size = data.size;
 	this.block = data.block;
 	this.collision = data.collision;

@@ -12,6 +12,7 @@ spl_autoload_register(
                 
                 'obstacle' => '/server/obstacle.php',
                 'asteroid' => '/server/asteroid.php',
+                'asteroidram' => '/server/particle.php',
 
                 'warhead' => '/server/systems/weapons/ammo.php',
                 'hasta' => '/server/systems/weapons/ammo.php',

@@ -2188,6 +2188,12 @@ Weapon.prototype.hasValidTarget = function(){
 	} return false;
 }
 
+function AsteroidRam(system){
+	Weapon.call(this, system);
+} 
+AsteroidRam.prototype = Object.create(Weapon.prototype)
+
+
 function Warhead(data){
 	this.id = data.id;
 	this.parentId = data.parentId;

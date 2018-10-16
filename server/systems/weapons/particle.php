@@ -9,6 +9,32 @@ class Particle extends Weapon {
 	}
 }
 
+class AsteroidRam extends Particle {
+	public $name = "AsteroidRam";
+	public $display = "Asteroid Ram Display";
+	public static $prio = 0;
+	public $minDmg = 25;
+	public $maxDmg = 35;
+	public $accDecay = 180;
+	public $shots = 4;	
+	public $reload = 2;
+	public $integrity = 28;
+	public $powerReq = 3;
+	public $tracking = 1;
+
+	public $animColor = "orange";
+	public $projSize = 2;
+	public $projSpeed = 8;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+	}
+
+	public function getShots($target){
+		return 10;
+	}
+}
+
 class TwinParticleBolter extends Particle {
 	public $name = "TwinParticleBolter";
 	public $display = "Twin Particle Bolter";

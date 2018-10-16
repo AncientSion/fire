@@ -183,15 +183,12 @@ class DmgCalc {
 				//Debug::log("hitting, dist to impact: ".$dist.", impact from: ".$angle);
 
 				$subFire = new FireOrder(
-					$fire->id, 0, $gd->turn, $fire->shooterid, $gd->ships[$i]->id, $impact->x, $impact->y, $fire->weapon->id, $fire->shots, 0, "", 1, 0
+					$fire->id, $gd->gameid, $gd->turn, $fire->shooterid, $gd->ships[$i]->id, $impact->x, $impact->y, $fire->weapon->id, 0, 0, "", 1, 0
 				);
 
 				$subFire->cc = 0;
 				$subFire->dist = $dist;
 				$subFire->angle = $angle;
-				$subFire->shooter = &$fire->shooter;
-				$subFire->target = $gd->ships[$i];
-				$subFire->weapon = $fire->weapon;
 				$newFires[] = $subFire;
 			}
 		}

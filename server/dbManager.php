@@ -1455,7 +1455,7 @@
 		}
 
 		public function insertFireOrders($fires){
-			//Debug::log("insertFireOrders: ".sizeof($fires)); var_export($fires); return;
+			Debug::log("insertFireOrders: ".sizeof($fires));
 			$stmt = $this->connection->prepare("
 				INSERT INTO fireorders 
 					(gameid, turn, shooterid, targetid, x, y, weaponid)

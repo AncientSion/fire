@@ -8,6 +8,7 @@ class Obstacle extends Mixed {
 	public $traverse = 10;
 	public $block = 0;
 	public $collision = 0;
+	public $systems = array();
 
 	function __construct($data = false){
         parent::__construct($data);
@@ -15,15 +16,42 @@ class Obstacle extends Mixed {
         $this->block = $data["rolling"];
         $this->collision = $data["rolled"];
 	}
-
-	function addAllSystems(){
+	
+	public function addAllSystems(){
+		$this->addPrimary();
 		$this->addStructures();
+	}	
+
+	public function addPrimary(){
+		//Debug::log("addPrimary #".$this->id.", index: ".$this->index);
+		$this->primary = new Shared($this->getId());
+		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, 0, 360);
 	}
 
 	public function addStructures(){
 		$amount = ceil(20 * $this->size / 4 * $this->block / 250 * $this->collision) / 100;
 		for ($i = 1; $i <= $amount; $i++){
 			$this->structures[] = new Asteroid($this->size, $amount);
+		}
+	}
+
+	public function getSystem($id){
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			if ($this->primary->systems[$i]->id == $id){
+				return $this->primary->systems[$i];
+			}
+		}
+		return false;
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($this->structures[$i]->id == $id){
+				return $this->structures[$i];
+			}
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				if ($this->structures[$i]->systems[$j]->id == $id){
+					return $this->structures[$i]->systems[$j]->getActiveSystem();
+				}
+			}
 		}
 	}
 	
@@ -82,6 +110,7 @@ class Obstacle extends Mixed {
 }
 
 class Asteroid {
+	public $id = 0;
 	public $size;
 	public $layout;
 	public $systems = array();

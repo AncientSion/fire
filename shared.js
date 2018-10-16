@@ -170,6 +170,10 @@ function initSquadron(data){
 
 function initObstacle(data){
 	var obstacle = new Obstacle(data);
+	for (var i = 0; i < data.primary.systems.length; i++){
+		var primSystem = new window[data.primary.systems[i].name](data.primary.systems[i]);
+		obstacle.primary.systems.push(primSystem);
+	}
 	for (var i = 0; i < data.structures.length; i++){
 		var asteroid = initAsteroid(data.structures[i]);
 		obstacle.structures.push(asteroid);

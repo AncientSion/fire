@@ -832,15 +832,21 @@ class Ship {
 				//$fire->rolls[] = 0;
 			}
 		}
-		else if ($fire->weapon->aoe){
+		else if $fire->shooter->aoe){
 			Debug::log("resolveFireOrder AREA - #".$fire->id.", TARGET ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
 
 			$fire->section = $this->getHitSection($fire);
 			DmgCalc::doDmg($fire, 0, $this->getHitSystem($fire));
 
 		}
+		else if ($fire->shooter->obstacle){
+			Debug::log("resolveFireOrder OBSTACLE - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots.", type: ".$fire->weapon->dmgType);
+
+			$fire->section = $this->getHitSection($fire);
+			DmgCalc::doDmg($fire, 0, $this->getHitSystem($fire));
+		}
 		else {
-			Debug::log("resolveFireOrder - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots.", type: ".$fire->weapon->dmgType);
+			Debug::log("resolveFireOrder STOCK - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots.", type: ".$fire->weapon->dmgType);
 
 			$fire->cc = $this->isCloseCombat($fire->shooter->id);
 			$fire->dist = $this->getHitDist($fire);

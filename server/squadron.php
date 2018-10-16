@@ -316,8 +316,6 @@ class Squadron extends Mixed {
 		for ($i = 0; $i < sizeof($crits); $i++){
 			$found = 0;
 
-			//var_export($crits[$i]);
-
 			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 				if ($this->primary->systems[$j]->id == $crits[$i]->systemid){
 					//Debug::log("add");
