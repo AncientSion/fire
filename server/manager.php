@@ -863,7 +863,6 @@
 				$subFires = DmgCalc::createAreaFireOrders($this, $this->fires[$i]);
 
 				for ($j = 0; $j < sizeof($subFires); $j++){
-					//$subFires[$j]->target->resolveAreaFireOrder($subFires[$j]);
 					$subFires[$j]->target->resolveFireOrder($subFires[$j]);
 					$this->fires[$i]->hits++;
 				}

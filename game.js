@@ -1076,19 +1076,18 @@ function Game(data){
 			}
 		}
 
-		this.showUI();
-
 		this.createLogEntry("-- Movement concluded --");
 
 		if (this.events.length){ // ramming, emines AFTER moving anim
 			if (this.phase == 2){
 				game.timeout = setTimeout(function(){
 					//$($("#combatLog").find("td")[0]).attr("colSpan", 8)
+					this.showUI(500);
 					game.resolvePostMoveFires();
 				}, 1000);
 			}
 			else if (this.phase == 1){ // firing eMine
-				this.drawingEvents = 1;
+				this.showUI(500);
 				this.logWeaponEvents();
 				this.draw();
 			}
@@ -1096,6 +1095,7 @@ function Game(data){
 		else {
 			this.drawingEvents = 1;
 			this.draw();
+			this.showUI();
 			if (this.phase == 2){ // player control now, setup fire
 				this.setObstacleData();
 				this.autoIssueFireOrders();
@@ -1527,7 +1527,6 @@ function Game(data){
 	}
 
 	this.addEvent = function(system){
-		system.initEvent();
 		this.events.push(system);
 		game.redraw();
 	}
@@ -2315,6 +2314,7 @@ function Game(data){
 	}
 
 	this.doSizeLog = function(width){
+		console.log("doSizeLog")
 
 		var header = "";
 		if (game.phase == -1){header = "Damage Control Resolution Log";}
@@ -2325,7 +2325,7 @@ function Game(data){
 		if (game.phase != 3){
 		ui.combatLogWrapper
 			.find(".combatLogHeader thead tr").last().remove().end()
-			//.html("<th>Damage Control Resolution Log</th>").end().find("#combatLog tr").first().remove();
+			//.html("<th>Damage Control Repsolution Log</th>").end().find("#combatLog tr").first().remove();
 			.html("<th>" + header + "</th>").end().find("#combatLog tr").first().remove();
 		}
 
@@ -3575,7 +3575,7 @@ Game.prototype.drawEvents = function(){
 	if (!game.drawCircle){return;}
 	else if (!game.drawingEvents){return;}
 	for (var i = 0; i < this.events.length; i++){
-		this.events[i].highlightEvent();
+		this.events[i].drawSingleEvent();
 	}
 }
 

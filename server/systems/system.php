@@ -17,6 +17,7 @@ class System {
 	public $mount = "";
 	public $damages = array();
 	public $powers = array();
+	public $fireOrders = array();
 	public $crits = array();
 	public $integrity = 0;
 	public $linked = 1;

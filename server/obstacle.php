@@ -9,6 +9,7 @@ class Obstacle extends Mixed {
 	public $block = 0;
 	public $collision = 0;
 	public $systems = array();
+	public $critEffects = array();
 
 	function __construct($data = false){
         parent::__construct($data);

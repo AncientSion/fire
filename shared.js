@@ -150,13 +150,6 @@ function initSquadron(data){
 	var squadron = new Squadron(data);
 	for (var i = 0; i < data.primary.systems.length; i++){
 		var primSystem = new window[data.primary.systems[i].name](data.primary.systems[i]);
-
-		for (var j = 0; j < data.primary.systems[i].powers.length; j++){
-			primSystem.powers.push(new Power(data.primary.systems[i].powers[j]));
-		}
-		for (var j = 0; j < data.primary.systems[i].crits.length; j++){
-			primSystem.crits.push(new Crit(data.primary.systems[i].crits[j]));
-		}
 		squadron.primary.systems.push(primSystem);
 	}
 	for (var i = 0; i < data.structures.length; i++){
@@ -196,28 +189,14 @@ function initSquaddie(data){
 	}
 
 	for (var i = 0; i < data.crits.length; i++){
-		//if (data.crits[i].turn == game.turn){
-			unit.crits.push(new Crit(data.crits[i]));
-		//}
+		unit.crits.push(new Crit(data.crits[i]));
 	}
 
 	for (var j = 0; j < data.structures.length; j++){
 		var struct = new Section(data.structures[j]);
 
 		for (var k = 0; k < data.structures[j].systems.length; k++){
-			var system = new window[data.structures[j].systems[k].type](data.structures[j].systems[k]);				
-			for (var l = 0; l < data.structures[j].systems[k].fireOrders.length; l++){
-				system.fireOrders.push(new FireOrder(data.structures[j].systems[k].fireOrders[l]));
-			}
-			for (var l = 0; l < data.structures[j].systems[k].damages.length; l++){
-				system.damages.push(new Damage(data.structures[j].systems[k].damages[l]));
-			}
-			for (var l = 0; l < data.structures[j].systems[k].powers.length; l++){
-				system.powers.push(new Power(data.structures[j].systems[k].powers[l]));
-			}
-			for (var l = 0; l < data.structures[j].systems[k].crits.length; l++){
-				system.crits.push(new Crit(data.structures[j].systems[k].crits[l]));
-			}
+			var system = new window[data.structures[j].systems[k].type](data.structures[j].systems[k]);		
 			struct.systems.push(system);
 		}
 		unit.structures.push(struct);
@@ -237,18 +216,6 @@ function initShip(data){
 
 	for (var j = 0; j < data.primary.systems.length; j++){
 		var primSystem = new window[data.primary.systems[j].name](data.primary.systems[j]);
-
-		for (var l = 0; l < data.primary.systems[j].damages.length; l++){
-			primSystem.damages.push(new Damage(data.primary.systems[j].damages[l]));
-		}
-
-		for (var l = 0; l < data.primary.systems[j].powers.length; l++){
-			primSystem.powers.push(new Power(data.primary.systems[j].powers[l]));
-		}
-
-		for (var l = 0; l < data.primary.systems[j].crits.length; l++){
-			primSystem.crits.push(new Crit(data.primary.systems[j].crits[l]));
-		}
 		ship.primary.systems.push(primSystem);
 	}
 
@@ -262,25 +229,7 @@ function initShip(data){
 
 		for (var k = 0; k < data.structures[j].systems.length; k++){
 			var system = new window[data.structures[j].systems[k].type](data.structures[j].systems[k]);
-			if (system){
-				
-				for (var l = 0; l < data.structures[j].systems[k].fireOrders.length; l++){
-					system.fireOrders.push(new FireOrder(data.structures[j].systems[k].fireOrders[l]));
-				}
-
-				for (var l = 0; l < data.structures[j].systems[k].damages.length; l++){
-					system.damages.push(new Damage(data.structures[j].systems[k].damages[l]));
-				}
-
-				for (var l = 0; l < data.structures[j].systems[k].powers.length; l++){
-					system.powers.push(new Power(data.structures[j].systems[k].powers[l]));
-				}
-
-				for (var l = 0; l < data.structures[j].systems[k].crits.length; l++){
-					system.crits.push(new Crit(data.structures[j].systems[k].crits[l]));
-				}
-				struct.systems.push(system);
-			}	
+			if (system){struct.systems.push(system);}	
 		}
 		ship.structures.push(struct);
 	}

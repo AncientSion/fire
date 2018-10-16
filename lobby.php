@@ -40,12 +40,18 @@ if (isset($_SESSION["userid"])){
 		if ($_POST["reinforceTurn"] == ""){return;}
 		if ($_POST["reinforceETA"] == ""){return;}
 		if ($_POST["reinforceAmount"] == ""){return;}
+		if ($_POST["obstaclesAmount"] == ""){return;}
+		if ($_POST["obstaclesSizeMin"] == ""){return;}
+		if ($_POST["obstaclesSizeMax"] == ""){return;}
 
 		if (!ctype_digit($_POST["pointValue"])){return;}
 		if (!ctype_digit($_POST["reinforceValue"])){return;}
 		if (!ctype_digit($_POST["reinforceTurn"])){return;}
 		if (!ctype_digit($_POST["reinforceETA"])){return;}
 		if (!ctype_digit($_POST["reinforceAmount"])){return;}
+		if (!ctype_digit($_POST["obstaclesAmount"])){return;}
+		if (!ctype_digit($_POST["obstaclesSizeMin"])){return;}
+		if (!ctype_digit($_POST["obstaclesSizeMax"])){return;}
 
 		$id = $dbManager->createNewGameAndJoin($_SESSION["userid"], $_POST);
 		if ($id){header("Location: gameSetup.php?gameid=".$id);}
@@ -295,6 +301,31 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 									<input type="number" style="width: 100%; text-align: center" value=10 placeholder="10" name="reinforceAmount" step="1" min="0" max="20"></input>		
 								</td>
 							</tr>
+							<tr>
+								<td>
+									Exact number of Obstacles
+								</td>
+								<td>
+									<input type="number" style="width: 100%; text-align: center" value=4 placeholder="4" name="obstaclesAmount" step="1" min="0" max="20"></input>		
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Minimal size per Obstacle
+								</td>
+								<td>
+									<input type="number" style="width: 100%; text-align: center" value=50 placeholder="50" name="obstaclesSizeMin" step="10" min="30" max="100"></input>		
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Maximum size per Obstacle
+								</td>
+								<td>
+									<input type="number" style="width: 100%; text-align: center" value=200 placeholder="200" name="obstaclesSizeMax" step="10" min="100" max="300"></input>		
+								</td>
+							</tr>
+							<tr>
 								<td colSpan=2 style="border: none">
 									<input type="submit" style="width: 40%" value="Confirm and Forward"></input>	
 								</td>

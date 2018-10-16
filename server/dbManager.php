@@ -277,8 +277,7 @@
 		}
 
 		public function createNewGameAndJoin($userid, $post){
-			$this->createNewGame($post);
-			$gameid = $this->getLastInsertId();
+			$gameid = $this->createNewGame($post);
 			$this->createPlayerStatus($userid, $gameid);
 			if ($gameid){return $gameid;}
 			return 0;
@@ -347,34 +346,28 @@
 		public function createNewGame($post){
 			$stmt = $this->connection->prepare("
 				INSERT INTO games
-					(name, status, turn, phase, pv, reinforce, reinforceTurn, reinforceETA, reinforceAmount, focusMod)
+					(name, status, turn, phase, pv, reinforce, reinforceTurn, reinforceETA, reinforceAmount, focusMod, obstaclesAmount, obstaclesSizeMax, obstaclesSizeMin)
 				VALUES
-					(:name, :status, :turn, :phase, :pv, :reinforce, :reinforceTurn, :reinforceETA, :reinforceAmount, :focusMod)
+					(:name, 'open', -1, -1, :pv, :reinforce, :reinforceTurn, :reinforceETA, :reinforceAmount, 10, :obstaclesAmount, :obstaclesSizeMax, :obstaclesSizeMin)
 			");
 			
-			$status = "open";
-			$turn = -1;
-			$phase = -1;
-			$focusMod = 10;
-			
 			$stmt->bindParam(":name", $post["gameName"]);
-			$stmt->bindParam(":status", $status);
-			$stmt->bindParam(":turn", $turn);
-			$stmt->bindParam(":phase", $phase);
 			$stmt->bindParam(":pv", $post["pointValue"]);
 			$stmt->bindParam(":reinforce", $post["reinforceValue"]);
 			$stmt->bindParam(":reinforceTurn", $post["reinforceTurn"]);
 			$stmt->bindParam(":reinforceETA", $post["reinforceETA"]);
 			$stmt->bindParam(":reinforceAmount", $post["reinforceAmount"]);
-			$stmt->bindParam(":focusMod", $focusMod);
+			$stmt->bindParam(":obstaclesAmount", $post["obstaclesAmount"]);
+			$stmt->bindParam(":obstaclesSizeMax", $post["obstaclesSizeMax"]);
+			$stmt->bindParam(":obstaclesSizeMin", $post["obstaclesSizeMin"]);
 			
 			$stmt->execute();
 			
 			if ($stmt->errorCode() == 0){
-				return true;
+				return $this->getLastInsertId();
 			}
 			else {
-				echo "<script>alert('ERROR');</script>";
+				return false;
 			}
 		}
 		
@@ -392,6 +385,7 @@
 			if ($stmt->errorCode() == 0){
 				$sql = "(SELECT * FROM playerstatus where gameid = ".$gameid.")";
 				$result = $this->query($sql);
+				//Debug::log(sizeof($result));
 				if (!sizeof($result)){
 					//Debug::log("deleting game");
 					$sql = "DELETE FROM games WHERE id = ".$gameid;
@@ -874,11 +868,15 @@
 		}
 
 
-		public function createObstacles($gameid){
+		public function createObstacles($gameid, $data){
 			Debug::log("createObstacles #".$gameid);
 			$rocks = array();
 
-			for ($i = 1; $i <= 4; $i++){
+			$amount = $data["obstaclesAmount"];
+			$min = $data["obstaclesSizeMin"];
+			$max = $data["obstaclesSizeMax"];
+
+			for ($i = 1; $i <= $amount; $i++){
 				//Debug::log("rock ".$i);
 				
 				$attempts = 3;
@@ -888,13 +886,12 @@
 					//Debug::log("attempts left ".$attempts);
 					$x = mt_rand(100, 400) * (1 - (mt_rand(0, 1)*2));
 					$y = mt_rand(100, 500) * (1 - (mt_rand(0, 1)*2));
-					$size = mt_rand(50, 200);
+					$size = mt_rand($min, $max);
 
 					$redo = 0;
 
 					for ($j = 0; $j < sizeof($rocks); $j++){
 						$dist = Math::getDist($rocks[$j][0], $rocks[$j][1], $x, $y);
-
 
 						if ($dist + $size/2 < $rocks[$j][4]){
 							//Debug::log("retry, dist $dist, size $size, next $rocks[$j][2])");
@@ -952,10 +949,8 @@
 		public function startGame($gameid){
 			Debug::log("startGame #".$gameid);
 
-			if (!$this->createObstacles($gameid)){
-				return false;
-			}
-
+			$data = $this->query("SELECT * FROM games where id = ".$gameid);
+			if (sizeof($data)){$this->createObstacles($gameid, $data[0]);}
 
 			$stmt = $this->connection->prepare("
 				UPDATE games 

@@ -421,20 +421,6 @@ window.ajax = {
 			error: ajax.error,
 		});
 	},
-
-	startGame: function(gameid, callback){
-		$.ajax({
-			type: "POST",
-			url: "postGameData.php",
-			datatype: "json",
-			data: {
-					type: "start",
-					gameid: gameid
-					},
-			success: callback,
-			error: ajax.error,
-		});
-	},
 	
 	getGames: function(){
 			

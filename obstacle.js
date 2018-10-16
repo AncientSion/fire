@@ -200,11 +200,34 @@ Obstacle.prototype.expandDiv = function(div){
 	$(structContainer)
 	.append($("<div>")
 		.addClass("obstacle")
-		.append(this.structures[0].getBaseImage().cloneNode(true)))
+		.append(graphics.images.rocks[range(0, graphics.images.rocks.length-1)]));	
+		//.append(this.structures[0].getBaseImage().cloneNode(true)))
 
 
 	$(div).addClass("disabled");
 	return div;
+}
+
+Obstacle.prototype.getAllResolvingFireOrders = function(){
+	var fires = [];
+
+	for (var i = 0; i < this.primary.systems.length; i++){
+		var fire = this.primary.systems[i].getResolvingFireOrders();
+		if (fire){fires.push(fire);}
+	}
+	return fires;
+}
+
+Obstacle.prototype.getEvents = function(){
+	var data = [];
+	for (var i = 0; i < this.primary.systems.length; i++){
+		for (var j = 0; j < this.primary.systems.length; j++){
+			if (this.primary.systems[i].hasEvent()){
+				data.push(this.primary.systems[i]);
+			}
+		}
+	}
+	return data;
 }
 
 Obstacle.prototype.create = function(){
@@ -270,7 +293,8 @@ Obstacle.prototype.setImage = function(){
 		ctx.translate(this.structures[i].layout.x/2, this.structures[i].layout.y/2);
 		ctx.rotate(rota * (Math.PI/180))
 		ctx.drawImage(
-			this.structures[i].getBaseImage(),
+			graphics.images.rocks[range(0, graphics.images.rocks.length-1)].cloneNode(true),
+			//this.structures[i].getBaseImage(),
 			0 -this.structures[i].size/2,
 			0 -this.structures[i].size/2,
 			this.structures[i].size, 
@@ -300,7 +324,7 @@ Obstacle.prototype.setImage = function(){
 	ctx.font = "30px Arial";
 	ctx.textAlign = "center";
 	ctx.fillText("I: " + this.getFullPenBlock() + "%", 0, -10);
-	ctx.fillText("C: " + this.collision + "%", 0, 30);
+	ctx.fillText("C: " + this.structures.length + "x " + this.collision + "%", 0, 30);
 
 	ctx.setTransform(1,0,0,1,0,0);
 	this.img = t;
@@ -321,7 +345,7 @@ function Asteroid(data){
 }
 
 Asteroid.prototype.setBaseImage = function(){
-	this.img = graphics.images.rocks[range(0, graphics.images.rocks.length-1)].cloneNode(true);
+	//this.img = graphics.images.rocks[range(0, graphics.images.rocks.length-1)].cloneNode(true);
 }
 
 Asteroid.prototype.getBaseImage = function(){

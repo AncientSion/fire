@@ -6,7 +6,6 @@ class Weapon extends System {
 	public $guns = 1;
 	public $reload = 1;
 	public $powerReq = 2;
-	public $fireOrders = array();
 	public $arc = array();
 	public $tracking = 0;
 	public $projSize = 10;

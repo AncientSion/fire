@@ -355,7 +355,6 @@ Squadron.prototype.unselectSystems = function(){
 
 Squadron.prototype.getFireOrders = function(){
 	var fires = [];
-
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].structures.length; j++){
 			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
@@ -367,8 +366,21 @@ Squadron.prototype.getFireOrders = function(){
 			}
 		}
 	}
-
 	return fires;
+}
+
+Squadron.prototype.getEvents = function(){
+	var data = [];
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].structures.length; j++){
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (this.structures[i].structures[j].systems[k].hasEvent()){
+					data.push(this.structures[i].structures[j].systems[k]);
+				}
+			}
+		}
+	}
+	return data;
 }
 
 Squadron.prototype.getAllPowerOrders = function(){
@@ -386,7 +398,6 @@ Squadron.prototype.getAllPowerOrders = function(){
 			}
 		}
 	}
-
 	return powers;
 }
 

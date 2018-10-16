@@ -832,7 +832,7 @@ class Ship {
 				//$fire->rolls[] = 0;
 			}
 		}
-		else if $fire->shooter->aoe){
+		else if ($fire->weapon->aoe){
 			Debug::log("resolveFireOrder AREA - #".$fire->id.", TARGET ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
 
 			$fire->section = $this->getHitSection($fire);
@@ -843,7 +843,7 @@ class Ship {
 			Debug::log("resolveFireOrder OBSTACLE - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots.", type: ".$fire->weapon->dmgType);
 
 			$fire->section = $this->getHitSection($fire);
-			DmgCalc::doDmg($fire, 0, $this->getHitSystem($fire));
+			$this->determineObstacleHits($fire);
 		}
 		else {
 			Debug::log("resolveFireOrder STOCK - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots.", type: ".$fire->weapon->dmgType);
@@ -853,7 +853,6 @@ class Ship {
 			$fire->angle = $this->getIncomingFireAngle($fire);
 			$fire->section = $this->getHitSection($fire);
 
-			$this->rollToHit($fire);
 			$this->determineHits($fire);
 		}
 
@@ -861,30 +860,32 @@ class Ship {
 		$fire->resolved = 1;
 	}
 
-	public function resolveAreaFireorder($fire){
+	public function determineObstacleHits($fire){
+		Debug::log("determineObstacleHits");
 
-		if ($this->isDestroyed()){
-			Debug::log("STOP - resolveFireOrder ".get_class($this)." (target) isDestroyed() = true");
-			$fire->resolved = 1;
-		}
-		else {
-			$fire->resolved = 1;
-		}
-	}
+		$fire->req = $fire->shooter->collision;
 
-	public function rollToHit($fire){
-		//Debug::log("rollToHit");
 		for ($i = 0; $i < $fire->shots; $i++){
 			$roll = mt_rand(1, 100);
 			$fire->rolls[] = $roll;
-			//Debug::log("$i roll ".$roll);
-			//$fire->notes .= $roll.";";
 		}
-		return true;
+
+		for ($i = 0; $i < sizeof($fire->rolls); $i++){
+			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
+			else if ($fire->rolls[$i] <= $fire->req){
+				$fire->hits++;
+				DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
+			}
+		}
 	}
 
 	public function determineHits($fire){ // target
 		$fire->req = $fire->shooter->calculateToHit($fire);
+
+		for ($i = 0; $i < $fire->shots; $i++){
+			$roll = mt_rand(1, 100);
+			$fire->rolls[] = $roll;
+		}
 
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			if ($this->destroyed){$fire->cancelShotResolution($i); return;}

@@ -18,15 +18,15 @@ function System(system){
 	this.maxRange = system.maxRange;
 	this.loads = system.loads || [];
 	this.critEffects = system.critEffects;
-	this.crits = [];
-	this.damages = [];
 	this.highlight = false;
 	this.selected = false;
 	this.weapon = false;
 	this.bonusNegation = 0;
 	this.cost = 0;
-	this.powers = [];
 	this.fireOrders = [];
+	this.damages = [];
+	this.powers = [];
+	this.crits = [];
 	this.type = "";
 	this.modes = {};
 	this.element;
@@ -45,6 +45,22 @@ function System(system){
 	this.usage = system.usage;
 	this.freeAim = system.freeAim;
 	this.width = system.width;
+
+	for (var i = 0; i < system.fireOrders.length; i++){
+		this.fireOrders.push(new FireOrder(system.fireOrders[i]));
+	}
+
+	for (var i = 0; i < system.damages.length; i++){
+		this.damages.push(new Damage(system.damages[i]));
+	}
+
+	for (var i = 0; i < system.powers.length; i++){
+		this.powers.push(new Power(system.powers[i]));
+	}
+
+	for (var i = 0; i < system.crits.length; i++){
+		this.crits.push(new FireOrder(system.crits[i]));
+	}
 }
 
 System.prototype.getActiveState = function(){
@@ -1804,7 +1820,6 @@ function Weapon(system){
 	this.animation = system.animation;
 	this.fighterId = system.fighterId;
 	this.loaded;
-	this.fireOrders = [];
 	this.mount;
 	this.exploSize = 2+((this.minDmg+this.maxDmg)/30) * (1+   (1*(this.fireMode == "Flash")) +(10*(this.fireMode == "Shockwave")));
 	this.odds = 0;
@@ -2193,6 +2208,19 @@ function AsteroidRam(system){
 } 
 AsteroidRam.prototype = Object.create(Weapon.prototype)
 
+AsteroidRam.prototype.hasEvent = function(){
+	if (game.phase == 3){return false;}
+	for (var i = this.fireOrders.length-1; i >= 0; i--){
+		if (this.fireOrders[i].turn == game.turn){
+			return true;
+		}
+	}
+	return false;
+}
+
+AsteroidRam.prototype.drawSingleEvent = function(){
+	return;
+}
 
 function Warhead(data){
 	this.id = data.id;
@@ -3579,7 +3607,7 @@ Area.prototype.handleAimEvent = function(o, t){
 	salvoCtx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
-Area.prototype.highlightEvent = function(){
+Area.prototype.drawSingleEvent = function(){
 	var o = game.getUnit(this.parentId);
 	if (!o.friendly && game.phase != 2){return;}
 	var t = this.fireOrders[this.fireOrders.length-1];
@@ -3640,36 +3668,6 @@ Area.prototype.highlightEvent = function(){
 	salvoCtx.setTransform(1,0,0,1,0,0);
 }
 
-Area.prototype.initEvent = function(){
-	return;
-	var o = game.getUnit(this.parentId);
-	var t = this.fireOrders[this.fireOrders.length-1];
-	var dist = getDistance(o, t);
-
-	var c = document.createElement("canvas");
-		c.width = dist*2;
-		c.height = dist*2;		
-	var ctx = c.getContext("2d");
-		ctx.translate(c.width/2, c.height/2);
-
-	ctx.globalAlpha = 1;
-	ctx.beginPath();
-	ctx.arc(0, 0, this.aoe, 0, 2*Math.PI, false);
-	ctx.closePath();
-	//ctx.globalCompositeOperation = "source-over";
-	//ctx.fillStyle = this.getEffectFillStyle(0, 0, dist);
-
-	//ctx.strokeStyle = "red";
-	//ctx.lineWidth = 3;
-	//ctx.stroke();
-	ctx.lineWidth = 1;
-
-	ctx.fillStyle = "white";
-	ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-	this.img = c;
-}
-
 Area.prototype.getEffectFillStyle = function(x, y, dist){
 	var grad = fxCtx.createRadialGradient(x, y, 0, x, y, this.aoe);
 	var loss = this.dmgLoss * this.getRangeDmgMod();
@@ -3687,52 +3685,10 @@ Area.prototype.hasEvent = function(){
 	if (game.phase == 3){return false;}
 	for (var i = this.fireOrders.length-1; i >= 0; i--){
 		if (this.fireOrders[i].turn == game.turn){
-			this.initEvent();
 			return true;
 		}
 	}
 	return false;
-}
-
-
-Area.prototype.geftSysDiv = function(){
-	var div = document.createElement("div");
-		div.id = "sysDiv";
-	var table = document.createElement("table");
-	
-	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
-	$(table).append($("<tr>").append($("<td>").html("Firing Mode").css("width", "60%")).append($("<td>").html(this.fireMode)));
-	$(table).append($("<tr>").append($("<td>").html("Damage Type")).append($("<td>").html(this.dmgType)));
-
-
-	if (game.getUnit(this.parentId).ship){
-		$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
-		$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
-	}
-
-	$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
-	$(table).append($("<tr>").append($("<td>").html("Loading")).append($("<td>").addClass("loading").html(this.getTimeLoaded() + " / " + this.reload)));
-
-	if (this.boostEffect.length && !(this instanceof Launcher)){
-		$(table).append($("<tr>").css("border-top", "2px solid white").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency() + " (max: " + this.maxBoost + ")")));
-		this.getBoostEffectElements(table);
-	}
-
-	//$(table).append($("<tr>").append($("<td>").html("Max Range")).append($("<td>").html(this.maxRange)));
-	$(table).append($("<tr>").append($("<td>").html("Area of Effect")).append($("<td>").html(this.aoe + "px")));
-	$(table).append($("<tr>").append($("<td>").html("Max Range")).append($("<td>").html(this.maxRange)));
-	//$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html(this.getAccuracy() + "px / 100px")));
-	$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html(this.getAccuracy() + "px / 100px")));
-	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("Up to <span class='red'>" + this.maxShots + "</span> / cycle")));
-
-	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));
-
-
-	div.appendChild(table);
-	this.attachSysNotes(div);
-	this.attachSysMods(div);
-		
-	return div;
 }
 
 Area.prototype.drawSystemArc = function(facing, rolled, pos){

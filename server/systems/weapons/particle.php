@@ -26,6 +26,8 @@ class AsteroidRam extends Particle {
 	public $projSize = 2;
 	public $projSpeed = 8;
 
+	public $critEffects = array();
+
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
