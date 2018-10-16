@@ -91,6 +91,10 @@ Obstacle.prototype.setNextMove = function(){
 	this.actions.push(new Move(-1, this.id, "move", 0, this.getCurSpeed(), p.x, p.y, 0, 0, 0, 1, 1, 0));
 }
 
+Obstacle.prototype.getFullPenBlock = function(){
+	return Math.round(this.block / 100 * this.size);
+}
+
 Obstacle.prototype.getShortInfo = function(){
 	var ele = ui.shortInfo;
 	if (this.userid == game.userid){
@@ -99,7 +103,7 @@ Obstacle.prototype.getShortInfo = function(){
 
 	ele
 	.append(this.getHeader())
-	.append($("<div>").html("Interference " + this.block + "%"))
+	.append($("<div>").html("Interference " + this.getFullPenBlock() + "%"))
 	.append($("<div>").html("Collision " + this.collision + "%"))
 	.append($("<div>").html("Speed " + this.getCurSpeed()));
 }
@@ -146,10 +150,12 @@ Obstacle.prototype.createBaseDiv = function(){
 			.append($("<td>").html("Speed"))
 			.append($("<td>").html(this.getCurSpeed())))
 		.append($("<tr>")
-			.append($("<td>").html("Base Interference Chance"))
-			.append($("<td>").html(this.block + "% per 100px")))
+			//.append($("<td>").html("Base Interference Chance"))
+			//.append($("<td>").html(this.block + "% per 100px")))
+			.append($("<td>").html("Interference Chance"))
+			.append($("<td>").html(this.block + "% per 100px / " + this.getFullPenBlock() + "%")))
 		.append($("<tr>")
-			.append($("<td>").html("Base Collision Chance"))
+			.append($("<td>").html("Collision Chance"))
 			.append($("<td>").html(this.collision + "%")))
 
 	div.append(table);
@@ -292,7 +298,7 @@ Obstacle.prototype.setImage = function(){
 	ctx.fillStyle = "yellow";
 	ctx.font = "30px Arial";
 	ctx.textAlign = "center";
-	ctx.fillText("I: " + this.block + "%", 0, -10);
+	ctx.fillText("I: " + this.getFullPenBlock() + "%", 0, -10);
 	ctx.fillText("C: " + this.collision + "%", 0, 30);
 
 	ctx.setTransform(1,0,0,1,0,0);
