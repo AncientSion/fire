@@ -3,14 +3,13 @@
 class Obstacle extends Mixed {
 	
 	public $name = "Obstacle";
-	public $display = "Asteroid Swarm";
+	public $display = "Asteroid Cluster";
 	public $obstacle = 1;
 	public $traverse = 10;
 	public $interference;
 	public $collision;
 	public $rockSize;
 	public $scale;
-	public $damage;
 	public $systems = array();
 	public $critEffects = array();
 
@@ -18,11 +17,10 @@ class Obstacle extends Mixed {
         parent::__construct($data);
         $this->size = $data["delay"];
         $this->interference = $data["rolling"];
-        $this->rockSize = $data["rolled"];
+        $this->rockSize = ($data["rolled"]);
         $this->scale = $data["flipped"];
 
         $this->collision = round($this->interference * $this->scale / $this->rockSize);
-        $this->damage = mt_rand(15, 22) * $this->rockSize;
 	}
 	
 	public function addAllSystems(){
@@ -33,7 +31,7 @@ class Obstacle extends Mixed {
 	public function addPrimary(){
 		//Debug::log("addPrimary #".$this->id.", index: ".$this->index);
 		$this->primary = new Shared($this->getId());
-		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, 0, 360, $this->damage);
+		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, 0, 360, $this->rockSize/2);
 	}
 
 	public function addStructures(){
@@ -109,9 +107,9 @@ class Obstacle extends Mixed {
 			"facing" => $this->facing,
 			"thrust" => $this->getCurSpeed(),
 			"delay" => $this->size,
-			"rolling" => $this->block,
-			"rolled" => $this->collision,
-			"flipped" => $this->flipped,
+			"rolling" => $this->interference,
+			"rolled" => $this->rockSize,
+			"flipped" => $this->scale,
 			"status" => $this->status,
 			"notes" => "",
 		);

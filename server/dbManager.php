@@ -894,7 +894,7 @@
 						$dist = Math::getDist($rocks[$j][0], $rocks[$j][1], $x, $y);
 
 						if ($dist + $size/2 < $rocks[$j][4]){
-							//Debug::log("retry, dist $dist, size $size, next $rocks[$j][2])");
+							Debug::log("retry, dist $dist, rad ".($size/2).", next rad".($rocks[$j][4]/2));
 							$redo = 1;
 							break;
 						}
@@ -906,7 +906,7 @@
 
 
 					$facing = mt_rand(0, 360);
-					$speed = floor(mt_rand(30, 70) * 1 / $size * 125);
+					$speed = floor(mt_rand(20, 50) * 1 / $size * ($min+$max)/3);
 
 					$interference = mt_rand(15, 40);
 					$rockSize = mt_rand(1, 4);

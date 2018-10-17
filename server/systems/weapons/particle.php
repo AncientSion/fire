@@ -14,8 +14,6 @@ class AsteroidRam extends Particle {
 	public $display = "Asteroid Ram Display";
 	public $animation = "explosive";
 	public static $prio = 0;
-	public $minDmg = 25;
-	public $maxDmg = 35;
 	public $accDecay = 180;
 	public $shots = 4;	
 	public $reload = 2;
@@ -31,8 +29,9 @@ class AsteroidRam extends Particle {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-        $this->minDmg = $output;
-        $this->maxDmg = round($output*1.3);
+
+        $this->minDmg = round(mt_rand(30, 40) * $output);
+        $this->maxDmg = round($this->minDmg*1.3);
 	}
 
 	public function getShots($target){

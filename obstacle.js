@@ -2,10 +2,9 @@ function Obstacle(data){
 	Mixed.call(this, data);
 	this.primary = {"systems": []};
 	this.size = data.size;
-	this.block = data.interference;
+	this.interference = data.interference;
 	this.rockSize = data.rockSize;
 	this.scale = data.scale;
-	this.damage = data.damage;
 	this.collision = data.collision;
 }
 Obstacle.prototype = Object.create(Mixed.prototype);
@@ -95,21 +94,18 @@ Obstacle.prototype.setNextMove = function(){
 	this.actions.push(new Move(-1, this.id, "move", 0, this.getCurSpeed(), p.x, p.y, 0, 0, 0, 1, 1, 0));
 }
 
-Obstacle.prototype.getFullPenBlock = function(){
-	return Math.round(this.block / 100 * this.size);
+Obstacle.prototype.getFullPenInterference = function(){
+	return Math.round(this.interference / 100 * this.size);
 }
 
 Obstacle.prototype.getShortInfo = function(){
-	var ele = ui.shortInfo;
-	if (this.userid == game.userid){
-		$(ele).attr("class", "friendly");
-	} else $(ele).attr("class", "hostile");
+	var ele = ui.shortInfo.attr("class", "hostile");
 
 	ele
-	.append(this.getHeader())
-	.append($("<div>").html("Interference " + this.getFullPenBlock() + "%"))
-	.append($("<div>").html("Collision " + this.collision + "%"))
-	.append($("<div>").html("Speed " + this.getCurSpeed()));
+	//.append(this.getHeader())
+	.append($("<div>").html("Size " + this.size + " / Speed " + this.getCurSpeed()))
+	.append($("<div>").html(this.getFullPenInterference() + "% Interference"))
+	.append($("<div>").html(this.collision + "% Collision / " + this.getDamageString()))
 }
 
 Obstacle.prototype.getHeader = function(){
@@ -125,20 +121,6 @@ Obstacle.prototype.getCurSpeed = function(){
 Obstacle.prototype.select = function(){
 	console.log(this);
 	return;
-}
-
-Obstacle.prototype.drawMarker = function(x, y, c, context){
-	context.beginPath();
-	context.arc(x, y, (this.size-2)/2, 0, 2*Math.PI, false);
-	context.closePath();
-	context.lineWidth = 2;
-	context.globalAlpha = 0.7;
-	context.globalCompositeOperation = "source-over";
-	context.strokeStyle = "blue";
-	context.stroke();
-	context.globalAlpha = 1;
-	context.lineWidth = 1;
-	context.strokeStyle = "black";
 }
 
 Obstacle.prototype.createBaseDiv = function(){
@@ -161,20 +143,23 @@ Obstacle.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			.append($("<td>").html("Size"))
 			.append($("<td>").html(this.size)))
-		.append($("<tr>")
-			.append($("<td>").html("Vector"))
-			.append($("<td>").html(this.facing + " degree")))
+		//.append($("<tr>")
+		//	.append($("<td>").html("Vector"))
+		//	.append($("<td>").html(this.facing + " degree")))
 		.append($("<tr>")
 			.append($("<td>").html("Speed"))
 			.append($("<td>").html(this.getCurSpeed())))
 		.append($("<tr>")
 			//.append($("<td>").html("Base Interference Chance"))
-			//.append($("<td>").html(this.block + "% per 100px")))
-			.append($("<td>").html("Interference Chance"))
-			.append($("<td>").html(this.block + "% per 100px / " + this.getFullPenBlock() + "%")))
+			//.append($("<td>").html(this.interference + "% per 100px")))
+			.append($("<td>").html("Interference"))
+			.append($("<td>").html(this.getFullPenInterference() + "% (" + this.interference + "% per 100px)")))
 		.append($("<tr>")
 			.append($("<td>").html("Collision Chance"))
 			.append($("<td>").html(this.collision + "%")))
+		.append($("<tr>")
+			.append($("<td>").html("Base Damage Potential"))
+			.append($("<td>").html(this.getDamageString())))
 
 	div.append(table);
 
@@ -217,7 +202,7 @@ Obstacle.prototype.expandDiv = function(div){
 	$(structContainer)
 	.append($("<div>")
 		.addClass("obstacle")
-		.append(graphics.images.rocks[range(0, graphics.images.rocks.length-1)]));	
+		.append(graphics.images.rocks[range(0, graphics.images.rocks.length-1)].cloneNode(true)));	
 		//.append(this.structures[0].getBaseImage().cloneNode(true)))
 
 
@@ -274,14 +259,27 @@ Obstacle.prototype.setPreMoveFacing = function(){
 Obstacle.prototype.draw = function(){
 	this.drawPositionMarker();
 	ctx.translate(this.drawX, this.drawY);
-	//ctx.rotate(this.getDrawFacing() * Math.PI/180);
-
-	//console.log("draw #" + this.id);
  	if (this.doDraw){this.drawSelf();}
-
-	//this.drawEscort();
-	//ctx.rotate(-this.getDrawFacing() * Math.PI/180);
 	ctx.translate(-this.drawX, -this.drawY);
+}
+
+Obstacle.prototype.drawPositionMarker = function(){
+	if (!game.drawCircle){return;}
+	this.drawMarker(this.drawX, this.drawY, "", ctx);
+}
+
+Obstacle.prototype.drawMarker = function(x, y, c, context){
+	context.beginPath();
+	context.arc(x, y, (this.size/2)-1, 0, 2*Math.PI, false);
+	context.closePath();
+	context.lineWidth = 1;
+	context.globalAlpha = 0.7;
+	context.globalCompositeOperation = "source-over";
+	context.strokeStyle = "Bisque";
+	context.stroke();
+	context.globalAlpha = 1;
+	context.lineWidth = 1;
+	context.strokeStyle = "black";
 }
 
 Obstacle.prototype.setLayout = function(){
@@ -296,45 +294,48 @@ Obstacle.prototype.setLayout = function(){
 
 Obstacle.prototype.setImage = function(){
 
-	var amount = Math.round(10*this.size / 100 * this.collision);
+	var amount = Math.round(Math.pow(this.size, 2) / 2000 * this.interference / (this.rockSize/2)/5);
+	console.log(this.id+"/"+amount);
 
-	if (this.id == 18){
-		console.log("rock " + this.size/2);
-	}
-
-	//console.log("Obstacle setImage");
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
 		t.height = this.size*2;
 	var ctx = t.getContext("2d");
 		ctx.translate(t.width/2, t.height/2);
 
+	var rockSize = this.rockSize/2;
+	var randoms = 0;
 
 	for (var i = 0; i < amount; i++){
 
-		//var rota = range(0, 360);
-		var d = range(0, this.size/2)
-	if (this.id == 18){console.log(d);}
+		var rota = range(0, 360);
+		var d = range(0, this.size* 0.9);
 		var loc = getPointInDir(d, range(0, 360), 0, 0);
-		var size = range(8, 10) * this.rockSize;
 
-		//ctx.translate(this.structures[i].layout.x/2, this.structures[i].layout.y/2);
+		var size = range(7, 10) + (rockSize)*15;
+
+		if (range(0, 100) <= 20){
+			randoms++;
+			size *= range(5, 20)/10
+		}
+
+
 		ctx.translate(loc.x, loc.y);
-		//ctx.rotate(rota * (Math.PI/180))
+		ctx.rotate(rota * (Math.PI/180))
 		ctx.drawImage(
 			graphics.images.rocks[range(0, graphics.images.rocks.length-1)],
-			//this.structures[i].getBaseImage(),
-			size/2,
-			size/2,
+			-size/2,
+			-size/2,
 			size, 
 			size
 		)
-		//ctx.rotate(-rota * (Math.PI/180))
-		//ctx.translate(-this.structures[i].layout.x/2, -this.structures[i].layout.y/2);
+		ctx.rotate(-rota * (Math.PI/180))
 		ctx.translate(-loc.x, -loc.y);
 	}
 
-	var vectorSize = 80;
+	console.log(amount-randoms + " / " + randoms);
+
+	/*var vectorSize = 80;
 	var vectorPos = getPointInDir(this.size - vectorSize/2, this.facing, 0, 0);
 
 	ctx.translate(vectorPos.x, vectorPos.y);
@@ -349,20 +350,29 @@ Obstacle.prototype.setImage = function(){
 
 	ctx.rotate(-this.facing * (Math.PI/180));
 	ctx.translate(-vectorPos.x, -vectorPos.y);
+	*/
 
+	var vectorPos = getPointInDir(this.size-3, this.facing, 0, 0);
+
+	ctx.beginPath();
+	ctx.moveTo(0, 0);
+	ctx.lineTo(vectorPos.x, vectorPos.y);
+	ctx.closePath();
+	ctx.lineWidth = 5;
+	ctx.strokeStyle = "green";
+	ctx.stroke();
+	
+	ctx.clearRect(-30, -15, 60, 30);
+	
 	ctx.fillStyle = "yellow";
-	ctx.font = "20px Arial";
+	ctx.font = "24px Arial";
 	ctx.textAlign = "center";
-	ctx.fillText("I: " + this.getFullPenBlock() + "%", 0, -30);
-	//ctx.fillText("C: " + this.structures.length + "x " + this.collision + "%", 0, 30);
-	ctx.fillText("C: " + this.collision + "%", 0, 10);
-	ctx.fillText("D: " + this.getDamageString(), 0, 40);
-	ctx.fillText("rocks: " + amount + " / " + this.rockSize, 0, 70);
+	ctx.fillText(this.getFullPenInterference() + "%", 0, 8);
+	
 
 	ctx.setTransform(1,0,0,1,0,0);
 	this.img = t;
 
-	if (this.id == 18){console.log(this.img.toDataURL());}
 
 }
 

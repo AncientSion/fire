@@ -3361,10 +3361,10 @@ Game.prototype.setObstacleData = function(){
 
 				if (!result){continue;}
 
-				var effectiveBlock = Math.round(this.ships[k].block / 100 * result.dist*2);
+				var EffInterference = Math.round(this.ships[k].interference / 100 * result.dist*2);
 
-				this.ships[i].blocks.push({id: this.ships[j].id, obstacleId: this.ships[k].id, effectiveBlock: effectiveBlock, path: result});
-				this.ships[j].blocks.push({id: this.ships[i].id, obstacleId: this.ships[k].id, effectiveBlock: effectiveBlock, path: result});
+				this.ships[i].blocks.push({id: this.ships[j].id, obstacleId: this.ships[k].id, EffInterference: EffInterference, path: result});
+				this.ships[j].blocks.push({id: this.ships[i].id, obstacleId: this.ships[k].id, EffInterference: EffInterference, path: result});
 
 			}
 		}
@@ -3389,10 +3389,9 @@ Game.prototype.hasObstacleInVector = function(oPos, tPos){
 				obstacleId: this.ships[j].id, 
 				dist: Math.round(result.dist*2),
 				size: this.ships[j].size,
-				//effectiveBlock: Math.round(effectiveBlock),
-				effectiveBlock: Math.round(this.ships[j].block / 100 * result.dist*2),
+				EffInterference: Math.round(this.ships[j].interference / 100 * result.dist*2),
 				exposure: Math.round(round((1-(result.dist / (this.ships[j].size/2))), 2)*100),
-				block: this.ships[j].block,
+				interference: this.ships[j].interference,
 			})
 		}
 	}

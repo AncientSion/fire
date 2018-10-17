@@ -1262,19 +1262,19 @@
 					//continue;
 
 					if ($result){
-						$effectiveBlock = round($this->ships[$k]->block / 100 * $result[0]*2);
+						$effInterference = round($this->ships[$k]->interference / 100 * $result[0]*2);
 						//$effectiveBlock = 100;
-						//Debug::log("effectiveBlock ".$effectiveBlock);
-						$this->ships[$i]->blocks[] = array($this->ships[$j]->id, $effectiveBlock);
-						$this->ships[$j]->blocks[] = array($this->ships[$i]->id, $effectiveBlock);
+						//Debug::log("effInterference ".$effectiveBlock);
+						$this->ships[$i]->blocks[] = array($this->ships[$j]->id, $effInterference);
+						$this->ships[$j]->blocks[] = array($this->ships[$i]->id, $effInterference);
 
 						/*$data = array(
 							"id" => $this->ships[$k]->id, 
 							"dist" => $result[1]*2,
 							"size" => $this->ships[$k]->size,
 							"exposure" => round((1-($result[1] / ($this->ships[$k]->size/2)))*100),
-							"effectiveBlock" => round($this->ships[$k]->block / 100 * $result[1]*2),
-							"block" => $this->ships[$k]->block
+							"effInterference" => round($this->ships[$k]->interference / 100 * $result[1]*2),
+							"interference" => $this->ships[$k]->interference
 						);*/
 						
 					}
