@@ -6,16 +6,23 @@ class Obstacle extends Mixed {
 	public $display = "Asteroid Swarm";
 	public $obstacle = 1;
 	public $traverse = 10;
-	public $block = 0;
-	public $collision = 0;
+	public $interference;
+	public $collision;
+	public $rockSize;
+	public $scale;
+	public $damage;
 	public $systems = array();
 	public $critEffects = array();
 
 	function __construct($data = false){
         parent::__construct($data);
         $this->size = $data["delay"];
-        $this->block = $data["rolling"];
-        $this->collision = $data["rolled"];
+        $this->interference = $data["rolling"];
+        $this->rockSize = $data["rolled"];
+        $this->scale = $data["flipped"];
+
+        $this->collision = round($this->interference * $this->scale / $this->rockSize);
+        $this->damage = mt_rand(15, 22) * $this->rockSize;
 	}
 	
 	public function addAllSystems(){
@@ -26,10 +33,11 @@ class Obstacle extends Mixed {
 	public function addPrimary(){
 		//Debug::log("addPrimary #".$this->id.", index: ".$this->index);
 		$this->primary = new Shared($this->getId());
-		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, 0, 360, 15);
+		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, 0, 360, $this->damage);
 	}
 
 	public function addStructures(){
+		return;
 		$amount = ceil(20 * $this->size / 4 * $this->block / 250 * $this->collision) / 100;
 		for ($i = 1; $i <= $amount; $i++){
 			$this->structures[] = new Asteroid($this->size, $amount);

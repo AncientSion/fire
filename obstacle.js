@@ -2,7 +2,10 @@ function Obstacle(data){
 	Mixed.call(this, data);
 	this.primary = {"systems": []};
 	this.size = data.size;
-	this.block = data.block;
+	this.block = data.interference;
+	this.rockSize = data.rockSize;
+	this.scale = data.scale;
+	this.damage = data.damage;
 	this.collision = data.collision;
 }
 Obstacle.prototype = Object.create(Mixed.prototype);
@@ -292,6 +295,13 @@ Obstacle.prototype.setLayout = function(){
 }
 
 Obstacle.prototype.setImage = function(){
+
+	var amount = Math.round(10*this.size / 100 * this.collision);
+
+	if (this.id == 18){
+		console.log("rock " + this.size/2);
+	}
+
 	//console.log("Obstacle setImage");
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
@@ -299,23 +309,29 @@ Obstacle.prototype.setImage = function(){
 	var ctx = t.getContext("2d");
 		ctx.translate(t.width/2, t.height/2);
 
-	for (var i = 0; i < this.structures.length; i++){
-		if (!this.structures[i].doDraw){continue;}
 
-		var rota = range(0, 360);
+	for (var i = 0; i < amount; i++){
 
-		ctx.translate(this.structures[i].layout.x/2, this.structures[i].layout.y/2);
-		ctx.rotate(rota * (Math.PI/180))
+		//var rota = range(0, 360);
+		var d = range(0, this.size/2)
+	if (this.id == 18){console.log(d);}
+		var loc = getPointInDir(d, range(0, 360), 0, 0);
+		var size = range(8, 10) * this.rockSize;
+
+		//ctx.translate(this.structures[i].layout.x/2, this.structures[i].layout.y/2);
+		ctx.translate(loc.x, loc.y);
+		//ctx.rotate(rota * (Math.PI/180))
 		ctx.drawImage(
-			graphics.images.rocks[range(0, graphics.images.rocks.length-1)].cloneNode(true),
+			graphics.images.rocks[range(0, graphics.images.rocks.length-1)],
 			//this.structures[i].getBaseImage(),
-			0 -this.structures[i].size/2,
-			0 -this.structures[i].size/2,
-			this.structures[i].size, 
-			this.structures[i].size
+			size/2,
+			size/2,
+			size, 
+			size
 		)
-		ctx.rotate(-rota * (Math.PI/180))
-		ctx.translate(-this.structures[i].layout.x/2, -this.structures[i].layout.y/2);
+		//ctx.rotate(-rota * (Math.PI/180))
+		//ctx.translate(-this.structures[i].layout.x/2, -this.structures[i].layout.y/2);
+		ctx.translate(-loc.x, -loc.y);
 	}
 
 	var vectorSize = 80;
@@ -335,13 +351,24 @@ Obstacle.prototype.setImage = function(){
 	ctx.translate(-vectorPos.x, -vectorPos.y);
 
 	ctx.fillStyle = "yellow";
-	ctx.font = "30px Arial";
+	ctx.font = "20px Arial";
 	ctx.textAlign = "center";
-	ctx.fillText("I: " + this.getFullPenBlock() + "%", 0, -10);
-	ctx.fillText("C: " + this.structures.length + "x " + this.collision + "%", 0, 30);
+	ctx.fillText("I: " + this.getFullPenBlock() + "%", 0, -30);
+	//ctx.fillText("C: " + this.structures.length + "x " + this.collision + "%", 0, 30);
+	ctx.fillText("C: " + this.collision + "%", 0, 10);
+	ctx.fillText("D: " + this.getDamageString(), 0, 40);
+	ctx.fillText("rocks: " + amount + " / " + this.rockSize, 0, 70);
 
 	ctx.setTransform(1,0,0,1,0,0);
 	this.img = t;
+
+	if (this.id == 18){console.log(this.img.toDataURL());}
+
+}
+
+Obstacle.prototype.getDamageString = function(){
+	var wpn = this.primary.systems[0];
+	return wpn.minDmg + " - " + wpn.maxDmg;
 }
 
 Obstacle.prototype.getBaseImage = function(){

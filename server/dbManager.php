@@ -346,9 +346,9 @@
 		public function createNewGame($post){
 			$stmt = $this->connection->prepare("
 				INSERT INTO games
-					(name, status, turn, phase, pv, reinforce, reinforceTurn, reinforceETA, reinforceAmount, focusMod, obstaclesAmount, obstaclesSizeMax, obstaclesSizeMin)
+					(name, status, turn, phase, pv, reinforce, reinforceTurn, reinforceETA, reinforceAmount, focusMod, obstaclesAmount, obstaclesSizeMin, obstaclesSizeMax)
 				VALUES
-					(:name, 'open', -1, -1, :pv, :reinforce, :reinforceTurn, :reinforceETA, :reinforceAmount, 10, :obstaclesAmount, :obstaclesSizeMax, :obstaclesSizeMin)
+					(:name, 'open', -1, -1, :pv, :reinforce, :reinforceTurn, :reinforceETA, :reinforceAmount, 10, :obstaclesAmount, :obstaclesSizeMin, :obstaclesSizeMax)
 			");
 			
 			$stmt->bindParam(":name", $post["gameName"]);
@@ -358,8 +358,8 @@
 			$stmt->bindParam(":reinforceETA", $post["reinforceETA"]);
 			$stmt->bindParam(":reinforceAmount", $post["reinforceAmount"]);
 			$stmt->bindParam(":obstaclesAmount", $post["obstaclesAmount"]);
-			$stmt->bindParam(":obstaclesSizeMax", $post["obstaclesSizeMax"]);
 			$stmt->bindParam(":obstaclesSizeMin", $post["obstaclesSizeMin"]);
+			$stmt->bindParam(":obstaclesSizeMax", $post["obstaclesSizeMax"]);
 			
 			$stmt->execute();
 			
@@ -867,8 +867,89 @@
 			return false;
 		}
 
-
 		public function createObstacles($gameid, $data){
+			Debug::log("createObstacles #".$gameid);
+			$rocks = array();
+
+			$amount = $data["obstaclesAmount"];
+			$min = $data["obstaclesSizeMin"];
+			$max = $data["obstaclesSizeMax"];
+
+			$amount = 10;
+			for ($i = 1; $i <= $amount; $i++){
+				//Debug::log("rock ".$i);
+				
+				$attempts = 3;
+
+				while ($attempts){
+					$attempts--;
+					//Debug::log("attempts left ".$attempts);
+					$x = mt_rand(100, 400) * (1 - (mt_rand(0, 1)*2));
+					$y = mt_rand(100, 500) * (1 - (mt_rand(0, 1)*2));
+					$size = mt_rand($min, $max);
+
+					$redo = 0;
+
+					for ($j = 0; $j < sizeof($rocks); $j++){
+						$dist = Math::getDist($rocks[$j][0], $rocks[$j][1], $x, $y);
+
+						if ($dist + $size/2 < $rocks[$j][4]){
+							//Debug::log("retry, dist $dist, size $size, next $rocks[$j][2])");
+							$redo = 1;
+							break;
+						}
+					}
+
+					if ($redo){
+						continue;
+					} else $attempts = 0;
+
+
+					$facing = mt_rand(0, 360);
+					$speed = floor(mt_rand(30, 70) * 1 / $size * 125);
+
+					$interference = mt_rand(15, 40);
+					$rockSize = mt_rand(1, 4);
+					$scale = 1;
+
+					$rocks[] = array($x, $y, $facing, $speed, $size, $interference, $rockSize, $scale);
+				}
+			}
+
+
+			//Debug::log("rocks ".sizeof($rocks));
+			$stmt = $this->connection->prepare("
+				INSERT INTO units
+				(gameid, name, status, x, y, facing, delay, thrust, rolling, rolled, flipped, turn, phase)
+				VALUES
+				(:gameid, 'Obstacle', 'deployed', :x, :y, :facing, :delay, :thrust, :rolling, :rolled, :flipped, 1, -1)
+			");
+
+			for ($i = 0; $i < sizeof($rocks); $i++){
+				//Debug::log("insert rock ".$i.", rolling: ".$rocks[$i][5]);
+
+				$stmt->bindParam(":gameid", $gameid);
+				$stmt->bindParam(":x", $rocks[$i][0]);
+				$stmt->bindParam(":y", $rocks[$i][1]);
+				$stmt->bindParam(":facing", $rocks[$i][2]);
+				$stmt->bindParam(":thrust", $rocks[$i][3]);
+				$stmt->bindParam(":delay", $rocks[$i][4]);
+				$stmt->bindParam(":rolling", $rocks[$i][5]);
+				$stmt->bindParam(":rolled", $rocks[$i][6]);
+				$stmt->bindParam(":flipped", $rocks[$i][7]);
+
+				$stmt->execute();
+
+				if ($stmt->errorCode() == 0){
+					continue;
+				} else return false;
+			}
+
+			return true;
+		}
+
+
+		public function createObstaclesa($gameid, $data){
 			Debug::log("createObstacles #".$gameid);
 			$rocks = array();
 
