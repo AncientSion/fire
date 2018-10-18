@@ -18,14 +18,6 @@ class Salvo extends Mixed {
 		$this->torpedo = $this->structures[0]->torpedo;
 	}
 
-	public function getFireOrder($gameid, $turn, $target){
-		$fire = new FireOrder(-1, $gameid, $turn, $this->id, $target->id, 0, 0, $this->structures[0]->systems[0]->id, $this->getShots($turn), 0, "", 0, 0);
-		$fire->weapon = $this->structures[0]->systems[0];
-		$fire->target = $target;
-		$fire->shooter = $this;
-		return $fire;
-	}
-
 	public function setSize(){
 		$this->size = 18;
 	}

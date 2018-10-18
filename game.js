@@ -1170,7 +1170,7 @@ function Game(data){
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setPostFireImage();
 			this.ships[i].setSize();
-			if (this.ships[i].obstacle){this.ships[i].setNextMove();}
+			if (this.ships[i].obstacle && game.phase == 3){this.ships[i].setNextMove();}
 		}
 
 		for (var i = 0; i < this.ships.length; i++){
@@ -2253,6 +2253,7 @@ function Game(data){
 	}
 
 	this.resolvePostMoveFires = function(){
+		console.log("resolvePostMoveFires");
 		this.resolveFire();
 	}
 
@@ -3302,7 +3303,7 @@ Game.prototype.getUnitByClick = function(pos){
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].destroyed || !this.ships[i].isReady){continue;}
 
-		var r = Math.max(10, this.ships[i].size/5);
+		var r = Math.max(10, this.ships[i].obstacle ? this.ships[i].size/10 : this.ships[i].size/5);
 		var shipPos = this.ships[i].getDrawPos();
 		if (pos.x < shipPos.x + r && pos.x > shipPos.x - r){
 			if (pos.y > shipPos.y - r && pos.y < shipPos.y + r){
@@ -3387,25 +3388,32 @@ Game.prototype.hasObstacleInVector = function(oPos, tPos, unit){
 			var pierceIn;
 			var pierceOut;
 
-			console.log(result)
 			if (result.points[0].onLine){
-				var pierceOut = getDistance(tPos, result.points[0]);
-			} else pierceOut = 0;
-			if (result.points[1].onLine){
-				var pierceIn = getDistance(tPos, result.points[1]);
+				var pierceIn = getDistance(tPos, result.points[0]);
 			} else pierceIn = 0;
+			if (result.points[1].onLine){
+				var pierceOut = getDistance(tPos, result.points[1]);
+			} else pierceOut = 0;
 
-			var realDist = Math.abs(pierceOut - pierceIn);
+			if (pierceIn){
+				realDist = Math.abs(pierceOut - pierceIn);
+			}
+			else if (pierceOut){
+				realDist = getDistance(oPos, result.points[1]);
+			}
+			else if (!pierceIn && !pierceOut){
+			}
+			else realDist = result.dist;
 
-			console.log("--------");
+		/*	console.log("--------")
+			console.log(result);
 			console.log(pierceIn)
 			console.log(pierceOut);
-
 			console.log(realDist);
-		
+		*/
 			inPath.push({
 				obstacleId: this.ships[j].id, 
-				dist: Math.round(result.dist*2),
+				dist: Math.round(realDist),
 				size: this.ships[j].size,
 				EffInterference: Math.round(this.ships[j].interference / 100 * realDist),
 				exposure: Math.round(round((1-(result.dist / (this.ships[j].size/2))), 2)*100),

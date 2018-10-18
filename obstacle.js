@@ -2,6 +2,7 @@ function Obstacle(data){
 	Mixed.call(this, data);
 	this.primary = {"systems": []};
 	this.size = data.size;
+	this.density = data.density;
 	this.interference = data.interference;
 	this.rockSize = data.rockSize;
 	this.scale = data.scale;
@@ -94,8 +95,12 @@ Obstacle.prototype.setNextMove = function(){
 	this.actions.push(new Move(-1, this.id, "move", 0, this.getCurSpeed(), p.x, p.y, 0, 0, 0, 1, 1, 0));
 }
 
-Obstacle.prototype.getFullPenInterference = function(){
+Obstacle.prototype.getMaxInterference = function(){
 	return Math.round(this.interference / 100 * this.size);
+}
+
+Obstacle.prototype.getMaxCollision = function(){
+	return Math.round(this.collision / 100 * this.size/2);
 }
 
 Obstacle.prototype.getShortInfo = function(){
@@ -104,8 +109,9 @@ Obstacle.prototype.getShortInfo = function(){
 	ele
 	//.append(this.getHeader())
 	.append($("<div>").html("Size " + this.size + " / Speed " + this.getCurSpeed()))
-	.append($("<div>").html(this.getFullPenInterference() + "% Interference"))
-	.append($("<div>").html(this.collision + "% Collision / " + this.getDamageString()))
+	.append($("<div>").html(this.getMaxInterference() + "% Interference"))
+	.append($("<div>").html(this.getMaxCollision() + "% Base Collision"))
+	.append($("<div>").html(this.getDamageString()))
 }
 
 Obstacle.prototype.getHeader = function(){
@@ -152,13 +158,13 @@ Obstacle.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			//.append($("<td>").html("Base Interference Chance"))
 			//.append($("<td>").html(this.interference + "% per 100px")))
-			.append($("<td>").html("Interference"))
-			.append($("<td>").html(this.getFullPenInterference() + "% (" + this.interference + "% per 100px)")))
+			.append($("<td>").html("Interference Chance"))
+			.append($("<td>").html(this.getMaxInterference() + "% (" + this.interference + "% per 100px)")))
 		.append($("<tr>")
-			.append($("<td>").html("Collision Chance"))
-			.append($("<td>").html(this.collision + "%")))
+			.append($("<td>").html("Max Collision Chance"))
+			.append($("<td>").html(this.getMaxCollision() + "% (" + this.collision + "% per 100px)")))
 		.append($("<tr>")
-			.append($("<td>").html("Base Damage Potential"))
+			.append($("<td>").html("Damage Potential"))
 			.append($("<td>").html(this.getDamageString())))
 
 	div.append(table);
@@ -362,23 +368,22 @@ Obstacle.prototype.setImage = function(){
 	ctx.strokeStyle = "green";
 	ctx.stroke();
 	
-	ctx.clearRect(-30, -15, 60, 30);
+	ctx.clearRect(-34, -25, 68, 50);
 	
 	ctx.fillStyle = "yellow";
 	ctx.font = "24px Arial";
 	ctx.textAlign = "center";
-	ctx.fillText(this.getFullPenInterference() + "%", 0, 8);
+	ctx.fillText(this.getMaxInterference() + "%", 0, -2);
+	ctx.fillText(this.getMaxCollision() + "%", 0, 20);
 	
 
 	ctx.setTransform(1,0,0,1,0,0);
 	this.img = t;
-
-
 }
 
 Obstacle.prototype.getDamageString = function(){
 	var wpn = this.primary.systems[0];
-	return wpn.minDmg + " - " + wpn.maxDmg;
+	return wpn.shots + "x " + wpn.minDmg + " - " + wpn.maxDmg + " damage";
 }
 
 Obstacle.prototype.getBaseImage = function(){

@@ -362,7 +362,6 @@
 			$stmt->bindParam(":obstaclesSizeMax", $post["obstaclesSizeMax"]);
 			
 			$stmt->execute();
-			
 			if ($stmt->errorCode() == 0){
 				return $this->getLastInsertId();
 			}
@@ -454,30 +453,6 @@
 
 			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
 			$rows = $this->update($sql);
-			return;
-			//Debug::log("Command set, rows updates: ".$rows);
-
-
-			$gd = $this->getGameDetails($gameid);
-			//Debug::log("getGameDetails");
-			$sql = "SELECT id FROM playerstatus WHERE userid = ".$userid." AND gameid = ".$gameid;
-			//Debug::log($sql);
-			$playerstatus = $this->query($sql);
-			//Debug::log("playerstatus");
-			
-
-			$baseGain = floor($gd["pv"] / 100 * $gd["focusMod"]);
-			$commandRating = $unit->baseFocusRate + $unit->modFocusRate;
-			$gainFocus = floor($baseGain / 10 * $commandRating);
-
-			$data = array(
-				"id" => $playerstatus[0]["id"],
-				"curFocus" => $gainFocus * 1,
-				"gainFocus" => $gainFocus, 
-				"maxFocus" => $gainFocus * 4
-			);
-
-			$this->updateFocusValues(array($data));
 		}
 
 		public function updateCommandUnit($data){
@@ -893,8 +868,8 @@
 					for ($j = 0; $j < sizeof($rocks); $j++){
 						$dist = Math::getDist($rocks[$j][0], $rocks[$j][1], $x, $y);
 
-						if ($dist + $size/2 < $rocks[$j][4]){
-							Debug::log("retry, dist $dist, rad ".($size/2).", next rad".($rocks[$j][4]/2));
+						if ($dist - $size/2 < $rocks[$j][4]/2){
+							Debug::log("retry, dist $dist, rad1 ".($size/2).", rad2 ".($rocks[$j][4]/2));
 							$redo = 1;
 							break;
 						}
@@ -905,14 +880,15 @@
 					} else $attempts = 0;
 
 
+					$size = mt_rand($min, $max);
 					$facing = mt_rand(0, 360);
-					$speed = floor(mt_rand(20, 50) * 1 / $size * ($min+$max)/3);
+					$speed = mt_rand(30, 45);
 
-					$interference = mt_rand(15, 40);
+					$density = mt_rand(10, 40);
 					$rockSize = mt_rand(1, 4);
 					$scale = 1;
 
-					$rocks[] = array($x, $y, $facing, $speed, $size, $interference, $rockSize, $scale);
+					$rocks[] = array($x, $y, $facing, $speed, $size, $density, $rockSize, $scale);
 				}
 			}
 

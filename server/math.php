@@ -29,27 +29,29 @@ class Math {
 			// compute distance from t to circle intersection point
 			$dt = sqrt( pow($size, 2) - pow($eDistCtoE, 2));
 
-			$f = array(
+			$in = array(
 				new Point(
 					(($t-$dt) * $d->x) + $a->x, 
 					(($t-$dt) * $d->y) + $a->y
 				), 0);
-			$f[1] = static::is_on($a, $b, $f[0]);
+			$in[1] = static::is_on($a, $b, $in[0]);
+			Debug::log("x ".$in[0]->x.", y ".$in[0]->y);
 
-			$g = array(
+			$out = array(
 				new Point(
 					(($t+$dt) * $d->x) + $a->x, 
 					(($t+$dt) * $d->y) + $a->y
 				), 0);
-			$g[1] = static::is_on($a, $b, $g[0]);
+			$out[1] = static::is_on($a, $b, $out[0]);
+			Debug::log("x ".$out[0]->x.", y ".$out[0]->y);
 
-			return array($dt, $f, $g);
+			return array("dist" => $dt, "points" => array($in, $out));
 		}
 		return false;
 	}
 
 	static function is_on($a, $b, $c) {
-		return (round(static::getDistA($a, $c) + static::getDistA($c, $b)) == round(static::getDistA($a, $b)));
+		return (round(static::getDist2($a, $c) + static::getDist2($c, $b)) == round(static::getDist2($a, $b)));
 	}
 
 	static function getPointInDirection($dist, $a, $oX, $oY){
@@ -64,10 +66,6 @@ class Math {
 
 	static function getDist2($a, $b){
 		return ceil(sqrt ( pow($b->x - $a->x, 2) + pow($b->y - $a->y, 2) ) );
-	}
-
-	static function getDistA($a, $b){
-		return sqrt ( pow($b->x - $a->x, 2) + pow($b->y - $a->y, 2) );
 	}
 
 	static function getAngle($ax, $ay, $bx, $by){

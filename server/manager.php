@@ -575,6 +575,10 @@
 		$this->assembleDeployStates();
 		$this->deleteAllReinforcements();
 
+		if ($this->turn == 1){
+			$this->setPostFireFocusValues();
+		}
+
 		DBManager::app()->deleteEmptyLoads($this->gameid);
 	}
 
@@ -722,7 +726,7 @@
 
 			if ($this->fires[$i]->resolved){continue;}
 			else if ($this->fires[$i]->weapon instanceof Launcher){
-				$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
+				$this->fires[$i]->setWeaponShots();
 				$this->fires[$i]->resolved = 2;
 			} else continue;
 
@@ -845,14 +849,11 @@
 		$this->handleServerNewActions();
 
 		$this->setupShips();
-
 		$this->handleCollisions();
 
-		if (0){
+		if (1){
 			$this->setFireOrderDetails();
 			$this->handlePostMoveAreaFires();
-
-			$this->setFireOrderDetails();
 			$this->resolveShipFireOrders();
 
 			$newDmgs = $this->getAllNewDamages();
@@ -967,7 +968,7 @@
 	public function handleCollisions(){
 		Debug::log("handleCollisions");
 
-		$rams = array();
+		$collides = array();
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (!$this->ships[$i]->obstacle){continue;}
@@ -983,44 +984,48 @@
 					//Debug::log("-----------Angle: ".$this->ships[$j]->angles[$k][1]);
 
 					if ($this->ships[$j]->distances[$k][1] - $this->ships[$i]->size/2 <= 0){
-						Debug::log("----- Obstacle #".$this->ships[$i]->id." crashed into Unit #".$this->ships[$j]->id);
+						Debug::log("----- Obstacle #".$this->ships[$i]->id." contact with Unit #".$this->ships[$j]->id);
 						Debug::log("-----------Dist: ".$this->ships[$j]->distances[$k][1]);
 						Debug::log("-----------Angle: ".$this->ships[$j]->angles[$k][1]);
 						Debug::log("Obstacle has size ".$this->ships[$i]->size);
-						Debug::log("= collision depth worth ".($this->ships[$i]->size/2 - $this->ships[$j]->distances[$k][1])." px");
 
-						$rams[] = array($this->ships[$i], $this->ships[$j], $k); // obstacle, unit, data-index
+						$depthIntoField = round($this->ships[$i]->size/2 - $this->ships[$j]->distances[$k][1]);
+						$collision = round($this->ships[$i]->collision / 100 * ($depthIntoField));
+
+						Debug::log("= collision depth worth ".$depthIntoField." px");
+						Debug::log("= obstacle collision % ".$this->ships[$i]->collision);
+						Debug::log("= effective collision % ".$collision);
+
+						$collides[] = array($this->ships[$i], $this->ships[$j], $depthIntoField, $collision); // obstacle, unit, data-index
 					}
 				}
 			}
 		}
 
-		return;
-
 		$newFires = array();
 
-		for ($i = 0; $i < sizeof($rams); $i++){
-			$shooterid = $rams[$i][0]->id;
-			//Debug::log("shooterid ".$shooterid);
-			$targetid =  $rams[$i][1]->id;
-			//Debug::log("targetid ".$targetid);
-			$x =  $rams[$i][1]->x;
+		for ($i = 0; $i < sizeof($collides); $i++){
+			$shooterid = $collides[$i][0]->id;
+			Debug::log("shooterid ".$shooterid);
+			$targetid =  $collides[$i][1]->id;
+			Debug::log("targetid ".$targetid);
+			$x =  $collides[$i][1]->x;
 			//Debug::log("x ".$x);
-			$y =  $rams[$i][1]->y;
+			$y =  $collides[$i][1]->y;
 			//Debug::log("y ".$y);
 			//Debug::log("shots ".$shots);
 			$weaponid = 2;
 
-			//$id, $gameid, $turn, $shooter, $target, $x, $y, $weapon, $shots, $req, $notes, $hits, $res
 			$fire = new FireOrder(
-				0, $this->gameid, $this->turn, $shooterid, $targetid, $x, $y, $weaponid, 0, 0, "", 0, 0
+				//$id, $gameid, $turn, $shooter, $target, $x, $y, $weapon, $shots, $req, $notes, $hits, $res
+				0, $this->gameid, $this->turn, $shooterid, $targetid, $x, $y, $weaponid, 0, $collides[$i][3], "", 0, 0
 			);
 
 			$fire->cc = 0;
-			$fire->dist = $rams[$i][1]->distances[$rams[$i][2]][1];
-			$fire->angle = $rams[$i][1]->angles[$rams[$i][2]][1];
+			$fire->dist = 0;
+			$fire->angle = 0;
+			$fire->notes = $collides[$i][2].";".$collides[$i][3].";";
 			$newFires[] = $fire;
-			//Debug::log("pushed!");
 		}
 
 		if (sizeof($newFires)){
@@ -1237,8 +1242,8 @@
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$oPos = $this->ships[$i]->getCurPos();
-			//Debug::log("comparing ".$this->ships[$i]->id." / " .$this->ships[$i]->display);
-			//Debug::log("POSITION #".$this->ships[$i]->id.": ".$oPos->x."/".$oPos->y);
+			//Debug::log("COMPARING ".$this->ships[$i]->id." / " .$this->ships[$i]->display);
+			//Debug::log("position #".$this->ships[$i]->id.": ".$oPos->x."/".$oPos->y);
 			for ($j = $i+1; $j < sizeof($this->ships); $j++){
 				if ($this->ships[$i]->userid == $this->ships[$j]->userid){continue;}
 				//Debug::log("POSITION #".$this->ships[$i]->id.": ".$oPos->x."/".$oPos->y);
@@ -1254,8 +1259,9 @@
 				$obstacles = array();
 
 				if ($this->ships[$i]->obstacle || $this->ships[$j]->obstacle){continue;}
-				//Debug::log("to ".$this->ships[$j]->id." / " .$this->ships[$j]->display);
-				//Debug::log("POSITION #".$this->ships[$j]->id.": ".$tPos->x."/".$tPos->y);
+				if ($this->phase != 2){continue;}
+				//Debug::log("TO ".$this->ships[$j]->id." / " .$this->ships[$j]->display);
+				//Debug::log("position #".$this->ships[$j]->id.": ".$tPos->x."/".$tPos->y);
 
 				for ($k = 0; $k < sizeof($this->ships); $k++){
 					if (!$this->ships[$k]->obstacle){continue;}
@@ -1263,7 +1269,7 @@
 
 					$blockPos = $this->ships[$k]->getCurPos();
 					//Debug::log("checking if ".$this->ships[$k]->display." / " .$this->ships[$k]->id." is in path");
-					//Debug::log("POSITION #".$this->ships[$j]->id.": ".$blockPos->x."/".$blockPos->y);
+					//Debug::log("position #".$this->ships[$j]->id.": ".$blockPos->x."/".$blockPos->y);
 
 					$result = Math::isInPath($oPos, $tPos, $blockPos, $this->ships[$k]->size/2);
 
@@ -1272,31 +1278,40 @@
 
 									
 					if ($result){ //return array($dt, $in, $out);
-						$in;
-						$out;
+						$pierceIn = 0;
+						$pierceOut = 0;
+						$realDist = 0;
 
-						if ($result[1][1]){
-							Debug::log("in online");
-							$in = Math::getDist2($tPos, $result[1][0]);
-						} else $in = 0;
+						if ($result["points"][0][1] == 1){
+							//Debug::log("pierceIn onLine");
+							$pierceIn = Math::getDist2($tPos, $result["points"][0][0]);
+						}
 
-						if ($result[2][1]){
-							Debug::log("off online");
-							$out = Math::getDist2($tPos, $result[2][0]);
-						} else $out = 0;
+						if ($result["points"][1][1] == 1){
+							//Debug::log("pierceOut onLine");
+							$pierceOut = Math::getDist2($tPos, $result["points"][1][0]);
+						}
+
+						if ($pierceIn){
+							$realDist = abs($pierceOut - $pierceIn);
+						}
+						else if( $pierceOut){
+							$realDist = Math::getDist2($oPos, $result["points"][1][0]);
+						}
+						else if (!$pierceIn && !$pierceOut){
+
+						}
+						else $realDist = $result[0];
+
+						Debug::log("pierceIn ".$pierceIn); Debug::log("pierceOut ".$pierceOut);	Debug::log("real ".$realDist);
 
 
-						$realDist = abs($in-$out);
 
-						Debug::log("in ".$in);
-						Debug::log("out ".$out);
-						Debug::log("real ".$realDist);
-
-
+						if (!$realDist){continue;}
 
 						$effInterference = round($this->ships[$k]->interference / 100 * $realDist);
 						//$effectiveBlock = 100;
-						//Debug::log("effInterference ".$effectiveBlock);
+						//Debug::log("effInterference ".$effInterference);
 						$this->ships[$i]->blocks[] = array($this->ships[$j]->id, $effInterference);
 						$this->ships[$j]->blocks[] = array($this->ships[$i]->id, $effInterference);
 
@@ -1479,7 +1494,7 @@
 			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystem($this->fires[$i]->weaponid);
 			//var_export($this->fires[$i]->id);
 			//Debug::log("weapon: ".get_class($this->fires[$i]->weapon));
-			$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
+			$this->fires[$i]->setWeaponShots();
 			//Debug::log("shots: ".$this->fires[$i]->shots);
 			$this->fires[$i]->target = $this->getUnit($this->fires[$i]->targetid);
 			//var_export($this->fires[$i]->weapon); echo "</br></br>";
@@ -1612,7 +1627,11 @@
 
 				//Debug::log("salvo #".$this->ships[$i]->id." arrived!");
 				$target = $this->getUnit($this->ships[$i]->mission->targetid);
-				$fire = $this->ships[$i]->getFireOrder($this->gameid, $this->turn, $target);
+				$fire = new FireOrder(0, $gameid, $turn, $this->ships[$i]->id, $target->id, 0, 0, 2, 0, 0, "", 0, 0);
+				$fire->weapon = $this->ships[$i]->structures[0]->systems[0];
+				$fire->target = $target;
+				$fire->shooter = $this;
+
 				$fires[] = $fire;
 			}
 		}

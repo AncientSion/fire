@@ -1154,8 +1154,11 @@ FireOrder.prototype.createCombatLogEntry = function(){
 	var dmgs = this.assembleDmgData();
 	var depth = Object.keys(dmgs).length-1;
 
+	var rolls = this.rolls.slice();
+
+	if (this.addCollisionEntry(log, rolls)){depth++;}
 	if (this.addLogShieldEntry(log, inflicted.shield)){depth++;}
-	if (this.addLogRollsEntry(log)){depth++;}
+	if (this.addLogRollsEntry(log, rolls)){depth++;}
 
 	//dmg Details
 	$($(log.children())[start-1])
@@ -1352,14 +1355,12 @@ FireOrder.prototype.assembleDmgData = function(){
 	return dmgs;
 }
 
-FireOrder.prototype.addLogRollsEntry = function(log){
+FireOrder.prototype.addLogRollsEntry = function(log, rolls){
 	if (this.weapon.aoe){return false;}
 
 	var req = this.req.slice();
 		req.sort(function(a, b){return a-b});
 	var reqString = this.getReqString(req);
-
-	var rolls = this.rolls.slice().sort((a, b) => a-b);
 	var rollString = this.getRollsString(rolls, req);
 
 	$(log).append(
@@ -1382,6 +1383,24 @@ FireOrder.prototype.addLogRollsEntry = function(log){
 	return true;
 }
 
+FireOrder.prototype.addCollisionEntry = function(log, rolls){
+	if (!this.shooter.obstacle){return false;}
+	$(log).append(
+		$("<tr>")
+		.hide()
+		.append($("<td>"))
+		.append($("<td>")
+			.attr("colSpan", 5)
+			.html("Depth "+rolls[0]+", collision "+rolls[1]+", final " + rolls[2])
+		)
+		.append($("<td>"))
+		.append($("<td>"))
+		.append($("<td>"))
+	)
+	rolls.splice(0, 3);
+	return true;
+}
+
 FireOrder.prototype.addLogShieldEntry = function(log, shield){
 	if (!shield){return false;}
 	$(log).append(
@@ -1400,6 +1419,7 @@ FireOrder.prototype.addLogShieldEntry = function(log, shield){
 }
 
 FireOrder.prototype.getRollsString = function(rolls, allReq){
+	rolls.sort((a, b) => a-b);
 	var req = 0;
 	if (allReq.length == 1 && allReq[0] == 0){return "";} //area emine auto hit
 	for (var i = 0; i < allReq.length; i++){

@@ -314,7 +314,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 									Minimal size per Obstacle
 								</td>
 								<td>
-									<input type="number" style="width: 100%; text-align: center" value=50 placeholder="50" name="obstaclesSizeMin" step="10" min="30" max="100"></input>		
+									<input type="number" style="width: 100%; text-align: center" value=75 placeholder="75" name="obstaclesSizeMin" step="25" min="50" max="100"></input>		
 								</td>
 							</tr>
 							<tr>
@@ -322,7 +322,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 									Maximum size per Obstacle
 								</td>
 								<td>
-									<input type="number" style="width: 100%; text-align: center" value=200 placeholder="200" name="obstaclesSizeMax" step="10" min="100" max="300"></input>		
+									<input type="number" style="width: 100%; text-align: center" value=200 placeholder="200" name="obstaclesSizeMax" step="25" min="100" max="300"></input>		
 								</td>
 							</tr>
 							<tr>

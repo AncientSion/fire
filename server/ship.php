@@ -861,9 +861,9 @@ class Ship {
 	}
 
 	public function determineObstacleHits($fire){
-		Debug::log("determineObstacleHits");
+		Debug::log("determineObstacleHits collision% ".$fire->req."%, shots ".$fire->shots);
 
-		$fire->req = $fire->shooter->collision;
+		$fire->req = $fire->shooter->calculateToHit($fire);
 
 		for ($i = 0; $i < $fire->shots; $i++){
 			$roll = mt_rand(1, 100);
@@ -871,8 +871,10 @@ class Ship {
 		}
 
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
+			//Debug::log("roll ".$fire->rolls[$i]);
 			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
 			else if ($fire->rolls[$i] <= $fire->req){
+				//Debug::log("hit");
 				$fire->hits++;
 				DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
 			}
@@ -890,7 +892,7 @@ class Ship {
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
 			else if ($fire->rolls[$i] <= $fire->req){
-				if ($this->doTestDefenses($fire, $i, $this)){
+				if ($this->didPassDefenses($fire, $i, $this)){
 					$fire->hits++;
 					DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
 				}
@@ -898,7 +900,9 @@ class Ship {
 		}
 	}
 
-	public function doTestDefenses($fire, $shot, &$target){
+	public function didPassDefenses($fire, $shot, &$target){
+		if ($fire->shooter->obstacle){return true;}
+
 		for ($i = 0; $i < sizeof($this->blocks); $i++){
 			if ($this->blocks[$i][0] == $fire->shooterid){
 				Debug::log("active obstacle found: ".$this->blocks[$i][0].", worth ".$this->blocks[$i][1]);
@@ -924,36 +928,8 @@ class Ship {
 		return true;
 	}
 
-	public function determineHitsa($fire){ // target
-		$fire->req = $fire->shooter->calculateToHit($fire);
-
-		for ($i = 0; $i < sizeof($fire->rolls); $i++){
-			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
-			else  if ($fire->rolls[$i] <= $fire->req){
-				if ($fire->target->jamming){
-					Debug::log("hit but active jam ".$fire->target->jamming);
-					$roll = mt_rand(1, 100);
-					if ($roll <= $fire->target->jamming){
-						Debug::log("failed jamming roll ".$roll);
-						$fire->rolls[$i] *= -1;
-					}
-					else {
-						Debug::log("passed jamming roll");
-						$fire->hits++;
-						DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
-					}
-				}
-				else {
-					$fire->hits++;
-					DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
-				}
-			}
-		}
-	}
-
-
 	public function calculateToHit($fire){ // shooter
-		//return 100;
+		Debug::log("calculateToHit");
 		$multi = 1;
 		$req = 0;
 		
@@ -1265,16 +1241,13 @@ class Ship {
 	}
 
 	public function getHitSection($fire){
-		if ($fire->cc && $fire->shooter->flight){return $this->structures[mt_rand(0, sizeof($this->structures)-1)]->id;}
+		if ($fire->cc && $fire->shooter->flight || $fire->shooter->obstacle){return $this->structures[mt_rand(0, sizeof($this->structures)-1)]->id;}
 
-		//Debug::log("fire-angle: ".$fire->angle);
-		//Debug::log("facing: ".$this->facing);
+		//Debug::log("fire-angle: ".$fire->angle.", facing: ".$this->facing);
 		$fire->angle = Math::addAngle($this->facing, $fire->angle);
 		if ($this->rolled){$fire->angle = Math::getMirrorAngle($fire->angle);}
-		//if ($fire->shooter->salvo){Debug::log("effective impact from: ".$fire->angle);}
 
 		$locs = array();
-		//Debug::log("facing: ".$this->facing." => to adjusted: ".$fire->angle);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (Math::isInArc($fire->angle, $this->structures[$i]->start, $this->structures[$i]->end)){
 				$locs[] = $this->structures[$i]->id;
@@ -1283,7 +1256,7 @@ class Ship {
 		return $locs[mt_rand(0, sizeof($locs)-1)];
 	}
 
-	public function getRelDmg($turn){ // 100 new, 800 total, 400 cur
+	public function getRelDmg($turn){
 		return new RelDmg($this->primary->newDmg, $this->primary->integrity-$this->primary->remaining-$this->primary->newDmg, $this->primary->integrity);
 	}
 

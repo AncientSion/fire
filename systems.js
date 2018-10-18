@@ -2233,7 +2233,11 @@ AsteroidRam.prototype.getAnimation = function(fire){
 }
 
 AsteroidRam.prototype.getShots = function(){
-	return this.output;
+	return this.shots;
+}
+
+AsteroidRam.prototype.hasEvent = function(){
+	return Area.prototype.hasEvent.call(this);
 }
 
 function Warhead(data){

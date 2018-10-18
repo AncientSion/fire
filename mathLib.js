@@ -60,7 +60,7 @@ function isInPath(a, b, c, size) {
 	var t = (d.x * (c.x-a.x)) + (d.y * (c.y-a.y));
 
 	// compute the coordinates of the point e on line and closest to c
-    var e = {coords:[], onLine:false};
+    var e = {x: 0, y: 0, onLine:false};
 		e.x = (t * d.x) + a.x;
 		e.y = (t * d.y) + a.y;
 
@@ -74,24 +74,22 @@ function isInPath(a, b, c, size) {
 		// compute distance from t to circle intersection point
 		var dt = Math.sqrt( Math.pow(size, 2) - Math.pow(eDistCtoE, 2));
 
-		var f = {x: 0, y: 0, onLine: false};
-			f.x = ((t-dt) * d.x) + a.x;
-			f.y = ((t-dt) * d.y) + a.y;
-			f.onLine = is_on( a, b, f);
+		var inP = {
+			x: ((t-dt) * d.x) + a.x, 
+			y: ((t-dt) * d.y) + a.y,
+			onLine: false
+		};
+		inP.onLine = is_on( a, b, inP);
 
-		var g = {x: 0, y: 0, onLine: false};
-			g.x = ((t+dt) * d.x) + a.x;
-			g.y = ((t+dt) * d.y) + a.y;
-			g.onLine = is_on(a, b, g);
+		var out = {
+			x: ((t+dt) * d.x) + a.x,
+			y: ((t+dt) * d.y) + a.y, 
+			onLine: false
+		};
+		out.onLine = is_on(a, b, out);
 
-		if (f.onLine || g.onLine){
-			var data = {dist: dt, points: []};
-			//if (f.onLine){
-				data.points.push(f);
-			//}
-			//else if (g.onLine){
-				data.points.push(g);
-			//}
+		if (inP.onLine || out.onLine){
+			var data = {dist: dt, points: [inP, out]};
 			return data;
 		}
 	}

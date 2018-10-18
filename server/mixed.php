@@ -308,7 +308,6 @@ class Mixed extends Ship {
 	public function getHitSection($fire){
 		//Debug::log("Mixed getHitSection");
 		return 0;
-		return $this->getHitSystem($fire)->id;
 	}
 
 	public function getFlashTargets($fire){
@@ -399,7 +398,7 @@ class Mixed extends Ship {
 				$fire->subtargetid = $target->id;
 				$fire->req = $fire->shooter->calculateToHit($fire);
 				if ($fire->rolls[$i] <= $fire->req){
-					if ($this->doTestDefenses($fire, $i, $target)){
+					if ($this->didPassDefenses($fire, $i, $target)){
 						$fire->hits++;
 						DmgCalc::doDmg($fire, $i, $target);
 					}
@@ -407,7 +406,6 @@ class Mixed extends Ship {
 			}
 		}
 	}
-
 
 
 	public function getHitChance($fire){

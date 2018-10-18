@@ -274,6 +274,10 @@ class FireOrder {
 		}
 	}
 
+	public function setWeaponShots(){
+		$this->shots = $this->weapon->getShots($this->turn);
+	}
+
 }
 
 class Damage {

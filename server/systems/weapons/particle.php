@@ -30,12 +30,15 @@ class AsteroidRam extends Particle {
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 
+        $this->start = 0;
+        $this->end = 0;
+        $this->shots = $end;
         $this->minDmg = round(mt_rand(30, 40) * $output);
         $this->maxDmg = round($this->minDmg*1.3);
 	}
 
 	public function getShots($target){
-		return $this->output;
+		return $this->shots;
 	}
 }
 
