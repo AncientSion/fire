@@ -330,7 +330,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	else obstacles = game.hasObstacleInVector(shooterPos, pos);
 	*/ 
 
-	var obstacles = game.hasObstacleInVector(shooterPos, pos);
+	var obstacles = game.hasObstacleInVector(shooterPos, pos, target);
 
 	if (obstacles.length){
 		var html = "";

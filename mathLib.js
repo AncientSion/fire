@@ -47,50 +47,6 @@ function dot(a, b){
 	return (a.x * b.x) + (a.y * b.y); 
 }
 
-// GEOMETRIC function to get the intersections
-function isInPatha(shooter, target, obstacle, size) {
-	// Calculate the euclidean distance between a & b
-	var shooterToTargetDist = Math.sqrt( Math.pow(target.x-shooter.x, 2) + Math.pow(target.y-shooter.y, 2) );
-	var shooterToObstacleDist = Math.sqrt( Math.pow(obstacle.x-shooter.x, 2) + Math.pow(obstacle.y-shooter.y, 2) );
-
-	// compute the direction vector d from a to b
-	var d = {x: (target.x-shooter.x)/shooterToTargetDist, y: (target.y-shooter.y)/shooterToTargetDist};
-
-	// Now the line equation is x = dx*t + ax, y = dy*t + ay with 0 <= t <= 1.
-
-	// compute the value t of the closest point to the circle center (cx, cy)
-	var t = (d.x * (obstacle.x-shooter.x)) + (d.y * (obstacle.y-shooter.y));
-
-	// compute the coordinates of the point e on line and closest to c
-	var closestPoint = {x: round(t * d.x + shooter.x), y: round(t * d.y + shooter.y)};
-	var dist = Math.floor(getDistance(obstacle, closestPoint));
-	//console.log(dist);
-	if (shooterToTargetDist < shooterToObstacleDist - size){
-		return false;
-	}
-	else if (dist < size){
-		var points = [closestPoint];
-
-		var distToClosestIntersection = Math.sqrt( Math.pow(size, 2) - Math.pow(dist, 2));
-
-		if (distToClosestIntersection <= size){
-		    points.push({
-		    	x: round(((t-distToClosestIntersection) * d.x) + shooter.x),
-		    	y: round(((t-distToClosestIntersection) * d.y) + shooter.y)
-		    });
-
-		    points.push({
-		    	x: round(((t+distToClosestIntersection) * d.x) + shooter.x),
-		    	y: round(((t+distToClosestIntersection) * d.y) + shooter.y)
-		    });
-
-			return [true, dist, points];
-		}
-	}
-	return false;
-}
-
-// GEOMETRIC function to get the intersections
 function isInPath(a, b, c, size) {
 	// Calculate the euclidean distance between a & b
 	var eDistAtoB = Math.sqrt( Math.pow(b.x-a.x, 2) + Math.pow(b.y-a.y, 2) );
@@ -130,12 +86,12 @@ function isInPath(a, b, c, size) {
 
 		if (f.onLine || g.onLine){
 			var data = {dist: dt, points: []};
-			if (f.onLine){
+			//if (f.onLine){
 				data.points.push(f);
-			}
-			else if (g.onLine){
+			//}
+			//else if (g.onLine){
 				data.points.push(g);
-			}
+			//}
 			return data;
 		}
 	}

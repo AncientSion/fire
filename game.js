@@ -3341,6 +3341,7 @@ Game.prototype.getObstructionPoint = function(fire){
 }
 
 Game.prototype.setObstacleData = function(){
+	return;
 	console.log("setObstacleData");
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].obstacle){continue;}
@@ -3373,7 +3374,7 @@ Game.prototype.setObstacleData = function(){
 	this.obstacleDataSet = 1;
 }
 
-Game.prototype.hasObstacleInVector = function(oPos, tPos){
+Game.prototype.hasObstacleInVector = function(oPos, tPos, unit){
 
 	var inPath = [];
 	for (var j = 0; j < this.ships.length; j++){
@@ -3383,13 +3384,30 @@ Game.prototype.hasObstacleInVector = function(oPos, tPos){
 		var result = isInPath(oPos, tPos, this.ships[j].getPlannedPos(), this.ships[j].size/2);
 
 		if (result){
-			//console.log(result.dist);
+			var pierceIn;
+			var pierceOut;
 
+			console.log(result)
+			if (result.points[0].onLine){
+				var pierceOut = getDistance(tPos, result.points[0]);
+			} else pierceOut = 0;
+			if (result.points[1].onLine){
+				var pierceIn = getDistance(tPos, result.points[1]);
+			} else pierceIn = 0;
+
+			var realDist = Math.abs(pierceOut - pierceIn);
+
+			console.log("--------");
+			console.log(pierceIn)
+			console.log(pierceOut);
+
+			console.log(realDist);
+		
 			inPath.push({
 				obstacleId: this.ships[j].id, 
 				dist: Math.round(result.dist*2),
 				size: this.ships[j].size,
-				EffInterference: Math.round(this.ships[j].interference / 100 * result.dist*2),
+				EffInterference: Math.round(this.ships[j].interference / 100 * realDist),
 				exposure: Math.round(round((1-(result.dist / (this.ships[j].size/2))), 2)*100),
 				interference: this.ships[j].interference,
 			})

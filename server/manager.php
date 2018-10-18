@@ -845,19 +845,22 @@
 		$this->handleServerNewActions();
 
 		$this->setupShips();
+
 		$this->handleCollisions();
 
-		$this->setFireOrderDetails();
-		$this->handlePostMoveAreaFires();
+		if (0){
+			$this->setFireOrderDetails();
+			$this->handlePostMoveAreaFires();
 
-		$this->setFireOrderDetails();
-		$this->resolveShipFireOrders();
+			$this->setFireOrderDetails();
+			$this->resolveShipFireOrders();
 
-		$newDmgs = $this->getAllNewDamages();
-		$newForcedMoves = $this->getAllNewForcedMoves();
-		DBManager::app()->updateFireOrders($this->fires);
-		if (sizeof($newDmgs)){DBManager::app()->insertDamageEntries($newDmgs);}
-		if (sizeof($newForcedMoves)){DBManager::app()->insertServerActions($newForcedMoves);}
+			$newDmgs = $this->getAllNewDamages();
+			$newForcedMoves = $this->getAllNewForcedMoves();
+			DBManager::app()->updateFireOrders($this->fires);
+			if (sizeof($newDmgs)){DBManager::app()->insertDamageEntries($newDmgs);}
+			if (sizeof($newForcedMoves)){DBManager::app()->insertServerActions($newForcedMoves);}			
+		}
 
 		$this->updateMissions();
 	}
@@ -981,12 +984,18 @@
 
 					if ($this->ships[$j]->distances[$k][1] - $this->ships[$i]->size/2 <= 0){
 						Debug::log("----- Obstacle #".$this->ships[$i]->id." crashed into Unit #".$this->ships[$j]->id);
+						Debug::log("-----------Dist: ".$this->ships[$j]->distances[$k][1]);
+						Debug::log("-----------Angle: ".$this->ships[$j]->angles[$k][1]);
+						Debug::log("Obstacle has size ".$this->ships[$i]->size);
+						Debug::log("= collision depth worth ".($this->ships[$i]->size/2 - $this->ships[$j]->distances[$k][1])." px");
 
 						$rams[] = array($this->ships[$i], $this->ships[$j], $k); // obstacle, unit, data-index
 					}
 				}
 			}
 		}
+
+		return;
 
 		$newFires = array();
 
@@ -1227,26 +1236,26 @@
 		}
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$aPos = $this->ships[$i]->getCurPos();
+			$oPos = $this->ships[$i]->getCurPos();
 			//Debug::log("comparing ".$this->ships[$i]->id." / " .$this->ships[$i]->display);
-			//Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
+			//Debug::log("POSITION #".$this->ships[$i]->id.": ".$oPos->x."/".$oPos->y);
 			for ($j = $i+1; $j < sizeof($this->ships); $j++){
 				if ($this->ships[$i]->userid == $this->ships[$j]->userid){continue;}
-				//Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
-				$bPos = $this->ships[$j]->getCurPos();
-				$dist = Math::getDist2($aPos, $bPos);
+				//Debug::log("POSITION #".$this->ships[$i]->id.": ".$oPos->x."/".$oPos->y);
+				$tPos = $this->ships[$j]->getCurPos();
+				$dist = Math::getDist2($oPos, $tPos);
 				
 				$this->ships[$i]->distances[] = array($this->ships[$j]->id, $dist);
 				$this->ships[$j]->distances[] = array($this->ships[$i]->id, $dist);
 
-				$this->ships[$i]->angles[] = array($this->ships[$j]->id, round(Math::getAngle2($aPos, $bPos)));
-				$this->ships[$j]->angles[] = array($this->ships[$i]->id, round(Math::getAngle2($bPos, $aPos)));
+				$this->ships[$i]->angles[] = array($this->ships[$j]->id, round(Math::getAngle2($oPos, $tPos)));
+				$this->ships[$j]->angles[] = array($this->ships[$i]->id, round(Math::getAngle2($tPos, $oPos)));
 
 				$obstacles = array();
 
 				if ($this->ships[$i]->obstacle || $this->ships[$j]->obstacle){continue;}
 				//Debug::log("to ".$this->ships[$j]->id." / " .$this->ships[$j]->display);
-				//Debug::log("POSITION #".$this->ships[$j]->id.": ".$bPos->x."/".$bPos->y);
+				//Debug::log("POSITION #".$this->ships[$j]->id.": ".$tPos->x."/".$tPos->y);
 
 				for ($k = 0; $k < sizeof($this->ships); $k++){
 					if (!$this->ships[$k]->obstacle){continue;}
@@ -1256,13 +1265,36 @@
 					//Debug::log("checking if ".$this->ships[$k]->display." / " .$this->ships[$k]->id." is in path");
 					//Debug::log("POSITION #".$this->ships[$j]->id.": ".$blockPos->x."/".$blockPos->y);
 
-					$result = Math::isInPath($aPos, $bPos, $blockPos, $this->ships[$k]->size/2);
+					$result = Math::isInPath($oPos, $tPos, $blockPos, $this->ships[$k]->size/2);
 
 					//$data[] = $result;
 					//continue;
 
-					if ($result){
-						$effInterference = round($this->ships[$k]->interference / 100 * $result[0]*2);
+									
+					if ($result){ //return array($dt, $in, $out);
+						$in;
+						$out;
+
+						if ($result[1][1]){
+							Debug::log("in online");
+							$in = Math::getDist2($tPos, $result[1][0]);
+						} else $in = 0;
+
+						if ($result[2][1]){
+							Debug::log("off online");
+							$out = Math::getDist2($tPos, $result[2][0]);
+						} else $out = 0;
+
+
+						$realDist = abs($in-$out);
+
+						Debug::log("in ".$in);
+						Debug::log("out ".$out);
+						Debug::log("real ".$realDist);
+
+
+
+						$effInterference = round($this->ships[$k]->interference / 100 * $realDist);
 						//$effectiveBlock = 100;
 						//Debug::log("effInterference ".$effectiveBlock);
 						$this->ships[$i]->blocks[] = array($this->ships[$j]->id, $effInterference);

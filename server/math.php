@@ -43,10 +43,7 @@ class Math {
 				), 0);
 			$g[1] = static::is_on($a, $b, $g[0]);
 
-			if ($f[1] || $g[1]){
-				return array($dt, $f, $g);
-			//return {active: true, dist: dt, f, g}
-			} else return array($dt, $f, $g);
+			return array($dt, $f, $g);
 		}
 		return false;
 	}
