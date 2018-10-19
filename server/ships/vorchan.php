@@ -9,7 +9,7 @@ class Vorchan extends SuperLight {
 	public $mass = 1250;
 	public $integrity = 370;
 	
-	public $ep = 120;
+	public $ep = 1020;
 	public $ew = 525;
 	public $power = 2;
 	public $negation = 11;
@@ -26,13 +26,13 @@ class Vorchan extends SuperLight {
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new LightPlasma($this->getId(), $this->parentId, 315, 45);
+		$right->systems[] = new LightPlasma($this->getId(), $this->parentId, 215, 45);
 		//$right->systems[] = new MagCompressor($this->getId(), $this->parentId, 315, 45);
 		//$right->systems[] = new MediumShock($this->getId(), $this->parentId, 315, 45);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new LightPlasma($this->getId(), $this->parentId, 315, 45);
+		$left->systems[] = new LightPlasma($this->getId(), $this->parentId, 215, 45);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

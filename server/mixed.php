@@ -361,6 +361,13 @@ class Mixed extends Ship {
 	}
 
 	public function determineHitso($fire){
+		//Debug::log("determineHits ".get_class($this)))
+
+		for ($i = 0; $i < $fire->shots; $i++){
+			$roll = mt_rand(1, 100);
+			$fire->rolls[] = $roll;
+		}
+
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
 			else {
@@ -386,6 +393,7 @@ class Mixed extends Ship {
 						DmgCalc::doDmg($fire, $i, $target);
 					}
 				}
+				else Debug::log("miss");
 			}
 		}
 	}

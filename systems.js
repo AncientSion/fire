@@ -2331,7 +2331,7 @@ Warhead.prototype.getAnimation = function(fire){
 			if (fire.hits[j] > k){
 				hit = 1;
 				hits++;
-			} else continue;
+			}// else continue;
 
 			if (fire.target.ship){
 				dest = getPointInDir(t.size/3 * (range(7, 13)/10), a, p.x + range(-4, 4), p.y + range(-4, 4));
@@ -2342,7 +2342,7 @@ Warhead.prototype.getAnimation = function(fire){
 				dest.y += p.y;
 			}
 
-			var shotAnim = {tx: dest.x, ty: dest.y, m: 35, n: 0 - ((j / grouping) * gunDelay + k*shotDelay)};
+			var shotAnim = {tx: dest.x, ty: dest.y, h: hit, f: 0, m: 35, n: 0 - ((j / grouping) * gunDelay + k*shotDelay)};
 			
 			gunAnims.push(shotAnim);
 		}

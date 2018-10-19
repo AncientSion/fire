@@ -853,6 +853,7 @@ class Ship {
 			$fire->angle = $this->getIncomingFireAngle($fire);
 			$fire->section = $this->getHitSection($fire);
 
+			$this->doRollShots($fire);
 			$this->determineHits($fire);
 		}
 
@@ -861,7 +862,7 @@ class Ship {
 	}
 
 	public function determineObstacleHits($fire){
-		Debug::log("determineObstacleHits collision% ".$fire->req."%, shots ".$fire->shots);
+		//Debug::log("determineObstacleHits collision% ".$fire->req."%, shots ".$fire->shots);
 
 		$fire->req = $fire->shooter->calculateToHit($fire);
 
@@ -881,13 +882,17 @@ class Ship {
 		}
 	}
 
-	public function determineHits($fire){ // target
-		$fire->req = $fire->shooter->calculateToHit($fire);
-
+	public function doRollShots($fire){
+		Debug::log("doRollShots ".$fire->shots);
 		for ($i = 0; $i < $fire->shots; $i++){
 			$roll = mt_rand(1, 100);
 			$fire->rolls[] = $roll;
 		}
+	}
+
+	public function determineHits($fire){ // target
+		//Debug::log("determineHits ".get_class($this)))
+		$fire->req = $fire->shooter->calculateToHit($fire);
 
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			if ($this->destroyed){$fire->cancelShotResolution($i); return;}

@@ -65,6 +65,9 @@ class Math {
 	}
 
 	static function getDist2($a, $b){
+		return sqrt ( pow($b->x - $a->x, 2) + pow($b->y - $a->y, 2) );
+	}
+	static function getDist2a($a, $b){
 		return ceil(sqrt ( pow($b->x - $a->x, 2) + pow($b->y - $a->y, 2) ) );
 	}
 

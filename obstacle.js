@@ -24,8 +24,8 @@ Obstacle.prototype.doHover = function(){
 	this.drawNextMove();
 }
 
-Obstacle.prototype.drawMovePlan = function(){
-	if (!game.drawMoves || !game.showObstacleMoves){return;}
+Obstacle.prototype.drawMovePlan = function(){return;
+	if (!game.phase!= 3 || !game.drawMoves || !game.showObstacleMoves){return;}
 
 	this.setMoveTranslation();
 
@@ -250,8 +250,23 @@ Obstacle.prototype.setUnitState = function(){
 	this.isReady = 1;
 }
 
+Obstacle.prototype.setDrawData = function(){
+	console.log("Obstacle setDrawData");
+
+	if (game.phase < 2){
+		this.setPreMovePosition();
+	}
+	else {
+		this.setPostMovePosition();
+	}
+}
 
 Obstacle.prototype.setPreMovePosition = function(){
+	this.drawX = this.x;
+	this.drawY = this.y;
+}
+
+Obstacle.prototype.setPostMovePosition = function(){
 	this.drawX = this.x;
 	this.drawY = this.y;
 }

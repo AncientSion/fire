@@ -409,7 +409,7 @@ Mixed.prototype.setPreMovePosition = function(){
 }
 
 Mixed.prototype.setDrawData = function(){
-	//console.log("MIXED setDrawData");
+	console.log("MIXED setDrawData");
 	if (this.available > game.turn || !this.available || game.turn == 1 && game.phase == -1){
 		if (this.friendly && this.isReady){
 			this.setPostMovePosition();

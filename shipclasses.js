@@ -584,10 +584,22 @@ Ship.prototype.issueMove = function(pos, dist){
 	game.updateIntercepts(this.id);
 	game.redraw();
 	game.setCollisionData(this);
-	game.printCollisionHints(this);
+	this.printCollisionHints();
 	//game.drawShipOverlays();
 }
 
+
+Ship.prototype.printCollisionHints = function(){
+	if (!this.collisions.length){return;}
+	var html = "Collision Alert for " + this.name + " #" + this.id + "</br>";
+	for (var i = 0; i < this.collisions.length; i++){
+		var col = this.collisions[i];
+		//console.log(unit.collisions[i]);
+		html += "</br><div>#" + col.obstacleId + "</br>" + col.depthIntoField + "px depth " + col.depthCol + "% * unit size " + this.traverse + "</br>";
+		html += "<u>" + col.realCol + "%, " + col.damage +"</u></div>";
+	}
+	popup(html);
+}
 
 Ship.prototype.doAutoShorten = function(){
 	if (this.getRemSpeed()){return;}

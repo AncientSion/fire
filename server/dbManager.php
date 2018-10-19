@@ -850,7 +850,8 @@
 			$min = $data["obstaclesSizeMin"];
 			$max = $data["obstaclesSizeMax"];
 
-			$amount = 10;
+			//$amount = 10;
+			//Debug::log("amount: ".$amount);
 			for ($i = 1; $i <= $amount; $i++){
 				//Debug::log("rock ".$i);
 				

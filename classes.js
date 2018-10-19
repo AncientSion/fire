@@ -1391,7 +1391,7 @@ FireOrder.prototype.addCollisionEntry = function(log, rolls){
 		.append($("<td>"))
 		.append($("<td>")
 			.attr("colSpan", 5)
-			.html("Depth "+rolls[0]+", collision "+rolls[1]+", final " + rolls[2])
+			.html("Depth "+rolls[0]+"px, collision "+rolls[1]+"%, final " + rolls[2]+"%")
 		)
 		.append($("<td>"))
 		.append($("<td>"))

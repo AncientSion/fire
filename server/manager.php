@@ -845,23 +845,20 @@
 		$this->handleShipMovement();
 		$this->handleFlightMovement();
 		$this->handleSalvoMovement();
-		$this->handleObstacleMovement();
 		$this->handleServerNewActions();
 
 		$this->setupShips();
 		$this->handleCollisions();
 
-		if (1){
-			$this->setFireOrderDetails();
-			$this->handlePostMoveAreaFires();
-			$this->resolveShipFireOrders();
+		$this->setFireOrderDetails();
+		$this->handlePostMoveAreaFires();
+		$this->resolveShipFireOrders();
 
-			$newDmgs = $this->getAllNewDamages();
-			$newForcedMoves = $this->getAllNewForcedMoves();
-			DBManager::app()->updateFireOrders($this->fires);
-			if (sizeof($newDmgs)){DBManager::app()->insertDamageEntries($newDmgs);}
-			if (sizeof($newForcedMoves)){DBManager::app()->insertServerActions($newForcedMoves);}			
-		}
+		$newDmgs = $this->getAllNewDamages();
+		$newForcedMoves = $this->getAllNewForcedMoves();
+		DBManager::app()->updateFireOrders($this->fires);
+		if (sizeof($newDmgs)){DBManager::app()->insertDamageEntries($newDmgs);}
+		if (sizeof($newForcedMoves)){DBManager::app()->insertServerActions($newForcedMoves);}
 
 		$this->updateMissions();
 	}
@@ -984,19 +981,19 @@
 					//Debug::log("-----------Angle: ".$this->ships[$j]->angles[$k][1]);
 
 					if ($this->ships[$j]->distances[$k][1] - $this->ships[$i]->size/2 <= 0){
-						Debug::log("----- Obstacle #".$this->ships[$i]->id." contact with Unit #".$this->ships[$j]->id);
+						/*Debug::log("----- Obstacle #".$this->ships[$i]->id." contact with Unit #".$this->ships[$j]->id);
 						Debug::log("-----------Dist: ".$this->ships[$j]->distances[$k][1]);
 						Debug::log("-----------Angle: ".$this->ships[$j]->angles[$k][1]);
 						Debug::log("Obstacle has size ".$this->ships[$i]->size);
-
+						*/
 						$depthIntoField = ($this->ships[$i]->size/2 - $this->ships[$j]->distances[$k][1]);
 						$collision = ($this->ships[$i]->collision / 100 * ($depthIntoField));
 
-						Debug::log("= collision depth worth ".$depthIntoField." px");
+						/*Debug::log("= collision depth worth ".$depthIntoField." px");
 						Debug::log("= obstacle collision % ".$this->ships[$i]->collision);
 						Debug::log("= effective collision % ".$collision);
-
-						$collides[] = array($this->ships[$i], $this->ships[$j], $depthIntoField, $collision); // obstacle, unit, data-index
+						*/
+						$collides[] = array($this->ships[$i], $this->ships[$j], round($depthIntoField), round($collision)); // obstacle, unit, data-index
 					}
 				}
 			}
@@ -1006,9 +1003,7 @@
 
 		for ($i = 0; $i < sizeof($collides); $i++){
 			$shooterid = $collides[$i][0]->id;
-			Debug::log("shooterid ".$shooterid);
 			$targetid =  $collides[$i][1]->id;
-			Debug::log("targetid ".$targetid);
 			$x =  $collides[$i][1]->x;
 			//Debug::log("x ".$x);
 			$y =  $collides[$i][1]->y;
@@ -1121,6 +1116,8 @@
 	public function endTurn(){
 		Debug::log("endTurn");
 		$this->setUnitRollState();
+		$this->handleObstacleMovement();
+		$this->handleServerNewActions();
 		$this->doFullDestroyedCheck();
 		$this->assembleEndStates();
 		return true;

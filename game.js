@@ -500,19 +500,6 @@ function Game(data){
 		}
 	}
 
-	this.printCollisionHints = function(unit){
-		var html = "Collision Alert for " + unit.name + " #" + unit.id + "</br>";
-		for (var i = 0; i < unit.collisions.length; i++){
-			var col = unit.collisions[i];
-			//console.log(unit.collisions[i]);
-			html += "</br><div>#" + col.obstacleId + "</br>" + col.depthIntoField + "px depth " + col.depthCol + "% * unit size " + unit.traverse + "</br>";
-			html += "<u>" + col.realCol + "%, " + col.damage +"</u></div>";
-		}
-
-		popup(html);
-
-	}
-
 	this.getHasBasicEW = function(){
 		var data = [];
 
@@ -1929,6 +1916,7 @@ function Game(data){
 		}
 		else if (game.phase == 2){
 			for (var i = 0; i < this.ships.length; i++){
+				if (this.ships[i].obstacle){continue;}
 				this.ships[i].toAnimate = true;
 			}
 		}
@@ -2225,7 +2213,7 @@ function Game(data){
 			window.startTime = then;
 			this.animating = 1;
 			this.animateJumpOut();
-		} else this.createTurnStartMoveActionEntries();
+		} else this.DamageControlResolved();
 	}
 
 	this.animateJumpOut = function(){
@@ -2263,13 +2251,13 @@ function Game(data){
 			if (done){
 				window.cancelAnimationFrame(anim);
 				game.animating = 0;
-				this.createTurnStartMoveActionEntries();
+				this.resolveObstacleMovement();
 			}
 		}
 	}
 
-	this.createTurnStartMoveActionEntries = function(){
-		console.log("createTurnStartMoveActionEntries");
+	this.DamageControlResolved = function(){
+		console.log("DamageControlResolved");
 
 		var show = 0;
 		for (var i = 0; i < this.ships.length; i++){
@@ -2692,9 +2680,14 @@ function Game(data){
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 						game.fireOrders[i].anim[j][k].n += 1;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
-							drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]); // EXPLO
-							if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
+							if (game.fireOrders[i].anim[j][k].h == 0){
 								game.fireOrders[i].anim[j][k].done = true;
+							}
+							else {
+								drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]); // EXPLO
+								if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
+									game.fireOrders[i].anim[j][k].done = true;
+								}
 							}
 						}
 					}
@@ -3388,7 +3381,7 @@ Game.prototype.getObstructionPoint = function(fire){
 }
 
 Game.prototype.setObstacleData = function(){
-	return;
+	//return;
 	console.log("setObstacleData");
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].obstacle){continue;}
@@ -3403,7 +3396,7 @@ Game.prototype.setObstacleData = function(){
 				if (!this.ships[k].obstacle){continue;}
 
 				//var obstaclePos = game.phase == 3 ? {x: this.ships[k].x, y: this.ships[k].y} : this.ships[k].gePlannedPos();
-				var obstaclePos = this.ships[k].getPlannedPos();
+				var obstaclePos = this.ships[k].getGamePos();
 
 				var result = isInPath(oPos, tPos, obstaclePos, this.ships[k].size/2);
 
@@ -3428,7 +3421,7 @@ Game.prototype.hasObstacleInVector = function(oPos, tPos, unit){
 		if (!this.ships[j].obstacle){continue;}
 		//if (this.ships[j].id != 24){continue;}
 
-		var result = isInPath(oPos, tPos, this.ships[j].getPlannedPos(), this.ships[j].size/2);
+		var result = isInPath(oPos, tPos, this.ships[j].getGamePos(), this.ships[j].size/2);
 
 		if (result){
 			var pierceIn;
@@ -3784,6 +3777,34 @@ Game.prototype.setCamera = function(){
 	}
 
 	cam.setFocusToPos({x: endX - shiftX, y: endY});
+}
+
+Game.prototype.resolveObstacleMovement = function(){
+	var need = 1;
+
+	if (game.turn == 1){
+		need = 0;
+	} else if (!this.hasObstaclesPresent()){
+		need = 0;
+	}
+
+	if (!need){
+		this.DamageControlResolved();
+	}
+	else {
+		this.handleObstacleMovement();
+	}
+}
+
+Game.prototype.handleObstacleMovement = function(){
+	console.log("handleObstacleMovement");
+}
+
+Game.prototype.hasObstaclesPresent = function(){
+	for (var i = 0; i < this.ships.length; i++){
+		if (this.ships[i].obstacle){return true;}
+	}
+	return false;
 }
 
 Game.prototype.getDistanceFromFocusCentre = function(){
