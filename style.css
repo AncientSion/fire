@@ -48,6 +48,10 @@ table, th, tr, td {
 	color: white;
 }
 
+.popupSingle div {
+	font-size: 16px;
+}
+
 .popupEntry {
 	display: block;
 	margin: auto;

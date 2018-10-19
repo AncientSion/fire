@@ -53,6 +53,7 @@ function Ship(data){
 	this.attachAnims = [];
 
 	this.blocks = [];
+	this.collisions = [];
 
 	this.ship = data.ship;
 	this.flight = data.flight;
@@ -582,6 +583,8 @@ Ship.prototype.issueMove = function(pos, dist){
 	this.doAutoShorten();
 	game.updateIntercepts(this.id);
 	game.redraw();
+	game.setCollisionData(this);
+	game.printCollisionHints(this);
 	//game.drawShipOverlays();
 }
 
@@ -677,6 +680,8 @@ Ship.prototype.doUndoLastAction = function(pos){
 	if (game.turnMode){this.switchTurnMode();}
 	this.turnAngles = {}
 	game.redraw();
+    ui.popupWrapper.hide();
+
 	//game.drawShipOverlays();
 }
 
@@ -1313,6 +1318,15 @@ Ship.prototype.getShortInfo = function(){
 	ele
 	.append($("<div>").html("Speed: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")"))
 	.append($("<div>").html("Base To-Hit: " + this.getStringHitChance()))
+
+	if (!this.collisions.length){return;}
+
+	ele.append($("<div>").html("Collisions"))
+	for (var i = 0; i < this.collisions.length; i++){
+		var html = this.collisions[i].damage + " @ " + this.collisions[i].realCol + "%</br>";
+		ele.append($("<div>").html(html))
+	}
+
 }
 
 Ship.prototype.getParent = function(){
@@ -1918,6 +1932,7 @@ Ship.prototype.getSystemLocation = function(i, name){
 			case "Reactor": p = getPointInDir(-this.size/4, this.getDrawFacing()+range(-15, 15), 0, 0); break;
 			case "Sensor": p = getPointInDir(this.size/3, this.getDrawFacing()+range(-15, 15), 0, 0); break;
 			case "Engine": p = getPointInDir(-this.size/4, this.getDrawFacing()+range(-15, 15), 0, 0); break;
+			case "Jammer": p = getPointInDir(-this.size/4, this.getDrawFacing()+range(-15, 15), 0, 0); break;
 		}
 	}
 	else {

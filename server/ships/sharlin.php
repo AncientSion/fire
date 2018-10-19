@@ -11,7 +11,7 @@ class Sharlin extends SuperHeavy {
 
 	public $integrity = 1600;
 	public $vitalHP = 180;
-	public $ep = 50;
+	public $ep = 150;
 	public $ew = 1000;
 	public $manual = 0;
 

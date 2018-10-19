@@ -383,7 +383,7 @@ Obstacle.prototype.setImage = function(){
 
 Obstacle.prototype.getDamageString = function(){
 	var wpn = this.primary.systems[0];
-	return wpn.shots + "x " + wpn.minDmg + " - " + wpn.maxDmg + " damage";
+	return wpn.shots + "x " + wpn.minDmg + " - " + wpn.maxDmg;
 }
 
 Obstacle.prototype.getBaseImage = function(){

@@ -989,8 +989,8 @@
 						Debug::log("-----------Angle: ".$this->ships[$j]->angles[$k][1]);
 						Debug::log("Obstacle has size ".$this->ships[$i]->size);
 
-						$depthIntoField = round($this->ships[$i]->size/2 - $this->ships[$j]->distances[$k][1]);
-						$collision = round($this->ships[$i]->collision / 100 * ($depthIntoField));
+						$depthIntoField = ($this->ships[$i]->size/2 - $this->ships[$j]->distances[$k][1]);
+						$collision = ($this->ships[$i]->collision / 100 * ($depthIntoField));
 
 						Debug::log("= collision depth worth ".$depthIntoField." px");
 						Debug::log("= obstacle collision % ".$this->ships[$i]->collision);
