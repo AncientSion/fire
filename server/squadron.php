@@ -180,9 +180,7 @@ class Squadron extends Mixed {
 	}
 
 	public function setBaseStats($turn, $phase){
-		//Debug::log("setBaseStats #".$this->id);
-
-		$this->size = 50 + sizeof($this->structures)*10;
+		//Debug::log("setBaseStats #".$this->id.", current ep ".$this->primary->systems[2]->output);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (($this->structures[$i]->destroyed && !$this->structures[$i]->isDestroyedThisTurn($turn)) || $this->structures[$i]->disabled){continue;}
@@ -190,6 +188,8 @@ class Squadron extends Mixed {
 			$this->baseTurnDelay = max($this->baseTurnDelay, $this->structures[$i]->baseTurnDelay);
 
 			$this->primary->systems[1]->output = max($this->primary->systems[1]->output, $this->structures[$i]->ew);
+			//Debug::log("current ep ".$this->primary->systems[2]->output."/".$this->structures[$i]->ep);
+
 			$this->primary->systems[2]->output = min($this->primary->systems[2]->output, $this->structures[$i]->ep);
 		}
 	}	

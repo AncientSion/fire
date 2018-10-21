@@ -392,7 +392,7 @@ Ship.prototype.getSelectedWeapons = function(){
 	return systems;
 }
 
-Ship.prototype.doHover = function(){
+Ship.prototype.handleHovering = function(){
 	this.drawEW();
 
 	if (this.ship || this.squad){
@@ -583,22 +583,27 @@ Ship.prototype.issueMove = function(pos, dist){
 	this.doAutoShorten();
 	game.updateIntercepts(this.id);
 	game.redraw();
-	game.setCollisionData(this);
-	this.printCollisionHints();
-	//game.drawShipOverlays();
+	if (this.actions[this.actions.length-1].type == "move"){
+		game.setCollisionData(this);
+		this.alertCollisions();
+	} else ui.popupWrapper.hide();
 }
 
 
-Ship.prototype.printCollisionHints = function(){
+Ship.prototype.alertCollisions = function(){
 	if (!this.collisions.length){return;}
 	var html = "Collision Alert for " + this.name + " #" + this.id + "</br>";
+		html += "<div>" + getUnitType(this.traverse) + ", size " + this.traverse + " - attack multiplier " + (1+(0.3 * (this.traverse-4))) + "</div>";
+
 	for (var i = 0; i < this.collisions.length; i++){
 		var col = this.collisions[i];
 		//console.log(unit.collisions[i]);
-		html += "</br><div>#" + col.obstacleId + "</br>" + col.depthIntoField + "px depth " + col.depthCol + "% * unit size " + this.traverse + "</br>";
-		html += "<u>" + col.realCol + "%, " + col.damage +"</u></div>";
+		html += "</br><div>#" + col.obstacleId + "</br>Distance " + col.totalDist + " - Risk " + col.baseCol + "% per 100px - Nominal " + col.baseAttacks + " attacks</br>";
+		html += "Result: ";
+		html += "<span class='obstacleWarn yellow'>" + col.realAttacks + "</span> attacks @ <span class='obstacleWarn yellow'>" + col.realCol + "%</span> for <span class='obstacleWarn yellow'>" + col.damage + "</span> Damage";
 	}
 	popup(html);
+	//<span class='obstacleWarn yellow'>"
 }
 
 Ship.prototype.doAutoShorten = function(){
@@ -666,22 +671,23 @@ Ship.prototype.canUndoLastAction = function(){
 Ship.prototype.doUndoLastAction = function(pos){
 	var update = false;
 	var setEW = false;
-	if (this.actions[this.actions.length-1].type == "speed"){
+	var type = this.actions[this.actions.length-1].type
+	if (type == "speed"){
 		this.actions[this.actions.length-1].dist *= -1;
 	}
-	else if (this.actions[this.actions.length-1].type == "move"){
+	else if (type == "move"){
 		this.actions[this.actions.length-1].dist *= -1;
 		update = true;
 	}
-	else if (this.actions[this.actions.length-1].type == "turn"){
+	else if (type == "turn"){
 		this.actions[this.actions.length-1].delay *= -1;
 		setEW = true;
 	}
-	else if (this.actions[this.actions.length-1].type == "roll"){
+	else if (type == "roll"){
 		this.rolling = !this.rolling;
 		this.setNotes();
 	}
-	else if (this.actions[this.actions.length-1].type == "flip"){
+	else if (type == "flip"){
 		this.flipping = !this.flipping;
 		this.setNotes();
 	}
@@ -690,11 +696,12 @@ Ship.prototype.doUndoLastAction = function(pos){
 	if (update){game.updateIntercepts(this.id);}
 	if (setEW){this.getSystemByName("Sensor").setTempEW();}
 	if (game.turnMode){this.switchTurnMode();}
-	this.turnAngles = {}
+	this.turnAngles = {};
 	game.redraw();
-    ui.popupWrapper.hide();
-
-	//game.drawShipOverlays();
+	if (type == "move"){
+		game.setCollisionData(this);
+		this.alertCollisions();
+	} else ui.popupWrapper.hide();
 }
 
 Ship.prototype.moveInVector = function(dist){
@@ -1335,7 +1342,7 @@ Ship.prototype.getShortInfo = function(){
 
 	ele.append($("<div>").html("Collisions"))
 	for (var i = 0; i < this.collisions.length; i++){
-		var html = this.collisions[i].damage + " @ " + this.collisions[i].realCol + "%</br>";
+		var html = this.collisions[i].realAttacks +"x " + this.collisions[i].damage + " @ " + this.collisions[i].realCol + "%</br>";
 		ele.append($("<div>").html(html))
 	}
 
@@ -3296,7 +3303,7 @@ Ship.prototype.attachUnit = function(unit){
 }
 
 Ship.prototype.setPostFireImage = function(){
-	if (this.ship){return;}
+	if (this.ship || this.obstacle){return;}
 
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].doDraw && (this.structures[i].destroyed || this.structures[i].disabled)){

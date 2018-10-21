@@ -55,7 +55,7 @@ function Game(data){
 	this.drawMoves = 1;
 	this.showFriendlyEW = 0;
 	this.showHostileEW = 0;
-	this.showObstacleMoves = 1;
+	this.showObstacleMoves = 0;
 
 	this.snapTurn = 0;
 	this.events = [];
@@ -473,33 +473,6 @@ function Game(data){
 		}
 	}
 
-	this.setCollisionData = function(unit){
-		if (unit.getRemSpeed()){return;}
-
-		unit.collisions = [];
-
-		for (var i = 0; i < this.ships.length; i++){
-			if (!this.ships[i].obstacle){continue;}
-			var origin = unit.getPlannedPos();
-			var dist = getDistance(origin, this.ships[i].getPlannedPos());
-
-			var depthIntoField = this.ships[i].size/2 - dist;
-			if (depthIntoField < 0){continue;}
-
-			var depthCol = this.ships[i].collision / 100 * depthIntoField;
-			var realCol = depthCol * unit.traverse;
-			//console.log("planned collision by " +unit.id+ " and " + this.ships[i].id +", depth " + depthIntoField + " collision " + this.ships[i].collision + "/" + collision + "%");
-			unit.collisions.push({
-				obstacleId: this.ships[i].id,
-				depthIntoField: Math.round(depthIntoField),
-				baseCol: this.ships[i].collision,
-				depthCol: Math.round(depthCol),
-				realCol: Math.round(realCol),
-				damage: this.ships[i].getDamageString()
-			})
-		}
-	}
-
 	this.getHasBasicEW = function(){
 		var data = [];
 
@@ -549,7 +522,7 @@ function Game(data){
 					this.getUnit(aUnit).doUnselect();
 				}
 				popup("You have units with unused speed (#" + this.ships[i].id + ")");
-				this.ships[i].doHover();
+				this.ships[i].handleHovering();
 				this.ships[i].select();
 				return true;
 			}
@@ -659,7 +632,7 @@ function Game(data){
 			game.getUnit(aUnit).doUnselect();
 		}
 		var ship = game.getUnit(id);
-			ship.doHover();
+			ship.handleHovering();
 			ship.doSelect();
 	}
 
@@ -1096,11 +1069,15 @@ function Game(data){
 			for (var i = 0; i < this.ships.length; i++){
 				this.ships[i].setSupportImage();
 				this.ships[i].getAttachDivs();
-				this.setCollisionData(this.ships[i]);
 				if (this.ships[i].flight && this.ships[i].hasPatrolLayout()){
 					this.ships[i].setPatrolLayout();
 					this.ships[i].setImage();
 				}
+			}
+		}
+		else if (this.phase == 3){
+			for (var i = 0; i < this.ships.length; i++){
+				if (this.ships[i].obstacle){this.ships[i].setNextMove();}
 			}
 		}
 
@@ -1115,16 +1092,16 @@ function Game(data){
 
 		this.createLogEntry("-- Movement concluded --");
 
-		if (this.events.length){ // ramming, emines AFTER moving anim
-			if (this.phase == 2){
+		if (this.events.length){
+			if (this.phase == 2){ // emines AFTER moving anim
 				game.timeout = setTimeout(function(){
 					//$($("#combatLog").find("td")[0]).attr("colSpan", 8)
-					this.showUI(500);
+					game.showUI();
 					game.resolvePostMoveFires();
 				}, 1000);
 			}
 			else if (this.phase == 1){ // firing eMine
-				this.showUI(500);
+				game.showUI(500);
 				this.logWeaponEvents();
 				this.draw();
 			}
@@ -1136,6 +1113,9 @@ function Game(data){
 			if (this.phase == 2){ // player control now, setup fire
 				this.setObstacleData();
 				this.autoIssueFireOrders();
+			}
+			else if (this.phase == 3){
+				this.fireResolved();
 			}
 		}
 	}
@@ -1198,7 +1178,7 @@ function Game(data){
 
 	this.initDamageControl = function(){
 		this.setObstacleData();
-		this.resolveFire();
+		this.doResolveFire();
 	}
 
 	this.fireResolved = function(){
@@ -1207,7 +1187,6 @@ function Game(data){
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setPostFireImage();
 			this.ships[i].setSize();
-			if (this.ships[i].obstacle && game.phase == 3){this.ships[i].setNextMove();}
 		}
 
 		for (var i = 0; i < this.ships.length; i++){
@@ -1230,8 +1209,12 @@ function Game(data){
 
 		this.showUI();
 
-		if (game.phase == 2){
+		if (this.phase == 2){
 			this.autoIssueFireOrders();
+		}
+		else if (this.phase == 3){
+			$(".optionsWrapper .options .drawObstaclesMoves").addClass("selected");
+			this.showObstacleMoves = 1;
 		}
 	}
 	
@@ -1335,7 +1318,7 @@ function Game(data){
 			.append($("<th>").attr("colSpan", 9).html(html)));
 	}
 	
-	this.initPhase = function(n){
+	this.startPhase = function(n){
 		this.setShipDivs();
 		this.phase = n;
 		game.redraw();
@@ -1358,21 +1341,23 @@ function Game(data){
 		else if (this.phase == 1){
 			$("#phaseSwitchDiv").click(function(){
 				setFPS(90);
-				game.prepResolveMovement();
+				game.prepResolveUnitMovement();
 				game.redraw();
 				$(this).hide();
 				game.timeout = setTimeout(function(){
+					game.animShip = 1;
 					game.doResolveMovement();
-				}, 50);
+				}, 500);
 			});
 		}
 		else if (this.phase == 2){
 			$("#phaseSwitchDiv").click(function(){
 				setFPS(90);
-				game.prepResolveMovement();
+				game.prepResolveUnitMovement();
 				game.redraw();
 				$(this).hide();
 				game.timeout = setTimeout(function(){
+					game.animShip = 1;
 					game.doResolveMovement();
 				}, 500);
 			});
@@ -1800,7 +1785,7 @@ function Game(data){
 
 		$(ui.shortInfo).css("left", left).css("top", top).show();
 
-		if (unit.id != aUnit){unit.doHover();}
+		if (unit.id != aUnit){unit.handleHovering();}
 	}
 
 	this.resetHover = function(es){
@@ -1851,22 +1836,19 @@ function Game(data){
 					unit.drawTurnArcs();
 					unit.resetMoveTranslation();
 				}
-				else if (unit.flight){unit.drawMovePlan()}
 			}
-			this.drawMixedMoves();
+			this.drawAllMovePlans();
 		}
 		this.draw();
 		this.drawAllEW();
+		//this.drawAllObstacleMoves();
 
 		//game.drawShipOverlays();
 	}
 
-	this.drawMixedMoves = function(){
+	this.drawAllMovePlans = function(){
 		for (var i = 0; i < this.ships.length; i++){
-			//if (this.ships[i].flight && this.ships[i].mission.arrived){continue;}
-			//else if (!this.ships[i].ship){
-				this.ships[i].drawMovePlan();
-			//}
+			this.ships[i].drawMovePlan();
 		}
 	}
 
@@ -1908,15 +1890,21 @@ function Game(data){
 	}
 
 	this.setUnitMoveDetails = function(){
-		if (game.phase == 1){
+		if (this.phase == 1){
 			for (var i = 0; i < this.ships.length; i++){
 				if (this.ships[i].focus || this.ships[i].flight || this.ships[i].salvo || this.ships[i].obstacle){continue;}
 				this.ships[i].toAnimate = true;
 			}
 		}
-		else if (game.phase == 2){
+		else if (this.phase == 2){
 			for (var i = 0; i < this.ships.length; i++){
 				if (this.ships[i].obstacle){continue;}
+				this.ships[i].toAnimate = true;
+			}
+		}
+		else if (this.phase == 3){
+			for (var i = 0; i < this.ships.length; i++){
+				if (!this.ships[i].obstacle){continue;}
 				this.ships[i].toAnimate = true;
 			}
 		}
@@ -1928,7 +1916,7 @@ function Game(data){
 				if (this.ships[i].ship || this.ships[i].squad){
 					for (var j = 0; j < this.ships[i].cc.length; j++){
 						var attach = this.getUnit(this.ships[i].cc[j]);
-						if (attach.mission.arrived < game.turn){
+						if (attach.mission.arrived < this.turn){
 							this.ships[i].attachAnims.push(attach);
 						}
 					}
@@ -2128,8 +2116,7 @@ function Game(data){
 		for (var i = 0; i < this.ships.length; i++){
 			if (!this.ships[i].deployed){continue;}
 			for (var j = 0; j < this.ships[i].actions.length; j++){
-				if (!this.ships[i].actions[j].forced){continue;}
-				if (this.ships[i].actions[j].type == "jumpOut"){continue;}
+				if (!this.ships[i].actions[j].forced || this.ships[i].actions[j].type == "jumpOut"){continue;}
 				need = 1;
 				this.ships[i].toAnimate = 1;
 				this.ships[i].actions[j].animated = 0;
@@ -2149,7 +2136,7 @@ function Game(data){
 	this.finishMoveSubPhase = function(){
 		var time = 500;
 
-		if (this.animForcedMoves){
+		if (this.animForcedMoves){ // phase 2 grav mine
 			this.animShip = 0;
 			this.animFlight = 0;
 			this.animSalvo = 0;
@@ -2157,14 +2144,13 @@ function Game(data){
 			this.animForcedMoves = 0;
 			this.animateUnitExplos();
 		}
-		else if (this.phase == 2){
-			if (this.animObstacles && !game.animFocus){
-				game.timeout = setTimeout(function(){
-					game.animShip = 1; game.animFocus = 1;
-					game.animateMovement();
-				}, time);
-			}
-			else if (this.animShip){
+		else if (this.animObstacles){ // phase 3 post fire
+			this.animObstacles = 0; 
+			this.endMoveSubPhase();
+			this.moveResolved();
+		}
+		else {
+			if (this.animShip){
 				game.timeout = setTimeout(function(){
 					game.animShip = 0; game.animFocus = 0; game.animFlight = 1;
 					game.animateMovement();
@@ -2187,11 +2173,6 @@ function Game(data){
 				this.animSalvo = 0;
 				this.moveResolved();
 			}
-		}
-		else {
-			this.animShip = 0; 
-			this.endMoveSubPhase();
-			this.moveResolved();
 		}
 	}
 
@@ -2288,10 +2269,10 @@ function Game(data){
 
 	this.resolvePostMoveFires = function(){
 		console.log("resolvePostMoveFires");
-		this.resolveFire();
+		this.doResolveFire();
 	}
 
-	this.resolveFire = function(){
+	this.doResolveFire = function(){
 		this.getAllResolvingFireOrders();
 		this.getShotDetails();
 		this.getFireAnimationDetails();
@@ -2325,7 +2306,7 @@ function Game(data){
 	}
 
 	this.doSizeLog = function(width){
-		console.log("doSizeLog")
+		//console.log("doSizeLog")
 
 		var header = "";
 		if (game.phase == -1){header = "Damage Control Resolution Log";}
@@ -2569,7 +2550,7 @@ function Game(data){
 	this.animateAllFireOrders = function(){
 		for (var i = 0; i < this.fireOrders.length; i++){
 			//if (this.fireOrders[i].shooterid != 16){continue;}
-				this.fireOrders[i].tr.show();
+			this.fireOrders[i].tr.show();
 			if (!this.fireOrders[i].animated){
 				//this.fireOrders[i].weapon.createCombatLogEntry(this.fireOrders[i]);
 				this.animateSingleFireOrder(i, 1);
@@ -2577,24 +2558,25 @@ function Game(data){
 			}
 		}
 		fxCtx.clearRect(0, 0, res.x, res.y);
-
-		this.handlePostFireOrderAnim();
+		this.handlePostFireMoves()
 	}
 
-	this.handlePostFireOrderAnim = function(){
-		this.createNullFiresEntries();
-		this.createFireFinalEntry();
-		this.handleForcedMoves();
-	}
+	this.handlePostFireMoves = function(){
 
-	this.createNullFiresEntries = function(){
-		for (var i = 0; i < this.ships.length; i++){
-		}
-	}
-
-	this.createFireFinalEntry = function(){
-		if (!game.fireOrders.length){return;}
 		this.createLogEntry("-- Fireorder animation completed --");
+
+		this.setCamera();
+
+		if (game.phase == 2){
+			this.handleForcedMoves();
+		}
+		else if (game.phase == 3){
+			this.setUnitMoveDetails();
+			game.timeout = setTimeout(function(){
+				game.animObstacles = 1;
+				game.doResolveMovement();
+			}, 500);
+		}
 	}
 
 	this.animateSingleFireOrder = function(i, goOn){
@@ -3171,14 +3153,16 @@ Game.prototype.initOptionsUI = function(){
 		}
 		else if (i == 2){
 			$(this)
-				.addClass("selected")
 				.hover(
 					function(){game.drawAllObstacleMoves();},
 					function(){game.redraw();
 				})
 				.click(function(){
-					game.toggleDrawObstacleMoves();
+					game.toggleShowNextObstacleMoves();
 			})
+			if (game.phase == -1 || game.phase == 3){
+				game.toggleShowNextObstacleMoves();
+			}
 		}
 		else if (i == 3){
 			$(this)
@@ -3414,6 +3398,81 @@ Game.prototype.setObstacleData = function(){
 	this.obstacleDataSet = 1;
 }
 
+Game.prototype.setCollisionData = function (unit){
+	if (unit.obstacle){return;}
+	if (unit.flight || unit.salvo){return;}
+	console.log("___setCollisionData for unit " + unit.id);
+
+	unit.collisions = [];
+	var unitPos = unit.getGamePos();
+	var unitSpeed = unit.getCurSpeed();
+
+	for (var i = 0; i < this.ships.length; i++){
+		if (!this.ships[i].obstacle){continue;}
+
+		var obstacle = this.ships[i];
+		var tPos = obstacle.getGamePos();
+		var totalDist = 0;
+		var distBetween = getDistance(unitPos, tPos) - obstacle.size/2 - unitSpeed;
+		
+		if (distBetween > 200){console.log("dist ship/field "+distBetween+", skip"); continue;}
+
+		for (var j = 0; j < unit.actions.length; j++){
+			var action = unit.actions[j];
+			if (action.type != "move"){continue;}
+			var oPos = j == 0 ? unitPos : unit.actions[j-1];
+
+			var result = isInPath(oPos, action, tPos, obstacle.size/2);
+			if (!result){continue;}
+
+			var enter = false;
+			var leave = false;
+			var distInside = 0;
+
+			if (result.points[0].onLine){
+				enter = true;
+			}
+			if (result.points[1].onLine){
+				leave = true;
+			}
+
+			if (enter && leave){
+				distInside = getDistance(result.points[0], result.points[1]);
+			}
+			else if (enter){
+				distInside = getDistance(result.points[0], action);
+			}
+			else if (leave){
+				distInside = getDistance(oPos, result.points[1]);
+			}
+			else {
+				var start = getDistance(oPos, tPos);
+				var end = getDistance(action, tPos);
+				if (start < obstacle.size/2 && end < obstacle.size/2){
+					//console.log("staying inside!");
+					distInside += action.dist;
+					//distInside += result.dist;
+				}
+			}
+
+			totalDist += distInside;
+		}
+
+		//console.log("total travel inside " + totalDist);
+
+		if (!totalDist){continue;}
+		unit.collisions.push({
+			obstacleId: this.ships[i].id,
+			totalDist: Math.round(totalDist),
+			baseCol: this.ships[i].collision,
+			realCol: Math.round(this.ships[i].collision / 100 * totalDist),
+			baseAttacks: this.ships[i].getBaseAttacks(),
+			realAttacks: this.ships[i].getRealAttacks(unit),
+			damage: this.ships[i].getDamageString()
+		})
+	}
+}
+
 Game.prototype.hasObstacleInVector = function(oPos, tPos, unit){
 
 	var inPath = [];
@@ -3422,43 +3481,44 @@ Game.prototype.hasObstacleInVector = function(oPos, tPos, unit){
 		//if (this.ships[j].id != 24){continue;}
 
 		var result = isInPath(oPos, tPos, this.ships[j].getGamePos(), this.ships[j].size/2);
+		if (!result){continue;}
 
-		if (result){
-			var pierceIn;
-			var pierceOut;
+		var pierceIn = 0;
+		var pierceOut = 0;
+		var realDist = 0;
 
-			if (result.points[0].onLine){
-				var pierceIn = getDistance(tPos, result.points[0]);
-			} else pierceIn = 0;
-			if (result.points[1].onLine){
-				var pierceOut = getDistance(tPos, result.points[1]);
-			} else pierceOut = 0;
-
-			if (pierceIn){
-				realDist = Math.abs(pierceOut - pierceIn);
-			}
-			else if (pierceOut){
-				realDist = getDistance(oPos, result.points[1]);
-			}
-			else if (!pierceIn && !pierceOut){
-			}
-			else realDist = result.dist;
-
-		/*	console.log("--------")
-			console.log(result);
-			console.log(pierceIn)
-			console.log(pierceOut);
-			console.log(realDist);
-		*/
-			inPath.push({
-				obstacleId: this.ships[j].id, 
-				dist: Math.round(realDist),
-				size: this.ships[j].size,
-				EffInterference: Math.round(this.ships[j].interference / 100 * realDist),
-				exposure: Math.round(round((1-(result.dist / (this.ships[j].size/2))), 2)*100),
-				interference: this.ships[j].interference,
-			})
+		if (result.points[0].onLine){
+			var pierceIn = getDistance(tPos, result.points[0]);
 		}
+		if (result.points[1].onLine){
+			var pierceOut = getDistance(tPos, result.points[1]);
+		}
+
+		if (pierceIn){
+			realDist = Math.abs(pierceOut - pierceIn);
+		}
+		else if (pierceOut){
+			realDist = getDistance(oPos, result.points[1]);
+		}
+		else if (!pierceIn && !pierceOut){
+		}
+		else realDist = result.dist;
+
+	/*	console.log("--------")
+		console.log(result);
+		console.log(pierceIn)
+		console.log(pierceOut);
+		console.log(realDist);
+	*/
+		if (!realDist){continue;}
+		inPath.push({
+			obstacleId: this.ships[j].id, 
+			dist: Math.round(realDist),
+			size: this.ships[j].size,
+			EffInterference: Math.round(this.ships[j].interference / 100 * realDist),
+			exposure: Math.round(round((1-(result.dist / (this.ships[j].size/2))), 2)*100),
+			interference: this.ships[j].interference,
+		})
 	}
 	return inPath;
 }
@@ -3563,12 +3623,11 @@ Game.prototype.toggleHostileEW = function(){
 	this.drawAllEW();
 }
 
-Game.prototype.toggleDrawObstacleMoves = function(){
+Game.prototype.toggleShowNextObstacleMoves = function(){
 	if (this.animating || this.sensorMode){return;}
 	this.showObstacleMoves = !this.showObstacleMoves;
 	$(".optionsWrapper .drawObstaclesMoves").toggleClass("selected");
 	salvoCtx.clearRect(0, 0, res.x, res.y);
-	this.redraw();
 }
 
 Game.prototype.drawAllEW = function(){
@@ -3602,11 +3661,13 @@ Game.prototype.drawHostileEW = function(){
 }
 
 Game.prototype.drawAllObstacleMoves = function(){
-	if (this.animating || this.sensorMode){return;}
+	if (this.animating || this.sensorMode || this.showObstacleMoves){return;}
+	this.showObstacleMoves = 1;
 	for (var i = 0; i < this.ships.length; i++){
 		if (!this.ships[i].obstacle){continue;}
 		this.ships[i].drawNextMove();
 	}
+	this.showObstacleMoves = 0;
 }
 
 Game.prototype.setUnitTransform = function(){
@@ -3752,7 +3813,7 @@ Game.prototype.resolveDeploy = function(){
 }
 
 Game.prototype.setCamera = function(){
-	console.log("setCamera")
+	//console.log("setCamera")
 
 	var data = this.getUnitMaxPos();
 
@@ -3862,8 +3923,14 @@ Game.prototype.animateJumpIn = function(){
 	}
 }
 
+Game.prototype.setAllCollisionData = function(){
+	for (var i = 0; i < this.ships.length; i++){
+		this.setCollisionData(this.ships[i]);
+	}
+}
+
 Game.prototype.initialPhaseResolutionDone = function(){
-	console.log("initialPhaseResolutionDone");
+	//console.log("initialPhaseResolutionDone");
 	var newUnit = 0;
 	var newMission = 0;
 
@@ -3935,7 +4002,7 @@ Game.prototype.logWeaponEvents = function(){
 	}
 }
 
-Game.prototype.prepResolveMovement = function(){
+Game.prototype.prepResolveUnitMovement = function(){
 	this.drawingEvents = 0;
 	this.resetImageData();
 	this.setCamera();
@@ -3945,13 +4012,7 @@ Game.prototype.prepResolveMovement = function(){
 Game.prototype.doResolveMovement = function(){
 	if (aUnit){game.getUnit(aUnit).select();}
 	this.animating = 1;
-	this.animShip = 0;
-	this.animFlight = 0;
-	this.animSalvo = 0;
-	this.animObstacles = 1;
-
 	this.hideUI();
-
 	this.animateMovement();
 }
 
@@ -4422,8 +4483,9 @@ Game.prototype.create = function(data){
 	this.initSelectionWrapper();
 	this.initOptionsUI();
 	this.initEvents();
+	this.setAllCollisionData();
 	cam.setFocusToPos({x: 0, y: 0});
-	this.initPhase(this.phase);
+	this.startPhase(this.phase);
 }
 
 Game.prototype.setCommandUnits = function(){

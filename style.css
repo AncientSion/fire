@@ -60,6 +60,10 @@ table, th, tr, td {
 	margin-bottom: 4px !important;
 }
 
+.obstacleWarn {
+	font-size: 16px;
+}
+
 #instructWrapper {
 	display: none;
 	position: absolute;

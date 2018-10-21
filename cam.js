@@ -47,9 +47,9 @@ window.cam = {
 	},
 
 	setFireFocus: function(fire){
-
 		//console.log("fire #"+fire.id+", "+fire.shooter.name + "/" + fire.shooter.weapon);
-		var a = Math.abs(fire.anim[0][0].f);
+
+		var a = fire.anim[0].length ? Math.abs(fire.anim[0][0].f) : 0;
 
 		if (fire.dist == 0){
 			this.z = 2.5
@@ -58,10 +58,10 @@ window.cam = {
 			this.z = 2;
 		}
 		else if (a >= 135 || a <= 45){
-			this.z = Math.min(2, Math.floor( (res.x / 2) / fire.dist * 15)/10);
+			this.z = Math.min(2, Math.floor( (res.x / 2) / fire.dist * 10)/10);
 		}
 		else if (a > 45 || a <= 135){
-			this.z = Math.min(2, Math.floor( (res.y / 2) / fire.dist * 15)/10);
+			this.z = Math.min(2, Math.floor( (res.y / 2) / fire.dist * 10)/10);
 		}
 		else this.z = 1.5;
 		

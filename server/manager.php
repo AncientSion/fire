@@ -89,7 +89,7 @@
 
 	public function getClientData(){
 		//Debug::log("getClientData");
-		//var_export($this->setupShips()); return;
+		//$this->setupShips(); return;
 		//$this->testUnitMorale(); return;
 		//$this->setPostFireFocusValues(); return;
 		//$this->testFleetMorale();
@@ -809,16 +809,16 @@
 	}
 
 	public function handleServerNewActions(){
-		$new = array();
+		$newMoves = array();
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->ship || $this->ships[$i]->squad){continue;}
 			if (!$this->ships[$i]->hasMoved()){continue;}		
-			$new[] = $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1];
+			$newMoves[] = $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1];
 		}
 
-		if (sizeof($new)){
-			DBManager::app()->insertServerActions($new);
+		if (sizeof($newMoves)){
+			DBManager::app()->insertServerActions($newMoves);
 		}
 	}
 
@@ -847,8 +847,9 @@
 		$this->handleSalvoMovement();
 		$this->handleServerNewActions();
 
-		$this->setupShips();
 		$this->handleCollisions();
+
+		$this->setupShips();
 
 		$this->setFireOrderDetails();
 		$this->handlePostMoveAreaFires();
@@ -870,14 +871,12 @@
 
 		for ($i = 0; $i < sizeof($this->fires); $i++){
 			if ($this->fires[$i]->resolved){continue;}
+			if ($this->fires[$i]->targetid){continue;}
+			$subFires = DmgCalc::createAreaFireOrders($this, $this->fires[$i]);
+			//Debug::log("got ".sizeof($subFires)." new fires");
+			$newFires = array_merge($newFires, $subFires);
 
-			if ($this->fires[$i]->targetid == 0){
-				$subFires = DmgCalc::createAreaFireOrders($this, $this->fires[$i]);
-				//Debug::log("got ".sizeof($subFires)." new fires");
-				$newFires = array_merge($newFires, $subFires);
-
-				$this->fires[$i]->resolved = 1;
-			}
+			$this->fires[$i]->resolved = 1;
 		}
 
 		if (sizeof($newFires)){
@@ -965,62 +964,19 @@
 	public function handleCollisions(){
 		Debug::log("handleCollisions");
 
-		$collides = array();
-
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if (!$this->ships[$i]->obstacle){continue;}
-			//Debug::log("--comparing Obstacle #".$this->ships[$i]->id);
-
-			for ($j = 0; $j < sizeof($this->ships); $j++){
-				if ($this->ships[$j]->obstacle){continue;}
-				//Debug::log("-----versus Unit #".$this->ships[$j]->id);
-
-				for ($k = 0; $k < sizeof($this->ships[$j]->distances); $k++){
-					if ($this->ships[$j]->distances[$k][0] != $this->ships[$i]->id){continue;}
-					//Debug::log("-----------Dist: ".$this->ships[$j]->distances[$k][1]);
-					//Debug::log("-----------Angle: ".$this->ships[$j]->angles[$k][1]);
-
-					if ($this->ships[$j]->distances[$k][1] - $this->ships[$i]->size/2 <= 0){
-						/*Debug::log("----- Obstacle #".$this->ships[$i]->id." contact with Unit #".$this->ships[$j]->id);
-						Debug::log("-----------Dist: ".$this->ships[$j]->distances[$k][1]);
-						Debug::log("-----------Angle: ".$this->ships[$j]->angles[$k][1]);
-						Debug::log("Obstacle has size ".$this->ships[$i]->size);
-						*/
-						$depthIntoField = ($this->ships[$i]->size/2 - $this->ships[$j]->distances[$k][1]);
-						$collision = ($this->ships[$i]->collision / 100 * ($depthIntoField));
-
-						/*Debug::log("= collision depth worth ".$depthIntoField." px");
-						Debug::log("= obstacle collision % ".$this->ships[$i]->collision);
-						Debug::log("= effective collision % ".$collision);
-						*/
-						$collides[] = array($this->ships[$i], $this->ships[$j], round($depthIntoField), round($collision)); // obstacle, unit, data-index
-					}
-				}
-			}
+			$this->setSingleCollision($this->ships[$i]);
 		}
 
 		$newFires = array();
 
-		for ($i = 0; $i < sizeof($collides); $i++){
-			$shooterid = $collides[$i][0]->id;
-			$targetid =  $collides[$i][1]->id;
-			$x =  $collides[$i][1]->x;
-			//Debug::log("x ".$x);
-			$y =  $collides[$i][1]->y;
-			//Debug::log("y ".$y);
-			//Debug::log("shots ".$shots);
-			$weaponid = 2;
-
-			$fire = new FireOrder(
-				//$id, $gameid, $turn, $shooter, $target, $x, $y, $weapon, $shots, $req, $notes, $hits, $res
-				0, $this->gameid, $this->turn, $shooterid, $targetid, $x, $y, $weaponid, 0, $collides[$i][3], "", 0, 0
-			);
-
-			$fire->cc = 0;
-			$fire->dist = 0;
-			$fire->angle = 0;
-			$fire->notes = $collides[$i][2].";".$collides[$i][3].";";
-			$newFires[] = $fire;
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if (!$this->ships[$i]->obstacle){continue;}
+			//Debug::log("unit #".$this->ships[$i]->id);
+			$newFires = array_merge($newFires, $this->ships[$i]->collisions);
+			//for ($j = 0; $j < sizeof($this->ships[$i]->collisions); $j++){
+				//Debug::log("collides with #".$this->ships[$i]->collisions[$j]->targetid);
+			//}
 		}
 
 		if (sizeof($newFires)){
@@ -1028,6 +984,82 @@
 		}	$this->fires = array_merge($this->fires, $newFires);
 	}
 
+	public function setSingleCollision($unit){
+		if ($unit->obstacle){return;}
+		if ($unit->flight || $unit->salvo){return;}
+		//Debug::log("setSingleCollision for unit #".$unit->id);
+		$unit->collides = array();
+		$unitPos = $unit->getTurnStartPosition();
+		$unitSpeed = $unit->getCurSpeed();
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if (!$this->ships[$i]->obstacle){continue;}
+
+			$obstacle = $this->ships[$i];
+			$tPos = $obstacle->getTurnStartPosition();
+			$totalDist = 0;
+			$distBetween = Math::getDist2($unitPos, $tPos) - $obstacle->size/2 - $unitSpeed;
+
+			if ($distBetween > 200){continue;}
+
+
+			//Debug::log("obstacle ".$obstacle->id.", pos: ".$tPos->x."/".$tPos->y.", dist between ".$distBetween);
+
+			for ($j = 0; $j < sizeof($unit->actions); $j++){
+				$action = $unit->actions[$j];
+				if ($action->type != "move"){continue;}
+				$oPos = $j == 0 ? $unitPos : $unit->actions[$j-1];
+
+				$result = Math::isInPath($oPos, $action, $tPos, $obstacle->size/2);
+				if (!$result){continue;}
+
+				$enter = false;
+				$leave = false;
+				$distInside = 0;
+
+				if ($result["points"][0][1]){
+					$enter = true;
+				}
+				if ($result["points"][1][1]){
+					$leave = true;
+				}
+
+				if ($enter && $leave){
+					$distInside = Math::getDist2($result["points"][0][0], $result["points"][1][0]);
+				}
+				else if ($enter){
+					$distInside = Math::getDist2($result["points"][0][0], $action);
+				}
+				else if ($leave){
+					$distInside = Math::getDist2($oPos, $result["points"][1][0]);
+				}
+				else {
+					$start = Math::getDist2($oPos, $tPos);
+					$end = Math::getDist2($action, $tPos);
+					if ($start < $obstacle->size/2 && $end < $obstacle->size/2){
+						$distInside += $action->dist;
+					}
+				}
+
+				$totalDist += $distInside;
+			}
+	
+
+
+			if (!$totalDist){continue;}
+
+			$weaponid = 2;
+			$req = $this->ships[$i]->collision / 100 * $totalDist;
+			$string = (round($totalDist).";".$this->ships[$i]->collision.";".round($req).";");
+			$shots = round($this->ships[$i]->getSystem(2)->getShots($this->turn) * (1 + (0.3 * ($unit->traverse-4))));
+
+			$fire = new FireOrder(
+				//$id, $gameid, $turn, $shooter, $target, $x, $y, $weapon, $shots, $req, $notes, $hits, $res
+				0, $this->gameid, $this->turn, $this->ships[$i]->id, $unit->id, 0, 0, 2, $shots, $req, $string, 0, 0
+			);
+			$this->ships[$i]->collisions[] = $fire;
+		}
+	}
 
 	public function assembleDeployStates(){
 		Debug::log("assembleDeployStates");
@@ -1072,7 +1104,7 @@
 		$this->setupShips();
 
 		$this->setFireOrderDetails();
-		$this->sortFireOrders();
+		$this->sortFiringPhaseFires();
 		$this->resolveShipFireOrders();
 		$this->resolveFighterFireOrders();
 		$this->resolveBallisticFireOrders();
@@ -1081,6 +1113,9 @@
 		$this->adjustFleetMorale();
 		$this->testFleetMorale();
 		$this->setPostFireFocusValues();
+
+		$this->handleObstacleMovement();
+		$this->handleServerNewActions();
 
 		$this->handleResolvedFireData();
 
@@ -1116,8 +1151,6 @@
 	public function endTurn(){
 		Debug::log("endTurn");
 		$this->setUnitRollState();
-		$this->handleObstacleMovement();
-		$this->handleServerNewActions();
 		$this->doFullDestroyedCheck();
 		$this->assembleEndStates();
 		return true;
@@ -1232,6 +1265,7 @@
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$this->ships[$i]->setFacing();
 			$this->ships[$i]->setPosition();
+			$this->ships[$i]->setCurSpeed($this->turn, $this->phase);
 			$this->ships[$i]->setImpulseProfileMod();
 			$this->ships[$i]->setBonusNegation($this->turn);
 			$this->ships[$i]->setJamming($this->turn);
@@ -1428,7 +1462,7 @@
 										$skip = 1; break;
 									}
 									else if ($this->ships[$i]->salvo){ // salvo, in trajectory ?
-										$angle = Math::getAngle2($emitter, $this->ships[$i]->getTrajectoryStart());
+										$angle = Math::getAngle2($emitter, $this->ships[$i]->getTurnStartPosition());
 										if (Math::isInArc($angle, $start, $end)){
 											//Debug::log("adding CC lock from ship vs salvo");
 											$emitter->locks[] = array($this->ships[$i]->id, $emitter->getLockEffect($this->ships[$i]));
@@ -1440,7 +1474,7 @@
 						}
 						else if ($ew->type == 1){ // ship MASK in cc, only working against salvo ATM
 							if ($this->ships[$i]->salvo){ // salvo, in trajectory ?
-								$angle = Math::getAngle2($emitter, $this->ships[$i]->getTrajectoryStart());
+								$angle = Math::getAngle2($emitter, $this->ships[$i]->getTurnStartPosition());
 								Debug::log("emitter: ".$emitter->id." vs salvo: ".$this->ships[$i]->id.", angle: ".$angle);
 								if (Math::isInArc($angle, $start, $end)){
 									//Debug::log("adding CC mask from ship vs salvo");
@@ -1499,7 +1533,7 @@
 		}
 	}
 
-	public function sortFireOrders(){
+	public function sortFiringPhaseFires(){
 		//Debug::log("fires: ".sizeof($this->fires));
 		//order target id ASC, weapon priority ASC, shooterider id ASC
 
@@ -1523,6 +1557,7 @@
 			//Debug::log("resolving fire: ".$i.", prio: ".$this->fires[$i]->weapon::$prio);
 			if ($this->fires[$i]->resolved){continue;}
 			if ($this->fires[$i]->shooter->flight){continue;}
+			Debug::log("resolving fire #".$this->fires[$i]->id.", weapon : ".$this->fires[$i]->weapon->display);
 			$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
 		}
 	}

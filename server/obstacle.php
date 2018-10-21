@@ -21,9 +21,9 @@ class Obstacle extends Mixed {
         $this->rockSize = $data["rolled"];
         $this->scale = $data["flipped"];
 
-        $this->curImp = round($this->curImp * 125 / $this->size / $this->rockSize * 1.5);
+        $this->curImp = round($this->curImp * 125 / $this->size / $this->rockSize * 2);
         $this->interference = round($this->density / 2 * $this->rockSize);
-        $this->collision = round($this->interference / 15 * $this->curImp);
+        $this->collision = round($this->interference / 25 * $this->curImp);
 	}
 	
 	public function addAllSystems(){
@@ -34,7 +34,7 @@ class Obstacle extends Mixed {
 	public function addPrimary(){
 		//Debug::log("addPrimary #".$this->id.", index: ".$this->index);
 		$this->primary = new Shared($this->getId());
-		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, 0, round($this->density/4), $this->rockSize/2);
+		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, $this->totalCost, $this->moraleCost, round($this->density / 6 * $this->rockSize / 2));
 	}
 
 	public function addStructures(){
@@ -71,12 +71,6 @@ class Obstacle extends Mixed {
 
 	public function isDestroyed(){
 		return false;
-	}
-
-	public function calculateToHit($fire){ // shooter
-		$final = ceil($fire->req * $fire->target->traverse);
-		$fire->notes .= $final.";";
-		return $final;
 	}
 
 	public function setMove(&$gd){

@@ -21,21 +21,23 @@ class Mixed extends Ship {
 		return;
 	}
 
-	public function setProps($turn, $phase){
+	public function setUnitState($turn, $phase){
+		//Debug::log("setUnitState #".$this->id." ".get_class($this));
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$this->structures[$i]->setSubunitState($turn, $phase);
+		}
 		$this->setBaseStats($phase, $turn);
-		$this->setSize();
-		//$this->setMass();
-		$this->setCurSpeed($turn, $phase);
-		$this->setRemImpulse($turn);
-		$this->setRemDelay($turn);
-	}	
+		$this->setMorale($turn, $phase);
+		$this->isDestroyed();
+		$this->setProps($turn, $phase);
+	}
 
 	public function setBonusNegation($turn){
 		return;
 	}
 
 	public function setSize(){
-		return;
+		$this->size = 50 + sizeof($this->structures)*10;
 	}
 
 	public function setMorale($turn, $phase){
@@ -46,26 +48,6 @@ class Mixed extends Ship {
 		return;
 	}
 	
-	public function setBaseStats($phase, $turn){
-		$this->baseHitChance = 0;
-		$this->baseTurnDelay = 0;
-		$this->baseImpulseCost = 0;
-	}
-	
-	public function setRemDelay($turn){
-		$this->remDelay = 0;
-	}
-
-	public function setUnitState($turn, $phase){
-		//Debug::log("setUnitState #".$this->id." ".get_class($this));
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			$this->structures[$i]->setSubunitState($turn, $phase);
-		}
-		$this->setMorale($turn, $phase);
-		$this->isDestroyed();
-		$this->setProps($turn, $phase);
-	}
-
 	public function isDestroyed(){
 		//Debug::log($this->destroyed);
 		if ($this->destroyed){
@@ -399,6 +381,7 @@ class Mixed extends Ship {
 	}
 
 	public function determineHits($fire){
+		Debug::log("determineHits ".get_class($this));
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
 			else {
@@ -421,7 +404,8 @@ class Mixed extends Ship {
 	}
 
 	public function setImpulseProfileMod(){
-		$this->impulseHitMod = 0;
+		if (!$this->squad){return;}
+		parent::setImpulseProfileMod();
 	}
 
 	public function getEndState($turn){

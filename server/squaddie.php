@@ -24,6 +24,7 @@ class Squaddie extends Single {
 	public $remNegation = 0;
 	public $parentIntegrity = 0;
 	public $parentPow;
+	public $jamming = 0;
 
 	public $slots = 0;
 	public $squaddie = 1;

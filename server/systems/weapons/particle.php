@@ -27,14 +27,11 @@ class AsteroidRam extends Particle {
 
 	public $critEffects = array();
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
-        parent::__construct($id, $parentId, $start, $end, $output, $width);
-
-        $this->start = 0;
-        $this->end = 0;
-        $this->shots = $end;
-        $this->minDmg = round(mt_rand(30, 40) * $output);
-        $this->maxDmg = round($this->minDmg*1.3);
+	function __construct($id, $parentId, $minDmg, $maxDmg, $shots){
+        parent::__construct($id, $parentId, 0, 0, 0, 0);
+        $this->shots = $shots; // vs Medium / 4
+        $this->minDmg = $minDmg;
+        $this->maxDmg = $maxDmg;
 	}
 
 	public function getShots($target){

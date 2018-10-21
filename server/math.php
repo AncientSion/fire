@@ -35,7 +35,7 @@ class Math {
 					(($t-$dt) * $d->y) + $a->y
 				), 0);
 			$in[1] = static::is_on($a, $b, $in[0]);
-			Debug::log("x ".$in[0]->x.", y ".$in[0]->y);
+			//Debug::log("x ".$in[0]->x.", y ".$in[0]->y);
 
 			$out = array(
 				new Point(
@@ -43,7 +43,7 @@ class Math {
 					(($t+$dt) * $d->y) + $a->y
 				), 0);
 			$out[1] = static::is_on($a, $b, $out[0]);
-			Debug::log("x ".$out[0]->x.", y ".$out[0]->y);
+			//Debug::log("x ".$out[0]->x.", y ".$out[0]->y);
 
 			return array("dist" => $dt, "points" => array($in, $out));
 		}

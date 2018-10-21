@@ -369,7 +369,7 @@ function handleMouseDown(e){
 	e.stopPropagation();
 	var rect = this.getBoundingClientRect();
 	var pos = new Point(e.clientX, e.clientY).getOffset();
-	console.log("game pos " + pos.x	+ " / " + pos.y);
+	if (e.button != 2){console.log("game pos " + pos.x	+ " / " + pos.y);}
 
 	var unit;	
 	if (aUnit){unit = game.getUnit(aUnit);}

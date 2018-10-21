@@ -719,7 +719,7 @@ Mixed.prototype.createDeployEntry = function(){
 
 	$("#combatLog").find("tbody tr").last()
 		.hover(
-			function(){game.getUnit($(this).data("shipid")).doHover();},
+			function(){game.getUnit($(this).data("shipid")).handleHovering();},
 			function(){game.resetHover()}
 		)
 }

@@ -80,7 +80,7 @@
 				<img src=sysIcons/Sensor.png style="background-color: red">
 			</div>
 			<div class="options drawObstaclesMoves">
-				<img src=sysIcons/Sensor.png style="background-color: red">
+				<img src=varIcons/oMoves.png style="background-color: red">
 			</div>
 			<div class="options drawMoves">
 				<img src=varIcons/plan.png>
@@ -443,7 +443,7 @@
 		});
 	}
 
-	function showUI(){
+	function initUI(){
 		$("#mouseCanvas").on("mouseleave", function(){
 			$("#aimDiv").hide();
 		})
@@ -599,7 +599,8 @@
 						//game.fireOrders[i].weapon.createCombatLogEntry(game.fireOrders[i]);
 					}
 
-					game.createFireFinalEntry();
+					game.handlePostFireMoves();
+					return;
 
 					if (game.unitExploAnims.length){
 						game.createPlaceHolderEntry();

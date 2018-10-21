@@ -7,7 +7,7 @@ include_once $_SERVER["DOCUMENT_ROOT"]."/fire/global.php";
 
 
 if (0){
-	DBManager::app()->startGame(5);
+	DBManager::app()->startGame(2);
 	return;
 	echo Manager::alterShipFiles();
 	return;

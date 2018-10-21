@@ -59,7 +59,7 @@ function System(system){
 	}
 
 	for (var i = 0; i < system.crits.length; i++){
-		this.crits.push(new FireOrder(system.crits[i]));
+		this.crits.push(new Crit(system.crits[i]));
 	}
 }
 
@@ -1156,14 +1156,14 @@ System.prototype.drawSystemArc = function(facing, rolled, pos){
 		var rad1 = degreeToRadian(start+facing);
 		var rad2 = degreeToRadian(end+facing);
 
-		fxCtx.globalAlpha = 1;
+		//fxCtx.globalAlpha = 1;
 		fxCtx.beginPath();			
 		fxCtx.moveTo(pos.x, pos.y);
 		fxCtx.arc(pos.x, pos.y, dist, rad1, rad2, false);
 		fxCtx.closePath();		
 		fxCtx.fillStyle = this.getFillStyle(pos.x, pos.y, dist);
 		fxCtx.fill();
-		fxCtx.globalAlpha = 1;
+		//fxCtx.globalAlpha = 1;
 	}
 }
 
@@ -2316,12 +2316,8 @@ Warhead.prototype.getAnimation = function(fire){
 	var shotDelay = 10;
 	var hits = 0;
 
-	var o = game.getUnit(this.parentId);
-	var t = game.getUnit(fire.targetid);
-	var p = t.getPlannedPos();
-	//var d = getDistance(o, t.getPlannedPos());
-	var a = getAngleFromTo(t.getPlannedPos(), o);
-	
+	var p = fire.target.getPlannedPos();
+
 	for (var j = 0; j < fire.guns; j++){
 		var gunAnims = [];
 
@@ -2331,10 +2327,13 @@ Warhead.prototype.getAnimation = function(fire){
 			if (fire.hits[j] > k){
 				hit = 1;
 				hits++;
-			}// else continue;
+			} else continue;
 
 			if (fire.target.ship){
-				dest = getPointInDir(t.size/3 * (range(7, 13)/10), a, p.x + range(-4, 4), p.y + range(-4, 4));
+				if (this instanceof Warhead){
+					dest = getPointInDir(t.size/3 * (range(7, 13)/10), a, p.x + range(-4, 4), p.y + range(-4, 4));
+				} 
+				else dest = getPointInDir(range(10, fire.target.size/3), range(0, 360), p.x, p.y);
 			} 
 			else {
 				dest = fire.target.getFireDest(fire, hit, hits-1);
@@ -2465,10 +2464,18 @@ Particle.prototype.getAnimation = function(fire){
 			var dest;
 			var tx, ty;
 
-			if (fire.rolls[roll] < 0 && fire.rolls[roll] > -100){ // jam
-				dest = game.getObstructionPoint(fire);
-				tx = dest.x;
-				ty = dest.y;
+			if (fire.rolls[roll] < 0){
+				if (fire.rolls[roll] >= -99){ // blocked
+					dest = game.getObstructionPoint(fire);
+					//hasHit = 1;
+					tx = dest.x;
+					ty = dest.y;
+				}
+				else if (fire.rolls[roll] >= -199){ // jammed
+					dest = fire.target.getFireDest(fire, hasHit, hits-1);
+					tx = t.x + dest.x;
+					ty = t.y + dest.y;
+				}
 			}
 			else {
 				if (fire.rolls[roll] >= 0 && fire.rolls[roll] < fire.req[i]){ // hit
@@ -3727,7 +3734,6 @@ Bulkhead.prototype = Object.create(PrimarySystem.prototype);
 
 
 Bulkhead.prototype.drawSystemArc = function(){
-	console.log(this);
 	return;
 }
 

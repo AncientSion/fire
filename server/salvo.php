@@ -51,25 +51,22 @@ class Salvo extends Mixed {
 		return;
 	}
 
+	public function getTurnStartPosition(){
+		if ($this->torpedo){return $this->actions[0];}
+		if ($this->missile && $this->available == $this->actions[sizeof($this->actions)-1]->turn){return $this->actions[0];}
+		return new Point($this->, $this->y);
+	}
+
 	public function getFireAngle($fire){
-		//$origin = $this->getTrajectoryStart();
+		//$origin = $this->getTurnStartPosition();
 		//$impact = $this->actions[sizeof($this->actions)-1];
 
 		//var_export($origin);
 		//var_export($impact);
-		//$angle = round(Math::getAngle2($this->getTrajectoryStart(), $this->actions[sizeof($this->actions)-1]));
-		$angle = round(Math::getAngle2($this->actions[sizeof($this->actions)-1], $this->getTrajectoryStart()));
+		//$angle = round(Math::getAngle2($this->getTurnStartPosition(), $this->actions[sizeof($this->actions)-1]));
+		$angle = round(Math::getAngle2($this->actions[sizeof($this->actions)-1], $this->getTurnStartPosition()));
 		Debug::log("------- SALVO TRAJECT: ".$angle);
 		return $angle;
-	}
-
-	public function getTrajectoryStart(){
-		if ($this->torpedo){return $this->actions[0];}
-		if ($this->missile){
-			if ($this->available == $this->actions[sizeof($this->actions)-1]->turn){return $this->actions[0];}
-			else return new Point($this->x, $this->y);
-		}
-		Debug::log("no return!");
 	}
 
 	public function addMission($data, $userid, $turn, $phase){

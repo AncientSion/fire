@@ -416,7 +416,7 @@ Flight.prototype.createMissionChangeEntry = function(){
 	this.attachLogEntry("<th colSpan=9><span><font color='" + this.getCodeColor()+ "'>Flight #" + this.id + "</font> has been issued a new mission.</span></th>");
 	$("#combatLog").find("tbody tr").last()
 		.hover(
-			function(){game.getUnit($(this).data("shipid")).doHover();},
+			function(){game.getUnit($(this).data("shipid")).handleHovering();},
 			function(){game.resetHover()}
 		)
 }

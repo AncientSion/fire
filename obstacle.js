@@ -19,12 +19,13 @@ Obstacle.prototype.setPostMoveFacing = function(){
 	}
 }
 
-Obstacle.prototype.doHover = function(){
-	this.drawMovePlan();
+Obstacle.prototype.handleHovering = function(){
+	//this.drawMovePlan();
 	this.drawNextMove();
 }
 
 Obstacle.prototype.drawMovePlan = function(){return;
+	return this.drawNextMove(); return;
 	if (!game.phase!= 3 || !game.drawMoves || !game.showObstacleMoves){return;}
 
 	this.setMoveTranslation();
@@ -58,7 +59,7 @@ Obstacle.prototype.drawMovePlan = function(){return;
 }
 
 Obstacle.prototype.drawNextMove = function(){
-	if (!game.drawMoves){return;}
+	//if (!game.showObstacleMoves){return;}
 
 	this.setMoveTranslation();
 
@@ -110,8 +111,8 @@ Obstacle.prototype.getShortInfo = function(){
 	//.append(this.getHeader())
 	.append($("<div>").html("Size " + this.size + " / Speed " + this.getCurSpeed()))
 	.append($("<div>").html(this.getMaxInterference() + "% Interference"))
-	.append($("<div>").html(this.getMaxCollision() + "% Base Collision"))
-	.append($("<div>").html(this.getDamageString()))
+	.append($("<div>").html(this.getMaxCollision() + "% Collision"))
+	.append($("<div>").html(this.getDamageString() + " / " + this.getBaseAttacks() + " Strikes"))
 }
 
 Obstacle.prototype.getHeader = function(){
@@ -163,6 +164,9 @@ Obstacle.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			.append($("<td>").html("Max Collision Chance"))
 			.append($("<td>").html(this.getMaxCollision() + "% (" + this.collision + "% per 100px)")))
+		.append($("<tr>")
+			.append($("<td>").html("Attacks (vs Medium/4)"))
+			.append($("<td>").html(this.getBaseAttacks())))
 		.append($("<tr>")
 			.append($("<td>").html("Damage Potential"))
 			.append($("<td>").html(this.getDamageString())))
@@ -240,7 +244,7 @@ Obstacle.prototype.getEvents = function(){
 
 Obstacle.prototype.create = function(){
 	this.setUnitState();
-	if (game.phase == 2 || game.phase == 3){return;}
+	if (game.phase == 3){return;}
 	this.setNextMove();
 }
 
@@ -251,14 +255,7 @@ Obstacle.prototype.setUnitState = function(){
 }
 
 Obstacle.prototype.setDrawData = function(){
-	console.log("Obstacle setDrawData");
-
-	if (game.phase < 2){
-		this.setPreMovePosition();
-	}
-	else {
-		this.setPostMovePosition();
-	}
+	this.setPostMovePosition();
 }
 
 Obstacle.prototype.setPreMovePosition = function(){
@@ -316,7 +313,7 @@ Obstacle.prototype.setLayout = function(){
 Obstacle.prototype.setImage = function(){
 
 	var amount = Math.round(Math.pow(this.size, 2) / 2000 * this.interference / (this.rockSize/2)/5);
-	console.log(this.id+"/"+amount);
+	//console.log(this.id+"/"+amount);
 
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
@@ -354,7 +351,7 @@ Obstacle.prototype.setImage = function(){
 		ctx.translate(-loc.x, -loc.y);
 	}
 
-	console.log(amount-randoms + " / " + randoms);
+	//console.log(amount-randoms + " / " + randoms);
 
 	/*var vectorSize = 80;
 	var vectorPos = getPointInDir(this.size - vectorSize/2, this.facing, 0, 0);
@@ -379,17 +376,17 @@ Obstacle.prototype.setImage = function(){
 	ctx.moveTo(0, 0);
 	ctx.lineTo(vectorPos.x, vectorPos.y);
 	ctx.closePath();
-	ctx.lineWidth = 5;
-	ctx.strokeStyle = "green";
+	ctx.lineWidth = 3;
+	ctx.strokeStyle = "yellow";
 	ctx.stroke();
 	
-	ctx.clearRect(-34, -25, 68, 50);
+	ctx.clearRect(-40, -25, 80, 50);
 	
 	ctx.fillStyle = "yellow";
 	ctx.font = "24px Arial";
 	ctx.textAlign = "center";
 	ctx.fillText(this.getMaxInterference() + "%", 0, -2);
-	ctx.fillText(this.getMaxCollision() + "%", 0, 20);
+	ctx.fillText(this.getMaxCollision() + "% / " + this.getBaseAttacks(), 0, 20);
 	
 
 	ctx.setTransform(1,0,0,1,0,0);
@@ -398,7 +395,17 @@ Obstacle.prototype.setImage = function(){
 
 Obstacle.prototype.getDamageString = function(){
 	var wpn = this.primary.systems[0];
-	return wpn.shots + "x " + wpn.minDmg + " - " + wpn.maxDmg;
+	return (wpn.minDmg + " - " + wpn.maxDmg);
+}
+
+Obstacle.prototype.getBaseAttacks = function(){
+	var wpn = this.primary.systems[0];
+	return wpn.shots;
+}
+
+Obstacle.prototype.getRealAttacks = function(unit){
+	var wpn = this.primary.systems[0];
+	return Math.round(wpn.shots * (1 + (0.3 * (unit.traverse-4))));
 }
 
 Obstacle.prototype.getBaseImage = function(){

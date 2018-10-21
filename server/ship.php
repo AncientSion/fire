@@ -59,6 +59,7 @@ class Ship {
 	public $distances = array();
 	public $angles = array();
 	public $blocks = array();
+	public $collisions = array();
 
 	public $turnAngle = 30;
 	public $slipAngle = 15;
@@ -302,10 +303,14 @@ class Ship {
 	public function setProps($turn, $phase){
 		//Debug::log("setProps ".get_class($this)." #".$this->id);
 		$this->setUnitCost();
+		$this->setSize();
 		$this->setCurSpeed($turn, $phase);
 		$this->setRemImpulse($turn);
-		$this->setRemDelay($turn);
 		$this->setSpecialActionState($turn, $phase);
+	}
+
+	public function setSize(){
+		return;
 	}
 
 	public function setUnitCost(){
@@ -408,7 +413,6 @@ class Ship {
 			}
 		}
 		$this->curImp = $impulse;
-		//Debug::log("setCurSpeed #".$this->id.": ".$this->curImp);
 	}
 
 	public function getCurSpeed(){
@@ -499,23 +503,6 @@ class Ship {
 
 	public function isRolled(){
 		return $this->rolled;
-	}
-
-	public function setRemDelay($turn){
-		return;
-		$delay = 0;
-
-		for ($i = 0; $i < sizeof($this->actions); $i++){
-			if (!$this->actions[$i]->resolved){continue;}
-			if ($delay && $this->actions[$i]->type == "move"){
-				$delay = max(0, $delay - $this->actions[$i]->dist);
-			} else if ($this->actions[$i]->type == "turn"){
-				$delay += $this->actions[$i]->delay;
-			}
-		}
-
-		$this->remDelay = $delay;
-		//echo $this->remDelay;
 	}
 
 	public function setSpecialActionState($turn, $phase){
@@ -842,7 +829,6 @@ class Ship {
 		else if ($fire->shooter->obstacle){
 			Debug::log("resolveFireOrder OBSTACLE - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots.", type: ".$fire->weapon->dmgType);
 
-			$fire->section = $this->getHitSection($fire);
 			$this->determineObstacleHits($fire);
 		}
 		else {
@@ -864,7 +850,7 @@ class Ship {
 	public function determineObstacleHits($fire){
 		//Debug::log("determineObstacleHits collision% ".$fire->req."%, shots ".$fire->shots);
 
-		$fire->req = $fire->shooter->calculateToHit($fire);
+		//$fire->req = $fire->shooter->calculateToHit($fire);
 
 		for ($i = 0; $i < $fire->shots; $i++){
 			$roll = mt_rand(1, 100);
@@ -877,6 +863,7 @@ class Ship {
 			else if ($fire->rolls[$i] <= $fire->req){
 				//Debug::log("hit");
 				$fire->hits++;
+				$fire->section = $this->getHitSection($fire);
 				DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
 			}
 		}
@@ -891,7 +878,7 @@ class Ship {
 	}
 
 	public function determineHits($fire){ // target
-		//Debug::log("determineHits ".get_class($this)))
+		//Debug::log("determineHits ".get_class($this));
 		$fire->req = $fire->shooter->calculateToHit($fire);
 
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
@@ -934,7 +921,7 @@ class Ship {
 	}
 
 	public function calculateToHit($fire){ // shooter
-		Debug::log("calculateToHit");
+		//Debug::log("calculateToHit");
 		$multi = 1;
 		$req = 0;
 		
@@ -949,7 +936,7 @@ class Ship {
 		$req = $base * $multi * $tracking - $range;
 		//Debug::log("CALCULATE TO HIT - angle: ".$fire->angle.", base: ".$base.", trav: ".$tracking.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
 
-		return ceil($req);
+		return round($req);
 	}
 
 	public function getArmour($fire, $system){
@@ -1134,12 +1121,14 @@ class Ship {
 	}
 	public function setImpulseProfileMod(){
 		$now = $this->getCurSpeed();
-		$stock = $this->getBaseImpulse();
-
-		$ratio = $now/$stock;
+		$base = $this->getBaseImpulse();
+ 		//	Debug::log($now); Debug::log($base);
+		$ratio = $now/$base;
 		if ($ratio != 1){
 			$this->impulseHitMod =  (1-$ratio)/2;
 		}
+
+		//Debug::log("impuleMod ".$this->impulseHitMod);
 		return;
 
 		//return 1+((($this->getBaseImpulse() / $this->getCurSpeed())-1)/2);
@@ -1172,6 +1161,10 @@ class Ship {
 				return $this->masks[$i][1];
 			}
 		} return 0;
+	}
+
+	public function getTurnStartPosition(){
+		return new Point($this->x, $this->y);
 	}
 
 	public function getCurPos(){

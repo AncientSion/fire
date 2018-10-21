@@ -1371,12 +1371,12 @@ FireOrder.prototype.addLogRollsEntry = function(log, rolls){
 			.html("")
 		)
 		.append($("<td>")
-			.attr("colSpan", 3)
+			.attr("colSpan", 4)
 			.css("textAlign", "left")
 			.html(rollString)
 		)
 		.append($("<td>")
-			.attr("colSpan", 4)
+			.attr("colSpan", 3)
 		)
 	)
 
@@ -1391,7 +1391,8 @@ FireOrder.prototype.addCollisionEntry = function(log, rolls){
 		.append($("<td>"))
 		.append($("<td>")
 			.attr("colSpan", 5)
-			.html("Depth "+rolls[0]+"px, collision "+rolls[1]+"%, final " + rolls[2]+"%")
+			.html("SERVER DEBUG - Distance "+rolls[0]+"px, collision "+rolls[1]+"%, final " + rolls[2]+"%")
+			//.html("Distance "+rolls[0]+"px / " + this.shooter.collision + "% per 100px"
 		)
 		.append($("<td>"))
 		.append($("<td>"))
@@ -1441,10 +1442,10 @@ FireOrder.prototype.getRollsString = function(rolls, allReq){
 
 		if (rolls[i] < 0){
 			if (rolls[i] >= -99){
-				blocked += (rolls[i]*-1) + ", ";
+				blocked += (rolls[i]+100) + ", ";
 			}
-			else if (rolls[i] >= 199){
-				jammed += (rolls[i]*-1) + ", ";
+			else if (rolls[i] >= -199){
+				jammed += (rolls[i]+200) + ", ";
 			}
 		}
 		else if (rolls[i] <= req){

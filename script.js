@@ -97,7 +97,7 @@ function init(data){
 	turn = new Turn();
 	game = new Game(data);
 	game.create(data);
-	showUI();
+	initUI();
 	window.initChat();
 	window.initiateKeyDowns();
 

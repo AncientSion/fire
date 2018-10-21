@@ -88,10 +88,10 @@ function isInPath(a, b, c, size) {
 		};
 		out.onLine = is_on(a, b, out);
 
-		if (inP.onLine || out.onLine){
+		//if (inP.onLine || out.onLine){
 			var data = {dist: dt, points: [inP, out]};
 			return data;
-		}
+		//}
 	}
 	return false;
 }
@@ -234,6 +234,10 @@ function randomize(pos, x, y){
 
 function round(val){
 	return Math.floor(val * 100) / 100; 
+}
+
+function roun2(val){
+	return Math.floor(val * 10) / 10; 
 }
 
 function getProjIntercept(src, dst, vector, mod){
