@@ -53,10 +53,8 @@ function scopeCanvas(){
 	drawCtx = drawCanvas.getContext("2d");
 
 
-	fxCtx.font = "14px Arial";
+	fxCtx.font = "18px Arial";
 	fxCtx.textAlign = "center";
-	ctx.font = "26px Arial";
-	ctx.textAlign = "center";
 }
 
 function init(data){

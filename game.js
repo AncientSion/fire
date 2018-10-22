@@ -3353,8 +3353,8 @@ Game.prototype.getObstructionPoint = function(fire){
 	var pick = valid[range(0, valid.length-1)];
 	var subpick = range(0, pick.path.points.length-1);
 	var point = pick.path.points[subpick];
-	var dist = getDistance(point, fire.target.getGamePos());
-	var target = getPointInDir(range(30, Math.min(100, dist)), fire.angle, point.x, point.y);
+	var distInterSectToTarget = getDistance(point, fire.target.getGamePos());
+	var target = getPointInDir(range(-20, distInterSectToTarget*0.7), fire.angle, point.x, point.y);
 	return target;
 }
 

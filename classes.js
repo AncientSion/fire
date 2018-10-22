@@ -37,8 +37,7 @@ function ShotVector(a, b, s, h){
 	this.f;
 	this.h = h;
 	this.p = 0;
-	this.float = [];
-	
+
 	this.setup = function(){
 		this.ox = a.x;
 		this.oy = a.y;
@@ -68,8 +67,7 @@ function BeamVector(o, a, b, n, m, h){
 	this.done = 0;
 	this.x;
 	this.y;
-	this.float = [];
-
+	
 	this.setup = function(){
 		this.tax = a.x;
 		this.tay = a.y;
