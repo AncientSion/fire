@@ -2467,7 +2467,6 @@ Particle.prototype.getAnimation = function(fire){
 			if (fire.rolls[roll] < 0){
 				if (fire.rolls[roll] >= -99){ // blocked
 					dest = game.getObstructionPoint(fire);
-					//hasHit = 1;
 					tx = dest.x;
 					ty = dest.y;
 				}
@@ -2478,7 +2477,7 @@ Particle.prototype.getAnimation = function(fire){
 				}
 			}
 			else {
-				if (fire.rolls[roll] >= 0 && fire.rolls[roll] < fire.req[i]){ // hit
+				if (fire.rolls[roll] >= 0 && fire.rolls[roll] <= fire.req[i]){ // hit
 					hasHit = 1;
 					hits++;
 				}
