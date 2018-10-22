@@ -3380,8 +3380,7 @@ Game.prototype.setObstacleData = function(){
 				if (!this.ships[k].obstacle){continue;}
 
 				//var obstaclePos = game.phase == 3 ? {x: this.ships[k].x, y: this.ships[k].y} : this.ships[k].gePlannedPos();
-				//var obstaclePos = this.ships[k].getGamePos();
-				var obstaclePos = {x: this.ships[i].x, y: this.ships[i].y};
+				var obstaclePos = this.ships[k].getDrawPos();
 				var result = isInPath(oPos, tPos, obstaclePos, this.ships[k].size/2);
 
 				if (!result){continue;}
