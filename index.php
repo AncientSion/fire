@@ -65,7 +65,7 @@ else if (isset($_POST["newUsername"]) && isset($_POST["newPassword"])){
 			<form method="post">
 				<div>
 					<input type="text" placeholder="Enter new Username here" name="newUsername"></input>	
-					<input type="text" style="float: right;" placeholder="Enter new Password here" name="newPassword"></input>
+					<input type="password" style="float: right;" placeholder="Enter new Password here" name="newPassword"></input>
 				</div>
 				<div style="width: 50%; margin: auto; margin-top: 10px;">
 					<input type="submit" value="Register New Account"></input>
