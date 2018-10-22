@@ -3349,13 +3349,24 @@ Game.prototype.getObstructionPoint = function(fire){
 			valid.push(fire.target.blocks[i]);
 		}
 	}
-
 	var pick = valid[range(0, valid.length-1)];
-	var subpick = range(0, pick.path.points.length-1);
-	var point = pick.path.points[subpick];
-	var distInterSectToTarget = getDistance(point, fire.target.getGamePos());
-	var distPicked = range(-20, distInterSectToTarget*0.7);
-	var target = getPointInDir(distPicked, fire.angle, point.x, point.y);
+	var dist;
+	var origin;
+
+	if (pick.points[0].onLine && pick.points[1].onLine){
+		dist = getDistance(pick.points[0], pick.points[1])*0.9;
+		origin = pick.points[0];
+	}
+	else if (pick.points[0].onLine){
+		dist = getDistance(pick.points[0], fire.target.getGamePos()*1.0;
+		origin = pick.points[0];
+	}
+	else if (pick.points[1].onLine){
+		dist = getDistance(fire.shooter.getGamePos(), pick.points[1])*0.7;
+		origin = pick.points[0];
+	}
+
+	var impact = getPointInDir(dist, fire.angle, origin.x, origin.y);
 	return target;
 }
 
