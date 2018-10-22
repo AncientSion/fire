@@ -2147,8 +2147,8 @@ function Game(data){
 		else if (this.animObstacles){ // phase 3 post fire
 			this.animObstacles = 0; 
 			game.timeout = setTimeout(function(){
-				this.endMoveSubPhase();
-				this.moveResolved();
+				game.endMoveSubPhase();
+				game.moveResolved();
 			}, 1000);
 		}
 		else {
@@ -2173,8 +2173,8 @@ function Game(data){
 			else if (this.animSalvo){
 				this.animSalvo = 0;
 				game.timeout = setTimeout(function(){
-				this.endMoveSubPhase();
-				this.moveResolved();
+				game.endMoveSubPhase();
+				game.moveResolved();
 				}, time);
 			}
 		}
