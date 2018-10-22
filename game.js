@@ -3350,18 +3350,12 @@ Game.prototype.getObstructionPoint = function(fire){
 		}
 	}
 
-
 	var pick = valid[range(0, valid.length-1)];
-	//console.log(pick.path.points);
 	var subpick = range(0, pick.path.points.length-1);
-	//console.log(subpick);
-
-	var real = pick.path.points[subpick];
-
-	var dist = getDistance(real, fire.target.getGamePos());
-	return getPointInDir(range(30, Math.min(100, dist)), fire.angle, real.x, real.y);
-	console.log(dist);
-	return 
+	var point = pick.path.points[subpick];
+	var dist = getDistance(point, fire.target.getGamePos());
+	var target = getPointInDir(range(30, Math.min(100, dist)), fire.angle, point.x, point.y);
+	return target;
 }
 
 Game.prototype.setObstacleData = function(){
