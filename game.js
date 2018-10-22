@@ -3367,7 +3367,7 @@ Game.prototype.getObstructionPoint = function(fire){
 	}
 
 	var impact = getPointInDir(dist, fire.angle, origin.x, origin.y);
-	return target;
+	return impact;
 }
 
 Game.prototype.setObstacleData = function(){
