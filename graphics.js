@@ -475,10 +475,10 @@ function drawDamageNumbers(weapon, anim){
 
 	fxCtx.globalAlpha = Math.min(1, 1.4 - fraction);
 
-	fxCtx.font = "24px Arial";
+	fxCtx.font = "22px Arial";
 	fxCtx.textAlign = "center";
 	fxCtx.fillStyle = "white";
-	fxCtx.fillText(anim.odds, anim.x, anim.y -65 - (30 * fraction));
+	fxCtx.fillText(anim.odds, anim.x, anim.y -70 - (30 * fraction));
 	fxCtx.fillText(anim.shots, anim.x, anim.y -50 - (30 * fraction));
 
 
