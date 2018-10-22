@@ -275,6 +275,7 @@ class FireOrder {
 	}
 
 	public function setWeaponShots(){
+		if ($this->shots){return;}
 		$this->shots = $this->weapon->getShots($this->turn);
 	}
 

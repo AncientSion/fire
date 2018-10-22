@@ -965,7 +965,7 @@
 		Debug::log("handleCollisions");
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$this->setSingleCollision($this->ships[$i]);
+			$this->setCollisionForSingleUnit($this->ships[$i]);
 		}
 
 		$newFires = array();
@@ -984,10 +984,10 @@
 		}	$this->fires = array_merge($this->fires, $newFires);
 	}
 
-	public function setSingleCollision($unit){
+	public function setCollisionForSingleUnit($unit){
 		if ($unit->obstacle){return;}
 		if ($unit->flight || $unit->salvo){return;}
-		//Debug::log("setSingleCollision for unit #".$unit->id);
+		//Debug::log("setCollisionForSingleUnit for unit #".$unit->id);
 		$unit->collides = array();
 		$unitPos = $unit->getTurnStartPosition();
 		$unitSpeed = $unit->getCurSpeed();
@@ -1265,7 +1265,7 @@
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$this->ships[$i]->setFacing();
 			$this->ships[$i]->setPosition();
-			$this->ships[$i]->setCurSpeed($this->turn, $this->phase);
+			//$this->ships[$i]->setCurSpeed($this->turn, $this->phase);
 			$this->ships[$i]->setImpulseProfileMod();
 			$this->ships[$i]->setBonusNegation($this->turn);
 			$this->ships[$i]->setJamming($this->turn);
@@ -1334,7 +1334,7 @@
 						}
 						else $realDist = $result[0];
 
-						Debug::log("pierceIn ".$pierceIn); Debug::log("pierceOut ".$pierceOut);	Debug::log("real ".$realDist);
+						//Debug::log("pierceIn ".$pierceIn); Debug::log("pierceOut ".$pierceOut);	Debug::log("real ".$realDist);
 
 
 

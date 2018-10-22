@@ -501,7 +501,7 @@ Squadron.prototype.hasNoFireOrders = function(){
 	else return false;
 }
 
-Squadron.prototype.getAllResolvingFireOrders = function(){
+Squadron.prototype.unitGetAllResolvingFireOrders = function(){
 	var fires = [];
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].destroyed && !this.structures[i].isDestroyedThisTurn()){continue;}

@@ -884,11 +884,12 @@
 
 					$facing = mt_rand(0, 360);
 					$size = mt_rand($min, $max);
-					$thrust = mt_rand(30, 45);
-
 					$density = mt_rand(15, 35);
 					$rockSize = mt_rand(1, 4);
-					$minDmg = round(mt_rand(30, 40) * $rockSize);
+
+					$thrust = mt_rand(30, 45) / $size * 125 / $rockSize * 2;
+
+					$minDmg = round(mt_rand(15, 25) * $rockSize);
 					$maxDmg = round($minDmg*1.3);
 
 					$rocks[] = array($x, $y, $facing, $size, $thrust, $density, $rockSize, $minDmg, $maxDmg);
@@ -910,6 +911,8 @@
 				//		Debug::log($val);
 				//	}
 				//}
+
+				Debug::log("rolling ".$rocks[$i][5]);
 
 				$stmt->bindParam(":gameid", $gameid);
 				$stmt->bindParam(":x", $rocks[$i][0]);

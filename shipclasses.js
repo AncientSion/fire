@@ -4490,7 +4490,7 @@ Ship.prototype.hasNoFireOrders = function(){
 	return true;
 }
 
-Ship.prototype.getAllResolvingFireOrders = function(){
+Ship.prototype.unitGetAllResolvingFireOrders = function(){
 	var fires = [];
 
 	for (var j = 0; j < this.structures.length; j++){

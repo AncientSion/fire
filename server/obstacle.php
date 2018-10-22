@@ -21,9 +21,28 @@ class Obstacle extends Mixed {
         $this->rockSize = $data["rolled"];
         $this->scale = $data["flipped"];
 
-        $this->curImp = round($this->curImp * 125 / $this->size / $this->rockSize * 2);
+       // $this->curImp = round($this->curImp * 125 / $this->size / $this->rockSize * 2);
         $this->interference = round($this->density / 2 * $this->rockSize);
         $this->collision = round($this->interference / 25 * $this->curImp);
+	}
+
+	public function getEndState($turn){
+		return array(
+			"id" => $this->id,
+			"destroyed" => $this->destroyed,
+			"withdraw" => $this->withdraw,
+			"manual" => $this->manual,
+			"x" => $this->actions[sizeof($this->actions)-1]->x,
+			"y" => $this->actions[sizeof($this->actions)-1]->y,
+			"facing" => $this->facing,
+			"thrust" => $this->getCurSpeed(),
+			"delay" => $this->size,
+			"rolling" => $this->density,
+			"rolled" => $this->rockSize,
+			"flipped" => $this->scale,
+			"status" => $this->status,
+			"notes" => "",
+		);
 	}
 	
 	public function addAllSystems(){
@@ -34,7 +53,8 @@ class Obstacle extends Mixed {
 	public function addPrimary(){
 		//Debug::log("addPrimary #".$this->id.", index: ".$this->index);
 		$this->primary = new Shared($this->getId());
-		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, $this->totalCost, $this->moraleCost, round($this->density / 6 * $this->rockSize / 2));
+		//Debug::log("density ".$this->density.", rockSize ".$this->rockSize.", result: ".round($this->density / 3 / $this->rockSize));
+		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, $this->totalCost, $this->moraleCost, round($this->density / 3 / $this->rockSize));
 	}
 
 	public function addStructures(){
@@ -97,25 +117,6 @@ class Obstacle extends Mixed {
 
 	public function getNewCrits($turn){
 		return array();
-	}
-
-	public function getEndState($turn){
-		return array(
-			"id" => $this->id,
-			"destroyed" => $this->destroyed,
-			"withdraw" => $this->withdraw,
-			"manual" => $this->manual,
-			"x" => $this->actions[sizeof($this->actions)-1]->x,
-			"y" => $this->actions[sizeof($this->actions)-1]->y,
-			"facing" => $this->facing,
-			"thrust" => $this->getCurSpeed(),
-			"delay" => $this->size,
-			"rolling" => $this->interference,
-			"rolled" => $this->rockSize,
-			"flipped" => $this->scale,
-			"status" => $this->status,
-			"notes" => "",
-		);
 	}
 }
 

@@ -24,7 +24,7 @@ Obstacle.prototype.handleHovering = function(){
 	this.drawNextMove();
 }
 
-Obstacle.prototype.drawMovePlan = function(){return;
+Obstacle.prototype.drawMovePlan = function(){
 	return this.drawNextMove(); return;
 	if (!game.phase!= 3 || !game.drawMoves || !game.showObstacleMoves){return;}
 
@@ -63,7 +63,7 @@ Obstacle.prototype.drawNextMove = function(){
 
 	this.setMoveTranslation();
 
-	planCtx.strokeStyle = "#00ea00";
+	/*planCtx.strokeStyle = "#00ea00";
 
 	planCtx.globalAlpha = 0.7;
 	planCtx.beginPath();
@@ -76,8 +76,9 @@ Obstacle.prototype.drawNextMove = function(){
 	planCtx.closePath();
 	planCtx.lineWidth = 1;
 	planCtx.strokeStyle = "black";
-	planCtx.globalAlpha = 1;
+	planCtx.globalAlpha = 1;*/
 
+	var nextMove = this.getPlannedPos();
 	this.drawMarker(nextMove.x, nextMove.y, "red", planCtx);
 
 	this.resetMoveTranslation();
@@ -165,11 +166,11 @@ Obstacle.prototype.createBaseDiv = function(){
 			.append($("<td>").html("Max Collision Chance"))
 			.append($("<td>").html(this.getMaxCollision() + "% (" + this.collision + "% per 100px)")))
 		.append($("<tr>")
-			.append($("<td>").html("Base Attacks (vs Medium unit)"))
+			.append($("<td>").html("Base Attacks (vs Medium)"))
 			.append($("<td>").html(this.getBaseAttacks())))
 		.append($("<tr>")
 			.append($("<td>").html("Attack Modifier"))
-			.append($("<td>").html("+-30 % per size difference")))
+			.append($("<td>").html("+-30 % per size diff.")))
 		.append($("<tr>")
 			.append($("<td>").html("Damage Potential"))
 			.append($("<td>").html(this.getDamageString())))
@@ -223,7 +224,7 @@ Obstacle.prototype.expandDiv = function(div){
 	return div;
 }
 
-Obstacle.prototype.getAllResolvingFireOrders = function(){
+Obstacle.prototype.unitGetAllResolvingFireOrders = function(){
 	var fires = [];
 
 	for (var i = 0; i < this.primary.systems.length; i++){

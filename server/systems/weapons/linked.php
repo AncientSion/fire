@@ -5,9 +5,9 @@ class FighterWeapon extends Particle {
 	public $projSize = 1.5;
 	public $reload = 1;
 	public $tracking = 0;
-	public $accDecay = 0;
 	public $tiny = 1;
 	public $fighterId = 0;
+	public $accDecay = 750;
 
 	function __construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg){
 		$this->id = $id;

@@ -67,28 +67,6 @@ class Flight extends Mixed {
 		} else $this->mission = new Mission($data[sizeof($data)-1]);
 	}
 
-	public function calculateToHit($fire){
-		//return 100;
-		$multi = 1;
-		$req = 0;
-		
-		$base = $fire->target->getHitChance($fire);
-		$tracking = 1-($fire->weapon->getTrackingMod($fire) * 0.2);
-		
-		$multi += $this->getOffensiveBonus($fire->target->id);
-		$multi -= $fire->target->getDefensiveBonus($this->id);
-		//Debug::log($multi);
-
-		$req = $base * $multi * $tracking;
-		//Debug::log("CALCULATE TO HIT - angle: ".$fire->angle.", base: ".$base.", trav: ".$tracking.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
-
-		//if ($fire->target->ship && $this->mission->targetid == $fire->target->id && $this->mission->arrived){
-			//Debug::log("strike flight attacking ship");
-		//}
-
-		return ceil($req);
-	}
-
 	public function getLockEffect($target){
 		if ($target->ship || $target->squad){
 			return 0.25;

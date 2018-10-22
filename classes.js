@@ -1060,6 +1060,27 @@ FireOrder.prototype.setSystems = function(){
 }
 FireOrder.prototype.setAngle = function(){
 }
+FireOrder.prototype.setShots = function(){
+	var shots = 0;
+	var hits;
+	if (this.shooter.salvo){
+		shots = this.shooter.getShots();
+		//hits = this.hits.reduce((a, b) => a+b, 0);
+	}
+	else {
+		for (var i = 0; i < this.guns; i++){
+			shots += this.weapon.getShots();
+			//hits += this.hits[i];
+		}
+	}
+
+	if (this.shooter.obstacle){
+		//$shots = round($this->ships[$i]->getSystem(2)->getShots($this->turn) * (1 + (0.3 * ($unit->traverse-4))));
+		shots = Math.round(shots * (1 + (0.3 * (this.target.traverse-4))));
+		shots *= this.rolls[3];
+	}
+	this.shots = shots;
+}
 
 
 FireOrder.prototype.setNumberAnim = function(){
@@ -1068,58 +1089,13 @@ FireOrder.prototype.setNumberAnim = function(){
 	var targets = 1;
 	var data = this.tr.data();
 	var row = data.row;
+	this.numbers = [];
 
 	for (var i = 0; i < targets; i++){
 		var tr = $("#combatLog tr").eq(row+i);
 		var drawPos = game.getUnit(tr.data("targetid")).getDrawPos();
 		var odds = tr.find("td").eq(4).html();
 		var shots = tr.find("td").eq(5).html();
-		var armour = tr.find("td").eq(6).html();
-		var system = tr.find("td").eq(7).html();
-		var hull = tr.find("td").eq(8).html();
-
-		this.numbers.push(
-			{
-				x: drawPos.x + range(-10, 10),
-				y: drawPos.y,
-				//n: Math.floor(len*0.4)*-1,
-				n: 0,
-				m: 70,
-				shots: shots,
-				armour: armour,
-				system: system,
-				hull: hull,
-				odds: odds,
-				done: 0
-			}
-		);
-
-		//console.log(this.numbers[0].n + " / " +this.numbers[0].m);
-	}
-}
-
-
-FireOrder.prototype.setNumberAnima = function(){
-
-	var last;
-	var targets = 1;
-	var data = this.tr.data();
-	var row = data.row;
-
-	if (this.weapon.aoe){targets = data.end - data.start+1;}
-	//if (this.weapon instanceof Warhead && this.hits.reduce((a, b) => a +b, 0)){
-	//	last = 0;
-	//}
-	//else last = this.anim[this.anim.length-1][this.anim[this.anim.length-1].length-1];
-	//var len = Math.abs(last.n) + last.m;
-
-	//if (!last){return;}
-
-	for (var i = 0; i < targets; i++){
-		var tr = $("#combatLog tr").eq(row+i);
-		var drawPos = game.getUnit(tr.data("targetid")).getDrawPos();
-		var odds = aoe ? "" : tr.find("td").eq(4).html();
-		var shots = aoe ? "" : tr.find("td").eq(5).html();
 		var armour = tr.find("td").eq(6).html();
 		var system = tr.find("td").eq(7).html();
 		var hull = tr.find("td").eq(8).html();
@@ -1198,7 +1174,7 @@ FireOrder.prototype.createCombatLogEntry = function(){
 }
 
 FireOrder.prototype.addLogStartEntry = function(log){
-	var shots = 0;
+	var shots = this.shots;
 	var hits = 0;
 	var armour = 0;
 	var em = 0;
@@ -1212,14 +1188,14 @@ FireOrder.prototype.addLogStartEntry = function(log){
 
 	var rolls = this.rolls.slice().sort((a, b) => a-b);
 	var rollString = this.getRollsString(rolls, req);
-	
+
 	if (this.shooter.salvo){
-		shots = this.shooter.getShots();
+		//shots = this.shooter.getShots();
 		hits = this.hits.reduce((a, b) => a+b, 0);
 	}
 	else {
 		for (var i = 0; i < this.guns; i++){
-			shots += this.weapon.getShots();
+			//this.shots += this.weapon.getShots();
 			hits += this.hits[i];
 		}
 	}
@@ -1449,6 +1425,10 @@ FireOrder.prototype.getRollsString = function(rolls, allReq){
 		else if (rolls[i] <= req){
 			hits += rolls[i] + ", ";
 		} else miss += rolls[i] + ", ";
+	}
+
+	if (this.shooter.obstacle){
+		hits = "Each subunit was subject " + (this.shots / this.rolls[3]) + " attacks. A total of " + this.hits[0] + " hits resolved...";
 	}
 
 	if (hits.length){hits = hits.slice(0, hits.length-2); hits = "Hits: " + hits;}

@@ -33,10 +33,6 @@ class AsteroidRam extends Particle {
         $this->minDmg = $minDmg;
         $this->maxDmg = $maxDmg;
 	}
-
-	public function getShots($target){
-		return $this->shots;
-	}
 }
 
 class TwinParticleBolter extends Particle {

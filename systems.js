@@ -103,20 +103,6 @@ System.prototype.getResolvingFireOrders = function(){
 	return false;
 }
 
-System.prototype.getResolvingFireOrdersO = function(){
-	if (game.phase != 3){return false;}
-	for (var i = this.fireOrders.length-1; i >= 0; i--){
-		if (this.fireOrders[i].turn == game.turn){
-			for (var j = 0; j < this.fireOrders[i].req.length; j++){
-				if (this.fireOrders[i].req[j] > 0){
-					return this.fireOrders[i];
-				}
-			}
-		} else return false;
-	}
-	return false;
-}
-
 System.prototype.hasLoad = function(){
 	for (var i = 0; i < this.loads.length; i++){
 		if (this.loads[i].amount){
@@ -1839,7 +1825,7 @@ Weapon.prototype.getDmgsPerShot = function(fire){
 		return 1;
 	}
 	else if (this.fireMode == "Shockwave"){
-		if (fire.target.ship || this.aoe){return 10;}
+		if (fire.target.ship && this.aoe){return 10;}
 		return fire.target.structures.length;
 	}
 	return 1;
@@ -2004,7 +1990,7 @@ Weapon.prototype.select = function(e){
 	else {
 		console.log(this);
 		unit = game.getUnit(this.parentId);
-		if (unit.flight && !unit.cc.length || unit.ship && unit.hasSystemSelected("Sensor")){
+		if (/*unit.flight && !unit.cc.length ||*/ unit.ship && unit.hasSystemSelected("Sensor")){
 			return false;
 		}
 		else if (this.getLoadLevel() >= 1){
@@ -2425,20 +2411,17 @@ Particle.prototype.getAnimation = function(fire){
 	var linked = this.linked -1;
 	var gunDelay = Math.max(20, this.shots * 10);
 	var shotDelay = 8;
-	var cc = 0;
 	var hits = 0;
 	var fraction = 1;
 	var t = fire.target.getDrawPos();
-		
-	if (game.isCloseCombat(fire.shooter, fire.target)){
-		cc = 1;
-		if (fire.shooter.ship || fire.shooter.squad){
-			fraction = 2;
-		}
-		else if (fire.shooter.flight){
-			grouping = 1;
-			gunDelay = 10;
-		}
+
+	if (fire.shooter.flight){
+		grouping = 1;
+		gunDelay = 5;
+		fraction = 2;
+	}
+	else if (game.isCloseCombat(fire.shooter, fire.target) && (fire.shooter.ship || fire.shooter.squad)){
+		fraction = 2;
 	}
 	else if (fire.dist < 200){
 		fraction = Math.min(3, 200 / fire.dist);
@@ -2533,22 +2516,19 @@ Pulse.prototype.getAnimation = function(fire){
 	var fraction = 1;
 	var t = fire.target.getDrawPos();
 		
-	if (game.isCloseCombat(fire.shooter, fire.target)){
-		cc = 1;
-		if (fire.shooter.ship || fire.shooter.squad){
-			fraction = 2;
-		}
-		else if (fire.shooter.flight){
-			grouping = 1;
-			gunDelay = 5;
-			fraction = 2;
-		}
+	if (fire.shooter.flight){
+		grouping = 1;
+		gunDelay = 5;
+		fraction = 2;
+	}
+	else if (game.isCloseCombat(fire.shooter, fire.target) && (fire.shooter.ship || fire.shooter.squad)){
+		fraction = 2;
 	}
 	else if (fire.dist < 200){
 		fraction = Math.min(3, 200 / fire.dist);
 	}
 	else if (fire.dist > 600){
-		fraction = Math.max(0.5, 600 / fire.dist);
+		fraction = Math.min(0.8, 600 / fire.dist);
 	}
 
 	speed /= fraction;

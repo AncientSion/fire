@@ -31,6 +31,7 @@ class Single {
 	public $index = 0;
 	public $emDmg = 0;
 	public $system = false;
+	public $squaddie = false;
 	
 	public $critEffects =  array( // type, mag, dura, effect
 		array("Disabled", 120, 0, 0.00),

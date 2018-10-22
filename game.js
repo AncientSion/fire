@@ -1739,7 +1739,7 @@ function Game(data){
 			hostileUnit = 1;
 		}
 
-		if (shooter.flight && hostileUnit && !this.isCloseCombat(shooter, target)){return;}
+		//if (shooter.flight && hostileUnit && !this.isCloseCombat(shooter, target)){return;}
 
 		for (var i = 0; i < active.length; i++){
 			if (active[i].hasValidTarget() && active[i].canFire()){
@@ -2279,7 +2279,7 @@ function Game(data){
 	this.doResolveFire = function(){
 		this.getAllResolvingFireOrders();
 		this.getShotDetails();
-		this.sortFireOrders();
+		(this.phase == 3 ? this.sortNormalFires() : this.sortPostMoveFires());
 		this.getFireAnimationDetails();
 		this.adjustAreaFires();	
 		this.getAllUnitExplos();
@@ -2293,7 +2293,7 @@ function Game(data){
 		ui.unitSelector.hide();
 		$(".chatWrapper").hide();
 		$("#leftUnitWrapper").hide();
-		$("#upperGUI").hide()
+		//$("#upperGUI").hide()
 		$(".optionsWrapper").hide();
 	}
 
@@ -2302,7 +2302,7 @@ function Game(data){
 		ui.unitSelector.show();
 		ui.combatLogWrapper.show();
 		this.setLeftWrapperVisibility();
-		$("#upperGUI").show()
+		//$("#upperGUI").show()
 		$(".optionsWrapper").show();
 		$(".chatWrapper").show();
 
@@ -2380,7 +2380,7 @@ function Game(data){
 	this.getAllResolvingFireOrders = function(){
 		this.fireOrders = [];
 		for (var i = 0; i < this.ships.length; i++){
-			var fires = this.ships[i].getAllResolvingFireOrders();
+			var fires = this.ships[i].unitGetAllResolvingFireOrders();
 			if (fires.length){
 				for (var j = 0; j < fires.length; j++){
 					this.fireOrders = this.fireOrders.concat(fires[j]);
@@ -2436,6 +2436,7 @@ function Game(data){
 			this.fireOrders[i].damages = this.fireOrders[i].target.getDmgByFire(this.fireOrders[i]);
 			this.fireOrders[i].systems.push(this.fireOrders[i].weaponid);
 			this.fireOrders[i].angle = getAngleFromTo(this.fireOrders[i].shooter.getGamePos(), this.fireOrders[i].target.getGamePos());
+			this.fireOrders[i].setShots();
 		/*	this.fireOrders[i].setTarget() = game.getUnit(this.fireOrders[i].targetid);
 			this.fireOrders[i].setShooter() = game.getUnit(this.fireOrders[i].shooterid);
 			this.fireOrders[i].setWeapon() = this.fireOrders[i].shooter.getSystem(this.fireOrders[i].weaponid).getActiveSystem();
@@ -2519,7 +2520,7 @@ function Game(data){
 		}
 	}
 
-	this.sortFireOrders = function(){
+	this.sortNormalFires = function(){
 		this.fireOrders.sort(function(a, b){
 			return (
 				a.shooter.salvo - b.shooter.salvo ||
@@ -2528,6 +2529,16 @@ function Game(data){
 				a.targetid - b.targetid ||
 				a.weapon.priority - b.weapon.priority ||
 				a.shooterid - b.shooterid
+			)
+		});
+	}
+
+	this.sortPostMoveFires = function(){
+		this.fireOrders.sort(function(a, b){
+			return (
+				a.weapon.aoe - b.weapon.aoe ||
+				a.shooterid - b.shooterid ||
+				a.obstacle - b.obstacle
 			)
 		});
 	}
@@ -3773,10 +3784,7 @@ Game.prototype.getRemainingReinforcePoints = function(){
 }
 
 Game.prototype.getFireDistance = function(a, b){
-	if ((a.ship || a.squad) && (b.ship || b.squad)){
-		return Math.floor(getDistance(a.getPlannedPos(), b.getPlannedPos()));
-	}
-	else if (this.isCloseCombat(a, b)){
+	if (this.isCloseCombat(a, b)){
 		return 0;
 		if (a.ship){
 			return Math.floor(a.size/2);
@@ -3785,9 +3793,7 @@ Game.prototype.getFireDistance = function(a, b){
 		}
 		else return a.getParent().size/2;
 	}
-	else if (a.ship || a.squad){
-		return Math.floor(getDistance(a.getPlannedPos(), b.getPlannedPos()));
-	}
+	else return Math.floor(getDistance(a.getPlannedPos(), b.getPlannedPos()));
 	return -666;
 }
 

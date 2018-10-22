@@ -22,7 +22,7 @@ class Mixed extends Ship {
 	}
 
 	public function setUnitState($turn, $phase){
-		//Debug::log("setUnitState #".$this->id." ".get_class($this));
+		Debug::log("setUnitState #".$this->id." ".get_class($this));
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->setSubunitState($turn, $phase);
 		}
@@ -379,6 +379,37 @@ class Mixed extends Ship {
 			}
 		}
 	}
+
+	public function determineObstacleHits($fire){
+		Debug::log("determineObstacleHits ".get_class($this).", shots ".$fire->shots.", req ".$fire->req);
+
+		$rollCounter = 0;
+		$fire->section = 0;
+		$targets = 0;
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			Debug::log("struct ".$i);
+			if ($this->structures[$i]->destroyed){continue;}
+			$targets++;
+
+			$this->doRollShots($fire);
+
+			for ($j = $rollCounter; $j < sizeof($fire->rolls); $j++){
+				Debug::log("roll ".$j);
+				if ($this->structures[$i]->destroyed){$fire->cancelShotResolution($j); break;}
+				else if ($fire->rolls[$j] <= $fire->req){
+					Debug::log("hit!");
+					$fire->hits++;
+					DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
+				} else Debug::log("miss");
+			}
+			$rollCounter = sizeof($fire->rolls);
+		}
+
+		$fire->rolls = [];
+		$fire->notes .= $targets.";";
+	}
+
 
 	public function determineHits($fire){
 		Debug::log("determineHits ".get_class($this));

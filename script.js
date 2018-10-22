@@ -137,6 +137,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	var pos;
 	var final = 0;
 
+	/*
 	if (shooter.flight){
 		drop = 0;
 		if (target && !cc){
@@ -144,7 +145,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 		} else if (!target){
 			drop = 1;
 		}
-	}
+	}*/
 	
 	if (target && !drop && !target.obstacle){
 		var multi = 1;
@@ -367,12 +368,12 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 					} else inArc = 0;
 				}	
 			}
-			else if (shooter.flight){
+		/*	else if (shooter.flight){
 				if (!cc){
 					legalTarget = 0;
 				}
 			}
-
+		*/
 			if (inArc && legalTarget){
 				system.getAimData(target, final, dist, row);
 			}
