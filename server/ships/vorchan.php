@@ -9,7 +9,7 @@ class Vorchan extends SuperLight {
 	public $mass = 1250;
 	public $integrity = 370;
 	
-	public $ep = 100;
+	public $ep = 120;
 	public $ew = 525;
 	public $power = 2;
 	public $negation = 11;
