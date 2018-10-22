@@ -2279,9 +2279,9 @@ function Game(data){
 	this.doResolveFire = function(){
 		this.getAllResolvingFireOrders();
 		this.getShotDetails();
+		this.sortFireOrders();
 		this.getFireAnimationDetails();
 		this.adjustAreaFires();	
-		this.sortFireOrders();	
 		this.getAllUnitExplos();
 		this.hideUI();
 		this.setFireGlobals();
