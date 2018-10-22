@@ -3349,11 +3349,11 @@ Game.prototype.getObstructionPoint = function(fire){
 			valid.push(fire.target.blocks[i]);
 		}
 	}
-	var pick = valid[range(0, valid.length-1)];
+	var pick = valid[range(0, valid.length-1)].path;
 	var dist;
 	var origin;
 
-	if (pick.points[0].onLine && pick.points[1].onLine){
+	if (pick.points[0].onLine && pick.[1].onLine){
 		dist = getDistance(pick.points[0], pick.points[1])*0.9;
 		origin = pick.points[0];
 	}
