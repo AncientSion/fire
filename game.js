@@ -2146,8 +2146,10 @@ function Game(data){
 		}
 		else if (this.animObstacles){ // phase 3 post fire
 			this.animObstacles = 0; 
-			this.endMoveSubPhase();
-			this.moveResolved();
+			game.timeout = setTimeout(function(){
+				this.endMoveSubPhase();
+				this.moveResolved();
+			}, 1000);
 		}
 		else {
 			if (this.animShip){
@@ -2169,9 +2171,11 @@ function Game(data){
 				}, time);
 			}
 			else if (this.animSalvo){
-				this.endMoveSubPhase();
 				this.animSalvo = 0;
+				game.timeout = setTimeout(function(){
+				this.endMoveSubPhase();
 				this.moveResolved();
+				}, time);
 			}
 		}
 	}
@@ -2575,7 +2579,7 @@ function Game(data){
 			game.timeout = setTimeout(function(){
 				game.animObstacles = 1;
 				game.doResolveMovement();
-			}, 500);
+			}, 1500);
 		}
 	}
 
