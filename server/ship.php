@@ -1092,7 +1092,7 @@ class Ship {
 	}
 
 	public function getSensorSizeRating(){
-		return $this->traverse;
+		return ($this->traverse-4);
 		return ($this->faction == "Minbari Federation" ? $this->traverse-1 : $this->traverse-4);
 	}
 
