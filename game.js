@@ -2154,7 +2154,7 @@ function Game(data){
 		else {
 			if (this.animShip){
 				game.timeout = setTimeout(function(){
-					game.animShip = 0; game.animFocus = 0; game.animFlight = 1;
+					game.animShip = 0; game.animFocus = 1; game.animFlight = 1;
 					game.animateMovement();
 				}, time);
 			}
