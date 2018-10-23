@@ -2152,9 +2152,9 @@ function Game(data){
 			}, 1000);
 		}
 		else {
-			if (this.animShip){
+			if (this.animShip && !this.animFocus){
 				game.timeout = setTimeout(function(){
-					game.animShip = 0; game.animFocus = 1; game.animFlight = 0;
+					game.animShip = 1; game.animFocus = 1; game.animFlight = 0;
 					game.animateMovement();
 				}, time);
 			}
