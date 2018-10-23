@@ -75,7 +75,7 @@ class LightLaser extends Laser {
 	public $maxDmg = 70;
 	public $optRange = 350;
 	public $dmgLoss = 12;
-	public $accDecay = 60;
+	public $accDecay = 10;
 	public $shots = 1;
 	public $reload = 3;
 	public $powerReq = 3;
@@ -119,7 +119,7 @@ class HeavyLaser extends LightLaser {
 	public $minDmg = 160;
 	public $maxDmg = 200;
 	public $reload = 4;
-	public $optRange = 950;
+	public $optRange = 800;
 	public $dmgLoss = 6;
 	public $powerReq = 6;
 	public $effiency = 4;

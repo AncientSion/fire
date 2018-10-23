@@ -25,6 +25,7 @@ Obstacle.prototype.handleHovering = function(){
 }
 
 Obstacle.prototype.drawMovePlan = function(){
+	if (!game.showObstacleMoves){return;}
 	return this.drawNextMove(); return;
 	if (!game.phase!= 3 || !game.drawMoves || !game.showObstacleMoves){return;}
 
