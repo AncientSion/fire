@@ -82,7 +82,7 @@
 			<div class="options drawObstaclesMoves">
 				<img src=varIcons/oMoves.png style="background-color: red">
 			</div>
-			<div class="options drawMoves">
+			<div class="options drawPlans">
 				<img src=varIcons/plan.png>
 			</div>
 			<div class="options distMeter">
@@ -568,13 +568,7 @@
 				else return;
 			}
 			else if (game){
-				if (e.keyCode == 101){ // e
-					game.toggleDrawMovePaths();
-				}
-				if (e.keyCode == 117){ // u
-					game.toggleUI();
-				}
-				else if (e.keyCode == 113){ // q
+				if (e.keyCode == 113){ // q
 					game.toggleFriendlyEW();
 				}
 				else if (e.keyCode == 119){ // w

@@ -598,9 +598,9 @@ Ship.prototype.alertCollisions = function(){
 	for (var i = 0; i < this.collisions.length; i++){
 		var col = this.collisions[i];
 		//console.log(unit.collisions[i]);
-		html += "</br><div>#" + col.obstacleId + "</br>Distance " + col.totalDist + " - Risk " + col.baseCol + "% nominal - " + col.baseAttacks + " attacks per 100px</br>";
-		html += "Result: ";
-		html += "<span class='obstacleWarn yellow'>" + col.realAttacks + "</span> attacks @ <span class='obstacleWarn yellow'>" + col.realCol + "%</span> for <span class='obstacleWarn yellow'>" + col.damage + "</span> Damage";
+		html += "</br><div>#" + col.obstacleId + "</br>Nominal risk " + col.baseCol + "% and " + col.baseAttacks + " attacks per 100px</br>";
+		html += "Total <span class='obstacleWarn yellow'>" + col.totalDist + "</span> distance: ";
+		html += "<span class='obstacleWarn yellow'>" + col.realAttacks + "</span> attacks @ <span class='obstacleWarn yellow'>" + col.realCol + "%</span> for <span class='obstacleWarn yellow'>" + col.damage + "</span> Damage</br>";
 	}
 	popup(html);
 	//<span class='obstacleWarn yellow'>"
@@ -698,10 +698,9 @@ Ship.prototype.doUndoLastAction = function(pos){
 	if (game.turnMode){this.switchTurnMode();}
 	this.turnAngles = {};
 	game.redraw();
-	if (type == "move"){
-		game.setCollisionData(this);
-		this.alertCollisions();
-	} else ui.popupWrapper.hide();
+	ui.popupWrapper.hide();
+	game.setCollisionData(this);
+	this.alertCollisions();
 }
 
 Ship.prototype.moveInVector = function(dist){
@@ -912,7 +911,6 @@ Ship.prototype.issueTurn = function(a){
 	if (!this.getRemSpeed() && this.getRemEP()){this.doAutoShorten();}
 	this.getSystemByName("Sensor").setTempEW();
 	if (!this.getRemSpeed()){this.switchTurnMode();}
-	else game.setShortenInfo(false, this, 0);
 	game.redraw();
 }
 
@@ -1280,40 +1278,44 @@ Ship.prototype.getStructureFromAngle = function(a){
 
 Ship.prototype.drawMovePlan = function(){
 	//console.log("draw moves for #" + this.id);
-	if (!this.selected && (!this.actions.length || !this.deployed || !game.drawMoves)){return;}
+	if (!this.selected && (!this.actions.length || !this.deployed)){return;}
 
-	this.setMoveTranslation();
-
-	planCtx.strokeStyle = "#00ea00";
-	if (!this.friendly){planCtx.strokeStyle = "red";}
+	var color = "#00ea00";
+	if (!this.friendly){color = "red";}
+	
+	planCtx.translate(cam.o.x, cam.o.y);
+	planCtx.scale(cam.z, cam.z);
+	planCtx.strokeStyle = color;
 
 	planCtx.globalAlpha = 0.7;
+
+	var start = this.getTurnStartPos();
 	planCtx.beginPath();
-	planCtx.moveTo(this.x, this.y);
+	planCtx.moveTo(start.x, start.y);
 
 	for (var i = 0; i < this.actions.length; i++){
 		if (this.actions[i].type == "move"){
 			planCtx.lineTo(this.actions[i].x, this.actions[i].y);
 			planCtx.stroke();
+			//console.log("draw 1 move #" + i);
 		}
-	}
-		
-	for (var i = 0; i < this.actions.length; i++){
-		if (this.actions[i].type == "turn"){
+		else if (this.actions[i].type == "turn"){
 			planCtx.beginPath();
 			planCtx.arc(this.actions[i].x, this.actions[i].y, 5, 0, 2*Math.PI, false);
-			planCtx.closePath();
 			planCtx.stroke();
+			planCtx.moveTo(this.actions[i].x, this.actions[i].y);
+			//console.log("draw 1 turn #" + i);
 		}
 	}
-		
+
+	if (!this.hasMoved() && this.actions.length){this.drawMarker(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y, planCtx.strokeStyle, planCtx);}
+
 	planCtx.closePath();
-	planCtx.lineWidth = 1;
-//	planCtx.stroke();
-	planCtx.strokeStyle = "black";
 	planCtx.globalAlpha = 1;
-	this.drawPlanMarker();
-	this.resetMoveTranslation();
+	planCtx.strokeStyle = "black";
+	planCtx.setTransform(1,0,0,1,0,0);
+
+
 }
 
 Ship.prototype.getHeader = function(){
@@ -1439,7 +1441,6 @@ Ship.prototype.doHighlight = function(){
 		game.draw();
 	}	
 	else {
-		//console.log("highlight on");
 		this.highlight = true;
 		ctx.translate(cam.o.x, cam.o.y);
 		ctx.scale(cam.z, cam.z);
@@ -1451,11 +1452,6 @@ Ship.prototype.doHighlight = function(){
 		ctx.strokeStyle = "white";
 		ctx.stroke();
 		ctx.setTransform(1,0,0,1,0,0);
-
-		//this.drawMovePlan();
-		//this.drawIncomingPreviewMovePlan();
-		//this.drawTargetMovePlan();
-		//this.drawTrajectory();
 	}
 }
 
@@ -1830,17 +1826,6 @@ Ship.prototype.drawEscort = function(){
 	if (this.cc.length && this.drawImg != undefined){
 		var s = this.drawImg.width/2;
 		ctx.drawImage(this.drawImg, -s/2, -s/2, s, s);
-	}
-}
-
-Ship.prototype.drawPlanMarker = function(){
-	for (var i = this.actions.length-1; i >= 0; i--){
-		if (!this.actions[i].resolved){
-			var color = "green";
-			if (!this.friendly){color = "red";}
-			this.drawMarker(this.actions[i].x, this.actions[i].y, color, planCtx);
-			return;
-		} else return;
 	}
 }
 
@@ -3515,8 +3500,7 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 
 Ship.prototype.readyForAnim = function(){
 	this.setPreMovePosition();
-	this.setPreMoveFacing();	
-
+	this.setPreMoveFacing();
 	var frameMod = 1000 / window.fpsTicks / this.getCurSpeed();
 	//console.log(frameMod)
 	for (var i = 0; i < this.actions.length; i++){

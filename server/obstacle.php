@@ -24,18 +24,35 @@ class Obstacle extends Mixed {
        // $this->curImp = round($this->curImp * 125 / $this->size / $this->rockSize * 2);
         $this->interference = round($this->density / 2 * $this->rockSize);
         $this->collision = round($this->interference / 25 * $this->curImp);
+	}	
+
+	public function getDeployState($turn){
+		Debug::log("getDeployState for ".$this->id.", destroyed: ".$this->destroyed);
+		return $this->getEndState($turn);
 	}
 
 	public function getEndState($turn){
+
+		Debug::log("getEndState for ".$this->id.", destroyed: ".$this->destroyed);
+
+		$x; $y;
+
+		if ($turn > 1){
+			$x = $this->actions[0]->x;
+			$y = $this->actions[0]->y;
+		}
+		else {
+			$x = $this->x;
+			$y = $this->y;
+		}
+
 		return array(
 			"id" => $this->id,
 			"destroyed" => $this->destroyed,
 			"withdraw" => $this->withdraw,
 			"manual" => $this->manual,
-			//"x" => $this->actions[sizeof($this->actions)-1]->x,
-			//"y" => $this->actions[sizeof($this->actions)-1]->y,
-			"x" => $this->x,
-			"y" => $this->y,
+			"x" => $x,
+			"y" => $y,
 			"facing" => $this->facing,
 			"thrust" => $this->getCurSpeed(),
 			"delay" => $this->size,

@@ -388,20 +388,20 @@ class Mixed extends Ship {
 		$targets = 0;
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			Debug::log("struct ".$i);
+			//Debug::log("struct ".$i);
 			if ($this->structures[$i]->destroyed){continue;}
 			$targets++;
 
 			$this->doRollShots($fire);
 
 			for ($j = $rollCounter; $j < sizeof($fire->rolls); $j++){
-				Debug::log("roll ".$j);
+				//Debug::log("roll ".$j);
 				if ($this->structures[$i]->destroyed){$fire->cancelShotResolution($j); break;}
 				else if ($fire->rolls[$j] <= $fire->req){
-					Debug::log("hit!");
+					//Debug::log("hit!");
 					$fire->hits++;
 					DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
-				} else Debug::log("miss");
+				}// else Debug::log("miss");
 			}
 			$rollCounter = sizeof($fire->rolls);
 		}
@@ -412,7 +412,7 @@ class Mixed extends Ship {
 
 
 	public function determineHits($fire){
-		Debug::log("determineHits ".get_class($this));
+		//Debug::log("determineHits ".get_class($this));
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
 			else {
@@ -460,7 +460,7 @@ class Mixed extends Ship {
 			"x" => $this->actions[sizeof($this->actions)-1]->x,
 			"y" => $this->actions[sizeof($this->actions)-1]->y,
 			"delay" => 0,
-			"facing" => $facing,
+			"facing" => $this->getCurFacing(),
 			"thrust" => $this->getCurSpeed(),
 			"rolling" => $this->isRolling(),
 			"rolled" => $this->isRolled(),

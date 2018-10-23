@@ -1065,7 +1065,6 @@ FireOrder.prototype.setShots = function(){
 	var hits;
 	if (this.shooter.salvo){
 		shots = this.shooter.getShots();
-		//hits = this.hits.reduce((a, b) => a+b, 0);
 	}
 	else {
 		for (var i = 0; i < this.guns; i++){
@@ -1075,12 +1074,11 @@ FireOrder.prototype.setShots = function(){
 	}
 
 	if (this.shooter.obstacle){
-		//$shots = round($this->ships[$i]->getSystem(2)->getShots($this->turn) * (1 + (0.3 * ($unit->traverse-4))));
-		shots = Math.round(shots * (1 + (0.3 * (this.target.traverse-4))));
-		shots *= this.rolls[3];
+		shots = Math.ceil(shots / 100 * this.rolls[0]);
 	}
-	this.shots = shots; return;
-	this.shots = this.guns * shots;
+
+
+	this.shots = shots;
 }
 
 
@@ -1426,8 +1424,8 @@ FireOrder.prototype.getRollsString = function(rolls, allReq){
 		} else miss += rolls[i] + ", ";
 	}
 
-	if (this.shooter.obstacle){
-		hits = "Each subunit was subject " + (this.shots / this.rolls[3]) + " attacks. A total of " + this.hits[0] + " hits resolved...";
+	if (this.shooter.obstacle && !this.target.ship){
+		hits = "Each subunit was subject " + (this.shots / this.rolls[3]) + " attacks. A total of " + this.hits[0] + " collisions occured...";
 	}
 
 	if (hits.length){hits = hits.slice(0, hits.length-2); hits = "Hits: " + hits;}

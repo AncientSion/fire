@@ -25,64 +25,36 @@ Obstacle.prototype.handleHovering = function(){
 }
 
 Obstacle.prototype.drawMovePlan = function(){
-	if (!game.showObstacleMoves){return;}
-	return this.drawNextMove(); return;
-	if (!game.phase!= 3 || !game.drawMoves || !game.showObstacleMoves){return;}
-
-	this.setMoveTranslation();
-
-	planCtx.strokeStyle = "#00ea00";
-
-	planCtx.globalAlpha = 0.7;
-	planCtx.beginPath();
-	planCtx.moveTo(this.x, this.y);
-
-	for (var i = 0; i < this.actions.length; i++){
-		planCtx.lineTo(this.actions[i].x, this.actions[i].y);
-		planCtx.stroke();
-	}
-		
-	for (var i = 0; i < this.actions.length; i++){
-		if (this.actions[i].type == "turn"){
-			planCtx.beginPath();
-			planCtx.arc(this.actions[i].x, this.actions[i].y, 5, 0, 2*Math.PI, false);
-			planCtx.closePath();
-			planCtx.stroke();
-		}
-	}
-		
-	planCtx.closePath();
+	this.drawNextMove(); return;
+	planCtx.translate(cam.o.x, cam.o.y);
+	planCtx.scale(cam.z, cam.z);
+	planCtx.strokeStyle = "white";
+	planCtx.globalAlpha = 0.4;
 	planCtx.lineWidth = 1;
-	planCtx.strokeStyle = "black";
-	planCtx.globalAlpha = 1;
-	this.drawPlanMarker();
-	this.resetMoveTranslation();
-}
 
-Obstacle.prototype.drawNextMove = function(){
-	//if (!game.showObstacleMoves){return;}
-
-	this.setMoveTranslation();
-
-	/*planCtx.strokeStyle = "#00ea00";
-
-	planCtx.globalAlpha = 0.7;
 	planCtx.beginPath();
 	planCtx.moveTo(this.drawX, this.drawY);
-
-	var nextMove = this.getPlannedPos();
-
-	planCtx.lineTo(nextMove.x, nextMove.y);
-	planCtx.stroke();
+	var len = this.actions.length-1;
+	planCtx.lineTo(this.actions[len].x, this.actions[len].y);
 	planCtx.closePath();
-	planCtx.lineWidth = 1;
+	planCtx.stroke();
+
+	planCtx.globalAlpha = 1;
 	planCtx.strokeStyle = "black";
-	planCtx.globalAlpha = 1;*/
+	planCtx.setTransform(1,0,0,1,0,0);
+}
+
+
+Obstacle.prototype.drawNextMove = function(){
+	planCtx.translate(cam.o.x, cam.o.y);
+	planCtx.scale(cam.z, cam.z);
 
 	var nextMove = this.getPlannedPos();
-	this.drawMarker(nextMove.x, nextMove.y, "red", planCtx);
+	this.drawMarker(nextMove.x, nextMove.y, "", planCtx);
 
-	this.resetMoveTranslation();
+	planCtx.globalAlpha = 1;
+	planCtx.strokeStyle = "black";
+	planCtx.setTransform(1,0,0,1,0,0);
 }
 
 Obstacle.prototype.setNextMove = function(){
@@ -102,7 +74,8 @@ Obstacle.prototype.getMaxInterference = function(){
 	return Math.round(this.interference / 100 * this.size);
 }
 
-Obstacle.prototype.getMaxCollision = function(){
+Obstacle.prototype.getBaseCollision = function(){
+	return this.collision;
 	return Math.round(this.collision / 100 * this.size/2);
 }
 
@@ -113,7 +86,7 @@ Obstacle.prototype.getShortInfo = function(){
 	//.append(this.getHeader())
 	.append($("<div>").html("Size " + this.size + " / Speed " + this.getCurSpeed()))
 	.append($("<div>").html(this.getMaxInterference() + "% Interference"))
-	.append($("<div>").html(this.getMaxCollision() + "% Collision"))
+	.append($("<div>").html(this.getBaseCollision() + "% Collision"))
 	.append($("<div>").html(this.getDamageString() + " / " + this.getBaseAttacks() + " Strikes"))
 }
 
@@ -165,7 +138,7 @@ Obstacle.prototype.createBaseDiv = function(){
 			.append($("<td>").html(this.getMaxInterference() + "% (" + this.interference + "% per 100px)")))
 		.append($("<tr>")
 			.append($("<td>").html("Max Collision Chance"))
-			.append($("<td>").html(this.getMaxCollision() + "% (" + this.collision + "% per 100px)")))
+			.append($("<td>").html(this.getBaseCollision() + "% (" + this.collision + "% per 100px)")))
 		.append($("<tr>")
 			.append($("<td>").html("Base Attacks (vs Medium)"))
 			.append($("<td>").html(this.getBaseAttacks())))
@@ -249,7 +222,7 @@ Obstacle.prototype.getEvents = function(){
 
 Obstacle.prototype.create = function(){
 	this.setUnitState();
-	if (game.phase == 3){return;}
+	if (game.phase == -1){return;}
 	this.setNextMove();
 }
 
@@ -260,17 +233,29 @@ Obstacle.prototype.setUnitState = function(){
 }
 
 Obstacle.prototype.setDrawData = function(){
-	this.setPostMovePosition();
+	if (game.phase == -1){
+		this.setPreMovePosition();
+	}
+	else {
+		this.setPostMovePosition();
+	}
 }
-
 Obstacle.prototype.setPreMovePosition = function(){
+	//console.log("setPreMovePosition #" + this.id);
 	this.drawX = this.x;
 	this.drawY = this.y;
 }
 
 Obstacle.prototype.setPostMovePosition = function(){
-	this.drawX = this.x;
-	this.drawY = this.y;
+	//console.log("setPostMovePosition");
+	if (!this.actions.length){return;}
+	if (game.turn == 1){
+		this.drawX = this.x;
+		this.drawY = this.y;
+		return;
+	}
+	this.drawX = this.actions[this.actions.length-2].x;
+	this.drawY = this.actions[this.actions.length-2].y;
 }
 
 Obstacle.prototype.setPreMoveFacing = function(){
@@ -296,7 +281,7 @@ Obstacle.prototype.drawMarker = function(x, y, c, context){
 	context.arc(x, y, (this.size/2)-1, 0, 2*Math.PI, false);
 	context.closePath();
 	context.lineWidth = 1;
-	context.globalAlpha = 0.7;
+	context.globalAlpha = 0.5;
 	context.globalCompositeOperation = "source-over";
 	context.strokeStyle = "Bisque";
 	context.stroke();
@@ -391,7 +376,7 @@ Obstacle.prototype.setImage = function(){
 	ctx.font = "24px Arial";
 	ctx.textAlign = "center";
 	ctx.fillText(this.getMaxInterference() + "%", 0, -2);
-	ctx.fillText(this.getMaxCollision() + "% / " + this.getBaseAttacks(), 0, 20);
+	ctx.fillText(this.getBaseCollision() + "% / " + this.getBaseAttacks(), 0, 20);
 	
 
 	ctx.setTransform(1,0,0,1,0,0);
@@ -410,7 +395,7 @@ Obstacle.prototype.getBaseAttacks = function(){
 
 Obstacle.prototype.getRealAttacks = function(dist){
 	var wpn = this.primary.systems[0];
-	return Math.round(wpn.shots / 100 * dist);
+	return Math.ceil(wpn.shots / 100 * dist);
 	return Math.round(wpn.shots * (1 + (0.3 * (unit.traverse-4))));
 }
 

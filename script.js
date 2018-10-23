@@ -484,13 +484,6 @@ function handleTurnShortening(unit, e, pos){
 	var reset = false;
 	var dist = Math.floor(getDistance(unit.getPlannedPos(), pos));
 	var multi = 0;
-
-	if (isInArc(getCompassHeadingOfPoint(unit.getPlannedPos(), pos, 0), unit.moveAngles.start, unit.moveAngles.end)){
-		//if (dist > Math.min(last.delay / 2 - unit.actions[unit.actions.length-1].dist, remDelay) && dist < remDelay){
-		if (dist < remDelay){
-			game.setShortenInfo(e, unit, dist)
-		}
-	}
 }
 
 

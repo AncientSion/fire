@@ -80,6 +80,7 @@ Mixed.prototype.getPostMovePos = function(){
 }
 
 Mixed.prototype.drawMovePlan = function(){
+	//return;
 	if (!this.deployed){return;}
 
 	var color = "#00ea00";
@@ -89,7 +90,7 @@ Mixed.prototype.drawMovePlan = function(){
 	planCtx.scale(cam.z, cam.z);
 	planCtx.strokeStyle = color;
 
-	if (game.drawMoves){
+	if (game.drawPlans){
 		planCtx.globalAlpha = 0.4;
 		planCtx.lineWidth = 1;
 
@@ -138,7 +139,6 @@ Mixed.prototype.drawMovePlan = function(){
 		planCtx.stroke();
 		planCtx.beginPath();
 		planCtx.moveTo(step.x, step.y);
-
 
 		planCtx.lineTo(tPos.x, tPos.y);
 		planCtx.closePath();

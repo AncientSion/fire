@@ -912,7 +912,7 @@
 				//	}
 				//}
 
-				Debug::log("rolling ".$rocks[$i][5]);
+				//Debug::log("rolling ".$rocks[$i][5]);
 
 				$stmt->bindParam(":gameid", $gameid);
 				$stmt->bindParam(":x", $rocks[$i][0]);

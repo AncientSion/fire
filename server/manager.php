@@ -988,7 +988,7 @@
 	public function setCollisionForSingleUnit($unit){
 		if ($unit->obstacle){return;}
 		if ($unit->flight || $unit->salvo){return;}
-		//Debug::log("setCollisionForSingleUnit for unit #".$unit->id);
+		Debug::log("setCollisionForSingleUnit for unit #".$unit->id);
 		$unit->collides = array();
 		$unitPos = $unit->getTurnStartPosition();
 		$unitSpeed = $unit->getCurSpeed();
@@ -997,14 +997,14 @@
 			if (!$this->ships[$i]->obstacle){continue;}
 
 			$obstacle = $this->ships[$i];
-			$tPos = $obstacle->getTurnStartPosition();
+			$tPos = $obstacle->getCurPos();
 			$totalDist = 0;
 			$distBetween = Math::getDist2($unitPos, $tPos) - $obstacle->size/2 - $unitSpeed;
 
 			if ($distBetween > 200){continue;}
 
 
-			//Debug::log("obstacle ".$obstacle->id.", pos: ".$tPos->x."/".$tPos->y.", dist between ".$distBetween);
+			Debug::log("obstacle ".$obstacle->id.", pos: ".$tPos->x."/".$tPos->y.", dist between ".$distBetween);
 
 			for ($j = 0; $j < sizeof($unit->actions); $j++){
 				$action = $unit->actions[$j];
@@ -1019,40 +1019,55 @@
 				$distInside = 0;
 
 				if ($result["points"][0][1]){
+					//Debug::log("enter!");
 					$enter = true;
 				}
 				if ($result["points"][1][1]){
+					//Debug::log("leave!");
 					$leave = true;
 				}
 
 				if ($enter && $leave){
+					//Debug::log("1!");
 					$distInside = Math::getDist2($result["points"][0][0], $result["points"][1][0]);
 				}
 				else if ($enter){
+					//Debug::log("2!");
 					$distInside = Math::getDist2($result["points"][0][0], $action);
 				}
 				else if ($leave){
+					//Debug::log("3!");
 					$distInside = Math::getDist2($oPos, $result["points"][1][0]);
 				}
 				else {
+					//Debug::log("4!");
 					$start = Math::getDist2($oPos, $tPos);
 					$end = Math::getDist2($action, $tPos);
 					if ($start < $obstacle->size/2 && $end < $obstacle->size/2){
+					//Debug::log("5!");
 						$distInside += $action->dist;
 					}
 				}
 
 				$totalDist += $distInside;
+				//Debug::log("totalDist ".$totalDist);
 			}
 	
 
 
 			if (!$totalDist){continue;}
 
-			$weaponid = 2;
+		/*	$weaponid = 2;
 			$req = $this->ships[$i]->collision / 100 * $totalDist;
 			$string = (round($totalDist).";".$this->ships[$i]->collision.";".round($req).";");
 			$shots = round($this->ships[$i]->getSystem(2)->getShots($this->turn) * (1 + (0.3 * ($unit->traverse-4))));
+		*/	
+			$weaponid = 2;
+			$req = $this->ships[$i]->collision * (1 + (0.3 * ($unit->traverse-4)));
+			$string = (round($totalDist).";".$this->ships[$i]->collision.";".round($req).";");
+			$shots = ceil($this->ships[$i]->getSystem(2)->getShots($this->turn) / 100 * $totalDist);
+
+			Debug::log($req."/".$string."/".$shots);
 
 			$fire = new FireOrder(
 				//$id, $gameid, $turn, $shooter, $target, $x, $y, $weapon, $shots, $req, $notes, $hits, $res
@@ -1066,7 +1081,7 @@
 		Debug::log("assembleDeployStates");
 		$states = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->available != $this->turn || $this->ships[$i]->obstacle){continue;}
+			if ($this->ships[$i]->available != $this->turn && !$this->ships[$i]->obstacle){continue;}// jumpin or field move
 			$states[] = $this->ships[$i]->getDeployState($this->turn);
 		}
 

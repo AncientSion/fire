@@ -52,7 +52,7 @@ function Game(data){
 	this.canConfirm = 1;
 
 	this.drawCircle = 1;
-	this.drawMoves = 1;
+	this.drawPlans = 1;
 	this.showFriendlyEW = 0;
 	this.showHostileEW = 0;
 	this.showObstacleMoves = 0;
@@ -808,74 +808,6 @@ function Game(data){
 				end: step == -1 ? 270 : 90
 			});
 		}
-
-		return;
-
-
-
-			if (game.turn == 1){
-				for (var i = 0; i < this.playerstatus.length; i++){
-
-					var step = 1;
-					var h = 1000;
-					var w = 200;
-					var dist = 400;
-					var y = h/2;
-
-					if (i % 2 == 0){step = -1;}
-
-					if (this.playerstatus[i].userid == this.userid){
-						var id = this.userid;
-						var color = "green";
-					}
-					else {
-						var id = 0;
-						var color = "red";
-					}
-
-					this.deployArea.push({
-						id: id,
-						x: 0 + (dist * step),
-						y: y/2*-1,
-						w: w * step,
-						h: h,
-						c: color
-					});
-				}
-			}
-			else if (game.turn > 1){
-				var center = {x: 0, y: 0};
-				center.y = Math.round(center.y);
-
-				var d = 0;
-
-				for (var i = 0; i < this.ships.length; i++){
-					if (this.ships[i].flight || this.ships[i].salvo){continue;}
-					if (this.ships[i].available > game.turn){continue;}
-					d = Math.max(d, getDistance(this.ships[i], center));
-				}
-				//console.log(d);
-
-				this.deployArea.push({
-					id: this.userid,
-					x: center.x,
-					y: center.y,
-					s: 900,
-					b: Math.min(700, Math.round(d*2.5)),
-					c: "green"
-				});
-			}
-			else {
-				this.deployArea.push({
-					id: this.userid,
-					x: 0,
-					y: 0,
-					s: 750,
-					c: "green"
-				});
-			}
-
-
 	}
 
 
@@ -998,7 +930,7 @@ function Game(data){
 		} else this.setCamera();
 		this.redraw();
 
-		if (game.turn == 1){return;}
+		if (game.turn == 1){this.setAllObstaclesNextMoves(); return;}
 
 		this.resolveDamageControl();
 	}
@@ -1056,6 +988,12 @@ function Game(data){
 		}
 	}
 
+	this.setAllObstaclesNextMoves = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].obstacle){this.ships[i].setNextMove();}
+		}
+	}
+
 	this.moveResolved = function(){
 		console.log("moveResolved");
 
@@ -1074,10 +1012,8 @@ function Game(data){
 				}
 			}
 		}
-		else if (this.phase == 3){
-			for (var i = 0; i < this.ships.length; i++){
-				if (this.ships[i].obstacle){this.ships[i].setNextMove();}
-			}
+		else if (this.phase == -1){
+			this.setAllObstaclesNextMoves();
 		}
 
 		for (var i = 0; i < this.ships.length; i++){
@@ -1339,7 +1275,6 @@ function Game(data){
 		}
 		else if (this.phase == 1){
 			$("#phaseSwitchDiv").click(function(){
-				setFPS(90);
 				game.prepResolveUnitMovement();
 				game.redraw();
 				$(this).hide();
@@ -1351,7 +1286,6 @@ function Game(data){
 		}
 		else if (this.phase == 2){
 			$("#phaseSwitchDiv").click(function(){
-				setFPS(90);
 				game.prepResolveUnitMovement();
 				game.redraw();
 				$(this).hide();
@@ -1840,9 +1774,6 @@ function Game(data){
 		}
 		this.draw();
 		this.drawAllEW();
-		//this.drawAllObstacleMoves();
-
-		//game.drawShipOverlays();
 	}
 
 	this.drawAllMovePlans = function(){
@@ -2033,13 +1964,14 @@ function Game(data){
 								}
 							}
 							else if (action.type == "turn"){
-								action.t[0]++;
-								game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[2]);
-								//action.angle += action.t[2];
+								action.t[0] += 2;
 
 								if (action.t[0] >= action.t[1]){
 									action.animated = true;
+									action.t[0] = action.t[1];
 								}
+
+								game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[2]);
 
 
 								/*
@@ -2364,6 +2296,7 @@ function Game(data){
 	}
 
 	this.resetImageData = function(){
+		if (this.phase == -1){return;}
 		//console.log("resetImageData");
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setPreFireImage();
@@ -2481,11 +2414,11 @@ function Game(data){
 				continue;
 			}
 			else {
-				this.fireOrders[i].setShots();
 				var origin = this.fireOrders[i].shooter.getGamePos();
 				var target = this.fireOrders[i].target.getGamePos();
 				this.fireOrders[i].focus = {x:  (target.x + origin.x) / 2, y:  (target.y + origin.y) / 2}
 				this.fireOrders[i].dist = getDistance({x: origin.x,	y: origin.y}, {x: target.x,	y: target.y});
+				this.fireOrders[i].setShots();
 			}
 		}
 	}
@@ -3174,17 +3107,23 @@ Game.prototype.initOptionsUI = function(){
 					function(){game.drawAllObstacleMoves();},
 					function(){game.redraw();
 				})
-				.click(function(){
-					game.toggleShowNextObstacleMoves();
-			})
-			if (game.phase == -1 || game.phase == 3){
-				game.toggleShowNextObstacleMoves();
-			}
+			//	.click(function(){
+			//		game.toggleShowNextObstacleMoves();
+			//})
+			//if (game.phase == -1 || game.phase == 3){
+			//	game.toggleShowNextObstacleMoves();
+			//}
 		}
 		else if (i == 3){
 			$(this)
-				.addClass("selected")
-				.click(function(){game.toggleDrawMovePaths();});
+				.hover(
+					function(){if (aUnit){return;} game.drawAllMovePlans();},
+					function(){if (aUnit){return;} game.redraw();
+				})
+			//	.click(function(){
+			//		game.toggleDrawAllPlans();
+			//})
+			//game.toggleDrawAllPlans();
 		}
 		else if (i == 4){
 			$(this).click(function(){game.toggleDistMeter();});
@@ -3298,12 +3237,6 @@ Game.prototype.toggleDistMeter = function(){
 		mouseCtx.clearRect(0, 0, res.x, res.y);
 	}
 	else $("#vectorDiv").removeClass("disabled");
-}
-
-Game.prototype.toggleDrawMovePaths = function(){
-	this.drawMoves = !this.drawMoves;
-	$(".optionsWrapper .drawMoves").toggleClass("selected");
-	this.redraw();
 }
 
 Game.prototype.posIsOccupied = function(ship, pos){
@@ -3641,6 +3574,15 @@ Game.prototype.drawShipOverlays = function(){
 	}
 }
 
+Game.prototype.toggleDrawAllPlans = function(){
+	if (this.animating){return;}
+	this.drawPlans = !this.drawPlans;
+	$(".optionsWrapper .drawPlans").toggleClass("selected");
+	salvoCtx.clearRect(0, 0, res.x, res.y);
+	this.drawAllMovePlans();
+
+}
+
 Game.prototype.toggleFriendlyEW = function(){
 	if (this.animating || this.sensorMode){return;}
 	this.showFriendlyEW = !this.showFriendlyEW;
@@ -3695,7 +3637,7 @@ Game.prototype.drawHostileEW = function(){
 }
 
 Game.prototype.drawAllObstacleMoves = function(){
-	if (this.animating || this.sensorMode || this.showObstacleMoves){return;}
+	if (this.animating || this.sensorMode || aUnit){return;}
 	this.showObstacleMoves = 1;
 	for (var i = 0; i < this.ships.length; i++){
 		if (!this.ships[i].obstacle){continue;}
@@ -3886,7 +3828,7 @@ Game.prototype.resolveObstacleMovement = function(){
 
 Game.prototype.handleObstacleMovement = function(){
 	console.log("handleObstacleMovement");
-	this.setUnitMoveDetails();
+	this.prepResolveUnitMovement();
 	game.timeout = setTimeout(function(){
 		game.animObstacles = 1;
 		game.doResolveMovement();
@@ -4035,6 +3977,7 @@ Game.prototype.logWeaponEvents = function(){
 }
 
 Game.prototype.prepResolveUnitMovement = function(){
+	setFPS(90);
 	this.drawingEvents = 0;
 	this.resetImageData();
 	this.setCamera();
@@ -4047,65 +3990,6 @@ Game.prototype.doResolveMovement = function(){
 	this.hideUI();
 	this.animateMovement();
 }
-
-Game.prototype.toggleUI = function(){
-	if (aUnit){
-		unit = game.getUnit(aUnit);
-		if (unit.canTurn()){
-			if (ui.turnButton.is(":visible")){
-				$(ui.turnButton).addClass("disabled");
-			} else $(ui.turnButton).removeClass("disabled");
-		}
-	}
-}
-
-Game.prototype.setShortenInfo = function(e, unit, dist){
-	return;
-	var short = "Shorten: <span class=";
-	var post = "Post: ";
-
-	var last = unit.getLastTurn();
-	var remEP = unit.getRemEP();
-	var remDelay = unit.getRemDelay();
-
-	var aim = remDelay-dist;
-	var multi = aim / last.delay*2;
-	var cost = Math.ceil(multi * last.cost);
-
-	var left;
-	var top;
-
-	
-	if (e){
-		left = e.clientX - $(ui.doShorten).width()/2;
-		top = e.clientY + 50;
-	} else {
-		var pos = unit.getGamePos();
-		var pos = getPointInDir(100, unit.getDrawFacing()-90, pos.x, pos.y);
-		left = pos.x - $(ui.doShorten).width()/2;
-		top = pos.y + 50;
-	}
-
-	if (cost > remEP){
-		short += "'red'>";
-	}
-	else {
-		short += "'green'>";
-		post += "<span class='green'>" + (remEP - cost) + "</span> / " + unit.getEffEP();
-	}
-	
-	short += cost + " TA</span>";
-	
-	$(ui.doShorten)
-		.empty()
-		.append($("<div>").html(short))
-		.append($("<div>").html(post))
-		.data("cost", cost)
-		.data("delay", aim)
-		.css("left", left)
-		.css("top", top)
-}
-
 
 Game.prototype.setPhaseSwitchDiv = function(){
 	$("#phaseSwitchDiv").find("#phaseSwitchInnerDiv")

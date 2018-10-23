@@ -834,6 +834,7 @@ class Ship {
 		else if ($fire->shooter->obstacle){
 			Debug::log("resolveFireOrder OBSTACLE - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots.", type: ".$fire->weapon->dmgType);
 
+			$this->doRollShots($fire);
 			$this->determineObstacleHits($fire);
 		}
 		else {
@@ -863,7 +864,7 @@ class Ship {
 	}
 
 	public function determineObstacleHits($fire){
-		Debug::log("determineObstacleHits ".get_class($this));
+		//Debug::log("determineObstacleHits ".get_class($this).", req: ".$fire->req);
 
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			//Debug::log("roll ".$fire->rolls[$i]);
