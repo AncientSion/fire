@@ -814,6 +814,7 @@
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->ship || $this->ships[$i]->squad){continue;}
 			if (!$this->ships[$i]->hasMoved()){continue;}		
+			if (!$this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1]->new){continue;}
 			$newMoves[] = $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1];
 		}
 
@@ -1114,8 +1115,8 @@
 		$this->testFleetMorale();
 		$this->setPostFireFocusValues();
 
-		$this->handleObstacleMovement();
-		$this->handleServerNewActions();
+		//$this->handleObstacleMovement();
+		//$this->handleServerNewActions();
 
 		$this->handleResolvedFireData();
 
@@ -1251,6 +1252,9 @@
 		$this->handleCommandTransfer();
 		$this->handleFocusGain();
 		$this->pickReinforcements();
+		$this->handleObstacleMovement();
+		$this->handleServerNewActions();
+
 		return true;
 	}
 

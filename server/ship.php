@@ -220,6 +220,7 @@ class Ship {
 				case "Sensor":
 					if ($this->withdraw){
 						$this->primary->systems[$i]->states = [0, 1];
+						$this->primary->systems[$i]->locked = 1;
 					}
 					break;
 			}

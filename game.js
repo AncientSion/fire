@@ -992,7 +992,6 @@ function Game(data){
 		drawCtx.clearRect(0, 0, res.x, res.y);
 	}
 
-
 	this.initDeploy = function(){
 		if (game.turn == 1 && game.phase == -1){
 			cam.z = 0.5;
@@ -1902,7 +1901,7 @@ function Game(data){
 				this.ships[i].toAnimate = true;
 			}
 		}
-		else if (this.phase == 3){
+		else if (this.phase == -1){
 			for (var i = 0; i < this.ships.length; i++){
 				if (!this.ships[i].obstacle){continue;}
 				this.ships[i].toAnimate = true;
@@ -2198,7 +2197,7 @@ function Game(data){
 			window.startTime = then;
 			this.animating = 1;
 			this.animateJumpOut();
-		} else this.DamageControlResolved();
+		} else this.resolveObstacleMovement();
 	}
 
 	this.animateJumpOut = function(){
@@ -2586,13 +2585,15 @@ function Game(data){
 		if (game.phase == 2){
 			this.handleForcedMoves();
 		}
-		else if (game.phase == 3){
+	/*	else if (game.phase == 3){
 			this.setUnitMoveDetails();
 			game.timeout = setTimeout(function(){
 				game.animObstacles = 1;
 				game.doResolveMovement();
 			}, 1500);
 		}
+	*/	else this.animateUnitExplos()
+	
 	}
 
 	this.animateSingleFireOrder = function(i, goOn){
@@ -3880,13 +3881,16 @@ Game.prototype.resolveObstacleMovement = function(){
 	if (!need){
 		this.DamageControlResolved();
 	}
-	else {
-		this.handleObstacleMovement();
-	}
+	else this.handleObstacleMovement();
 }
 
 Game.prototype.handleObstacleMovement = function(){
 	console.log("handleObstacleMovement");
+	this.setUnitMoveDetails();
+	game.timeout = setTimeout(function(){
+		game.animObstacles = 1;
+		game.doResolveMovement();
+	}, 1500);
 }
 
 Game.prototype.hasObstaclesPresent = function(){
