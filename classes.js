@@ -1079,7 +1079,7 @@ FireOrder.prototype.setShots = function(){
 		shots = Math.round(shots * (1 + (0.3 * (this.target.traverse-4))));
 		shots *= this.rolls[3];
 	}
-	this.shots = shots;
+	this.shots = this.guns * shots;
 }
 
 
@@ -1190,12 +1190,10 @@ FireOrder.prototype.addLogStartEntry = function(log){
 	var rollString = this.getRollsString(rolls, req);
 
 	if (this.shooter.salvo){
-		//shots = this.shooter.getShots();
 		hits = this.hits.reduce((a, b) => a+b, 0);
 	}
 	else {
 		for (var i = 0; i < this.guns; i++){
-			//this.shots += this.weapon.getShots();
 			hits += this.hits[i];
 		}
 	}
