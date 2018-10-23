@@ -3485,11 +3485,23 @@ Game.prototype.setCollisionData = function (unit){
 			obstacleId: this.ships[i].id,
 			totalDist: Math.round(totalDist),
 			baseCol: this.ships[i].collision,
+			realCol: this.ships[i].getRealCollisionPct(unit),
+			baseAttacks: this.ships[i].getBaseAttacks(),
+			realAttacks: this.ships[i].getRealAttacks(totalDist),
+			damage: this.ships[i].getDamageString()
+		})
+
+		/*
+		unit.collisions.push({
+			obstacleId: this.ships[i].id,
+			totalDist: Math.round(totalDist),
+			baseCol: this.ships[i].collision,
 			realCol: Math.round(this.ships[i].collision / 100 * totalDist),
 			baseAttacks: this.ships[i].getBaseAttacks(),
 			realAttacks: this.ships[i].getRealAttacks(unit),
 			damage: this.ships[i].getDamageString()
 		})
+		*/
 	}
 }
 

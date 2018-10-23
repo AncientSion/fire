@@ -408,9 +408,14 @@ Obstacle.prototype.getBaseAttacks = function(){
 	return wpn.shots;
 }
 
-Obstacle.prototype.getRealAttacks = function(unit){
+Obstacle.prototype.getRealAttacks = function(dist){
 	var wpn = this.primary.systems[0];
+	return Math.round(wpn.shots / 100 * dist);
 	return Math.round(wpn.shots * (1 + (0.3 * (unit.traverse-4))));
+}
+
+Obstacle.prototype.getRealCollisionPct = function(unit){
+	return Math.round(this.collision * (1 + (0.3 * (unit.traverse-4))));
 }
 
 Obstacle.prototype.getBaseImage = function(){

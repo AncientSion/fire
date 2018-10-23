@@ -593,12 +593,12 @@ Ship.prototype.issueMove = function(pos, dist){
 Ship.prototype.alertCollisions = function(){
 	if (!this.collisions.length){return;}
 	var html = "Collision Alert for " + this.name + " #" + this.id + "</br>";
-		html += "<div>" + getUnitType(this.traverse) + ", size " + this.traverse + " - attack multiplier " + (1+(0.3 * (this.traverse-4))) + "</div>";
+		html += "<div>" + getUnitType(this.traverse) + ", size " + this.traverse + " - collision multiplier " + (1+(0.3 * (this.traverse-4))) + "</div>";
 
 	for (var i = 0; i < this.collisions.length; i++){
 		var col = this.collisions[i];
 		//console.log(unit.collisions[i]);
-		html += "</br><div>#" + col.obstacleId + "</br>Distance " + col.totalDist + " - Risk " + col.baseCol + "% per 100px - Nominal " + col.baseAttacks + " attacks</br>";
+		html += "</br><div>#" + col.obstacleId + "</br>Distance " + col.totalDist + " - Risk " + col.baseCol + "% nominal - " + col.baseAttacks + " attacks per 100px</br>";
 		html += "Result: ";
 		html += "<span class='obstacleWarn yellow'>" + col.realAttacks + "</span> attacks @ <span class='obstacleWarn yellow'>" + col.realCol + "%</span> for <span class='obstacleWarn yellow'>" + col.damage + "</span> Damage";
 	}
@@ -1131,6 +1131,20 @@ Ship.prototype.switchDiv = function(){
 		game.zIndex--;
 		$(this.element).addClass("disabled").css("zIndex", 10);
 	}
+}
+
+Ship.prototype.toggleDivSize = function(){
+	if ($(this.element).find(".structContainer").is(":visible")){
+		$(this.element).find(".structContainer").hide();
+	} else $(this.element).find(".structContainer").show();
+
+	return;
+
+
+
+	if ($(this.element).find(".structContainer").is(":visible")){
+		$(this.element).find(".structContainer").hide();
+	} else $(this.element).find(".structContainer").show();
 }
 
 Ship.prototype.setPreMoveFacing = function(){
@@ -2432,6 +2446,11 @@ Ship.prototype.createBaseDiv = function(){
 	$(table)
 		.append($("<tr>")
 			.append($("<th>").html(this.getHeader()).attr("colSpan", 2).addClass("name " + headerC)))
+			.contextmenu(function(e){
+				e.stopPropagation(); e.preventDefault();
+				var unit = game.getUnit($(this).parent().parent().parent().data("shipId"));
+				unit.toggleDivSize();
+			})
 		.append($("<tr>")
 			.append($("<th>").html(this.getCallSign()).attr("colSpan", 2).addClass(headerC)))
 		.append($("<tr>")
@@ -2727,15 +2746,15 @@ Ship.prototype.expandDiv = function(div){
 						handleWeaponAimEvent(shooter, target, e);
 					}
 				}
-			}).
-			click(function(e){
+			})
+			.click(function(e){
 				if (!game.turn){return;}
 				var shooter = game.getUnit(aUnit);
 				var target = game.getUnit($(this).parent().parent().data("shipId"));
 				if (shooter && target){
 					firePhase({x: 0, y: 0}, shooter, target.id);
 				}
-			}));
+			}))
 
 
 	$(document.body).append(div);
