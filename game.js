@@ -2436,7 +2436,7 @@ function Game(data){
 			this.fireOrders[i].damages = this.fireOrders[i].target.getDmgByFire(this.fireOrders[i]);
 			this.fireOrders[i].systems.push(this.fireOrders[i].weaponid);
 			this.fireOrders[i].angle = getAngleFromTo(this.fireOrders[i].shooter.getGamePos(), this.fireOrders[i].target.getGamePos());
-			this.fireOrders[i].setShots();
+			//this.fireOrders[i].setShots();
 		/*	this.fireOrders[i].setTarget() = game.getUnit(this.fireOrders[i].targetid);
 			this.fireOrders[i].setShooter() = game.getUnit(this.fireOrders[i].shooterid);
 			this.fireOrders[i].setWeapon() = this.fireOrders[i].shooter.getSystem(this.fireOrders[i].weaponid).getActiveSystem();
@@ -2482,6 +2482,7 @@ function Game(data){
 				continue;
 			}
 			else {
+				this.fireOrders[i].setShots();
 				var origin = this.fireOrders[i].shooter.getGamePos();
 				var target = this.fireOrders[i].target.getGamePos();
 				this.fireOrders[i].focus = {x:  (target.x + origin.x) / 2, y:  (target.y + origin.y) / 2}
