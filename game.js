@@ -1969,13 +1969,13 @@ function Game(data){
 									action.animated = true;
 								}
 							}
-							else if (action.type == "r"){//roll
+							else if (action.type[0] == "r"){//roll
 								action.animated = true;
 							}
-							else if (action.type == "f"){//flip
+							else if (action.type[0] == "f"){//flip
 								action.animated = true;
 							}
-							else if (action.type == "p"){//patrol
+							else if (action.type[0] == "p"){//patrol
 								action.animated = true;
 							}
 
