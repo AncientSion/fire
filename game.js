@@ -61,7 +61,7 @@ function Game(data){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.animData = {jump: 15};
+	this.animData = {jump: 30};
 	this.commandChange = {old: 0, new: 0, original: 0}
 	this.subPhase = 1;
 	this.exclusiveSystem = false;
