@@ -3512,7 +3512,7 @@ Ship.prototype.readyForAnim = function(){
 			this.actions[i].animated = 1;
 		}
 		else if (action.type == "turn"){
-			this.actions[i].t = [0, Math.abs(this.actions[i].a*3), this.actions[i].a/Math.abs(this.actions[i].a*3)];
+			this.actions[i].t = [0, Math.abs(this.actions[i].a*2), this.actions[i].a/Math.abs(this.actions[i].a*2)];
 		}
 		else {
 			if (i == 0){
