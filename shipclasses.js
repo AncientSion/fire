@@ -1573,7 +1573,7 @@ Ship.prototype.createMoraleLogEntry = function(){
 	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Severe damage forces " + this.getLogTitleSpan() + " into a morale check.</br>";
 		html += "Chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] + ".</br>"
 
-	if (type == "p"){
+/*	if (type == "p"){
 		html += " <span class='yellow'>Passed !</span class='yellow'>";
 	}
 	else {
@@ -1592,9 +1592,34 @@ Ship.prototype.createMoraleLogEntry = function(){
 			}
 		}
 	}
+*/
+	if (type == "p"){
+		html += " <span class='yellow'>Passed !</span class='yellow'>";
+	}
+	else if (type == "f"){
+		html += "<span class='yellow'> Failed ! (Severity Roll: " + numbers[2] + ", Morale Modifier: " + (numbers[3]-numbers[2]) + " = " + numbers[3] +")</span></br>";
+	}
 
 
-	//if (!effect){html += "The unit suffers no penalty.</td>";}
+	var effect = 0;
+	if (this.actions.length && this.actions[this.actions.length-1].type == "jumpOut"){
+		html += "The unit <span class='yellow'> is routed</span>.";
+		effect = 1;
+	}
+	else {
+		var command = this.getSystemByName("Command");
+		for (var i = 0; i < command.crits.length; i++){
+			if (command.crits[i].turn != game.turn || command.crits[i].duration != -2){continue;}
+			html += "The unit is subject to <span class='yellow'>" + command.crits[i].value + "% " + command.crits[i].type + "</span>.";
+			effect = 1;
+		}
+	}
+
+	if (!effect){
+		html += "The crew stays strong.";
+	}
+
+	html += "</td>";
 
 	this.attachLogEntry(html);
 	return true;
