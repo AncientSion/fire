@@ -599,7 +599,7 @@ Ship.prototype.alertCollisions = function(){
 		var col = this.collisions[i];
 		//console.log(unit.collisions[i]);
 		html += "</br><div>#" + col.obstacleId + "</br>Nominal risk " + col.baseCol + "% and " + col.baseAttacks + " attacks per 100px</br>";
-		html += "<span class='obstacleWarn yellow'>" + col.totalDist + "</span> istance: ";
+		html += "<span class='obstacleWarn yellow'>" + col.totalDist + "</span> distance: ";
 		html += "<span class='obstacleWarn yellow'>" + col.realAttacks + "</span> attacks @ <span class='obstacleWarn yellow'>" + col.realCol + "%</span> for <span class='obstacleWarn yellow'>" + col.damage + "</span> Damage</br>";
 	}
 	popup(html);
@@ -1594,7 +1594,7 @@ Ship.prototype.createMoraleLogEntry = function(){
 	}
 */
 	if (type == "p"){
-		html += " <span class='yellow'>Passed !";
+		html += " <span class='yellow'>Passed ! (-30 on effect roll)";
 	}
 	else if (type == "f"){
 		html += "<span class='yellow'> Failed !";
