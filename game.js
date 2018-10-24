@@ -1790,6 +1790,7 @@ function Game(data){
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].flight || this.ships[i].salvo){continue;}
+			if (this.ships[i].obstacle && this.phase != -1){continue;}
 			minX = Math.min(minX, this.ships[i].x);
 			maxX = Math.max(maxX, this.ships[i].x);
 			minY = Math.min(minY, this.ships[i].y);
