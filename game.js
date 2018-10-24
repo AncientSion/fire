@@ -3768,6 +3768,7 @@ Game.prototype.setCamera = function(){
 	var center = {x: endX, y: endY}
 
 	for (var i = 0; i < this.ships.length; i++){
+		if (this.ships[i].obstacle && this.phase != -1){continue;}
 		var d = getDistance(center, this.ships[i].getCameraStartPos());
 		maxD = Math.max(d, maxD);
 	}
