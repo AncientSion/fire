@@ -1971,7 +1971,7 @@ function Game(data){
 									action.t[0] = action.t[1];
 								}
 
-								game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[2]);
+								game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[1]);
 
 
 								/*
