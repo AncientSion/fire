@@ -1951,8 +1951,7 @@ function Game(data){
 							}
 
 
-							if (action.type == "move"){
-								//	console.log(action.v);
+							if (action.type[0] == "m"){
 								action.v.t[0] += 1;
 								game.ships[i].drawX += action.v.x * 1 / action.v.t[1];
 								game.ships[i].drawY += action.v.y * 1 / action.v.t[1];
@@ -1963,15 +1962,15 @@ function Game(data){
 									if (game.ships[i].doesContinueRolling()){game.ships[i].createStillRollingEntry()}
 								}
 							}
-							else if (action.type == "turn"){
+							else if (action.type[0] == "t"){
 								action.t[0] += 2;
+								game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, 2);
 
 								if (action.t[0] >= action.t[1]){
 									action.animated = true;
+									game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, -(action.t[1] - action.t[0]));
 									action.t[0] = action.t[1];
-									game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[1]);
 								}
-
 
 								/*
 								var step = 1;
