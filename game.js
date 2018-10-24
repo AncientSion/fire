@@ -1950,8 +1950,7 @@ function Game(data){
 								continue;
 							}
 
-
-							if (action.type[0] == "m"){
+							if (action.type[0] == "m"){ // move
 								action.v.t[0] += 1;
 								game.ships[i].drawX += action.v.x * 1 / action.v.t[1];
 								game.ships[i].drawY += action.v.y * 1 / action.v.t[1];
@@ -1962,49 +1961,24 @@ function Game(data){
 									if (game.ships[i].doesContinueRolling()){game.ships[i].createStillRollingEntry()}
 								}
 							}
-							else if (action.type[0] == "t"){
-								action.t[0] += 2;
-								game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, 2);
+							else if (action.type[0] == "t"){ // turn
+								action.t[0]++;
+								game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[2]);
 
 								if (action.t[0] >= action.t[1]){
 									action.animated = true;
-									game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, -(action.t[1] - action.t[0]));
-									action.t[0] = action.t[1];
 								}
-
-								/*
-								var step = 1;
-								if (action.a > 0){
-									game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, step);
-									action.angle -= step;
-								}
-								else {
-									game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, -step);
-									action.angle += step;
-								}
-								
-								if (action. == 0){
-									action.animated = true;
-								}
-								*/
 							}
-							else if (action.type == "roll"){
+							else if (action.type == "r"){//roll
 								action.animated = true;
-								//game.ships[i].createActionEntry();
 							}
-							else if (action.type == "flip"){
+							else if (action.type == "f"){//flip
 								action.animated = true;
-								//game.ships[i].createActionEntry();
 							}
-							else if (action.type == "patrol"){
+							else if (action.type == "p"){//patrol
 								action.animated = true;
 							}
 
-							//for (var k = 0; k < game.ships[i].attachAnims.length; k++){
-							//		game.ships[i].attachAnims[k].drawX = game.ships[i].drawX;
-							//ame.ships[i].attachAnims[k].drawY = game.ships[i].drawY;
-							//}
-							
 							break;
 						}
 					}
