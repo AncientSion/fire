@@ -1571,7 +1571,7 @@ Ship.prototype.createMoraleLogEntry = function(){
 	if (numbers[0] == 100){return;}
 
 	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Severe damage forces " + this.getLogTitleSpan() + " into a morale check.</br>";
-		html += "Chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] + ".</br>"
+		html += "Initial chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] + " - ";
 
 /*	if (type == "p"){
 		html += " <span class='yellow'>Passed !</span class='yellow'>";
@@ -1594,11 +1594,15 @@ Ship.prototype.createMoraleLogEntry = function(){
 	}
 */
 	if (type == "p"){
-		html += " <span class='yellow'>Passed !</span class='yellow'>";
+		html += " <span class='yellow'>Passed !";
 	}
 	else if (type == "f"){
-		html += "<span class='yellow'> Failed ! (Severity Roll: " + numbers[2] + ", Morale Modifier: " + (numbers[3]-numbers[2]) + " = " + numbers[3] +")</span></br>";
+		html += "<span class='yellow'> Failed !";
 	}
+	html += "</span></br>";
+
+	html +=	"The unit rolled " + numbers[2] + " on effect, modified by " + (numbers[3]-numbers[2]) + " due to morale for a total of <span class='yellow'> " + numbers[3] +"</span></br>";
+
 
 
 	var effect = 0;
