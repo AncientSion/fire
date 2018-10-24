@@ -1969,9 +1969,8 @@ function Game(data){
 								if (action.t[0] >= action.t[1]){
 									action.animated = true;
 									action.t[0] = action.t[1];
+									game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[1]);
 								}
-
-								game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[1]);
 
 
 								/*
