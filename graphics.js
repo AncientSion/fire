@@ -46,6 +46,12 @@ window.graphics = {
 		this.images.vector = new Image();
 		this.images.vector.src = "varIcons/vector.png";
 
+		this.images.collision = new Image();
+		this.images.collision.src = "varIcons/collision.png";
+
+		this.images.interference = new Image();
+		this.images.interference.src = "varIcons/interference.png";
+
 		this.images.rocks = [];
 
 		for (var i = 1; i <= 11; i++){

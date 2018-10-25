@@ -361,25 +361,65 @@ Obstacle.prototype.setImage = function(){
 	ctx.translate(-vectorPos.x, -vectorPos.y);
 	*/
 
-	var vectorPos = getPointInDir(this.size-3, this.facing, 0, 0);
+	var vectorStart = getPointInDir(60, this.facing, 0, 0);
+	var vectorEnd = getPointInDir(this.size-63, this.facing, vectorStart.x, vectorStart.y);
 
 	ctx.beginPath();
-	ctx.moveTo(0, 0);
-	ctx.lineTo(vectorPos.x, vectorPos.y);
+	ctx.moveTo(vectorStart.x, vectorStart.y);
+	ctx.lineTo(vectorEnd.x, vectorEnd.y);
 	ctx.closePath();
 	ctx.lineWidth = 3;
-	ctx.strokeStyle = "yellow";
+	ctx.strokeStyle = "white";
 	ctx.stroke();
-	
-	ctx.clearRect(-50, -25, 100, 50);
-	
+
+	var vectorSize = 60;
+
+	ctx.drawImage(
+		graphics.images.interference,
+		0 -vectorSize/2,
+		0 -30 -vectorSize/2,
+		vectorSize, 
+		vectorSize
+	);
+
 	ctx.fillStyle = "yellow";
 	ctx.font = "24px Arial";
 	ctx.textAlign = "center";
-	ctx.fillText(this.getMaxInterference() + "%", 0, -2);
-	var wpn = this.primary.systems[0];
-	ctx.fillText((this.collision + "% / " + wpn.shots + "x " + (Math.round(wpn.minDmg + wpn.maxDmg)/2)), 0, 20);
+	ctx.fillText(this.getMaxInterference(), 0, 0 - 25)
+
+
+
+	var vectorSize = 80;
+
+	ctx.drawImage(
+		graphics.images.collision,
+		0 -vectorSize/2,
+		0 + 40 -vectorSize/2,
+		vectorSize, 
+		vectorSize
+	);
+
+	ctx.fillStyle = "black";
+	ctx.font = "24px Arial";
+	ctx.textAlign = "center";
+	ctx.fillText(this.collision, 0, 0 + 45)
+
+
+
+
+
+
 	
+/*	ctx.clearRect(-40, -40, 80, 80);
+	
+	ctx.fillStyle = "white";
+	ctx.font = "24px Arial";
+	ctx.textAlign = "center";
+	ctx.fillText(this.getMaxInterference() + "%", 0, -18);
+	ctx.fillText(this.collision + "%", 0, 12);
+	var wpn = this.primary.systems[0];
+	ctx.fillText(wpn.shots + "x " + Math.round((wpn.minDmg + wpn.maxDmg)/2), 0, 37);
+*/	
 
 	ctx.setTransform(1,0,0,1,0,0);
 	this.img = t;
