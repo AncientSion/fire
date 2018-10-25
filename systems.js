@@ -2707,7 +2707,6 @@ function Dual(system){
 	this.modes = system.modes;
 	this.states = system.states;
 	this.dual = 1;
-	this.weapons;
 
 	this.initSubWeapons(system.weapons);
 }
@@ -2741,6 +2740,7 @@ Dual.prototype.init = function(){
 		if (this.states[i]){
 			for (var j = 0; j < this.powers.length; j++){
 				if (this.powers[j].turn == game.turn && this.powers[j].type > 0){
+					console.log("push");
 					w.powers.push(this.powers[j]);
 				}
 			}

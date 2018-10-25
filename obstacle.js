@@ -46,6 +46,7 @@ Obstacle.prototype.drawMovePlan = function(){
 
 
 Obstacle.prototype.drawNextMove = function(){
+	if (game.phase == 2){return;}
 	planCtx.translate(cam.o.x, cam.o.y);
 	planCtx.scale(cam.z, cam.z);
 
@@ -370,13 +371,14 @@ Obstacle.prototype.setImage = function(){
 	ctx.strokeStyle = "yellow";
 	ctx.stroke();
 	
-	ctx.clearRect(-40, -25, 80, 50);
+	ctx.clearRect(-50, -25, 100, 50);
 	
 	ctx.fillStyle = "yellow";
 	ctx.font = "24px Arial";
 	ctx.textAlign = "center";
 	ctx.fillText(this.getMaxInterference() + "%", 0, -2);
-	ctx.fillText(this.getBaseCollision() + "% / " + this.getBaseAttacks(), 0, 20);
+	var wpn = this.primary.systems[0];
+	ctx.fillText((this.collision + "% / " + wpn.shots + "x " + (Math.round(wpn.minDmg + wpn.maxDmg)/2)), 0, 20);
 	
 
 	ctx.setTransform(1,0,0,1,0,0);

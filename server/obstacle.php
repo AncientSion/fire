@@ -22,8 +22,8 @@ class Obstacle extends Mixed {
         $this->scale = $data["flipped"];
 
        // $this->curImp = round($this->curImp * 125 / $this->size / $this->rockSize * 2);
-        $this->interference = round($this->density / 2 * $this->rockSize);
-        $this->collision = round($this->interference / 25 * $this->curImp);
+        $this->interference = round($this->density / 4 * $this->rockSize);
+        $this->collision = round($this->interference / 15 * $this->curImp);
 	}	
 
 	public function getDeployState($turn){

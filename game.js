@@ -3329,7 +3329,7 @@ Game.prototype.setObstacleData = function(){
 Game.prototype.setCollisionData = function (unit){
 	if (unit.obstacle){return;}
 	if (unit.flight || unit.salvo){return;}
-	console.log("___setCollisionData for unit " + unit.id);
+	//console.log("___setCollisionData for unit " + unit.id);
 
 	unit.collisions = [];
 	var unitPos = unit.getGamePos();
@@ -3343,7 +3343,10 @@ Game.prototype.setCollisionData = function (unit){
 		var totalDist = 0;
 		var distBetween = getDistance(unitPos, tPos) - obstacle.size/2 - unitSpeed;
 		
-		if (distBetween > 200){console.log("dist ship/field #" + this.ships[i].id+": "+distBetween+", skip"); continue;}
+		if (distBetween > 200){
+			//console.log("dist ship/field #" + this.ships[i].id+": "+distBetween+", skip");
+			continue;
+		}
 
 		for (var j = 0; j < unit.actions.length; j++){
 			var action = unit.actions[j];
