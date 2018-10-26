@@ -46,7 +46,7 @@ Obstacle.prototype.drawMovePlan = function(){
 
 
 Obstacle.prototype.drawNextMove = function(){
-	if (game.phase == 2){return;}
+	if (game.phase == 2  || (game.phase == 3 && aUnit)){return;}
 	planCtx.translate(cam.o.x, cam.o.y);
 	planCtx.scale(cam.z, cam.z);
 
@@ -318,7 +318,7 @@ Obstacle.prototype.setImage = function(){
 	for (var i = 0; i < amount; i++){
 
 		var rota = range(0, 360);
-		var d = range(0, this.size* 0.9);
+		var d = range(30, this.size* 0.9);
 		var loc = getPointInDir(d, range(0, 360), 0, 0);
 
 		var size = range(7, 10) + (rockSize)*15;
@@ -377,49 +377,24 @@ Obstacle.prototype.setImage = function(){
 	ctx.drawImage(
 		graphics.images.interference,
 		0 -vectorSize/2,
-		0 -30 -vectorSize/2,
+		0 -40 -vectorSize/2,
 		vectorSize, 
 		vectorSize
 	);
 
-	ctx.fillStyle = "yellow";
+	ctx.fillStyle = "white";
 	ctx.font = "24px Arial";
 	ctx.textAlign = "center";
-	ctx.fillText(this.getMaxInterference(), 0, 0 - 25)
+	ctx.fillText(this.getMaxInterference(), 0, 0 - 35)
 
-
-
-	var vectorSize = 80;
-
-	ctx.drawImage(
-		graphics.images.collision,
-		0 -vectorSize/2,
-		0 + 40 -vectorSize/2,
-		vectorSize, 
-		vectorSize
-	);
-
-	ctx.fillStyle = "black";
-	ctx.font = "24px Arial";
-	ctx.textAlign = "center";
-	ctx.fillText(this.collision, 0, 0 + 45)
-
-
-
-
-
-
-	
-/*	ctx.clearRect(-40, -40, 80, 80);
+	ctx.clearRect(-40, -7, 80, 50);
 	
 	ctx.fillStyle = "white";
 	ctx.font = "24px Arial";
 	ctx.textAlign = "center";
-	ctx.fillText(this.getMaxInterference() + "%", 0, -18);
 	ctx.fillText(this.collision + "%", 0, 12);
 	var wpn = this.primary.systems[0];
 	ctx.fillText(wpn.shots + "x " + Math.round((wpn.minDmg + wpn.maxDmg)/2), 0, 37);
-*/	
 
 	ctx.setTransform(1,0,0,1,0,0);
 	this.img = t;

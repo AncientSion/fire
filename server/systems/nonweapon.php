@@ -206,6 +206,7 @@ class Sensor extends PrimarySystem {
 		for ($k = sizeof($this->ew)-1; $k >= 0; $k--){
 			if ($this->ew[$k]->turn == $turn){
 				array_splice($this->ew, $k, 1);
+				$this->states = array(1, 0);
 			} else break;
 		}
     }

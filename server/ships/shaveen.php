@@ -26,11 +26,11 @@ class Shaveen extends SuperLight {
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-			$right->systems[] = new TwinEMProjector($this->getId(), $this->id, 300, 120);
+			$right->systems[] = new TwinEMProjector($this->getId(), $this->parentId, 300, 120);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-			$left->systems[] = new TwinEMProjector($this->getId(), $this->id, 240, 60);
+			$left->systems[] = new TwinEMProjector($this->getId(), $this->parentId, 240, 60);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

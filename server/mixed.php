@@ -319,6 +319,7 @@ class Mixed extends Ship {
 	}
 
 	public function addSubUnits($elements){
+		Debug::log("add subs to #".$this->id.", element len ".sizeof($elements));
 		for ($i = 0; $i < sizeof($elements); $i++){
 			for ($j = 1; $j <= $elements[$i]["amount"]; $j++){
 				$this->structures[] = new $elements[$i]["name"]($this->getId(), $this->id);

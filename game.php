@@ -594,37 +594,19 @@
 					}
 
 					game.handlePostFireMoves();
-					return;
-
-					if (game.unitExploAnims.length){
-						game.createPlaceHolderEntry();
-						for (var i = 0; i < game.unitExploAnims.length; i++){
-							game.unitExploAnims[i].done = 1;
-							game.unitExploAnims[i].animating = 0;
-							for (var j = 0; j < game.unitExploAnims[i].entries.length; j++){
-								game.unitExploAnims[i].entries[j].u.doDestroy();
-							}
-						}
-					}
-
-					game.fireResolved();
 				}
 				else if (e.keyCode == 109){ // m, cancel move animation
-					if (!game.animating){return;}
-					if (game.phase < 1 || game.phase > 2){return;}
-
+					if (!game.animating || !game.animMoves){return;}
 					window.cancelAnimationFrame(anim);
-				/*	for (var i = 0; i < game.ships.length; i++){
-						if (game.ships[i].focus+1 > game.phase){continue;}
-						game.ships[i].setPostMovePosition();
-						game.ships[i].drawFacing = game.ships[i].getPlannedFacing();
-				1}
-*/
-					game.animShip = 1; game.animFlight = 1; game.animSalvo = 1; game.animObstacles = 1;
-					game.endMoveSubPhase();
-					game.animShip = 0; game.animFlight = 0; game.animSalvo = 0; game.animObstacles = 0;
 
-					game.moveResolved();
+					if (game.phase == -1){
+						game.finishMoveSubPhase();
+					}
+					else {
+						game.animShip = 0; game.animFocus = 0;
+						game.animFlight = 0; game.animSalvo = 1;
+						game.finishMoveSubPhase();
+					}
 					game.draw();
 				}
 			}

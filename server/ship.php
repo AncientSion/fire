@@ -355,7 +355,10 @@ class Ship {
 				$this->structures[$i]->systems[$j]->doHidePowerOrders($turn);
 			}
 		}
-		//if (!$this->ship){return;}
+	}
+
+	public function hideSpecials($turn){
+		if (!$this->ship && !$this->squad){return;}
 
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 			if ($this->primary->systems[$i]->name == "Sensor"){

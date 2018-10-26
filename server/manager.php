@@ -236,6 +236,7 @@
 					$this->ships[$i]->hideAllPowers($this->turn);
 					$this->ships[$i]->hideFireOrders($this->turn, $this->phase);
 					$this->ships[$i]->hideActions($this->phase);
+					$this->ships[$i]->hideSpecials($this->turn);
 				} break;
 			case 0: 
 				for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -251,7 +252,7 @@
 				for ($i = 0; $i < sizeof($this->ships); $i++){
 					if ($this->ships[$i]->userid == $this->userid){continue;}
 					$this->ships[$i]->hideFireOrders($this->turn, $this->phase);
-					if ($this->ships[$i]->flight){ // flights pick fpialmode in firing phase
+					if ($this->ships[$i]->flight){ // flights pick firemode in firing phase
 						$this->ships[$i]->hideAllPowers($this->turn);
 					}
 				} break;
@@ -774,7 +775,7 @@
 				//$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "", "deployed", 0, 0, 0, 0, 0, 0, 0, 0, "");
 				$this->ships[] = new Salvo(
 					array(
-						"id" => $units[$i]["id"], "userid" => $units[$i]["userid"], "command" => 0, "available" => $this->turn, "withdraw" => 0, "callsign" => "",
+						"id" => $units[$i]["id"], "userid" => $units[$i]["userid"], "command" => 0, "available" => $this->turn, "withdraw" => 0, "manual" => 0, "callsign" => "",
 						"totalCost" => 0, "moraleCost" => 0, "status" => "deployed", "destroyed" => 0, "x" => 0, "y" => 0, "facing" => 270, "delay" => 0, "thrust" => 0, 
 						"rolling" => 0, "rolled" => 0, "flipped" => 0, "focus" => 0, "notes" => ""
 					)

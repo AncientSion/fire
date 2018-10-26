@@ -519,13 +519,14 @@
 			$missions = array();
 
 			for ($i = 0; $i < sizeof($units); $i++){
+				Debug::log("type ".$units[$i]["type"]);
 				$type = 0;
 				$status = "deployed";
 
 				if ($units[$i]["type"] == "Salvo"){
 					$type = 1;
 				}
-				if ($units[$i]["type"] == "Flight"){
+				else if ($units[$i]["type"] == "Flight"){
 					$type = 2;
 				}
 				else if ($units[$i]["type"] == "Squadron"){
@@ -561,7 +562,7 @@
 					if ($type && $type < 3){
 						$units[$i]["mission"]["unitid"] = $id;
 
-						if ($type == 1){ // new salvo or flight, negative id on client yet
+						if ($type == 2){ // new salvo or flight, negative id on client yet
 							for ($j = 0; $j < sizeof($units); $j++){
 								if (isset($units[$j]["mission"]) && $units[$j]["mission"]["targetid"] == $units[$i]["clientId"]){
 									$units[$j]["mission"]["targetid"] = $id;

@@ -33,7 +33,8 @@ class Salvo extends Mixed {
 	}
 
 	public function setCurSpeed($turn, $phase){
-		//Debug::log("setCurSpeed ".get_class($this));
+		//Debug::log("setCurSpeed ".get_class($this).", size ".sizeof($this->structures));
+		//Debug::trace();
 
 		if ($this->available == $turn && $phase == -1){$this->curImp = 0; return;}
 		
@@ -54,7 +55,7 @@ class Salvo extends Mixed {
 	public function getTurnStartPosition(){
 		if ($this->torpedo){return $this->actions[0];}
 		if ($this->missile && $this->available == $this->actions[sizeof($this->actions)-1]->turn){return $this->actions[0];}
-		return new Point($this->, $this->y);
+		return new Point($this->x, $this->y);
 	}
 
 	public function getFireAngle($fire){

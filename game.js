@@ -64,6 +64,7 @@ function Game(data){
 	this.animData = {jump: 30};
 	this.commandChange = {old: 0, new: 0, original: 0}
 	this.subPhase = 1;
+	this.animMoves = 0;
 	this.exclusiveSystem = false;
 	this.obstacleDataSet = 0;
 
@@ -950,6 +951,21 @@ function Game(data){
 		return false;
 	}
 
+	this.resetFireOrders = function(){
+		for (let i = 0; i < this.fireOrders.length; i++){
+			if (this.fireOrders[i].animated){
+				this.fireOrders[i].animated = 0;
+				this.fireOrders[i].animating = 0;
+			}
+		}
+	}
+
+	this.setAllObstaclesNextMoves = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].obstacle){this.ships[i].setNextMove();}
+		}
+	}
+
 	this.endMoveSubPhase = function(){
 		//console.log("endMoveSubPhase")
 		for (var i = 0; i < this.ships.length; i++){
@@ -979,26 +995,13 @@ function Game(data){
 		}
 	}
 
-	this.resetFireOrders = function(){
-		for (let i = 0; i < this.fireOrders.length; i++){
-			if (this.fireOrders[i].animated){
-				this.fireOrders[i].animated = 0;
-				this.fireOrders[i].animating = 0;
-			}
-		}
-	}
-
-	this.setAllObstaclesNextMoves = function(){
-		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].obstacle){this.ships[i].setNextMove();}
-		}
-	}
 
 	this.moveResolved = function(){
 		console.log("moveResolved");
 
 		this.subPhase = 2;
 		this.animating = 0;
+		this.animMoves = 0;
 		this.setPostMoveCC();
 		this.checkUnitOffsetting();
 
@@ -1014,6 +1017,17 @@ function Game(data){
 		}
 		else if (this.phase == -1){
 			this.setAllObstaclesNextMoves();
+			for (var i = 0; i < this.ships.length; i++){
+				if (!this.ships[i].obstacle){continue;}
+				this.ships[i].setPostMoveFacing();
+				this.ships[i].setPostMovePosition();
+			}
+		}
+
+		for (var i = 0; i < this.ships.length; i++){
+			if (!this.ships[i].hasMoved()){continue;}
+			this.ships[i].setPostMoveFacing();
+			this.ships[i].setPostMovePosition();
 		}
 
 		for (var i = 0; i < this.ships.length; i++){
@@ -2049,9 +2063,8 @@ function Game(data){
 			this.animateUnitExplos();
 		}
 		else if (this.animObstacles){ // phase 3 post fire
-			this.animObstacles = 0; 
 			game.timeout = setTimeout(function(){
-				game.endMoveSubPhase();
+				game.animObstacles = 0; 
 				game.moveResolved();
 			}, 1000);
 		}
@@ -2077,7 +2090,6 @@ function Game(data){
 			else if (this.animSalvo){
 				this.animSalvo = 0;
 				game.timeout = setTimeout(function(){
-				game.endMoveSubPhase();
 				game.moveResolved();
 				}, time);
 			}
@@ -3964,6 +3976,7 @@ Game.prototype.prepResolveUnitMovement = function(){
 Game.prototype.doResolveMovement = function(){
 	if (aUnit){game.getUnit(aUnit).select();}
 	this.animating = 1;
+	this.animMoves = 1;
 	this.hideUI();
 	this.animateMovement();
 }
