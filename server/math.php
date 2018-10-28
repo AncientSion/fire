@@ -9,8 +9,13 @@ class Math {
 		// Calculate the euclidean distance between a & b
 		$eDistAtoB = sqrt(pow($b->x - $a->x, 2) + pow($b->y - $a->y, 2));
 
+		if (!$eDistAtoB){
+			Debug::log("---------------------------------dieA");
+			Debug::trace();
+			die();
+		}
 		// compute the direction vector d from a to b
-		$d = new Point(($b->x-$a->x) / $eDistAtoB, ($b->y-$a->y) / $eDistAtoB);
+		$d = new Point(($b->x - $a->x) / $eDistAtoB, ($b->y - $a->y) / $eDistAtoB);
 
 		// Now the line equation is x = dx*t + ax, y = dy*t + ay with 0 <= t <= 1.
 

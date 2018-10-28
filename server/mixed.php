@@ -22,7 +22,7 @@ class Mixed extends Ship {
 	}
 
 	public function setUnitState($turn, $phase){
-		Debug::log("setUnitState #".$this->id." ".get_class($this));
+		//Debug::log("setUnitState #".$this->id." ".get_class($this));
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->setSubunitState($turn, $phase);
 		}
@@ -319,7 +319,7 @@ class Mixed extends Ship {
 	}
 
 	public function addSubUnits($elements){
-		Debug::log("add subs to #".$this->id.", element len ".sizeof($elements));
+		//Debug::log("add subs to #".$this->id.", element len ".sizeof($elements));
 		for ($i = 0; $i < sizeof($elements); $i++){
 			for ($j = 1; $j <= $elements[$i]["amount"]; $j++){
 				$this->structures[] = new $elements[$i]["name"]($this->getId(), $this->id);

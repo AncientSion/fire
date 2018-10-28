@@ -2317,7 +2317,7 @@ Warhead.prototype.getAnimation = function(fire){
 
 			if (fire.target.ship){
 				if (this instanceof Warhead){
-					dest = getPointInDir(t.size/3 * (range(7, 13)/10), a, p.x + range(-4, 4), p.y + range(-4, 4));
+					dest = getPointInDir(fire.target.size/3 * (range(7, 13)/10), fire.angle, p.x + range(-4, 4), p.y + range(-4, 4));
 				} 
 				else dest = getPointInDir(range(10, fire.target.size/3), range(0, 360), p.x, p.y);
 			} 

@@ -1297,7 +1297,6 @@
 			//Debug::log("position #".$this->ships[$i]->id.": ".$oPos->x."/".$oPos->y);
 			for ($j = $i+1; $j < sizeof($this->ships); $j++){
 				if ($this->ships[$i]->userid == $this->ships[$j]->userid){continue;}
-				//Debug::log("POSITION #".$this->ships[$i]->id.": ".$oPos->x."/".$oPos->y);
 				$tPos = $this->ships[$j]->getCurPos();
 				$dist = Math::getDist2($oPos, $tPos);
 				
@@ -1311,16 +1310,17 @@
 
 				if ($this->ships[$i]->obstacle || $this->ships[$j]->obstacle){continue;}
 				if ($this->phase != 2){continue;}
+				if ($oPos->x == $tPos->x && $oPos->y == $tPos->y){Debug::log("same position, continue"); continue;}
 				//Debug::log("TO ".$this->ships[$j]->id." / " .$this->ships[$j]->display);
 				//Debug::log("position #".$this->ships[$j]->id.": ".$tPos->x."/".$tPos->y);
 
 				for ($k = 0; $k < sizeof($this->ships); $k++){
 					if (!$this->ships[$k]->obstacle){continue;}
-					//if ($this->ships[$k]->id != 25){continue;}
 
 					$blockPos = $this->ships[$k]->getCurPos();
 					//Debug::log("checking if ".$this->ships[$k]->display." / " .$this->ships[$k]->id." is in path");
 					//Debug::log("position #".$this->ships[$j]->id.": ".$blockPos->x."/".$blockPos->y);
+
 
 					$result = Math::isInPath($oPos, $tPos, $blockPos, $this->ships[$k]->size/2);
 
@@ -1680,10 +1680,11 @@
 
 				//Debug::log("salvo #".$this->ships[$i]->id." arrived!");
 				$target = $this->getUnit($this->ships[$i]->mission->targetid);
-				$fire = new FireOrder(0, $gameid, $turn, $this->ships[$i]->id, $target->id, 0, 0, 2, 0, 0, "", 0, 0);
+				$fire = new FireOrder(0, $this->gameid, $this->turn, $this->ships[$i]->id, $target->id, 0, 0, 2, 0, 0, "", 0, 0);
+				$fire->shooter = $this->ships[$i];
 				$fire->weapon = $this->ships[$i]->structures[0]->systems[0];
 				$fire->target = $target;
-				$fire->shooter = $this;
+				$fire->shots = $fire->shooter->getShots($this->turn);
 
 				$fires[] = $fire;
 			}

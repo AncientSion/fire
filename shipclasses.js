@@ -1573,37 +1573,9 @@ Ship.prototype.createMoraleLogEntry = function(){
 	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Severe damage forces " + this.getLogTitleSpan() + " into a morale check.</br>";
 		html += "Initial chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] + " - ";
 
-/*	if (type == "p"){
-		html += " <span class='yellow'>Passed !</span class='yellow'>";
-	}
-	else {
-		html += "<span class='yellow'> Failed ! (Severity: Roll " + numbers[2] + " + " + (numbers[3]-numbers[2]) + " = " + numbers[3] +")</span></br>";
-		var effect = 0;
-		if (this.actions.length && this.actions[this.actions.length-1].type == "jumpOut"){
-			html += "The unit <span class='yellow'> is routed</span>.</td>";
-			effect = 1;
-		}
-		else {
-			var command = this.getSystemByName("Command");
-			for (var i = 0; i < command.crits.length; i++){
-				if (command.crits[i].turn != game.turn || command.crits[i].duration != -2){continue;}
-				html += "The unit is subject to <span class='yellow'>" + command.crits[i].value + "% " + command.crits[i].type + "</span>.</td>";
-				effect = 1;
-			}
-		}
-	}
-*/
-	if (type == "p"){
-		html += " <span class='yellow'>Passed ! (-30 on effect roll)";
-	}
-	else if (type == "f"){
-		html += "<span class='yellow'> Failed !";
-	}
-	html += "</span></br>";
+		html += "<span class='yellow'>" + ((type == "p") ? " Passed ! (-30 on final severity)" : " Failed !") +"</span></br>";
 
-	html +=	"The unit rolled " + numbers[2] + " on effect, modified by " + (numbers[3]-numbers[2]) + " due to morale for a total of <span class='yellow'> " + numbers[3] +"</span></br>";
-
-
+		html +=	"The unit rolled " + numbers[2] + " on effect, modified by a combined " + (numbers[3]-numbers[2]) + " for a total of <span class='yellow'> " + numbers[3] +".</span></br>";
 
 	var effect = 0;
 	if (this.actions.length && this.actions[this.actions.length-1].type == "jumpOut"){
@@ -1620,7 +1592,7 @@ Ship.prototype.createMoraleLogEntry = function(){
 	}
 
 	if (!effect){
-		html += "The crew stays strong.";
+		html += "Just a normal day in space.";
 	}
 
 	html += "</td>";

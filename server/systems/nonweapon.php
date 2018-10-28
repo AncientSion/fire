@@ -195,7 +195,7 @@ class Sensor extends PrimarySystem {
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
 		$this->powerReq = floor($output/60);
-		$this->effiency = floor($this->powerReq/9)+2;
+		$this->effiency = floor($this->powerReq/4)+1;
 		$this->boostEffect[] = new Effect("Output", 10);
         parent::__construct($id, $parentId, $integrity, $output, $width);
     }

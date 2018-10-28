@@ -88,7 +88,8 @@ class MissileLauncher extends Launcher {
 class TorpedoLauncher extends MissileLauncher {
 	public $name = "TorpedoLauncher";
 	public $display = "Torpedo Launcher";
-	public $powerReq = 4;	
+	public $powerReq = 4;
+
 	public $critEffects =  array( // type, mag, dura, effect
 		array("Max Range", 80, 0, 0),
 		array("Ammo Amount", 120, 0, 0),
@@ -98,4 +99,5 @@ class TorpedoLauncher extends MissileLauncher {
 	function __construct($id, $parentId, $start, $end, $integrity, $loads, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $integrity, $loads, $width);
 	}
+
 }

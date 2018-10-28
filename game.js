@@ -1237,7 +1237,7 @@ function Game(data){
 				var html = "<td colSpan=9 style='padding: 10px'><span style='font-size: 12px; font-weight: bold'><span class='yellow'>" + this.playerstatus[i].username + "'</span> is subject to a fleetwide morale check.</br>";
 					html += "Chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] + ".</br>"
 
-					html += "<span class='yellow'>" + ((type == "p") ? " Passed " : " Failed ") +" initially !</span></br>";
+					html += "<span class='yellow'>" + ((type == "p") ? " Passed ! (-30 on final severity)" : " Failed !") +"</span></br>";
 
 				if (globals[j].type == "Rout " || globals[j].type == "Morale" && globals[j].value != 0){
 					html += "The fleet is subject to <span class='yellow'>" + (globals[j].type == "Rout" ? "a complete rout." : globals[j].value + " % " + globals[j].type) + ".</span>";
@@ -3940,7 +3940,7 @@ Game.prototype.logWeaponEvents = function(){
 			var systemId = this.events[i].id;
 			body.append(
 			$("<tr>")
-				.append($("<td>")
+				.append($("<th>")
 					.html(this.events[i].getUsageString())
 					.data("shipId", shipId)
 					.data("systemId", systemId)
