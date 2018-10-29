@@ -2402,7 +2402,7 @@ function Particle(system){
 Particle.prototype = Object.create(Weapon.prototype);
 
 Particle.prototype.getAnimation = function(fire){
-	if (this.fireMode == "Flash"){return Flash.prototype.getAnimation.call(this, fire);}
+	//if (this.fireMode == "Flash"){return Flash.prototype.getAnimation.call(this, fire);}
 	if (this.fireMode == "ShockWave" && fire.target.ship){return Flash.prototype.getAnimation.call(this, fire);}
 
 	var allAnims = [];

@@ -85,7 +85,7 @@ Obstacle.prototype.getShortInfo = function(){
 
 	ele
 	//.append(this.getHeader())
-	.append($("<div>").html("Size " + this.size + " / Speed " + this.getCurSpeed()))
+	.append($("<div>").html("#" + this.id +"___Size " + this.size + " / Speed " + this.getCurSpeed()))
 	.append($("<div>").html(this.getMaxInterference() + "% Interference"))
 	.append($("<div>").html(this.getBaseCollision() + "% Collision"))
 	.append($("<div>").html(this.getDamageString() + " / " + this.getBaseAttacks() + " Strikes"))

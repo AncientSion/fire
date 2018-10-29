@@ -1060,7 +1060,7 @@ function Game(data){
 			this.draw();
 			this.showUI();
 			if (this.phase == 2){ // player control now, setup fire
-				this.setObstacleData();
+				this.setInterferenceData();
 				this.autoIssueFireOrders();
 			}
 			else if (this.phase == 3){
@@ -1126,7 +1126,7 @@ function Game(data){
 	}
 
 	this.initDamageControl = function(){
-		this.setObstacleData();
+		this.setInterferenceData();
 		this.doResolveFire();
 	}
 
@@ -2541,7 +2541,7 @@ function Game(data){
 			for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){
 				if (game.fireOrders[i].anim[j][k].done){continue;}
 
-				if (game.fireOrders[i].weapon.animation == "em"){
+				if (game.fireOrders[i].weapon.animation[0] ==  "e"){
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 						game.fireOrders[i].anim[j][k].n += 1;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
@@ -2559,7 +2559,7 @@ function Game(data){
 						}
 					}
 				}
-				else if (game.fireOrders[i].weapon.animation == "projectile"){
+				else if (game.fireOrders[i].weapon.animation[0] ==  "p"){
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 						game.fireOrders[i].anim[j][k].n += 1;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
@@ -2577,7 +2577,7 @@ function Game(data){
 						}
 					}
 				}
-				else if (game.fireOrders[i].weapon.animation == "beam"){
+				else if (game.fireOrders[i].weapon.animation[0] ==  "b"){
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 						game.fireOrders[i].anim[j][k].n += 1;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
@@ -2593,7 +2593,7 @@ function Game(data){
 						}
 					}
 				}
-				else if (game.fireOrders[i].weapon.animation == "explosive"){
+				else if (game.fireOrders[i].weapon.animation[0] ==  "e"){
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 						game.fireOrders[i].anim[j][k].n += 1;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
@@ -2609,7 +2609,7 @@ function Game(data){
 						}
 					}
 				}
-				else if (game.fireOrders[i].weapon.animation == "area"){
+				else if (game.fireOrders[i].weapon.animation[0] ==  "a"){
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 						game.fireOrders[i].anim[j][k].n += 1;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
@@ -3305,26 +3305,28 @@ Game.prototype.getObstructionPoint = function(fire){
 	return impact;
 }
 
-Game.prototype.setObstacleData = function(){
-	//return;
-	console.log("setObstacleData");
+Game.prototype.setInterferenceData = function(){
+	console.log("setInterferenceData");
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].obstacle){continue;}
+		console.log("check " + this.ships[i].id);
 		var oPos = this.ships[i].getGamePos();
 
 		for (var j = i+1; j < this.ships.length; j++){
 		if (this.ships[j].obstacle){continue;}
 			if (this.ships[i].userid == this.ships[j].userid){continue;}
+			console.log("versus " + this.ships[j].id);
 			var tPos = this.ships[j].getGamePos();
 
 			for (var k = 0; k < this.ships.length; k++){
 				if (!this.ships[k].obstacle){continue;}
+				console.log("obs " + this.ships[k].id);
 
 				//var obstaclePos = game.phase == 3 ? {x: this.ships[k].x, y: this.ships[k].y} : this.ships[k].gePlannedPos();
 				var obstaclePos = this.ships[k].getDrawPos();
 				var result = isInPath(oPos, tPos, obstaclePos, this.ships[k].size/2);
 
-				if (!result){continue;}
+				if (!result || !result.points[0].onLine && !result.points[1].onLine){continue;}
 
 				var EffInterference = Math.round(this.ships[k].interference / 100 * result.dist*2);
 
@@ -3349,6 +3351,7 @@ Game.prototype.setCollisionData = function (unit){
 
 	for (var i = 0; i < this.ships.length; i++){
 		if (!this.ships[i].obstacle){continue;}
+
 
 		var obstacle = this.ships[i];
 		var tPos = obstacle.getGamePos();
