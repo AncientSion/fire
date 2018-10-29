@@ -12,7 +12,7 @@ class Particle extends Weapon {
 class AsteroidRam extends Particle {
 	public $name = "AsteroidRam";
 	public $display = "Asteroid Ram Display";
-	public $animation = "explosive";
+	public $animation = "contact";
 	public static $prio = 0;
 	public $accDecay = 180;
 	public $shots = 4;	
@@ -237,7 +237,7 @@ class AntimatterConverter extends Particle {
 	public $projSize = 3.5;
 	public $projSpeed = 6;
 	public $reload = 3;
-	public $integrity = 60;
+	public $integrity = 45;
 	public $powerReq = 4;
 	public $tracking = 4;
 	public $amBonus = 2;
@@ -265,8 +265,8 @@ class HeavyAntimatterConverter extends AntimatterConverter {
 	public $name = "HeavyAntimatterConverter";
 	public $display = "Heavy Antimatter-Converter";
 	public static $prio = 0;
-	public $minDmg = 150;
-	public $maxDmg = 150;
+	public $minDmg = 140;
+	public $maxDmg = 140;
 	public $projSize = 5;
 	public $projSpeed = 6;
 	public $reload = 3;

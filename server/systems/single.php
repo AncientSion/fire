@@ -85,7 +85,7 @@ class Single {
 	}
 
 	public function adjustLoad($dbLoad){
-		echo ("error adjust load: ".$this->display.", ".$this->parentId."\n");
+		//echo ("error adjust load: ".$this->display.", ".$this->parentId."\n");
 		//Debug::log("error adjust load: ".$this->display.", ".$this->parentId.", target system: ".$dbLoad["systemid"]);
 		//var_export($dbLoad);
 		return;

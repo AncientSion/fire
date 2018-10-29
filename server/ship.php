@@ -562,6 +562,7 @@ class Ship {
 		for ($i = 0; $i < sizeof($powers); $i++){
 			//if ($this->id == 15 && $powers[$i]->systemid == 14){Debug::log("adding");}
 			//echo ($this->id.", ".get_class($this).", ".$powers[$i]->unitid."/".$powers[$i]->systemid);
+			//echo ($powers[$i]->id);
 			$this->getSystem($powers[$i]->systemid)->addPowerEntry($powers[$i]);
 		}
 	}

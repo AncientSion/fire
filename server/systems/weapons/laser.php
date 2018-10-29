@@ -1,12 +1,12 @@
 <?php
 
 class Laser extends Weapon {
-	public $type = "Laser";
+	public $type = "Beam";
 	public $animation = "beam";
 	public $beamWidth;
 	public $rakes;
 	public $laser = 1;
-	public $fireMode = "Laser";
+	public $fireMode = "Beam";
 	public $dmgType = "Standard";
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){

@@ -256,7 +256,7 @@ class Squadron extends Mixed {
 				}
 			}
 		}
-		//Debug::log("ERROR squadron getSystem: ".$id);
+		Debug::log("ERROR squadron getSystem: ".$id);
 	}
 
 	public function getHitChance($fire){

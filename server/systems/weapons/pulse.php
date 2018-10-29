@@ -88,10 +88,10 @@ class HeavyPulse extends Pulse {
 
 class FusionPulseCannonAS extends Pulse {
 	public $name = "FusionPulseCannonAS";
-	public $display = "Fusion Cannon (Pulse Mode)";
+	public $display = "Neutron Pulsar (Pulse)";
 	public static $prio = 0;
-	public $minDmg = 24;
-	public $maxDmg = 30;
+	public $minDmg = 17;
+	public $maxDmg = 25;
 	public $accDecay = 120;
 	public $animColor = "green";
 	public $projSize = 2;
@@ -109,10 +109,10 @@ class FusionPulseCannonAS extends Pulse {
 
 class FusionPulseCannonAF extends Particle {
 	public $name = "FusionPulseCannonAF";
-	public $display = "Fusion Cannon (Scatter Mode)";
+	public $display = "Neutron Pulsar (Scatter)";
 	public static $prio = 0;
-	public $minDmg = 18;
-	public $maxDmg = 24;
+	public $minDmg = 17;
+	public $maxDmg = 25;
 	public $accDecay = 180;
 	public $animColor = "green";
 	public $projSize = 2;

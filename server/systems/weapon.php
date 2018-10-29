@@ -190,7 +190,7 @@ class Weapon extends System {
 
 		$dist = $fire->dist;
 
-		if ($this->fireMode[0] == "L"){
+		if ($this->fireMode[0] == "B"){
 			if ($fire->dist <= $this->optRange){return 1;}
 			else $dist = $fire->dist - $this->optRange;
 		}

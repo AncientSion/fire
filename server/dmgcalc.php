@@ -220,7 +220,7 @@ class DmgCalc {
 			case "Standard": static::doStandardDmg($fire, $hit, $system); break;
 			case "Ballistic": static::doStandardDmg($fire, $hit, $system); break;
 			case "Pulse": static::doPulseDmg($fire, $hit, $system); break;
-			case "Laser": static::doLaserDmg($fire, $hit, $system); break;
+			case "Beam": static::doBeamDmg($fire, $hit, $system); break;
 			case "Shockwave": static::doShockDamage($fire, $hit, $system); break;
 			case "Flash": static::doFlashDmg($fire, $hit, $system); break;
 			case "Special": static::doSpecialDmg($fire, $hit, $system); break;
@@ -416,7 +416,7 @@ class DmgCalc {
 		$fire->target->addTopDamage($entry);
 	}
 
-	public static function doLaserDmg($fire, $hit, $system){
+	public static function doBeamDmg($fire, $hit, $system){
 		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 		$okSystem = 0;
 		$rakes = $fire->weapon->rakes;
@@ -429,7 +429,7 @@ class DmgCalc {
 		if ($totalDmg <= 0){return;}
 			
 		$rake = floor($totalDmg / $fire->weapon->rakes);
-		Debug::log("fire #".$fire->id.", doLaserDmg, weapon: ".get_class($fire->weapon).", target: ".$fire->target->id." for ".$totalDmg." dmg");
+		Debug::log("fire #".$fire->id.", doBeamDmg, weapon: ".get_class($fire->weapon).", target: ".$fire->target->id." for ".$totalDmg." dmg");
 
 		while ($rakes){
 			if ($fire->target->ship){

@@ -435,7 +435,7 @@ function Game(data){
 	this.hasInvalidPower = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].flight || this.ships[i].salvo || this.ships[i].userid != this.userid){continue;}
-			if (game.turn != this.ships[i].available){continue;}
+			//if (game.turn != this.ships[i].available){continue;}
 
 			if (this.ships[i].hasInvalidPower()){
 				popup("You have units with invalid Reactor settings (#" + this.ships[i].id + ")"); 
@@ -2349,10 +2349,13 @@ function Game(data){
 		for (var i = 0; i < this.fireOrders.length; i++){
 			this.fireOrders[i].shooter = game.getUnit(this.fireOrders[i].shooterid);
 			this.fireOrders[i].weapon = this.fireOrders[i].shooter.getSystem(this.fireOrders[i].weaponid).getActiveSystem();
-			this.fireOrders[i].target = game.getUnit(this.fireOrders[i].targetid);
-			this.fireOrders[i].damages = this.fireOrders[i].target.getDmgByFire(this.fireOrders[i]);
+		//	this.fireOrders[i].target = game.getUnit(this.fireOrders[i].targetid);
+			this.fireOrders[i].setTarget();
+			//this.fireOrders[i].damages = this.fireOrders[i].target.getDmgByFire(this.fireOrders[i]);
+			this.fireOrders[i].setDamages();
 			this.fireOrders[i].systems.push(this.fireOrders[i].weaponid);
-			this.fireOrders[i].angle = getAngleFromTo(this.fireOrders[i].shooter.getGamePos(), this.fireOrders[i].target.getGamePos());
+			//this.fireOrders[i].angle = getAngleFromTo(this.fireOrders[i].shooter.getGamePos(), this.fireOrders[i].target.getGamePos());
+			
 			//this.fireOrders[i].setShots();
 		/*	this.fireOrders[i].setTarget() = game.getUnit(this.fireOrders[i].targetid);
 			this.fireOrders[i].setShooter() = game.getUnit(this.fireOrders[i].shooterid);
@@ -2399,10 +2402,7 @@ function Game(data){
 				continue;
 			}
 			else {
-				var origin = this.fireOrders[i].shooter.getGamePos();
-				var target = this.fireOrders[i].target.getGamePos();
-				this.fireOrders[i].focus = {x:  (target.x + origin.x) / 2, y:  (target.y + origin.y) / 2}
-				this.fireOrders[i].dist = getDistance({x: origin.x,	y: origin.y}, {x: target.x,	y: target.y});
+				this.fireOrders[i].setCamAndAngle();
 				this.fireOrders[i].setShots();
 			}
 		}
@@ -2541,7 +2541,7 @@ function Game(data){
 			for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){
 				if (game.fireOrders[i].anim[j][k].done){continue;}
 
-				if (game.fireOrders[i].weapon.animation[0] ==  "e"){
+				if (game.fireOrders[i].weapon.animation[0] == "e"){ // em
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 						game.fireOrders[i].anim[j][k].n += 1;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
@@ -2559,7 +2559,7 @@ function Game(data){
 						}
 					}
 				}
-				else if (game.fireOrders[i].weapon.animation[0] ==  "p"){
+				else if (game.fireOrders[i].weapon.animation[0] == "p"){ //proj
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 						game.fireOrders[i].anim[j][k].n += 1;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
@@ -2577,7 +2577,7 @@ function Game(data){
 						}
 					}
 				}
-				else if (game.fireOrders[i].weapon.animation[0] ==  "b"){
+				else if (game.fireOrders[i].weapon.animation[0] == "b"){ //beam
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 						game.fireOrders[i].anim[j][k].n += 1;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
@@ -2593,7 +2593,7 @@ function Game(data){
 						}
 					}
 				}
-				else if (game.fireOrders[i].weapon.animation[0] ==  "e"){
+				else if (game.fireOrders[i].weapon.animation[0] == "c"){ //impact
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 						game.fireOrders[i].anim[j][k].n += 1;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
@@ -2609,7 +2609,7 @@ function Game(data){
 						}
 					}
 				}
-				else if (game.fireOrders[i].weapon.animation[0] ==  "a"){
+				else if (game.fireOrders[i].weapon.animation[0] ==  "a"){ //area
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 						game.fireOrders[i].anim[j][k].n += 1;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
@@ -3309,18 +3309,18 @@ Game.prototype.setInterferenceData = function(){
 	console.log("setInterferenceData");
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].obstacle){continue;}
-		console.log("check " + this.ships[i].id);
+		//console.log("check " + this.ships[i].id);
 		var oPos = this.ships[i].getGamePos();
 
 		for (var j = i+1; j < this.ships.length; j++){
 		if (this.ships[j].obstacle){continue;}
 			if (this.ships[i].userid == this.ships[j].userid){continue;}
-			console.log("versus " + this.ships[j].id);
+			//console.log("versus " + this.ships[j].id);
 			var tPos = this.ships[j].getGamePos();
 
 			for (var k = 0; k < this.ships.length; k++){
 				if (!this.ships[k].obstacle){continue;}
-				console.log("obs " + this.ships[k].id);
+				//console.log("obs " + this.ships[k].id);
 
 				//var obstaclePos = game.phase == 3 ? {x: this.ships[k].x, y: this.ships[k].y} : this.ships[k].gePlannedPos();
 				var obstaclePos = this.ships[k].getDrawPos();

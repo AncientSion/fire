@@ -1816,7 +1816,7 @@ function Weapon(system){
 Weapon.prototype = Object.create(System.prototype);
 
 Weapon.prototype.getDmgsPerShot = function(fire){
-	if (this.fireMode == "Laser"){
+	if (this.fireMode == "Beam"){
 		if (fire.target.ship || fire.target.squad){return this.output;}
 		return 1;
 	}
@@ -1855,7 +1855,7 @@ Weapon.prototype.hasFireOrder = function(){
 
 Weapon.prototype.getRangeDmgMod = function(){
 	var mod = 100;
-	//if (this.fireMode == "Laser" || this.dmgType == "Plasma"){
+	//if (this.fireMode == "Beam" || this.dmgType == "Plasma"){
 		mod += this.getCritMod("Damage Loss");
 		mod += this.getBoostEffect("Damage Loss") * this.getBoostLevel();
 	//}
@@ -1865,7 +1865,7 @@ Weapon.prototype.getRangeDmgMod = function(){
 Weapon.prototype.getDmgLoss = function(dist){
 	if (!this.dmgLoss){return 0;}
 
-	if (this.fireMode[0] == "L"){
+	if (this.fireMode[0] == "B"){
 		if (dist <= this.optRange){return 0;}
 		else dist = dist - this.optRange;
 	}
@@ -2072,7 +2072,7 @@ Weapon.prototype.getSysDiv = function(){
 	table.append($("<tr>").append($("<td>").html("Loading")).append($("<td>").addClass("loading").html(this.getTimeLoaded() + " / " + this.reload)));
 	if (this.tracking >= 0){table.append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTrackingRating() + " / " + getUnitType(this.getTrackingRating()))));}
 
-	if (this.fireMode == "Laser"){
+	if (this.fireMode == "Beam"){
 		table.append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").html(this.optRange + "px")));
 	}
 
@@ -2086,7 +2086,7 @@ Weapon.prototype.getSysDiv = function(){
 		table.append($("<tr>").append($("<td>").html("Linked Guns")).append($("<td>").html(this.linked)));
 	}
 	
-	if (this.fireMode == "Laser"){
+	if (this.fireMode == "Beam"){
 		table.append($("<tr>").append($("<td>").html("Shots & Rakes")).append($("<td>").html(this.getShots() + " w/ " + this.output + " rakes")));
 	}
 	else if (this.fireMode == "Pulse"){
@@ -2141,7 +2141,7 @@ Weapon.prototype.getAccuracyLoss = function(dist){
 Weapon.prototype.getFillStyle = function(x, y, dist){
 	if (!this.dmgLoss){return "green";}
 
-	if (this.fireMode[0] == "L"){ // laser
+	if (this.fireMode[0] == "B"){ // laser
 		var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
 		grad.addColorStop(0, "green");
 		grad.addColorStop((this.optRange/1200*dist) / dist, "green");
@@ -2423,9 +2423,9 @@ Particle.prototype.getAnimation = function(fire){
 	else if (game.isCloseCombat(fire.shooter, fire.target) && (fire.shooter.ship || fire.shooter.squad)){
 		fraction = 2;
 	}
-	else if (fire.dist < 200){
-		fraction = Math.min(3, 200 / fire.dist);
-	}
+//	else if (fire.dist < 200){
+//		fraction = Math.min(3, 200 / fire.dist);
+//	}
 	else if (fire.dist > 600){
 		fraction = Math.min(0.8, 600 / fire.dist);
 	}
@@ -2598,7 +2598,7 @@ Pulse.prototype.getAnimation = function(fire){
 	return allAnims;
 }
 
-function Laser(system){
+function Beam(system){
 	Weapon.call(this, system);	
 	this.optRange = system.optRange;
 	this.dmgLoss = system.dmgLoss;
@@ -2607,10 +2607,10 @@ function Laser(system){
 	this.beamWidth = system.beamWidth || (this.minDmg+this.maxDmg)/system.rakes/35;
 	this.exploSize = (this.minDmg+this.maxDmg)/system.rakes/30;
 }
-Laser.prototype = Object.create(Weapon.prototype);
+Beam.prototype = Object.create(Weapon.prototype);
 
 
-Laser.prototype.getAnimation = function(fire){
+Beam.prototype.getAnimation = function(fire){
 	var allAnims = [];
 	var grouping = 1;
 	var delay = 30;
@@ -3693,16 +3693,23 @@ Area.prototype.drawSystemArc = function(facing, rolled, pos){
 
 Area.prototype.getResolvingFireOrders = function(){
 	if (game.phase != 2){return false;}
-	var ret = [];
+	var org = [];
+	var copies = [];
 	for (var i = this.fireOrders.length-1; i >= 0; i--){
-		if (this.fireOrders[i].targetid == -1){continue;}
-		if (this.fireOrders[i].turn == game.turn && this.fireOrders[i].resolved == 1){
-			ret.push(this.fireOrders[i]);
+		if (this.fireOrders[i].turn < game.turn){break;}
+		if (this.fireOrders[i].targetid == -1){
+			org.push(this.fireOrders[i]);
 		}
-		else if (this.fireOrders[i].turn < game.turn){break;}
+		else{
+			copies.push(this.fireOrders[i]);
+		}
 	}
-	if (ret.length){return ret;}
-	return false;
+
+	if (copies.length){
+		return copies;
+	} else if (org.length){
+		return org;
+	} else return false;
 }
 
 function Bulkhead(system){

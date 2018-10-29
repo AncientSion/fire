@@ -42,7 +42,7 @@ class Warhead extends Weapon {
 	public $name = "Warhead";
 	public $role = "Warhead";
 	public $type = "Warhead";
-	public $animation = "explosive";
+	public $animation = "contact";
 	public $linked = 1;
 
 	function __construct($id, $parentId, $tracking, $minDmg, $maxDmg, $fireMode = "Standard", $dmgType = "Standard", $melt = 0){

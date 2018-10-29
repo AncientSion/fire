@@ -1049,17 +1049,38 @@ function FireOrder(data){
 
 
 FireOrder.prototype.setTarget = function(){
+	if (this.targetid > 0){
+		this.target = game.getUnit(this.targetid);
+	} else this.target = false;
 }
+
 FireOrder.prototype.setShooter = function(){
 }
+
 FireOrder.prototype.setWeapon = function(){
 }
+
 FireOrder.prototype.setDamages = function(){
+	if (this.target){
+		this.damages = this.target.getDmgByFire(this);
+	} else this.damages = [];
 }
+
 FireOrder.prototype.setSystems = function(){
 }
-FireOrder.prototype.setAngle = function(){
+
+FireOrder.prototype.setCamAndAngle = function(){
+	var origin = this.shooter.getGamePos();
+	var dest;
+	if (this.weapon.freeAim){
+		dest = {x: this.x, y: this.y};
+	} else dest = this.target.getGamePos();
+
+	this.angle = getAngleFromTo(origin, dest);
+	this.focus = {x:  (dest.x + origin.x) / 2, y:  (dest.y + origin.y) / 2}
+	this.dist = getDistance({x: origin.x,	y: origin.y}, {x: dest.x,	y: dest.y});
 }
+
 FireOrder.prototype.setShots = function(){
 	var shots = 0;
 	var hits;
@@ -1085,7 +1106,7 @@ FireOrder.prototype.setShots = function(){
 FireOrder.prototype.setNumberAnim = function(){
 
 	var last;
-	var targets = 1;
+	var targets = (this.targetid > 0 ? 1 : 0);
 	var data = this.tr.data();
 	var row = data.row;
 	this.numbers = [];
@@ -1209,8 +1230,8 @@ FireOrder.prototype.addLogStartEntry = function(log){
 	var index = $(log).children().length;
 
 	tr
-	.data("shooterid", this.shooter.id)
-	.data("targetid", this.target.id)
+	.data("shooterid", this.shooterid)
+	.data("targetid", this.targetid)
 	.data("fireid", this.id)
 	.data("row", index)
 	.data("expanded", 0)
@@ -1260,7 +1281,7 @@ FireOrder.prototype.addLogStartEntry = function(log){
 
 	tr.hover(function(){
 		var data = $(this).data();
-		if (data.targetid == ""){return;}
+		if (data.targetid == "" || data.targetid <= 0){return;}
 		game.getUnit(data.shooterid).doHighlight();
 		game.getUnit(data.targetid).doHighlight();
 	})
@@ -1269,10 +1290,14 @@ FireOrder.prototype.addLogStartEntry = function(log){
 		req.sort(function(a, b){return a-b});
 	var reqString = this.getReqString(req);
 
+	var targetString = "";
+	if (this.target){targetString = "<font color='" + this.target.getCodeColor() + "'>" + this.target.name + " #" + this.target.id + "</font>";}
+	else targetString = "";
+
 	tr
 	.append($("<td>").html(this.type))
 	.append($("<td>").html("<font color='" + this.shooter.getCodeColor() + "'>" + this.shooter.name + " #" + this.shooter.id + "</font>"))
-	.append($("<td>").html("<font color='" + this.target.getCodeColor() + "'>" + this.target.name + " #" + this.target.id + "</font>"))
+	.append($("<td>").html(targetString))
 	//.append($("<td>").html("this"))
 	.append($("<td>").html(this.weapon.getDisplay()))
 	.append($("<td>").html(reqString))
