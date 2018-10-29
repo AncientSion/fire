@@ -10,7 +10,7 @@ class Shaveen extends SuperLight {
 	public $integrity = 310;
 	public $ep = 120;
 	public $ew = 550;
-	public $power = 0;
+	public $power = -3;
 	public $negation = 12;
 	public $jamming = 20;
 
@@ -22,6 +22,7 @@ class Shaveen extends SuperLight {
 		$structs = array();
 
 		$front = new Section(300, 60);
+		$front->systems[] = new FusionCannon($this->getId(), $this->parentId, 270, 90);
 		$front->systems[] = new FusionCannon($this->getId(), $this->parentId, 270, 90);
 		$structs[] = $front;
 

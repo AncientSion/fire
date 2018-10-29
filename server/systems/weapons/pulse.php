@@ -91,7 +91,7 @@ class FusionPulseCannonAS extends Pulse {
 	public $display = "Fusion Cannon (Pulse Mode)";
 	public static $prio = 0;
 	public $minDmg = 24;
-	public $maxDmg = 32;
+	public $maxDmg = 30;
 	public $accDecay = 120;
 	public $animColor = "green";
 	public $projSize = 2;
@@ -100,6 +100,7 @@ class FusionPulseCannonAS extends Pulse {
 	public $integrity = 36;
 	public $powerReq = 4;
 	public $tracking = 3;
+	public $linked = 2;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -110,8 +111,8 @@ class FusionPulseCannonAF extends Particle {
 	public $name = "FusionPulseCannonAF";
 	public $display = "Fusion Cannon (Scatter Mode)";
 	public static $prio = 0;
-	public $minDmg = 24;
-	public $maxDmg = 32;
+	public $minDmg = 18;
+	public $maxDmg = 24;
 	public $accDecay = 180;
 	public $animColor = "green";
 	public $projSize = 2;
@@ -119,6 +120,7 @@ class FusionPulseCannonAF extends Particle {
 	public $reload = 3;
 	public $integrity = 36;
 	public $powerReq = 4;
+	public $linked = 2;
 
 	public $shots = 2;
 	public $tracking = 1;

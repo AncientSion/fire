@@ -134,7 +134,7 @@ spl_autoload_register(
                 'heavylaser' => '/server/systems/weapons/laser.php',
                 'superheavylaser' => '/server/systems/weapons/laser.php',
                 'neutronlaser' => '/server/systems/weapons/laser.php',
-                'assaultneutronlaser' => '/server/systems/weapons/laser.php',
+                'phasedneutronlaser' => '/server/systems/weapons/laser.php',
                 'heavyneutronbeamprojector' => '/server/systems/weapons/laser.php',
                 'molecularslicer' => '/server/systems/weapons/laser.php',
 

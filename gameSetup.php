@@ -306,6 +306,13 @@ else header("Location: index.php");
 				doConfirmUnitPurchase: function(unit){
 					unit.callsign = $("#nameWrapper").find("input").val();
 
+
+					if (game.system){
+						game.getUnit(aUnit).doConfirmSystemLoadout();
+						game.setUnitTotal(game.getUnit(aUnit));
+						}
+						
+
 					if (this.refit){
 						//console.log("confirmRefit");
 						//console.log($(unit.tr).html());
@@ -368,18 +375,20 @@ else header("Location: index.php");
 					}
 
 
+
 					$("#remPoints").html()
 					$(".shipDiv").remove();
 					game.setRemPV()
 					window.shipCtx.clearRect(0, 0, res.x, res.y);
 					window.fxCtx.clearRect(0, 0, res.x, res.y);
-					$("#hangarDiv").addClass("disabled");
-					$("#weaponDiv").addClass("disabled");
+
+					//$("#hangarDiv").addClass("disabled");
+					//$("#weaponDiv").addClass("disabled");
+					//$("#crewDiv").addClass("disabled");
 					$("#hangarTable").html("");
 					game.setReinforceFaction(unit);
 					aUnit = 0;
 					game.ships[0] = undefined;
-					game.system = 0;
 				},
 
 				getPurchasedUnit: function(purchaseId){
