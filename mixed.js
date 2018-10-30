@@ -116,76 +116,8 @@ Mixed.prototype.drawNextMove = function(){
 }
 
 Mixed.prototype.drawMovePlan = function(){
-	if (!this.deployed){return}
+	if (!this.deployed || game.animating){return}
 	this.drawNextMove(); 
-	return;
-
-	var color = "#00ea00";
-	if (!this.friendly){color = "red";}
-	
-	planCtx.translate(cam.o.x, cam.o.y);
-	planCtx.scale(cam.z, cam.z);
-	planCtx.strokeStyle = color;
-
-	if (game.drawPlans){
-		planCtx.globalAlpha = 0.4;
-		planCtx.lineWidth = 1;
-
-		planCtx.beginPath();
-		planCtx.moveTo(this.x, this.y);
-
-		for (var i = 0; i < this.actions.length; i++){
-			if (this.actions[i].type == "move"){
-				planCtx.lineTo(this.actions[i].x, this.actions[i].y);
-				planCtx.stroke();
-			}
-		}
-		planCtx.closePath();
-	}
-	
-	var target = this.getTarget();
-	var tPos;
-	var origin = this.getPlannedPos();
-	if (this.mission.type > 1){
-		tPos = target.getNextPosition();
-		if (tPos.x == origin.x && tPos.y == origin.y){
-			tPos = target.getPlannedPos();
-		}
-	} else tPos = {x: this.mission.x, y: this.mission.y};
-
-	var dist = getDistance(origin, tPos);
-	var speed = this.getCurSpeed();
-
-	planCtx.beginPath();
-	planCtx.moveTo(origin.x, origin.y);
-	planCtx.globalAlpha = 0.7;
-
-	if (dist <= speed){
-		planCtx.lineTo(tPos.x, tPos.y);
-		planCtx.closePath();
-		planCtx.stroke();
-		planCtx.setTransform(1,0,0,1,0,0);
-	}
-	else {
-		var a = getAngleFromTo(origin, tPos);
-		var step = getPointInDir(speed, a, origin.x, origin.y);
-
-		planCtx.lineTo(step.x, step.y);
-		planCtx.closePath();
-
-		planCtx.stroke();
-		planCtx.beginPath();
-		planCtx.moveTo(step.x, step.y);
-
-		planCtx.lineTo(tPos.x, tPos.y);
-		planCtx.closePath();
-		planCtx.strokeStyle = "white";
-		planCtx.stroke();
-		planCtx.setTransform(1,0,0,1,0,0);
-	}
-	planCtx.globalAlpha = 1;
-	
-	if (this.flight){this.drawMissionArea();}
 }
 
 Mixed.prototype.drawTargetMovePlan = function(){
@@ -289,7 +221,7 @@ Mixed.prototype.getTarget = function(){
 Mixed.prototype.setNextMove = function(){
 	var s = this.getCurSpeed();
 	var d = 0;
-	var p = this.getPlannedPos();
+	var p = this.getGamePos();
 	var next;
 
 	if (this.mission.type == 1){  // patrol goal
@@ -341,7 +273,12 @@ Mixed.prototype.setNextMove = function(){
 		}
 	}
 
-	this.actions.push(new Move(-1, this.id, "move", 0, this.getCurSpeed(), next.x, next.y, 0, 0, 0, 1, 1, 0));
+	if (this.actions.length && this.actions[this.actions.length-1].type == "move" && this.actions[this.actions.length-1].resolved == 0){
+		this.actions[this.actions.length-1].x = next.x;
+		this.actions[this.actions.length-1].y = next.y;
+	}
+	else this.actions.push(new Move(-1, this.id, "move", 0, this.getCurSpeed(), next.x, next.y, 0, 0, 0, 1, 1, 0));
+	game.setCollisionData(this);
 
 }
 
@@ -421,11 +358,8 @@ Mixed.prototype.setPreMoveFacing = function(){
 }
 
 Mixed.prototype.setPostMoveFacing = function(){
-	//console.log("setPostMoveFacing");
-	//if (this.salvo){console.log("setPostMoveFacing");}
-	//if (this.mission.turn == game.turn){
-		this.facing = getAngleFromTo(this.getPlannedPos(), this.finalStep);
-	//}
+	if (!this.finalStep){return;}
+	this.facing = getAngleFromTo(this.getPlannedPos(), this.finalStep);
 }
 
 Mixed.prototype.canShortenTurn = function(){
@@ -505,7 +439,7 @@ Mixed.prototype.setPreMovePosition = function(){
 }
 
 Mixed.prototype.setDrawData = function(){
-	console.log("MIXED setDrawData");
+	//console.log("MIXED setDrawData");
 	if (this.available > game.turn || !this.available || game.turn == 1 && game.phase == -1){
 		if (this.friendly && this.isReady){
 			this.setPostMovePosition();

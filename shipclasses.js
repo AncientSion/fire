@@ -1176,6 +1176,13 @@ Ship.prototype.setPostMovePosition = function(){
 	if (!this.actions.length){return;}
 	this.drawX = this.actions[this.actions.length-1].x;
 	this.drawY = this.actions[this.actions.length-1].y;
+
+	for (var i = this.actions.length-1; i >= 0; i--){
+		if (this.actions[i].resolved){
+			this.drawX = this.actions[i].x;
+			this.drawY = this.actions[i].y;
+		}
+	}
 }
 
 Ship.prototype.animatesThisSegment = function(){
@@ -1749,7 +1756,9 @@ Ship.prototype.draw = function(){
 	ctx.translate(this.drawX, this.drawY);
 	ctx.rotate(this.getDrawFacing() * Math.PI/180);
 
-	//console.log("draw #" + this.id);
+	//if (this.flight){
+	//	console.log("draw #" + this.id);
+	//}
  	if (this.doDraw){this.drawSelf();}
 
 	this.drawEscort();
@@ -1886,7 +1895,6 @@ Ship.prototype.getAngledHitChance = function(angle){
 	sub /= (90 - 0);
 	return Math.ceil(sub);
 }
-
 
 Ship.prototype.getDmgByFire = function(fire){
 	//console.log(fire.hits);
@@ -3176,11 +3184,11 @@ Ship.prototype.doRandomOffset = function(shift){
 	if (!this.doDraw){return;}
 	if (this.mission.arrived){return;}
 	//console.log("doOffset #" + this.id);
-	var o = this.getPlannedPos();
+	var o = this.getGamePos();
 	var t = this.getTarget();
 	var tPos;
 	if (t){
-		var tPos = t.getPlannedPos();
+		var tPos = t.getGamePos();
 	} else tPos = {x: this.mission.x, y: this.mission.y};
 
 	var a = getAngleFromTo(o, tPos);

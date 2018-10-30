@@ -24,6 +24,10 @@ Obstacle.prototype.handleHovering = function(){
 	this.drawNextMove();
 }
 
+Obstacle.prototype.getAngledHitChance = function(angle){
+	return "-";
+}
+
 Obstacle.prototype.drawNextMove = function(){
 	if (game.phase == 2  || (game.phase == 3 && aUnit)){return;}
 	planCtx.translate(cam.o.x, cam.o.y);
@@ -38,6 +42,7 @@ Obstacle.prototype.drawNextMove = function(){
 }
 
 Obstacle.prototype.setNextMove = function(){
+	console.log("setNextMove");
 	var p;
 
 	if (this.actions.length){
@@ -80,9 +85,22 @@ Obstacle.prototype.getCurSpeed = function(){
 	return this.curImp;
 }
 
-Obstacle.prototype.select = function(){
+Obstacle.prototype.doSelect = function(){
 	console.log(this);
-	return;
+	aUnit = this.id;
+	this.selected = true;
+	game.redraw()
+	this.switchDiv();
+}
+
+Obstacle.prototype.doUnselect = function(){
+	this.unselectSystems();
+	aUnit = false;
+	this.selected = false;
+	this.switchDiv();
+	mouseCtx.clearRect(0, 0, res.x, res.y);
+	$("#vectorDiv").addClass("disabled");
+	game.redraw();
 }
 
 Obstacle.prototype.createBaseDiv = function(){
@@ -202,8 +220,6 @@ Obstacle.prototype.getEvents = function(){
 
 Obstacle.prototype.create = function(){
 	this.setUnitState();
-	if (game.phase == -1){return;}
-	this.setNextMove();
 }
 
 Obstacle.prototype.setUnitState = function(){
@@ -224,18 +240,6 @@ Obstacle.prototype.setPreMovePosition = function(){
 	//console.log("setPreMovePosition #" + this.id);
 	this.drawX = this.x;
 	this.drawY = this.y;
-}
-
-Obstacle.prototype.setPostMovePosition = function(){
-	//console.log("setPostMovePosition");
-	if (!this.actions.length){return;}
-	if (game.turn == 1){
-		this.drawX = this.x;
-		this.drawY = this.y;
-		return;
-	}
-	this.drawX = this.actions[this.actions.length-2].x;
-	this.drawY = this.actions[this.actions.length-2].y;
 }
 
 Obstacle.prototype.setPreMoveFacing = function(){
@@ -306,7 +310,6 @@ Obstacle.prototype.setImage = function(){
 			randoms++;
 			size *= range(5, 20)/10
 		}
-
 
 		ctx.translate(loc.x, loc.y);
 		ctx.rotate(rota * (Math.PI/180))

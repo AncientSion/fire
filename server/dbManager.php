@@ -1366,10 +1366,8 @@
 				INSERT INTO actions 
 					(shipid, turn, type, dist, x, y, a, cost, delay, costmod, resolved)
 				VALUES
-					(:shipid, :turn, :type, :dist, :x, :y, :a, :cost, :delay, :costmod, :resolved)
+					(:shipid, :turn, :type, :dist, :x, :y, :a, :cost, :delay, :costmod, 0)
 			");
-
-			$resolved = 0;
 
 			for ($i = 0; $i < sizeof($units); $i++){
 				$stmt->bindParam(":shipid", $units[$i]["id"]);
@@ -1386,15 +1384,12 @@
 					$stmt->bindParam(":cost", $units[$i]["actions"][$j]["cost"]);
 					$stmt->bindParam(":delay", $units[$i]["actions"][$j]["delay"]);
 					$stmt->bindParam(":costmod", $units[$i]["actions"][$j]["costmod"]);
-					//$stmt->bindParam(":resolved", $units[$i]["actions"][$j]["resolved"]);
-					$stmt->bindParam(":resolved", $resolved);
 					$stmt->execute();
 
 					if ($stmt->errorCode() == 0){
 						continue;
 					} 
 					else {
-						Debug::log($stmt->errorCode());
 						return false;
 					}
 				}

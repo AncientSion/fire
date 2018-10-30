@@ -34,7 +34,8 @@ $(document).ready(function(){
 		aimDiv: $("#aimDiv"),
 		targetDataA: $("#aimDiv").find("#targetDataA"),
 		targetDataB: $("#aimDiv").find("#targetDataB"),
-		targetDataC: $("#aimDiv").find("#targetDataC")
+		targetDataC: $("#aimDiv").find("#targetDataC"),
+		vector: $("#vectorDiv")
 	}
 })
 

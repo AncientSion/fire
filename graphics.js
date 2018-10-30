@@ -240,7 +240,7 @@ window.graphics = {
 	}
 }
 
-function drawVector(origin, target, dist, angle){
+function drawVector(unit, origin, target, dist, angle){
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	mouseCtx.beginPath();
 	mouseCtx.moveTo(origin.x * cam.z + cam.o.x, origin.y * cam.z + cam.o.y);
@@ -256,7 +256,11 @@ function drawVector(origin, target, dist, angle){
 		angle = (360-angle) *-1;
 	}
 
-	$("#vectorDiv").html("Distance: " + dist + " </br>Angle: " + round(angle, 2) + "</br>Profile: " + game.getUnit(aUnit).getAngledHitChance(fireAngle) + "%")
+	if (unit.obstacle){
+		ui.vector.html("Distance: " + dist + " </br>Angle: " + round(angle, 2));
+	} else ui.vector.html("Distance: " + dist + " </br>Angle: " + round(angle, 2) + "</br>Profile: " + game.getUnit(aUnit).getAngledHitChance(fireAngle) + "%");
+
+	ui.vector
 	.css("left", target.x - 45 + "px")
 	.css("top", target.y + 60 + "px")
 	.removeClass("disabled");

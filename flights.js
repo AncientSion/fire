@@ -45,6 +45,12 @@ Flight.prototype.setSize = function(){
 	this.size = max + 20;
 }
 
+Flight.prototype.getLaunchAction = function(){
+	var launch = this.actions[0];
+		launch.resolved = 0;
+	return [launch];
+}
+
 Flight.prototype.setPreFireSize = function(){
 	//console.log("setPreFireSize #" + this.id);
 	var max = 0;

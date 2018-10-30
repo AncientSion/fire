@@ -437,14 +437,14 @@ function canvasMouseMove(e){
 		var ship = game.getUnit(aUnit);
 		if (!ship){return;}
 
-		var shipLoc = ship.getPlannedPos();
+		var shipLoc = ((ship.flight || ship.salvo || ship.obstacle) ? ship.getGamePos() : ship.getPlannedPos());
 		var	facing = ship.getPlannedFacing();
 
 		if (game.vector){
 			var dist = Math.floor(getDistance(shipLoc, pos));
 			var a = getAngleFromTo(shipLoc, pos);
 				a = addAngle(facing, a);
-			drawVector(shipLoc, {x: e.clientX, y: e.clientY}, dist, a);
+			drawVector(ship, shipLoc, {x: e.clientX, y: e.clientY}, dist, a);
 		}
 
 		if (ship.salvo){}
