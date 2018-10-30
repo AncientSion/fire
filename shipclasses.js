@@ -1354,14 +1354,17 @@ Ship.prototype.getShortInfo = function(){
 	.append($("<div>").html("Speed: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")"))
 	.append($("<div>").html("Base To-Hit: " + this.getStringHitChance()))
 
+	this.appendCollisions(ele);
+}
+
+Ship.prototype.appendCollisions = function(ele){
 	if (!this.collisions.length){return;}
 
-	ele.append($("<div>").html("Collisions"))
+	ele.append($("<div>").addClass("yellow").html("Collisions"))
 	for (var i = 0; i < this.collisions.length; i++){
 		var html = this.collisions[i].realAttacks +"x " + this.collisions[i].damage + " @ " + this.collisions[i].realCol + "%</br>";
 		ele.append($("<div>").html(html))
 	}
-
 }
 
 Ship.prototype.getParent = function(){
@@ -1396,7 +1399,7 @@ Ship.prototype.setUnitState = function(){
 	}
 }
 
-Ship.prototype.setTarget = function(){
+Ship.prototype.setNextMove = function(){
 	return;
 }
 

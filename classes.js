@@ -1047,8 +1047,7 @@ function FireOrder(data){
 	this.numbers = [];
 }
 
-
-FireOrder.prototype.setTarget = function(){
+FireOrder.prototype.setShotTarget = function(){
 	if (this.targetid > 0){
 		this.target = game.getUnit(this.targetid);
 	} else this.target = false;
@@ -1387,7 +1386,7 @@ FireOrder.prototype.addCollisionEntry = function(log, rolls){
 		.append($("<td>"))
 		.append($("<td>")
 			.attr("colSpan", 5)
-			.html("SERVER DEBUG - Distance "+rolls[0]+"px, collision "+rolls[1]+"%, final " + rolls[2]+"%")
+			.html("SERVER DEBUG - Distance "+rolls[0]+"px, base collision "+rolls[1]+"%, final " + rolls[2]+"%")
 			//.html("Distance "+rolls[0]+"px / " + this.shooter.collision + "% per 100px"
 		)
 		.append($("<td>"))
@@ -1450,7 +1449,7 @@ FireOrder.prototype.getRollsString = function(rolls, allReq){
 	}
 
 	if (this.shooter.obstacle && !this.target.ship){
-		hits = "Each subunit was subject " + (this.shots / this.rolls[3]) + " attacks. A total of " + this.hits[0] + " collisions occured...";
+		hits = "Each subunit was subject to " + this.rolls[3] + " attacks. A total of " + this.hits[0] + " collisions occured...";
 	}
 
 	if (hits.length){hits = hits.slice(0, hits.length-2); hits = "Hits: " + hits;}

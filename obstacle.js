@@ -24,27 +24,6 @@ Obstacle.prototype.handleHovering = function(){
 	this.drawNextMove();
 }
 
-Obstacle.prototype.drawMovePlan = function(){
-	this.drawNextMove(); return;
-	planCtx.translate(cam.o.x, cam.o.y);
-	planCtx.scale(cam.z, cam.z);
-	planCtx.strokeStyle = "white";
-	planCtx.globalAlpha = 0.4;
-	planCtx.lineWidth = 1;
-
-	planCtx.beginPath();
-	planCtx.moveTo(this.drawX, this.drawY);
-	var len = this.actions.length-1;
-	planCtx.lineTo(this.actions[len].x, this.actions[len].y);
-	planCtx.closePath();
-	planCtx.stroke();
-
-	planCtx.globalAlpha = 1;
-	planCtx.strokeStyle = "black";
-	planCtx.setTransform(1,0,0,1,0,0);
-}
-
-
 Obstacle.prototype.drawNextMove = function(){
 	if (game.phase == 2  || (game.phase == 3 && aUnit)){return;}
 	planCtx.translate(cam.o.x, cam.o.y);

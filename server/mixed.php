@@ -384,18 +384,19 @@ class Mixed extends Ship {
 	public function determineObstacleHits($fire){
 		Debug::log("determineObstacleHits ".get_class($this).", shots ".$fire->shots.", req ".$fire->req);
 
-		$rollCounter = 0;
+		//$rollCounter = 0;
 		$fire->section = 0;
-		$targets = 0;
+		//$targets = 0;
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			//Debug::log("struct ".$i);
 			if ($this->structures[$i]->destroyed){continue;}
-			$targets++;
+			//$targets++;
 
+			$fire->rolls = [];
 			$this->doRollShots($fire);
 
-			for ($j = $rollCounter; $j < sizeof($fire->rolls); $j++){
+			for ($j = 0; $j < sizeof($fire->rolls); $j++){
 				//Debug::log("roll ".$j);
 				if ($this->structures[$i]->destroyed){$fire->cancelShotResolution($j); break;}
 				else if ($fire->rolls[$j] <= $fire->req){
@@ -404,11 +405,11 @@ class Mixed extends Ship {
 					DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
 				}// else Debug::log("miss");
 			}
-			$rollCounter = sizeof($fire->rolls);
+			//$rollCounter = sizeof($fire->rolls);
 		}
 
 		$fire->rolls = [];
-		$fire->notes .= $targets.";";
+		$fire->notes .= $fire->shots.";";
 	}
 
 

@@ -79,9 +79,46 @@ Mixed.prototype.getPostMovePos = function(){
 	return this.nextStep;
 }
 
+Mixed.prototype.drawNextMove = function(){
+	planCtx.translate(cam.o.x, cam.o.y);
+	planCtx.scale(cam.z, cam.z);
+
+	var nextMove = this.getPlannedPos();
+	var color = (this.friendly ? "#00ea00" : "red");
+	planCtx.strokeStyle = color;
+
+	planCtx.beginPath();
+	planCtx.moveTo(this.x, this.y);
+
+	for (var i = 0; i < this.actions.length; i++){
+		if (this.actions[i].type == "move"){
+			planCtx.lineTo(this.actions[i].x, this.actions[i].y);
+		}
+	}
+	planCtx.stroke();
+	planCtx.closePath();
+
+	if (this.actions[this.actions.length-1].x == this.finalStep.x && this.actions[this.actions.length-1].y == this.finalStep.y){return;}
+
+	planCtx.beginPath();
+	planCtx.moveTo(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);
+	planCtx.lineTo(this.finalStep.x, this.finalStep.y);
+	planCtx.strokeStyle = "white";
+	planCtx.stroke();
+	planCtx.closePath();
+
+
+	//this.drawMarker(nextMove.x, nextMove.y, color, planCtx);
+
+	planCtx.globalAlpha = 1;
+	planCtx.strokeStyle = "black";
+	planCtx.setTransform(1,0,0,1,0,0);
+}
+
 Mixed.prototype.drawMovePlan = function(){
-	//return;
-	if (!this.deployed){return;}
+	if (!this.deployed){return}
+	this.drawNextMove(); 
+	return;
 
 	var color = "#00ea00";
 	if (!this.friendly){color = "red";}
@@ -249,7 +286,66 @@ Mixed.prototype.getTarget = function(){
 	return game.getUnit(this.mission.targetid);	
 }
 
-Mixed.prototype.setTarget = function(){
+Mixed.prototype.setNextMove = function(){
+	var s = this.getCurSpeed();
+	var d = 0;
+	var p = this.getPlannedPos();
+	var next;
+
+	if (this.mission.type == 1){  // patrol goal
+		this.finalStep = {x: this.mission.x, y: this.mission.y};
+		this.facing = getAngleFromTo(this, this.finalStep);
+		d = getDistance(p, this.finalStep);
+		if (d < s){
+			next = this.finalStep;
+		} else next = getPointInDir(s, this.facing, p.x, p.y);
+	}
+	else {
+		if (this.mission.type == 2){
+			var target = this.getTarget();
+			if (target.ship || target.squad){
+				this.finalStep = target.getPlannedPos();
+				this.facing = getAngleFromTo(this, this.finalStep);
+				d = getDistance(p, this.finalStep);
+				if (d < s){
+					next = this.finalStep;
+				} else next = getPointInDir(s, getAngleFromTo(p, this.finalStep), p.x, p.y);
+			}
+			else if (target.flight){
+				if (target.mission.targetid == this.id){
+					if (s > target.getCurSpeed() || s == target.getCurSpeed() && this.id > target.id){
+						popup("Flight #" + this.id + " (targeting Flight #" + target.id + ") has the advantage (is faster) and will move last");
+						target.setNextMove();
+					}
+
+					this.finalStep = target.getPlannedPos();
+					this.facing = getAngleFromTo(p, this.finalStep);
+
+					d = getDistance(p, this.finalStep);
+
+					next = getPointInDir(Math.min(d, s), this.facing, p.x, p.y);
+				}
+				else if (target.finalStep == undefined){
+					target.setNextMove();
+				}
+				this.finalStep = target.getPlannedPos();
+				//this.facing = getAngleFromTo(p, target.getPlannedPos());
+				this.facing = getAngleFromTo(p, this.finalStep);
+				d = getDistance(p, this.finalStep);
+				if (d < s){
+					next = target.getPlannedPos();
+				} else next = getPointInDir(s, getAngleFromTo(p, this.finalStep), p.x, p.y);
+			}
+			else if (target.salvo){
+			}
+		}
+	}
+
+	this.actions.push(new Move(-1, this.id, "move", 0, this.getCurSpeed(), next.x, next.y, 0, 0, 0, 1, 1, 0));
+
+}
+
+Mixed.prototype.setTlarget = function(){
 	var s = this.getCurSpeed();
 	var d = 0;
 	var p = this.getPlannedPos();
@@ -276,7 +372,7 @@ Mixed.prototype.setTarget = function(){
 				if (target.mission.targetid == this.id){
 					if (s > target.getCurSpeed() || s == target.getCurSpeed() && this.id > target.id){
 						popup("Flight #" + this.id + " (targeting Flight #" + target.id + ") has the advantage (is faster) and will move last");
-						target.setTarget();
+						target.setNextMove();
 					}
 
 					this.finalStep = target.getPlannedPos();
@@ -289,7 +385,7 @@ Mixed.prototype.setTarget = function(){
 				
 				}
 				else if (target.finalStep == undefined){
-					target.setTarget();
+					target.setNextMove();
 				}
 				this.finalStep = target.nextStep;
 				//this.facing = getAngleFromTo(p, target.getPlannedPos());

@@ -222,7 +222,7 @@ function Game(data){
 			.find(".missionTarget").html(this.getMissionTargetString(mission)).end()
 			s.facing = a;
 			s.setCurSpeed();
-			s.setTarget();
+			s.setNextMove();
 
 		s.setBaseLayout();
 		s.setSize();
@@ -278,7 +278,7 @@ function Game(data){
 		flight.setUnitState();
 		flight.isReady = 1;
 		flight.create();
-		flight.setTarget();
+		flight.setNextMove();
 		flight.setLayout();
 		flight.setSize();
 		flight.finalStep = {x: o.x, y: o.y}
@@ -364,7 +364,7 @@ function Game(data){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].ship || this.ships[i].squad){continue;}
 			if (this.ships[i].mission.targetid == update.id){
-				this.ships[i].setTarget();
+				this.ships[i].setNextMove();
 			}
 		}
 	}
@@ -1004,6 +1004,7 @@ function Game(data){
 		this.animMoves = 0;
 		this.setPostMoveCC();
 		this.checkUnitOffsetting();
+		this.setAllCollisionData();
 
 		if (this.phase == 2){
 			for (var i = 0; i < this.ships.length; i++){
@@ -1662,7 +1663,7 @@ function Game(data){
 		}
 
 		for (var i = 0; i < stack.length; i++){
-			stack[i].setTarget();
+			stack[i].setNextMove();
 			if (stack[i].mission.arrived){continue;}
 			stack[i].setImage();
 		}
@@ -2350,14 +2351,14 @@ function Game(data){
 			this.fireOrders[i].shooter = game.getUnit(this.fireOrders[i].shooterid);
 			this.fireOrders[i].weapon = this.fireOrders[i].shooter.getSystem(this.fireOrders[i].weaponid).getActiveSystem();
 		//	this.fireOrders[i].target = game.getUnit(this.fireOrders[i].targetid);
-			this.fireOrders[i].setTarget();
+			this.fireOrders[i].setShotTarget();
 			//this.fireOrders[i].damages = this.fireOrders[i].target.getDmgByFire(this.fireOrders[i]);
 			this.fireOrders[i].setDamages();
 			this.fireOrders[i].systems.push(this.fireOrders[i].weaponid);
 			//this.fireOrders[i].angle = getAngleFromTo(this.fireOrders[i].shooter.getGamePos(), this.fireOrders[i].target.getGamePos());
 			
 			//this.fireOrders[i].setShots();
-		/*	this.fireOrders[i].setTarget() = game.getUnit(this.fireOrders[i].targetid);
+		/*	this.fireOrders[i].setNextMove() = game.getUnit(this.fireOrders[i].targetid);
 			this.fireOrders[i].setShooter() = game.getUnit(this.fireOrders[i].shooterid);
 			this.fireOrders[i].setWeapon() = this.fireOrders[i].shooter.getSystem(this.fireOrders[i].weaponid).getActiveSystem();
 			this.fireOrders[i].setDamages() = this.fireOrders[i].target.getDmgByFire(this.fireOrders[i]);
@@ -3342,7 +3343,9 @@ Game.prototype.setInterferenceData = function(){
 
 Game.prototype.setCollisionData = function (unit){
 	if (unit.obstacle){return;}
-	if (unit.flight || unit.salvo){return;}
+	if (unit.flight || unit.salvo){
+		console.log("ding");
+	}
 	//console.log("___setCollisionData for unit " + unit.id);
 
 	unit.collisions = [];
@@ -3352,12 +3355,10 @@ Game.prototype.setCollisionData = function (unit){
 	for (var i = 0; i < this.ships.length; i++){
 		if (!this.ships[i].obstacle){continue;}
 
-
 		var obstacle = this.ships[i];
 		var tPos = obstacle.getGamePos();
 		var totalDist = 0;
-		var distBetween = getDistance(unitPos, tPos) - obstacle.size/2 - unitSpeed;
-		
+		var distBetween = getDistance(unitPos, tPos) - obstacle.size/2 - unitSpeed;		
 		if (distBetween > 200){
 			//console.log("dist ship/field #" + this.ships[i].id+": "+distBetween+", skip");
 			continue;
@@ -3479,15 +3480,6 @@ Game.prototype.hasObstacleInVector = function(oPos, tPos, unit){
 		})
 	}
 	return inPath;
-}
-
-Ship.prototype.getSavedObstacles = function(shooterid){
-	for (var i = 0; i < this.blocks.length; i++){
-		if (this.blocks[i].id == shooterid){
-			return this.blocks[i];
-		}
-	}
-	return false;
 }
 
 Game.prototype.snapByTurnAttempt = function(pos){
@@ -3890,6 +3882,7 @@ Game.prototype.animateJumpIn = function(){
 }
 
 Game.prototype.setAllCollisionData = function(){
+	console.log("setAllCollisionData");
 	for (var i = 0; i < this.ships.length; i++){
 		this.setCollisionData(this.ships[i]);
 	}
@@ -4335,7 +4328,7 @@ Game.prototype.create = function(data){
 	this.setCC();
 
 	for (var i = 0; i < this.ships.length; i++){
-		this.ships[i].setTarget();
+		this.ships[i].setNextMove();
 		this.ships[i].setLayout();
 		this.ships[i].setSize();
 		this.ships[i].setDrawData();

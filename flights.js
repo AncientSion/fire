@@ -348,6 +348,8 @@ Flight.prototype.getShortInfo = function(){
 	if (!this.mission.arrived && this.contactImminent()){
 		ele.append($("<div>").html("<span class='yellow'>contact imminent</span>"));
 	}
+
+	this.appendCollisions(ele);
 }
 
 Flight.prototype.setPreMoveSize = function(){
