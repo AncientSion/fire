@@ -2090,8 +2090,8 @@ Weapon.prototype.getSysDiv = function(){
 		table.append($("<tr>").append($("<td>").html("Shots & Rakes")).append($("<td>").html(this.getShots() + " w/ " + this.output + " rakes")));
 	}
 	else if (this.fireMode == "Pulse"){
-			table.append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots())));
-			table.append($("<tr>").append($("<td>").html("Volley")).append($("<td>").html(this.basePulses + "+1 (max " + (this.basePulses+this.extraPulses)  +") per " + this.grouping + "%")))
+			table.append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots() + " w/ " + this.basePulses + " pulses")));
+			table.append($("<tr>").append($("<td>").html("Extra Pulses")).append($("<td>").html("+1 per " + this.grouping + "%, up to " + this.extraPulses)))
 	}
 	else if (this.area){
 	}

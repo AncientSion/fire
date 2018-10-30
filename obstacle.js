@@ -85,7 +85,7 @@ Obstacle.prototype.getShortInfo = function(){
 
 	ele
 	//.append(this.getHeader())
-	.append($("<div>").html("#" + this.id +"___Size " + this.size + " / Speed " + this.getCurSpeed()))
+	.append($("<div>").html("Size " + this.size + " / Speed " + this.getCurSpeed()))
 	.append($("<div>").html(this.getMaxInterference() + "% Interference"))
 	.append($("<div>").html(this.getBaseCollision() + "% Collision"))
 	.append($("<div>").html(this.getDamageString() + " / " + this.getBaseAttacks() + " Strikes"))
@@ -135,17 +135,17 @@ Obstacle.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			//.append($("<td>").html("Base Interference Chance"))
 			//.append($("<td>").html(this.interference + "% per 100px")))
-			.append($("<td>").html("Interference Chance"))
+			.append($("<td>").html("Interference"))
 			.append($("<td>").html(this.getMaxInterference() + "% (" + this.interference + "% per 100px)")))
 		.append($("<tr>")
-			.append($("<td>").html("Max Collision Chance"))
-			.append($("<td>").html(this.getBaseCollision() + "% (" + this.collision + "% per 100px)")))
+			.append($("<td>").html("Collision Chance"))
+			.append($("<td>").html(this.getBaseCollision() + "% (vs Medium)")))
 		.append($("<tr>")
-			.append($("<td>").html("Base Attacks (vs Medium)"))
-			.append($("<td>").html(this.getBaseAttacks())))
+			.append($("<td>").html("Collision Modifier"))
+			.append($("<td>").html("+- 0.3 multiplier per Size")))
 		.append($("<tr>")
-			.append($("<td>").html("Attack Modifier"))
-			.append($("<td>").html("+-30 % per size diff.")))
+			.append($("<td>").html("Collision Attacks"))
+			.append($("<td>").html(this.getBaseAttacks() + " per 100px")))
 		.append($("<tr>")
 			.append($("<td>").html("Damage Potential"))
 			.append($("<td>").html(this.getDamageString())))
@@ -382,7 +382,7 @@ Obstacle.prototype.setImage = function(){
 		vectorSize
 	);
 
-	ctx.fillStyle = "white";
+	ctx.fillStyle = "yellow";
 	ctx.font = "24px Arial";
 	ctx.textAlign = "center";
 	ctx.fillText(this.getMaxInterference(), 0, 0 - 35)
