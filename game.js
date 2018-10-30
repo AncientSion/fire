@@ -393,7 +393,7 @@ function Game(data){
 					mission: this.ships[i].mission,
 					loadAdjust: this.ships[i].getLoadAdjustment(),
 					upgrades: this.ships[i].getLaunchData(),
-					actions: this.ships[i].actions,
+					actions: this.ships[i].actions[0],
 					turn: this.turn,
 					eta: 0,
 				}
