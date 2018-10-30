@@ -180,17 +180,22 @@ class NeutronLaser extends Laser {
 class PhasedNeutronLaser extends NeutronLaser {
 	public $name = "PhasedNeutronLaser";
 	public $display = "Phased Neutron Laser";
-	public $dmgType = "Phased";
+	//public $dmgType = "Phased";
 	public $minDmg = 82;
 	public $maxDmg = 108;
 	public $reload = 2;
-	public $optRange = 400;
+	public $optRange = 500;
 	public $dmgLoss = 8;
 	public $integrity = 46;
-	public $armourSkip = 75;
+	//public $armourSkip = 75;
+
+	public $powerReq = 6;
+	public $effiency = 8;
+	public $maxBoost = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
+		$this->boostEffect[0] = new Effect("Damage", 60);
 	}
 }
 

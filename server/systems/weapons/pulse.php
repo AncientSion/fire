@@ -98,7 +98,7 @@ class FusionPulseCannonAS extends Pulse {
 	public $projSpeed = 9;
 	public $reload = 3;
 	public $integrity = 36;
-	public $powerReq = 4;
+	public $powerReq = 5;
 	public $tracking = 3;
 	public $linked = 2;
 
@@ -119,7 +119,7 @@ class FusionPulseCannonAF extends Particle {
 	public $projSpeed = 9;
 	public $reload = 3;
 	public $integrity = 36;
-	public $powerReq = 4;
+	public $powerReq = 5;
 	public $linked = 2;
 
 	public $shots = 2;
