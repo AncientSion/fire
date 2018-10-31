@@ -4,24 +4,14 @@ function Mixed(data){
 	this.primary = false;
 	this.mission = data.mission || {};
 	this.oldMission = 0;
-	this.nextStep;
 	this.finalStep;
 	this.layout = [];
 }
 
 Mixed.prototype = Object.create(Ship.prototype);
 
-Mixed.prototype.getNextPosition = function(){
-	return this.nextStep;
-}
-
 Mixed.prototype.getPlannedFacing = function(){
 	return this.facing;
-	if (game.phase < 2){
-		return this.facing;
-		//return getAngleFromTo(this, this.nextStep);
-	}
-	return this.actions[this.actions.length-1].a;
 }
 
 Mixed.prototype.getCameraStartPos = function(){
@@ -73,10 +63,6 @@ Mixed.prototype.getCurSpeed = function(){
 
 Mixed.prototype.getMaxSpeed = function(){
 	return this.baseImpulse*3;
-}
-
-Mixed.prototype.getPostMovePos = function(){
-	return this.nextStep;
 }
 
 Mixed.prototype.drawNextMove = function(){
@@ -280,62 +266,6 @@ Mixed.prototype.setNextMove = function(){
 
 }
 
-Mixed.prototype.setTlarget = function(){
-	var s = this.getCurSpeed();
-	var d = 0;
-	var p = this.getPlannedPos();
-	if (this.mission.type == 1){  // patrol goal
-		this.finalStep = {x: this.mission.x, y: this.mission.y};
-		this.facing = getAngleFromTo(this, this.finalStep);
-		d = getDistance(p, this.finalStep);
-		if (d < s){
-			this.nextStep = this.finalStep;
-		} else this.nextStep = getPointInDir(s, this.facing, p.x, p.y);
-	}
-	else {
-		if (this.mission.type == 2){
-			var target = this.getTarget();
-			if (target.ship || target.squad){
-				this.finalStep = target.getPlannedPos();
-				this.facing = getAngleFromTo(this, this.finalStep);
-				d = getDistance(p, this.finalStep);
-				if (d < s){
-					this.nextStep = this.finalStep;
-				} else this.nextStep = getPointInDir(s, getAngleFromTo(p, this.finalStep), p.x, p.y);
-			}
-			else if (target.flight){
-				if (target.mission.targetid == this.id){
-					if (s > target.getCurSpeed() || s == target.getCurSpeed() && this.id > target.id){
-						popup("Flight #" + this.id + " (targeting Flight #" + target.id + ") has the advantage (is faster) and will move last");
-						target.setNextMove();
-					}
-
-					this.finalStep = target.getPlannedPos();
-					this.facing = getAngleFromTo(p, this.finalStep);
-
-					d = getDistance(p, this.finalStep);
-
-					this.nextStep = getPointInDir(Math.min(d, s), this.facing, p.x, p.y);
-					return;
-				
-				}
-				else if (target.finalStep == undefined){
-					target.setNextMove();
-				}
-				this.finalStep = target.nextStep;
-				//this.facing = getAngleFromTo(p, target.getPlannedPos());
-				this.facing = getAngleFromTo(p, this.finalStep);
-				d = getDistance(p, this.finalStep);
-				if (d < s){
-					this.nextStep = target.nextStep;
-				} else this.nextStep = getPointInDir(s, getAngleFromTo(p, this.finalStep), p.x, p.y);
-			}
-			else if (target.salvo){
-			}
-		}
-	}
-}
-
 Mixed.prototype.setPreMoveFacing = function(){
 	//console.log("setPreMoveFacing");
 	//if (this.salvo){console.log("setPreMoveFacing");}
@@ -352,7 +282,7 @@ Mixed.prototype.setPreMoveFacing = function(){
 	if (this.actions.length){
 		this.facing = getAngleFromTo(this, this.actions[this.actions.length-1]);
 	}
-	else this.facing = getAngleFromTo(this.getPlannedPos(), this.nextStep);
+	else this.facing = getAngleFromTo(this.getGamePos(), this.getPlannedPos());
 }
 
 Mixed.prototype.setPostMoveFacing = function(){

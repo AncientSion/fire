@@ -1590,10 +1590,10 @@ function Game(data){
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].status == "jumpOut" && game.phase == -1){continue;}
-			var a = this.ships[i].getPlannedPos();
+			var a = this.ships[i].getGamePos();
 			for (var j = i+1; j < this.ships.length; j++){
 				if (this.ships[j].status == "jumpOut" && game.phase == -1){continue;}
-				var b = this.ships[j].getPlannedPos();
+				var b = this.ships[j].getGamePos();
 				if (a.x == b.x && a.y == b.y){
 					if (this.ships[i].flight && this.ships[j].flight && this.ships[i].userid == this.ships[j].userid){
 						if (this.ships[i].mission.targetid != this.ships[j].id && this.ships[j].mission.targetid != this.ships[i].id){continue;}

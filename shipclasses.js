@@ -2195,10 +2195,6 @@ Ship.prototype.getRemDelaya = function(){
 	return this.remDelay;
 }
 
-Ship.prototype.getNextPosition = function(){
-	return this.getPlannedPos();
-}
-
 Ship.prototype.getTurnStartPos = function(){
 	return new Point(this.x, this.y);
 }
