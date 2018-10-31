@@ -44,7 +44,6 @@ class Section {
 	public $start = 0;
 	public $end = 0;
 	public $systems = array();
-	public $parentId;
 
 	function __construct($start, $end){
 		$this->start = $start;

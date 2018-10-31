@@ -109,6 +109,7 @@ spl_autoload_register(
                 'reactor' => '/server/systems/nonweapon.php',
                 'lifesupport' => '/server/systems/nonweapon.php',
                 'sensor' => '/server/systems/nonweapon.php',
+                'jammer' => '/server/systems/nonweapon.php',
                 'cyber' => '/server/systems/nonweapon.php',
                 'interceptor' => '/server/systems/nonweapon.php',
                 

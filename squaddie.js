@@ -88,7 +88,7 @@ Squaddie.prototype.getSysDiv = function(){
 
 Squaddie.prototype.createSelfContainer = function(){
 
-	var img = $(this.getBaseImage().cloneNode(true)).addClass("size70 rotate270");
+	var img = $(this.getBaseImage().cloneNode(true)).addClass("size60 rotate270");
 	if (!this.destroyed){
 		img
 		.click(function(){
@@ -128,16 +128,16 @@ Squaddie.prototype.createSelfContainer = function(){
 		.addClass("primaryDiv")
 	var cTable = $("<table>")
 		.addClass("primaryTable")
-		.append(this.getCoreData())
-		.append(this.getArmourData())
 		.append($("<tr>")
 			.append($("<td>").attr("colspan", 3)
 				.append(imgCont)
 			)
 		)
+		.append(this.getCoreData())
+		.append(this.getArmourData())
 
 	
-	if (!this.destroyed){
+/*	if (!this.destroyed){
 		// power icon
 		$(this.element)
 		.append($("<div>").addClass("unusedPowerDiv")
@@ -147,7 +147,7 @@ Squaddie.prototype.createSelfContainer = function(){
 				.addClass("unusedPower")
 				.html(this.getUnusedPower())))
 
-		if (this.jamming){
+	/*	if (this.jamming){
 			$(this.element)
 			.append($("<div>").addClass("jammingDiv")
 				.append($("<img>").attr("src", "varIcons/jammerIcon.png")
@@ -157,7 +157,7 @@ Squaddie.prototype.createSelfContainer = function(){
 					.html(this.jamming)))
 		}
 	}
-
+*/
 	//core div and core table
 	$(this.element)
 		.append($(pDiv)
@@ -170,7 +170,7 @@ Squaddie.prototype.createSelfContainer = function(){
 	var pHeight = $(pDiv).height();
 
 	var primPosX = cWidth/2 - pWidth/2;
-	var primPosY = cHeight/2 - pHeight/2 + 5;
+	var primPosY = cHeight/2 - pHeight/2 + 20;
 
 
 	$(pDiv)
@@ -179,7 +179,11 @@ Squaddie.prototype.createSelfContainer = function(){
 
 	for (var i = 0; i < this.structures.length; i++){
 		var a = getLayoutDir(this.structures[i]);
-		var p = getPointInDir(pWidth - 15, a-90, primPosX, primPosY);
+		var dist = (pWidth/2)+25;
+		var p = getPointInDir(dist, a-90, primPosX, primPosY);
+
+		if (a == 150){p.x += 30; p.y += 25}
+		else if (a == 210){p.x -= 30; p.y += 25;}
 		var s = 24;
 
 		var oX = 0;
@@ -203,7 +207,7 @@ Squaddie.prototype.createSelfContainer = function(){
 		}
 		else {
 			if (this.structures[i].systems.length > 1){
-				oY = -s*this.structures[i].systems.length;
+				oY = -s*this.structures[i].systems.length - 15;
 			} else oY = -pHeight / 4;
 		}
 

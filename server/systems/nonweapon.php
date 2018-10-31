@@ -240,6 +240,7 @@ class Sensor extends PrimarySystem {
 }
 
 class Jammer extends PrimarySystem {
+	public $type = "Jammer";
 	public $name = "Jammer";
 	public $display = "Passive Jamming Suite";
 	public $hitMod = 1.5;

@@ -687,7 +687,7 @@ table, th, tr, td {
 	display: inline-block;
 	position: relative;
 	width: 160px;
-	height: 160px;
+	height: 170px;
 }
 
 .unitContainer.borderHighlight {
@@ -706,7 +706,6 @@ table, th, tr, td {
 
 .unitContainer .primaryDiv {
 	width: 80px;
-	height: 80px;
 	border: none;
 }
 
