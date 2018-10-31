@@ -287,7 +287,7 @@ Mixed.prototype.setPreMoveFacing = function(){
 
 Mixed.prototype.setPostMoveFacing = function(){
 	if (!this.finalStep){return;}
-	this.facing = getAngleFromTo(this.getPlannedPos(), this.finalStep);
+	this.facing = getAngleFromTo(this.getGamePos(), this.finalStep);
 }
 
 Mixed.prototype.canShortenTurn = function(){
