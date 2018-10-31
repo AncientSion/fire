@@ -83,6 +83,7 @@ class ParticleBolt extends FighterWeapon {
 	public $shots = 1;
 	public $reload = 2;
 	public $tracking = 3;
+	public $accDecay = 500;
 	
 	function __construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg){
 		parent::__construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg);

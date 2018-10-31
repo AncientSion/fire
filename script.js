@@ -125,7 +125,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 		return;
 	}
 	
-	var shooterPos = shooter.getPlannedPos();
+	var shooterPos = (shooter.flight ? shooter.getGamePos() : shooter.getPlannedPos());
 	var facing = shooter.getPlannedFacing();
 	var targetDataA = ui.aimDiv.find("#targetDataA");
 	var targetDataB = ui.aimDiv.find("#targetDataB");

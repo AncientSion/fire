@@ -85,15 +85,15 @@ Salvo.prototype.createBaseDiv = function(){
 
 	var table = $("<table>")
 		.append($("<tr>")
-			.append($("<th>").html(this.structures.length + "x '" + this.structures[0].name + "' #" + this.id).attr("colSpan", 4).addClass(headerC)))
+			.append($("<th>").html(this.structures.length + "x '" + this.structures[0].name + "' #" + this.id).attr("colSpan", 2).addClass(headerC)))
 		.append($("<tr>")
-			.append($("<td>").html(this.structures[0].role).addClass("yellow").css("font-size", 14).attr("colSpan", 4)))
+			.append($("<td>").html(this.structures[0].role).addClass("yellow").css("font-size", 14).attr("colSpan", 2)))
 		.append($("<tr>")
 			.append($("<td>").html("Type / Size").css("width", "50%"))
-			.append($("<td>").html(getUnitType(this.traverse) + " / " + this.traverse).attr("colSpan", 3)))
+			.append($("<td>").html(getUnitType(this.traverse) + " / " + this.traverse)))
 		.append($("<tr>")
 			.append($("<td>").html("Base To-Hit"))
-			.append($("<td>").html(this.getProfileString()).attr("colSpan", 3)))
+			.append($("<td>").html(this.getProfileString())))
 		.append($("<tr>")
 			.append($("<td>").html("Current Speed"))
 			.append($("<td>").html(speed)))
@@ -102,22 +102,22 @@ Salvo.prototype.createBaseDiv = function(){
 			.append($("<td>").html(accel)))
 		.append($("<tr>")
     		.append($("<td>").html("Tracking"))
-			.append($("<td>").html(getUnitType(this.structures[0].systems[0].tracking)).attr("colSpan", 3)))
+			.append($("<td>").html(getUnitType(this.structures[0].systems[0].tracking))))
 		//.append($("<tr>").append($("<td>").attr("colSpan", 4).css("height", 15)))
 		.append($("<tr>")
 			.append($("<td>").html("Targeting"))
-			.append($("<td>").html(target.name + " #" + target.id).attr("colSpan", 3)))
+			.append($("<td>").html(target.name + " #" + target.id)))
 		//.append($("<tr>").append($("<td>").attr("colSpan", 4).css("height", 15)))
 
 		if (lacking){
 			table
 			.append($("<tr>")
-				.append($("<th>").html("- Targeting unsuited units -").attr("colSpan", 4)))
+				.append($("<th>").html("- Targeting unsuited units -").attr("colSpan", 2)))
 		}
 
 		table.append($("<tr>")
     		.append($("<td>").html("Hit Chance (w/o EW)"))
-			.append($("<td>").html(this.getTrackingString()).attr("colSpan", 3)))
+			.append($("<td>").html(this.getTrackingString())))
 		//.append($("<tr>")
     	//	.append($("<td>").html("Damage"))
     	//	.append($("<td>").html(this.getDamage()).attr("colSpan", 3)))
@@ -235,6 +235,24 @@ Salvo.prototype.getShortInfo = function(){
 		ele.append($("<div>").html("<span class='yellow'>contact imminent</span>"));
 	}	
 	this.appendCollisions(ele);
+}
+
+Salvo.prototype.doSelect = function(){
+	console.log(this);
+	//aUnit = this.id;
+	//this.selected = true;
+	//game.redraw()
+	this.switchDiv();
+}
+
+Salvo.prototype.doUnselect = function(){
+	//this.unselectSystems();
+	//aUnit = false;
+	//this.selected = false;
+	this.switchDiv();
+	//mouseCtx.clearRect(0, 0, res.x, res.y);
+	$("#vectorDiv").addClass("disabled");
+	game.redraw();
 }
 
 Salvo.prototype.setImage = function(){

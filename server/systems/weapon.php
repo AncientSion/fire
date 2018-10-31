@@ -65,7 +65,7 @@ class Weapon extends System {
 	}
 
 	public function getTotalDamage($fire, $hit, $system){
-		$base = $this->getBaseDamage($fire, $hit, $system);
+		$base = $this->getBaseDamage($fire, $system);
 		$bonus = $this->getBonusDamage($fire, $base, $hit);
 		$mod = $this->getDamageMod($fire);
 		$range = $this->getDmgRangeMod($fire);
@@ -74,7 +74,7 @@ class Weapon extends System {
 		return max(0, floor(($base+$bonus)*$mod*$range));
 	}
 	
-	public function getBaseDamage($fire, $hit, $system){
+	public function getBaseDamage($fire, $system){
 		return mt_rand($this->getMinDamage(), $this->getMaxDamage());
 	}
 	

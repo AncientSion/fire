@@ -235,7 +235,7 @@ class DmgCalc {
 	}
 
 	public static function doStandardDmg($fire, $hit, $system){
-		//Debug::log("hitting: ".get_class($system));
+		//Debug::log("hitting: ".get_class($system). "# ".$system->id);
 		$destroyed = 0;
 		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 		$okSystem = 0;
@@ -517,7 +517,7 @@ class DmgCalc {
 		$values = $fire->weapon->dmgs;
 
 		$baseDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
-		$damageMod = $baseDmg / $fire->weapon->getBaseDamage($fire, $hit, $system);
+		$damageMod = $baseDmg / $fire->weapon->getBaseDamage($fire, $system);
 
 		Debug::log("fire #".$fire->id.", doFlashDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".get_class($system).", baseDmg: ".$baseDmg.", damageMod: ".$damageMod);
 

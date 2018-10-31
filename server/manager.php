@@ -988,7 +988,7 @@
 
 	public function setCollisionForSingleUnit($unit){
 		if ($unit->obstacle){return;}
-		if ($unit->flight || $unit->salvo){return;}
+		//if ($unit->flight || $unit->salvo){return;}
 		Debug::log("setCollisionForSingleUnit for unit #".$unit->id);
 		$unit->collides = array();
 		$unitPos = $unit->getTurnStartPosition();
@@ -1064,7 +1064,7 @@
 			$shots = round($this->ships[$i]->getSystem(2)->getShots($this->turn) * (1 + (0.3 * ($unit->traverse-4))));
 		*/	
 			$weaponid = 2;
-			$req = $this->ships[$i]->collision * (1 + (0.3 * ($unit->traverse-4)));
+			$req = $this->ships[$i]->collision * (1 + (0.2 * ($unit->traverse-4)));
 			$string = (round($totalDist).";".$this->ships[$i]->collision.";".round($req).";");
 			$shots = ceil($this->ships[$i]->getSystem(2)->getShots($this->turn) / 100 * $totalDist);
 

@@ -249,7 +249,7 @@ class AntimatterConverter extends Particle {
         $this->setFlashData();
 	}
 
-	public function getBaseDamage($fire, $hit, $system){
+	public function getBaseDamage($fire, $system){
 		if ($fire->target->squad){return $this->dmgs[1];}
 		return mt_rand($this->getMinDamage(), $this->getMaxDamage());
 	}

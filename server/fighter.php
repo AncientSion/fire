@@ -37,7 +37,7 @@ class Aurora extends Fighter {
 	public $mass = 34;
 	public $integrity = 26;
 	public $negation = 4;
-	public $baseImpulse = 125;
+	public $baseImpulse = 225;
 	public $baseHitChance = 24;
 
 	function __construct($id, $parentId){
@@ -117,7 +117,7 @@ class Sitara extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new ParticleBolt($this->getId(), $this->parentId, $this->id, 1, 1, 30, 36, 0, 360);
+		$this->systems[] = new ParticleBolt($this->getId(), $this->parentId, $this->id, 1, 1, 34, 41, 0, 360);
 	}
 }
 

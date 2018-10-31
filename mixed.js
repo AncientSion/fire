@@ -90,6 +90,7 @@ Mixed.prototype.drawNextMove = function(){
 	planCtx.beginPath();
 	planCtx.moveTo(this.x, this.y);
 
+//for (var i = 0; i < this.actions.length - (game.phase < 2 ? 0 : 1); i++){
 	for (var i = 0; i < this.actions.length; i++){
 		if (this.actions[i].type == "move"){
 			planCtx.lineTo(this.actions[i].x, this.actions[i].y);
@@ -98,17 +99,14 @@ Mixed.prototype.drawNextMove = function(){
 	planCtx.stroke();
 	planCtx.closePath();
 
-	if (this.actions[this.actions.length-1].x == this.finalStep.x && this.actions[this.actions.length-1].y == this.finalStep.y){return;}
-
-	planCtx.beginPath();
-	planCtx.moveTo(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);
-	planCtx.lineTo(this.finalStep.x, this.finalStep.y);
-	planCtx.strokeStyle = "white";
-	planCtx.stroke();
-	planCtx.closePath();
-
-
-	//this.drawMarker(nextMove.x, nextMove.y, color, planCtx);
+	if (this.actions[this.actions.length-1].x != this.finalStep.x && this.actions[this.actions.length-1].y != this.finalStep.y){
+		planCtx.beginPath();
+		planCtx.moveTo(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);
+		planCtx.lineTo(this.finalStep.x, this.finalStep.y);
+		planCtx.strokeStyle = "white";
+		planCtx.stroke();
+		planCtx.closePath();
+	}
 
 	planCtx.globalAlpha = 1;
 	planCtx.strokeStyle = "black";
@@ -116,8 +114,8 @@ Mixed.prototype.drawNextMove = function(){
 }
 
 Mixed.prototype.drawMovePlan = function(){
-	if (!this.deployed || game.animating){return}
-	this.drawNextMove(); 
+	if (!this.deployed || game.animating){return;}
+	this.drawNextMove();
 }
 
 Mixed.prototype.drawTargetMovePlan = function(){
@@ -204,11 +202,11 @@ Mixed.prototype.contactImminent = function(){
 	var t = this.getTarget();
 
 	if (t.flight && t.mission.targetid == this.id){
-		if (getDistance(t.getPlannedPos(), this.getPlannedPos()) <= this.getCurSpeed() + t.getCurSpeed()){
+		if (getDistance(t.getPlannedPos(), this.getGamePos()) <= this.getCurSpeed() + t.getCurSpeed()){
 			return true;
 		}
 	}
-	else if (getDistance(this.getTargetPos(), this.getPlannedPos()) <= this.getCurSpeed()){
+	else if (getDistance(this.getTargetPos(), this.getGamePos()) <= this.getCurSpeed()){
 		return true;
 	}
 	return false;
@@ -626,7 +624,11 @@ Mixed.prototype.setImage = function(){
 			size
 		)
 		ctx.translate(-this.structures[i].layout.x, -this.structures[i].layout.y);
-	}		
+	}
+
+	ctx.arc(0, 0, 5, 0, 2*Math.PI, false);
+	ctx.fillStyle = (this.friendly ? "#00ea00" : "red");
+	ctx.fill();
 	ctx.setTransform(1,0,0,1,0,0);
 	this.img = t;
 	//console.log(this.img.toDataURL());

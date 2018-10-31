@@ -650,6 +650,7 @@ class Ship {
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($dmg->systemid == $this->structures[$i]->id){
+				//Debug::log("adding damage to id ".$this->structures[$i]->id);
 
 				$this->structures[$i]->addDamage($dmg);
 

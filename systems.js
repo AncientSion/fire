@@ -2302,32 +2302,32 @@ Warhead.prototype.getAnimation = function(fire){
 	var shotDelay = 10;
 	var hits = 0;
 
-	var p = fire.target.getPlannedPos();
+	var t = fire.target.getDrawPos();
 
 	for (var j = 0; j < fire.guns; j++){
 		var gunAnims = [];
 
 		for (var k = 0; k < fire.shots; k++){
-			var hit = 0;
+			var hasHit = 0;
 			var dest;
 			if (fire.hits[j] > k){
-				hit = 1;
+				hasHit = 1;
 				hits++;
 			} else continue;
 
 			if (fire.target.ship){
 				if (this instanceof Warhead){
 					dest = getPointInDir(fire.target.size/3 * (range(7, 13)/10), fire.angle, p.x + range(-4, 4), p.y + range(-4, 4));
-				} 
+				}
 				else dest = getPointInDir(range(10, fire.target.size/3), range(0, 360), p.x, p.y);
 			} 
 			else {
-				dest = fire.target.getFireDest(fire, hit, hits-1);
-				dest.x += p.x;
-				dest.y += p.y;
+				dest = fire.target.getFireDest(fire, hasHit, hits-1);
+				dest.x += t.x;
+				dest.y += t.y;
 			}
 
-			var shotAnim = {tx: dest.x, ty: dest.y, h: hit, f: 0, m: 35, n: 0 - ((j / grouping) * gunDelay + k*shotDelay)};
+			var shotAnim = {tx: dest.x, ty: dest.y, h: hasHit, f: 0, m: 35, n: 0 - ((j / grouping) * gunDelay + k*shotDelay)};
 			
 			gunAnims.push(shotAnim);
 		}

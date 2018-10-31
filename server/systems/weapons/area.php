@@ -46,7 +46,7 @@ class EnergyMine extends Area {
 		$this->armour = floor($rem * $this->armourMod);
 	}
 
-	public function getBaseDamage($fire, $hit, $system){
+	public function getBaseDamage($fire, $system){
 		$base = mt_rand($this->getMinDamage(), $this->getMaxDamage());
 		$multi = $system->traverse;
 		Debug::log("AREA getBaseDamage ".get_class($system)." baseDmg " .$base.", multi ".$multi);

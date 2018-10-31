@@ -227,8 +227,8 @@ function Game(data){
 		s.setBaseLayout();
 		s.setSize();
 		s.resetImage();
-		s.drawX = p.x;
-		s.drawY = p.y;
+		//s.drawX = p.x;
+		//s.drawY = p.y;
 		s.setSupportImage();
 		s.getAttachDivs();
 		s.disableMissionMode();
@@ -325,7 +325,8 @@ function Game(data){
 
 	this.offsetFromFlight = function(){
 		for (var i = 0; i < this.ships.length; i++){
-			if (!this.ships[i].flight || this.ships[i].doDraw || !this.ships[i].cc.length){continue;}
+			//if (!this.ships[i].flight || this.ships[i].doDraw || !this.ships[i].cc.length){continue;}
+			if (!this.ships[i].flight || !this.ships[i].doDraw){continue;}
 			var aPos = this.ships[i].getDrawPos();
 
 			for (var j = i+1; j < this.ships.length; j++){
@@ -3341,9 +3342,7 @@ Game.prototype.setInterferenceData = function(){
 
 Game.prototype.setCollisionData = function (unit){
 	if (unit.obstacle){return;}
-	if (unit.flight || unit.salvo){
-		console.log("ding");
-	}
+	//if (unit.flight || unit.salvo){console.log("ding");}
 	//console.log("___setCollisionData for unit " + unit.id);
 
 	unit.collisions = [];

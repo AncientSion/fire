@@ -42,7 +42,7 @@ Obstacle.prototype.drawNextMove = function(){
 }
 
 Obstacle.prototype.setNextMove = function(){
-	console.log("setNextMove");
+	//console.log("setNextMove");
 	var p;
 
 	if (this.actions.length){
@@ -87,20 +87,20 @@ Obstacle.prototype.getCurSpeed = function(){
 
 Obstacle.prototype.doSelect = function(){
 	console.log(this);
-	aUnit = this.id;
-	this.selected = true;
-	game.redraw()
+	//aUnit = this.id;
+	//this.selected = true;
+	//game.redraw()
 	this.switchDiv();
 }
 
 Obstacle.prototype.doUnselect = function(){
-	this.unselectSystems();
-	aUnit = false;
-	this.selected = false;
+	//this.unselectSystems();
+	//aUnit = false;
+	//this.selected = false;
 	this.switchDiv();
-	mouseCtx.clearRect(0, 0, res.x, res.y);
+	//mouseCtx.clearRect(0, 0, res.x, res.y);
 	$("#vectorDiv").addClass("disabled");
-	game.redraw();
+	//game.redraw();
 }
 
 Obstacle.prototype.createBaseDiv = function(){
@@ -139,7 +139,7 @@ Obstacle.prototype.createBaseDiv = function(){
 			.append($("<td>").html(this.getBaseCollision() + "% (vs Medium)")))
 		.append($("<tr>")
 			.append($("<td>").html("Collision Modifier"))
-			.append($("<td>").html("+- 0.3 multiplier per Size")))
+			.append($("<td>").html("+- 0.2 multiplier per Size")))
 		.append($("<tr>")
 			.append($("<td>").html("Collision Attacks"))
 			.append($("<td>").html(this.getBaseAttacks() + " per 100px")))
@@ -395,11 +395,10 @@ Obstacle.prototype.getBaseAttacks = function(){
 Obstacle.prototype.getRealAttacks = function(dist){
 	var wpn = this.primary.systems[0];
 	return Math.ceil(wpn.shots / 100 * dist);
-	return Math.round(wpn.shots * (1 + (0.3 * (unit.traverse-4))));
 }
 
 Obstacle.prototype.getRealCollisionPct = function(unit){
-	return Math.round(this.collision * (1 + (0.3 * (unit.traverse-4))));
+	return Math.round(this.collision * (1 + (0.2 * (unit.traverse-4))));
 }
 
 Obstacle.prototype.getBaseImage = function(){
