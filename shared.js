@@ -157,7 +157,6 @@ function initSquadron(data){
 		var sub = initSquaddie(data.structures[i]);
 			sub.create()
 		squadron.structures.push(sub)
-		//squadron.addSubElement(sub);
 	}
 	return squadron;
 }
@@ -193,7 +192,7 @@ function initSquaddie(data){
 		unit.crits.push(new Crit(data.crits[i]));
 	}
 
-	for (var j = 0; j < data.structures.length; j++){
+/*	for (var j = 0; j < data.structures.length; j++){
 		var struct = new Section(data.structures[j]);
 
 		for (var k = 0; k < data.structures[j].systems.length; k++){
@@ -202,6 +201,12 @@ function initSquaddie(data){
 		}
 		unit.structures.push(struct);
 	}
+*/
+	for (var j = 0; j < data.systems.length; j++){
+		var system = new window[data.systems[k].type](data.systems[k]);		
+		unit.systems.push(system);
+	}
+
 	return unit;
 }
 

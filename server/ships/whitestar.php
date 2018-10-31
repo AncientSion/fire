@@ -12,10 +12,21 @@ class WhiteStar extends Light {
 	public $ep = 140;
 	public $ew = 700;
 	public $negation = 16;
-	public $jamming = 20;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
+	}
+
+	public function addSystems(){
+		$this->addSubSystem(new PhasedNeutronLaser($this->getId(), $this->parentId, 330, 30), 0);
+		$this->addSubSystem(new Dual($this->getId(), $this->parentId, 355, 55, 0, array("FusionPulseCannonAS", "FusionPulseCannonAF")), 120);
+		$this->addSubSystem(new Dual($this->getId(), $this->parentId, 305, 5, 0, array("FusionPulseCannonAS", "FusionPulseCannonAF")), 240);
+		$this->addSubSystem(new Jammer($this->getId(), $this->parentId, 0), 180);
+	}
+
+	public function addSubSystem($system, $align){
+		$system->align = $align;
+		$this->systems[] = $system;
 	}
 
 	public function addStructures(){
@@ -27,17 +38,17 @@ class WhiteStar extends Light {
 
 		$right = new Section(60, 180);
 
-		$right->systems[] = new Dual($this->getId(), $this->parentId, 355, 55, 0, array("FusionPulseCannonAS", "FusionPulseCannonAF"));
+		$right->systems[] = 
 
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new Dual($this->getId(), $this->parentId, 305, 5, 0, array("FusionPulseCannonAS", "FusionPulseCannonAF"));
+		$left->systems[] = 
 
 		$structs[] = $left;
 
 
-		$jammer = new Jammer($this->getId(), $this->id, 0);
+		$jammer = new Jammer($this->getId(), $this->parentId, 0);
 		$jammer->powerReq = 4;
 		$intern = new Section(210, 210);
 		$intern->systems[] = $jammer;

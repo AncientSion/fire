@@ -47,7 +47,12 @@ class Single {
 		$this->cost = static::$value;
 
 		$this->setBaseStats(0, 0);
-		$this->addStructures();
+		$this->addSystems();
+
+		for ($i = 0; $i < sizeof($this->systems); $i++){
+			$this->systems[$i]->fighterId = $this->id;
+		}
+		
 		$this->setPowerOutput();
 	}
 
@@ -93,10 +98,6 @@ class Single {
 
 	public function addPowerEntry($power){
 		$this->powers[] = $power;
-	}
-
-	public function addStructures(){
-		return;
 	}
 
 	public function setPowerOutput(){

@@ -24,10 +24,10 @@ function Squaddie(data){
 Squaddie.prototype = Object.create(Single.prototype);
 
 Squaddie.prototype.create = function(){
-	this.setElement();
+	this.createBaseContainer();
 }
 
-Squaddie.prototype.setElement = function(){
+Squaddie.prototype.createBaseContainer = function(){
 	this.element = $("<div>")
 		.addClass("unitContainer")
 		.data("shipId", this.parentId)
@@ -86,7 +86,7 @@ Squaddie.prototype.getSysDiv = function(){
 	return div;
 }
 
-Squaddie.prototype.createSelfContainer = function(){
+Squaddie.prototype.fillSelfContainer = function(){
 
 	var img = $(this.getBaseImage().cloneNode(true)).addClass("size60 rotate270");
 	if (!this.destroyed){
@@ -122,6 +122,15 @@ Squaddie.prototype.createSelfContainer = function(){
 				})
 			)
 	}
+	else {
+		$(this.element)
+		.append($("<div>").addClass("unusedPowerDiv")
+			.append($("<img>").attr("src", "varIcons/powerIcon.png")
+				.addClass("unusedPowerIcon"))
+			.append($("<div>")
+				.addClass("unusedPower")
+				.html(this.getUnusedPower())))
+	}
 
 
 	var pDiv = $("<div>")
@@ -137,7 +146,7 @@ Squaddie.prototype.createSelfContainer = function(){
 		.append(this.getArmourData())
 
 	
-/*	if (!this.destroyed){
+	/*if (!this.destroyed){
 		// power icon
 		$(this.element)
 		.append($("<div>").addClass("unusedPowerDiv")
@@ -147,7 +156,7 @@ Squaddie.prototype.createSelfContainer = function(){
 				.addClass("unusedPower")
 				.html(this.getUnusedPower())))
 
-	/*	if (this.jamming){
+		if (this.jamming){
 			$(this.element)
 			.append($("<div>").addClass("jammingDiv")
 				.append($("<img>").attr("src", "varIcons/jammerIcon.png")
@@ -156,8 +165,9 @@ Squaddie.prototype.createSelfContainer = function(){
 					.addClass("jammingOutput")
 					.html(this.jamming)))
 		}
-	}
-*/
+	
+	}*/
+
 	//core div and core table
 	$(this.element)
 		.append($(pDiv)

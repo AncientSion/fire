@@ -158,15 +158,15 @@ Squadron.prototype.createBaseDiv = function(){
 	if (this.structures.length){
 		$(div).removeClass("disabled");
 		this.setLayout();
-		this.positionSubUnits();
+		this.addSubContainers();
 		for (var i = 0; i < this.structures.length; i++){
-			this.structures[i].createSelfContainer();
+			this.structures[i].fillSelfContainer();
 		}
 		$(div).addClass("disabled");
 	}
 }
 
-Squadron.prototype.positionSubUnits = function(){
+Squadron.prototype.addSubContainers = function(){
 
 	var contW = 160;
 

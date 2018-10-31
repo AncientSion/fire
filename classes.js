@@ -654,15 +654,12 @@ function Single(data){
 	this.mass = data.mass;
 	this.remaining = data.remaining;
 	this.integrity = data.integrity;
-	this.value = data.value;
 	this.negation = data.negation;
 	this.baseHitChance = data.baseHitChance;
 	this.destroyed = data.destroyed;
 	this.disabled = data.disabled;
-	this.tracking = data.tracking;
 	this.baseImpulse = data.baseImpulse;
 	this.critEffects = data.critEffects;
-	this.jamming = data.jamming;
 	this.damages = [];
 	this.crits = [];
 	this.systems = [];
@@ -673,9 +670,20 @@ function Single(data){
 	this.squaddie = 0;
 }
 
-Single.prototype.hasPassiveJamming = function(){
-	if (this.jamming){return true;}
+Single.prototype.getSystemByName = function(name){
+	for (var i = 0; i < this.systems.length; i++){
+		if (this.systems[i].name == name){
+			return this.systems[i];
+		}
+	}
 	return false;
+}
+
+Single.prototype.hasPassiveJamming = function(){
+	var jammer = this.getSystemByName("Jammer");
+	if (!jammer || jammer.destroyed || jammer.disabled){
+		return false;
+	} return true;
 }
 
 Single.prototype.getJammerStrength = function(){

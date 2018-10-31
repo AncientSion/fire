@@ -5,10 +5,6 @@ class Fighter extends Single {
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->addSystems();
-		for ($i = 0; $i < sizeof($this->systems); $i++){
-			$this->systems[$i]->fighterId = $this->id;
-		}
 	}
 
 	public function setBaseStats($phase, $turn){
@@ -131,7 +127,6 @@ class Nial extends Fighter {
 	public $negation = 7;
 	public $baseImpulse = 150;
 	public $baseHitChance = 26;
-	public $jamming = 15;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -157,7 +152,6 @@ class Tishat extends Fighter {
 	public $negation = 6;
 	public $baseImpulse = 150;
 	public $baseHitChance = 24;
-	public $jamming = 15;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

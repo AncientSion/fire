@@ -280,10 +280,10 @@ else header("Location: index.php");
 					squadron.structures.push(copy);
 					squadron.index = id;
 					squadron.setLayout();
-					squadron.positionSubUnits();
+					squadron.addSubContainers();
 					squadron.setStats();
 					squadron.setSubSystemState();
-					copy.createSelfContainer();
+					copy.fillSelfContainer();
 					copy.previewSetup();
 
 					game.setUnitTotal(squadron);
@@ -862,11 +862,11 @@ else header("Location: index.php");
 		squadron.index = sub.index;
 		squadron.size = (50 + squadron.structures.length*10) * 0.7;
 		squadron.setLayout();
-		squadron.positionSubUnits();
+		squadron.addSubContainers();
 		squadron.setStats();
 		squadron.setSubSystemState();
 		squadron.updateImage();
-		sub.createSelfContainer();
+		sub.fillSelfContainer();
 		sub.previewSetup();
 		drawShipPreview();
 
