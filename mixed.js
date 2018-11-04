@@ -4,7 +4,7 @@ function Mixed(data){
 	this.primary = false;
 	this.mission = data.mission || {};
 	this.oldMission = 0;
-	this.finalStep;
+	this.finalStep = false;
 	this.layout = [];
 }
 
@@ -184,7 +184,7 @@ Mixed.prototype.getTargetPos = function(){
 }
 
 Mixed.prototype.contactImminent = function(){
-	if (this.torpedo && this.actions[this.actions.length-1].type == "move" && this.actions[this.actions.length-1].turn == game.turn){return false;}
+	//if (this.torpedo && this.actions[this.actions.length-1].type == "move" && this.actions[this.actions.length-1].turn == game.turn){return false;}
 	var t = this.getTarget();
 
 	if (t.flight && t.mission.targetid == this.id){
@@ -207,6 +207,8 @@ Mixed.prototype.setNextMove = function(){
 	var d = 0;
 	var p = this.getGamePos();
 	var next;
+
+	if (this.mission.arrived && game.phase >= 2){return;}
 
 	if (this.mission.type == 1){  // patrol goal
 		this.finalStep = {x: this.mission.x, y: this.mission.y};

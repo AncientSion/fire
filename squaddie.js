@@ -1,6 +1,5 @@
 function Squaddie(data){
 	Single.call(this, data);
-	this.structures = [];
 	this.size = data.size;
 	this.index = data.index;
 	this.ew = data.ew;
@@ -86,6 +85,8 @@ Squaddie.prototype.getSysDiv = function(){
 	return div;
 }
 
+
+
 Squaddie.prototype.fillSelfContainer = function(){
 
 	var img = $(this.getBaseImage().cloneNode(true)).addClass("size60 rotate270");
@@ -145,29 +146,6 @@ Squaddie.prototype.fillSelfContainer = function(){
 		.append(this.getCoreData())
 		.append(this.getArmourData())
 
-	
-	/*if (!this.destroyed){
-		// power icon
-		$(this.element)
-		.append($("<div>").addClass("unusedPowerDiv")
-			.append($("<img>").attr("src", "varIcons/powerIcon.png")
-				.addClass("unusedPowerIcon"))
-			.append($("<div>")
-				.addClass("unusedPower")
-				.html(this.getUnusedPower())))
-
-		if (this.jamming){
-			$(this.element)
-			.append($("<div>").addClass("jammingDiv")
-				.append($("<img>").attr("src", "varIcons/jammerIcon.png")
-					.addClass("jammingIcon"))
-				.append($("<div>")
-					.addClass("jammingOutput")
-					.html(this.jamming)))
-		}
-	
-	}*/
-
 	//core div and core table
 	$(this.element)
 		.append($(pDiv)
@@ -187,8 +165,18 @@ Squaddie.prototype.fillSelfContainer = function(){
 		.css("left", primPosX)
 		.css("top", primPosY)
 
-	for (var i = 0; i < this.structures.length; i++){
-		var a = getLayoutDir(this.structures[i]);
+
+	var toDo = [[this.systems[0]]];	
+
+	for (var i = 1; i < this.systems.length; i++){
+		if (this.systems[i].align == toDo[toDo.length-1][toDo[toDo.length-1].length-1].align){
+			toDo[toDo.length-1].push(this.systems[i]);
+		} else toDo.push([this.systems[i]]);
+	}
+
+
+	for (var i = 0; i < toDo.length; i++){
+		var a = toDo[i][0].align;
 		var dist = (pWidth/2)+25;
 		var p = getPointInDir(dist, a-90, primPosX, primPosY);
 
@@ -205,30 +193,30 @@ Squaddie.prototype.fillSelfContainer = function(){
 		var space = 10;
 
 		if (a == 0 || a == 360 || a == 180){
-			if (this.structures[i].systems.length == 2){
+			if (toDo[i].length == 2){
 				oX = -s/2 - space/2;
 			}
-			else if (this.structures[i].systems.length == 3){
+			else if (toDo[i].length == 3){
 				oX = -s - space;
 			}
-			else if (this.structures[i].systems.length == 4){
+			else if (toDo[i].length == 4){
 				oX = -s -space*3;
 			}
 		}
 		else {
-			if (this.structures[i].systems.length > 1){
-				oY = -s*this.structures[i].systems.length - 15;
+			if (toDo[i].length > 1){
+				oY = -s*toDo[i].length - 15;
 			} else oY = -pHeight / 4;
 		}
 
-		for (var j = 0; j < this.structures[i].systems.length; j++){
-			var ele = this.attachEvent(this.structures[i].systems[j].getDiv());
+		for (var j = 0; j < toDo[i].length; j++){
+			var ele = this.attachEvent(toDo[i][j].getDiv());
 			if (this.id > 0 && game.phase == -1){
-				var boostDiv = this.structures[i].systems[j].getBoostDiv();
+				var boostDiv = toDo[i][j].getBoostDiv();
 				if (boostDiv){ele.appendChild(boostDiv)};
-				var powerDiv = this.structures[i].systems[j].getPowerDiv();
+				var powerDiv = toDo[i][j].getPowerDiv();
 				if (powerDiv){ele.appendChild(powerDiv);}
-				var modeDiv = this.structures[i].systems[j].getModeDiv();
+				var modeDiv = toDo[i][j].getModeDiv();
 				if (modeDiv){ele.appendChild(modeDiv);}
 			}
 
@@ -280,14 +268,11 @@ Squaddie.prototype.getUnusedPower = function(){
 	var use = 0;
 
 	use += this.getPowerUsage();
-	for (var i = 0; i < this.structures.length; i++){
-		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (this.structures[i].systems[j].isPowered()){
-				use += this.structures[i].systems[j].getPowerUsage();
-			}
+	for (var i = 0; i < this.systems.length; i++){
+		if (this.systems[i].isPowered()){
+			use += this.systems[i].getPowerUsage();
 		}
 	}
-
 	return output - use;
 }
 
@@ -309,40 +294,32 @@ Squaddie.prototype.updatesysDiv = function(){
 }
 
 Squaddie.prototype.unpowerSystemsByName = function(name){
-	for (var i = 0; i < this.structures.length; i++){
-		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (!this.structures[i].systems[j].isPowered() || this.structures[i].systems[j].getActiveSystem().name != name){continue;}
-			this.structures[i].systems[j].doUnpower();
-		}
+	for (var i = 0; i < this.systems.length; i++){
+		if (!this.systems[i].isPowered() || this.systems[i].getActiveSystem().name != name){continue;}
+		this.systems[i].doUnpower();
 	}
 }
 
 Squaddie.prototype.powerSystemsByName = function(name){
-	for (var i = 0; i < this.structures.length; i++){
-		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (this.structures[i].systems[j].isPowered() || this.structures[i].systems[j].getActiveSystem().name != name){continue;}
-			this.structures[i].systems[j].doPower();
-		}
+	for (var i = 0; i < this.systems.length; i++){
+		if (this.systems[i].isPowered() || this.systems[i].getActiveSystem().name != name){continue;}
+		this.systems[i].doPower();
 	}
 }
 
 Squaddie.prototype.switchSystemsByName = function(name){
-	for (var i = 0; i < this.structures.length; i++){
-		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (!this.structures[i].systems[j].dual || this.structures[i].systems[j].getLoadLevel() != 1){continue;}
-			if (this.structures[i].systems[j].getActiveSystem().name == name){
-				this.structures[i].systems[j].switchMode();
-			}
+	for (var i = 0; i < this.systems.length; i++){
+		if (!this.systems[i].dual || this.systems[i].getLoadLevel() != 1){continue;}
+		if (this.systems[i].getActiveSystem().name == name){
+			this.systems[i].switchMode();
 		}
 	}
 }
 
 Squaddie.prototype.getSystem = function(id){
-	for (var i = 0; i < this.structures.length; i++){
-		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (this.structures[i].systems[j].id == id){
-				return this.structures[i].systems[j];
-			}
+	for (var i = 0; i < this.systems.length; i++){
+		if (this.systems[i].id == id){
+			return this.systems[i];
 		}
 	}
 }
@@ -434,11 +411,9 @@ Squaddie.prototype.armourOut = function(e){
 
 Squaddie.prototype.doDestroy = function(){
 	this.doDraw = 0;
-	for (var i = 0; i < this.structures.length; i++){
-		for (var k = 0; k < this.structures[i].systems.length; k++){
-			//this.structures[i].systems[k].destroyed = true;
-			this.structures[i].systems[k].locked = true;
-		}
+	for (var i = 0; i < this.systems.length; i++){
+		//this.systems[i].destroyed = true;
+		this.systems[i].locked = true;
 	}
 }
 
@@ -495,11 +470,9 @@ Squaddie.prototype.getBoostEffect = function(val){
 }
 
 Squaddie.prototype.previewSetup = function(){
-	for (var i = 0; i < this.structures.length; i++){
-		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (this.structures[i].systems[j].loadout){
-				$(this.structures[i].systems[j].element).addClass("hasOptions");
-			}
+	for (var i = 0; i < this.systems.length; i++){
+		if (this.systems[i].loadout){
+			$(this.systems[i].element).addClass("hasOptions");
 		}
 	}
 }

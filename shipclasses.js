@@ -932,6 +932,9 @@ Ship.prototype.getProfileMod = function(){
 }
 
 Ship.prototype.canBoost = function(system){
+	var need = system.getEffiency();
+	var avail = this.getUnusedPower();
+
 	if (system.disabled || system.destroyed || system.tiny){
 		return false;
 	}
@@ -940,23 +943,21 @@ Ship.prototype.canBoost = function(system){
 			if (system.getOutput() < system.getMaxoutput()){
 				if (system.getRemAmmo() > system.getOutput()){
 					return true;
-				} else popup("There is not enough ammunition left");
-			} else popup("The launcher is already at maximum capacity");
+				} else popup("There is not enough ammunition left.");
+			} else popup("The launcher is already at maximum capacity.");
 		}
 		else {
 			if (system.getBoostLevel() < system.maxBoost){
-				var avail = this.getUnusedPower();
-				var need = system.getEffiency();
 				if (avail >= need){
 					return true;
-				} else popup("You have insufficient power remaining");
+				} else popup("You have insufficient power remaining.</br>(Need " + need + ", Have " + avail +")");
 			} else popup("The selected system cant be boosted further.");
 		}
 	}
 	else if (!(system instanceof Weapon)){
-		if (this.getUnusedPower() >= system.getEffiency()){
+		if (avail >= need){
 			return true;
-		} else popup("You have insufficient power remaining");
+		} else popup("You have insufficient power remaining.</br>(Need " + need + ", Have " + avail +")");
 	}
 	return false;
 }
@@ -1135,17 +1136,10 @@ Ship.prototype.toggleDivSize = function(){
 	if ($(this.element).find(".structContainer").is(":visible")){
 		$(this.element).find(".structContainer").hide();
 	} else $(this.element).find(".structContainer").show();
-
-	return;
-
-
-
-	if ($(this.element).find(".structContainer").is(":visible")){
-		$(this.element).find(".structContainer").hide();
-	} else $(this.element).find(".structContainer").show();
 }
 
 Ship.prototype.setPreMoveFacing = function(){
+	//console.log("setPreMoveFacing #"+this.id);
 	this.drawFacing = this.facing;
 	if (this.available == game.turn){
 		for (var i = 0; i < this.actions.length; i++){
@@ -1157,22 +1151,21 @@ Ship.prototype.setPreMoveFacing = function(){
 }
 
 Ship.prototype.setPostMoveFacing = function(){
+	//console.log("setPostMoveFacing #"+this.id);
 	this.drawFacing = this.facing;
 	for (var i = 0; i < this.actions.length; i++){
-		//if (this.actions[i].type == "turn"){
-			this.drawFacing += this.actions[i].a;
-		//}
+		this.drawFacing += this.actions[i].a;
 	}
 }
 
 Ship.prototype.setPreMovePosition = function(){
-	//console.log("setPreMovePosition #" + this.id);
+	//console.log("setPreMovePosition #"+this.id);
 	this.drawX = this.x;
 	this.drawY = this.y;
 }
 
 Ship.prototype.setPostMovePosition = function(){
-	//console.log("setPostMovePosition");
+	//console.log("setPostMovePosition #"+this.id);
 	if (!this.actions.length){return;}
 	this.drawX = this.actions[this.actions.length-1].x;
 	this.drawY = this.actions[this.actions.length-1].y;
@@ -1181,6 +1174,7 @@ Ship.prototype.setPostMovePosition = function(){
 		if (this.actions[i].resolved){
 			this.drawX = this.actions[i].x;
 			this.drawY = this.actions[i].y;
+			return;
 		}
 	}
 }
@@ -1283,12 +1277,15 @@ Ship.prototype.getStructureFromAngle = function(a){
 	}
 }
 
+Ship.prototype.getColor = function(){
+	return (this.friendly ? "#00ea00" : "red");
+}
+
 Ship.prototype.drawMovePlan = function(){
 	//console.log("draw moves for #" + this.id);
 	if (!this.selected && (!this.actions.length || !this.deployed)){return;}
 
-	var color = "#00ea00";
-	if (!this.friendly){color = "red";}
+	var color = this.getColor();
 	
 	planCtx.translate(cam.o.x, cam.o.y);
 	planCtx.scale(cam.z, cam.z);
@@ -3028,7 +3025,7 @@ Ship.prototype.expandDiv = function(div){
 	//$(structContainer).append($("<div>").addClass("unusedPower").html(this.getSystemByName("Reactor").getOutput()));
 
 	var top = 0;
-	var left = structContainer.width() - 55;
+	var left = structContainer.width() - 40;
 	if (this.structures.length == 3 && this.structures[0].start == 0){
 		top = structContainer.height() - 65;
 	}
@@ -4617,6 +4614,10 @@ Ship.prototype.hasPassiveJamming = function(){
 	if (!jammer || jammer.destroyed || jammer.disabled){
 		return false;
 	} return true;
+}
+
+Ship.prototype.getJammingString = function(){
+	return ("---- Passing jamming detected (<span class='yellow'>" + this.getJammingString() + "% chance to miss</span>) ----");
 }
 
 Ship.prototype.getJammerStrength = function(){

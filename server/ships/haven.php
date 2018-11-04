@@ -18,24 +18,10 @@ class Haven extends UltraLight {
 		parent::__construct($id, $parentId);
 	}
 
-	public function addStructures(){
-		$structs = array();
-
-		$front = new Section(300, 60);
-		$front->systems[] = new LightPlasma($this->getId(), $this->parentId, 315, 45);
-		$structs[] = $front;
-
-		$right = new Section(60, 180);
-		$right->systems[] = new LightParticle($this->getId(), $this->parentId, 240, 120);
-		$structs[] = $right;
-
-		$left = new Section(180, 300);
-		$left->systems[] = new LightParticle($this->getId(), $this->parentId, 240, 120);
-		$structs[] = $left;
-
-		for ($i = 0; $i < sizeof($structs); $i++){
-			$this->structures[] = $structs[$i];
-		}
+	public function addSystems(){
+		$this->addSubSystem(new LightPlasma($this->getId(), $this->parentId, 315, 45), 0);
+		$this->addSubSystem(new LightParticle($this->getId(), $this->parentId, 240, 120), 120);
+		$this->addSubSystem(new LightParticle($this->getId(), $this->parentId, 240, 120), 240);
 	}
 }
 

@@ -1,6 +1,6 @@
 <?php 
 
-class Obstacle extends Mixed {
+class Obstacle extends Minor {
 	
 	public $name = "Obstacle";
 	public $display = "Asteroid Cluster";

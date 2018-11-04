@@ -1,6 +1,6 @@
 <?php
 
-class Flight extends Mixed {
+class Flight extends Minor {
 	public $flight = true;
 	public $unitType = "Flight";
 	public $name = "Flight";

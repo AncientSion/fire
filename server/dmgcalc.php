@@ -91,11 +91,11 @@ class DmgCalc {
 
 	public static function setWeaponPriority(){
 		$names = array(
-			"SuperHeavyLaser", "HeavyLaser", "MediumLaser", "LightLaser", "LightParticleBeam", "NeutronLaser", "PhasedNeutronLaser", "HeavyNeutronBeamProjector",
+			"SuperHeavyLaser", "HeavyLaser", "MediumLaser", "LightLaser", "LightParticleBeam", "NeutronLaser", "ImprovedNeutronLaser", "HeavyNeutronBeamProjector",
 			"SuperHeavyParticle", "HeavyParticle", "MediumParticle", "LightParticle", "TwinParticleBolter", "FusionCannon", "HeavyFusionCannon",
 			"HeavyPlasma", "MediumPlasma", "LightPlasma", "LightPlasmaShredder",
-			"AntimatterConverter", "MagCompressor",
-			"LightPulse", "MediumPulse", "HeavyPulse", "FusionPulseCannonAS", "FusionPulseCannonAF",
+			"HeavyAntimatterConverter", "AntimatterConverter",  "MagCompressor",
+			"LightPulse", "MediumPulse", "HeavyPulse", "NeutronPulsar",
 			"LightPlasmaPulse", "MediumPlasmaPulse", "HeavyPlasmaPulse",
 			"MediumRailGun", "HeavyRailGun"
 		);
@@ -292,7 +292,7 @@ class DmgCalc {
 		//$hits = $fire->weapon->basePulses + min($fire->weapon->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $fire->weapon->grouping));
 		$hits = $fire->weapon->getMultiShotHits($fire, $hit, $system);
 
-		//Debug::log("fire #".$fire->id.", doPulseDmg, weapon: ".$fire->weapon->name.", target #".$fire->target->id."/".$system->id."/".$system->name.", hits: ".$hits);
+		Debug::log("fire #".$fire->id.", doPulseDmg, weapon: ".$fire->weapon->name.", target #".$fire->target->id."/".$system->id."/".$system->name.", hits: ".$hits);
 
 		/*if ($negation["bonus"] > 1){
 			Debug::log("PulseDmg:</br>");
@@ -314,7 +314,8 @@ class DmgCalc {
 			//Debug::log("added hit ".$i.", ".$shield."/".$armour."/".$struct);
 		}
 
-		$dmg->notes .= ("v".$hits.";");
+		$dmg->notes .= ("v".($hits*$fire->weapon->linked).";");
+		Debug::log("notes ".$dmg->notes);
 		$dmg->shieldDmg = $shield;
 		$dmg->armourDmg = $armour;
 		$dmg->systemDmg = $struct;

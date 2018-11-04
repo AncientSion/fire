@@ -17,12 +17,16 @@ class Sharlin extends SuperHeavy {
 
 	function __construct($data = false){
         parent::__construct($data);
+	}	
+
+	public function addSpecials(){
+		$this->primary->systems[] = new Jammer($this->getId(), $this->id, $this->vitalHP, $this->traverse*2);
 	}
 
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 1200, 26, 4);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 1200, 23, 4);
 			$front->systems[] = new TwinEMProjector($this->getId(), $this->id, 270, 90);
 			$front->systems[] = new HeavyNeutronBeamProjector($this->getId(), $this->id, 315, 45, 0, 2);
 			$front->systems[] = new TwinEMProjector($this->getId(), $this->id, 270, 90);
@@ -32,7 +36,7 @@ class Sharlin extends SuperHeavy {
 			$front->systems[] = new FusionCannon($this->getId(), $this->id, 315, 45);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 30, 150, 2450, 24);
+		$right = new Structure($this->getId(), $this->id, 30, 150, 2450, 21);
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$right->systems[] = new FusionCannon($this->getId(), $this->id, 30, 150);
@@ -43,7 +47,7 @@ class Sharlin extends SuperHeavy {
 			$right->systems[] = new TwinEMProjector($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 		
-		$aft = new Structure($this->getId(), $this->id, 150, 210, 2100, 20, 4);
+		$aft = new Structure($this->getId(), $this->id, 150, 210, 2100, 17, 4);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 180, 0);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
@@ -53,7 +57,7 @@ class Sharlin extends SuperHeavy {
 			$aft->systems[] = new NeutronLaser($this->getId(), $this->id, 120, 240);
 		$structs[] = $aft;
 
-		$left = new Structure($this->getId(), $this->id, 210, 330, 2450, 24);
+		$left = new Structure($this->getId(), $this->id, 210, 330, 2450, 21);
 			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$left->systems[] = new FusionCannon($this->getId(), $this->id, 210, 330);

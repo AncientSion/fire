@@ -18,24 +18,10 @@ class Vorchora extends SuperLight {
 		parent::__construct($id, $userid);
 	}
 
-	public function addStructures(){
-		$structs = array();
-
-		$front = new Section(300, 60);
-		$front->systems[] = new LightParticle($this->getId(), $this->parentId, 270, 90);
-		$structs[] = $front;
-
-		$right = new Section(60, 180);
-		$right->systems[] = new LightPlasmaShredder($this->getId(), $this->parentId, 315, 45);
-		$structs[] = $right;
-
-		$left = new Section(180, 300);
-		$left->systems[] = new LightPlasmaShredder($this->getId(), $this->parentId, 315, 45);
-		$structs[] = $left;
-
-		for ($i = 0; $i < sizeof($structs); $i++){
-			$this->structures[] = $structs[$i];
-		}
+	public function addSystems(){
+		$this->addSubSystem(new LightParticle($this->getId(), $this->parentId, 270, 90), 0);
+		$this->addSubSystem(new LightPlasmaShredder($this->getId(), $this->parentId, 315, 45), 120);
+		$this->addSubSystem(new LightPlasmaShredder($this->getId(), $this->parentId, 315, 45), 240);
 	}
 }
 

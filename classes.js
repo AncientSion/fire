@@ -1079,6 +1079,13 @@ FireOrder.prototype.setSystems = function(){
 FireOrder.prototype.setCamAndAngle = function(){
 	var origin = this.shooter.getGamePos();
 	var dest;
+	if (this.shooter.salvo){
+		this.angle = getAngleFromTo(this.target.getGamePos(), this.shooter.getTrajectory());
+		this.focus = this.target.getGamePos();
+		this.dist = 0; return;
+	}
+
+
 	if (this.weapon.freeAim){
 		dest = {x: this.x, y: this.y};
 	} else dest = this.target.getGamePos();

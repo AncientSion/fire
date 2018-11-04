@@ -579,7 +579,7 @@
 				}
 				else if (e.keyCode == 102){ // f
 					if (game.phase != 3 || !game.animating){return;}
-
+					console.log("m!");
 					game.animating = false;
 					window.cancelAnimationFrame(anim);
 					fxCtx.setTransform(1,0,0,1,0,0)
@@ -597,6 +597,8 @@
 				}
 				else if (e.keyCode == 109){ // m, cancel move animation
 					if (!game.animating || !game.animMoves){return;}
+					console.log("m!");
+					game.animating = 0;
 					window.cancelAnimationFrame(anim);
 
 					if (game.phase == -1){

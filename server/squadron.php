@@ -35,10 +35,8 @@ class Squadron extends Mixed {
 			$this->structures[$i]->determineCrit($dmg, $turn, 0);
 			if ($this->structures[$i]->destroyed){continue;}
 
-			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
-				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){
-					$this->structures[$i]->structures[$j]->systems[$k]->determineCrit($dmg, $turn, 1);
-				}
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				$this->structures[$i]->systems[$j]->determineCrit($dmg, $turn, 1);
 			}
 		}
 		$this->isDestroyed();
@@ -99,6 +97,7 @@ class Squadron extends Mixed {
 
 
 	public function getRelDmg($turn){
+		//Debug::log("getRelDmg on SQUAD #".$this->id."/".get_class($this));
 		$max = 0;
 		$new = 0;
 		$rem = 0;
@@ -196,13 +195,11 @@ class Squadron extends Mixed {
 
 	public function hideFireOrders($turn, $phase){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
-				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){
-					for ($l = sizeof($this->structures[$i]->structures[$j]->systems[$k]->fireOrders)-1; $l >= 0; $l--){
-						if ($this->structures[$i]->structures[$j]->systems[$k]->fireOrders[$l]->turn == $turn && $this->structures[$i]->structures[$j]->systems[$k]->usage == $phase){
-							array_splice($this->structures[$i]->structures[$j]->systems[$k]->fireOrders, $l, 1);
-						} else break;
-					}
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				for ($k = sizeof($this->structures[$i]->systems[$j]->fireOrders)-1; $k >= 0; $k--){
+					if ($this->structures[$i]->systems[$j]->fireOrders[$k]->turn == $turn && $this->structures[$i]->systems[$j]->usage == $phase){
+						array_splice($this->structures[$i]->systems[$j]->fireOrders,kl, 1);
+					} else break;
 				}
 			}
 		}
@@ -212,9 +209,9 @@ class Squadron extends Mixed {
 		//Debug::log("d");
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
-				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){
-					$this->structures[$i]->structures[$j]->systems[$k]->doHidePowerOrders($turn);
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]); $k++){
+					$this->structures[$i]->systems[$j]->doHidePowerOrders($turn);
 				}
 			}
 		}
@@ -248,12 +245,9 @@ class Squadron extends Mixed {
 				return $this->structures[$i];
 			}
 
-			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
-				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){
-					if ($this->structures[$i]->structures[$j]->systems[$k]->id == $id){
-						return $this->structures[$i]->structures[$j]->systems[$k]->getActiveSystem();
-					}
-				}
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				if ($this->structures[$i]->systems[$j]->id != $id){continue;}
+				return $this->structures[$i]->systems[$j]->getActiveSystem();
 			}
 		}
 		Debug::log("ERROR squadron getSystem: ".$id);
@@ -336,24 +330,20 @@ class Squadron extends Mixed {
 					$this->structures[$j]->crits[] = $crits[$i];
 					if ($crits[$i]->type == "Disabled" && $crits[$i]->duration == 0){
 						$this->structures[$j]->destroyed = 1;
-						for ($k = 0; $k < sizeof($this->structures[$j]->structures); $k++){
-							for ($l = 0; $l < sizeof($this->structures[$j]->structures[$k]->systems); $l++){
-								$this->structures[$j]->structures[$k]->systems[$l]->destroyed = 1;
-							}
+						for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
+							$this->structures[$j]->systems[$k]->destroyed = 1;
 						}
 					}
 					$found = 1;
 					break;
 				}
 				
-				for ($k = 0; $k < sizeof($this->structures[$j]->structures); $k++){
-					for ($l = 0; $l < sizeof($this->structures[$j]->structures[$k]->systems); $l++){
-						//Debug::log("system id: ".$this->structures[$j]->structures[$k]->systems[$l]->id);
-						if ($this->structures[$j]->structures[$k]->systems[$l]->id == $crits[$i]->systemid){
-							$this->structures[$j]->structures[$k]->systems[$l]->crits[] = $crits[$i];
-							$found = 1;
-							break 3;
-						}
+				for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
+					//Debug::log("system id: ".$this->structures[$j]->structures[$k]->systems[$l]->id);
+					if ($this->structures[$j]->systems[$k]->id == $crits[$i]->systemid){
+						$this->structures[$j]->systems[$k]->crits[] = $crits[$i];
+						$found = 1;
+						break 3;
 					}
 				}
 				if ($found){continue;}

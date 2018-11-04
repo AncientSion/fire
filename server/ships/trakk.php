@@ -18,18 +18,10 @@ class Trakk extends SuperLight {
 		parent::__construct($id, $parentId);
 	}
 
-	public function addStructures(){
-		$structs = array();
-
-		$front = new Section(300, 60);
-		$front->systems[] = new MediumPlasmaPulse($this->getId(), $this->parentId, 315, 45);
-		$front->systems[] = new TwinParticleBolter($this->getId(), $this->parentId, 270, 90);
-		$front->systems[] = new MediumPlasmaPulse($this->getId(), $this->parentId, 315, 45);
-		$structs[] = $front;
-		
-		for ($i = 0; $i < sizeof($structs); $i++){
-			$this->structures[] = $structs[$i];
-		}
+	public function addSystems(){	
+		$this->addSubSystem(new MediumPlasmaPulse($this->getId(), $this->parentId, 315, 45), 0);
+		$this->addSubSystem(new TwinParticleBolter($this->getId(), $this->parentId, 270, 90), 0);
+		$this->addSubSystem(new MediumPlasmaPulse($this->getId(), $this->parentId, 315, 45), 0);
 	}
 }
 

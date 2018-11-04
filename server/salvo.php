@@ -1,6 +1,6 @@
 <?php
 
-class Salvo extends Mixed {
+class Salvo extends Minor {
 	public $name = "Salvo";
 	public $unitType = "Salvo";
 	public $salvo = true;

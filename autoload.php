@@ -29,6 +29,7 @@ spl_autoload_register(
                 'vranothka' => '/server/systems/weapons/ammo.php',
 
                 'mixed' => '/server/mixed.php',
+                'minor' => '/server/mixed.php',
 
                 'salvo' => '/server/salvo.php',
                 'missile ' =>  '/server/ammo.php',
@@ -135,7 +136,7 @@ spl_autoload_register(
                 'heavylaser' => '/server/systems/weapons/laser.php',
                 'superheavylaser' => '/server/systems/weapons/laser.php',
                 'neutronlaser' => '/server/systems/weapons/laser.php',
-                'phasedneutronlaser' => '/server/systems/weapons/laser.php',
+                'improvedneutronlaser' => '/server/systems/weapons/laser.php',
                 'heavyneutronbeamprojector' => '/server/systems/weapons/laser.php',
                 'molecularslicer' => '/server/systems/weapons/laser.php',
 
@@ -150,8 +151,12 @@ spl_autoload_register(
                 'lightpulse' => '/server/systems/weapons/pulse.php',
                 'mediumpulse' => '/server/systems/weapons/pulse.php',
                 'heavypulse' => '/server/systems/weapons/pulse.php',
-                'fusionpulsecCannonas' => '/server/systems/weapons/pulse.php',
-                'fusionpulsecCannonaf' => '/server/systems/weapons/pulse.php',
+                'neutronpulsar' => '/server/systems/weapons/pulse.php',
+                'fusionpulseccannonas' => '/server/systems/weapons/pulse.php',
+                'fusionpulseccannonaf' => '/server/systems/weapons/pulse.php',
+
+                'fusioncannona' => '/server/systems/weapons/particle.php',
+                'fusioncannonb' => '/server/systems/weapons/particle.php',
 
                 'lightplasmapulse' => '/server/systems/weapons/pulse.php',
                 'mediumplasmapulse' => '/server/systems/weapons/pulse.php',

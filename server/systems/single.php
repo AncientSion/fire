@@ -56,6 +56,11 @@ class Single {
 		$this->setPowerOutput();
 	}
 
+	public function addSubSystem($system, $align = 0){
+		$this->systems[] = $system;
+		$this->systems[sizeof($this->systems)-1]->align = $align;
+	}
+
 	public function getValue(){
 		return static::$value;
 	}
@@ -68,19 +73,14 @@ class Single {
 				$crits[] = $this->crits[$i];
 			}	
 		}
-
-		if ($this->squaddie){
-			for ($i = 0; $i < sizeof($this->structures); $i++){
-				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-					for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->crits); $k++){
-						if ($this->structures[$i]->systems[$j]->crits[$k]->new){
-							$crits[] = $this->structures[$i]->systems[$j]->crits[$k];
-						}
-					}
+		for ($i = 0; $i < sizeof($this->systems); $i++){
+			for ($k = 0; $k < sizeof($this->systems[$i]->crits); $k++){
+				if ($this->systems[$i]->crits[$k]->new){
+					$crits[] = $this->systems[$i]->crits[$k];
 				}
 			}
 		}
-		
+
 		return $crits;
 	}
 
@@ -110,6 +110,30 @@ class Single {
 
 	public function setMaxDmg($fire, $dmg){
 		return $dmg;
+	}
+
+	public function getSystemByName($name){
+		for ($i = 0; $i < sizeof($this->systems); $i++){
+			if ($this->systems[$i]->name == $name){
+				return $this->systems[$i];
+			}
+		}
+	}
+
+	public function getSystem($id){
+		for ($i = 0; $i < sizeof($this->systems); $i++){
+			if ($this->systems[$i]->id == $id){
+				return $this->systems[$i];
+			}
+		}
+	}
+
+	public function setSingleJamming($turn){
+		$jammer = $this->getSystemByName("Jammer");
+
+		if (!$jammer || $jammer->destroyed || $jammer->disabled){
+			$this->jamming = 0;
+		} else $this->jamming = $jammer->getOutput($turn);
 	}
 
 	public function isDestroyed(){
@@ -182,6 +206,8 @@ class Single {
 			//Debug::log("destroyed = 1");
 			$this->destroyed = 1;
 		}
+
+		if ($this->squaddie){$this->setNegation($this->integrity, 0);}
 		
 		for ($i = 0; $i < sizeof($this->systems); $i++){
 			$this->systems[$i]->setState($turn, $phase);
@@ -193,7 +219,7 @@ class Single {
 	}
 
 	public function getRelDmg($turn){
-		//Debug::log("getRelDmg ".get_class($this)." #".$this->id);
+		//Debug::log("getRelDmg on SINGLE #".$this->id."/".get_class($this));
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->turn == $turn){

@@ -202,8 +202,8 @@ function initSquaddie(data){
 		unit.structures.push(struct);
 	}
 */
-	for (var j = 0; j < data.systems.length; j++){
-		var system = new window[data.systems[k].type](data.systems[k]);		
+	for (var i = 0; i < data.systems.length; i++){
+		var system = new window[data.systems[i].type](data.systems[i]);		
 		unit.systems.push(system);
 	}
 

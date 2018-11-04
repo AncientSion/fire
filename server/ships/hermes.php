@@ -21,18 +21,10 @@ class Hermes extends SuperLight {
 		$this->boostEffect[] = new Effect("Armour", 2);
 	}
 
-	public function addStructures(){
-		$structs = array();
-
-		$front = new Section(300, 60);
-		$front->systems[] = new LightPulse($this->getId(), $this->parentId, 270, 90);
-		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 270, 90, 0, array(array("Needle", 8, 4), array("Naga", 6, 3)));
-		$front->systems[] = new LightPulse($this->getId(), $this->parentId, 270, 90);
-		$structs[] = $front;
-
-		for ($i = 0; $i < sizeof($structs); $i++){
-			$this->structures[] = $structs[$i];
-		}
+	public function addSystems(){
+		$this->addSubSystem(new LightPulse($this->getId(), $this->parentId, 270, 90), 0);
+		$this->addSubSystem(new MissileLauncher($this->getId(), $this->parentId, 270, 90, 0, array(array("Needle", 8, 4), array("Naga", 6, 3))), 0);
+		$this->addSubSystem(new LightPulse($this->getId(), $this->parentId, 270, 90), 0);
 	}
 }
 

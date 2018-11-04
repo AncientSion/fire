@@ -80,6 +80,10 @@ Flight.prototype.hasWeaponsSelected = function(){
 	return false;
 }
 
+Flight.prototype.getBaseSpeed = function(){
+	return this.baseImpulse;
+}
+
 Flight.prototype.setCurSpeed = function(){
 	var start = game.turn;
 

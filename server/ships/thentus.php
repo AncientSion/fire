@@ -17,33 +17,12 @@ class Thentus extends Light {
 		parent::__construct($id, $parentId);
 	}
 
-	public function addStructures(){
-		$structs = array();
-
-		$front = new Section(300, 60);
-		//$front->systems[] = new bLaser($this->getId(), $this->parentId, 315, 45, 3);
-		//$front->systems[] = new bLaser($this->getId(), $this->parentId, 315, 45, 5);
-		//$front->systems[] = new bLaser($this->getId(), $this->parentId, 315, 45, 7);
-		$front->systems[] = new LightPLasmaPulse($this->getId(), $this->parentId, 300, 60);
-		$front->systems[] = new MediumLaser($this->getId(), $this->parentId, 315, 45);
-		$front->systems[] = new LightPLasmaPulse($this->getId(), $this->parentId, 300, 60);
-		$structs[] = $front;
-
-		$right = new Section(60, 180);
-		//$right->systems[] = new HeavyLaser($this->getId(), $this->parentId, 315, 45);
-		//$right->systems[] = new LightPLasmaPulse($this->getId(), $this->parentId, 270, 90);
-		$right->systems[] = new TwinParticleBolter($this->getId(), $this->parentId, 270, 90);
-
-		$structs[] = $right;
-		$left = new Section(180, 300);
-		//$left->systems[] = new LightLaser($this->getId(), $this->parentId, 315, 45);
-		//$left->systems[] = new LightPLasmaPulse($this->getId(), $this->parentId, 300, 60);
-		$left->systems[] = new TwinParticleBolter($this->getId(), $this->parentId, 270, 90);
-		$structs[] = $left;
-
-		for ($i = 0; $i < sizeof($structs); $i++){
-			$this->structures[] = $structs[$i];
-		}
+	public function addSystems(){
+		$this->addSubSystem(new LightPLasmaPulse($this->getId(), $this->parentId, 240, 120), 0);
+		$this->addSubSystem(new MediumLaser($this->getId(), $this->parentId, 300, 60), 0);
+		$this->addSubSystem(new LightPLasmaPulse($this->getId(), $this->parentId, 240, 120), 0);
+		$this->addSubSystem(new TwinParticleBolter($this->getId(), $this->parentId, 270, 90), 120);
+		$this->addSubSystem(new TwinParticleBolter($this->getId(), $this->parentId, 270, 90), 240);
 	}
 }
 

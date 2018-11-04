@@ -125,7 +125,8 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 		return;
 	}
 	
-	var shooterPos = (shooter.flight ? shooter.getGamePos() : shooter.getPlannedPos());
+	//var shooterPos = (shooter.flight ? shooter.getGamePos() : shooter.getPlannedPos());
+	var shooterPos = (game.phase == 2 ? shooter.getGamePos() : shooter.getPlannedPos())
 	var facing = shooter.getPlannedFacing();
 	var targetDataA = ui.aimDiv.find("#targetDataA");
 	var targetDataB = ui.aimDiv.find("#targetDataB");
@@ -164,11 +165,10 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			var target;
 			var section;
 			var angle;
-			var targetPos = target.getPlannedPos()
+			var targetPos = (game.phase == 2 ? target.getGamePos() : target.getPlannedPos())
 			var shooterAngle = addAngle(facing, getAngleFromTo(shooterPos, targetPos));
+			var dist = Math.floor(getDistance(shooterPos, targetPos));
 
-			//dist = Math.max(50, game.getFireDistance(shooter, target));
-			dist = game.getFireDistance(shooter, target);
 			if (shooter.ship || shooter.squad){
 				if (target.salvo){
 					angle = getAngleFromTo(target.getTrajectory(), shooterPos);
@@ -249,8 +249,9 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			var jamming = target.hasPassiveJamming();
 		
 			if (jamming){
-				ui.targetDataC.html("---- Passing jamming detected (<span class='yellow'>" + target.getJammerStrength() + "% chance to miss</span>) ----").show();
-			} else ui.targetDataC.empty();
+				//ui.targetDataC.html("fuck").show();
+				ui.targetDataC.html(target.getJammingString())//.show();
+			}// else ui.targetDataC.empty();
 		}
 	}
 	else {
@@ -258,7 +259,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 		if (target){
 			pos = target.getPlannedPos();
 		}
-		dist = Math.round(getDistance(shooter.getPlannedPos(), pos));
+		dist = Math.round(getDistance(shooterPos, pos));
 		ui.targetDataA
 		.empty()
 		.append($("<td>").html(""))
@@ -290,7 +291,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	if (target){
 		if (target.salvo){
 			pos = target.getTrajectory();
-		} else pos = target.getPlannedPos();
+		} else pos = targetPos;
 	}
 	
 	if (!drop){	
@@ -339,8 +340,8 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			html += "Obstacle #" + obstacles[i].obstacleId + ", penetration need: " + obstacles[i].dist + " --- ";
 			html += "<span class='yellow'>" + obstacles[i].EffInterference + "% chance to miss</span></br>";
 		}
-		ui.targetDataC.html(html).show();
-	} else ui.targetDataC.empty();
+		ui.targetDataC.html(html)//.show();
+	}// else ui.targetDataC.empty();
 			
 
 		for (var i = 0; i < active.length; i++){
@@ -430,44 +431,45 @@ function canvasMouseMove(e){
 	var unit = game.getUnitByClick(pos);
 
 	if (game.flightDeploy && game.mission){
-		game.handleFlightDeployMouseMove(e, pos, unit);
+		game.handleFlightDeployMouseMove(e, pos, game.getUnit(aUnit));
+	}
+	else {
+		if (aUnit){
+			var ship = game.getUnit(aUnit);
+			if (!ship){return;}
+
+			var shipLoc = ((ship.flight || ship.salvo || ship.obstacle) ? ship.getGamePos() : ship.getPlannedPos());
+			var	facing = ship.getPlannedFacing();
+
+			if (game.vector){
+				var dist = Math.floor(getDistance(shipLoc, pos));
+				var a = getAngleFromTo(shipLoc, pos);
+					a = addAngle(facing, a);
+				drawVector(ship, shipLoc, {x: e.clientX, y: e.clientY}, dist, a);
+			}
+
+			if (ship.salvo){}
+			else if (game.sensorMode){
+				sensorEvent(false, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), addAngle(facing, getAngleFromTo(shipLoc, pos)));
+			}
+			else if (game.turnMode){
+				ship.handleTurning(e, shipLoc, facing, pos);
+			}
+			else if (ship.hasWeaponsSelected()){
+				handleWeaponAimEvent(ship, unit, e, pos);
+			}
+			else if (game.phase == 0 || game.phase == 1){
+				handleTurnShortening(ship, e, pos);
+			}
+		}
+		else if (game.deploying){
+			game.handleShipDeployMouseMove(e, pos);
+		}
+		else if (!game.deploying){
+			ui.deployOverlay.hide();
+		}
 	}
 	 
-	if (aUnit){
-		var ship = game.getUnit(aUnit);
-		if (!ship){return;}
-
-		var shipLoc = ((ship.flight || ship.salvo || ship.obstacle) ? ship.getGamePos() : ship.getPlannedPos());
-		var	facing = ship.getPlannedFacing();
-
-		if (game.vector){
-			var dist = Math.floor(getDistance(shipLoc, pos));
-			var a = getAngleFromTo(shipLoc, pos);
-				a = addAngle(facing, a);
-			drawVector(ship, shipLoc, {x: e.clientX, y: e.clientY}, dist, a);
-		}
-
-		if (ship.salvo){}
-		else if (game.sensorMode){
-			sensorEvent(false, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), addAngle(facing, getAngleFromTo(shipLoc, pos)));
-		}
-		else if (game.turnMode){
-			ship.handleTurning(e, shipLoc, facing, pos);
-		}
-		else if (ship.hasWeaponsSelected()){
-			handleWeaponAimEvent(ship, unit, e, pos);
-		}
-		else if (game.phase == 0 || game.phase == 1){
-			handleTurnShortening(ship, e, pos);
-		}
-	}
-	else if (game.deploying){
-		game.handleShipDeployMouseMove(e, pos);
-	}
-	else if (!game.deploying){
-		ui.deployOverlay.hide();
-	}
-
 	if (unit){game.handleHoverEvent(e, 1, unit);
 	} else if (game.shortInfo){game.resetHover(e, shipLoc, facing, pos);}
 }

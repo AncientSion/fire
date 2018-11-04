@@ -183,6 +183,39 @@ class MediumShock extends Particle {
 		return $this->dmgs[$fire->target->traverse];
 	}
 }
+class FusionCannonA extends Particle {
+	public $name = "FusionCannonA";
+	public $display = "FusionCannonA";
+	public static $prio = 0;
+	public $minDmg = 34;
+	public $maxDmg = 43;
+	public $accDecay = 120;
+	public $shots = 1;
+	public $reload = 2;
+	public $powerReq = 3;
+	public $tracking = 3;
+
+	public $animColor = "green";
+	public $projSize = 3;
+	public $projSpeed = 7;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+	}
+}
+
+class FusionCannonB extends FusionCannonA {
+	public $name = "FusionCannonB";
+	public $display = "FusionCannonB";
+	public static $prio = 0;
+	public $minDmg = 15;
+	public $maxDmg = 19;
+	public $shots = 2;	
+	public $tracking = 1;
+	public $projSize = 2;
+	public $projSpeed = 9;
+}
+
 
 class FusionCannon extends Particle {
 	public $name = "FusionCannon";
@@ -229,9 +262,9 @@ class AntimatterConverter extends Particle {
 	public $display = "Antimatter-Converter";
 	public $fireMode = "Flash";
 	public static $prio = 0;
-	public $minDmg = 90;
-	public $maxDmg = 90;
-	public $accDecay = 120;
+	public $minDmg = 80;
+	public $maxDmg = 80;
+	public $accDecay = 140;
 	public $shots = 1;
 	public $animColor = "#a1ff00";
 	public $projSize = 3.5;
@@ -265,8 +298,8 @@ class HeavyAntimatterConverter extends AntimatterConverter {
 	public $name = "HeavyAntimatterConverter";
 	public $display = "Heavy Antimatter-Converter";
 	public static $prio = 0;
-	public $minDmg = 140;
-	public $maxDmg = 140;
+	public $minDmg = 125;
+	public $maxDmg = 125;
 	public $projSize = 5;
 	public $projSpeed = 6;
 	public $reload = 3;

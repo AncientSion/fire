@@ -55,7 +55,7 @@ function Game(data){
 	this.drawPlans = 1;
 	this.showFriendlyEW = 0;
 	this.showHostileEW = 0;
-	this.showObstacleMoves = 0;
+	this.showObstacleMoves = 1;
 
 	this.snapTurn = 0;
 	this.events = [];
@@ -734,8 +734,10 @@ function Game(data){
 		ui.deployOverlay.css("top", res.y - 100).css("left", 10).show().find("#deployType").html( game.getMissionType(value)).end();
 	}
 
-	this.handleFlightDeployMouseMove = function(e, pos, unit){
+	this.handleFlightDeployMouseMove = function(e, target, flight){
 		$(ui.deployOverlay).css("top", e.clientY + 100).css("left", e.clientX - 50)
+
+		drawFlightVector(flight, flight.getBaseSpeed(), target);
 	}
 
 	this.handleShipDeployMouseMove = function(e, pos){
@@ -1160,10 +1162,6 @@ function Game(data){
 
 		if (this.phase == 2){
 			this.autoIssueFireOrders();
-		}
-		else if (this.phase == 3){
-			$(".optionsWrapper .options .drawObstaclesMoves").addClass("selected");
-			this.showObstacleMoves = 1;
 		}
 	}
 	
@@ -3088,16 +3086,17 @@ Game.prototype.initOptionsUI = function(){
 		}
 		else if (i == 2){
 			$(this)
+				.addClass("selected")
 				.hover(
-					function(){game.drawAllObstacleMoves();},
+					function(){game.forceDrawAllObstacleMoves();},
 					function(){game.redraw();
 				})
-			//	.click(function(){
-			//		game.toggleShowNextObstacleMoves();
-			//})
-			//if (game.phase == -1 || game.phase == 3){
-			//	game.toggleShowNextObstacleMoves();
-			//}
+				.click(function(){
+					game.toggleShowNextObstacleMoves();
+			})
+			if (game.phase == 2){
+				game.toggleShowNextObstacleMoves();
+			}
 		}
 		else if (i == 3){
 			$(this)
@@ -3580,7 +3579,7 @@ Game.prototype.toggleHostileEW = function(){
 }
 
 Game.prototype.toggleShowNextObstacleMoves = function(){
-	if (this.animating || this.sensorMode){return;}
+	if (this.animating){return;}
 	this.showObstacleMoves = !this.showObstacleMoves;
 	$(".optionsWrapper .drawObstaclesMoves").toggleClass("selected");
 	salvoCtx.clearRect(0, 0, res.x, res.y);
@@ -3616,14 +3615,15 @@ Game.prototype.drawHostileEW = function(){
 	this.showHostileEW = 0;
 }
 
-Game.prototype.drawAllObstacleMoves = function(){
-	if (this.animating || this.sensorMode || aUnit){return;}
+Game.prototype.forceDrawAllObstacleMoves = function(){
+	if (this.animating){return;}
+	var preset = this.showObstacleMoves;
 	this.showObstacleMoves = 1;
 	for (var i = 0; i < this.ships.length; i++){
 		if (!this.ships[i].obstacle){continue;}
 		this.ships[i].drawNextMove();
 	}
-	this.showObstacleMoves = 0;
+	this.showObstacleMoves = preset;
 }
 
 Game.prototype.setUnitTransform = function(){
@@ -3718,21 +3718,6 @@ Game.prototype.getRemainingReinforcePoints = function(){
 
 	return Math.floor(avail-cost);
 }
-
-Game.prototype.getFireDistance = function(a, b){
-	if (this.isCloseCombat(a, b)){
-		return 0;
-		if (a.ship){
-			return Math.floor(a.size/2);
-		} else if (b.ship){
-			return Math.floor(b.size/2);
-		}
-		else return a.getParent().size/2;
-	}
-	else return Math.floor(getDistance(a.getPlannedPos(), b.getPlannedPos()));
-	return -666;
-}
-
 Game.prototype.resolveDeploy = function(){
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].deployed = true;

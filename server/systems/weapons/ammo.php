@@ -78,7 +78,10 @@ class Vran extends Torpedo {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 28, 32);
+	}
+
+	function addSystems(){
+		$this->addSubSystem(new Warhead($this->getId(), $this->parentId, $this->tracking, 28, 32));
 	}
 }
 
@@ -93,7 +96,10 @@ class Vranoth extends Vran {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 34, 46);
+	}
+
+	function addSystems(){
+		$this->addSubSystem(new Warhead($this->getId(), $this->parentId, $this->tracking, 34, 46));
 	}
 }
 
@@ -108,7 +114,10 @@ class VranothKa extends Vranoth {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 54, 72);
+	}
+
+	function addSystems(){
+		$this->addSubSystem(new Warhead($this->getId(), $this->parentId, $this->tracking, 54, 70));
 	}
 }
 
@@ -125,7 +134,10 @@ class Hasta extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 15, 18);
+	}
+
+	function addSystems(){
+		$this->addSubSystem(new Warhead($this->getId(), $this->parentId, $this->tracking, 15, 18));
 	}
 }
 
@@ -142,7 +154,10 @@ class Javelin extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 32, 44);
+	}
+
+	function addSystems(){
+		$this->addSubSystem(new Warhead($this->getId(), $this->parentId, $this->tracking, 32, 44));
 	}
 }
 
@@ -159,8 +174,10 @@ class Triarii extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 32, 44, "Standard", "Plasma", 50);
+	}
 
+	function addSystems(){
+		$this->addSubSystem(new Warhead($this->getId(), $this->parentId, $this->tracking, 32, 44, "Standard", "Plasma", 50));
 	}
 }
 
@@ -177,7 +194,10 @@ class Myrmidon extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 54, 70);
+	}
+
+	function addSystems(){
+		$this->addSubSystem(new Warhead($this->getId(), $this->parentId, $this->tracking, 54, 70));
 	}
 }
 
@@ -194,7 +214,10 @@ class Vanguard extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 9, 12);
+	}
+
+	function addSystems(){
+		$this->addSubSystem(new Warhead($this->getId(), $this->parentId, $this->tracking, 9, 12));
 	}
 }
 
@@ -211,7 +234,10 @@ class Needle extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 15, 18);
+	}
+
+	function addSystems(){
+		$this->addSubSystem(new Warhead($this->getId(), $this->parentId, $this->tracking, 15, 18));
 	}
 }
 
@@ -228,7 +254,10 @@ class Naga extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 30, 42);
+	}
+
+	function addSystems(){
+		$this->addSubSystem(new Warhead($this->getId(), $this->parentId, $this->tracking, 30, 42));
 	}
 }
 
@@ -245,7 +274,10 @@ class Cyclops extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 50, 66);
+	}
+
+	function addSystems(){
+		$this->addSubSystem(new Warhead($this->getId(), $this->parentId, $this->tracking, 50, 66));
 	}
 }
 
@@ -262,7 +294,10 @@ class Titan extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->tracking, 70, 88);
+	}
+
+	function addSystems(){
+		$this->addSubSystem(new Warhead($this->getId(), $this->parentId, $this->tracking, 70, 88));
 	}
 }
 

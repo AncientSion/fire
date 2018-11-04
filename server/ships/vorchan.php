@@ -18,26 +18,10 @@ class Vorchan extends SuperLight {
 		parent::__construct($id, $userid);
 	}
 
-	public function addStructures(){
-		$structs = array();
-
-		$front = new Section(300, 60);
-		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 300, 60, 0, array(array("Javelin", 9, 3), array("Hasta", 12, 4)));
-		$structs[] = $front;
-
-		$right = new Section(60, 180);
-		$right->systems[] = new LightPlasma($this->getId(), $this->parentId, 215, 45);
-		//$right->systems[] = new MagCompressor($this->getId(), $this->parentId, 315, 45);
-		//$right->systems[] = new MediumShock($this->getId(), $this->parentId, 315, 45);
-		$structs[] = $right;
-
-		$left = new Section(180, 300);
-		$left->systems[] = new LightPlasma($this->getId(), $this->parentId, 215, 45);
-		$structs[] = $left;
-
-		for ($i = 0; $i < sizeof($structs); $i++){
-			$this->structures[] = $structs[$i];
-		}
+	public function addSystems(){
+		$this->addSubSystem(new MissileLauncher($this->getId(), $this->parentId, 300, 60, 0, array(array("Javelin", 9, 3), array("Hasta", 12, 4))), 0);
+		$this->addSubSystem(new LightPlasma($this->getId(), $this->parentId, 315, 45), 120);
+		$this->addSubSystem(new LightPlasma($this->getId(), $this->parentId, 315, 45), 240);
 	}
 }
 

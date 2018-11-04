@@ -56,7 +56,7 @@ class Dual extends Weapon {
 
 	public function doHidePowerOrders($turn){
 		parent::doHidePowerOrders($turn);
-		$this->states = [1, 0];
+		$this->setActiveSystem($turn);
 	}
 
 	public function setActiveSystem($turn){

@@ -739,23 +739,22 @@ table, th, tr, td {
 .unitContainer .boostDiv {
 	z-index: 15;
 	position: absolute;
-	left: -21px;
+	left: -20px;
 	top: -5px;
 }
 
 .unitContainer .powerDiv {
 	z-index: 15;
 	position: absolute;
-	left: 25px;
+	left: 24px;
 	top: -5px;
-
 }
 
 .unitContainer .modeDiv {
 	z-index: 15;
 	position: absolute;
 	left: 2px;
-	top: 22px;
+	top: 20px;
 }
 
 .unitContainer .plus, .unitContainer .minus, .unitContainer .power, .unitContainer .unpower, .unitContainer .mode {
@@ -1430,11 +1429,11 @@ div.integrityFull {
 }
 
 tr.rowBorderTop {
-	border-top: 1px solid red;
+	border-top: 2px solid yellow;
 }
 
 tr.rowBorderBottom {
-	border-bottom: 1px solid red;
+	border-bottom: 2px solid yellow;
 }
 
 .negative {
@@ -1447,7 +1446,7 @@ tr.rowBorderBottom {
 }
 
 .positiveMod {
-	color: #27e627;
+	color: #27e627 !important;
 	font-size: 14px;
 }
 
@@ -1855,10 +1854,17 @@ div.rollSeparator {
 	color: #ff3d00;
 }
 
-.unusedPowerDiv, .jumpDiv {
+.unusedPowerDiv {
 	display: inline-block;
 	width: 25px;
 	height: 50px;
+	position: absolute;
+}
+
+.jumpDiv {
+	display: inline-block;
+	width: 40px;
+	height: 40px;
 	position: absolute;
 }
 
@@ -2301,7 +2307,6 @@ body {
 
 .ammoDiv {
 	position: absolute;
-	border: 1px solid white;
 	border-radius: 5px;
 	z-index: 10;
 	background-color: black;
@@ -2331,14 +2336,12 @@ body {
 .ammoDiv table {
 	width: 100%;
 	margin: auto;
-	border: 1px solid white;
 	border-collapse: collapse;;
 }
 
 .ammoDiv .structContainer {
+	padding-top: 10px;
 	height: unset;
-	border: 1px solid white;
-	border-top: unset;
 }
 
 textarea {	

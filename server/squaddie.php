@@ -41,33 +41,15 @@ class Squaddie extends Single {
 
 	public function setPowerOutput(){
 		$need = 0;
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				$need += $this->structures[$i]->systems[$j]->powerReq;
-			}
+		for ($i = 0; $i < sizeof($this->systems); $i++){
+			$need += $this->systems[$i]->powerReq;
 		}
 		$this->power += $need;
 	}
 
 	public function setBaseStats($phase, $turn){
 	}
-
-	public function setSubunitState($turn, $phase){
-		//Debug::log("setSubunitState ".get_class($this));
-		if ($this->isDestroyed()){
-			$this->destroyed = 1;
-		}
-		$this->setNegation($this->integrity, 0);
-
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				$this->structures[$i]->systems[$j]->setState($turn, $phase);
-			}
-		}
-
-		return true;
-	}
-
+	
 	public function getBaseImpulse(){
 		return $this->baseImpulse;
 	}

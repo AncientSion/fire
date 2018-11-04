@@ -18,26 +18,10 @@ class Torotha extends SuperLight {
 		parent::__construct($id, $parentId);
 	}
 
-	public function addStructures(){
-		$structs = array();
-
-		$front = new Section(300, 60);
-		$front->systems[] = new FusionCannon($this->getId(), $this->parentId, 300, 60);
-		$front->systems[] = new AntimatterConverter($this->getId(), $this->parentId, 315, 45);
-		$front->systems[] = new FusionCannon($this->getId(), $this->parentId, 300, 60);
-		//$front->systems[] = new TwinEMProjector($this->getId(), $this->parentId, 270, 90);
-		$structs[] = $front;
-
-	/*	$right = new Section(60, 180);
-		$right->systems[] = new TwinEMProjector($this->getId(), $this->parentId, 270, 90);
-		$structs[] = $right;
-
-		$left = new Section(180, 300);
-		$left->systems[] = new TwinEMProjector($this->getId(), $this->parentId, 270, 90);
-		$structs[] = $left;
-	*/	
-		for ($i = 0; $i < sizeof($structs); $i++){
-			$this->structures[] = $structs[$i];
-		}
+	public function addSystems(){
+		$this->addSubSystem(new FusionCannon($this->getId(), $this->parentId, 330, 30), 0);
+		$this->addSubSystem(new AntimatterConverter($this->getId(), $this->parentId, 315, 15), 0);
+		$this->addSubSystem(new FusionCannon($this->getId(), $this->parentId, 330, 30), 0);
+		$this->addSubSystem(new Jammer($this->getId(), $this->parentId, 0), 210);
 	}
 }

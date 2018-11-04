@@ -13,15 +13,15 @@ Obstacle.prototype = Object.create(Mixed.prototype);
 Obstacle.prototype.setPostMoveFacing = function(){
 	this.drawFacing = this.facing;
 	for (var i = 0; i < this.actions.length; i++){
-		//if (this.actions[i].type == "turn"){
-			this.drawFacing += this.actions[i].a;
-		//}
+		this.drawFacing += this.actions[i].a;
 	}
 }
 
 Obstacle.prototype.handleHovering = function(){
-	//this.drawMovePlan();
+	var preset = game.showObstacleMoves;
+	game.showObstacleMoves = 1;
 	this.drawNextMove();
+	game.showObstacleMoves = preset;
 }
 
 Obstacle.prototype.getAngledHitChance = function(angle){
@@ -29,7 +29,7 @@ Obstacle.prototype.getAngledHitChance = function(angle){
 }
 
 Obstacle.prototype.drawNextMove = function(){
-	if (game.phase == 2  || (game.phase == 3 && aUnit)){return;}
+	if (!game.showObstacleMoves){return;}
 	planCtx.translate(cam.o.x, cam.o.y);
 	planCtx.scale(cam.z, cam.z);
 

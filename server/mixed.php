@@ -1,5 +1,6 @@
 <?php
 
+
 class Mixed extends Ship {
 	public $ship = false;
 	public $primary = false;
@@ -44,10 +45,6 @@ class Mixed extends Ship {
 		return;
 	}
 
-	public function doTestMorale($turn){
-		return;
-	}
-	
 	public function isDestroyed(){
 		//Debug::log($this->destroyed);
 		if ($this->destroyed){
@@ -396,7 +393,7 @@ class Mixed extends Ship {
 			//Debug::log($shots);
 
 			for ($j = 0; $j < sizeof($fire->rolls); $j++){
-				if ($this->structures[$i]->destroyed){$fire->cancelShotResolution($j); break;}
+				if ($this->structures[$i]->destroyed){$fire->cancelShotResolution($j); Debug("killed!")break;}
 				else if ($fire->rolls[$j] <= $fire->req){
 					$fire->hits++;
 					DmgCalc::doDmg($fire, $i, $this->structures[$i]);
@@ -439,6 +436,12 @@ class Mixed extends Ship {
 		parent::setImpulseProfileMod();
 	}
 
+	public function setJamming($turn){
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$this->structures[$i]->setSingleJamming($turn);
+		}
+	}
+
 	public function getEndState($turn){
 		//Debug::log("getEndState for ".$this->id);
 		$facing = $this->actions[sizeof($this->actions)-1]->a;
@@ -471,4 +474,13 @@ class Mixed extends Ship {
 	}
 }
 
+class Minor extends Mixed {
+	function __construct($data = false){
+        parent::__construct($data);
+	}
+
+	public function doTestMorale($turn){
+		return false;
+	}
+}
 ?>

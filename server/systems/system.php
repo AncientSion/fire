@@ -3,8 +3,8 @@
 class System {
 	public $id = 0;
 	public $parentId = 0;
-	public $figherId = 0;
-	public $align;
+	public $fighterId = 0;
+	public $align = 0;
 	public $weapon = 0;
 	public $utility = 0;
 	public $destroyed = false;

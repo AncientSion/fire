@@ -28,7 +28,7 @@ class Varnic extends Heavy {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 16, 1);
-		$right->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 300, 120);
+		$right->systems[] = new TwinParticleBolter($this->getId(), $this->id, 300, 120);
 		$right->systems[] = new TorpedoLauncher($this->getId(), $this->id, 0, 180, 44, array(array("Vran", 12, 4), array("Vranoth", 12, 4)));
 		$structs[] = $right;
 

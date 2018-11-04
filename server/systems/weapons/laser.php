@@ -177,9 +177,9 @@ class NeutronLaser extends Laser {
 	}
 }
 
-class PhasedNeutronLaser extends NeutronLaser {
-	public $name = "PhasedNeutronLaser";
-	public $display = "Phased Neutron Laser";
+class ImprovedNeutronLaser extends NeutronLaser {
+	public $name = "ImprovedNeutronLaser";
+	public $display = "Imrproved Neutron Laser";
 	//public $dmgType = "Phased";
 	public $minDmg = 82;
 	public $maxDmg = 108;
@@ -190,7 +190,7 @@ class PhasedNeutronLaser extends NeutronLaser {
 	//public $armourSkip = 75;
 
 	public $powerReq = 6;
-	public $effiency = 8;
+	public $effiency = 6;
 	public $maxBoost = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){

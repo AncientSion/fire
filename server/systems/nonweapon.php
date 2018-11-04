@@ -245,10 +245,13 @@ class Jammer extends PrimarySystem {
 	public $display = "Passive Jamming Suite";
 	public $hitMod = 1.5;
 	public $effiency = 6;
+	public $powerReq = 4;
 
-	function __construct($id, $parentId, $integrity, $output = 20, $width = 1){
-		$this->boostEffect[] = new Effect("Output", 20);
-        parent::__construct($id, $parentId, $integrity/2, $output, $width);
+	function __construct($id, $parentId, $integrity, $powerReq){
+		$this->boostEffect[] = new Effect("Output", 50);
+		$this->powerReq = $powerReq;
+		$this->effiency = floor($this->powerReq*2);
+        parent::__construct($id, $parentId, $integrity/2, 20, 1); //hp, output, width
     }
 }
 

@@ -102,7 +102,7 @@ Salvo.prototype.createBaseDiv = function(){
 			.append($("<td>").html(accel)))
 		.append($("<tr>")
     		.append($("<td>").html("Tracking"))
-			.append($("<td>").html(getUnitType(this.structures[0].systems[0].tracking))))
+			.append($("<td>").html(getUnitType(this.structures[0].systems[0].tracking) + "/" + this.structures[0].systems[0].tracking)))
 		//.append($("<tr>").append($("<td>").attr("colSpan", 4).css("height", 15)))
 		.append($("<tr>")
 			.append($("<td>").html("Targeting"))

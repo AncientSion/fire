@@ -117,6 +117,7 @@ class Ship {
 
 	public function addAllSystems(){
 		$this->addPrimary();
+		$this->addSpecials();
 		$this->addStructures();
 	}
 
@@ -126,13 +127,10 @@ class Ship {
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, $this->vitalHP, $this->ep);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, $this->vitalHP, $this->ew);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, $this->vitalHP);
+	}
 
-		if ($this->faction == "Minbari Federation"){
-			$jammer = new Jammer($this->getId(), $this->id, $this->vitalHP);
-			$jammer->powerReq = floor(2 + $this->traverse*1.5);
-			$this->primary->systems[] = $jammer;
-			//$jammer->effiency = floor($this->powerReq/9)+2;
-		}
+	public function addSpecials(){
+		return;
 	}
 
 	public function getId(){
@@ -553,8 +551,10 @@ class Ship {
 
 	public function addFireDB($fires){
 		for ($i = 0; $i < sizeof($fires); $i++){
-			//Debug::log("FIRE trying to add fire to ".$fires[$i]->weaponid ." on ".$this->id);
+			//Debug::log("FIRE trying to add fire to unit #".$this->id.", system ".$fires[$i]->weaponid);
 			$this->getSystem($fires[$i]->weaponid)->fireOrders[] = $fires[$i];
+			//Debug::log("added");
+			continue;
 		}
 	}
 
@@ -915,7 +915,7 @@ class Ship {
 		}
 
 		if ($target->jamming){
-			Debug::log("active jam ".$fire->target->jamming);
+			Debug::log("active jam ".$target->jamming);
 			$roll = mt_rand(1, 100);
 			if ($roll <= $target->jamming){
 				Debug::log("failed jamming roll ".$roll);
@@ -1147,7 +1147,6 @@ class Ship {
 	}
 
 	public function setJamming($turn){
-		if (!$this->ship){return;}
 		$jammer = $this->getSystemByName("Jammer");
 
 		if (!$jammer || $jammer->destroyed || $jammer->disabled){
@@ -1264,12 +1263,13 @@ class Ship {
 	}
 
 	public function getRelDmg($turn){
+		//Debug::log("getRelDmg on SHIP #".$this->id."/".get_class($this));
 		return new RelDmg($this->primary->newDmg, $this->primary->integrity-$this->primary->remaining-$this->primary->newDmg, $this->primary->integrity);
 	}
 
 	public function doTestMorale($turn){
 		$dmg = $this->getRelDmg($turn);
-		Debug::log("doTestMorale ".get_class($this)."# ".$this->id." remMorale: ".$this->morale->rem." #".$this->id.", newRel: ".$dmg->rel);
+		//Debug::log("doTestMorale ".get_class($this)."# ".$this->id." remMorale: ".$this->morale->rem." #".$this->id.", newRel: ".$dmg->rel);
 
 		if (!$dmg->rel){return;}
 		$crit = DmgCalc::moraleCritProcedure($this->id, 2, $turn, $dmg->rel, $this->critEffects, 100 - $this->morale->rem);
