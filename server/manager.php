@@ -455,7 +455,7 @@
 
 	public function hasFocusUnits(){
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->focus){return true;}
+			if ($this->ships[$i]->focus || $this->ships[$i]->flight){return true;}
 		}
 		return false;
 	}

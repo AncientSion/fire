@@ -66,6 +66,7 @@ Mixed.prototype.getMaxSpeed = function(){
 }
 
 Mixed.prototype.drawNextMove = function(){
+	if (this.mission.arrived && this.mission.type == 2){return;}
 	planCtx.translate(cam.o.x, cam.o.y);
 	planCtx.scale(cam.z, cam.z);
 

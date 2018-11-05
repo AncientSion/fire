@@ -98,6 +98,7 @@ function Game(data){
 	this.getNewMissions = function(){
 		var data = [];
 		for (var i = 0; i < this.ships.length; i++){
+			if (!this.ships[i].friendly){continue;}
 			if (this.ships[i].flight && this.ships[i].available < game.turn){
 				if (this.ships[i].mission.new){
 					data.push(this.ships[i].mission);
@@ -151,6 +152,28 @@ function Game(data){
 			return t.name + " #" + t.id;
 		}
 		else return "";
+	}
+
+	this.doAbortmission = function(){
+		var flight = game.getUnit(aUnit);
+
+
+		game.flightDeploy = 1;
+		game.mission = 2;
+
+		game.issueMission(flight.getGamePos());
+		flight.mission.arrived = game.turn;
+		if (!flight.actions[flight.actions.length-1].resolved){
+			flight.actions.splice(flight.actions.length-1, 1);
+		}
+
+		game.mission = 0;
+		game.flightDeploy = 0;
+		
+		flight.setPatrolLayout();
+		flight.setPatrolImage();
+		//flight.setNextMove();
+		flight.doUnselect();
 	}
 
 	this.issueMission = function(pos){

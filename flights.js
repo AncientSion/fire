@@ -181,7 +181,8 @@ Flight.prototype.createBaseDiv = function(){
 	$(div).append(missionContainer);
 
 
-	if (this.friendly && game.phase == -1){
+	//if (this.friendly && game.phase == -1){
+	if (game.phase == -1){
 			missionContainer
 				.append($("<input>")
 					.attr("type", "button")
@@ -217,14 +218,18 @@ Flight.prototype.createBaseDiv = function(){
 						}
 					}))
 	}
+	else if (game.phase == 1){
+		missionContainer
+			.append($("<input>")
+				.attr("type", "button")
+				.attr("value", "Abort current mission")
+				.click(function(e){
+					if (aUnit == $(this).parent().parent().data("shipId")){
+						game.doAbortmission();
+					}
+				}))
+	}
 	else {
-		if (game.phase != -1){
-			text = "Orders: -Initial Phase only-";
-		}
-		else if (!this.friendly){
-			text = "New orders possible";
-		}
-
 		missionContainer
 			.append($("<input>")
 				.addClass("inactive")
