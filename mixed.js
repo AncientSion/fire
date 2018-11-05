@@ -66,7 +66,7 @@ Mixed.prototype.getMaxSpeed = function(){
 }
 
 Mixed.prototype.drawNextMove = function(){
-	if (this.mission.arrived && this.mission.type == 2){return;}
+	if (this.mission.arrived && this.mission.type == 1){return;}
 	planCtx.translate(cam.o.x, cam.o.y);
 	planCtx.scale(cam.z, cam.z);
 
@@ -451,8 +451,13 @@ Mixed.prototype.hasPatrolLayout = function(){
 	//console.log("Mixed hasPatrolLayout");
 	if (this.patrolLayout){return true;}
 
-	if (this.mission.arrived && this.mission.type == 1 && (game.phase == 1 || game.phase == 3)){
-		return true;
+	if (this.mission.arrived && this.mission.type == 1){
+		if (game.phase == 1 || game.phase == 3){
+			return true;
+		}
+		else if (game.phase == 2 && this.actions[this.actions.length-1].type[0] == "p"){
+			return true;
+		}	
 	}
 	
 
@@ -497,7 +502,7 @@ Mixed.prototype.setLayout = function(){
 Mixed.prototype.setPatrolLayout = function(){
 	//console.log("setPatrolLayout " + this.id);
 	for (var i = 0; i < this.structures.length; i++){
-		var p = getPointInDir(range(0, this.size*1), range(0, 360), 0, 0);
+		var p = getPointInDir(range(0, this.size*0.9), range(0, 360), 0, 0);
 		this.structures[i].layout.x = p.x;
 		this.structures[i].layout.y = p.y;
 	}
@@ -738,13 +743,14 @@ Mixed.prototype.attachDivClickFunction = function(){
 Mixed.prototype.getSelfExplo = function(){
 	//console.log(this.id);
 
-	var base = {x: this.drawX, y: this.drawY};
+	var base = this.getDrawPos();
 
 	var data = {
 		entries: [],
 		done: 0,
 		animating: 0,
 		id: this.id,
+		pos: base,
 		html: ""
 	}
 

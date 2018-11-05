@@ -18,6 +18,7 @@ class Ship {
 	public $rolled;
 	public $flipping = 0;
 	public $flipped;
+	public $baseFocusRate = 0;
 
 	public $disabled = false;
 

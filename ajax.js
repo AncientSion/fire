@@ -332,6 +332,8 @@ window.ajax = {
 			ships.push(ship);
 		}
 
+		var missions = game.getNewMissions();
+
 		$.ajax({
 			type: "POST",
 			url: "postGameData.php",
@@ -342,7 +344,8 @@ window.ajax = {
 					userid: game.userid,
 					turn: game.turn,
 					phase: game.phase,
-					ships: ships
+					ships: ships,
+					missions: missions
 				},
 			success: callback,
 			//success: function(echo){console.log(echo)},

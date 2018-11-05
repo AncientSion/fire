@@ -34,11 +34,23 @@ Obstacle.prototype.drawNextMove = function(){
 	planCtx.scale(cam.z, cam.z);
 
 	var nextMove = this.getPlannedPos();
-	this.drawMarker(nextMove.x, nextMove.y, "", planCtx);
+	this.drawNextMarker(nextMove.x, nextMove.y, "", planCtx);
 
-	planCtx.globalAlpha = 1;
-	planCtx.strokeStyle = "black";
 	planCtx.setTransform(1,0,0,1,0,0);
+}
+
+Obstacle.prototype.drawNextMarker = function(x, y, c, context){
+	context.beginPath();
+	context.arc(x, y, (this.size/2)-1, 0, 2*Math.PI, false);
+	context.closePath();
+	context.lineWidth = 2;
+	context.globalAlpha = 0.2;
+	context.globalCompositeOperation = "source-over";
+	context.strokeStyle = "Bisque";
+	context.stroke();
+	context.globalAlpha = 1;
+	context.lineWidth = 1;
+	context.strokeStyle = "black";
 }
 
 Obstacle.prototype.setNextMove = function(){
@@ -264,7 +276,7 @@ Obstacle.prototype.drawMarker = function(x, y, c, context){
 	context.beginPath();
 	context.arc(x, y, (this.size/2)-1, 0, 2*Math.PI, false);
 	context.closePath();
-	context.lineWidth = 1;
+	context.lineWidth = 2;
 	context.globalAlpha = 0.5;
 	context.globalCompositeOperation = "source-over";
 	context.strokeStyle = "Bisque";
@@ -285,9 +297,16 @@ Obstacle.prototype.setLayout = function(){
 }
 
 Obstacle.prototype.setImage = function(){
+	var info = true;
+	if ((game.phase == 1 || game.phase == 2) && game.subPhase == 1){
+		info = false;
+	}
+	this.setTrueImage(info);
+}
+
+Obstacle.prototype.setTrueImage = function(info){
 
 	var amount = Math.round(Math.pow(this.size, 2) / 2000 * this.interference / (this.rockSize/2)/5);
-	//console.log(this.id+"/"+amount);
 
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
@@ -323,60 +342,43 @@ Obstacle.prototype.setImage = function(){
 		ctx.rotate(-rota * (Math.PI/180))
 		ctx.translate(-loc.x, -loc.y);
 	}
-
-	//console.log(amount-randoms + " / " + randoms);
-
-	/*var vectorSize = 80;
-	var vectorPos = getPointInDir(this.size - vectorSize/2, this.facing, 0, 0);
-
-	ctx.translate(vectorPos.x, vectorPos.y);
-	ctx.rotate(this.facing * (Math.PI/180));
-	ctx.drawImage(
-		graphics.images.vector,
-		0 -vectorSize/2,
-		0 -vectorSize/2,
-		vectorSize, 
-		vectorSize
-	);
-
-	ctx.rotate(-this.facing * (Math.PI/180));
-	ctx.translate(-vectorPos.x, -vectorPos.y);
-	*/
-
-	var vectorStart = getPointInDir(60, this.facing, 0, 0);
-	var vectorEnd = getPointInDir(this.size-63, this.facing, vectorStart.x, vectorStart.y);
-
-	ctx.beginPath();
-	ctx.moveTo(vectorStart.x, vectorStart.y);
-	ctx.lineTo(vectorEnd.x, vectorEnd.y);
-	ctx.closePath();
-	ctx.lineWidth = 3;
-	ctx.strokeStyle = "white";
-	ctx.stroke();
-
-	var vectorSize = 60;
-
-	ctx.drawImage(
-		graphics.images.interference,
-		0 -vectorSize/2,
-		0 -40 -vectorSize/2,
-		vectorSize, 
-		vectorSize
-	);
-
-	ctx.fillStyle = "yellow";
-	ctx.font = "24px Arial";
-	ctx.textAlign = "center";
-	ctx.fillText(this.getMaxInterference(), 0, 0 - 35)
-
-	ctx.clearRect(-40, -7, 80, 50);
 	
-	ctx.fillStyle = "white";
-	ctx.font = "24px Arial";
-	ctx.textAlign = "center";
-	ctx.fillText(this.collision + "%", 0, 12);
-	var wpn = this.primary.systems[0];
-	ctx.fillText(wpn.shots + "x " + Math.round((wpn.minDmg + wpn.maxDmg)/2), 0, 37);
+	if (info){
+		var vectorStart = getPointInDir(60, this.facing, 0, 0);
+		var vectorEnd = getPointInDir(this.size-63, this.facing, vectorStart.x, vectorStart.y);
+
+		ctx.beginPath();
+		ctx.moveTo(vectorStart.x, vectorStart.y);
+		ctx.lineTo(vectorEnd.x, vectorEnd.y);
+		ctx.closePath();
+		ctx.lineWidth = 3;
+		ctx.strokeStyle = "white";
+		ctx.stroke();
+
+		var vectorSize = 60;
+
+		ctx.drawImage(
+			graphics.images.interference,
+			0 -vectorSize/2,
+			0 -40 -vectorSize/2,
+			vectorSize, 
+			vectorSize
+		);
+
+		ctx.fillStyle = "yellow";
+		ctx.font = "24px Arial";
+		ctx.textAlign = "center";
+		ctx.fillText(this.getMaxInterference(), 0, 0 - 35)
+
+		ctx.clearRect(-40, -7, 80, 50);
+		
+		ctx.fillStyle = "white";
+		ctx.font = "24px Arial";
+		ctx.textAlign = "center";
+		ctx.fillText(this.collision + "%", 0, 12);
+		var wpn = this.primary.systems[0];
+		ctx.fillText(wpn.shots + "x " + Math.round((wpn.minDmg + wpn.maxDmg)/2), 0, 37);
+	}
 
 	ctx.setTransform(1,0,0,1,0,0);
 	this.img = t;
@@ -398,7 +400,7 @@ Obstacle.prototype.getRealAttacks = function(dist){
 }
 
 Obstacle.prototype.getRealCollisionPct = function(unit){
-	return Math.round(this.collision * (1 + (0.2 * (unit.traverse-4))));
+	return Math.round(this.collision * unit.getCollisionMod());
 }
 
 Obstacle.prototype.getBaseImage = function(){

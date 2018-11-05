@@ -877,13 +877,14 @@ Squadron.prototype.getUnusedPower = function(){
 
 Squadron.prototype.getSelfExplo = function(){
 
-	var base = {x: this.drawX, y: this.drawY};
+	var base = this.getDrawPos();
 
 	var data = {
 		entries: [],
 		done: 0,
 		animating: 0,
 		id: this.id,
+		pos: base,
 		html: ""
 	}
 

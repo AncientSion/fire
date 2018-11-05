@@ -1,4 +1,4 @@
-<?php
+mf<?php
 include_once $_SERVER["DOCUMENT_ROOT"]."/fire/global.php";
 
 $manager;
@@ -72,6 +72,9 @@ if (isset($_POST["type"])) {
 		$dbManager->deletePlannedMoves($_POST["ships"], $_POST["turn"]);
 		$dbManager->insertClientActions($_POST["ships"]);
 		$dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready");
+		if (isset($_POST["missions"])){
+			$dbManager->insertMissions($_POST["missions"]);
+		}
 
 		if ($_POST["phase"] == 1){
 			echo $dbManager->checkPhaseSkip($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"]);

@@ -8,6 +8,12 @@ window.cam = {
 	scroll: 0,
 	sx: 0,
 	sy: 0,
+	doing: 0,
+	tx: 0,
+	ty: 0,
+	vx: 0,
+	vy: 0,
+	steps: 0,
 	
 	getOffset: function(){
 		return {x: this.o.x * this.z, y: this.o.y * this.z};
@@ -17,22 +23,76 @@ window.cam = {
 		return {x: res.x/2 - this.o.x, y: res.y/2 - this.o.y};
 	},
 
+	isFocused: function(){
+
+		if (this.doing >= this.steps){
+			this.stopMove();
+			return true;
+		}
+		return false;
+	},
+
+	setFocus(focus){
+		this.tx = Math.floor(res.x/2 - (focus.x*cam.z));
+		this.ty = Math.floor(res.y/2 - (focus.y*cam.z));
+
+		this.vx = this.tx - this.o.x;
+		this.vy = this.ty - this.o.y;
+
+		console.log(Math.max(Math.abs(this.vx), Math.abs(this.vy)));
+
+		this.steps = Math.ceil(Math.max(Math.abs(this.vx), Math.abs(this.vy))/15)
+		//this.vx = this.o.x - this.tx;
+		//this.vy = this.o.y - this.ty;
+
+		this.focused = 0;
+		this.adjustFocus();
+		game.redraw();
+
+	},
+
+	adjustFocus: function(){
+		this.doing++;
+		this.o.x += (this.vx/this.steps);
+		this.o.y += (this.vy/this.steps);
+		game.redraw();
+	},
+
 	setFocusToPos(pos){
-		this.o.x = res.x/2 - (pos.x*cam.z);
-		this.o.y = res.y/2 - (pos.y*cam.z);
+		console.log("------setFocusToPos");
+		console.log(this.c);
+		console.log(this.o);
+		this.o.x = Math.floor(res.x/2 - (pos.x*cam.z));
+		this.o.y = Math.floor(res.y/2 - (pos.y*cam.z));
 		this.c = pos;
 		game.redraw();
 	},
 
-	setZoom: function(val){
-		if (game.phase != 3 || !game.animating){return;}
+	setZoom: function(fire){
+		var a = fire.anim[0].length ? Math.abs(fire.anim[0][0].f) : 0;
 
-		for (var i = 0; i < game.fireOrders.length; i++){
-			if (!game.fireOrders[i].animated && game.fireOrders[i].animating){
-				this.setFocusToPos(game.fireOrders[i].target.getPlannedPos());
-				return;
-			}
+		if (fire.dist == 0){
+			this.z = 2.5
 		}
+		else if (fire.dist <= 150){
+			this.z = 2;
+		}
+		else if (a >= 135 || a <= 45){
+			this.z = Math.min(2, Math.floor( (res.x / 1.25) / fire.dist * 10)/10);
+		}
+		else if (a > 45 || a <= 135){
+			this.z = Math.min(2, Math.floor( (res.y / 1.25) / fire.dist * 10)/10);
+		}
+		else this.z = 1.5;
+	},
+
+	stopMove: function(){
+		this.focused = 0;
+		this.doing = 0;
+		this.tx = 0;
+		this.ty = 0;
+		this.vx = 0;
+		this.vy = 0;
 	},
 	
 	adjustZoom: function(e){

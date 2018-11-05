@@ -71,6 +71,7 @@ function Ship(data){
 	this.drawX = 0;
 	this.drawY = 0;
 	this.toAnimate = 0;
+	this.isOffset = 0;
 
 	this.highlight = false;
 	this.destroyed = false;
@@ -593,7 +594,7 @@ Ship.prototype.issueMove = function(pos, dist){
 Ship.prototype.alertCollisions = function(){
 	if (!this.collisions.length){return;}
 	var html = "Collision Alert for " + this.name + " #" + this.id + "</br>";
-		html += "<div>" + getUnitType(this.traverse) + ", size " + this.traverse + " - collision multiplier " + (1+(0.3 * (this.traverse-4))) + "</div>";
+		html += "<div>" + getUnitType(this.traverse) + ", size " + this.traverse + " - collision multiplier " + this.getCollisionMod() + "</div>";
 
 	for (var i = 0; i < this.collisions.length; i++){
 		var col = this.collisions[i];
@@ -1277,6 +1278,10 @@ Ship.prototype.getStructureFromAngle = function(a){
 	}
 }
 
+Ship.prototype.getCollisionMod = function(){
+	return (1+(0.2 * (this.traverse-4)))
+}
+
 Ship.prototype.getColor = function(){
 	return (this.friendly ? "#00ea00" : "red");
 }
@@ -1484,7 +1489,7 @@ Ship.prototype.create = function(){
 	this.setSubSystemState();
 	this.setStringHitChance();
 
-	if (this.ship ||this.squad){
+	if (this.ship || this.squad){
 		if (game.turn > 1 && game.phase == -1 && this.available == game.turn){
 			this.x = this.actions[0].x;
 			this.y = this.actions[0].y;
@@ -3195,6 +3200,7 @@ Ship.prototype.doRandomOffset = function(shift){
 
 	this.drawX = p.x;
 	this.drawY = p.y;
+	this.isOffset = 1;
 }
 
 Ship.prototype.getAttachDivs = function(){
@@ -4370,7 +4376,7 @@ Ship.prototype.drawVectorUI = function(){
 Ship.prototype.drawVectorIndicator = function(){
 	var center = this.getPlannedPos();
 	var angle = this.getPlannedFacing();
-	var p = getPointInDir(200, angle, center.x, center.y);
+	var p = getPointInDir(this.getCurSpeed(), angle, center.x, center.y);
 	
 	moveCtx.beginPath();			
 	moveCtx.moveTo(center.x, center.y);
@@ -4430,13 +4436,13 @@ Ship.prototype.drawTurnArcs = function(){
 			var modAngle = turnAngle * i * j;
 			var newAngle = addToDirection(angle, modAngle);
 			//var p = getPointInDir(Math.max(this.getBaseImpulse(), this.getRemSpeed()*2), newAngle, center.x, center.y);
-			var p = getPointInDir(100, newAngle, center.x, center.y);
+			var p = getPointInDir(75, newAngle, center.x, center.y);
 			if (turnAngle != 180){
 				moveCtx.beginPath();
 				moveCtx.moveTo(center.x, center.y);
 				moveCtx.lineTo(p.x, p.y);
 				moveCtx.closePath();
-				moveCtx.globalAlpha = 0.25;
+				moveCtx.globalAlpha = 0.5;
 				moveCtx.strokeStyle = "yellow";
 				moveCtx.lineWidth = 1;
 				moveCtx.stroke();
@@ -4545,6 +4551,7 @@ Ship.prototype.getSelfExplo = function(){
 		done: 0,
 		animating: 0,
 		id: this.id,
+		pos: this.getDrawPos(),
 		html: ""
 	}
 

@@ -24,6 +24,8 @@ class Flight extends Minor {
 	public function setCurSpeed($turn, $phase){
 		//Debug::log($this->curImp);
 
+		$elapsed = 1;
+
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed || $this->structures[$i]->disabled){continue;}
 			$this->baseImpulse = min($this->baseImpulse, $this->structures[$i]->baseImpulse);
@@ -31,11 +33,11 @@ class Flight extends Minor {
 
 		if (!isset($this->mission) || empty($this->mission) || !sizeof($this->structures)){return;}
 
-		$elapsed = 1;
-		//var_export($this->mission);
-		//if (!$this->mission->arrived){
-			$elapsed += $turn - $this->mission->turn;
-		//}
+		if ($this->mission->type == 1 && $this->mission->arrived){
+			$elapsed = 0;
+		}
+
+		$elapsed += $turn - $this->mission->turn;
 
 		$this->curImp = floor($this->baseImpulse * min(3, $elapsed + ($phase > 1)));
 	}

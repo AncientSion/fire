@@ -42,13 +42,8 @@ Flight.prototype.setSize = function(){
 		max = Math.max(max, Math.abs(this.structures[i].layout.x));
 		max = Math.max(max, Math.abs(this.structures[i].layout.y));
 	}
+	//console.log("setSize #" + this.id + ", size " + this.size);
 	this.size = max + 20;
-}
-
-Flight.prototype.getLaunchAction = function(){
-	var launch = this.actions[0];
-		launch.resolved = 0;
-	return [launch];
 }
 
 Flight.prototype.setPreFireSize = function(){
@@ -64,6 +59,12 @@ Flight.prototype.setPreFireSize = function(){
 
 Flight.prototype.getEffEP = function(){
 	return this.ep;
+}
+
+Flight.prototype.getLaunchAction = function(){
+	var launch = this.actions[0];
+		launch.resolved = 0;
+	return [launch];
 }
 
 Flight.prototype.hasWeaponsSelected = function(){
@@ -85,13 +86,18 @@ Flight.prototype.getBaseSpeed = function(){
 }
 
 Flight.prototype.setCurSpeed = function(){
+	if (this.mission.type == 1 && this.mission.arrived){
+		this.curImp = this.baseImpulse; return;
+	}
+	
 	var start = game.turn;
 
 	if (this.mission.targetid == this.oldMission.targetid && this.mission.type == this.oldMission.type){
 		start = this.oldMission.turn;
 	}
 
-	this.curImp = Math.floor(this.baseImpulse * ((game.turn - start)+1));
+	this.curImp = Math.min(this.getMaxSpeed(), Math.floor(this.baseImpulse * ((game.turn - start)+1)));
+	$(this.element).find(".speedStats").html(this.getCurSpeed() + " (max: " + this.getMaxSpeed() + ")");
 }
 
 
@@ -137,7 +143,7 @@ Flight.prototype.createBaseDiv = function(){
 			.append($("<td>").addClass("missionType").html(game.getMissionTypeString(this, this.getTarget()))))
 		.append($("<tr>")
 			.append($("<td>").html("Current Speed"))
-			.append($("<td>").html(this.getCurSpeed() + " (max: " + this.getMaxSpeed() + ")")))
+			.append($("<td>").addClass("speedStats").html(this.getCurSpeed() + " (max: " + this.getMaxSpeed() + ")")))
 		.append($("<tr>")
 			.append($("<td>").html("Acceleration"))
 			.append($("<td>").html(" +" + this.baseImpulse + " per turn")))
@@ -218,7 +224,7 @@ Flight.prototype.createBaseDiv = function(){
 						}
 					}))
 	}
-	else if (game.phase == 1){
+	else if (game.phase == 1 && !(this.mission.type == 1 && this.mission.arrived)){
 		missionContainer
 			.append($("<input>")
 				.attr("type", "button")
@@ -234,7 +240,7 @@ Flight.prototype.createBaseDiv = function(){
 			.append($("<input>")
 				.addClass("inactive")
 				.attr("type", "button")
-				.attr("value", text))
+				.attr("value", "No action possible"))
 	}
 }
 

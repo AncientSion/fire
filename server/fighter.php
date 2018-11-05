@@ -43,8 +43,8 @@ class Aurora extends Fighter {
 	public function addSystems(){
 		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
 			array(
-				array("FighterStandard", 1, 12, 16),
-				array("FighterStrafe", 1, 12, 16)
+				array("FighterStandard", 1, 10, 14),
+				array("FighterStrafe", 1, 10, 14)
 			)
 		);
 
@@ -67,7 +67,7 @@ class Thunderbolt extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new ParticlePulsar($this->getId(), $this->parentId, $this->id, 1, 1, 12, 16, 0, 360);
+		$this->systems[] = new ParticlePulsar($this->getId(), $this->parentId, $this->id, 1, 1, 10, 14, 0, 360);
 	}
 }
 
@@ -89,8 +89,8 @@ class Sentri extends Fighter {
 	public function addSystems(){
 		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
 			array(
-				array("FighterStandard", 1, 12, 16),
-				array("FighterStrafe", 1, 12, 16)
+				array("FighterStandard", 1, 10, 14),
+				array("FighterStrafe", 1, 10, 14)
 			)
 		);
 		return;
@@ -135,8 +135,8 @@ class Nial extends Fighter {
 	public function addSystems(){
 		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 3, 
 			array(
-				array("FighterStandard", 1, 14, 18),
-				array("FighterStrafe", 1, 14, 18)
+				array("FighterStandard", 1, 12, 16),
+				array("FighterStrafe", 1, 12, 16)
 			)
 		);
 	}
@@ -160,8 +160,8 @@ class Tishat extends Fighter {
 	public function addSystems(){
 		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
 			array(
-				array("FighterStandard", 1, 13, 17),
-				array("FighterStrafe", 1, 13, 17)
+				array("FighterStandard", 1, 11, 15),
+				array("FighterStrafe", 1, 11, 15)
 			)
 		);
 	}
@@ -185,8 +185,8 @@ class Gorith extends Fighter {
 	public function addSystems(){
 		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
 			array(
-				array("FighterStandard", 1, 12, 16),
-				array("FighterStrafe", 1, 12, 16)
+				array("FighterStandard", 1, 10, 14),
+				array("FighterStrafe", 1, 10, 14)
 			)
 		);
 		return;
@@ -220,12 +220,10 @@ class Frazi extends Fighter {
 	public function addSystems(){
 		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
 			array(
-				array("FighterStandard", 1, 13, 17),
-				array("FighterStrafe", 1, 13, 17)
+				array("FighterStandard", 1, 12, 16),
+				array("FighterStrafe", 1, 12, 16)
 			)
 		);
-		return;
-		$this->systems[] = new ParticleGun($this->getId(), $this->parentId, $this->id, 2, 1, 13, 17);
 	}
 }
 
