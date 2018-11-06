@@ -33,12 +33,12 @@ window.cam = {
 
 		//console.log(Math.max(Math.abs(this.vx), Math.abs(this.vy)));
 
-		this.steps = Math.ceil(Math.max(Math.abs(this.vx), Math.abs(this.vy))/15)
+		this.steps = Math.ceil(Math.max(Math.abs(this.vx), Math.abs(this.vy))/5)
 		//this.vx = this.o.x - this.tx;
 		//this.vy = this.o.y - this.ty;
 
-	
-		this.state = 1;
+
+		this.state = (this.steps <= 5 ? 2 : 1); // 1 pan // 2 pause, 3 done
 		window.then = Date.now();
 		game.shiftCam();
 	},

@@ -589,7 +589,7 @@
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$l = sizeof($this->ships[$i]->actions)-1;
 			if ($l < 0){continue;}
-			if ($this->ships[$i]->actions[$l]->type == "jumpOut"){
+			if ($this->ships[$i]->actions[$l]->type == "jumpOut" && !$this->ships[$i]->actions[$j]->forced){
 				$this->ships[$i]->withdraw = $this->turn +2;
 				$this->ships[$i]->manual = 1;
 			}
@@ -1713,7 +1713,7 @@
 	public function testUnitMorale(){
 		Debug::log("----------------testUnitMorale-------------------");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->destroyed || $this->ships[$i]->available > $this->turn){continue;}
+			if ($this->ships[$i]->destroyed || $this->ships[$i]->available > $this->turn || $this->ships[$i]->withdraw){continue;}
 			$this->ships[$i]->setMorale($this->turn, $this->phase);
 			$this->ships[$i]->doTestMorale($this->turn);
 		}
@@ -1737,7 +1737,7 @@
 
 				$type = $this->ships[$j]->getUnitMoraleChangeType($this->turn, $this->phase);
 				$value = ceil($this->ships[$j]->getMoraleChangeValue($this->turn, $this->phase) / $full * 100);
-				$scope = ($type == "withdrawn" ? 3 : 1); // start entry, 1 unit trigger, 2 fleet morale effect, 3 non trigger withdrawal
+				$scope = ($type == "withdrawn" ? 3 : 1); // log entry, 1 unit trigger, 2 fleet morale effect, 3 non trigger withdrawal
 
 				Debug::log("unit #".$this->ships[$j]->id.", moraleCost: ".$this->ships[$j]->moraleCost.", value: ".$value);
 

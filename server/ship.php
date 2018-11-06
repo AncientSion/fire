@@ -743,6 +743,7 @@ class Ship {
 	}
 
 	public function triggersMoraleChange($turn, $phase){
+		Debug::log("triggersMoraleChange #".$this->id.", $turn/$phase, withdraw: ".$this->withdraw);
 		if ($phase == 2){
 			if ($this->destroyed){
 				return true;
@@ -758,16 +759,18 @@ class Ship {
 				return true;
 			}
 		}
+		return false;
 	}
 
 	public function triggersFleetMoraleTest($turn, $phase){
+		Debug::log("triggersFleetMoraleTest #".$this->id.", $turn/$phase, withdraw: ".$this->withdraw.", manaul: ".$this->manual);
 		if ($phase == 2){
 			if ($this->destroyed){
 				return true;
 			}
 		}
 		else if ($phase == 3){
-			if ($turn+1 == $this->withdraw && $this->manual){
+			if ($turn+1 == $this->withdraw && !$this->manual){
 				return true;
 			}
 		}
@@ -776,6 +779,7 @@ class Ship {
 				return true;
 			}
 		}
+		return false;
 	}
 
 	public function getUnitMoraleChangeType($turn, $phase){

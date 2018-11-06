@@ -22,14 +22,13 @@ function Game(data){
 	this.index = 1;
 	this.reinforcePoints = 0;
 	this.animating = false;
+	this.animateAllFire = false;
 	this.deployArea = [];
-	this.deployBlock = [];
 	this.vector = false;
 	this.opacity = false;
 	this.markers = [];
 	this.ballistics = [];
 	this.fighters = [];
-	this.antiBallistics = [];
 	this.unitExploAnims = [];
 	this.shortInfo = false;
 	this.turnMode = 0;
@@ -37,7 +36,7 @@ function Game(data){
 	this.sensorMode = 0;
 	this.target = 0;
 	this.deploys = data.deploys;
-	this.callback = "";
+	this.callback = ["", 0];
 
 	this.animShip = 0;
 	this.animFlight = 0;
@@ -1281,6 +1280,7 @@ this.animateMovement = function(){
 		}
 
 		this.animating = 0;
+		this.animateAllFire = 0;
 		this.drawingEvents = 1;
 		
 		$(fxCanvas).css("opacity", 0.25);
@@ -1360,6 +1360,7 @@ this.animateMovement = function(){
 
 		for (let i = 0; i < this.playerstatus.length; i++){
 			var globals = this.playerstatus[i].globals;
+			var html = "";
 
 			for (let j = 0; j < globals.length; j++){ // then by crit rolling
 				if (globals[j].turn != game.turn || globals[j].scope != 2){continue;}
@@ -1380,10 +1381,12 @@ this.animateMovement = function(){
 					html += "The fleet suffers no effect.</span>";
 				}
 				html += "</br><span>(Severity: Roll " + numbers[2] + " + " + (numbers[3]-numbers[2]) + " = " + numbers[3] +")</span></br>";
-			}	
+			}
 
-			$("#combatLog").find("tbody")
+			if (html.length > 2){
+				$("#combatLog").find("tbody")
 				.append($("<tr>").html(html))
+			}
 		}
 
 		if (!entries){
@@ -2897,18 +2900,21 @@ Game.prototype.doResolveMovement = function(){
 	this.setGlobalCam();
 }
 
-Game.prototype.setCallback = function(name){
-	this.callback = name;
+Game.prototype.setCallback = function(name, args){
+	console.log("SET " + name);
+	this.callback = [name, args];
 }
 
 Game.prototype.getCallback = function(){
-	if (this.callback == ""){
+	console.log("GET " + this.callback[0]);
+	if (this.callback[0] == ""){
 		console.log("no callback set!"); return;
 	}
 
-	//window["game"]["callback"]();
-	window.game[this.callback]();
-	this.setCallback("");
+	var name = this.callback[0];
+	var arg = this.callback[1];
+	this.setCallback("", 0);
+	window.game[name](arg);
 }
 
 Game.prototype.setPhaseSwitchDiv = function(){
@@ -3438,63 +3444,26 @@ Game.prototype.setUnitMoveDetails = function(){
 	}
 }
 
-Game.prototype.setUnitMoveDetailsO = function(){
-	var baseUnit = false;
-	var focusUnit = false;
-	var split = false;
-
-	for (var i = 0; i < this.ships.length; i++){
-		if (this.ships[i].focus){focusUnit = true;}
-		else baseUnit = true;
-	}
-
-	if (baseUnit && focusUnit){
-		split = true;
-	}
-
-
-	if (game.phase == 1){
-		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].focus || this.ships[i].flight || this.ships[i].salvo){continue;}
-			this.ships[i].toAnimate = true;
-		}
-	}
-	else if (game.phase == 2){
-		if (focusUnit){
-			for (var i = 0; i < this.ships.length; i++){
-				if (this.ships[i].focus || this.ships[i].flight || this.ships[i].salvo){
-					this.ships[i].toAnimate = true;
-				}
-			}
-		}
-		else {
-			for (var i = 0; i < this.ships.length; i++){
-				this.ships[i].toAnimate = true;
-			}
+Game.prototype.handleAllUnitExplos = function(){
+	console.log("handleAllUnitExplos");
+	for (var i = 0; i < this.unitExploAnims.length; i++){
+		if (!game.unitExploAnims[i].animated){
+			console.log(this.unitExploAnims[i]);
+			this.handleSingleUnitExplos(i);
+			return;
 		}
 	}
 
-	for (var i = 0; i < this.ships.length; i++){
-		if (!this.ships[i].toAnimate){continue;}
+	fxCtx.clearRect(0, 0, res.x, res.y);
+	this.fireResolved()
+}
 
-		if (this.ships[i].cc.length){
-			if (this.ships[i].ship || this.ships[i].squad){
-				for (var j = 0; j < this.ships[i].cc.length; j++){
-					var attach = this.getUnit(this.ships[i].cc[j]);
-					if (attach.mission.arrived < game.turn){
-						this.ships[i].attachAnims.push(attach);
-					}
-				}
-			} else if (this.ships[i].flight){
-				var attach = this.getUnit(this.ships[i].cc[j]);
-				if (attach.salvo){
-					this.ships[i].attachAnims.push(attach);
-				}
-			}
-		}
-
-		this.ships[i].readyForAnim();
-	}
+Game.prototype.handleSingleUnitExplos = function(i){
+	console.log("handleSingleUnitExplos");
+	this.unitExploAnims[i].animating = 1;
+	this.setCallback("animateSingleUnitExplo", i);
+	cam.z = 2;
+	cam.setFocus(this.unitExploAnims[i].pos);
 }
 
 Game.prototype.handleForcedMoves = function(){
@@ -3519,7 +3488,7 @@ Game.prototype.handleForcedMoves = function(){
 		this.animForcedMoves = 1;
 		this.animateMovement();
 	}
-	else this.animateUnitExplos();
+	else this.handleAllUnitExplos();
 }
 
 Game.prototype.finishMoveSubPhase = function(){
@@ -3531,7 +3500,7 @@ Game.prototype.finishMoveSubPhase = function(){
 		this.animSalvo = 0;
 		this.animObstacles = 0;
 		this.animForcedMoves = 0;
-		this.animateUnitExplos();
+		this.handleAllUnitExplos();
 	}
 	else if (this.animObstacles){ // phase 3 post fire
 		game.timeout = setTimeout(function(){
@@ -3672,7 +3641,7 @@ Game.prototype.doResolveFire = function(){
 	this.getAllUnitExplos();
 	this.hideUI();
 	this.setFireGlobals();
-	this.animateAllFireOrders();
+	this.handleAllFireOrders();
 }
 
 Game.prototype.hideUI = function(){
@@ -3748,6 +3717,7 @@ Game.prototype.setFireGlobals = function(){
 	fxCtx.clearRect(0, 0, res.x, res.y);
 
 	this.drawShips();
+	this.animateAllFire = 1;
 	this.animating = 1;
 }
 
@@ -3949,8 +3919,17 @@ Game.prototype.getAllUnitExplos = function(){
 	return true;
 }
 
+Game.prototype.handlePostFireMoves = function(){
+	this.createLogEntry("-- Fireorder animation completed --");
 
-Game.prototype.animateAllFireOrders = function(){
+	if (this.phase == 2){
+		this.setCallback("handleForcedMoves");
+	} else this.setCallback("handleAllUnitExplos");
+
+	this.setGlobalCam();
+}
+
+Game.prototype.handleAllFireOrders = function(){
 	for (var i = 0; i < this.fireOrders.length; i++){
 		this.fireOrders[i].tr.show();
 		if (!this.fireOrders[i].animated){
@@ -3963,24 +3942,15 @@ Game.prototype.animateAllFireOrders = function(){
 	this.handlePostFireMoves()
 }
 
-Game.prototype.handlePostFireMoves = function(){
-	this.createLogEntry("-- Fireorder animation completed --");
-
-	if (this.phase == 2){
-		this.setCallback("handleForcedMoves");
-	} else this.setCallback("animateUnitExplos");
-
-	this.setGlobalCam();
-}
-
 Game.prototype.handleSingleFireOrder = function(i, goOn){
-	game.fireOrders[i].animating = 1;
+	this.fireOrders[i].animating = 1;
+	this.setCallback("animateSingleFireOrder", i)
 	cam.setZoom(game.fireOrders[i]);
 	cam.setFocus(game.fireOrders[i].focus);
 }
 
-Game.prototype.animateSingleFireOrder = function(i, goOn){
-	anim = window.requestAnimationFrame(game.animateSingleFireOrder.bind(this, i, goOn));
+Game.prototype.animateSingleFireOrder = function(i){
+	anim = window.requestAnimationFrame(game.animateSingleFireOrder.bind(this, i));
 	window.now = Date.now();		
 	window.elapsed = window.now - window.then;
 	if (elapsed <= window.fpsTicks){return;}
@@ -4106,9 +4076,9 @@ Game.prototype.animateSingleFireOrder = function(i, goOn){
 		fxCtx.clearRect(0, 0, res.x, res.y);
 		game.fireOrders[i].animated = allAnimated;
 
-		if (goOn){
+		if (game.animateAllFire){
 			game.timeout = setTimeout(function(){
-				game.animateAllFireOrders();
+				game.handleAllFireOrders();
 			}, 750);
 		}
 		else {
@@ -4117,73 +4087,51 @@ Game.prototype.animateSingleFireOrder = function(i, goOn){
 	}
 }
 
-Game.prototype.animateUnitExplos = function(){
-	anim = window.requestAnimationFrame(game.animateUnitExplos.bind(this));
+Game.prototype.animateSingleUnitExplo = function(i){
+	anim = window.requestAnimationFrame(game.animateSingleUnitExplo.bind(this, i));
 	window.now = Date.now();		
 	window.elapsed = window.now - window.then;
-	if (elapsed > window.fpsTicks){
-		window.then = window.now - (window.elapsed % window.fpsTicks);
-		fxCtx.clearRect(0, 0, res.x, res.y);
+	if (elapsed <= window.fpsTicks){return;}
 
-		var allDone = 1;
-		for (var i = 0; i < game.unitExploAnims.length; i++){
-			if (!game.unitExploAnims[i].done){
+	window.then = window.now - (window.elapsed % window.fpsTicks);
+	fxCtx.clearRect(0, 0, res.x, res.y);
 
-				if (!game.unitExploAnims[i].animating){
-					game.unitExploAnims[i].animating = 1;
-					cam.z = 2;
-					cam.setFocus(game.unitExploAnims[i].pos);
-					return;
-				}
+	var allAnimated = 1;
 
-				if (cam.doing){
-					cam.doProgress();
-					if (cam.isDone()){}
-					else return;
-				}
+	for (var j = 0; j < game.unitExploAnims[i].entries.length; j++){
+		for (var k = 0; k < game.unitExploAnims[i].entries[j].anims.length; k++){
+			if (game.unitExploAnims[i].entries[j].anims[k].t[0] > 0){
+				drawUnitExplo(
+					game.unitExploAnims[i].entries[j].anims[k].x,
+					game.unitExploAnims[i].entries[j].anims[k].y,
+					game.unitExploAnims[i].entries[j].anims[k].s,
+					game.unitExploAnims[i].entries[j].anims[k].t[0],
+					game.unitExploAnims[i].entries[j].anims[k].t[1]
+				)
+			}
+			
+			if (game.unitExploAnims[i].entries[j].anims[k].t[0] > game.unitExploAnims[i].entries[j].anims[k].t[1] * 0.7){
+				game.unitExploAnims[i].entries[j].u.doDestroy();
+				//game.redraw();
+			}
 
-				var done = 1;
-
-				for (var j = 0; j < game.unitExploAnims[i].entries.length; j++){
-					for (var k = 0; k < game.unitExploAnims[i].entries[j].anims.length; k++){
-						if (game.unitExploAnims[i].entries[j].anims[k].t[0] > 0){
-							drawUnitExplo(
-								game.unitExploAnims[i].entries[j].anims[k].x,
-								game.unitExploAnims[i].entries[j].anims[k].y,
-								game.unitExploAnims[i].entries[j].anims[k].s,
-								game.unitExploAnims[i].entries[j].anims[k].t[0],
-								game.unitExploAnims[i].entries[j].anims[k].t[1]
-							)
-						}
-						
-						if (game.unitExploAnims[i].entries[j].anims[k].t[0] > game.unitExploAnims[i].entries[j].anims[k].t[1] * 0.7){
-							game.unitExploAnims[i].entries[j].u.doDestroy();
-							game.redraw();
-						}
-
-						if (game.unitExploAnims[i].entries[j].anims[k].t[0] < game.unitExploAnims[i].entries[j].anims[k].t[1]){
-							game.unitExploAnims[i].entries[j].anims[k].t[0]++;
-							done = 0;
-						}
-					}
-				}
-
-				if (!done){
-					allDone = 0;
-					break;
-				}
-				else {
-					game.unitExploAnims[i].done = 1;
-					game.unitExploAnims[i].animating = 0;
-				}
+			if (game.unitExploAnims[i].entries[j].anims[k].t[0] < game.unitExploAnims[i].entries[j].anims[k].t[1]){
+				game.unitExploAnims[i].entries[j].anims[k].t[0]++;
+				allAnimated = 0;
 			}
 		}
+	}
 
-		if (allDone){
-			window.cancelAnimationFrame(anim);
-			fxCtx.clearRect(0, 0, res.x, res.y);
-			game.fireResolved();
-		}
+	game.draw();
+
+	if (!allAnimated){
+		return;
+	}
+	else {
+		game.unitExploAnims[i].animated = 1;
+		game.unitExploAnims[i].animating = 0;
+		window.cancelAnimationFrame(anim);
+		game.handleAllUnitExplos();
 	}
 }
 

@@ -4548,7 +4548,7 @@ Ship.prototype.getSelfExplo = function(){
 
 	var data = {
 		entries: [],
-		done: 0,
+		animated: 0,
 		animating: 0,
 		id: this.id,
 		pos: this.getDrawPos(),

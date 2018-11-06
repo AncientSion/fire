@@ -578,7 +578,7 @@
 					game.toggleDistMeter();
 				}
 				else if (e.keyCode == 102){ // f
-					if ((game.phase != 2 && game.phase != 3) || !game.animating){return;}
+					if ((game.phase != 2 && game.phase != 3) && !game.animating || !game.animateAllFire){return;}
 					console.log("f!");
 					game.animating = false;
 					window.cancelAnimationFrame(anim);
