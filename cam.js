@@ -14,6 +14,7 @@ window.cam = {
 	vx: 0,
 	vy: 0,
 	steps: 0,
+	state: 0,
 	
 	getOffset: function(){
 		return {x: this.o.x * this.z, y: this.o.y * this.z};
@@ -23,15 +24,6 @@ window.cam = {
 		return {x: res.x/2 - this.o.x, y: res.y/2 - this.o.y};
 	},
 
-	isFocused: function(){
-
-		if (this.doing >= this.steps){
-			this.stopMove();
-			return true;
-		}
-		return false;
-	},
-
 	setFocus(focus){
 		this.tx = Math.floor(res.x/2 - (focus.x*cam.z));
 		this.ty = Math.floor(res.y/2 - (focus.y*cam.z));
@@ -39,23 +31,41 @@ window.cam = {
 		this.vx = this.tx - this.o.x;
 		this.vy = this.ty - this.o.y;
 
-		console.log(Math.max(Math.abs(this.vx), Math.abs(this.vy)));
+		//console.log(Math.max(Math.abs(this.vx), Math.abs(this.vy)));
 
 		this.steps = Math.ceil(Math.max(Math.abs(this.vx), Math.abs(this.vy))/15)
 		//this.vx = this.o.x - this.tx;
 		//this.vy = this.o.y - this.ty;
 
-		this.focused = 0;
-		this.adjustFocus();
-		game.redraw();
-
+	
+		this.state = 1;
+		window.then = Date.now();
+		game.shiftCam();
 	},
 
-	adjustFocus: function(){
+	doProgress: function(){
 		this.doing++;
-		this.o.x += (this.vx/this.steps);
-		this.o.y += (this.vy/this.steps);
+
+		if (this.state == 1){
+			this.o.x += (this.vx/this.steps);
+			this.o.y += (this.vy/this.steps);
+		}
+
 		game.redraw();
+
+		if (this.doing == this.steps){
+			this.doing = 0;
+			this.steps = 30;
+			this.state++;
+		}
+	},
+
+	isDone: function(){
+		if (this.state == 3){
+			this.stopMove();
+			return true;
+		}
+		return false;
 	},
 
 	setFocusToPos(pos){
@@ -87,7 +97,7 @@ window.cam = {
 	},
 
 	stopMove: function(){
-		this.focused = 0;
+		this.state = 0;
 		this.doing = 0;
 		this.tx = 0;
 		this.ty = 0;

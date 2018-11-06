@@ -3138,7 +3138,7 @@ Ship.prototype.requestJumpOut = function(){
 
 Ship.prototype.doJumpOut = function(){
 	var p = this.getPlannedPos();
-	this.actions.push(new Move(-1, this.id, "jumpOut", 0, 0, p.x, p.y, this.drawFacing, 0, 0, 1, 1, 0));
+	this.actions.push(new Move(-1, this.id, "jumpOut", 0, 0, p.x, p.y, 0, 0, 0, 1, 1, 0));
 	this.withdraw = game.turn + 2;
 	this.setJumpOutTimer();
 	this.setNotes();

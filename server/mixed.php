@@ -441,6 +441,16 @@ class Mixed extends Ship {
 			$this->structures[$i]->setSingleJamming($turn);
 		}
 	}
+}
+
+class Minor extends Mixed {
+	function __construct($data = false){
+        parent::__construct($data);
+	}
+
+	public function doTestMorale($turn){
+		return false;
+	}
 
 	public function getEndState($turn){
 		//Debug::log("getEndState for ".$this->id);
@@ -471,16 +481,6 @@ class Mixed extends Ship {
 			"status" => $this->status,
 			"notes" => "",
 		);
-	}
-}
-
-class Minor extends Mixed {
-	function __construct($data = false){
-        parent::__construct($data);
-	}
-
-	public function doTestMorale($turn){
-		return false;
 	}
 }
 ?>

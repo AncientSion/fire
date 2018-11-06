@@ -1567,6 +1567,7 @@ Sensor.prototype.getEWModeEffect = function(){
 
 Sensor.prototype.setState = function(){
 	System.prototype.setState.call(this);
+
 	if (game.phase == -1 && !this.locked){
 
 		//console.log("active: " + this.getActiveState());
@@ -1594,13 +1595,16 @@ Sensor.prototype.doPower = function(){
 	if (this.powers.length && this.powers[this.powers.length-1].turn == game.turn && this.powers[this.powers.length-1].type == 0){
 		this.powers.splice(this.powers.length-1, 1);
 		this.disabled = 0;
+
+		var mode = this.getActiveState();
+		
 		this.setEW({
 			angle: -1,
 			dist: Math.ceil(this.getOutput() / Math.pow(180/game.const.ew.len, 1/game.const.ew.p)),
 			turn: game.turn,
 			unitid: this.parentId,
 			systemid: this.id,
-			type: 0
+			type: mode
 		})
 		this.setTempEW();
 		salvoCtx.clearRect(0, 0, res.x, res.y);

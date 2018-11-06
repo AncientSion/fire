@@ -216,12 +216,14 @@ class Ship {
 						$this->doUnpowerAllSystems($turn);
 					}
 					break;
+			/*
 				case "Sensor":
 					if ($this->withdraw){
 						$this->primary->systems[$i]->states = [0, 1];
 						$this->primary->systems[$i]->locked = 1;
 					}
 					break;
+			*/
 			}
 		}
 
@@ -362,6 +364,9 @@ class Ship {
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 			if ($this->primary->systems[$i]->name == "Sensor"){
 				$this->primary->systems[$i]->hideEW($turn);
+				if ($this->withdraw){
+					$this->primary->systems[$i]->states = array(0, 1);
+				}
 			}
 			for ($j = sizeof($this->primary->systems[$i]->powers)-1; $j >= 0; $j--){
 				if ($this->primary->systems[$i]->powers[$j]->turn == $turn && $this->primary->systems[$i]->powers[$j]->type != 2){
