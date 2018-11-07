@@ -305,7 +305,7 @@ Structure.prototype.select = function(){
 	var unit;
 
 	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || this.parentId < 0 || game.turnMode){return;}
-	else if (game.phase == -2 || game.turn == 1 && game.phase == -1){return;}
+	else if (game.turn == 0 || game.turn == 1 && game.phase == -1){return;}
 
 	unit = game.getUnit(this.parentId);
 	if (unit.ship && unit.hasSystemSelected("Sensor") || unit.hasHangarSelected()){return false;}

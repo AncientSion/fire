@@ -19,6 +19,10 @@ class Tigara extends Heavy {
         parent::__construct($data);
 	}
 
+	public function addSpecials(){
+		$this->primary->systems[] = new Jammer($this->getId(), $this->id, $this->vitalHP, $this->traverse*2);
+	}
+
 	public function addStructures(){
 		$structs = array();
 		
@@ -49,8 +53,6 @@ class Tigara extends Heavy {
 			$left->systems[] = new TwinEMProjector($this->getId(), $this->id, 180, 360);
 			$left->systems[] = new TwinEMProjector($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
-
-	
 
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];

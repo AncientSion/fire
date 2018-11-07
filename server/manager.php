@@ -414,6 +414,10 @@
 		//return;
 		$time = -microtime(true);
 
+		if ($this->phase == -2){
+			$this->startNewTurn();
+			$this->startDeployPhase();
+		}
 		if ($this->phase == -1){
 			$this->handleDeployPhase();
 			$this->startMovementPhase();
@@ -1130,9 +1134,6 @@
 		$this->adjustFleetMorale();
 		$this->testFleetMorale();
 		$this->setPostFireFocusValues();
-
-		//$this->handleObstacleMovement();
-		//$this->handleServerNewActions();
 
 		$this->handleResolvedFireData();
 

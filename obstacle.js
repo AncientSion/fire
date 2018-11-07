@@ -44,7 +44,7 @@ Obstacle.prototype.drawNextMarker = function(x, y, c, context){
 	context.arc(x, y, (this.size/2)-1, 0, 2*Math.PI, false);
 	context.closePath();
 	context.lineWidth = 2;
-	context.globalAlpha = 0.2;
+	context.globalAlpha = 0.3;
 	context.globalCompositeOperation = "source-over";
 	context.strokeStyle = "Bisque";
 	context.stroke();

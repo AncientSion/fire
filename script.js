@@ -58,7 +58,7 @@ function scopeCanvas(){
 }
 
 function init(data){
-	if (data.turn == -1){window.location = "lobby.php"; return;}
+	if (data.turn == 0){window.location = "lobby.php"; return;}
 
 	console.time("time");
 

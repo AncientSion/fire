@@ -769,7 +769,7 @@ System.prototype.hideOptions = function(){
 	if (this.destroyed || this.locked){return;}
 	var ele = $(this.element);
 
-	if (game.phase == -2){
+	if (game.turn == 0){
 		if (Object.keys(this.modes).length){
 			ele.find(".modeDiv").hide();
 		}
@@ -1527,7 +1527,7 @@ Sensor.prototype.switchMode = function(id){
 }
 
 Sensor.prototype.setEWMode = function(){
-	//if (this.disabled || game.phase == -2){return "NONE";}
+	//if (this.disabled || game.turn == 0){return "NONE";}
 
 	var d = 0;
 	var w = 0;
@@ -1545,7 +1545,7 @@ Sensor.prototype.setEWMode = function(){
 }
 /*
 Sensor.prototype.getEWMode = function(){
-	if (this.disabled || game.phase == -2){return "NONE";}
+	if (this.disabled || game.turn == 0){return "NONE";}
 
 	for (var i = 0; i < this.states.length; i++){
 		if (this.states[i]){
@@ -1662,7 +1662,7 @@ Sensor.prototype.drawEW = function(){
 }
 
 Sensor.prototype.setTempEW = function(){
-	if (game.phase == -2){return;}
+	if (game.turn == 0){return;}
 	if (!this.isPowered()){return;}
 	if (!this.ew.length){return;}
 	var ship = game.getUnit(this.parentId);
@@ -1728,7 +1728,7 @@ Sensor.prototype.select = function(e){
 	var selected = false;
 	var unit;
 
-	if (game.phase == -2 || this.destroyed || this.disabled || this.locked || this.parentId != aUnit || aUnit < 0 || game.turnMode){
+	if (game.turn == 0 || this.destroyed || this.disabled || this.locked || this.parentId != aUnit || aUnit < 0 || game.turnMode){
 		return false;
 	}
 	else if (game.system && game.system != this.id && !this.selected){return false;}
@@ -1751,7 +1751,7 @@ Sensor.prototype.select = function(e){
 
 Sensor.prototype.hover = function(e){
 	PrimarySystem.prototype.hover.call(this, e);
-	if (game.phase == -2){return;}
+	if (game.turn == 0){return;}
 	if (this.highlight && aUnit && aUnit != this.parentId){
 		this.drawEW();
 	}
@@ -1760,7 +1760,7 @@ Sensor.prototype.hover = function(e){
 Sensor.prototype.doBoost = function(){
 	System.prototype.doBoost.call(this);
 
-	if (game.phase == -2){return;}
+	if (game.turn == 0){return;}
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	if (this.ew[this.ew.length-1].angle == -1){
 		this.ew[this.ew.length-1].dist = Math.floor(this.ew[this.ew.length-1].dist * 1.1);
@@ -1776,7 +1776,7 @@ Sensor.prototype.doBoost = function(){
 Sensor.prototype.doUnboost = function(){
 	System.prototype.doUnboost.call(this);
 
-	if (game.phase == -2){return;}
+	if (game.turn == 0){return;}
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	if (this.ew[this.ew.length-1].angle == -1){
 		this.ew[this.ew.length-1].dist = Math.floor(this.ew[this.ew.length-1].dist / 1.1);
@@ -1983,7 +1983,7 @@ Weapon.prototype.select = function(e){
 		game.getUnit(this.parentId).drawEW();
 		return;
 	}
-	else if (game.phase == -2 || game.turn == 1 && game.phase == -1){return;}
+	else if (game.turn == 0 || game.turn == 1 && game.phase == -1){return;}
 	else if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || this.parentId < 0 || game.turnMode){
 		return false;
 	}
@@ -2468,7 +2468,6 @@ Particle.prototype.getAnimation = function(fire){
 					hasHit = 1;
 					hits++;
 				}
-
 				dest = fire.target.getFireDest(fire, hasHit, hits-1);
 				tx = t.x + dest.x;
 				ty = t.y + dest.y;
@@ -2639,6 +2638,7 @@ Beam.prototype.getAnimation = function(fire){
 	var fraction = 1;
 	var	t = fire.target.getDrawPos();
 	var devi = fire.weapon.output * 3;
+	var roll = -1;
 
 	if (fire.shooter.squad){
 		delay = 40; shotDelay = 5;
@@ -2653,28 +2653,34 @@ Beam.prototype.getAnimation = function(fire){
 		//console.log(o.display);
 		
 		for (var k = 0; k < this.shots; k++){
-			var tx; var ty; var tb; var a;
-			var hit = 0;
+			roll++;
+			var hasHit = 0;
 			var dest;
+			var tx; var ty; var tb; var a;
 
-			if (fire.hits[j] > k){
-				hit = 1;
-				hits++
-			}	
-
-			if (hit){ // shot hit
+			if (fire.rolls[roll] < 0){
+				if (fire.rolls[roll] >= -99){ // blocked
+					dest = game.getObstructionPoint(fire);
+					tx = dest.x;
+					ty = dest.y;
+				}
+				else if (fire.rolls[roll] >= -199){ // jammed
+					dest = fire.target.getFireDest(fire, hasHit, hits-1);
+					tx = t.x + dest.x;
+					ty = t.y + dest.y;
+				}
+				tb = getPointInDir(devi, range(0, 360), tx, ty); // BEAM swipe END on MISS	
+			}
+			else if (fire.rolls[roll] >= 0 && fire.rolls[roll] <= fire.req[i]){ // hit
+				hasHit = 1;
+				hits++;
 				if (fire.target.ship){dest = fire.target.getHitSection(fire);}
 				else {dest = fire.target.getFireDest(fire, hit, hits-1);}
-				tx = t.x + dest.x;
-				ty = t.y + dest.y;
+				a = getAngleFromTo( {x: fire.target.drawX, y: fire.target.drawY}, {x: tx, y: ty} );
 				tb = getPointInDir(devi, range(0, 360), tx, ty);
 			}
-			else { // shot miss
-				tx = fire.target.drawX + range(fire.target.size/2, fire.target.size/2) * (1-(range(0, 1)*2))
-				ty = fire.target.drawY + range(fire.target.size/2, fire.target.size/2) * (1-(range(0, 1)*2))
-				a = getAngleFromTo( {x: fire.target.drawX, y: fire.target.drawY}, {x: tx, y: ty} );
-				tb = getPointInDir(devi, a, tx, ty); // BEAM swipe END on MISS	
-			}
+
+
 
 			var shotAnim = new BeamVector(
 				{x: fire.shooter.drawX + o.x, y: fire.shooter.drawY + o.y},
@@ -2682,7 +2688,7 @@ Beam.prototype.getAnimation = function(fire){
 				{x: tb.x, y: tb.y}, 
 				0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay) - k*shotDelay,
 				fire.weapon.output*20,
-				hit
+				hasHit
 			);
 
 			gunAnims.push(shotAnim);
@@ -2817,7 +2823,7 @@ Dual.prototype.copyProps = function(){
 }
 
 Dual.prototype.setSystemWindow = function(id){
-	//if (game.phase == -2){return;}
+	//if (game.turn == 0){return;}
 	if (this.canPower() || !this.effiency){
 		$(this.element).find(".boostDiv").hide().end().find(".outputMask").hide();
 	}
@@ -2991,7 +2997,7 @@ Launcher.prototype.init = function(){
 		if (this.loads[i] instanceof Ballistic){continue;}
 		this.loads[i] = new Ballistic(this.loads[i]);
 	}
-	if (game.phase == -2){
+	if (game.turn == 0){
 	}
 	else if (this.ammo ==-1 || this.getRemAmmo() == 0 && !this.hasFireOrder()){
 		this.shots = 0;
@@ -3147,7 +3153,7 @@ Launcher.prototype.select = function(e){
 
 	if (this.destroyed || this.disabled || this.locked || game.turnMode){return false;}
 
-	if (game.phase == -2){
+	if (game.turn == 0){
 		if (!this.loadout || game.system && game.system != this.id){return;}
 		if (this.selected){
 			game.system = 0;
@@ -3819,7 +3825,7 @@ Hangar.prototype.select = function(e){
 	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || game.turnMode){
 		return false;
 	}
-	else if (game.phase == -2){
+	else if (game.turn == 0){
 		if (game.system && game.system != this.id){return;}
 		if (this.selected){
 			game.system = 0;

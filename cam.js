@@ -20,23 +20,23 @@ window.cam = {
 		return {x: this.o.x * this.z, y: this.o.y * this.z};
 	},
 
-	getFocus: function(){
-		return {x: res.x/2 - this.o.x, y: res.y/2 - this.o.y};
-	},
+	setCamFocus(focus, instant){
 
-	setFocus(focus){
 		this.tx = Math.floor(res.x/2 - (focus.x*cam.z));
 		this.ty = Math.floor(res.y/2 - (focus.y*cam.z));
+
+		if (instant){
+			this.o.x = this.tx;
+			this.o.y = this.ty;
+			game.redraw();
+			game.getCallback(); 
+			return;
+		}
 
 		this.vx = this.tx - this.o.x;
 		this.vy = this.ty - this.o.y;
 
-		//console.log(Math.max(Math.abs(this.vx), Math.abs(this.vy)));
-
 		this.steps = Math.ceil(Math.max(Math.abs(this.vx), Math.abs(this.vy))/5)
-		//this.vx = this.o.x - this.tx;
-		//this.vy = this.o.y - this.ty;
-
 
 		this.state = (this.steps <= 5 ? 2 : 1); // 1 pan // 2 pause, 3 done
 		window.then = Date.now();
@@ -114,28 +114,6 @@ window.cam = {
 		}
 		
 		game.redraw();
-	},
-
-	setFireFocus: function(fire){
-		//console.log("fire #"+fire.id+", "+fire.shooter.name + "/" + fire.shooter.weapon);
-
-		var a = fire.anim[0].length ? Math.abs(fire.anim[0][0].f) : 0;
-
-		if (fire.dist == 0){
-			this.z = 2.5
-		}
-		else if (fire.dist <= 150){
-			this.z = 2;
-		}
-		else if (a >= 135 || a <= 45){
-			this.z = Math.min(2, Math.floor( (res.x / 1.25) / fire.dist * 10)/10);
-		}
-		else if (a > 45 || a <= 135){
-			this.z = Math.min(2, Math.floor( (res.y / 1.25) / fire.dist * 10)/10);
-		}
-		else this.z = 1.5;
-		
-		this.setFocusToPos(fire.focus);
 	}
 }
 

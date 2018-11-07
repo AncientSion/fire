@@ -22,6 +22,7 @@ class Torotha extends SuperLight {
 		$this->addSubSystem(new FusionCannon($this->getId(), $this->parentId, 330, 30), 0);
 		$this->addSubSystem(new AntimatterConverter($this->getId(), $this->parentId, 315, 15), 0);
 		$this->addSubSystem(new FusionCannon($this->getId(), $this->parentId, 330, 30), 0);
-		$this->addSubSystem(new Jammer($this->getId(), $this->parentId, 0), 210);
+		$this->addSubSystem(new Jammer($this->getId(), $this->parentId, 0, 4), 210);
+
 	}
 }

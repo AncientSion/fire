@@ -1,6 +1,5 @@
 <?php
 
-
 class Mixed extends Ship {
 	public $ship = false;
 	public $primary = false;
@@ -38,7 +37,7 @@ class Mixed extends Ship {
 	}
 
 	public function setSize(){
-		$this->size = 50 + sizeof($this->structures)*10;
+		$this->size = 50 + sizeof($this->structures)*8;
 	}
 
 	public function setMorale($turn, $phase){

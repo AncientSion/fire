@@ -290,23 +290,11 @@
 				INSERT INTO playerstatus
 					(userid, gameid, turn, phase, faction, morale, value, status)
 				VALUES
-					(:userid, :gameid, :turn, :phase, :faction, 0, (SELECT pv FROM games WHERE id = $gameid), :status)
+					(:userid, :gameid, 0, 3, '', 0, (SELECT pv FROM games WHERE id = $gameid), 'joined')
 			");
-
-
-			$turn = -1;
-			$phase = -1;
-			$faction = "";
-			$status = "joined";
 
 			$stmt->bindParam(":userid", $userid);
 			$stmt->bindParam(":gameid", $gameid);
-			$stmt->bindParam(":turn", $turn);
-			$stmt->bindParam(":phase", $phase);
-			$stmt->bindParam(":faction", $faction);
-			//$stmt->bindParam(":gameid", $gameid);
-			//$stmt->bindParam(":value", $value);
-			$stmt->bindParam(":status", $status);
 
 			$stmt->execute();
 
@@ -348,7 +336,7 @@
 				INSERT INTO games
 					(name, status, turn, phase, pv, reinforce, reinforceTurn, reinforceETA, reinforceAmount, focusMod, obstaclesAmount, obstaclesSizeMin, obstaclesSizeMax)
 				VALUES
-					(:name, 'open', -1, -1, :pv, :reinforce, :reinforceTurn, :reinforceETA, :reinforceAmount, 10, :obstaclesAmount, :obstaclesSizeMin, :obstaclesSizeMax)
+					(:name, 'open', 0, 3, :pv, :reinforce, :reinforceTurn, :reinforceETA, :reinforceAmount, 10, :obstaclesAmount, :obstaclesSizeMin, :obstaclesSizeMax)
 			");
 			
 			$stmt->bindParam(":name", $post["gameName"]);
@@ -405,7 +393,7 @@
 			$this->setInitialFleetData($userid, $gameid, $units, $faction);
 			$this->setInitialMorale($userid, $gameid, $faction);
 			$this->setInitialCommandUnit($userid, $gameid, $units);
-			$this->setPlayerStatus($userid, $gameid, -1, -1, "ready");
+			$this->setPlayerStatus($userid, $gameid, 0, 3, "ready");
 			Debug::log("processInitialBuy done");
 			return true;
 		}
@@ -942,39 +930,37 @@
 			$data = $this->query("SELECT * FROM games where id = ".$gameid);
 			if (sizeof($data)){$this->createObstacles($gameid, $data[0]);}
 
+			Debug::log("A");
 			$stmt = $this->connection->prepare("
 				UPDATE games 
 				SET 
-					status = :status,
-					turn = :turn
+					status = 'active'
 				WHERE
 					id = :gameid				
 			");
 
-			$status = "active";
-			$turn = 1;
-
-			$stmt->bindParam(":status", $status);
-			$stmt->bindParam(":turn", $turn);
 			$stmt->bindParam(":gameid", $gameid);
 
+			Debug::log("B");
 			$stmt->execute();
 
 			if ($stmt->errorCode() == 0){
-				$this->setStartGamePlayerStatus($gameid);
+				$this->startGamePlayerStatus();
 				return true;
+			} else {
+				Debug::log("C");
 			}
 		}
 
-		public function setStartGamePlayerStatus($gameid){
-			Debug::log("setStartGamePlayerStatus ".$gameid);
+		public function startGamePlayerStatus($gameid){
+			Debug::log("startGamePlayerStatus ".$gameid);
 
 			$stmt = $this->connection->prepare("
 				UPDATE playerstatus 
 				SET 
 					turn = :turn,
 					phase = :phase,
-					status = :status,
+					status = 'ready',
 					value = value + (SELECT reinforce FROM games WHERE id = :gameid1)
 				WHERE
 					gameid = :gameid2
@@ -986,7 +972,6 @@
 
 			$stmt->bindParam(":turn", $turn);
 			$stmt->bindParam(":phase", $phase);
-			$stmt->bindParam(":status", $status);
 			$stmt->bindParam(":gameid1", $gameid);
 			$stmt->bindParam(":gameid2", $gameid);
 

@@ -18,6 +18,10 @@ class Tinashi extends Medium {
         parent::__construct($data);
 	}
 
+	public function addSpecials(){
+		$this->primary->systems[] = new Jammer($this->getId(), $this->id, $this->vitalHP, $this->traverse*2);
+	}
+
 	public function addStructures(){
 		$structs = array();
 

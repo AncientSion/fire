@@ -94,7 +94,7 @@ if (isset($_SESSION["userid"])){
 		$myGamesElement .= "</tr>";
 		
 		foreach ($myGames as $game){
-			if ($game["turn"] == -1){continue;}
+			if ($game["turn"] == 0){continue;}
 			$phase = getPhaseString($game["phase"]);
 			
 			$myGamesElement .= "<tr id=".$game['id'].">";

@@ -233,19 +233,19 @@ class Squadron extends Mixed {
 	public function getSystem($id){
 		//Debug::log("Squadron #".$this->id.", getSystem #".$id);
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
-			//Debug::log($this->primary->systems[$i]->name." id: ".$this->primary->systems[$i]->id);
-			if ($this->primary->systems[$i]->id == $id){
-				return $this->primary->systems[$i];
-			}
+			//Debug::log($this->primary->systems[$i]->id." / ".$this->primary->systems[$i]->name);
+			if ($this->primary->systems[$i]->id != $id){continue;}
+			return $this->primary->systems[$i];
 		}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
+			//Debug::log($this->structures[$i]->id." / ".$this->structures[$i]->name);
 			if ($this->structures[$i]->id == $id){
-				//Debug::log("id: ".$this->structures[$i]->id);
 				return $this->structures[$i];
 			}
 
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				//Debug::log($this->structures[$i]->systems[$j]->id." / ".$this->structures[$i]->systems[$j]->name);
 				if ($this->structures[$i]->systems[$j]->id != $id){continue;}
 				return $this->structures[$i]->systems[$j]->getActiveSystem();
 			}

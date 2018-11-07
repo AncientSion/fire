@@ -61,6 +61,8 @@ Squadron.prototype.setLayout = function(){
 	var h;
 	var s = 160;
 
+	var dist = 40 + this.structures.length*6;
+
 	if (this.structures.length == 1){
 		this.structures[0].layout = {x: 0, y: 0};
 		h = s;
@@ -68,12 +70,18 @@ Squadron.prototype.setLayout = function(){
 	else {
 		for (var i = 0; i < this.structures.length; i++){
 			var a = -45*(this.structures.length == 4) + -90*(this.structures.length == 2) + 360 /  this.structures.length * i;
-			var o = getPointInDir(60 + (-5*(this.structures.length == 2)) + (5*(this.structures.length == 4)), a-90, 0, 0);
+			//var o = getPointInDir(60 + (-5*(this.structures.length == 2)) + (5*(this.structures.length == 4)), a-90, 0, 0);
+			var o = getPointInDir(dist, a-90, 0, 0);
 
-			minX = Math.min(minX, o.x);
-			maxX = Math.max(maxX, o.x);
-			minY = Math.min(minY, o.y);
-			maxY = Math.max(maxY, o.y);
+			//minX = Math.min(minX, o.x);
+			//maxX = Math.max(maxX, o.x);
+			//minY = Math.min(minY, o.y);
+			//maxY = Math.max(maxY, o.y);
+
+			if (game.phase > -2){
+				o.x += range(-8, 8);
+				o.y += range(-8, 8);
+			}
 
 			o = rotate(0, 0, o, 90);
 
@@ -81,9 +89,9 @@ Squadron.prototype.setLayout = function(){
 
 		}
 
-		w = Math.abs(minX) + Math.abs(maxX) + s/2;
+		//w = Math.abs(minX) + Math.abs(maxX) + s/2;
 	}
-		h = Math.abs(minY) + Math.abs(maxY) + s;
+		//h = Math.abs(minY) + Math.abs(maxY) + s;
 
 
 	//$(this.element).find(".structContainer").css("height", h + 20 + ((this.structures.length > 2) * 70));
@@ -133,7 +141,7 @@ Squadron.prototype.createBaseDiv = function(){
 
 
 	for (var i = 0; i < this.primary.systems.length; i++){
-		this.index++;
+		//this.index++;
 		var div = this.primary.systems[i].getDiv();
 			div = this.attachEvent(div);
 
@@ -762,9 +770,9 @@ Squadron.prototype.doConfirmSystemLoadout = function(){
 
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (this.structures[i].systems[j].systems[k].selected){
-				if (this.structures[i].systems[j].systems[k].launcher){this.structures[i].systems[j].systems[k].setAmmo();}
-				this.structures[i].systems[j].systems[k].select();
+			if (this.structures[i].systems[j].selected){
+				if (this.structures[i].systems[j].launcher){this.structures[i].systems[j].setAmmo();}
+				this.structures[i].systems[j].select();
 				return;
 			}
 		}

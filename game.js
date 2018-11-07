@@ -1057,11 +1057,6 @@ this.animateMovement = function(){
 	}
 
 	this.initDeploy = function(){
-		if (game.turn == 1 && game.phase == -1){
-			cam.z = 0.5;
-		}
-		if (this.turn == 1){this.setAllObstaclesNextMoves(); return;}
-
 		this.setCallback("resolveDamageControl");
 		this.setGlobalCam();
 	}
@@ -1182,7 +1177,7 @@ this.animateMovement = function(){
 			if (this.phase == 2){ // emines AFTER moving anim
 				game.timeout = setTimeout(function(){
 					//$($("#combatLog").find("td")[0]).attr("colSpan", 8)
-					game.showUI();
+					game.showUI(800);
 					game.resolvePostMoveFires();
 				}, 1000);
 			}
@@ -1195,7 +1190,7 @@ this.animateMovement = function(){
 		else {
 			this.drawingEvents = 1;
 			this.draw();
-			this.showUI();
+			this.showUI(800);
 			if (this.phase == 2){ // player control now, setup fire
 				this.setInterferenceData();
 				this.autoIssueFireOrders();
@@ -1292,7 +1287,7 @@ this.animateMovement = function(){
 		this.createPlaceHolderEntry();
 		this.createLogEntry("-- Fire Events concluded --");
 
-		this.showUI();
+		this.showUI(800);
 
 		if (this.phase == 2){
 			this.autoIssueFireOrders();
@@ -1420,7 +1415,7 @@ this.animateMovement = function(){
 		else if (this.phase == 0){
 			ctx.clearRect(0, 0, res.x, res.y);
 			$("#phaseSwitchDiv").click(function(){
-				game.resolveDeploy();
+				game.initMovement();
 				$(this).hide()
 			});
 		}
@@ -1459,28 +1454,6 @@ this.animateMovement = function(){
 
 	this.setLeftWrapperVisibility = function(){	
 
-		/*
-		$("#reinforce")
-			.data("on", 1)
-			.click(function(e){
-				e.stopPropagation();
-				if (!$(this).data("on")){
-					$(this).data("on", 1);
-					$("#leftUnitWrapper").show();
-				}
-				else {
-					$(this).data("on", 0);
-					$("#leftUnitWrapper").hide();
-					if (game.phase == -1){
-						$("#leftUnitWrapper").find("#reinforceBody").find(".selected").each(function(){
-							$(this).removeClass("selected");
-							game.disableDeployment();
-						})
-					}
-				}
-			})
-		*/
-
 		var wrapper = $("#leftUnitWrapper");
 		var incoming = wrapper.find("#deployTable");
 		var avail = wrapper.find(".reinforceWrapper");
@@ -1496,9 +1469,6 @@ this.animateMovement = function(){
 
 	this.showStats = function(data){
 		data = JSON.parse(data);
-		//units.sort(function(a, b){
-		//	return a.userid - b.userid || a.id - b.id
-		//});
 
 		var wrapper = $("<div>")
 			.attr("id", "statsWrapper")
@@ -1879,7 +1849,10 @@ this.animateMovement = function(){
 	this.draw = function(){
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		
+		this.setUnitTransform();
 		this.drawShips();
+		this.drawBorders();
+		this.resetUnitTransform();
 		this.drawEvents();
 		
 		if (this.deploying){
@@ -2551,7 +2524,6 @@ Game.prototype.resetUnitTransform = function(){
 }
 
 Game.prototype.drawShips = function(){
-	this.setUnitTransform();
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].draw();
 	}
@@ -2559,7 +2531,6 @@ Game.prototype.drawShips = function(){
 	for (var i = 0; i < this.incoming.length; i++){
 		this.incoming[i].drawIncomingPreview();
 	}
-	this.resetUnitTransform();
 }
 
 Game.prototype.drawEvents = function(){
@@ -2568,6 +2539,21 @@ Game.prototype.drawEvents = function(){
 	for (var i = 0; i < this.events.length; i++){
 		this.events[i].drawSingleEvent();
 	}
+}
+
+Game.prototype.drawBorders = function(){
+	ctx.beginPath();
+	ctx.arc(0, 0, 1500, 0, 2*Math.PI);
+	ctx.closePath();
+
+	ctx.strokeStyle = "yellow";
+	ctx.lineWidth = 20;
+	ctx.globalAlpha = 0.3;
+	ctx.stroke();
+
+	ctx.globalAlpha = 1;
+	ctx.strokeStyle = "black";
+	ctx.lineWidth = 1;
 }
 
 Game.prototype.drawOtherShips = function(id){
@@ -2634,7 +2620,14 @@ Game.prototype.getRemainingReinforcePoints = function(){
 	return Math.floor(avail-cost);
 }
 
+Game.prototype.initMovement = function(){
+	console.log("initMovement");
+	this.setCallback("resolveDeploy");
+	this.setGlobalCam();
+}
+
 Game.prototype.resolveDeploy = function(){
+	console.log("resolveDeploy");
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].deployed = true;
 		if (this.ships[i].obstacle){continue;}
@@ -2653,17 +2646,17 @@ Game.prototype.resolveDeploy = function(){
 	
 
 	if (!show){
-		this.setCallback("initialPhaseResolutionDone");
+		this.initialPhaseResolutionDone();
+		//this.setCallback("initialPhaseResolutionDone");
 	}
 	else {
-		this.setCallback("handleJumpIn");
+		this.handleJumpIn();
+		//this.setCallback("handleJumpIn");
 	}
-
-	this.setGlobalCam();
-
 }
 
 Game.prototype.handleJumpIn = function(){
+	console.log("handleJumpIn");
 	this.hideUI();
 	setFPS(30);
 	window.then = Date.now();
@@ -2697,7 +2690,7 @@ Game.prototype.setGlobalCam = function(){
 		shiftX = 200;
 	}
 
-	cam.setFocus({x: endX - shiftX, y: endY});
+	cam.setCamFocus({x: endX - shiftX, y: endY}, false);
 }
 
 Game.prototype.shiftCam = function(){
@@ -2719,10 +2712,7 @@ Game.prototype.shiftCam = function(){
 
 Game.prototype.resolveObstacleMovement = function(){
 	var need = 1;
-
-	if (game.turn == 1){
-		need = 0;
-	} else if (!this.hasObstaclesPresent()){
+	if (!this.hasObstaclesPresent()){
 		need = 0;
 	}
 
@@ -2812,7 +2802,7 @@ Game.prototype.setAllCollisionData = function(){
 }
 
 Game.prototype.initialPhaseResolutionDone = function(){
-	//console.log("initialPhaseResolutionDone");
+	console.log("initialPhaseResolutionDone");
 	var newUnit = 0;
 	var newMission = 0;
 
@@ -3329,7 +3319,8 @@ Game.prototype.create = function(data){
 	this.initOptionsUI();
 	this.initEvents();
 	this.setAllCollisionData();
-	cam.setFocusToPos({x: 0, y: 0});
+	cam.z = 0.5;
+	cam.setCamFocus({x: 0, y:0}, true);
 	this.startPhase(this.phase);
 }
 
@@ -3463,7 +3454,7 @@ Game.prototype.handleSingleUnitExplos = function(i){
 	this.unitExploAnims[i].animating = 1;
 	this.setCallback("animateSingleUnitExplo", i);
 	cam.z = 2;
-	cam.setFocus(this.unitExploAnims[i].pos);
+	cam.setCamFocus(this.unitExploAnims[i].pos, false);
 }
 
 Game.prototype.handleForcedMoves = function(){
@@ -3649,7 +3640,6 @@ Game.prototype.hideUI = function(){
 	ui.unitSelector.hide();
 	$(".chatWrapper").hide();
 	$("#leftUnitWrapper").hide();
-	//$("#upperGUI").hide()
 	$(".optionsWrapper").hide();
 }
 
@@ -3658,11 +3648,12 @@ Game.prototype.showUI = function(width){
 	ui.unitSelector.show();
 	ui.combatLogWrapper.show();
 	this.setLeftWrapperVisibility();
-	//$("#upperGUI").show()
-	$(".optionsWrapper").show();
 	$(".chatWrapper").show();
+	this.setLeftWrapperVisibility();
+	$(".optionsWrapper").show();
 
 	this.doSizeLog(width);
+	if (game.turn == 1 && game.phase == -1){ui.combatLogWrapper.hide();}
 }
 
 Game.prototype.doSizeLog = function(width){
@@ -3681,8 +3672,8 @@ Game.prototype.doSizeLog = function(width){
 		.html("<th>" + header + "</th>").end().find("#combatLog tr").first().remove();
 	}
 
-	if (ui.combatLogWrapper.find("#combatLog tr").children().length < 2){
-		ui.combatLogWrapper.css("width", 300)
+	if (ui.combatLogWrapper.find("#combatLog tr").length < 2){
+		ui.combatLogWrapper.css("width", 400).find(".combatLogHeader").remove();
 	} else if (width){
 		ui.combatLogWrapper.css("width", width)
 	}
@@ -3716,7 +3707,10 @@ Game.prototype.setFireGlobals = function(){
 	salvoCtx.clearRect(0, 0, res.x, res.y);
 	fxCtx.clearRect(0, 0, res.x, res.y);
 
+	this.setUnitTransform();
 	this.drawShips();
+	this.resetUnitTransform();
+
 	this.animateAllFire = 1;
 	this.animating = 1;
 }
@@ -3946,7 +3940,7 @@ Game.prototype.handleSingleFireOrder = function(i, goOn){
 	this.fireOrders[i].animating = 1;
 	this.setCallback("animateSingleFireOrder", i)
 	cam.setZoom(game.fireOrders[i]);
-	cam.setFocus(game.fireOrders[i].focus);
+	cam.setCamFocus(game.fireOrders[i].focus, false);
 }
 
 Game.prototype.animateSingleFireOrder = function(i){

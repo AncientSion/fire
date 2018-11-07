@@ -263,22 +263,17 @@ else header("Location: index.php");
 					if (squadron.getSlotsUsed() + sub.space > squadron.getMaxSlots()){return;}
 
 					var copy = initSquaddie(JSON.parse(JSON.stringify(sub)));
-						copy.index = squadron.index;
-						copy.id = copy.index;
+						squadron.index++;
+						copy.id = squadron.index;
 						copy.create();
 
-						id = copy.id;
-
-						for (var i = 0; i < copy.structures.length; i++){
-							for (var j = 0; j < copy.structures[i].systems.length; j++){
-								id++;
-								copy.structures[i].systems[j].id = id;
-								copy.structures[i].systems[j].setTotalBuyData();
-							}
+						for (var i = 0; i < copy.systems.length; i++){
+							squadron.index++;
+							copy.systems[i].id = squadron.index;
+							copy.systems[i].setTotalBuyData();
 						}
 
 					squadron.structures.push(copy);
-					squadron.index = id;
 					squadron.setLayout();
 					squadron.addSubContainers();
 					squadron.setStats();

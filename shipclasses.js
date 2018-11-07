@@ -1168,8 +1168,6 @@ Ship.prototype.setPreMovePosition = function(){
 Ship.prototype.setPostMovePosition = function(){
 	//console.log("setPostMovePosition #"+this.id);
 	if (!this.actions.length){return;}
-	this.drawX = this.actions[this.actions.length-1].x;
-	this.drawY = this.actions[this.actions.length-1].y;
 
 	for (var i = this.actions.length-1; i >= 0; i--){
 		if (this.actions[i].resolved){
@@ -1178,6 +1176,8 @@ Ship.prototype.setPostMovePosition = function(){
 			return;
 		}
 	}
+	//this.drawX = this.actions[this.actions.length-1].x;
+	//this.drawY = this.actions[this.actions.length-1].y;
 }
 
 Ship.prototype.animatesThisSegment = function(){
@@ -3857,7 +3857,7 @@ Ship.prototype.enableCrewPurchase = function(command){
 		)
 	}
 
-	if (game.phase == -2){
+	if (game.turn == 0){
 			table
 			.append($("<tr>")
 				.css("fontSize", 18).css("height", 30)
@@ -3874,7 +3874,7 @@ Ship.prototype.enableCrewPurchase = function(command){
 
 Ship.prototype.disableCrewPurchase = function(){
 	$("#crewDiv").addClass("disabled");
-	if (game.phase == -2){game.setUnitTotal(this);}
+	if (game.turn == 0){game.setUnitTotal(this);}
 }
 
 Ship.prototype.plusCrewLevel = function(i){
