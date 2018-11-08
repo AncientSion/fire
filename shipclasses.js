@@ -1978,8 +1978,9 @@ Ship.prototype.getSystemLocation = function(i, name){
 Ship.prototype.getWeaponOrigin = function(id){
 	for (var i = 0; i < this.structures.length; i++){
 		if (i == this.structures.length-1 || id > this.structures[i].id && id < this.structures[i+1].id){
-			var devi = this.size / 4;
-			return getPointInDir(this.size/3 + range (-devi, devi), (getSystemArcDir(this.structures[i]) + this.getDrawFacing()), 0, 0);
+			var devi = this.size/8;
+			var p = getPointInDir(this.size/4 + range (-devi, devi), (getSystemArcDir(this.structures[i]) + this.getDrawFacing()), 0, 0);
+			return p;
 		}
 	}
 	console.log("lacking gun origin");

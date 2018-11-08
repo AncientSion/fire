@@ -85,22 +85,6 @@ Flight.prototype.getBaseSpeed = function(){
 	return this.baseImpulse;
 }
 
-Flight.prototype.setCurSpeed = function(){
-	if (this.mission.type == 1 && this.mission.arrived){
-		this.curImp = this.baseImpulse; return;
-	}
-	
-	var start = game.turn;
-
-	if (this.mission.targetid == this.oldMission.targetid && this.mission.type == this.oldMission.type){
-		start = this.oldMission.turn;
-	}
-
-	this.curImp = Math.min(this.getMaxSpeed(), Math.floor(this.baseImpulse * ((game.turn - start)+1)));
-	$(this.element).find(".speedStats").html(this.getCurSpeed() + " (max: " + this.getMaxSpeed() + ")");
-}
-
-
 Flight.prototype.getNewMission = function(){
 	if (this.mission.turn == game.turn){
 		return this.mission;

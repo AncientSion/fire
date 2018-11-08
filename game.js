@@ -383,13 +383,12 @@ this.animateMovement = function(){
 		var facing = 0;
 		var p = getPointInDir(s.size/2, facing, o.x, o.y);
 
-
 		var flight = new Flight(
 			{id: range(-0, -100), name: "Flight", mission: false, traverse: 1,
 			x: o.x, y: o.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, curImp: 0, size: 0, fSize: 15, baseSize: 25, unitSize: 4, userid: this.userid, available: this.turn}
 		);
 
-		flight.primary = new Primary(0, flight.id, 0, 0, 0);
+		//flight.primary = new Primary(0, flight.id, 0, 0, 0);
 		flight.actions.push(new Move(-1, flight.id, "deploy", 0, 0, o.x, o.y, facing, 0, 0, 0, 1, 1));
 		flight.launch = {
 			shipid: aUnit,
@@ -436,6 +435,48 @@ this.animateMovement = function(){
 		$(flight.element).css("top", 600).css("left", 0);
 		this.checkUnitOffsetting();
 		this.draw();
+	}
+
+	this.doDeploySalvo = function(launcher, targetid, pos){
+		var s = game.getUnit(aUnit);
+		var o = s.getGamePos();
+		var facing = 0;
+		var p = getPointInDir(s.size/4, facing, o.x, o.y);
+		var id = range(0, -100);
+
+		var mission = {id: 0, unitid: id, type: 2, targetid: targetid, turn: game.turn, x: pos.x, y: pos.y, arrivd: 0, new: 1, target: false};
+
+		var salvo = new Salvo(
+			{id: range(-0, -100), name: "Salvo", mission: mission, traverse: 0,
+			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, curImp: 0, size: 50, fSize: 0, baseSize: 0, unitSize: 0, userid: this.userid, available: this.turn}
+		);
+		salvo.actions.push(new Move(-1, salvo.id, "deploy", 0, 0, o.x, o.y, facing, 0, 0, 0, 1, 1));
+
+		var shots = launcher.getShots();
+
+		for (var i = 1; i <= shots; i++){
+			salvo.structures.push(new Ballistic(launcher.loads[launcher.ammo]));
+		}
+		
+		baseImpulse = 1000;
+		for (var i = 0; i < salvo.structures.length; i++){
+			salvo.baseImpulse = Math.min(baseImpulse, salvo.structures[i].baseImpulse)
+		}
+
+		salvo.setUnitState();
+		salvo.isReady = 1;
+		salvo.doDraw = 1;
+		salvo.create();
+		salvo.setPreMovePosition();
+		salvo.setCurSpeed();
+		salvo.setLayout();
+		salvo.setSize();
+		salvo.setDrawData();
+		salvo.setImage();
+		salvo.createBaseDiv();
+		salvo.setVarious();
+		salvo.setNextMove();
+		this.ships.push(salvo);
 	}
 
 	this.doDeployShip = function(e, ship, pos){

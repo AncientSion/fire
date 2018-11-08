@@ -2110,7 +2110,7 @@ Weapon.prototype.getShotsString = function(){
 	if (this.fireMode[0] == "B"){
 		return (this.getShots() + " w/ " + this.getRakes() + " rakes");
 	}
-	else if (this.fireMode[0] = "P"){
+	else if (this.fireMode[0] == "P"){
 		return (this.getShots() + " w/ " + this.basePulses + " pulses");
 	}
 	else if (this.area){}
@@ -2637,8 +2637,9 @@ Beam.prototype.getAnimation = function(fire){
 	var hits = 0;
 	var fraction = 1;
 	var	t = fire.target.getDrawPos();
-	var devi = fire.weapon.output * 3;
+	var devi = fire.weapon.output * 6;
 	var roll = -1;
+	var oPos = fire.shooter.getDrawPos();
 
 	if (fire.shooter.squad){
 		delay = 40; shotDelay = 5;
@@ -2669,18 +2670,22 @@ Beam.prototype.getAnimation = function(fire){
 					tx = t.x + dest.x;
 					ty = t.y + dest.y;
 				}
-				tb = getPointInDir(devi, range(0, 360), tx, ty); // BEAM swipe END on MISS	
 			}
 			else if (fire.rolls[roll] >= 0 && fire.rolls[roll] <= fire.req[i]){ // hit
 				hasHit = 1;
 				hits++;
 				if (fire.target.ship){dest = fire.target.getHitSection(fire);}
-				else {dest = fire.target.getFireDest(fire, hit, hits-1);}
-				a = getAngleFromTo( {x: fire.target.drawX, y: fire.target.drawY}, {x: tx, y: ty} );
-				tb = getPointInDir(devi, range(0, 360), tx, ty);
+				else {dest = fire.target.getFireDest(fire, hasHit, hits-1);}
 			}
 
-
+			//var dist = Math.round(getDistance(oPos, {x: tx, y: ty}));
+			var angle = Math.round(getAngleFromTo(oPos, {x: tx, y: ty}));
+			//console.log("t " + oPos.x+"/" +oPos.y);
+			//console.log("t " + tx+"/" +ty);
+			//console.log("dist " + dist)
+			//console.log("beam angle " + angle)
+			//console.log("fire angle " + fire.angle)
+			tb = getPointInDir(devi, angle, tx, ty); // BEAM swipe END on MISS	
 
 			var shotAnim = new BeamVector(
 				{x: fire.shooter.drawX + o.x, y: fire.shooter.drawY + o.y},
@@ -3090,11 +3095,13 @@ Launcher.prototype.getTrackingRating = function(){
 }
 
 Launcher.prototype.setFireOrder = function(targetid, pos){
+	console.log("setFireOrder");
 	if (this.odds <= 0){return;}
 	this.fireOrders.push(
 		{id: 0, turn: game.turn, gameid: game.id, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
 		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
 	);
+	game.doDeploySalvo(this, targetid, pos);
 	this.selected = 0;
 	this.validTarget = 0;
 	this.highlight = 0;

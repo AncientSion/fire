@@ -168,6 +168,22 @@ Mixed.prototype.getBaseHitChance = function(){
 	return Math.ceil(chance/amount);
 }
 
+Mixed.prototype.setCurSpeed = function(){
+	if (this.mission.type == 1 && this.mission.arrived){
+		this.curImp = this.baseImpulse; return;
+	}
+	
+	var start = game.turn;
+
+	if (this.mission.targetid == this.oldMission.targetid && this.mission.type == this.oldMission.type){
+		start = this.oldMission.turn;
+	}
+
+	this.curImp = Math.min(this.getMaxSpeed(), Math.floor(this.baseImpulse * ((game.turn - start)+1)));
+	$(this.element).find(".speedStats").html(this.getCurSpeed() + " (max: " + this.getMaxSpeed() + ")");
+}
+
+
 Mixed.prototype.getWeaponPosition = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
