@@ -2648,12 +2648,12 @@ Beam.prototype.getAnimation = function(fire){
 		delay = 15;
 	}
 	
-	for (var j = 0; j < fire.guns; j++){
+	for (var i = 0; i < fire.guns; i++){
 		var gunAnims = [];
-		var o = fire.shooter.getWeaponOrigin(fire.systems[j]);
+		var o = fire.shooter.getWeaponOrigin(fire.systems[i]);
 		//console.log(o.display);
 		
-		for (var k = 0; k < this.shots; k++){
+		for (var j = 0; j < this.shots; j++){
 			roll++;
 			var hasHit = 0;
 			var dest;
@@ -2662,13 +2662,11 @@ Beam.prototype.getAnimation = function(fire){
 			if (fire.rolls[roll] < 0){
 				if (fire.rolls[roll] >= -99){ // blocked
 					dest = game.getObstructionPoint(fire);
-					tx = dest.x;
-					ty = dest.y;
 				}
 				else if (fire.rolls[roll] >= -199){ // jammed
 					dest = fire.target.getFireDest(fire, hasHit, hits-1);
-					tx = t.x + dest.x;
-					ty = t.y + dest.y;
+					dest.x += t.x;
+					dest.y += t.y;
 				}
 			}
 			else if (fire.rolls[roll] >= 0 && fire.rolls[roll] <= fire.req[i]){ // hit
@@ -2676,22 +2674,25 @@ Beam.prototype.getAnimation = function(fire){
 				hits++;
 				if (fire.target.ship){dest = fire.target.getHitSection(fire);}
 				else {dest = fire.target.getFireDest(fire, hasHit, hits-1);}
+				dest.x += t.x;
+				dest.y += t.y;
 			}
 
 			//var dist = Math.round(getDistance(oPos, {x: tx, y: ty}));
-			var angle = Math.round(getAngleFromTo(oPos, {x: tx, y: ty}));
+			var angle = Math.round(getAngleFromTo(oPos, dest));
 			//console.log("t " + oPos.x+"/" +oPos.y);
 			//console.log("t " + tx+"/" +ty);
 			//console.log("dist " + dist)
 			//console.log("beam angle " + angle)
 			//console.log("fire angle " + fire.angle)
-			tb = getPointInDir(devi, angle, tx, ty); // BEAM swipe END on MISS	
+			//tb = getPointInDir(devi, angle, dest.x, dest.y);
+			tb = getPointInDir(devi/2, range(0, 360), dest.x, dest.y);
 
 			var shotAnim = new BeamVector(
 				{x: fire.shooter.drawX + o.x, y: fire.shooter.drawY + o.y},
-				{x: tx, y: ty},
+				dest,
 				{x: tb.x, y: tb.y}, 
-				0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay) - k*shotDelay,
+				0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay) - j*shotDelay,
 				fire.weapon.output*20,
 				hasHit
 			);
@@ -3108,6 +3109,38 @@ Launcher.prototype.setFireOrder = function(targetid, pos){
 	this.setSystemBorder();
 }
 
+Launcher.prototype.doUndoActions = function(){
+	if (game.phase != -1){return;}
+	for (var i = game.ships.length-1; i >= 0; i--){
+		if (!game.ships[i].salvo || !game.ships[i].actions.length || !game.ships[i].available == game.turn){continue;}
+
+		console.log(game.ships[i].notes);
+
+		var data = game.ships[i].notes.split(";");
+		var shooterid = data[0];
+
+		if (this.parentId != shooterid){continue;}
+
+		for (var j = 1; j < data.length; j++){
+			if (data[j] != this.id){continue;}
+			console.log("im launching!");
+
+			var ele = $(".ammoDiv").each(function(){
+				if ($(this).data("shipId") == game.ships[i].id){
+					$(this).remove();
+					return false;
+					}
+				})
+
+			game.ships.splice(i, 1);
+		}
+		break;
+	}
+	this.unsetFireOrder();
+	planCtx.clearRect(0, 0, res.x, res.y);
+	game.redraw();
+}
+
 Launcher.prototype.getAimDetailsUnit = function(target, final, accLoss, dmgLoss, row){
 	var final = 80;
 	var trackingMod = this.getTrackingMod(target);
@@ -3182,6 +3215,7 @@ Launcher.prototype.select = function(e){
 	if (this.canFire()){
 		if (this.hasUnresolvedFireOrder()){
 			this.unsetFireOrder();
+			this.doUndoActions();
 		}
 
 		if (this.selected){
@@ -3876,7 +3910,6 @@ Hangar.prototype.doUndoActions = function(){
 						}
 					})
 				game.ships.splice(i, 1);
-				this.fireOrders.splice(this.fireOrders.length-1, 1);
 				for (var j = 0; j < this.loads.length; j++){
 					this.loads[j].launch = 0;
 				}
@@ -3884,6 +3917,7 @@ Hangar.prototype.doUndoActions = function(){
 			}
 		}
 	}
+	this.unsetFireOrder();
 	game.draw();
 }
 

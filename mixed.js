@@ -65,6 +65,13 @@ Mixed.prototype.getMaxSpeed = function(){
 	return this.baseImpulse*3;
 }
 
+Mixed.prototype.setBaseImpulse = function(){
+	baseImpulse = 1000;
+	for (var i = 0; i < this.structures.length; i++){
+		this.baseImpulse = Math.min(baseImpulse, this.structures[i].baseImpulse)
+	}
+}
+
 Mixed.prototype.drawNextMove = function(){
 	if (this.mission.arrived && this.mission.type == 1){return;}
 	planCtx.translate(cam.o.x, cam.o.y);

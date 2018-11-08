@@ -215,7 +215,7 @@ Flight.prototype.createBaseDiv = function(){
 				.attr("value", "Abort current mission")
 				.click(function(e){
 					if (aUnit == $(this).parent().parent().data("shipId")){
-						game.doAbortmission();
+						game.doAbortMission();
 					}
 				}))
 	}

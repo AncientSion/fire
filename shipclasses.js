@@ -3193,10 +3193,10 @@ Ship.prototype.doRandomOffset = function(shift){
 	var a = getAngleFromTo(o, tPos);
 	if (t){
 		//a = addAngle(range(-90, 90), getAngleFromTo(o, this.getTarget().getPlannedPos()));
-		a += 90 * shift;
+		a += 90 * shift + range (-5, 5);
 	} else a = range(0, 360);
 	
-	var p = getPointInDir(20, a, o.x, o.y);
+	var p = getPointInDir(20 + range(-8, 8), a, o.x, o.y);
 	//console.log(p);
 
 	this.drawX = p.x;

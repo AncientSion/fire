@@ -604,12 +604,12 @@
 					cam.stopMove();
 
 					if (game.phase == -1){
-						game.finishMoveSubPhase();
+						game.finishMoveSubPhase(1);
 					}
 					else {
 						game.animShip = 0; game.animFocus = 0;
 						game.animFlight = 0; game.animSalvo = 1;
-						game.finishMoveSubPhase();
+						game.finishMoveSubPhase(1);
 					}
 					game.draw();
 				}
