@@ -530,7 +530,7 @@ this.animateMovement = function(){
 
 			for (var j = 0; j < this.ships.length; j++){
 				if (!this.ships[j].flight || !this.ships[i].doDraw){continue;}
-				if (this.subPhase == 1){continue;}
+				if (game.phase != 0 && this.subPhase == 1){continue;}
 				var bPos = this.ships[j].getDrawPos();
 
 				if (aPos.x == bPos.x && aPos.y == bPos.y){
@@ -3975,6 +3975,7 @@ Game.prototype.handlePostFireMoves = function(){
 }
 
 Game.prototype.handleAllFireOrders = function(){
+	console.log(this.fireOrders);
 	for (var i = 0; i < this.fireOrders.length; i++){
 		this.fireOrders[i].tr.show();
 		if (!this.fireOrders[i].animated){

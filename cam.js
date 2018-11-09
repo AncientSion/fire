@@ -36,7 +36,7 @@ window.cam = {
 		this.vx = this.tx - this.o.x;
 		this.vy = this.ty - this.o.y;
 
-		this.steps = Math.ceil(Math.max(Math.abs(this.vx), Math.abs(this.vy))/10)
+		this.steps = Math.ceil(Math.max(Math.abs(this.vx), Math.abs(this.vy))/30)
 
 		this.state = (this.steps <= 5 ? 2 : 1); // 1 pan // 2 pause, 3 done
 		window.then = Date.now();

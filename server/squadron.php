@@ -261,47 +261,6 @@ class Squadron extends Mixed {
 		return $this->getHitSystme();
 	}
 
-	public function getFlashTargets($fire){
-		$valid = array();
-
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->destroyed){continue;}
-			$valid[] = $this->structures[$i];
-		}
-		return $valid;
-
-		if (!sizeof($valid)){return $this->primary;}
-		return $valid[mt_rand(0, sizeof($valid)-1)];
-	}
-
-	public function getFlashOverkillSystem($fire){
-		return false;
-	}
-	
-	public function getHitSystem($fire){
-		$elements = array();
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->destroyed){continue;}
-			$elements[] = $this->structures[$i];
-		}
-		return $elements[mt_rand(0, sizeof($elements)-1)];
-	}
-
-	public function isDestroyed(){
-		//Debug::log("isDestroyed()".get_class($this));
-		if ($this->destroyed){return true;}
-
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if (!$this->structures[$i]->isDestroyed()){
-				//Debug::log("nope, unit ".$i." / ".$this->structures[$i]->name." still alive");
-				return false;
-			}
-		}
-		//Debug::log("setting squadron to destroyed");
-		$this->destroyed = 1;
-		return true;
-	}
-
 	public function getArmour($fire, $system){
 		return $system->getArmourValue($system);
 	}

@@ -174,6 +174,7 @@ class DmgCalc {
 		$newFires = array();
 
 		for ($i = 0; $i < sizeof($gd->ships); $i++){
+			if ($gd->ships[$i]->obstacle){continue;}
 			$dist = Math::getDist2($gd->ships[$i]->getCurPos(), $impact);
 			//Debug::log("eMine impact distance to ".$gd->ships[$i]->name." #".$gd->ships[$i]->id.": ".$dist);
 

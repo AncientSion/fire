@@ -44,21 +44,6 @@ class Mixed extends Ship {
 		return;
 	}
 
-	public function isDestroyed(){
-		//Debug::log($this->destroyed);
-		if ($this->destroyed){
-			return true;
-		}
-		//Debug::log($this->destroyed);
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if (!$this->structures[$i]->isDestroyed()){
-				return false;
-			}
-		}
-		$this->destroyed = 1;
-		return true;
-	}
-
 	public function isRolling(){
 		return 0;
 	}
@@ -300,7 +285,7 @@ class Mixed extends Ship {
 		if (!sizeof($valid)){return $this->primary;}
 		return $valid[mt_rand(0, sizeof($valid)-1)];
 	}
-	
+
 	public function getFlashOverkillSystem($fire){
 		return false;
 	}
@@ -312,6 +297,21 @@ class Mixed extends Ship {
 			$elements[] = $this->structures[$i];
 		}
 		return $elements[mt_rand(0, sizeof($elements)-1)];
+	}
+
+	public function isDestroyed(){
+		//Debug::log("isDestroyed()".get_class($this));
+		if ($this->destroyed){return true;}
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if (!$this->structures[$i]->isDestroyed()){
+				//Debug::log("nope, unit ".$i." / ".$this->structures[$i]->name." still alive");
+				return false;
+			}
+		}
+		//Debug::log("setting squadron to destroyed");
+		$this->destroyed = 1;
+		return true;
 	}
 
 	public function addSubUnits($elements){
@@ -378,13 +378,16 @@ class Mixed extends Ship {
 	}
 
 	public function determineObstacleHits($fire){
-		Debug::log("determineObstacleHits ".get_class($this).", shots ".$fire->shots.", req ".$fire->req);
+		//Debug::log("determineObstacleHits ".get_class($this).", shots ".$fire->shots.", req ".$fire->req);
 
 		$fire->section = 0;
 		$shots = 0;
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->destroyed){Debug::log("skip id ".$this->structures[$i]->id); continue;}
+			if ($this->structures[$i]->destroyed){
+				Debug::log("skip id ".$this->structures[$i]->id);
+				continue;
+			}
 
 			$fire->rolls = [];
 			$this->doRollShots($fire);
