@@ -64,6 +64,24 @@ table, th, tr, td {
 	font-size: 16px;
 }
 
+#collideWrapper {
+	display: none;
+	position: absolute;
+	background-color: black;
+	border-radius: 5px;
+	border: 5px solid yellow;
+	padding: 10px;
+	z-index: 20;
+}
+
+.collideText {
+	margin: auto;
+	text-align: center;
+	border-radius: 5px;
+	color: white;
+	font-size: 20px;
+}
+
 #instructWrapper {
 	display: none;
 	position: absolute;
@@ -72,6 +90,14 @@ table, th, tr, td {
 	border: 5px solid #27e627;
 	padding: 10px;
 	z-index: 20;
+}
+
+.instructText {
+	margin: auto;
+	text-align: center;
+	border-radius: 5px;
+	color: white;
+	font-size: 20px;
 }
 
 #nameWrapper { 
@@ -85,14 +111,6 @@ table, th, tr, td {
 }
 
 #nameWrapper td {
-	font-size: 20px;
-}
-
-#instructText {
-	margin: auto;
-	text-align: center;
-	border-radius: 5px;
-	color: white;
 	font-size: 20px;
 }
 
@@ -1153,6 +1171,21 @@ div.integrityFull {
 
 .obstacleDiv table {
 	width: 100%;
+	border-collapse: collapse
+}
+
+.obstacleDiv table table td {
+	border: 1px solid white;
+	border-top: none;
+	border-bottom: none;
+}
+
+.obstacleDiv table table td:first-child {
+	border-left: none;
+}
+
+.obstacleDiv table table td:last-child {
+	border-right: none;
 }
 
 .obstacle {

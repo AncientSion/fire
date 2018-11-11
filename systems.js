@@ -65,6 +65,14 @@ function System(system){
 	}
 }
 
+System.prototype.attachLogHover = function(fire, tr){
+	tr.hover(function(){
+		var data = $(this).data();
+		game.getUnit(data.shooterid).doHighlight();
+		game.getUnit(data.targetid).doHighlight();
+	})
+}
+
 System.prototype.getActiveState = function(){
 	for (var i = 0; i < this.states.length; i++){
 		if (this.states[i]){return i;}
@@ -3111,10 +3119,12 @@ Launcher.prototype.setFireOrder = function(targetid, pos){
 
 Launcher.prototype.doUndoActions = function(){
 	if (game.phase != -1){return;}
+	var need = 0;
+
 	for (var i = game.ships.length-1; i >= 0; i--){
 		if (!game.ships[i].salvo || !game.ships[i].actions.length || !game.ships[i].available == game.turn){continue;}
 
-		console.log(game.ships[i].notes);
+		//console.log(game.ships[i].notes);
 
 		var data = game.ships[i].notes.split(";");
 		var shooterid = data[0];
@@ -3131,14 +3141,17 @@ Launcher.prototype.doUndoActions = function(){
 					return false;
 					}
 				})
-
+			need = 1;
 			game.ships.splice(i, 1);
 		}
 		break;
 	}
-	this.unsetFireOrder();
-	planCtx.clearRect(0, 0, res.x, res.y);
-	game.redraw();
+	
+	if (need){
+		this.unsetFireOrder();
+		planCtx.clearRect(0, 0, res.x, res.y);
+		game.redraw();
+	}
 }
 
 Launcher.prototype.getAimDetailsUnit = function(target, final, accLoss, dmgLoss, row){
@@ -3473,6 +3486,26 @@ function Area(system){
 }
 
 Area.prototype = Object.create(Particle.prototype);
+
+Area.prototype.attachLogHover = function(fire, tr){
+	tr.hover(
+		function(){
+			var data = $(this).data();
+			if (data.targetid >= 1){
+				game.getUnit(data.shooterid).doHighlight();
+				game.getUnit(data.targetid).doHighlight();
+			}
+			game.getUnit(data.shooterid).getSystem(data.weaponid).drawSingleEvent();
+		},
+		function(){
+			var data = $(this).data();
+			if (data.targetid >= 1){
+				game.getUnit(data.shooterid).doHighlight();
+				game.getUnit(data.targetid).doHighlight();
+			}
+			salvoCtx.clearRect(0, 0, res.x, res.y);
+		})
+}
 
 Area.prototype.select = function(){
 	if (aUnit != this.parentId){return;}

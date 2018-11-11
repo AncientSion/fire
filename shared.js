@@ -24,6 +24,7 @@ $(document).ready(function(){
 	window.ui = {
 		popupWrapper: $("#popupWrapper"),
 		instructWrapper: $("#instructWrapper"),
+		collideWrapper: $("#collideWrapper"),
 		combatLogWrapper: $("#combatLogWrapper"),
 		deployOverlay:  $("#deployOverlay"),
 		reinforceWrapper: $(".reinforceWrapper"),
@@ -294,14 +295,27 @@ function redirect(url){
 	}, 300);
 }
 
+function collide(text){
+    ui.collideWrapper
+     	.show()
+    	.find(".collideText")
+    		.html("<div class='popupSingle'>" + text + "</div>")
+
+	var ox = ui.collideWrapper.width()/2;
+		oy = 600;
+
+    ui.collideWrapper
+		.css("top", window.innerHeight / 2 - oy)
+		.css("left", window.innerWidth / 2 - ox)
+}
+
 function popup(text){
     ui.popupWrapper
      	.show()
-    	.find("#popupText")
+    	.find(".popupText")
     		.html("<div class='popupSingle'>" + text + "</div>")
 
 	var ox = ui.popupWrapper.width()/2;
-	var oy =  ui.popupWrapper.height()/2;
 		oy = 400;
 
     ui.popupWrapper
@@ -312,11 +326,10 @@ function popup(text){
 function instruct(text){
    ui.instructWrapper
     	.show()
-  		.find("#instructText")
+  		.find(".instructText")
   			.html("<div class='popupSingle'>" + text + "</div>")
 
-	var ox = ui.popupWrapper.width()/2;
-	var oy =  ui.popupWrapper.height()/2;
+	var ox = ui.instructWrapper.width()/2;
 		oy = 400;
 
     ui.instructWrapper

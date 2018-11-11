@@ -36,9 +36,12 @@ window.cam = {
 		this.vx = this.tx - this.o.x;
 		this.vy = this.ty - this.o.y;
 
-		this.steps = Math.ceil(Math.max(Math.abs(this.vx), Math.abs(this.vy))/30)
+		var dist = getDistance(this.o, {x: this.tx, y: this.ty});
+		this.steps = Math.ceil(Math.max(Math.abs(this.vx), Math.abs(this.vy))/10)
 
-		this.state = (this.steps <= 5 ? 2 : 1); // 1 pan // 2 pause, 3 done
+
+		//this.state = (this.steps <= 5 ? 2 : 1); //state:    1 pan // 2 pause, 3 done
+		this.state = (dist <= 200 ? 2 : 1); //state:    1 pan // 2 pause, 3 done
 		window.then = Date.now();
 		game.shiftCam();
 	},

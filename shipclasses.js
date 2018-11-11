@@ -587,24 +587,22 @@ Ship.prototype.issueMove = function(pos, dist){
 	if (this.actions[this.actions.length-1].type == "move"){
 		game.setCollisionData(this);
 		this.alertCollisions();
-	} else ui.popupWrapper.hide();
+	} else ui.collisionWrapper.hide();
 }
 
 
 Ship.prototype.alertCollisions = function(){
 	if (!this.collisions.length){return;}
 	var html = "Collision Alert for " + this.name + " #" + this.id + "</br>";
-		html += "<div>" + getUnitType(this.traverse) + ", size " + this.traverse + " - collision multiplier " + this.getCollisionMod() + "</div>";
+		html += "<div>" + getUnitType(this.traverse) + ", size " + this.traverse + " - collision multiplier " + game.getCollisionMod(this.traverse) + "</div>";
 
 	for (var i = 0; i < this.collisions.length; i++){
 		var col = this.collisions[i];
-		//console.log(unit.collisions[i]);
 		html += "</br><div>#" + col.obstacleId + "</br>Nominal risk " + col.baseCol + "% and " + col.baseAttacks + " attacks per 100px</br>";
 		html += "<span class='obstacleWarn yellow'>" + col.totalDist + "</span> distance: ";
 		html += "<span class='obstacleWarn yellow'>" + col.realAttacks + "</span> attacks @ <span class='obstacleWarn yellow'>" + col.realCol + "%</span> for <span class='obstacleWarn yellow'>" + col.damage + "</span> Damage</br>";
 	}
-	popup(html);
-	//<span class='obstacleWarn yellow'>"
+	collide(html);
 }
 
 Ship.prototype.doAutoShorten = function(){
@@ -1279,7 +1277,7 @@ Ship.prototype.getStructureFromAngle = function(a){
 }
 
 Ship.prototype.getCollisionMod = function(){
-	return (1+(0.2 * (this.traverse-4)))
+	return (1+( game.const.collision.hitMod * (this.traverse-4)))
 }
 
 Ship.prototype.getColor = function(){
@@ -1687,7 +1685,8 @@ Ship.prototype.getCost = function(){
  	return this.structures.map(x => x.cost).reduce((a, b) => a+b, 0);
 }
 
-Ship.prototype.animateSelfJumpIn = function(){
+Ship.prototype.animateSelfDeployIn = function(){
+
 	if (this.deployAnim[0] == this.deployAnim[1]){
 		this.deployed = 1;
 		this.isReady = 1;
@@ -1720,7 +1719,7 @@ Ship.prototype.animateSelfJumpIn = function(){
 
 }
 
-Ship.prototype.animateSelfJumpOut = function(){
+Ship.prototype.animateDeployOut = function(){
 	if (this.deployAnim[0] == this.deployAnim[1]){
 		this.deployed = 0;
 		this.isReady = 0;
@@ -1741,7 +1740,7 @@ Ship.prototype.animateSelfJumpOut = function(){
 
 	if (fraction > 0.5){
 		ctx.globalAlpha = 1;
-	} else ctx.globalAlpha = fraction * 2
+	} else ctx.globalAlpha = fraction * 2;
 
 	ctx.translate(this.drawX, this.drawY);
 	ctx.rotate(this.getDrawFacing() * Math.PI/180);
@@ -1758,8 +1757,7 @@ Ship.prototype.draw = function(){
 	ctx.translate(this.drawX, this.drawY);
 	ctx.rotate(this.getDrawFacing() * Math.PI/180);
 
-	//if (this.flight){
-	//	console.log("draw #" + this.id);
+	//if (this.flight){console.log("draw #" + this.id);
 	//}
  	if (this.doDraw){this.drawSelf();}
 
@@ -1848,7 +1846,7 @@ Ship.prototype.drawMarker = function(x, y, c, context){
 	context.beginPath();
 	context.arc(x, y, (this.size-2)/2, 0, 2*Math.PI, false);
 	context.closePath();
-	context.lineWidth = 1 + (this.salvo *1) + Math.floor(this.selected*2 + (this.focus == 1)*2);
+	context.lineWidth = 1 + Math.floor(this.selected*2 + (this.focus == 1)*2);
 	context.globalAlpha = 0.7 + (this.focus == 1) * 0.1;
 	context.globalCompositeOperation = "source-over";
 	context.strokeStyle = c;
@@ -3191,12 +3189,12 @@ Ship.prototype.doRandomOffset = function(shift){
 	} else tPos = {x: this.mission.x, y: this.mission.y};
 
 	var a = getAngleFromTo(o, tPos);
-	if (t){
+	//if (t){
 		//a = addAngle(range(-90, 90), getAngleFromTo(o, this.getTarget().getPlannedPos()));
 		a += 90 * shift + range (-5, 5);
-	} else a = range(0, 360);
+	//} else a = range(0, 360);
 	
-	var p = getPointInDir(20 + range(-8, 8), a, o.x, o.y);
+	var p = getPointInDir(25 + range(-5, 5), a, o.x, o.y);
 	//console.log(p);
 
 	this.drawX = p.x;
@@ -3319,7 +3317,7 @@ Ship.prototype.attachUnit = function(unit){
 }
 
 Ship.prototype.setPostFireImage = function(){
-	if (this.ship || this.obstacle){return;}
+	if (this.ship){return;}
 
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].doDraw && (this.structures[i].destroyed || this.structures[i].disabled)){
@@ -4190,17 +4188,6 @@ Ship.prototype.adjustMaxTurn = function(){
 	}
 }
 
-Ship.prototype.canDoAnotherTurn = function(){
-	var i = 0;
-	if (!this.getRemSpeed()){
-		return false;
-	}
-	else if (this.turns[i].cost * (this.turns[i].costmod + 0.2) + this.getTurnCost() < this.getRemEP()){
-		return true;
-	}
-	else return false;
-}
-
 Ship.prototype.doRoll = function(){
 	var shipPos = this.getPlannedPos();
 	this.actions.push(new Move(-1, this.id, "roll", 0, 1, shipPos.x, shipPos.y, 0, 0, this.getActionCost(0), 1, 1, 0));
@@ -4598,6 +4585,7 @@ Ship.prototype.getSelfExplo = function(){
 Ship.prototype.disableMissionMode = function(){
 	game.flightDeploy = 0;
 	game.mission = 0;
+	game.flightDeploy = false;
 	$(this.element)
 		.find("input[name=mission]:checked").each(function(){$(this).prop("checked", false)}).end()
 		.find(".missionOption").addClass("disabled");
@@ -4605,6 +4593,7 @@ Ship.prototype.disableMissionMode = function(){
 
 Ship.prototype.enableMissionMode = function(){
 	game.flightDeploy = 1;
+	game.deploySpeed = this.baseImpulse
 	$(this.element).find(".missionOption").removeClass("disabled");
 }
 

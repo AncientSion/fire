@@ -37,11 +37,15 @@
 </head>
 	<body>
 		<div id="popupWrapper">
-			<div id="popupText">
+			<div class="popupText">
 			</div>
 		</div>
 		<div id="instructWrapper">
-			<div id="instructText">
+			<div class="instructText">
+			</div>
+		</div>
+		<div id="collideWrapper">
+			<div class="collideText">
 			</div>
 		</div>
 		<div id="game">
@@ -604,12 +608,12 @@
 					cam.stopMove();
 
 					if (game.phase == -1){
-						game.finishMoveSubPhase(1);
+						game.finishMoveSubPhase(500);
 					}
 					else {
 						game.animShip = 0; game.animFocus = 0;
 						game.animFlight = 0; game.animSalvo = 1;
-						game.finishMoveSubPhase(1);
+						game.finishMoveSubPhase(500);
 					}
 					game.draw();
 				}

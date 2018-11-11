@@ -660,6 +660,7 @@ function Single(data){
 	this.disabled = data.disabled;
 	this.baseImpulse = data.baseImpulse;
 	this.critEffects = data.critEffects;
+	this.size = data.size;
 	this.damages = [];
 	this.crits = [];
 	this.systems = [];
@@ -1154,7 +1155,7 @@ FireOrder.prototype.createCombatLogEntry = function(){
 	var start = log.children().length;
 
 	var dmgs = this.assembleDmgData();
-	var depth = Object.keys(dmgs).length-1;
+	var depth = Object.keys(dmgs).length ? Object.keys(dmgs).length-1 : 0;
 
 	var rolls = this.rolls.slice();
 
@@ -1240,6 +1241,7 @@ FireOrder.prototype.addLogStartEntry = function(log){
 	tr
 	.data("shooterid", this.shooterid)
 	.data("targetid", this.targetid)
+	.data("weaponid", this.weapon.id)
 	.data("fireid", this.id)
 	.data("row", index)
 	.data("expanded", 0)
@@ -1262,6 +1264,7 @@ FireOrder.prototype.addLogStartEntry = function(log){
 		var startRow = $(this).data("start");
 		var endRow = $(this).data("end");
 		var rows = $("#combatLog").find("tbody").children();
+		if (startRow == endRow){return;}
 
 		if ($(this).data("expanded") == 1){
 			$(this).data("expanded", 0).removeClass("selected");
@@ -1276,23 +1279,14 @@ FireOrder.prototype.addLogStartEntry = function(log){
 			}
 		}
 
-
 		var tableHeight = 10;
 		for (var i = 0; i < endRow; i++){
 			if ($(rows[i]).is(":visible")){tableHeight += 22;}
 		}
-
 		ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return tableHeight - 250 + 22});
-
 	})
 
-
-	tr.hover(function(){
-		var data = $(this).data();
-		if (data.targetid == "" || data.targetid <= 0){return;}
-		game.getUnit(data.shooterid).doHighlight();
-		game.getUnit(data.targetid).doHighlight();
-	})
+	this.weapon.attachLogHover(this, tr);
 
 	var req = this.req.slice();
 		req.sort(function(a, b){return a-b});

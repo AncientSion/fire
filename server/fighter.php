@@ -2,6 +2,7 @@
 
 class Fighter extends Single {
 	public $traverse = 1;
+	public $size = 26;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

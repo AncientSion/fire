@@ -1920,7 +1920,7 @@
 			//var_export($result);
 
 			$stmt = $this->connection->prepare(
-				"SELECT * FROM units where userid = :userid AND focus = 1"
+				"SELECT * FROM units where userid = :userid AND focus = 1 OR type = 2"
 			);
 
 			$phaseSkip = 1;

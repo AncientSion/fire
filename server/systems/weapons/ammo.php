@@ -1,6 +1,7 @@
 <?php
 
 class Missile extends Single {
+	public $size = 20;
 	public $missile = 1;
 	public $torpedo = 0;
 	public $maxRange = 0;

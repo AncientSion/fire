@@ -57,16 +57,20 @@ class Flight extends Minor {
 	}
 
 	public function addMission($data, $userid, $turn, $phase){
-		if ($this->userid == $userid){
+		Debug::log("addMission to #".$this->id.", phase: ".$phase.", userid: ".$userid);
+		if (!$userid || $this->userid == $userid || sizeof($data) == 1){
+			//echo "id ".$this->id.", adding____";
 			$this->mission = new Mission($data[sizeof($data)-1]);
 		}
-		else if ($phase == -1){
+		else if ($phase == -1 || $phase == 1){
 			for ($i = sizeof($data)-1; $i >= 0; $i--){
 				if ($data[$i]["turn"] == $turn){continue;}
 				$this->mission = new Mission($data[$i]);
 				return;
 			}
 		} else $this->mission = new Mission($data[sizeof($data)-1]);
+
+		//var_export($this->mission);
 	}
 
 	public function getLockEffect($target){

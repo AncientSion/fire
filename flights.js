@@ -43,7 +43,7 @@ Flight.prototype.setSize = function(){
 		max = Math.max(max, Math.abs(this.structures[i].layout.y));
 	}
 	//console.log("setSize #" + this.id + ", size " + this.size);
-	this.size = max + 20;
+	this.size = max + 15;
 }
 
 Flight.prototype.setPreFireSize = function(){
@@ -54,7 +54,7 @@ Flight.prototype.setPreFireSize = function(){
 		max = Math.max(max, Math.abs(this.structures[i].layout.x));
 		max = Math.max(max, Math.abs(this.structures[i].layout.y));
 	}
-	this.size = max + 20;
+	this.size = max + 15;
 }
 
 Flight.prototype.getEffEP = function(){
@@ -439,4 +439,94 @@ Flight.prototype.getLaunchData = function(){
 	}
 	var data = {active: 1, units: units};
 	return [data];
+}
+
+Flight.prototype.setImage = function(){
+	if (this.hasPatrolLayout()){this.setPatrolImage(); return;}
+	//console.log("setImage " + this.id);
+	var t = document.createElement("canvas");
+		t.width = this.size*2;
+		t.height = this.size*2;
+	var ctx = t.getContext("2d");
+		ctx.translate(t.width/2, t.height/2);
+
+	for (var i = 0; i < this.structures.length; i++){
+		if (!this.structures[i].doDraw){continue;}
+
+		ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
+		ctx.drawImage(
+			this.structures[i].getBaseImage(),
+			0 -this.structures[i].size/2,
+			0 -this.structures[i].size/2,
+			this.structures[i].size, 
+			this.structures[i].size
+		)
+		ctx.translate(-this.structures[i].layout.x, -this.structures[i].layout.y);
+	}
+
+	ctx.arc(0, 0, 5, 0, 2*Math.PI, false);
+	ctx.fillStyle = (this.friendly ? "#00ea00" : "red");
+	ctx.fill();
+	ctx.setTransform(1,0,0,1,0,0);
+	this.img = t;
+	//console.log(this.img.toDataURL());
+}
+
+Flight.prototype.setPatrolImage = function(){
+	//console.log("setPatrolImage " + this.id);
+	var t = document.createElement("canvas");
+		t.width = this.size*2;
+		t.height = this.size*2;
+	var ctx = t.getContext("2d");
+		ctx.translate(t.width/2, t.height/2);
+
+	for (var i = 0; i < this.structures.length; i++){
+		if (!this.structures[i].doDraw){continue;}
+
+		ctx.save();
+		ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
+		ctx.rotate((360/this.structures.length*i) * (Math.PI/180));
+		ctx.drawImage(
+		this.structures[i].getBaseImage(),
+			0 -this.structures[i].size/2,
+			0 -this.structures[i].size/2,
+			this.structures[i].size, 
+			this.structures[i].size
+		);
+		ctx.restore();
+	}
+	ctx.setTransform(1,0,0,1,0,0);
+	this.img = t;
+	//console.log(this.drawImg.toDataURL());
+}
+
+Flight.prototype.setBaseLayout = function(){
+	var osx = 16;
+	var osy = 12;
+
+	//var num = Math.ceil(this.structures.length/3);
+	//this.size = num*10;
+
+	var reach = 15 + Math.max(0, (Math.floor(this.structures.length-3)/3)*12);
+
+	for (var i = 0; i < this.structures.length/3; i++){
+
+		var a = 360/Math.ceil(this.structures.length/3)*i;
+		//var o = getPointInDir(0 + this.unitSize*15, a-90, 0, 0);
+		var o = getPointInDir(reach, a, 0, 0);
+
+		for (var j = 0; j < Math.min(this.structures.length-i*3, 3); j++){
+			var ox = o.x;
+			var oy = o.y;
+
+			switch (j){
+				case 0: oy -= osy; break;
+				case 1: ox -= osx; oy += osy; break;
+				case 2: ox += osx; oy += osy; break;
+				default: break;
+			}
+			this.structures[(i*3)+j].layout = {x: ox, y: oy};
+		}
+	}
+	this.patrolLayout = 0;
 }

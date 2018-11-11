@@ -39,6 +39,9 @@
 				array("Morale", 100, 0, -25.00),
 				array("Rout", 150, 0, 0.00)
 			),
+			"collision" => array(
+				"hitMod" => 0.22
+			)
 		);
 
 		function __construct($gameid = 0, $userid = 0){
@@ -398,6 +401,7 @@
 			}
 		}
 
+		$this->userid = 0;
 		return true;
 	}
 
@@ -764,7 +768,7 @@
 			//Debug::log("i = ".$i.", shooterid: ".$shooter->id);
 			//$devi = Math::getPointInDirection($this->fires[$i]->shooter->size/3, $a, $sPos->x + mt_rand(-10, 10), $sPos->y + mt_rand(-10, 10));
 			$mission = array("type" => 2, "turn" => $this->turn, "targetid" => $this->fires[$i]->targetid, "x" => $tPos->x, "y" => $tPos->y, "arrived" => 0, "new" => 1);
-			$move = array("turn" => $this->turn, "type" => "deploy", "dist" => 0, "x" => $devi->x, "y" => $devi->y, "a" => $a, "cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
+			$move = array("turn" => $this->turn, "type" => "deploy", "dist" => 0, "x" => $sPos->x, "y" => $sPos->y, "a" => $a, "cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
 			$upgrades = array(array("active" => 1, "shipid" => $this->fires[$i]->shooter->id, "systemid" => $this->fires[$i]->weapon->id, "units" => array(0 => array("amount" => $this->fires[$i]->shots, "name" => $name))));
 
 			$units[] = array("gameid" => $this->gameid, "userid" => $this->fires[$i]->shooter->userid, "type" => "Salvo", "name" => "Salvo", "callsign" => "", "totalCost" => 0, "moraleCost" => 0, "turn" => $this->turn, "eta" => 0, "mission" => $mission, "actions" => array($move), "upgrades" => $upgrades);
@@ -915,18 +919,17 @@
 		Debug::log("handleFlightMovement");
 
 		$flights = array();
+		$patrols = array();
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (!$this->ships[$i]->flight){continue;}
+			if ($this->ships[$i]->mission->type == 1){$patrols[] = $this->ships[$i]; continue;}
 			$this->ships[$i]->mission->target = $this->getUnit($this->ships[$i]->mission->targetid);
 			$flights[] = $this->ships[$i];
 		}
 
 		usort($flights, function($a, $b){
-			if ($a->mission->type == 1){
-				return -1;
-			}
-			else if ($a->mission->target->flight != $b->mission->target->flight){
+			if ($a->mission->target->flight != $b->mission->target->flight){
 				return $a->mission->target->flight - $b->mission->target->flight;
 			}
 			else if ($a->mission->target->flight && $b->mission->target->flight){
@@ -939,6 +942,10 @@
 				return $a->mission->target->ship - $b->mission->target->ship;
 			}
 		});
+
+		for ($i = 0; $i < sizeof($patrols); $i++){
+			$patrols[$i]->setMove($this);
+		}
 
 		for ($i = 0; $i < sizeof($flights); $i++){
 			$flights[$i]->setMove($this);
@@ -1068,7 +1075,7 @@
 			$shots = round($this->ships[$i]->getSystem(2)->getShots($this->turn) * (1 + (0.3 * ($unit->traverse-4))));
 		*/	
 			$weaponid = 2;
-			$req = $this->ships[$i]->collision * (1 + (0.2 * ($unit->traverse-4)));
+			$req = $this->ships[$i]->collision * (1 + ($this->const["collision"]["hitMod"] * ($unit->traverse-4)));
 			$string = (round($totalDist).";".$this->ships[$i]->collision.";".round($req).";");
 			$shots = ceil($this->ships[$i]->getSystem(2)->getShots($this->turn) / 100 * $totalDist);
 

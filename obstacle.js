@@ -43,7 +43,7 @@ Obstacle.prototype.drawNextMarker = function(x, y, c, context){
 	context.beginPath();
 	context.arc(x, y, (this.size/2)-1, 0, 2*Math.PI, false);
 	context.closePath();
-	context.lineWidth = 2;
+	context.lineWidth = 1;
 	context.globalAlpha = 0.3;
 	context.globalCompositeOperation = "source-over";
 	context.strokeStyle = "Bisque";
@@ -71,9 +71,8 @@ Obstacle.prototype.getMaxInterference = function(){
 	return Math.round(this.interference / 100 * this.size);
 }
 
-Obstacle.prototype.getBaseCollision = function(){
+Obstacle.prototype.getBaseCollisionPct = function(){
 	return this.collision;
-	return Math.round(this.collision / 100 * this.size/2);
 }
 
 Obstacle.prototype.getShortInfo = function(){
@@ -83,7 +82,7 @@ Obstacle.prototype.getShortInfo = function(){
 	//.append(this.getHeader())
 	.append($("<div>").html("Size " + this.size + " / Speed " + this.getCurSpeed()))
 	.append($("<div>").html(this.getMaxInterference() + "% Interference"))
-	.append($("<div>").html(this.getBaseCollision() + "% Collision"))
+	.append($("<div>").html(this.getBaseCollisionPct() + "% Collision"))
 	.append($("<div>").html(this.getDamageString() + " / " + this.getBaseAttacks() + " Strikes"))
 }
 
@@ -127,7 +126,8 @@ Obstacle.prototype.createBaseDiv = function(){
 
 	this.element = div[0];
 
-	var table = $("<table>")
+	var table = $("<table>")//.contextmenu(function(e){e.stopPropagation()})
+	var baseCol = this.getBaseCollisionPct();
 
 	$(table)
 		.append($("<tr>")
@@ -146,18 +146,42 @@ Obstacle.prototype.createBaseDiv = function(){
 			//.append($("<td>").html(this.interference + "% per 100px")))
 			.append($("<td>").html("Interference"))
 			.append($("<td>").html(this.getMaxInterference() + "% (" + this.interference + "% per 100px)")))
-		.append($("<tr>")
-			.append($("<td>").html("Collision Chance"))
-			.append($("<td>").html(this.getBaseCollision() + "% (vs Medium)")))
-		.append($("<tr>")
-			.append($("<td>").html("Collision Modifier"))
-			.append($("<td>").html("+- 0.2 multiplier per Size")))
-		.append($("<tr>")
+				.append($("<tr>")
 			.append($("<td>").html("Collision Attacks"))
 			.append($("<td>").html(this.getBaseAttacks() + " per 100px")))
 		.append($("<tr>")
 			.append($("<td>").html("Damage Potential"))
 			.append($("<td>").html(this.getDamageString())))
+		.append($("<tr>")
+			.append($("<td>").attr("colSpan", 2).css("height", 10)))
+	/*	.append($("<tr>")
+			.append($("<td>").html("<span class='yellow'>Base Collision Chance</span>"))
+			.append($("<td>").html(baseCol + "% (vs Medium)")))
+		.append($("<tr>")
+			.append($("<td>").html("Collision Modifier"))
+			.append($("<td>").html("+- " + game.const.collision.hitMod + " multiplier per Size")))
+	*/
+
+
+
+		var units = ["Salvo", "Flight", "", "Squadron", "Medium", "Heavy", "SuperHeavy"];
+
+		var trA = $("<tr>");
+		var trB = $("<tr>");
+		for (var i = 0; i < units.length; i++){
+			if (units[i] == ""){continue;}
+			trA.append($("<td>").html(units[i]));
+			trB.append($("<td>").html(Math.round(baseCol * game.getCollisionMod(i)) + "%"));
+		}
+
+		table.append($("<tr>")
+			.append($("<td>").attr("colSpan", 2)
+				.append($("<table>").addClass("collisionTable")
+					.append($("<tr>").append($("<td>").attr("colSpan", 7).html("<span class='yellow'>Collision Chance (mod: " + game.const.collision.hitMod + ")</span>")))
+					.append(trA)
+					.append(trB))))
+		.append($("<tr>")
+			.append($("<td>").attr("colSpan", 2).css("height", 10)))
 
 	div.append(table);
 
@@ -276,7 +300,7 @@ Obstacle.prototype.drawMarker = function(x, y, c, context){
 	context.beginPath();
 	context.arc(x, y, (this.size/2)-1, 0, 2*Math.PI, false);
 	context.closePath();
-	context.lineWidth = 2;
+	context.lineWidth = 1;
 	context.globalAlpha = 0.5;
 	context.globalCompositeOperation = "source-over";
 	context.strokeStyle = "Bisque";
@@ -296,9 +320,18 @@ Obstacle.prototype.setLayout = function(){
 	}
 }
 
+Obstacle.prototype.setPreFireImage = function(){
+	this.setTrueImage(false);
+}
+
+Obstacle.prototype.setPostFireImage = function(){
+	this.setTrueImage(true);
+}
+
 Obstacle.prototype.setImage = function(){
 	var info = true;
-	if ((game.phase == 1 || game.phase == 2) && game.subPhase == 1){
+	if ((game.phase == 1 || game.phase == 2) && game.subPhase < 3){
+		console.log("ding");
 		info = false;
 	}
 	this.setTrueImage(info);
@@ -399,8 +432,8 @@ Obstacle.prototype.getRealAttacks = function(dist){
 	return Math.ceil(wpn.shots / 100 * dist);
 }
 
-Obstacle.prototype.getRealCollisionPct = function(unit){
-	return Math.round(this.collision * unit.getCollisionMod());
+Obstacle.prototype.getRealCollisionPct = function(traverse){
+	return Math.round(this.collision * game.getCollisionMod(traverse));
 }
 
 Obstacle.prototype.getBaseImage = function(){

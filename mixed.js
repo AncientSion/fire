@@ -182,7 +182,7 @@ Mixed.prototype.setCurSpeed = function(){
 	
 	var start = game.turn;
 
-	if (this.mission.targetid == this.oldMission.targetid && this.mission.type == this.oldMission.type){
+	if (this.mission.type == 2 && this.mission.targetid == this.oldMission.targetid && this.mission.type == this.oldMission.type){
 		start = this.oldMission.turn;
 	}
 
@@ -532,98 +532,6 @@ Mixed.prototype.setPatrolLayout = function(){
 	this.patrolLayout = 1;
 }
 
-Mixed.prototype.setBaseLayout = function(){
-	var osx = 16;
-	var osy = 12;
-
-	//var num = Math.ceil(this.structures.length/3);
-	//this.size = num*10;
-
-	var reach = 15 + Math.max(0, (Math.floor(this.structures.length-3)/3)*12);
-
-	for (var i = 0; i < this.structures.length/3; i++){
-
-		var a = 360/Math.ceil(this.structures.length/3)*i;
-		//var o = getPointInDir(0 + this.unitSize*15, a-90, 0, 0);
-		var o = getPointInDir(reach, a, 0, 0);
-
-		for (var j = 0; j < Math.min(this.structures.length-i*3, 3); j++){
-			var ox = o.x;
-			var oy = o.y;
-
-			switch (j){
-				case 0: oy -= osy; break;
-				case 1: ox -= osx; oy += osy; break;
-				case 2: ox += osx; oy += osy; break;
-				default: break;
-			}
-			this.structures[(i*3)+j].layout = {x: ox, y: oy};
-		}
-	}
-	this.patrolLayout = 0;
-}
-
-Mixed.prototype.setImage = function(){
-	if (this.hasPatrolLayout()){this.setPatrolImage(); return}
-	//console.log("setImage " + this.id);
-	var size = 26;
-	var t = document.createElement("canvas");
-		t.width = this.size*2;
-		t.height = this.size*2;
-	var ctx = t.getContext("2d");
-		ctx.translate(t.width/2, t.height/2);
-
-	for (var i = 0; i < this.structures.length; i++){
-		if (!this.structures[i].doDraw){continue;}
-
-		ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
-		ctx.drawImage(
-			this.structures[i].getBaseImage(),
-			0 -size/2,
-			0 -size/2,
-			size, 
-			size
-		)
-		ctx.translate(-this.structures[i].layout.x, -this.structures[i].layout.y);
-	}
-
-	ctx.arc(0, 0, 5, 0, 2*Math.PI, false);
-	ctx.fillStyle = (this.friendly ? "#00ea00" : "red");
-	ctx.fill();
-	ctx.setTransform(1,0,0,1,0,0);
-	this.img = t;
-	//console.log(this.img.toDataURL());
-}
-
-Mixed.prototype.setPatrolImage = function(){
-	//console.log("setPatrolImage " + this.id);
-	var size = 26;
-	var t = document.createElement("canvas");
-		t.width = this.size*2;
-		t.height = this.size*2;
-	var ctx = t.getContext("2d");
-		ctx.translate(t.width/2, t.height/2);
-
-	for (var i = 0; i < this.structures.length; i++){
-		if (!this.structures[i].doDraw){continue;}
-
-		ctx.save();
-		ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
-		ctx.rotate((360/this.structures.length*i) * (Math.PI/180));
-		ctx.drawImage(
-		this.structures[i].getBaseImage(),
-			0 -size/2,
-			0 -size/2,
-			size, 
-			size
-		);
-		ctx.restore();
-	}
-	ctx.setTransform(1,0,0,1,0,0);
-	this.img = t;
-	//console.log(this.drawImg.toDataURL());
-}
-
 Mixed.prototype.getWeaponOrigin = function(id){
 	for (i = this.structures.length-1; i >= 0; i--){
 		if (id > this.structures[i].id){
@@ -717,33 +625,15 @@ Mixed.prototype.createDeployEntry = function(){
 		)
 }
 
-Mixed.prototype.animateSelfJumpIn = function(){
+Mixed.prototype.animateSelfDeployIn = function(){
 	this.deployAnim[0] = this.deployAnim[1];
 
 	if (this.deployAnim[0] == this.deployAnim[1]){
 		this.deployed = 1;
 		this.isReady = 1;
-		this.drawSelf();
-		ctx.rotate(-this.getDrawFacing() * Math.PI/180);
-		ctx.translate(-this.drawX, -this.drawY);
+		this.draw();
 		this.createDeployEntry();
 		return;
-	}
-
-	this.deployAnim[0] += 1;
-
-	var fraction = this.deployAnim[0] / this.deployAnim[1];
-	var sin = Math.sin(Math.PI*fraction);
-
-	drawCircle(this.drawX, this.drawY, this.size*0.55*sin, "source-over", "blue");
-	drawCircle(this.drawX, this.drawY, this.size*0.2*sin/2, "lighter", "lightBlue");
-
-	if (fraction >= 0.3){
-		ctx.globalAlpha = fraction;
-		this.drawSelf();
-		ctx.globalAlpha = 1;
-		ctx.rotate(-this.getDrawFacing() * Math.PI/180);
-		ctx.translate(-this.drawX, -this.drawY);
 	}
 }
 

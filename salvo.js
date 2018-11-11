@@ -5,7 +5,13 @@ function Salvo(data){
 	this.salvo = 1;
 
 	this.setSize = function(){
-		this.size = 18;
+		var max = 0;
+		for (var i = 0; i < this.structures.length; i++){
+			if (this.structures[i].destroyed){continue;}
+			max = Math.max(max, Math.abs(this.structures[i].layout.x));
+			max = Math.max(max, Math.abs(this.structures[i].layout.y));
+		}
+		this.size = max + 15;
 	}
 
 	this.getDamage = function(){
@@ -255,7 +261,54 @@ Salvo.prototype.doUnselect = function(){
 	game.redraw();
 }
 
+Salvo.prototype.setBaseLayout = function(){
+	console.log("salvo setBaseLayout");
+
+	var dist = 20;
+	if (this.structures.length == 2){
+		dist = 10;
+	} else if (this.structures.length == 3){
+		dist = 15;
+	}
+
+	for (var i = 0; i < this.structures.length; i++){
+		var a = 360/Math.ceil(this.structures.length)*i;
+		var o = getPointInDir(dist, a + ((this.structures.length == 2) * 90), 0, 0);
+		this.structures[i].layout = o;
+	}
+}
+
 Salvo.prototype.setImage = function(){
+	//console.log("setImage " + this.id);
+	var t = document.createElement("canvas");
+		t.width = this.size*2;
+		t.height = this.size*2;
+	var ctx = t.getContext("2d");
+		ctx.translate(t.width/2, t.height/2);
+
+	for (var i = 0; i < this.structures.length; i++){
+		if (!this.structures[i].doDraw){continue;}
+
+		ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
+		ctx.drawImage(
+			this.structures[i].getBaseImage(),
+			0 -this.structures[i].size/2,
+			0 -this.structures[i].size/2,
+			this.structures[i].size, 
+			this.structures[i].size
+		)
+		ctx.translate(-this.structures[i].layout.x, -this.structures[i].layout.y);
+	}
+
+	ctx.arc(0, 0, 3, 0, 2*Math.PI, false);
+	ctx.fillStyle = (this.friendly ? "#00ea00" : "red");
+	ctx.fill();
+	ctx.setTransform(1,0,0,1,0,0);
+	this.img = t;
+	//console.log(this.img.toDataURL());
+}
+
+Salvo.prototype.setImages = function(){
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
 		t.height = this.size*2;

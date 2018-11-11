@@ -266,22 +266,22 @@ function drawVector(unit, origin, target, dist, angle){
 	.removeClass("disabled");
 }
 
-function drawFlightVector(flight, speed, target){
+function drawFlightVector(origin, target, color, speed){
 
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	mouseCtx.beginPath();
-	mouseCtx.moveTo(flight.x * cam.z + cam.o.x, flight.y * cam.z + cam.o.y);
+	mouseCtx.moveTo(origin.x * cam.z + cam.o.x, origin.y * cam.z + cam.o.y);
 	mouseCtx.lineTo(target.x * cam.z + cam.o.x, target.y * cam.z + cam.o.y);
 	mouseCtx.closePath();
-	mouseCtx.strokeStyle = flight.getColor();
+	mouseCtx.strokeStyle = color;
 	mouseCtx.lineWidth = 1;
 	mouseCtx.stroke();
 
-	var dist = getDistance(flight, target);
+	var dist = getDistance(origin, target);
 
 	if (dist <= speed){return;}
 
-	var p = getPointInDir(speed, getAngleFromTo(flight, target), flight.x, flight.y);
+	var p = getPointInDir(speed, getAngleFromTo(origin, target), origin.x, origin.y);
 
 	mouseCtx.beginPath();
 	mouseCtx.moveTo(p.x * cam.z + cam.o.x, p.y * cam.z + cam.o.y);

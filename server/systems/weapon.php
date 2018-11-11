@@ -89,11 +89,11 @@ class Weapon extends System {
 			$this->dmgs[$i] = floor($data[$i] / 100 * $this->minDmg);
 		}
 
-		$this->notes[] = "Intial hit scores ".$this->dmgs[0]." damage against</br>target hull.";
+		$this->notes[] = "Intial hit scores full damage against hull.";
 		$this->notes[] = "</br><u>Squadron</u>";
 		$this->notes[] = "Instead ".$this->dmgs[1]." damage";
 		$this->notes[] = "</br><u>Ship</u>";
-		$this->notes[] = "Facing systems: Either</br>".$this->dmgs[2].", ".$this->dmgs[3]." or ".$this->dmgs[4]." damage each, no overkill";
+		$this->notes[] = "Facing systems:</br>".$this->dmgs[2].", ".$this->dmgs[3]." or ".$this->dmgs[4]." damage each, no overkill";
 	}
 
 	public function setShockData(){
@@ -105,14 +105,13 @@ class Weapon extends System {
 			$this->dmgs[$i] = (($this->minDmg*$i) . "-" . ($this->maxDmg*$i));
 		}
 
-
 		$this->notes[] = "<u>Salvo</u>: ".$this->dmgs[0]." damage each";
 		$this->notes[] = "<u>Flight</u>: ".$this->dmgs[1]." damage each";
 		$this->notes[] = "<u>Squadron</u>: ".$this->dmgs[3]." damage each";
 
 		$html = "</br><u>Ship</u></br>";
 		$html .= "Hull: ".$this->dmgs[4]." damage</br>Extra " .$this->dmgs[0]." damage per size > Medium</br>";
-		$html .= "Facing systems: ".$this->dmgs[0]." damage each</br>No overkill";	
+		$html .= "Facing systems:".$this->dmgs[0]." damage each</br>No overkill";	
 		$this->notes[] = $html;
 		//$this->notes[] = "Armour applies, no Overkill";
 	}
@@ -158,8 +157,9 @@ class Weapon extends System {
 	}
 
 	public function setAntimatterData(){
-		$this->notes[] = "<span class='yellow'>".$this->amBonus."</span> extra damage per 1 point of passing the to-hit roll.";
-		$this->notes[] = "Extra damage is capped at <span class='yellow'>".$this->amMax."%</span>";
+		//$this->notes[] = "<span class='yellow'>".$this->amBonus."</span> extra damage per 1 point of passing the to-hit roll.";
+		$this->notes[] = "<span class='yellow'>+".($this->amBonus*10)."</span> extra damage caused per 10 points of passing the to-hit roll.";
+		$this->notes[] = "Extra damage capped at <span class='yellow'>".$this->amMax."%</span> of base damage after all modifiers.";
 	}
 
 	public function setEMData(){
