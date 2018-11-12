@@ -259,7 +259,6 @@ else header("Location: index.php");
 				doCloneSquaddie: function(data){
 					var squadron = game.getUnit(aUnit);
 					var sub = squadron.getSystem(data.systemId);
-
 					if (squadron.getSlotsUsed() + sub.space > squadron.getMaxSlots()){return;}
 
 					var copy = initSquaddie(JSON.parse(JSON.stringify(sub)));
@@ -273,14 +272,61 @@ else header("Location: index.php");
 							copy.systems[i].setTotalBuyData();
 						}
 
-					squadron.structures.push(copy);
+					this.finishExpandSquadron(squadron, copy);
+				},
+
+				requestSubUnit: function(data){
+					var unit = game.getUnit(aUnit);
+					if (!unit || !unit.squad){return;}
+					if (game.openRequest){return;}
+					if (unit.getRemainingSlots() < data.space){
+						popup("Insufficent slot space remaining</br>" + $(unit.element).find(".squadSlots").html()); return;
+					}
+
+					var purchase = game.purchases;
+
+					if (game.refit){purchase = unit.purchaseId;}
+
+					game.openRequest = 1;
+					$.ajax({
+						type: "GET",
+						url: "getGameData.php",
+						datatype: "json",
+						data: {
+								type: "unitdata",
+								unit: "squaddie",
+								purchases: purchase,
+								index: unit.index,
+								name: data.name,
+							},
+						success: game.addUnitToSquadron,
+						error: ajax.error,
+					});
+				},
+
+				addUnitToSquadron: function(data){
+					game.openRequest = 0;
+					var squadron = game.getUnit(aUnit);
+					var sub = initSquaddie(JSON.parse(data));
+						sub.create();	
+					squadron.index = sub.index;	
+
+					game.finishExpandSquadron(squadron, sub);
+				},
+
+				finishExpandSquadron: function(squadron, squaddie){
+					squadron.structures.push(squaddie);
+					squadron.size = 50 + squadron.structures.length;
 					squadron.setLayout();
 					squadron.addSubContainers();
 					squadron.setStats();
 					squadron.setSubSystemState();
-					copy.fillSelfContainer();
-					copy.previewSetup();
+					squadron.updateImage();
+					squaddie.fillSelfContainer();
+					squaddie.previewSetup();
+					drawShipPreview();
 
+					squadron.recalcCommandUpgrades();
 					game.setUnitTotal(squadron);
 				},
 
@@ -672,7 +718,7 @@ else header("Location: index.php");
 										.data("name", data[i]["name"])
 										.data("value", data[i]["value"])
 										.data("space", data[i]["space"])
-										.click(function(){requestSubUnit($(this).data())})
+										.click(function(){game.requestSubUnit($(this).data())})
 									)
 								)
 							)
@@ -751,35 +797,6 @@ else header("Location: index.php");
 		});
 	}
 
-	function requestSubUnit(data){
-		var unit = game.getUnit(aUnit);
-		if (!unit || !unit.squad){return;}
-		if (game.openRequest){return;}
-		if (unit.getRemainingSlots() < data.space){
-			popup("Insufficent slot space remaining</br>" + $(unit.element).find(".squadSlots").html()); return;
-		}
-
-		var purchase = game.purchases;
-
-		if (game.refit){purchase = unit.purchaseId;}
-
-		game.openRequest = 1;
-		$.ajax({
-			type: "GET",
-			url: "getGameData.php",
-			datatype: "json",
-			data: {
-					type: "unitdata",
-					unit: "squaddie",
-					purchases: purchase,
-					index: unit.index,
-					name: data.name,
-				},
-			success: addUnitToSquadron,
-			error: ajax.error,
-		});
-	}
-
 	function prepShowShipDiv(data){
 		$(".shipDiv").remove();
 		$("#popupWrapper").hide()
@@ -844,29 +861,6 @@ else header("Location: index.php");
 
 	function addCostDiv(unit){
 		$(unit.element).append($("<div>").css("border", "1px solid white").append($("<table>").attr("id", "totalShipCost")))
-	}
-
-	function addUnitToSquadron(data){
-
-		game.openRequest = 0;
-		var squadron = game.getUnit(aUnit);
-		var sub = initSquaddie(JSON.parse(data));
-			sub.create();			
-
-		squadron.structures.push(sub);
-		squadron.index = sub.index;
-		squadron.size = (50 + squadron.structures.length*10) * 0.7;
-		squadron.setLayout();
-		squadron.addSubContainers();
-		squadron.setStats();
-		squadron.setSubSystemState();
-		squadron.updateImage();
-		sub.fillSelfContainer();
-		sub.previewSetup();
-		drawShipPreview();
-
-		squadron.recalcCommandUpgrades();
-		game.setUnitTotal(squadron);
 	}
 
 	function initPreviewCanvas(){

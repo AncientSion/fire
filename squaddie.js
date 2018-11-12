@@ -95,7 +95,8 @@ Squaddie.prototype.fillSelfContainer = function(){
 			var data = $(this).closest(".unitContainer").data();
 			console.log(game.getUnit(data.shipId).getSystem(data.systemId));
 		})
-		.contextmenu(function(){
+		.contextmenu(function(e){
+			e.preventDefault();
 			var data = $(this).closest(".unitContainer").data();
 			game.doCloneSquaddie(data);
 		})

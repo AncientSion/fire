@@ -3445,11 +3445,9 @@ Game.prototype.userHasTransferedCommand = function(){
 	} return false;
 }
 
-Game.prototype.doCloneSquaddie = function(data){
+Game.prototype.doCloneSquaddie = function(){
 	return;
 }
-
-
 
 Game.prototype.setUnitMoveDetails = function(){
 	if (this.phase == 1){

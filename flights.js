@@ -43,7 +43,7 @@ Flight.prototype.setSize = function(){
 		max = Math.max(max, Math.abs(this.structures[i].layout.y));
 	}
 	//console.log("setSize #" + this.id + ", size " + this.size);
-	this.size = max + 15;
+	this.size = max + 20;
 }
 
 Flight.prototype.setPreFireSize = function(){
@@ -54,7 +54,7 @@ Flight.prototype.setPreFireSize = function(){
 		max = Math.max(max, Math.abs(this.structures[i].layout.x));
 		max = Math.max(max, Math.abs(this.structures[i].layout.y));
 	}
-	this.size = max + 15;
+	this.size = max + 20;
 }
 
 Flight.prototype.getEffEP = function(){
