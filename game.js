@@ -1116,7 +1116,7 @@ this.animateMovement = function(){
 
 	this.initDeploy = function(){
 		this.setCallback("resolveDamageControl");
-		this.setGlobalCam();
+		this.setObstacleCam();
 	}
 
 	this.createCommandTransferEntries = function(){
@@ -1987,6 +1987,24 @@ this.animateMovement = function(){
 		return {minX: minX, minY: minY, maxX: maxX, maxY: maxY};
 
 	}
+
+	this.getObstacleMaxPos = function(){
+		var minX = 0;
+		var minY = 0;
+		var maxX = 0;
+		var maxY = 0;
+
+		for (var i = 0; i < this.ships.length; i++){
+		if (!this.ships[i].obstacle){continue;}
+			minX = Math.min(minX, this.ships[i].x);
+			maxX = Math.max(maxX, this.ships[i].x);
+			minY = Math.min(minY, this.ships[i].y);
+			maxY = Math.max(maxY, this.ships[i].y);
+		}
+
+		return {minX: minX, minY: minY, maxX: maxX, maxY: maxY};
+
+	}
 }
 
 Game.prototype.doPositionChat = function(){
@@ -2725,6 +2743,34 @@ Game.prototype.handleDeployIn = function(){
 	window.startTime = then;
 	this.animating = 1;
 	this.animateDeployIn();
+}
+
+Game.prototype.setObstacleCam = function(){
+
+	var data = this.getObstacleMaxPos();
+
+	var endX = (data.minX + data.maxX) / 2;
+	var endY = (data.minY + data.maxY) / 2;
+
+	var min = 0;
+	var maxD = 0;
+	var center = {x: endX, y: endY}
+
+	for (var i = 0; i < this.ships.length; i++){
+		if (!this.ships[i].obstacle){continue;}
+		var d = getDistance(center, this.ships[i].getCameraStartPos());
+		maxD = Math.max(d, maxD);
+	}
+
+	cam.z = Math.max(0.5, 1.5 - (Math.ceil(maxD / 100)/10));
+
+	var shiftX = 0;
+
+	if (ui.reinforceWrapper.is(":visible")){
+		shiftX = 200;
+	}
+
+	cam.setCamFocus({x: endX - shiftX, y: endY}, false);
 }
 
 Game.prototype.setGlobalCam = function(){

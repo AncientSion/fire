@@ -1885,12 +1885,12 @@
 	}		
 
 	public function userChangedCommandThisTurn($index){
-		//Debug::log("userChangedCommandThisTurn");
-		if ($this->playerstatus[$index]["transfered"]){
-			//Debug::log("yay");
+		Debug::log("userChangedCommandThisTurn");
+		if ($this->turn > 1 && $this->playerstatus[$index]["transfered"]){
+			Debug::log("yay");
 			return true;
 		}
-		//Debug::log("nay");
+		Debug::log("nay");
 		return false;
 	}
 
@@ -1932,7 +1932,7 @@
 		$data = array();
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-				$this->playerstatus[$i]["transfered"] = false;
+			$this->playerstatus[$i]["transfered"] = false;
 			for ($j = 0; $j < sizeof($this->ships); $j++){
 				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
 				if ($this->ships[$j]->command != $this->turn){continue;}
