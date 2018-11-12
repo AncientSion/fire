@@ -113,8 +113,8 @@ else header("Location: index.php");
 	<script src='ajax.js'></script>
 </head>
 	<body style="padding: 5px">
-		<div id ="popupWrapper">
-			<div id="popupText">
+		<div id="popupWrapper">
+			<div class="popupText">
 			</div>
 		</div>
 
