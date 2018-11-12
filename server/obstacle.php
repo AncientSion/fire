@@ -73,7 +73,7 @@ class Obstacle extends Minor {
 		//Debug::log("addPrimary #".$this->id.", index: ".$this->index);
 		$this->primary = new Shared($this->getId());
 		//Debug::log("density ".$this->density.", rockSize ".$this->rockSize.", result: ".round($this->density / 3 / $this->rockSize));
-		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, $this->totalCost, $this->moraleCost, round($this->density / 3 / $this->rockSize));
+		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, $this->totalCost, $this->moraleCost, ceil($this->density / 4 / $this->rockSize));
 	}
 
 	public function addStructures(){

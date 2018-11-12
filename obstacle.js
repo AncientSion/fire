@@ -405,7 +405,7 @@ Obstacle.prototype.setTrueImage = function(info){
 
 		ctx.clearRect(-40, -7, 80, 50);
 		
-		ctx.fillStyle = "white";
+		ctx.fillStyle = "red";
 		ctx.font = "24px Arial";
 		ctx.textAlign = "center";
 		ctx.fillText(this.collision + "%", 0, 12);
