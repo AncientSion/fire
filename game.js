@@ -2878,7 +2878,7 @@ Game.prototype.animateDeployIn = function(){
 		ctx.scale(cam.z, cam.z);
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].available < game.turn || this.ships[i].deployAnim[0] == this.ships[i].deployAnim[1]){
+			if (this.ships[i].available < game.turn || this.ships[i].deployed){
 				this.ships[i].draw();
 				continue;
 			}
