@@ -1858,21 +1858,26 @@ div.rollSeparator {
 	width: 100%;
 }
 
-#combatLog .selected {
+#combatLog tr {
+	height: 22px;
+	border: 1px solid white;
+}
+
+#combatLog .details {
+	display: none;
+}
+
+#combatLog .details .selected {
+	display: inline-block;
+}
+
+#combatLog tr.selected {
 	background-color: #505050;
 	color: white;
 	box-shadow: none;
 	border: 1px solid black;
 	border-left: 1px solid white;
 	border-right: 1px solid white;
-}
-
-#combatLog tr {
-	height: 22px;
-	border: 1px solid white;
-}
-
-#combatLog tr.selected {
 }
 
 .friendly {

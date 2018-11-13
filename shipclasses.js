@@ -1612,7 +1612,7 @@ Ship.prototype.createMoraleLogEntry = function(){
 }
 
 Ship.prototype.getCallSign = function(){
-	if (this.callsign.length > 3){
+	if (this.callsign.length >= 3){
 		return " - " + this.callsign + " - ";
 	}
 	return this.callsign;
@@ -1623,7 +1623,7 @@ Ship.prototype.getLogTitleSpan = function(){
 }
 
 Ship.prototype.getLogNameEntry = function(){
-	if (this.callsign.length > 3){
+	if (this.callsign.length >= 3){
 		return this.getCallSign();
 	}
 	return "";

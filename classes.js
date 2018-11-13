@@ -1054,6 +1054,7 @@ function FireOrder(data){
 	this.animating = 0;
 	this.tr = false;
 	this.numbers = [];
+	this.rows = [];
 }
 
 FireOrder.prototype.setShotTarget = function(){
@@ -1151,31 +1152,21 @@ FireOrder.prototype.setNumberAnim = function(){
 
 FireOrder.prototype.createCombatLogEntry = function(){
 	var log = $($("#combatLog").find("tbody")[0]);
+
 	var inflicted = this.addLogStartEntry(log);
-	var start = log.children().length;
+	var rowIndex = log.children().length;
 
 	var dmgs = this.assembleDmgData();
-	var depth = Object.keys(dmgs).length ? Object.keys(dmgs).length-1 : 0;
 
 	var rolls = this.rolls.slice();
 
-	if (this.addCollisionEntry(log, rolls)){depth++;}
-	if (this.addLogShieldEntry(log, inflicted.shield)){depth++;}
-	if (this.addLogRollsEntry(log, rolls)){depth++;}
-
-	//dmg Details
-	$($(log.children())[start-1])
-		.data("expanded", 0)
-		.data("start", start)
-		.data("end", start + depth)
-
-	//console.log(dmgs);
+	this.addCollisionEntry(log, rolls);
+	this.addLogShieldEntry(log, inflicted.shield);
+	this.addLogRollsEntry(log, rolls);
 
 	for (var i in dmgs){
-		start++;
 		var sub = $("<tr>")
 			.hide()
-			.data("row", start)
 			.data("targetid", dmgs[i][7])
 			.append($("<td>")
 			)
@@ -1197,8 +1188,12 @@ FireOrder.prototype.createCombatLogEntry = function(){
 				.html(dmgs[i][j] ? dmgs[i][j] : "")
 			)
 		}
-
 		$(log).append(sub);
+	}
+
+	var rows = log.children();
+	for (var i = rowIndex +1; i < rows.length; i++){
+		this.rows.push($(rows[i]).addClass("details"));
 	}
 }
 
@@ -1243,12 +1238,11 @@ FireOrder.prototype.addLogStartEntry = function(log){
 	.data("targetid", this.targetid)
 	.data("weaponid", this.weapon.id)
 	.data("fireid", this.id)
-	.data("row", index)
-	.data("expanded", 0)
 	.hide()
 	.contextmenu(function(){
+		var fireid = $(this).data("fireid");
 		for (var i = 0; i < game.fireOrders.length; i++){
-			if (game.fireOrders[i].id == $(this).data("fireid")){
+			if (game.fireOrders[i].id == fireid){
 				game.fireOrders[i].animating = 0;
 				break;
 			}
@@ -1261,29 +1255,13 @@ FireOrder.prototype.addLogStartEntry = function(log){
 		game.animateSingleFireOrder(i, 0)
 	})
 	.click(function(){
-		var startRow = $(this).data("start");
-		var endRow = $(this).data("end");
-		var rows = $("#combatLog").find("tbody").children();
-		if (startRow == endRow){return;}
-
-		if ($(this).data("expanded") == 1){
-			$(this).data("expanded", 0).removeClass("selected");
-			for (var i = startRow; i <= endRow; i++){
-				$(rows[i]).hide().removeClass("selected");
+		var fireid = $(this).data("fireid");
+		for (var i = 0; i < game.fireOrders.length; i++){
+			if (game.fireOrders[i].id == fireid){
+				game.fireOrders[i].toggleAllRows();
+				return;
 			}
 		}
-		else {
-			$(this).data("expanded", 1).addClass("selected");
-			for (var i = startRow; i <= endRow; i++){
-				$(rows[i]).show().addClass("selected");
-			}
-		}
-
-		var tableHeight = 10;
-		for (var i = 0; i < endRow; i++){
-			if ($(rows[i]).is(":visible")){tableHeight += 22;}
-		}
-		ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return tableHeight - 250 + 22});
 	})
 
 	this.weapon.attachLogHover(this, tr);
@@ -1312,6 +1290,20 @@ FireOrder.prototype.addLogStartEntry = function(log){
 	this.tr = tr;
 
 	return {armour: armour, system: system, hull: hull, shield: shield, em: em};
+}
+
+FireOrder.prototype.toggleAllRows = function(){
+	for (var i = 0; i < this.rows.length; i++){
+		$(this.rows[i]).toggleClass("selected")
+	}
+
+	var tableHeight = 10;
+	var rows = ui.combatLogWrapper.find("#combatLog tr").length;
+	
+	for (var i = 0; i < rows; i++){
+		if ($(rows[i]).is(":visible")){tableHeight += 22;}
+	}
+	ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return tableHeight - 250 + 22});
 }
 
 FireOrder.prototype.assembleDmgData = function(){

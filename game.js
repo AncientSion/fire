@@ -2866,7 +2866,7 @@ Game.prototype.animateDeployIn = function(){
 	window.elapsed = window.now - window.then;
 
 	if (elapsed > window.fpsTicks){
-		console.log("animateDeployIn");
+		//console.log("animateDeployIn");
 
 		var done = 1;
 		var doing = 0;

@@ -75,7 +75,7 @@ class LightLaser extends Laser {
 	public $maxDmg = 70;
 	public $optRange = 350;
 	public $dmgLoss = 12;
-	public $accDecay = 10;
+	public $accDecay = 60;
 	public $shots = 1;
 	public $reload = 3;
 	public $powerReq = 3;
