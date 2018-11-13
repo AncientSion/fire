@@ -561,6 +561,13 @@
 			$(this).hide();
 		});
 
+	$("#collideWrapper")
+		.contextmenu(function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			$(this).hide();
+		});
+
 	$("#hangarDiv").drag()
 	$("#crewDiv").drag()
 }

@@ -3328,7 +3328,7 @@ Ship.prototype.setPostFireImage = function(){
 }
 
 Ship.prototype.resetImage = function(){
-	if (this.salvo){return;}
+	//if (this.salvo){return;}
 	this.img = undefined;
 	this.setImage();
 }

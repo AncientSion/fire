@@ -422,6 +422,15 @@ Flight.prototype.createMissionChangeEntry = function(){
 		)
 }
 
+Flight.prototype.createMissionAbortEntry = function(){
+	this.attachLogEntry("<th colSpan=9><span><font color='" + this.getCodeColor()+ "'>Flight #" + this.id + "</font> has emergeny-aborted its mission.</span></th>");
+	$("#combatLog").find("tbody tr").last()
+		.hover(
+			function(){game.getUnit($(this).data("shipid")).handleHovering();},
+			function(){game.resetHover()}
+		)
+}
+
 Flight.prototype.getLoadAdjustment = function(){
 	var data = {shipid: this.launch.shipid, systemid: this.launch.systemid, loads: []};
 	for (var i = 0; i < this.launch.loads.length; i++){
@@ -439,6 +448,15 @@ Flight.prototype.getLaunchData = function(){
 	}
 	var data = {active: 1, units: units};
 	return [data];
+}
+
+Flight.prototype.hasAbortedMission = function(){
+	if (this.patrolLayout && this.mission.type == 1 && this.mission.turn == game.turn && this.mission.arrived == game.turn){
+		if (this.mission.x == this.x && this.mission.y == this.y){
+			return true;
+		}
+	}
+	return false;
 }
 
 Flight.prototype.setImage = function(){

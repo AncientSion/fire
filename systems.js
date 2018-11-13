@@ -1816,6 +1816,8 @@ function Weapon(system){
 	this.melt = system.melt;
 	this.aoe = system.aoe;
 	this.animation = system.animation;
+	this.amBonus = system.amBonus;
+	this.amMax =
 	this.loaded;
 	this.mount;
 	this.exploSize = 2+((this.minDmg+this.maxDmg)/30) * (1+   (1*(this.fireMode == "Flash")) +(10*(this.fireMode == "Shockwave")));
@@ -2280,7 +2282,7 @@ Warhead.prototype.getSysDiv = function(){
 	var div = $("<div>").attr("id", "sysDiv")
 		.append($("<table>")
 			.append($("<tr>")
-				.append($("<th>").html("Impact Warhead").attr("colSpan", 2)))
+				.append($("<th>").html("Warhead").attr("colSpan", 2)))
 			.append($("<tr>")
 				.append($("<td>").html("Firing Mode").css("width", "60%"))
 				.append($("<td>").html(this.fireMode)))

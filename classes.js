@@ -1118,11 +1118,12 @@ FireOrder.prototype.setNumberAnim = function(){
 	var last;
 	var targets = (this.targetid > 0 ? 1 : 0);
 	var data = this.tr.data();
-	var row = data.row;
+	var index = this.tr.index();
+	var rows = $("#combatLog tr");
 	this.numbers = [];
 
 	for (var i = 0; i < targets; i++){
-		var tr = $("#combatLog tr").eq(row+i);
+		var tr = rows.eq(index+i)
 		var drawPos = game.getUnit(tr.data("targetid")).getDrawPos();
 		var odds = tr.find("td").eq(4).html();
 		var shots = tr.find("td").eq(5).html();
@@ -1192,8 +1193,8 @@ FireOrder.prototype.createCombatLogEntry = function(){
 	}
 
 	var rows = log.children();
-	for (var i = rowIndex +1; i < rows.length; i++){
-		this.rows.push($(rows[i]).addClass("details"));
+	for (var i = rowIndex; i < rows.length; i++){
+		this.rows.push($(rows[i]));
 	}
 }
 
@@ -1293,15 +1294,16 @@ FireOrder.prototype.addLogStartEntry = function(log){
 }
 
 FireOrder.prototype.toggleAllRows = function(){
+	this.tr.toggleClass("selected");
 	for (var i = 0; i < this.rows.length; i++){
-		$(this.rows[i]).toggleClass("selected")
+		this.rows[i].addClass("selected").toggle();
 	}
 
 	var tableHeight = 10;
-	var rows = ui.combatLogWrapper.find("#combatLog tr").length;
+	var allRows = ui.combatLogWrapper.find("#combatLog tr").length;
 	
-	for (var i = 0; i < rows; i++){
-		if ($(rows[i]).is(":visible")){tableHeight += 22;}
+	for (var i = 0; i < allRows; i++){
+		if ($(allRows[i]).is(":visible")){tableHeight += 22;}
 	}
 	ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return tableHeight - 250 + 22});
 }

@@ -1201,9 +1201,14 @@ this.animateMovement = function(){
 			for (var i = 0; i < this.ships.length; i++){
 				this.ships[i].setSupportImage();
 				this.ships[i].getAttachDivs();
-				if (this.ships[i].flight && this.ships[i].hasPatrolLayout()){
-					this.ships[i].setPatrolLayout();
-					this.ships[i].setImage();
+				if (this.ships[i].flight){
+					if (!this.ships[i].patrolLayout && this.ships[i].hasPatrolLayout()){
+						this.ships[i].setPatrolLayout();
+						this.ships[i].setImage();
+					}
+					else if (this.ships[i].hasAbortedMission()){
+						this.ships[i].createMissionAbortEntry();
+					}
 				}
 			}
 		}
@@ -1253,6 +1258,9 @@ this.animateMovement = function(){
 				this.setAllObstaclesImages();
 				this.setInterferenceData();
 				this.autoIssueFireOrders();
+			}
+			else if (this.phase == -1){
+				this.drawingEvents = 1;
 			}
 			else if (this.phase == 3){
 				this.fireResolved();
@@ -1527,7 +1535,7 @@ this.animateMovement = function(){
 		else if (game.phase > -1){avail.hide();}
 		else ui.combatLogWrapper.css("top", 90).css("left", 240)
 		
-		if (incoming.find("tbody").children().length > 1){wrapper.show(); incoming.show();}
+		if (incoming.find("tbody").children().length > 1){wrapper.show(); incoming.show();} else incoming.hide();
 
 		if (!avail.is(":visible") && !incoming.is(":visible")){wrapper.hide();}
 	}

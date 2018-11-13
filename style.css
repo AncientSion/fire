@@ -1863,14 +1863,6 @@ div.rollSeparator {
 	border: 1px solid white;
 }
 
-#combatLog .details {
-	display: none;
-}
-
-#combatLog .details .selected {
-	display: inline-block;
-}
-
 #combatLog tr.selected {
 	background-color: #505050;
 	color: white;
