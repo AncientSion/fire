@@ -2886,6 +2886,7 @@ Game.prototype.animateDeployIn = function(){
 			if (this.ships[i].deployAnim[1]){
 				doing = 1; done = 0;
 				this.ships[i].animateSelfDeployIn();
+				break;
 			} else continue;
 		}
 
