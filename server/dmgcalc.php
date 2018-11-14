@@ -68,7 +68,7 @@ class DmgCalc {
 		$totalMag = $magRoll + $magAdd;
 		$crit->notes .= ";".$magRoll.";".$totalMag;
 
-		//Debug::log("chance to fail: $chance, rolled $chanceRoll, magRoll $magRoll, magAdd $magAdd, totalMag $totalMag");
+		Debug::log("chance to fail: $chance, rolled $chanceRoll, magRoll $magRoll, magAdd $magAdd, totalMag $totalMag");
 		if ($totalMag >= $effects[0][1]){
 
 			for ($i = sizeof($effects)-1; $i >= 0; $i--){

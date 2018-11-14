@@ -198,7 +198,7 @@ class Squadron extends Mixed {
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				for ($k = sizeof($this->structures[$i]->systems[$j]->fireOrders)-1; $k >= 0; $k--){
 					if ($this->structures[$i]->systems[$j]->fireOrders[$k]->turn == $turn && $this->structures[$i]->systems[$j]->usage == $phase){
-						array_splice($this->structures[$i]->systems[$j]->fireOrders,kl, 1);
+						array_splice($this->structures[$i]->systems[$j]->fireOrders, $k, 1);
 					} else break;
 				}
 			}
@@ -210,13 +210,10 @@ class Squadron extends Mixed {
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]); $k++){
-					$this->structures[$i]->systems[$j]->doHidePowerOrders($turn);
-				}
+				$this->structures[$i]->systems[$j]->doHidePowerOrders($turn);
 			}
 		}
-
-
+		
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 			//Debug::log("s: ".sizeof($this->primary->systems));
 			if ($this->primary->systems[$i]->name == "Sensor"){
