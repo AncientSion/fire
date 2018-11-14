@@ -2689,8 +2689,8 @@ Beam.prototype.getAnimation = function(fire){
 			}
 			else { // basic miss
 				dest = t;
-				dest.x += range(unit.size/1.5, unit.size);
-				dest.y += range(unit.size/1.5, unit.size);
+				dest.x += range(this.target.size/1.5, this.target.size);
+				dest.y += range(this.target.size/1.5, this.target.size);
 			}
 
 			//var dist = Math.round(getDistance(oPos, {x: tx, y: ty}));
