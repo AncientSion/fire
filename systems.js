@@ -2687,6 +2687,11 @@ Beam.prototype.getAnimation = function(fire){
 				dest.x += t.x;
 				dest.y += t.y;
 			}
+			else { // basic miss
+				dest = t;
+				dest.x += range(unit.size/1.5, unit.size);
+				dest.y += range(unit.size/1.5, unit.size);
+			}
 
 			//var dist = Math.round(getDistance(oPos, {x: tx, y: ty}));
 			var angle = Math.round(getAngleFromTo(oPos, dest));
