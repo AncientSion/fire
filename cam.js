@@ -91,10 +91,10 @@ window.cam = {
 			this.z = 2;
 		}
 		else if (a >= 135 || a <= 45){
-			this.z = Math.min(2, Math.floor( (res.x / 1.25) / fire.dist * 10)/10);
+			this.z = Math.min(2, Math.floor( (res.x / 1.4) / fire.dist * 10)/10);
 		}
 		else if (a > 45 || a <= 135){
-			this.z = Math.min(2, Math.floor( (res.y / 1.25) / fire.dist * 10)/10);
+			this.z = Math.min(2, Math.floor( (res.y / 1.4) / fire.dist * 10)/10);
 		}
 		else this.z = 1.5;
 	},
