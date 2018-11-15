@@ -267,7 +267,7 @@ Mixed.prototype.setNextMove = function(){
 
 					next = getPointInDir(Math.min(d, s), this.facing, p.x, p.y);
 				}
-				else if (target.finalStep == undefined){
+				else if (!target.finalStep){
 					target.setNextMove();
 				}
 				this.finalStep = target.getPlannedPos();

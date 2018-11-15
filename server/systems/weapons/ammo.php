@@ -132,6 +132,7 @@ class Hasta extends Missile {
 	public static $value = 3;
 	public $tracking = 1;
 	public $baseImpulse = 250;
+	public $size = 15;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -212,6 +213,7 @@ class Vanguard extends Missile {
 	public static $value = 3;
 	public $tracking = 0;
 	public $baseImpulse = 350;
+	public $size = 15;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -232,6 +234,7 @@ class Needle extends Missile {
 	public static $value = 3;
 	public $tracking = 1;
 	public $baseImpulse = 250;
+	public $size = 15;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
