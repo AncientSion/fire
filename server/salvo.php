@@ -70,10 +70,6 @@ class Salvo extends Minor {
 		return $angle;
 	}
 
-	public function addMission($data, $userid, $turn, $phase){
-		$this->mission = new Mission($data[sizeof($data)-1]);
-	}
-
 	public function calculateToHit($fire){
 		$base = 80;
 		//$base = 120;
