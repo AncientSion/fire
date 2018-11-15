@@ -4043,7 +4043,7 @@ Game.prototype.handleAllFireOrders = function(){
 		this.fireOrders[i].tr.show();
 		if (!this.fireOrders[i].animated){
 			console.log(game.fireOrders[i]);
-			this.handleSingleFireOrder(i, 1);
+			this.handleSingleFireOrder(i);
 			return;
 		}
 	}
@@ -4051,11 +4051,16 @@ Game.prototype.handleAllFireOrders = function(){
 	this.handlePostFireMoves()
 }
 
-Game.prototype.handleSingleFireOrder = function(i, goOn){
+Game.prototype.handleSingleFireOrder = function(i){
 	this.fireOrders[i].animating = 1;
-	this.setCallback("animateSingleFireOrder", i);
+	this.setCallback("initAnimateSingleFireOrder", i);
 	cam.setZoom(game.fireOrders[i]);
 	cam.setCamFocus(game.fireOrders[i].focus, false);
+}
+
+Game.prototype.initAnimateSingleFireOrder = function(i){
+	game.animating = 1;
+	this.animateSingleFireOrder(i);
 }
 
 Game.prototype.animateSingleFireOrder = function(i){
