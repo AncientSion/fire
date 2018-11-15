@@ -589,7 +589,7 @@
 					game.toggleDistMeter();
 				}
 				else if (e.keyCode == 102){ // f
-					if (!game.animating || game.animating == 2 || !game.animateAllFire){return;}
+					if (game.animating != 1 || !game.animateAllFire){return;}
 					console.log("f!");
 					window.cancelAnimationFrame(anim);
 					cam.stopMove();
@@ -607,7 +607,7 @@
 					game.handlePostFireMoves();
 				}
 				else if (e.keyCode == 109){ // m, cancel move animation
-					if (!game.animating || game.animating == 2 || !game.animMoves){return;}
+					if (game.animating != 1 || !game.animMoves){return;}
 					console.log("m!");
 					window.cancelAnimationFrame(anim);
 					cam.stopMove();
