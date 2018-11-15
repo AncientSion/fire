@@ -1446,24 +1446,24 @@ FireOrder.prototype.getRollsString = function(rolls, allReq){
 	}
 
 	if (this.shooter.obstacle && !this.target.ship){
-		hits = "Each subunit was subject to " + this.rolls[3] + " attacks for " + this.shooter.primary.systems[0].getDmgString() + " Damage.  ";
+		string = "Each subunit was subject to " + this.rolls[3] + " attacks for " + this.shooter.primary.systems[0].getDmgString() + " Damage.  ";
 	}
 	else {
 		if (hits.length){hits = hits.slice(0, hits.length-2); hits = "Hits: " + hits;}
 		if (miss.length){miss = miss.slice(0, miss.length-2); miss = "Misses: " + miss;}
 		if (jammed.length){jammed = jammed.slice(0, jammed.length-2); jammed = "Jammed: " + jammed;}
 		if (blocked.length){blocked = blocked.slice(0, blocked.length-2); blocked = "Blocked: " + blocked;}
-	}
 
-	string = "<div class='rollWrapper'><div class='hits'>" + hits + "</div>" + divider + "<div class='miss'>" + miss + "</div>";
-	if (jammed){
-		string += divider +"<div class='jammed'>" + jammed + "</div>";
-	}
-	if (blocked){
-		string += divider +"<div class='blocked'>" + blocked + "</div>";
-	}
-	if (skipped){
-		string += divider +"<div class='overfire'>" + skipped + "x Overkill</div>"
+		string = "<div class='rollWrapper'><div class='hits'>" + hits + "</div>" + divider + "<div class='miss'>" + miss + "</div>";
+		if (jammed){
+			string += divider +"<div class='jammed'>" + jammed + "</div>";
+		}
+		if (blocked){
+			string += divider +"<div class='blocked'>" + blocked + "</div>";
+		}
+		if (skipped){
+			string += divider +"<div class='overfire'>" + skipped + "x Overkill</div>"
+		}
 	}
 	return string;
 }
