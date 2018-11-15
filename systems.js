@@ -445,7 +445,7 @@ System.prototype.getBoostEffectElements = function(table, boost){
 
 		html = this.boostEffect[i].type + ": " + mod + this.boostEffect[i].value * boost;
 
-		if (this.boostEffect[i].value >= 11){
+		if (this.boostEffect[i].value >= 10){
 			html += "%";
 		}
 
@@ -2652,7 +2652,7 @@ Beam.prototype.getAnimation = function(fire){
 	var oPos = fire.shooter.getDrawPos();
 
 	if (fire.shooter.squad){
-		delay = 40; shotDelay = 5;
+		delay = 60; shotDelay = 10;
 	}
 	else if (fire.guns >= 6){
 		delay = 15;
@@ -2707,7 +2707,8 @@ Beam.prototype.getAnimation = function(fire){
 				dest,
 				{x: tb.x, y: tb.y}, 
 				0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay) - j*shotDelay,
-				fire.weapon.output*20,
+				//fire.weapon.output*20,
+				this.rakeTime,
 				hasHit
 			);
 

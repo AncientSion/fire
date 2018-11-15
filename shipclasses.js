@@ -3378,7 +3378,7 @@ Ship.prototype.setSupportImage = function(){
 		}
 		else hostiles.push(u);
 		for (var j = 0; j < u.structures.length; j++){
-			if (!u.structures[j].doDraw){;continue;}
+			//if (!u.structures[j].doDraw){continue;}
 			if (this.userid == u.userid){
 				friendly.push(u.structures[j]);
 			} else hostile.push(u.structures[j]);
@@ -3432,6 +3432,7 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 
 		//ctx.rotate(rota*(Math.PI/180));
 		for (var i = 0; i < friendly.length; i++){
+			if (!friendly[i].doDraw){continue;}
 			var a = split*i + drawFacing;
 			var drawPos = getPointInDir(size+tresh - fSize/2, a, 0, 0);
 			//var aPos = getPointInDir(size/2+tresh - fSize/2, a, 0, 0);
@@ -3478,6 +3479,7 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 		var split = Math.floor(360/hostile.length);
 
 		for (var i = 0; i < hostile.length; i++){
+			if (!hostile[i].doDraw){continue;}
 			var a = split*i + drawFacing;
 			var drawPos = getPointInDir(size+tresh - fSize/2, a, 0, 0);
 			//var aPos = getPointInDir(size/2+tresh - fSize/2, a, 0, 0);
