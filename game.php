@@ -589,9 +589,8 @@
 					game.toggleDistMeter();
 				}
 				else if (e.keyCode == 102){ // f
-					if ((game.phase != 2 && game.phase != 3) && !game.animating || !game.animateAllFire){return;}
+					if (!game.animating || game.animating == 2 || !game.animateAllFire){return;}
 					console.log("f!");
-					game.animating = false;
 					window.cancelAnimationFrame(anim);
 					cam.stopMove();
 					fxCtx.setTransform(1,0,0,1,0,0)
@@ -608,9 +607,8 @@
 					game.handlePostFireMoves();
 				}
 				else if (e.keyCode == 109){ // m, cancel move animation
-					if (!game.animating || !game.animMoves){return;}
+					if (!game.animating || game.animating == 2 || !game.animMoves){return;}
 					console.log("m!");
-					game.animating = false;
 					window.cancelAnimationFrame(anim);
 					cam.stopMove();
 

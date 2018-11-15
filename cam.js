@@ -21,6 +21,7 @@ window.cam = {
 	},
 
 	setCamFocus(focus, instant){
+		game.animating = 2;
 
 		this.tx = Math.floor(res.x/2 - (focus.x*cam.z));
 		this.ty = Math.floor(res.y/2 - (focus.y*cam.z));
@@ -100,6 +101,7 @@ window.cam = {
 	},
 
 	stopMove: function(){
+		game.animating = false;
 		this.state = 0;
 		this.doing = 0;
 		this.tx = 0;

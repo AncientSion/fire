@@ -22,7 +22,7 @@ function Game(data){
 	this.mission = 0;
 	this.index = 1;
 	this.reinforcePoints = 0;
-	this.animating = false;
+	this.animating = false; // movement 1, cam 2, fire 3
 	this.animateAllFire = false;
 	this.deployArea = [];
 	this.vector = false;
@@ -69,8 +69,15 @@ function Game(data){
 	this.exclusiveSystem = false;
 	this.obstacleDataSet = 0;
 
-this.animateMovement = function(){
-	anim = window.requestAnimationFrame(game.animateMovement.bind(this));
+this.initAnimateMovement = function(){
+	this.drawingEvents = 0;
+	this.animating = 1;
+	this.animMoves = 1;
+	this.doAnimateMovement();
+}
+
+this.doAnimateMovement = function(){
+	anim = window.requestAnimationFrame(game.doAnimateMovement.bind(this));
 	window.now = Date.now();		
 	window.elapsed = window.now - window.then;
 	if (elapsed < window.fpsTicks){}
@@ -2739,12 +2746,12 @@ Game.prototype.resolveDeploy = function(){
 		this.initialPhaseResolutionDone();
 	}
 	else {
-		this.handleDeployIn();
+		this.initDeployIn();
 	}
 }
 
-Game.prototype.handleDeployIn = function(){
-	console.log("handleDeployIn");
+Game.prototype.initDeployIn = function(){
+	console.log("initDeployIn");
 	this.hideUI();
 	setFPS(30);
 	window.then = Date.now();
@@ -2782,7 +2789,6 @@ Game.prototype.setObstacleCam = function(){
 }
 
 Game.prototype.setGlobalCam = function(){
-
 	var data = this.getUnitMaxPos();
 
 	var endX = (data.minX + data.maxX) / 2;
@@ -2996,11 +3002,8 @@ Game.prototype.prepResolveMovement = function(){
 
 Game.prototype.doResolveMovement = function(){
 	if (aUnit){this.getUnit(aUnit).select();}
-	this.drawingEvents = 0;
-	this.animating = 1;
-	this.animMoves = 1;
 	this.hideUI();
-	this.setCallback("animateMovement");
+	this.setCallback("initAnimateMovement");
 	this.setGlobalCam();
 }
 
@@ -3589,7 +3592,7 @@ Game.prototype.handleForcedMoves = function(){
 		this.animFlight = 1;
 		this.animSalvo = 1;
 		this.animForcedMoves = 1;
-		this.animateMovement();
+		this.initAnimateMovement();
 	}
 	else this.handleAllUnitExplos();
 }
@@ -3613,19 +3616,19 @@ Game.prototype.finishMoveSubPhase = function(time){
 		if (this.animShip && !this.animFocus){
 			game.timeout = setTimeout(function(){
 				game.animShip = 1; game.animFocus = 1; game.animFlight = 0;
-				game.animateMovement();
+				game.initAnimateMovement();
 			}, time);
 		}
 		else if (this.animFocus){
 			game.timeout = setTimeout(function(){
 				game.animShip = 0; game.animFocus = 0; game.animFlight = 1;
-				game.animateMovement();
+				game.initAnimateMovement();
 			}, time);
 		}
 		else if (this.animFlight){
 			game.timeout = setTimeout(function(){
 				game.animFlight = 0; game.animSalvo = 1;
-				game.animateMovement();
+				game.initAnimateMovement();
 			}, time);
 		}
 		else if (this.animSalvo){
