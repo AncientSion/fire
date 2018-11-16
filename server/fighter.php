@@ -34,7 +34,7 @@ class Aurora extends Fighter {
 	public $mass = 34;
 	public $integrity = 26;
 	public $negation = 4;
-	public $baseImpulse = 225;
+	public $baseImpulse = 125;
 	public $baseHitChance = 24;
 
 	function __construct($id, $parentId){
