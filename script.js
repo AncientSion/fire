@@ -354,7 +354,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 				row.append($("<td>").html(system.getDisplay()))
 
 			var relevantPos = pos;
-			if (system.launcher && game.phase == -1){
+			if (target && system.launcher && game.phase == -1){
 				relevantPos = target.getGamePos();
 			}
 
