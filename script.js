@@ -351,20 +351,24 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			var msg = "";
 
 			var row = $("<tr>");
-				//row.append($("<td>").html(system.getDisplay() + " #" + active[i].id))
 				row.append($("<td>").html(system.getDisplay()))
+
+			var relevantPos = pos;
+			if (system.launcher && game.phase == -1){
+				relevantPos = target.getGamePos();
+			}
 
 			if (shooter.ship || shooter.squad){
 				if (cc){
-					if (system instanceof Launcher){
+					if (system.launcher){
 						legalTarget = 0;
 					}
-					else if (target.salvo && !targetInArc(shooter, shooterPos, pos, facing, system)){
+					else if (target.salvo && !targetInArc(shooter, shooterPos, relevantPos, facing, system)){
 						legalTarget = 0;
 					}
 				}
 
-				else if (!targetInArc(shooter, shooterPos, pos, facing, system)){
+				else if (!targetInArc(shooter, shooterPos, relevantPos, facing, system)){
 					if (snap && (active[i].arc[0][0] == 0 || active[i].arc[0][1] == 360)){
 					} else inArc = 0;
 				}	
