@@ -2583,7 +2583,7 @@ Pulse.prototype.getAnimation = function(fire){
 			var bonus = Math.max(0, Math.floor((fire.req[i] - fire.rolls[roll]) / this.grouping));
 			var subHits = hasHit * (this.basePulses + Math.min(this.extraPulses, bonus));
 			var shots = this.basePulses + this.extraPulses;
-
+			
 			for (var k = 0; k < shots; k++){
 				var devi = {x: range(-2, 2), y: range(-2, 2)};
 				var shotAnim = new ShotVector({x: ox, y: oy}, {x: tx + devi.x, y: ty + devi.y}, speed, (k < subHits));
@@ -2641,8 +2641,8 @@ Beam.prototype.getRakes = function(){
 Beam.prototype.getAnimation = function(fire){
 	var allAnims = [];
 	var grouping = 1;
-	var delay = 30;
-	var shotDelay = 15;
+	var gunDelay = 60;
+	var shotDelay = 30;
 	var cc = 0;
 	var hits = 0;
 	var fraction = 1;
@@ -2650,16 +2650,10 @@ Beam.prototype.getAnimation = function(fire){
 	var devi = fire.weapon.output * 6;
 	var roll = -1;
 	var oPos = fire.shooter.getDrawPos();
-
-	if (fire.shooter.squad){
-		delay = 60; shotDelay = 10;
-	}
-	else if (fire.guns >= 6){
-		delay = 15;
-	}
 	
 	for (var i = 0; i < fire.guns; i++){
 		var gunAnims = [];
+		var actualGunDelay = Math.floor(i / grouping) * gunDelay;
 		var o = fire.shooter.getWeaponOrigin(fire.systems[i]);
 		//console.log(o.display);
 		
@@ -2702,7 +2696,7 @@ Beam.prototype.getAnimation = function(fire){
 			//tb = getPointInDir(devi, angle, dest.x, dest.y);
 			tb = getPointInDir(devi/2, range(0, 360), dest.x, dest.y);
 
-			var now = (0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay) - j*shotDelay);
+			var now = 0 - (actualGunDelay + j*shotDelay);
 
 			var shotAnim = new BeamVector(
 				{x: fire.shooter.drawX + o.x, y: fire.shooter.drawY + o.y},
