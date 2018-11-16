@@ -2702,11 +2702,13 @@ Beam.prototype.getAnimation = function(fire){
 			//tb = getPointInDir(devi, angle, dest.x, dest.y);
 			tb = getPointInDir(devi/2, range(0, 360), dest.x, dest.y);
 
+			var now = (0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay) - j*shotDelay);
+
 			var shotAnim = new BeamVector(
 				{x: fire.shooter.drawX + o.x, y: fire.shooter.drawY + o.y},
 				dest,
 				{x: tb.x, y: tb.y}, 
-				0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay) - j*shotDelay,
+				now,
 				//fire.weapon.output*20,
 				this.rakeTime,
 				hasHit
