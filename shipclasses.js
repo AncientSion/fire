@@ -2336,7 +2336,7 @@ Ship.prototype.getMoraleTrigger = function(){
 }
 
 Ship.prototype.getFlagshipMoraleBonus = function(){
-	return this.command ? 10 : "";
+	return this.command ? "+10" : "";
 }
 
 Ship.prototype.getOfficerMoraleBonus = function(){

@@ -595,9 +595,9 @@
 		Debug::log("handleJumpOutAction");
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$l = sizeof($this->ships[$i]->actions)-1;
-			if ($l < 0){continue;}
-			if ($this->ships[$i]->actions[$l]->type == "jumpOut" && !$this->ships[$i]->actions[$j]->forced){
+			$len = sizeof($this->ships[$i]->actions)-1;
+			if ($len < 0){continue;}
+			if ($this->ships[$i]->actions[$len]->type == "jumpOut" && !$this->ships[$i]->actions[$len]->forced){
 				$this->ships[$i]->withdraw = $this->turn +2;
 				$this->ships[$i]->manual = 1;
 			}

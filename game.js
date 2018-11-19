@@ -343,7 +343,7 @@ this.doAnimateMovement = function(){
 			mission = s.oldMission;
 		}
 		else {
-			mission = {id: -1, unitid: s.id, turn: this.turn, type: this.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
+			mission = {id: -1, unitid: s.id, turn: this.turn, phase: this.phase, type: this.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
 			if (doOffset){
 				p = getPointInDir(s.size/3, a, o.x, o.y);
 				for (var i = s.cc.length-1; i >= 0; i--){
@@ -3208,7 +3208,7 @@ Game.prototype.showFocusInfo = function(e, userid){
 			)
 			.append($("<tr>")
 				.append($("<td>").html("Flagship Crit Modifiers"))
-				.append($("<td>").html( (command ? (command.getCritMod("Output") + "%") : "0%")))
+				.append($("<td>").html( (command ? (command.getCritMod("Focus") + "%") : "0%")))
 			)
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 10))

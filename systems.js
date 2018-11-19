@@ -445,7 +445,7 @@ System.prototype.getBoostEffectElements = function(table, boost){
 
 		html = this.boostEffect[i].type + ": " + mod + this.boostEffect[i].value * boost;
 
-		if (this.boostEffect[i].value >= 10){
+		if (this.boostEffect[i].value >= 10 || this.boostEffect[i].value <= -10){
 			html += "%";
 		}
 
@@ -2663,7 +2663,10 @@ Beam.prototype.getAnimation = function(fire){
 			var dest;
 			var tx; var ty; var tb; var a;
 
-			if (fire.rolls[roll] < 0){
+			if (fire.rolls[roll] == 999){
+				continue;
+			}
+			else if (fire.rolls[roll] < 0){
 				if (fire.rolls[roll] >= -99){ // blocked
 					dest = game.getObstructionPoint(fire);
 				}
@@ -2673,7 +2676,7 @@ Beam.prototype.getAnimation = function(fire){
 					dest.y += t.y;
 				}
 			}
-			else if (fire.rolls[roll] >= 0 && fire.rolls[roll] <= fire.req[i]){ // hit
+			else if (fire.rolls[roll] > 0 && fire.rolls[roll] <= fire.req[i]){ // hit
 				hasHit = 1;
 				hits++;
 				if (fire.target.ship){dest = fire.target.getHitSection(fire);}

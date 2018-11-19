@@ -35,7 +35,7 @@ class Structure {
 	}
 
 	public function adjustLoad($data){
-		Debug::log("FATAL ERROR ADJUSTLOAD STRUCTURE: ".$dbLoad[0]["name"]);
+		Debug::log("FATAL ERROR ADJUSTLOAD STRUCTURE: ".$data[0]["name"]);
 	}
 
 	public function isDestroyed(){

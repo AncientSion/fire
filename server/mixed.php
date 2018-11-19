@@ -10,8 +10,6 @@ class Mixed extends Ship {
 	public $turnAngle = 0;
 	public $slipAngle = 0;
 	public $turnStep = 0;
-	
-	public $critEffects =  array();
 
 	function __construct($data = false){
         parent::__construct($data);
@@ -30,10 +28,6 @@ class Mixed extends Ship {
 		$this->setMorale($turn, $phase);
 		$this->isDestroyed();
 		$this->setProps($turn, $phase);
-	}
-
-	public function setBonusNegation($turn){
-		return;
 	}
 
 	public function setSize(){
@@ -159,7 +153,7 @@ class Mixed extends Ship {
 
 			if ($t->flight){
 				Debug::log("target is a flight");
-				if ($t->mission->type == 1 && $this->mission->arrived && $t->mission->arrived && $t->moveSet && !$t->actions[sizeof($actions)-1]->dist){
+				if ($t->mission->type == 1 && $this->mission->arrived && $t->mission->arrived && $t->moveSet && !$t->actions[sizeof($t->actions)-1]->dist){
 					Debug::log("target is patrol, i have arrived - no move");
 					$tPos = $origin;
 					$dist = 0;
@@ -449,10 +443,11 @@ class Minor extends Mixed {
 	function __construct($data = false){
         parent::__construct($data);
 	}
+	
+	public $critEffects =  array();
 
 	public function addMission($data, $userid, $turn, $phase){
 		if ($this->salvo){$this->mission = new Mission($data[sizeof($data)-1]); return;}
-
 		
 		//Debug::log("addMission to #".$this->id.", turn: ".$turn.", phase: ".$phase.", userid: ".$userid);
 		//if ($this->id == 29){var_export($data);}
@@ -464,15 +459,11 @@ class Minor extends Mixed {
 			$possible = array();
 
 			for ($i = sizeof($data)-1; $i >= 0; $i--){
-				if ($data[$i]["turn"] == $turn){$possible[] = $data[$i]; continue;}
-				$this->mission = new Mission($data[$i]);
-				return;
+				if ($data[$i]["turn"] < $turn){$this->mission = new Mission($data[sizeof($data)-1]); return;}
+				if ($data[$i]["phase"] >= $phase){$this->mission = new Mission($data[sizeof($data)-1]); return;}
 			}
-
-			$this->mission = new Mission($possible[1]);
-
-		} else $this->mission = new Mission($data[sizeof($data)-1]);
-
+		}
+		else $this->mission = new Mission($data[sizeof($data)-1]);
 	}
 
 	public function doTestMorale($turn){

@@ -275,10 +275,7 @@ class Squadron extends Mixed {
 				}
 			}
 
-			if ($found){
-				//Debug::log("ding");
-				continue;
-			}
+			if ($found){continue;}
 
 			for ($j = 0; $j < sizeof($this->structures); $j++){
 				
@@ -299,10 +296,11 @@ class Squadron extends Mixed {
 					if ($this->structures[$j]->systems[$k]->id == $crits[$i]->systemid){
 						$this->structures[$j]->systems[$k]->crits[] = $crits[$i];
 						$found = 1;
-						break 3;
+						break;
 					}
 				}
-				if ($found){continue;}
+
+				if ($found){break;}
 			}
 
 			if (!$found){Debug::log("ERROR unable to apply sqwuad crit id: ".$crits[$i]->id);}

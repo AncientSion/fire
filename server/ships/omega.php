@@ -48,10 +48,10 @@ class Omega extends SuperHeavy {
 		$aft->systems[] = new HeavyRailGun($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new HeavyRailGun($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new HeavyRailGun($this->getId(), $this->id, 120, 240);
-	*/	$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
-		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
-		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
-		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
+	*/	$aft->systems[] = new MediumPulse($this->getId(), $this->id, 180, 240);
+		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 180, 240);
+		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 180);
+		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 180);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 1500, 19);

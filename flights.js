@@ -85,12 +85,6 @@ Flight.prototype.getBaseSpeed = function(){
 	return this.baseImpulse;
 }
 
-Flight.prototype.getNewMission = function(){
-	if (this.mission.turn == game.turn){
-		return this.mission;
-	}
-}
-
 Flight.prototype.setCallSign = function(){
 	var names = ["Blue", "yellow", "Red", "Green", "Silver", "Tiger", "Eagle", "Dragon", "Wyvern", "Phoenix", "Rampage", "Assault", "Onslaught"];
 	var signs = ["Alpha", "Beta", "Gamma", "Epsilon", "Sigma", "Phi"];

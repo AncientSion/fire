@@ -835,7 +835,7 @@ class Ship {
 		if ($this->destroyed){
 			//Debug::log("STOP - resolveFireOrder #".$fire->id.", TARGET: ".get_class($this)." destroyed");
 			for ($i = 0; $i < $fire->shots; $i++){
-				$fire->cancelShotResolution[$i];
+				$fire->cancelShotResolution($i);
 				//$fire->rolls[] = 0;
 			}
 		}

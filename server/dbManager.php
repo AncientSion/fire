@@ -507,7 +507,7 @@
 			$missions = array();
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				Debug::log("type ".$units[$i]["type"]);
+				//Debug::log("type ".$units[$i]["type"]);
 				$type = 0;
 				$status = "deployed";
 
@@ -576,9 +576,9 @@
 			//Debug::log("insertMissions s: ".sizeof($missions));
 			$stmt = $this->connection->prepare("
 				INSERT INTO missions 
-					(unitid, type, turn, targetid, x, y, arrived)
+					(unitid, type, turn, phase, targetid, x, y, arrived)
 				VALUES
-					(:unitid, :type, :turn, :targetid, :x, :y, :arrived)
+					(:unitid, :type, :turn, :phase, :targetid, :x, :y, :arrived)
 			");
 
 			for ($i = 0; $i < sizeof($missions); $i++){
@@ -587,6 +587,7 @@
 				$stmt->bindParam(":unitid", $missions[$i]["unitid"]);
 				$stmt->bindParam(":type", $missions[$i]["type"]);
 				$stmt->bindParam(":turn", $missions[$i]["turn"]);
+				$stmt->bindParam(":phase", $missions[$i]["phase"]);
 				$stmt->bindParam(":targetid", $missions[$i]["targetid"]);
 				$stmt->bindParam(":x", $missions[$i]["x"]);
 				$stmt->bindParam(":y", $missions[$i]["y"]);
@@ -943,7 +944,7 @@
 			$stmt->execute();
 
 			if ($stmt->errorCode() == 0){
-				$this->startGamePlayerStatus();
+				$this->startGamePlayerStatus($gameid);
 				return true;
 			}
 		}
@@ -951,31 +952,28 @@
 		public function startGamePlayerStatus($gameid){
 			Debug::log("startGamePlayerStatus ".$gameid);
 
+			//$reinforce = $this->query("SELECT value from GAMES where gameid = ".$gameid);
+			//Debug::log("reinforce: ".$reinforce);
+
 			$stmt = $this->connection->prepare("
 				UPDATE playerstatus 
 				SET 
-					turn = :turn,
-					phase = :phase,
 					status = 'ready',
 					value = value + (SELECT reinforce FROM games WHERE id = :gameid1)
 				WHERE
 					gameid = :gameid2
 			");
 
-			$turn = 1;
-			$phase = -1;
-			$status = "waiting";
-
-			$stmt->bindParam(":turn", $turn);
-			$stmt->bindParam(":phase", $phase);
 			$stmt->bindParam(":gameid1", $gameid);
 			$stmt->bindParam(":gameid2", $gameid);
 
 			$stmt->execute();
 
 			if ($stmt->errorCode() == 0){
+				Debug::log("success!");
 				return true;
 			} else {
+				Debug::log("fai!");
 				return false;
 			}
 		}
@@ -1916,13 +1914,13 @@
 			//var_export($result);
 
 			$stmt = $this->connection->prepare(
-				"SELECT * FROM units where userid = :userid AND focus = 1 OR type = 2"
+				"SELECT * FROM units WHERE userid = :userid AND destroyed = 0 AND (focus = 1 OR type = 2)"
 			);
 
 			$phaseSkip = 1;
 
 			for ($i = 0; $i < sizeof($otherPlayers); $i++){
-				Debug::log("checking user ".$i);
+				Debug::log("checking userid ".$otherPlayers[$i]["userid"]);
 				$stmt->bindParam(":userid", $otherPlayers[$i]["userid"]);
 				$stmt->execute();
 

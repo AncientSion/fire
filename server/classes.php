@@ -129,6 +129,7 @@ class Mission {
 	public $type;
 	public $targetid;
 	public $turn;
+	public $phase;
 	public $x;
 	public $y;
 	public $arrived;
@@ -141,6 +142,7 @@ class Mission {
 		$this->unitid = $data["unitid"];
 		$this->type = $data["type"];
 		$this->turn = $data["turn"];
+		$this->phase = $data["phase"];
 		$this->targetid = $data["targetid"];
 		$this->x = $data["x"];
 		$this->y = $data["y"];
