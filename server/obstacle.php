@@ -22,8 +22,8 @@ class Obstacle extends Minor {
         $this->scale = $data["flipped"];
 
        // $this->curImp = round($this->curImp * 125 / $this->size / $this->rockSize * 2);
-        $this->interference = round($this->density / 4 * $this->rockSize);
-        $this->collision = round($this->interference / 15 * $this->curImp);
+        $this->interference = round($this->density / 8 * $this->rockSize);
+        $this->collision = round($this->interference / 30 * $this->curImp);
 	}	
 
 	public function getDeployState($turn){
@@ -33,7 +33,7 @@ class Obstacle extends Minor {
 
 	public function getEndState($turn){
 
-		Debug::log("getEndState for ".$this->id.", destroyed: ".$this->destroyed);
+		//Debug::log("getEndState for ".$this->id.", destroyed: ".$this->destroyed);
 
 		$x; $y;
 
@@ -73,7 +73,10 @@ class Obstacle extends Minor {
 		//Debug::log("addPrimary #".$this->id.", index: ".$this->index);
 		$this->primary = new Shared($this->getId());
 		//Debug::log("density ".$this->density.", rockSize ".$this->rockSize.", result: ".round($this->density / 3 / $this->rockSize));
-		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, $this->totalCost, $this->moraleCost, ceil($this->density / 4 / $this->rockSize));
+
+		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id,
+		// minDmg, maxDmg, $shots
+		$this->totalCost, $this->moraleCost, ceil($this->density / 8 / $this->rockSize));
 	}
 
 	public function addStructures(){

@@ -742,7 +742,7 @@
 			$name = $this->fires[$i]->weapon->getAmmo()->name;
 			$adjust[] = array(
 				"loadAdjust" => array(
-					"shipid" => $this->fires[$i]->shooterid,
+					"unitid" => $this->fires[$i]->shooterid,
 					"systemid" => $this->fires[$i]->weaponid, 
 					"loads" => array(0 => array("name" => $name, "amount" => $this->fires[$i]->shots)
 					)
@@ -750,7 +750,7 @@
 			);
 
 			for ($j = 0; $j < sizeof($units); $j++){
-				if ($units[$j]["upgrades"][0]["shipid"] == $this->fires[$i]->shooterid && $units[$j]["upgrades"][0]["units"][0]["name"] == $name && $units[$j]["mission"]["targetid"] == $this->fires[$i]->targetid){
+				if ($units[$j]["upgrades"][0]["unitid"] == $this->fires[$i]->shooterid && $units[$j]["upgrades"][0]["units"][0]["name"] == $name && $units[$j]["mission"]["targetid"] == $this->fires[$i]->targetid){
 					//Debug::log("merging");
 					$units[$j]["upgrades"][0]["units"][0]["amount"] += $this->fires[$i]->shots;
 					$skip = 1;
@@ -769,7 +769,7 @@
 			//$devi = Math::getPointInDirection($this->fires[$i]->shooter->size/3, $a, $sPos->x + mt_rand(-10, 10), $sPos->y + mt_rand(-10, 10));
 			$mission = array("type" => 2, "turn" => $this->turn, "targetid" => $this->fires[$i]->targetid, "x" => $tPos->x, "y" => $tPos->y, "arrived" => 0, "new" => 1);
 			$move = array("turn" => $this->turn, "type" => "deploy", "dist" => 0, "x" => $sPos->x, "y" => $sPos->y, "a" => $a, "cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
-			$upgrades = array(array("active" => 1, "shipid" => $this->fires[$i]->shooter->id, "systemid" => $this->fires[$i]->weapon->id, "units" => array(0 => array("amount" => $this->fires[$i]->shots, "name" => $name))));
+			$upgrades = array(array("active" => 1, "unitid" => $this->fires[$i]->shooter->id, "systemid" => $this->fires[$i]->weapon->id, "units" => array(0 => array("amount" => $this->fires[$i]->shots, "name" => $name))));
 
 			$units[] = array("gameid" => $this->gameid, "userid" => $this->fires[$i]->shooter->userid, "type" => "Salvo", "name" => "Salvo", "callsign" => "", "totalCost" => 0, "moraleCost" => 0, "turn" => $this->turn, "eta" => 0, "mission" => $mission, "actions" => array($move), "upgrades" => $upgrades);
 
@@ -1887,10 +1887,10 @@
 	public function userChangedCommandThisTurn($index){
 		Debug::log("userChangedCommandThisTurn");
 		if ($this->turn > 1 && $this->playerstatus[$index]["transfered"]){
-			Debug::log("yay");
+			//Debug::log("yay");
 			return true;
 		}
-		Debug::log("nay");
+		//Debug::log("nay");
 		return false;
 	}
 

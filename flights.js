@@ -411,7 +411,7 @@ Flight.prototype.createMissionChangeEntry = function(){
 	this.attachLogEntry("<th colSpan=9><span><font color='" + this.getCodeColor()+ "'>Flight #" + this.id + "</font> has been issued a new mission.</span></th>");
 	$("#combatLog").find("tbody tr").last()
 		.hover(
-			function(){game.getUnit($(this).data("shipid")).handleHovering();},
+			function(){game.getUnit($(this).data("unitid")).handleHovering();},
 			function(){game.resetHover()}
 		)
 }
@@ -420,13 +420,13 @@ Flight.prototype.createMissionAbortEntry = function(){
 	this.attachLogEntry("<th colSpan=9><span><font color='" + this.getCodeColor()+ "'>Flight #" + this.id + "</font> has emergeny-aborted its mission.</span></th>");
 	$("#combatLog").find("tbody tr").last()
 		.hover(
-			function(){game.getUnit($(this).data("shipid")).handleHovering();},
+			function(){game.getUnit($(this).data("unitid")).handleHovering();},
 			function(){game.resetHover()}
 		)
 }
 
 Flight.prototype.getLoadAdjustment = function(){
-	var data = {shipid: this.launch.shipid, systemid: this.launch.systemid, loads: []};
+	var data = {unitid: this.launch.unitid, systemid: this.launch.systemid, loads: []};
 	for (var i = 0; i < this.launch.loads.length; i++){
 		if (!this.launch.loads[i].launch){continue;}
 		data.loads.push({amount: this.launch.loads[i].launch, name: this.launch.loads[i].name});

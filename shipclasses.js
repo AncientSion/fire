@@ -2606,7 +2606,8 @@ Ship.prototype.getUnitName = function(){
 }
 
 Ship.prototype.trySetCommand = function(){
-	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace.");}
+	if (!this.friendly){return false;}
+	else if (this.isJumpingOut()){popup("This unit is jumping to hyperspace.");}
 	else {
 		var html = "Transfering Fleet Commands will void Focus generation for this turn as well as blocking any Focus setups. </br>";
 			html += "Please confirm your order.</br></br><input type='button' class='popupEntryConfirm' value='Confirm Transfer' onclick='game.getUnit(aUnit).doSetCommand()'>";

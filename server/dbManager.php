@@ -425,7 +425,7 @@
 
 
 		public function setInitialCommandUnit($userid, $gameid, $units){
-			//Debug::log("setInitialCommandUnit s:".sizeof($units));	
+			Debug::log("setInitialCommandUnit s:".sizeof($units));	
 			$unit;
 			$id;
 
@@ -495,7 +495,7 @@
 		}
 
 		public function insertUnits($userid, $gameid, &$units){
-			//Debug::log("DB insertUnits: ".sizeof($units));
+			Debug::log("DB insertUnits: ".sizeof($units));
 
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
@@ -606,14 +606,14 @@
 			$stmt = $this->connection->prepare("
 				UPDATE loads
 				SET amount = amount - :amount
-				WHERE shipid = :shipid
+				WHERE unitid = :unitid
 				AND systemid = :systemid
 				AND name = :name
 			");
 
 			for ($i = 0; $i < sizeof($data); $i++){
 
-				$stmt->bindParam(":shipid", $data[$i]["loadAdjust"]["shipid"]);
+				$stmt->bindParam(":unitid", $data[$i]["loadAdjust"]["unitid"]);
 				$stmt->bindParam(":systemid", $data[$i]["loadAdjust"]["systemid"]);
 
 				for ($j = 0; $j < sizeof($data[$i]["loadAdjust"]["loads"]); $j++){
@@ -630,12 +630,12 @@
 		}
 
 		public function insertLoads($userid, $gameid, &$units){
-			//Debug::log("insertLoads: ".sizeof($units));
+			Debug::log("insertLoads: ".sizeof($units));
 			$stmt = $this->connection->prepare("
 				INSERT INTO loads 
-					(shipid, systemid, name, amount)
+					(unitid, systemid, name, amount)
 				VALUES
-					(:shipid, :systemid, :name, :amount)
+					(:unitid, :systemid, :name, :amount)
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){
@@ -647,7 +647,7 @@
 					
 					for ($k = 0; $k < sizeof($units[$i]["upgrades"][$j]["loads"]); $k++){
 						//Debug::log("loads #".$k.": ".$units[$i]["upgrades"][$j]["loads"][$k]["amount"]."x ".$units[$i]["upgrades"][$j]["loads"][$k]["name"]);
-						$stmt->bindParam(":shipid", $units[$i]["id"]);
+						$stmt->bindParam(":unitid", $units[$i]["id"]);
 						$stmt->bindParam(":systemid", $units[$i]["upgrades"][$j]["systemid"]);
 						$stmt->bindParam(":name", $units[$i]["upgrades"][$j]["loads"][$k]["name"]);
 						$stmt->bindParam(":amount", $units[$i]["upgrades"][$j]["loads"][$k]["amount"]);
@@ -747,9 +747,9 @@
 			//Debug::log("insertLoads: ".sizeof($units));
 			$stmt = $this->connection->prepare("
 				INSERT INTO loads 
-					(shipid, systemid, name, amount)
+					(unitid, systemid, name, amount)
 				VALUES
-					(:shipid, :systemid, :name, :amount)
+					(:unitid, :systemid, :name, :amount)
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){
@@ -757,7 +757,7 @@
 					if (isset($units[$i]["upgrades"][$j]["active"]) && !$units[$i]["upgrades"][$j]["active"]){continue;}
 					if (!sizeof($units[$i]["upgrades"])){continue;}
 
-					$stmt->bindParam(":shipid", $units[$i]["id"]);
+					$stmt->bindParam(":unitid", $units[$i]["id"]);
 
 					for ($k = 0; $k < sizeof($units[$i]["upgrades"][$j]["loads"]); $k++){
 
@@ -779,15 +779,15 @@
 			Debug::log("DB insertServerActions s: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				INSERT INTO actions 
-					(shipid, turn, type, forced, dist, x, y, a, cost, delay, costmod, resolved)
+					(unitid, turn, type, forced, dist, x, y, a, cost, delay, costmod, resolved)
 				VALUES
-					(:shipid, :turn, :type, :forced, :dist, :x, :y, :a, :cost, :delay, :costmod, :resolved)
+					(:unitid, :turn, :type, :forced, :dist, :x, :y, :a, :cost, :delay, :costmod, :resolved)
 			");
 
 			for ($j = 0; $j < sizeof($data); $j++){
 				if (!$data[$j]->new){continue;}
 
-				$stmt->bindParam(":shipid", $data[$j]->shipid);
+				$stmt->bindParam(":unitid", $data[$j]->unitid);
 				$stmt->bindParam(":turn", $data[$j]->turn);
 				$stmt->bindParam(":type", $data[$j]->type);
 				$stmt->bindParam(":forced", $data[$j]->forced);
@@ -834,16 +834,126 @@
 
 		public function createObstacles($gameid, $data){
 			Debug::log("createObstacles #".$gameid);
+
+			$amount = $data["obstaclesAmount"];
+			$min = $data["obstaclesSizeMin"];
+			$max = $data["obstaclesSizeMax"];
+
+			$players = 2;
+
+			$templates = array();
+
+			for ($i = 1; $i <= $amount; $i++){
+				$templates[] = array(mt_rand($min, $max), mt_rand(1, 8));
+			}
+
+
+			$fields = array();
+
+			for ($i = 1; $i <= $players; $i++){
+				Debug::log("player ".$i);
+
+				for ($j = 0; $j < sizeof($templates); $j++){
+					Debug::log("players ".$j);
+
+					$redo = 0;
+					$attempts = 5;
+
+					while ($attempts){
+						$attempts--;
+
+						$x = mt_rand(150, 400) * ($i == 1 ? 1 : -1);
+						$y = mt_rand(100, 500) * ($i == 1 ? 1 : -1);
+						$size = $templates[$j][0];
+						$rockSize = $templates[$j][1];
+
+						for ($k = 0; $k < sizeof($fields); $k++){
+							//Debug::log("checking vs field ".$k);
+							$dist = Math::getDist($fields[$k][0], $fields[$k][1], $x, $y);
+
+							if ($dist - $size/2 < $fields[$k][4]/2){
+								Debug::log("----RETRY, dist $dist, rad1 ".round($size/2).", rad2 ".round($fields[$k][4]/2));
+								$redo = 1;
+								$redo = 1;
+								break;
+							} //else Debug::log("no problem !");
+						}
+
+						if ($redo){continue;}
+						else $attempts = 0;
+
+						$angleFromCenter = round(Math::getAngle(0, 0, $x, $y));
+						Debug::log("Angle center to pos ".$x."/".$y." is ".$angleFromCenter."°");
+
+						$facing = mt_rand(0, 360);
+						$density = mt_rand(15, 35);
+
+						$thrust = mt_rand(30, 60);
+
+						$minDmg = round(mt_rand(8, 10) * $rockSize);
+						$maxDmg = round($minDmg*1.3);
+
+						Debug::log("PUSHING!");
+						$fields[] = array($x, $y, $facing, $size, $thrust, $density, $rockSize, $minDmg, $maxDmg);
+					}
+				}
+			}
+
+			Debug::log("fields to add ".sizeof($fields));
+			$stmt = $this->connection->prepare("
+				INSERT INTO units
+				(gameid, name, status, x, y, facing, delay, thrust, rolling, rolled, turn, phase, totalCost, moraleCost)
+				VALUES
+				(:gameid, 'Obstacle', 'deployed', :x, :y, :facing, :delay, :thrust, :rolling, :rolled, 1, -1, :totalCost, :moraleCost)
+			");
+
+
+			for ($i = 0; $i < sizeof($fields); $i++){
+
+				//foreach ($fields as $rock){
+				//	foreach ($rock as $val){
+				//		Debug::log($val);
+				//	}
+				//}
+
+				//Debug::log("rolling ".$fields[$i][5]);
+
+				$stmt->bindParam(":gameid", $gameid);
+				$stmt->bindParam(":x", $fields[$i][0]);
+				$stmt->bindParam(":y", $fields[$i][1]);
+				$stmt->bindParam(":facing", $fields[$i][2]);
+				$stmt->bindParam(":delay", $fields[$i][3]);
+				$stmt->bindParam(":thrust", $fields[$i][4]);
+				$stmt->bindParam(":rolling", $fields[$i][5]);
+				$stmt->bindParam(":rolled", $fields[$i][6]);
+				$stmt->bindParam(":totalCost", $fields[$i][7]);
+				$stmt->bindParam(":moraleCost", $fields[$i][8]);
+
+				$stmt->execute();
+
+				if ($stmt->errorCode() == 0){
+					continue;
+				} else return false;
+			}
+
+			return true;
+		}
+
+		public function acreateObstacles($gameid, $data){
+			Debug::log("createObstacles #".$gameid);
 			$rocks = array();
 
 			$amount = $data["obstaclesAmount"];
 			$min = $data["obstaclesSizeMin"];
 			$max = $data["obstaclesSizeMax"];
 
+
+			$sizes = array();
+
 			//$amount = 10;
 			//Debug::log("amount: ".$amount);
 			for ($i = 1; $i <= $amount; $i++){
-				//Debug::log("rock ".$i);
+				Debug::log("rock ".$i);
 				
 				$attempts = 3;
 
@@ -867,19 +977,20 @@
 						}
 					}
 
-					if ($redo){
-						continue;
-					} else $attempts = 0;
+					if ($redo){continue;}
+					else $attempts = 0;
 
+					$angleFromCenter = round(Math::getAngle(0, 0, $x, $y));
+					Debug::log("Angle center to pos ".$x."/".$y." is ".$angleFromCenter."°");
 
 					$facing = mt_rand(0, 360);
 					$size = mt_rand($min, $max);
 					$density = mt_rand(15, 35);
-					$rockSize = mt_rand(1, 4);
+					$rockSize = mt_rand(1, 10);
 
-					$thrust = mt_rand(30, 45) / $size * 125 / $rockSize * 2;
+					$thrust = mt_rand(50, 70) / $size * 125 / $rockSize * 2;
 
-					$minDmg = round(mt_rand(15, 25) * $rockSize);
+					$minDmg = round(mt_rand(10, 14) * $rockSize);
 					$maxDmg = round($minDmg*1.3);
 
 					$rocks[] = array($x, $y, $facing, $size, $thrust, $density, $rockSize, $minDmg, $maxDmg);
@@ -1068,7 +1179,7 @@
 			if (!sizeof($result)){Debug::log("no results!"); return;}
 
 			$stmt = $this->connection->prepare("
-				delete units, subunits, loads from units left join subunits on units.id = subunits.unitid left join loads on units.id = loads.shipid where units.id = :id
+				delete units, subunits, loads from units left join subunits on units.id = subunits.unitid left join loads on units.id = loads.unitid where units.id = :id
 			");
 			for ($i = 0; $i < sizeof($result); $i++){
 				$stmt->bindParam(":id", $result[$i]["id"]);
@@ -1324,14 +1435,14 @@
 		public function deletePlannedMoves($units, $turn){
 			$stmt = $this->connection->prepare("
 				DELETE from actions
-				WHERE shipid = :shipid
+				WHERE unitid = :unitid
 				AND turn = :turn
 				AND resolved = 0
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){
 				//Debug::log("deleting: ".$units[$i]["id"]);
-				$stmt->bindParam(":shipid", $units[$i]["id"]);
+				$stmt->bindParam(":unitid", $units[$i]["id"]);
 				$stmt->bindParam(":turn", $turn);
 
 				$stmt->execute();
@@ -1343,13 +1454,13 @@
 			//Debug::log("insertClientActions s: ".sizeof($units));
 			$stmt = $this->connection->prepare("
 				INSERT INTO actions 
-					(shipid, turn, type, dist, x, y, a, cost, delay, costmod, resolved)
+					(unitid, turn, type, dist, x, y, a, cost, delay, costmod, resolved)
 				VALUES
-					(:shipid, :turn, :type, :dist, :x, :y, :a, :cost, :delay, :costmod, 0)
+					(:unitid, :turn, :type, :dist, :x, :y, :a, :cost, :delay, :costmod, 0)
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				$stmt->bindParam(":shipid", $units[$i]["id"]);
+				$stmt->bindParam(":unitid", $units[$i]["id"]);
 
 				for ($j = 0; $j < sizeof($units[$i]["actions"]); $j++){
 					if ($units[$i]["actions"][$j]["resolved"]){continue;}
@@ -1528,11 +1639,11 @@
 		public function getDamages($units){
 			$stmt = $this->connection->prepare("
 				SELECT * FROM damages
-				WHERE shipid = :shipid
+				WHERE unitid = :unitid
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				$stmt->bindParam(":shipid", $units[$i]->id);
+				$stmt->bindParam(":unitid", $units[$i]->id);
 				$stmt->execute();
 				$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 				if ($result){
@@ -1541,7 +1652,7 @@
 							$result[$j]["id"],
 							$result[$j]["fireid"],
 							$result[$j]["gameid"],
-							$result[$j]["shipid"],
+							$result[$j]["unitid"],
 							$result[$j]["structureid"],
 							$result[$j]["systemid"],
 							$result[$j]["turn"],
@@ -1598,11 +1709,11 @@
 		public function getCrits($units){
 			$stmt = $this->connection->prepare("
 				SELECT * FROM systemcrits
-				WHERE shipid = :shipid
+				WHERE unitid = :unitid
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				$stmt->bindParam(":shipid", $units[$i]->id);
+				$stmt->bindParam(":unitid", $units[$i]->id);
 				$stmt->execute();
 				$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 				if ($result){
@@ -1610,7 +1721,7 @@
 						//var_export($result[$j]);
 						$crit = new Crit(
 							$result[$j]["id"],
-							$result[$j]["shipid"],
+							$result[$j]["unitid"],
 							$result[$j]["systemid"],
 							$result[$j]["turn"],
 							$result[$j]["type"],
@@ -1667,13 +1778,13 @@
 			//Debug::log("getActions for turn ".$turn);
 			$stmt = $this->connection->prepare("
 				SELECT * FROM actions
-				WHERE shipid = :shipid
+				WHERE unitid = :unitid
 				AND turn >= :turn
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){
 
-				$stmt->bindParam(":shipid", $units[$i]->id);
+				$stmt->bindParam(":unitid", $units[$i]->id);
 				$stmt->bindParam(":turn", $turn);
 				$stmt->execute();
 				$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -1684,7 +1795,7 @@
 						//Debug::log("result #".$j);
 						$units[$i]->actions[] = new Action(
 							$result[$j]["id"],
-							$result[$j]["shipid"],
+							$result[$j]["unitid"],
 							$result[$j]["turn"],
 							$result[$j]["type"],
 							$result[$j]["forced"],
@@ -1742,9 +1853,9 @@
 
 			$stmt = $this->connection->prepare("
 				INSERT INTO damages 
-					( fireid, shipid, gameid, structureid, systemid, turn, roll, type, totalDmg, shieldDmg, armourDmg, systemDmg, hullDmg, emDmg, negation, destroyed, notes, new)
+					( fireid, unitid, gameid, structureid, systemid, turn, roll, type, totalDmg, shieldDmg, armourDmg, systemDmg, hullDmg, emDmg, negation, destroyed, notes, new)
 				VALUES
-					( :fireid, :shipid, :gameid, :structureid, :systemid, :turn, :roll, :type, :totalDmg, :shieldDmg, :armourDmg, :systemDmg, :hullDmg, :emDmg, :negation, :destroyed, :notes, :new)
+					( :fireid, :unitid, :gameid, :structureid, :systemid, :turn, :roll, :type, :totalDmg, :shieldDmg, :armourDmg, :systemDmg, :hullDmg, :emDmg, :negation, :destroyed, :notes, :new)
 			");
 
 			$new = 0;
@@ -1752,7 +1863,7 @@
 			//echo json_encode($damages[0]);
 			for ($i = 0; $i < sizeof($damages); $i++){
 				$stmt->bindParam(":fireid", $damages[$i]->fireid);
-				$stmt->bindParam(":shipid", $damages[$i]->shipid);
+				$stmt->bindParam(":unitid", $damages[$i]->unitid);
 				$stmt->bindParam(":gameid", $damages[$i]->gameid);
 				$stmt->bindParam(":structureid", $damages[$i]->structureid);
 				$stmt->bindParam(":systemid", $damages[$i]->systemid);
@@ -1786,15 +1897,15 @@
 			
 			$stmt = $this->connection->prepare("
 				INSERT INTO systemcrits 
-					( shipid, systemid, turn, type, duration, value)
+					( unitid, systemid, turn, type, duration, value)
 				VALUES
-					( :shipid, :systemid, :turn, :type, :duration, :value)
+					( :unitid, :systemid, :turn, :type, :duration, :value)
 			");
 
 			for ($i = 0; $i < sizeof($crits); $i++){
 				if ($crits[$i]->new){
 					//var_export($crits[$i]);
-					$stmt->bindParam(":shipid", $crits[$i]->shipid);
+					$stmt->bindParam(":unitid", $crits[$i]->unitid);
 					$stmt->bindParam(":systemid", $crits[$i]->systemid);
 					$stmt->bindParam(":turn", $crits[$i]->turn);
 					$stmt->bindParam(":type", $crits[$i]->type);
@@ -1874,8 +1985,8 @@
 			} else return false;
 		}
 
-		public function setPlayerstatus($userid, $gameid, $turn, $phase, $status){
-			//Debug::log("setPlayerstatus for player ".$userid. " adjusted to turn/phase: ".$turn."/".$phase);
+		public function setPlayerStatus($userid, $gameid, $turn, $phase, $status){
+			//Debug::log("setPlayerStatus for player ".$userid. " adjusted to turn/phase: ".$turn."/".$phase);
 
 			$stmt = $this->connection->prepare("
 				UPDATE playerstatus 
@@ -2113,11 +2224,11 @@
 			$stmt = $this->connection->prepare("
 				SELECT *
 				FROM loads 
-				WHERE shipid = :shipid
+				WHERE unitid = :unitid
 			");
 
 			for ($i = 0; $i < sizeof($ships); $i++){
-				$stmt->bindParam(":shipid", $ships[$i]->id);
+				$stmt->bindParam(":unitid", $ships[$i]->id);
 				$stmt->execute();
 				$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -2185,13 +2296,13 @@
 			$stmt = $this->connection->prepare("
 				UPDATE actions
 				SET resolved = :resolved
-				WHERE shipid = :shipid
+				WHERE unitid = :unitid
 			");
 
 			$resolved = 1;
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				$stmt->bindParam(":shipid", $units[$i]);
+				$stmt->bindParam(":unitid", $units[$i]);
 				$stmt->bindParam(":resolved", $resolved);
 				$stmt->execute();
 			//	Debug::log("aaa");
@@ -2209,7 +2320,7 @@
 				UPDATE actions
 				SET resolved = 1
 				WHERE 
-					shipid = :shipid
+					unitid = :unitid
 				AND
 					resolved = 0
 			");
@@ -2217,7 +2328,7 @@
 			for ($i = 0; $i < sizeof($ships); $i++){
 				if (!$ships[$i]->moveSet){continue;}
 				//Debug::log("resolving: ".$ships[$i]->id);
-				$stmt->bindParam(":shipid", $ships[$i]->id);
+				$stmt->bindParam(":unitid", $ships[$i]->id);
 				$stmt->execute();
 
 				if ($stmt->errorCode() == 0){

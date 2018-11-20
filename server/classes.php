@@ -158,7 +158,7 @@ class HitTable {
 
 class Action {
 	public $id;
-	public $shipid;
+	public $unitid;
 	public $turn;
 	public $type;
 	public $forced;
@@ -169,9 +169,9 @@ class Action {
 	public $new;
 	public $manual = 0;
 
-	function __construct($id, $shipid, $turn, $type, $forced, $dist, $x, $y, $a, $cost, $delay, $costmod, $resolved, $new){
+	function __construct($id, $unitid, $turn, $type, $forced, $dist, $x, $y, $a, $cost, $delay, $costmod, $resolved, $new){
 		$this->id = $id;
-		$this->shipid = $shipid;
+		$this->unitid = $unitid;
 		$this->turn = $turn;
 		$this->type = $type;
 		$this->forced = $forced;
@@ -286,7 +286,7 @@ class Damage {
 	public $id;
 	public $fireid;
 	public $gameid;
-	public $shipid;
+	public $unitid;
 	public $structureid;
 	public $systemid;
 	public $turn;
@@ -302,11 +302,11 @@ class Damage {
 	public $notes;
 	public $new;
 	
-	function __construct($id, $fireid, $gameid, $shipid, $structureid, $systemid, $turn, $type, $totalDmg, $shieldDmg, $armourDmg, $systemDmg, $hullDmg, $emDmg, $negation, $destroyed, $notes, $new){
+	function __construct($id, $fireid, $gameid, $unitid, $structureid, $systemid, $turn, $type, $totalDmg, $shieldDmg, $armourDmg, $systemDmg, $hullDmg, $emDmg, $negation, $destroyed, $notes, $new){
 		$this->id = $id;
 		$this->fireid = abs($fireid);
 		$this->gameid = $gameid;
-		$this->shipid = $shipid;
+		$this->unitid = $unitid;
 		$this->structureid = $structureid;
 		$this->systemid = $systemid;
 		$this->turn = $turn;
@@ -326,7 +326,7 @@ class Damage {
 
 class Crit {
 	public $id;
-	public $shipid;
+	public $unitid;
 	public $systemid;
 	public $turn;
 	public $type;
@@ -336,9 +336,9 @@ class Crit {
 	public $new = 0;
 	public $notes = "";
 	
-	function __construct($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
+	function __construct($id, $unitid, $systemid, $turn, $type, $duration, $value, $new){
 		$this->id = $id;
-		$this->shipid = $shipid;
+		$this->unitid = $unitid;
 		$this->systemid = $systemid;
 		$this->turn = $turn;
 		$this->type = $type;

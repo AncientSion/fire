@@ -3937,7 +3937,7 @@ Hangar.prototype.doUndoActions = function(){
 	if (game.phase != -1){return;}
 	for (var i = game.ships.length-1; i >= 0; i--){
 		if (game.ships[i].flight && game.ships[i].actions.length && game.ships[i].available == game.turn){
-			if (game.ships[i].launch.shipid == this.parentId && game.ships[i].launch.systemid == this.id){
+			if (game.ships[i].launch.unitid == this.parentId && game.ships[i].launch.systemid == this.id){
 				if (game.ships[i].cc.length){
 					game.getUnit(game.ships[i].cc[0]).detachFlight(game.ships[i].id);
 				}

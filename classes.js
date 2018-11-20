@@ -7,9 +7,9 @@ function Point(x, y){
 	}
 }
 
-function Move(id, shipid, type, forced, dist, x, y, a, delay, cost, costmod, manual, resolved){
+function Move(id, unitid, type, forced, dist, x, y, a, delay, cost, costmod, manual, resolved){
 	this.id = id;
-	this.shipid = shipid;
+	this.unitid = unitid;
 	this.turn = game.turn;
 	this.type = type;
 	this.forced = forced;
@@ -166,7 +166,7 @@ function Damage(data){
 	this.id = data.id;
 	this.fireid = data.fireid;
 	this.gameid = data.gameid;
-	this.shipid = data.shipid;
+	this.unitid = data.unitid;
 	this.structureid = data.structureid;
 	this.systemid = data.systemid;
 	this.turn = data.turn;
@@ -187,7 +187,7 @@ function Damage(data){
 
 function Crit(data){
 	this.id = data.id;
-	this.shipid = data.shipid;
+	this.unitid = data.unitid;
 	this.systemid = data.systemid;
 	this.turn = data.turn;
 	this.type = data.type;
@@ -1314,7 +1314,7 @@ FireOrder.prototype.assembleDmgData = function(){
 		if (dmgs.hasOwnProperty(this.damages[i].system)){ // hit
 			dmgs[this.damages[i].system][2]++;
 		}
-		else dmgs[this.damages[i].system] = [0, 0, 1, 0, 0, 0, "", this.damages[i].shipid]; // new system entry
+		else dmgs[this.damages[i].system] = [0, 0, 1, 0, 0, 0, "", this.damages[i].unitid]; // new system entry
 
 		if (this.weapon.grouping /*|| this.weapon.fireMode == "Shockwave"*/){ // multi hit weapons
 			for (var j = 0; j < this.damages[i].notes.length; j++){

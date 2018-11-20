@@ -515,8 +515,8 @@
 	/*	$(".doTurn")
 		.click(function(){
 			//console.log("issueTurn")
-		//	game.getUnit($(this).data("shipid")).issueTurn($(this).data("a"))
-		//	game.getUnit($(this).data("shipid")).switchTurnMode();
+		//	game.getUnit($(this).data("unitid")).issueTurn($(this).data("a"))
+		//	game.getUnit($(this).data("unitid")).switchTurnMode();
 
 		})
 
@@ -534,17 +534,17 @@
 	$("#maxCutVector")
 	.click(function(){
 		//console.log("maxVector")
-		game.getUnit($(this).data("shipid")).moveInVector($(this).data("dist"));
+		game.getUnit($(this).data("unitid")).moveInVector($(this).data("dist"));
 	})	
 	$("#maxTurnVector")
 	.click(function(){
 		//console.log("maxVector")
-		game.getUnit($(this).data("shipid")).moveToMaxTurnVector();
+		game.getUnit($(this).data("unitid")).moveToMaxTurnVector();
 	})	
 	$("#maxVector")
 	.click(function(){
 		//console.log("maxVector")
-		game.getUnit($(this).data("shipid")).moveToMaxVector();
+		game.getUnit($(this).data("unitid")).moveToMaxVector();
 	})
 
 	$("#popupWrapper")

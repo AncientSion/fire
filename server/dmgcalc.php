@@ -32,7 +32,7 @@ class DmgCalc {
 			if ($totalMag < $effects[$i][1]){continue;}	
 			//Debug::log("crit: ".$effects[$i][0]);
 
-			//($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
+			//($id, $unitid, $systemid, $turn, $type, $duration, $value, $new){
 			$crit = new Crit(
 				0, $unitid, $systemid, $turn,
 				$effects[$i][0], $effects[$i][2], $effects[$i][3],
@@ -76,7 +76,7 @@ class DmgCalc {
 		
 				//Debug::log("crit: ".$effects[$i][0]);
 
-				//($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
+				//($id, $unitid, $systemid, $turn, $type, $duration, $value, $new){
 				$crit->type = $effects[$i][0];
 				$crit->duration = $effects[$i][2];
 				$crit->value = $effects[$i][3];

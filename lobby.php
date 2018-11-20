@@ -305,7 +305,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 							</tr>
 							<tr>
 								<td>
-									Exact number of Obstacles
+									Number of asteroid fields spawned per player
 								</td>
 								<td>
 									<input type="number" style="width: 100%; text-align: center" value=4 placeholder="4" name="obstaclesAmount" step="1" min="0" max="20"></input>		
@@ -313,7 +313,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 							</tr>
 							<tr>
 								<td>
-									Minimal size per Obstacle
+									Minimum size per asteroid field
 								</td>
 								<td>
 									<input type="number" style="width: 100%; text-align: center" value=75 placeholder="75" name="obstaclesSizeMin" step="25" min="50" max="100"></input>		
@@ -321,7 +321,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 							</tr>
 							<tr>
 								<td>
-									Maximum size per Obstacle
+									Maximum size per asteroid field
 								</td>
 								<td>
 									<input type="number" style="width: 100%; text-align: center" value=200 placeholder="200" name="obstaclesSizeMax" step="25" min="100" max="300"></input>		

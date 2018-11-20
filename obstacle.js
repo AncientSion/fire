@@ -83,7 +83,7 @@ Obstacle.prototype.getShortInfo = function(){
 	.append($("<div>").html("Size " + this.size + " / Speed " + this.getCurSpeed()))
 	.append($("<div>").html(this.getMaxInterference() + "% Interference"))
 	.append($("<div>").html(this.getBaseCollisionPct() + "% Collision"))
-	.append($("<div>").html(this.getDamageString() + " / " + this.getBaseAttacks() + " Strikes"))
+	.append($("<div>").html("(" + this.rockSize + ")  "+ this.getDamageString() + " / " + this.getBaseAttacks() + " Strikes"))
 }
 
 Obstacle.prototype.getHeader = function(){
@@ -151,7 +151,7 @@ Obstacle.prototype.createBaseDiv = function(){
 			.append($("<td>").html(this.getBaseAttacks() + " per 100px")))
 		.append($("<tr>")
 			.append($("<td>").html("Damage Potential"))
-			.append($("<td>").html(this.getDamageString())))
+			.append($("<td>").html("(" + this.rockSize + ") " + this.getDamageString())))
 		.append($("<tr>")
 			.append($("<td>").attr("colSpan", 2).css("height", 10)))
 	/*	.append($("<tr>")
@@ -339,7 +339,7 @@ Obstacle.prototype.setImage = function(){
 
 Obstacle.prototype.setTrueImage = function(info){
 
-	var amount = Math.round(Math.pow(this.size, 2) / 2000 * this.interference / (this.rockSize/2)/5);
+	var amount = Math.round(Math.pow(this.size, 2) / 2500 * this.interference / (this.rockSize));
 
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
@@ -347,7 +347,6 @@ Obstacle.prototype.setTrueImage = function(info){
 	var ctx = t.getContext("2d");
 		ctx.translate(t.width/2, t.height/2);
 
-	var rockSize = this.rockSize/2;
 	var randoms = 0;
 
 	for (var i = 0; i < amount; i++){
@@ -356,7 +355,7 @@ Obstacle.prototype.setTrueImage = function(info){
 		var d = range(30, this.size* 0.9);
 		var loc = getPointInDir(d, range(0, 360), 0, 0);
 
-		var size = range(7, 10) + (rockSize)*15;
+		var size = range(3, 5) + (this.rockSize*4);
 
 		if (range(0, 100) <= 20){
 			randoms++;
@@ -390,22 +389,24 @@ Obstacle.prototype.setTrueImage = function(info){
 
 		var vectorSize = 60;
 
-		ctx.drawImage(
+		/*ctx.drawImage(
 			graphics.images.interference,
 			0 -vectorSize/2,
 			0 -40 -vectorSize/2,
 			vectorSize, 
 			vectorSize
-		);
+		);*/
+
+		ctx.clearRect(-40, -60, 80, 105);
 
 		ctx.fillStyle = "yellow";
 		ctx.font = "24px Arial";
 		ctx.textAlign = "center";
-		ctx.fillText(this.getMaxInterference(), 0, 0 - 35)
+		ctx.fillText(this.getMaxInterference() + "%", 0, 0 - 35)
 
-		ctx.clearRect(-40, -7, 80, 50);
+		//ctx.clearRect(-40, -40, 80, 80);
 		
-		ctx.fillStyle = "red";
+		ctx.fillStyle = "yellow";
 		ctx.font = "24px Arial";
 		ctx.textAlign = "center";
 		ctx.fillText(this.collision + "%", 0, 12);

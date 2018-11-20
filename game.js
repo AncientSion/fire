@@ -398,7 +398,7 @@ this.doAnimateMovement = function(){
 		//flight.primary = new Primary(0, flight.id, 0, 0, 0);
 		flight.actions.push(new Move(-1, flight.id, "deploy", 0, 0, o.x, o.y, facing, 0, 0, 0, 1, 1));
 		flight.launch = {
-			shipid: aUnit,
+			unitid: aUnit,
 			systemid: flightDeploy.id,
 			loads: flightDeploy.loads
 		};
@@ -1413,11 +1413,11 @@ this.doAnimateMovement = function(){
 						.append(
 						$("<tr>")
 							.append($("<th>").attr("colSpan", 9).html(game.unitExploAnims[i].html))
-							.data("shipid", game.unitExploAnims[i].id)
+							.data("unitid", game.unitExploAnims[i].id)
 							.hover(
 								function(){
 									var data = $(this).data();
-									game.getUnit($(this).data("shipid")).doHighlight()
+									game.getUnit($(this).data("unitid")).doHighlight()
 								}
 							)
 						)
@@ -1535,16 +1535,25 @@ this.doAnimateMovement = function(){
 	this.setLeftWrapperVisibility = function(){	
 
 		var wrapper = $("#leftUnitWrapper");
+			wrapper.show();
 		var incoming = wrapper.find("#deployTable");
-		var avail = wrapper.find(".reinforceWrapper");
+		var reinforce = wrapper.find(".reinforceWrapper");
 
-		if (game.turn != game.settings.reinforceTurn){avail.hide();}
-		else if (game.phase > -1){avail.hide();}
-		else ui.combatLogWrapper.css("top", 90).css("left", 240)
-		
-		if (incoming.find("tbody").children().length > 1){wrapper.show(); incoming.show();} else incoming.hide();
+		if (game.turn == game.settings.reinforceTurn && game.phase == -1){
+			reinforce.show();
+		}
+		else {
+			reinforce.hide();
+		}
 
-		if (!avail.is(":visible") && !incoming.is(":visible")){wrapper.hide();}
+		if (incoming.find("tbody").children().length > 1){
+			incoming.show();
+		} else incoming.hide();
+
+		if (!reinforce.is(":visible") && !incoming.is(":visible")){
+			wrapper.hide();
+		} else wrapper.show();
+
 	}
 
 	this.showStats = function(data){
@@ -3790,6 +3799,10 @@ Game.prototype.doSizeLog = function(width){
 		ui.combatLogWrapper.css("width", width)
 	}
 
+	if ($("#leftUnitWrapper").is(":visible")){
+		ui.combatLogWrapper.css("top", 80).css("left", 240);
+	}
+
 
 	var top = ui.combatLogWrapper.css("top");
 		top = Math.floor(top.slice(0, top.length-2));
@@ -4280,7 +4293,7 @@ Game.prototype.initIncomingTable = function(){
 			var color = "green";
 			wrapper
 			.append($("<tr>").addClass("deployNow")
-				.data("shipid", this.ships[i].id)
+				.data("unitid", this.ships[i].id)
 				.append($("<td>")
 					.append($(this.ships[i].getUnitSelectorIcon().cloneNode(true))
 						.addClass("size40")
@@ -4299,7 +4312,7 @@ Game.prototype.initIncomingTable = function(){
 		else {
 			wrapper
 			.append($("<tr>").addClass("deployNow")
-				.data("shipid", this.ships[i].id)
+				.data("unitid", this.ships[i].id)
 				.append($("<td>")
 					.append($("<img>")
 						.addClass("size40")
@@ -4330,9 +4343,9 @@ Game.prototype.initIncomingTable = function(){
 							$(this).removeClass("selected");
 							game.disableDeployment();
 						}
-						else if (!game.deploying && !game.aUnit && game.getUnit($(this).data("shipid")).canDeploy()){
+						else if (!game.deploying && !game.aUnit && game.getUnit($(this).data("unitid")).canDeploy()){
 							$(this).addClass("selected");
-							game.enableDeployment($(this).data("shipid"));
+							game.enableDeployment($(this).data("unitid"));
 						}
 					}
 				})
@@ -4352,7 +4365,7 @@ Game.prototype.initIncomingTable = function(){
 
 			wrapper
 			.append($("<tr>").addClass("deployNow")
-				.data("shipid", this.incoming[i].id)
+				.data("unitid", this.incoming[i].id)
 				.append($("<td>")
 					.append($(graphics.images[this.incoming[i].name.toLowerCase()].cloneNode(true))
 						.addClass("size40")
@@ -4375,7 +4388,7 @@ Game.prototype.initIncomingTable = function(){
 
 			wrapper
 			.append($("<tr>").addClass("deployNow")
-				.data("shipid", this.incoming[i].id)
+				.data("unitid", this.incoming[i].id)
 				.append($("<td>")
 					.append($("<img>")
 						.addClass("size40")
