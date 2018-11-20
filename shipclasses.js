@@ -151,7 +151,7 @@ Ship.prototype.canDeployHere = function(pos){
 	var valid = false;	
 
 	var deploy = game.getDeployArea();
-	console.log(deploy);
+	//console.log(deploy);
 
 	var xDist = Math.abs(pos.x - deploy.x);
 	if (xDist < deploy.deleteW/2){
@@ -164,10 +164,10 @@ Ship.prototype.canDeployHere = function(pos){
 	}
 
 	var a = getCompassHeadingOfPoint(deploy, pos, 0);
-	console.log(a);
+	//console.log(a);
 	if (isInArc(a, deploy.start, deploy.end)){
 		var d = getDistance(pos, deploy);
-		console.log(d);
+		//console.log(d);
 		if (d > deploy.b && d < deploy.s){
 			return true;
 		}
@@ -1274,10 +1274,6 @@ Ship.prototype.getStructureFromAngle = function(a){
 
 		if (isInArc(a, start, end)){return this.structures[i];}
 	}
-}
-
-Ship.prototype.getCollisionMod = function(){
-	return (1+( game.const.collision.hitMod * (this.traverse-4)))
 }
 
 Ship.prototype.getColor = function(){

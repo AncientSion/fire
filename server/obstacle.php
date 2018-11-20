@@ -22,9 +22,19 @@ class Obstacle extends Minor {
         $this->scale = $data["flipped"];
 
        // $this->curImp = round($this->curImp * 125 / $this->size / $this->rockSize * 2);
-        $this->interference = round($this->density / 8 * $this->rockSize);
-        $this->collision = round($this->interference / 30 * $this->curImp);
-	}	
+        $this->interference = round($this->density*0.66);
+        $this->collision = round($this->density / 20 * $this->curImp);
+	}		
+
+	public function addPrimary(){
+		//Debug::log("addPrimary #".$this->id.", index: ".$this->index);
+		$this->primary = new Shared($this->getId());
+		//Debug::log("density ".$this->density.", rockSize ".$this->rockSize.", result: ".round($this->density / 3 / $this->rockSize));
+
+		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id,
+		// minDmg, maxDmg, $shots
+		$this->totalCost, $this->moraleCost, ceil($this->density / 4 / max(1, floor($this->rockSize /2))));
+	}
 
 	public function getDeployState($turn){
 		Debug::log("getDeployState for ".$this->id.", destroyed: ".$this->destroyed);
@@ -67,24 +77,10 @@ class Obstacle extends Minor {
 	public function addAllSystems(){
 		$this->addPrimary();
 		$this->addStructures();
-	}	
-
-	public function addPrimary(){
-		//Debug::log("addPrimary #".$this->id.", index: ".$this->index);
-		$this->primary = new Shared($this->getId());
-		//Debug::log("density ".$this->density.", rockSize ".$this->rockSize.", result: ".round($this->density / 3 / $this->rockSize));
-
-		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id,
-		// minDmg, maxDmg, $shots
-		$this->totalCost, $this->moraleCost, ceil($this->density / 8 / $this->rockSize));
 	}
 
 	public function addStructures(){
 		return;
-		$amount = ceil(20 * $this->size / 4 * $this->block / 250 * $this->collision) / 100;
-		for ($i = 1; $i <= $amount; $i++){
-			$this->structures[] = new Asteroid($this->size, $amount);
-		}
 	}
 
 	public function getSystem($id){

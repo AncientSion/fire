@@ -177,7 +177,7 @@ Obstacle.prototype.createBaseDiv = function(){
 		table.append($("<tr>")
 			.append($("<td>").attr("colSpan", 2)
 				.append($("<table>").addClass("collisionTable")
-					.append($("<tr>").append($("<td>").attr("colSpan", 7).html("<span class='yellow'>Collision Chance (mod: " + game.const.collision.hitMod + ")</span>")))
+					.append($("<tr>").append($("<td>").attr("colSpan", 7).html("<span class='yellow'>Collision Chance (mod: " + game.const.collision.hitMod + ", min 0.1)</span>")))
 					.append(trA)
 					.append(trB))))
 		.append($("<tr>")

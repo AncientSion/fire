@@ -853,49 +853,61 @@
 			for ($i = 1; $i <= $players; $i++){
 				Debug::log("player ".$i);
 
-				for ($j = 0; $j < sizeof($templates); $j++){
-					Debug::log("players ".$j);
+				$shift = ($i == 1 ? 1 : -1);
 
-					$redo = 0;
+				for ($j = 0; $j < sizeof($templates); $j++){
+					Debug::log("template ".($j+1));
+
 					$attempts = 5;
 
-					while ($attempts){
-						$attempts--;
+					$x; $y; $size; $rockSize;
 
-						$x = mt_rand(150, 400) * ($i == 1 ? 1 : -1);
-						$y = mt_rand(100, 500) * ($i == 1 ? 1 : -1);
-						$size = $templates[$j][0];
-						$rockSize = $templates[$j][1];
+					while ($attempts){
+						$redo = 0;
+						$attempts--;
+						Debug::log("attempts ".$attempts);
+
+						$x = mt_rand(150, 475) * $shift;
+						$y = mt_rand(50, 500) * $shift;
+						$size = round($templates[$j][0] / 10 * mt_rand(9, 11));
+						$rockSize = min(8, max(1, $templates[$j][1] + mt_rand(-1, 1)));
 
 						for ($k = 0; $k < sizeof($fields); $k++){
-							//Debug::log("checking vs field ".$k);
 							$dist = Math::getDist($fields[$k][0], $fields[$k][1], $x, $y);
+							Debug::log("checking vs field ".$k.", dist: ".$dist);
 
-							if ($dist - $size/2 < $fields[$k][4]/2){
-								Debug::log("----RETRY, dist $dist, rad1 ".round($size/2).", rad2 ".round($fields[$k][4]/2));
-								$redo = 1;
+							if ($dist - $size/2 - $fields[$k][4]/2 <= 0){
+								Debug::log("----RETRY, dist $dist, sizeA ".round($size/2).", sizeeB ".round($fields[$k][4]/2));
+								Debug::log("----".$x."/".$y." versus ".$fields[$k][0]."/".$fields[$k][1]);
 								$redo = 1;
 								break;
 							} //else Debug::log("no problem !");
 						}
 
-						if ($redo){continue;}
-						else $attempts = 0;
-
-						$angleFromCenter = round(Math::getAngle(0, 0, $x, $y));
-						Debug::log("Angle center to pos ".$x."/".$y." is ".$angleFromCenter."°");
-
-						$facing = mt_rand(0, 360);
-						$density = mt_rand(15, 35);
-
-						$thrust = mt_rand(30, 60);
-
-						$minDmg = round(mt_rand(8, 10) * $rockSize);
-						$maxDmg = round($minDmg*1.3);
-
-						Debug::log("PUSHING!");
-						$fields[] = array($x, $y, $facing, $size, $thrust, $density, $rockSize, $minDmg, $maxDmg);
+						if (!$redo){
+							Debug::log("!redo");
+							break;
+						}
 					}
+
+					if (!$attempts){continue;}
+
+					$angleFromCenter = round(Math::getAngle(0, 0, $x, $y));
+					$angleToCenter = round(Math::getAngle($x, $y, 0, 0));
+
+					//$facing = ($shift == 1 ? mt_rand(120, 240) : mt_rand(-60, 60));
+					$facing = mt_rand($angleToCenter-60, $angleToCenter+60);
+
+					Debug::log("Angle center to pos ".$x."/".$y." is ".$angleToCenter."°, picking vector ".$facing);
+					$density = mt_rand(15, 35);
+
+					$thrust = mt_rand(25, 35);
+
+					$minDmg = round(mt_rand(8, 10) * $rockSize);
+					$maxDmg = round($minDmg*1.3);
+
+					//Debug::log("PUSHING!");
+					$fields[] = array($x, $y, $facing, $size, $thrust, $density, $rockSize, $minDmg, $maxDmg);
 				}
 			}
 

@@ -40,7 +40,7 @@
 				array("Rout", 150, 0, 0.00)
 			),
 			"collision" => array(
-				"hitMod" => 0.22
+				"hitMod" => 0.25
 			)
 		);
 
@@ -1075,7 +1075,7 @@
 			$shots = round($this->ships[$i]->getSystem(2)->getShots($this->turn) * (1 + (0.3 * ($unit->traverse-4))));
 		*/	
 			$weaponid = 2;
-			$req = $this->ships[$i]->collision * (1 + ($this->const["collision"]["hitMod"] * ($unit->traverse-4)));
+			$req = $this->ships[$i]->collision * max(0.1, (1 + ($this->const["collision"]["hitMod"] * ($unit->traverse-4))));
 			$string = (round($totalDist).";".$this->ships[$i]->collision.";".round($req).";");
 			$shots = ceil($this->ships[$i]->getSystem(2)->getShots($this->turn) / 100 * $totalDist);
 
