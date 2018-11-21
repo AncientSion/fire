@@ -1370,7 +1370,7 @@
 			$stmt = $this->connection->prepare("
 				UPDATE units 
 				SET 
-					status = :status,
+					withdraw = :withdraw,
 					notes = :notes
 				WHERE
 					id = :id
@@ -1378,7 +1378,7 @@
 			
 			for ($i = 0; $i < sizeof($data); $i++){
 				$stmt->bindParam(":id", $data[$i]["id"]);
-				$stmt->bindParam(":status", $data[$i]["status"]);
+				$stmt->bindParam(":withdraw", $data[$i]["withdraw"]);
 				$stmt->bindParam(":notes", $data[$i]["notes"]);
 				$stmt->execute();
 
@@ -1604,7 +1604,7 @@
 			");
 
 			for ($i = 0; $i < sizeof($fires); $i++){
-				//Debug::log("fire id: ".$fires[$i]->id.", notes: ".$fires[$i]->notes);
+				Debug::log("fire id: ".$fires[$i]->id.", notes: ".$fires[$i]->notes);
 				$stmt->bindParam(":shots", $fires[$i]->shots);
 				$stmt->bindParam(":req", $fires[$i]->req);
 				$stmt->bindParam(":notes", $fires[$i]->notes);

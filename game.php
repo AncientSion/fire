@@ -534,17 +534,20 @@
 	$("#maxCutVector")
 	.click(function(){
 		//console.log("maxVector")
-		game.getUnit($(this).data("unitid")).moveInVector($(this).data("dist"));
+		game.getActiveUnit().moveInVector();
+		//game.getUnit($(this).data("unitid")).moveInVector($(this).data("dist"));
 	})	
 	$("#maxTurnVector")
 	.click(function(){
 		//console.log("maxVector")
-		game.getUnit($(this).data("unitid")).moveToMaxTurnVector();
+		game.getActiveUnit().moveToMaxTurnVector();
+		//game.getUnit($(this).data("unitid")).moveToMaxTurnVector();
 	})	
 	$("#maxVector")
 	.click(function(){
 		//console.log("maxVector")
-		game.getUnit($(this).data("unitid")).moveToMaxVector();
+		game.getActiveUnit().moveToMaxVector();
+		//game.getUnit($(this).data("unitid")).moveToMaxVector();
 	})
 
 	$("#popupWrapper")

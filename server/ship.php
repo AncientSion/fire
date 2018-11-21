@@ -88,9 +88,6 @@ class Ship {
 	);
 
 	function __construct($data){
-		//echo ("constructing!" .$data["id"]."\n");
-		//if (!(isset($data["manual"]))){Debug::trace();}
-		//if (!(isset($data["manual"]))){Debug::log("ding"); Debug::log($this->name);}
 		if (!$data){return;}
 		$this->id = $data["id"];
 		$this->userid = $data["userid"];
@@ -865,7 +862,11 @@ class Ship {
 		}
 
 		if (sizeof($fire->rolls)){
+			for ($i = 0; $i < sizeof($fire->rolls); $i++){
+				Debug::log("roll ".$fire->rolls[$i]);
+			}
 			$fire->notes .= implode(";", $fire->rolls).";";
+			Debug::log("notes ".$fire->notes);
 		}
 		$fire->resolved = 1;
 	}

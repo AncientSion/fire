@@ -2474,7 +2474,7 @@ Particle.prototype.getAnimation = function(fire){
 				}
 			}
 			else {
-				if (fire.rolls[roll] >= 0 && fire.rolls[roll] <= fire.req[i]){ // hit
+				if (fire.rolls[roll] > 0 && fire.rolls[roll] <= fire.req[i]){ // hit
 					hasHit = 1;
 					hits++;
 				}
@@ -2663,7 +2663,7 @@ Beam.prototype.getAnimation = function(fire){
 			var dest;
 			var tx; var ty; var tb; var a;
 
-			if (fire.rolls[roll] == 999){
+			if (fire.rolls[roll] == 999 || fire.rolls[roll] == 0){
 				continue;
 			}
 			else if (fire.rolls[roll] < 0){

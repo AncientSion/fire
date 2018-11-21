@@ -64,7 +64,7 @@ class DmgCalc {
 
 		$crit->notes .= $failChance.";".$chanceRoll;
 
-		$magRoll = mt_rand(1, 100);
+		$magRoll = mt_rand(1, 500);
 		$totalMag = $magRoll + $magAdd;
 		$crit->notes .= ";".$magRoll.";".$totalMag;
 
@@ -279,9 +279,9 @@ class DmgCalc {
 		$remInt = $system->getRemIntegrity();
 		$okSystem = 0;
 
-		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
+		//$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 		$negation = $fire->target->getArmour($fire, $system);
-		$dmg = DmgCalc::calcDmg($fire->weapon, $totalDmg, $negation);
+		//$dmg = DmgCalc::calcDmg($fire->weapon, $totalDmg, $negation);
 
 		$total = 0;
 		$shield = 0;
@@ -305,7 +305,7 @@ class DmgCalc {
 			$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 			$dmg = DmgCalc::calcDmg($fire->weapon, $totalDmg, $negation);
 
-			//Debug::log("hits ".$i.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"].", armourDmg: ".$dmg->armourDmg);
+			Debug::log("hits ".$i.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"].", armourDmg: ".$dmg->armourDmg);
 
 			$total += $totalDmg;
 			$shield += $dmg->shieldDmg;
@@ -316,7 +316,7 @@ class DmgCalc {
 		}
 
 		$dmg->notes .= ("v".($hits*$fire->weapon->linked).";");
-		Debug::log("notes ".$dmg->notes);
+		//Debug::log("notes ".$dmg->notes);
 		$dmg->shieldDmg = $shield;
 		$dmg->armourDmg = $armour;
 		$dmg->systemDmg = $struct;

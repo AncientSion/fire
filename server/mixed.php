@@ -491,7 +491,7 @@ class Minor extends Mixed {
 			"x" => $this->actions[sizeof($this->actions)-1]->x,
 			"y" => $this->actions[sizeof($this->actions)-1]->y,
 			"delay" => 0,
-			"facing" => $this->getCurFacing(),
+			"facing" => $this->facing,
 			"thrust" => $this->getCurSpeed(),
 			"rolling" => $this->isRolling(),
 			"rolled" => $this->isRolled(),

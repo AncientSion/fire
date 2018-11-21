@@ -28,9 +28,9 @@ class Saggitarius extends Medium {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 450, 15, 1);
-		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 0, 180, 48, array(array("Naga", 16, 4), array("Cyclops", 12, 2), array("Titan", 8, 2)));
+		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 0, 180, 48, array(array("Naga", 20, 4), array("Cyclops", 10, 2), array("Titan", 8, 2)));
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 0, 180, 48, array(array("Naga", 16, 4), array("Cyclops", 12, 2), array("Titan", 8, 2)));
+		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 0, 180, 48, array(array("Naga", 20, 4), array("Cyclops", 10, 2), array("Titan", 8, 2)));
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 325, 13);
@@ -39,9 +39,9 @@ class Saggitarius extends Medium {
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 450, 15, 1);
-		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 180, 360, 48, array(array("Naga", 16, 4), array("Cyclops", 12, 2), array("Titan", 8, 2)));
+		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 180, 360, 48, array(array("Naga", 20, 4), array("Cyclops", 10, 2), array("Titan", 8, 2)));
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 180, 360, 48, array(array("Naga", 16, 4), array("Cyclops", 12, 2), array("Titan", 8, 2)));
+		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 180, 360, 48, array(array("Naga", 20, 4), array("Cyclops", 10, 2), array("Titan", 8, 2)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -71,16 +71,28 @@ class Saggitarius extends Medium {
 					"loads" => 
 					array(
 						array(
-							"systemid" => 13,
-							"display" => "Port Missile Launcher",
+							"systemid" => 10,
+							"display" => "Port A Missile Launcher",
 							"name" => "Naga",
-							"amount" => 4
+							"amount" => 12
 						),
 						array(
-							"systemid" => 17,
-							"display" => "Starboard Missile Launcher",
+							"systemid" => 12,
+							"display" => "Port B Missile Launcher",
 							"name" => "Naga",
-							"amount" => 4
+							"amount" => 12
+						)
+						array(
+							"systemid" => 17,
+							"display" => "Starboard A Missile Launcher",
+							"name" => "Naga",
+							"amount" => 12
+						),
+						array(
+							"systemid" => 19,
+							"display" => "Starboard B Missile Launcher",
+							"name" => "Naga",
+							"amount" => 12
 						)
 					)
 				),
@@ -88,20 +100,32 @@ class Saggitarius extends Medium {
 					"active" => 0,
 					"chance" => 30,
 					"cost" => 70,
-					"notes" => "Needle Outfit",
+					"notes" => "Cyclops Outfit",
 					"units" => array(),
 					"loads" => 
 					array(
 						array(
-							"systemid" => 13,
-							"display" => "Port Missile Launcher",
-							"name" => "Needle",
+							"systemid" => 10,
+							"display" => "Port A Missile Launcher",
+							"name" => "Cyclops",
 							"amount" => 6
 						),
 						array(
+							"systemid" => 12,
+							"display" => "Port B Missile Launcher",
+							"name" => "Cyclops",
+							"amount" => 6
+						)
+						array(
 							"systemid" => 17,
-							"display" => "Starboard Missile Launcher",
-							"name" => "Needle",
+							"display" => "Starboard A Missile Launcher",
+							"name" => "Cyclops",
+							"amount" => 6
+						),
+						array(
+							"systemid" => 19,
+							"display" => "Starboard B Missile Launcher",
+							"name" => "Cyclops",
 							"amount" => 6
 						)
 					)

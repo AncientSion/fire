@@ -499,7 +499,7 @@
 
 			//Debug::log("totalOdds: ".$total);
 			$add = $this->settings->reinforceAmount;
-			$add = 5;
+			//$add = 5;
 			while ($add){
 				$current = 0;
 				$roll = mt_rand(0, $total);
@@ -2044,7 +2044,7 @@
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->destroyed || $this->ships[$i]->flight || $this->ships[$i]->salvo || $this->ships[$i]->obstacle){continue;}
 			if (!strlen($this->ships[$i]->notes)){continue;}
-			$data[] = array("id" => $this->ships[$i]->id, "status" => $this->ships[$i]->status, "notes" => $this->ships[$i]->notes);
+			$data[] = array("id" => $this->ships[$i]->id, "withdraw" => $this->ships[$i]->withdraw, "notes" => $this->ships[$i]->notes);
 		}
 		return $data;
 	}

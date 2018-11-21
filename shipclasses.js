@@ -702,8 +702,9 @@ Ship.prototype.doUndoLastAction = function(pos){
 	this.alertCollisions();
 }
 
-Ship.prototype.moveInVector = function(dist){
+Ship.prototype.moveInVector = function(){
 	var pos = this.getPlannedPos();
+	var dist = this.getRemSpeed();
 	var goal = getPointInDir(dist, this.getPlannedFacing(), pos.x, pos.y);
 		this.issueMove(goal, dist);
 }
@@ -1712,7 +1713,6 @@ Ship.prototype.animateSelfDeployIn = function(){
 		ctx.rotate(-this.getDrawFacing() * Math.PI/180);
 		ctx.translate(-this.drawX, -this.drawY);
 	}
-
 }
 
 Ship.prototype.animateDeployOut = function(){
@@ -4334,8 +4334,8 @@ Ship.prototype.drawVectorUI = function(){
 		var top = p.y * cam.z  + cam.o.y - $(ele).height()/2;
 
 		$(ele)
-			.data("shipid", this.id)
-			.data("dist", remSpeed)
+			//.data("shipid", this.id)
+			//.data("dist", remSpeed)
 			//.html("<div style='margin-left: 4px; margin-top: 7px'>"+rem+"<div>")
 			.html("<div>"+remSpeed+"</div>")
 			.css("left", left)
