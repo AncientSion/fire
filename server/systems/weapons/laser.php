@@ -3,6 +3,7 @@
 class Laser extends Weapon {
 	public $type = "Beam";
 	public $animation = "beam";
+	public $rakeTime = 35;
 	public $beamWidth;
 	public $rakes;
 	public $laser = 1;
@@ -156,6 +157,7 @@ class NeutronLaser extends Laser {
 	public $name = "NeutronLaser";
 	public $display = "Neutron Laser";
 	public $animColor = "#ffeb3e";
+	public $rakeTime = 35;
 	public static $prio = 0;
 	public $beamWidth = 2;
 	public $minDmg = 96;

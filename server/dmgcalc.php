@@ -64,7 +64,7 @@ class DmgCalc {
 
 		$crit->notes .= $failChance.";".$chanceRoll;
 
-		$magRoll = mt_rand(1, 500);
+		$magRoll = mt_rand(1, 100);
 		$totalMag = $magRoll + $magAdd;
 		$crit->notes .= ";".$magRoll.";".$totalMag;
 
@@ -863,19 +863,11 @@ class DmgCalc {
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
 			$systemDmg = round($totalDmg - $shieldDmg - $armourDmg);
-			$armourDmg += floor(($totalDmg-$shieldDmg) / 100 * $weapon->melt);
-
-//		shield	round(min(16, 3))
-//		armour 	round(min(16-3, 9))
-//		struct	round (16-3-9)
-//		armour	+= floor(16 / 100 * 50)
-
-//		shield	3
-//		armour	9
-//		struct	4
-//		armouzr	8
 
 		}
+
+		$armourDmg += floor(($totalDmg-$shieldDmg) / 100 * $weapon->melt);
+
 
 		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $systemDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
 	}

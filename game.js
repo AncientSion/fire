@@ -1455,8 +1455,8 @@ this.doAnimateMovement = function(){
 
 					html += "<span class='yellow'>" + ((type == "p") ? " Passed ! (-30 on final severity)" : " Failed !") +"</span></br>";
 
-				if (globals[j].type == "Rout " || globals[j].type == "Morale" && globals[j].value != 0){
-					html += "The fleet is subject to <span class='yellow'>" + (globals[j].type == "Rout" ? "a complete rout." : globals[j].value + " % " + globals[j].type) + ".</span>";
+				if (globals[j].type == "Rout" || globals[j].type == "Morale" && globals[j].value != 0){
+					html += "The fleet is subject to <span class='yellow'>" + (globals[j].type == "Rout" ? "a complete rout" : globals[j].value + " % " + globals[j].type) + ".</span>";
 				}
 				else {
 					html += "The fleet suffers no effect.</span>";
@@ -2921,12 +2921,14 @@ Game.prototype.animateDeployIn = function(){
 				this.ships[i].draw();
 				continue;
 			}
+		}
 
-			if (this.ships[i].deployAnim[1]){
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].deployAnim[1] && !this.ships[i].deployed){
 				doing = 1; done = 0;
 				this.ships[i].animateSelfDeployIn();
 				break;
-			} else continue;
+			}
 		}
 
 		ctx.setTransform(1,0,0,1,0,0);
@@ -3134,7 +3136,6 @@ Game.prototype.getUserMaxFocus = function(i){
 
 Game.prototype.showFleetMorale = function(e, userid){
 
-	// scope 0 start, 1 morale test, 2 unit loss, 3 non trigger manual withdrawal
 	var i;
 	for (i = 0; i < this.playerstatus.length; i++){
 		if (this.playerstatus[i].userid == userid){break;}
@@ -3144,24 +3145,28 @@ Game.prototype.showFleetMorale = function(e, userid){
 		.append($("<tr>").append($("<th>").html("Fleet Morale Overview - " + this.playerstatus[i].username).attr("colSpan", 2)))
 		.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 10)))
 		.append($("<tr>")
-			.append($("<td>").html("Initial Morale"))
+			.append($("<td>").html("Initial Morale / " + this.playerstatus[i].morale))
 			.append($("<td>").css("width", 40).html(this.playerstatus[i].globals[0].value))
 		)
 
+	// scope 0 start, 1 unit loss/gain, 2 morale test, 3 non trigger manual withdrawal
 	for (var j = 1; j < this.playerstatus[i].globals.length; j++){
-		//if (this.playerstatus[i].globals[j].type != "Morale"){continue;}
-		//if (this.playerstatus[i].globals[j].value == 0){continue;}
 		var crit = this.playerstatus[i].globals[j];
 		var html = "";
 
 		if (crit.scope == 2){
 			html = "Morale Test";
 		} else html = crit.text;
+
+		var string = !crit.value ? crit.notes : crit.value > 0 ? "+" + crit.value : crit.value;
+		if (crit.type == "Rout"){
+			string = "Full Rout";
+		}
 		
 		table.append($("<tr>")
 			.append($("<td>").html(html + " (Turn " + crit.turn+")"))
-			.append($("<td>").html(!crit.value ? crit.notes : crit.value > 0 ? "+" + crit.value  : crit.value)))
-			//.append($("<td>").html(crit.value ? crit.notes : crit.value > 0 ? "+" + crit.value  : crit.value)))
+			.append($("<td>").html(string)))
+			//.append($("<td>").html(crit.value ? crit.notes : crit.value > 0 ? "+" + crit.value : crit.value)))
 	}
 
 	table
@@ -3179,6 +3184,7 @@ Game.prototype.showFleetMorale = function(e, userid){
 
 	var div = $("<div>").attr("id", "sysDiv")
 		.css("top", e.clientY + 30).css("left", e.clientX - 50)
+		.css("width", 280)
 		.append(table);
 
 	for (var i = 0; i < this.const.fleetMoraleEffects.length; i++){
@@ -3192,7 +3198,7 @@ Game.prototype.showFleetMorale = function(e, userid){
 }
 
 Game.prototype.hideFleetMorale = function(){
-	$("#sysDiv").remove();
+	$("#sysDiv").css("width", 240).remove();
 }
 
 Game.prototype.showFocusInfo = function(e, userid){

@@ -1040,7 +1040,7 @@ System.prototype.setBonusNegation = function(value){
 	}
 }
 
-System.prototype.getMount = function(){
+System.prototype.getMountArmour = function(){
 	if (this.mount.length){
 		return this.mount + " / " + this.armour + (this.bonusNegation ? (" <span class='yellow'>+" + this.bonusNegation) + "</span>" : "");
 	} else return this.armour;
@@ -1316,6 +1316,7 @@ PrimarySystem.prototype.getSysDiv = function(){
 	}
 	else if (unit.ship){
 		table.append($("<tr>").append($("<td>").css("width", "55%").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
+		table.append($("<tr>").append($("<td>").attr("colSpan", 2).html("Armour equals facing section armour")))
 		table.append($("<tr>").append($("<td>").html("Hit Chance")).append($("<td>").html(this.hitPct + "%")));
 		table.append($("<tr>").append($("<td>").html("Max Damage / hit")).append($("<td>").html(this.maxDmg)));
 		table.append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html(this.getEMDmg())))
@@ -1576,9 +1577,10 @@ Sensor.prototype.getEWModeEffect = function(){
 Sensor.prototype.setState = function(){
 	System.prototype.setState.call(this);
 
-	if (game.phase == -1 && !this.locked){
+	//if (this.parentId == 1){console.log("ding");
 
-		//console.log("active: " + this.getActiveState());
+	if (game.phase == -1 && !this.locked){
+		
 		this.setEW({
 			angle: -1,
 			dist: Math.ceil(this.getOutput() / Math.pow(180/game.const.ew.len, 1/game.const.ew.p)),
@@ -2070,7 +2072,7 @@ Weapon.prototype.getSysDiv = function(){
 		if (game.getUnit(this.parentId).ship){
 			table.append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
 			if (this.getEMDmg()){table.append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html(this.getEMDmg())));}
-			table.append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
+			table.append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMountArmour())));
 		}
 		table.append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
 		if (this.boostEffect.length){
@@ -2461,7 +2463,10 @@ Particle.prototype.getAnimation = function(fire){
 			var dest;
 			var tx, ty;
 
-			if (fire.rolls[roll] < 0){
+			if (fire.rolls[roll] == 999 || fire.rolls[roll] == 0){
+				continue;
+			}
+			else if (fire.rolls[roll] < 0){
 				if (fire.rolls[roll] >= -99){ // blocked
 					dest = game.getObstructionPoint(fire);
 					tx = dest.x;
@@ -2981,7 +2986,7 @@ Launcher.prototype.getSysDiv = function(){
 	if (!this.tiny){
 		if (game.getUnit(this.parentId).ship){
 			$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
-			$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
+			$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMountArmour())));
 		}
 		$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
 	}
@@ -3808,7 +3813,7 @@ Bulkhead.prototype.getSysDiv = function(){
 		th.colSpan = 2; th.innerHTML = this.display; th.style.width = "40%"; tr.appendChild(th); table.appendChild(tr);
 
 	$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
-	$(table).append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.getMount())));
+	$(table).append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.getMountArmour())));
 	div.appendChild(table);		
 	return div;
 }
@@ -4320,7 +4325,7 @@ Hangar.prototype.getSysDiv = function(){
 		.append($("<table>")
 			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.display).css("width", "40%")))
 			.append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)))
-			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.getMount())))
+			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.getMountArmour())))
 			.append($("<tr>").append($("<td>").html("Capacity")).append($("<td>").html("up to " + this.capacity + " units")))
 			.append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html(this.getOutput() + " each " + this.reload + " turns"))))
 	this.attachSysMods(div);

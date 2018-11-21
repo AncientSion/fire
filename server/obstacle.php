@@ -37,7 +37,7 @@ class Obstacle extends Minor {
 	}
 
 	public function getDeployState($turn){
-		Debug::log("getDeployState for ".$this->id.", destroyed: ".$this->destroyed);
+		//Debug::log("getDeployState for ".$this->id.", destroyed: ".$this->destroyed);
 		return $this->getEndState($turn);
 	}
 

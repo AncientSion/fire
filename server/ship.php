@@ -213,20 +213,11 @@ class Ship {
 						$this->doUnpowerAllSystems($turn);
 					}
 					break;
-			/*
-				case "Sensor":
-					if ($this->withdraw){
-						$this->primary->systems[$i]->states = [0, 1];
-						$this->primary->systems[$i]->locked = 1;
-					}
-					break;
-			*/
 			}
 		}
 
 		$this->getSystemByName("Engine")->setPowerReq($this->mass);
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
-
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
@@ -342,6 +333,12 @@ class Ship {
 			return floor($this->getBaseImpulse() / 8);
 	}
 
+	public function setDEW(){
+		$sensor = $this->getSystemByName("Sensor");
+		//$sensor->locked = 1;
+		$sensor->states = array(0, 1);
+	}
+
 	public function hideAllPowers($turn){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = sizeof($this->structures[$i]->powers)-1; $j >= 0; $j--){
@@ -361,9 +358,6 @@ class Ship {
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 			if ($this->primary->systems[$i]->name == "Sensor"){
 				$this->primary->systems[$i]->hideEW($turn);
-				if ($this->withdraw){
-					$this->primary->systems[$i]->states = array(0, 1);
-				}
 			}
 			for ($j = sizeof($this->primary->systems[$i]->powers)-1; $j >= 0; $j--){
 				if ($this->primary->systems[$i]->powers[$j]->turn == $turn && $this->primary->systems[$i]->powers[$j]->type != 2){
@@ -437,7 +431,7 @@ class Ship {
 	}
 
 	public function getDeployState($turn){
-		Debug::log("getDeployState for ".$this->id.", destroyed: ".$this->destroyed);
+		//Debug::log("getDeployState for ".$this->id.", destroyed: ".$this->destroyed);
 		return array(
 			"id" => $this->id,
 			"withdraw" => $this->withdraw,
@@ -863,10 +857,10 @@ class Ship {
 
 		if (sizeof($fire->rolls)){
 			for ($i = 0; $i < sizeof($fire->rolls); $i++){
-				Debug::log("roll ".$fire->rolls[$i]);
+				//Debug::log("roll ".$fire->rolls[$i]);
 			}
 			$fire->notes .= implode(";", $fire->rolls).";";
-			Debug::log("notes ".$fire->notes);
+			//Debug::log("notes ".$fire->notes);
 		}
 		$fire->resolved = 1;
 	}

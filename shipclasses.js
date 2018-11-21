@@ -2267,6 +2267,10 @@ Ship.prototype.getCurMorale = function(){
 
 Ship.prototype.getRelativeMoraleValue = function(){
 	if (game.playerstatus){
+		return (this.moraleCost);
+	} else return "";
+	
+	if (game.playerstatus){
 		return (this.moraleCost + " / " + Math.floor((this.moraleCost / game.getPlayerStatus(this.userid).morale)*100) + "%");
 	} else return "";
 }
@@ -3026,7 +3030,7 @@ Ship.prototype.expandDiv = function(div){
 	//$(structContainer).append($("<div>").addClass("unusedPower").html(this.getSystemByName("Reactor").getOutput()));
 
 	var top = 0;
-	var left = structContainer.width() - 40;
+	var left = structContainer.width() - 45;
 	if (this.structures.length == 3 && this.structures[0].start == 0){
 		top = structContainer.height() - 65;
 	}
@@ -4565,7 +4569,7 @@ Ship.prototype.getSelfExplo = function(){
 
 		var explos = {u: this, anims: []};
 
-		var amount = 22 + (this.traverse * 8);
+		var amount = 8 + (this.traverse * 3);
 
 		for (var j = 0; j < amount; j++){
 			explos.anims.push({
@@ -4613,7 +4617,7 @@ Ship.prototype.hasPassiveJamming = function(){
 }
 
 Ship.prototype.getJammingString = function(){
-	return ("---- Passing jamming detected (<span class='yellow'>" + this.getJammingString() + "% chance to miss</span>) ----");
+	return ("---- Passing jamming detected (<span class='yellow'>" + this.getJammerStrength() + "% chance to miss</span>) ----");
 }
 
 Ship.prototype.getJammerStrength = function(){

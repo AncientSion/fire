@@ -94,7 +94,6 @@ class System {
 	}
 
 	public function setArmourData($rem){
-		$this->armourMod = 1;
 		$this->armour = floor($rem * $this->armourMod);
 	}
 

@@ -206,7 +206,6 @@
 		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
 			if ($this->turn == 1 && $this->phase == -1){return $this->ships;}
 
-
 			if ($this->phase == 3){$this->ships[$i]->focus = 0;}
 
 			if ($this->ships[$i]->available == $this->turn && $this->phase == -1){
@@ -266,6 +265,20 @@
 				} break;
 			default: break;
 		}
+
+
+
+		switch ($this->phase){
+			case -1: 
+				for ($i = 0; $i < sizeof($this->ships); $i++){
+					if ($this->ships[$i]->withdraw){
+						$this->ships[$i]->setDEW();
+					}
+				}
+			default: break;
+		}
+
+
 
 		return $this->ships;
 	}
@@ -665,12 +678,16 @@
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (($this->ships[$i]->ship || $this->ships[$i]->squad) && $this->ships[$i]->available == $this->turn){
 				$order = $this->ships[$i]->actions[0];
-				$output = $this->ships[$i]->getSystemByName("Sensor")->getOutput($this->turn);
-				$shift = round(($this->ships[$i]->size - $this->ships[$i]->squad*15) / $output*500*$mod, 2);
+				$sensor = $this->ships[$i]->getSystemByName("Sensor");
+				$mod = 1 + ($sensor->getBoostLevel($this->turn)*0.3);
+				$output = $sensor->output;
+
+				$shift = round(45 / ($output * $mod) * (650 - ($this->ships[$i]->squad * 150))); 
 				$aShift = ceil($shift);
-				$pShift = ceil($shift*2);
-				//Debug::log("jumpin: #".$this->ships[$i]->id.", class: ".$this->ships[$i]->name.", size: ".$this->ships[$i]->size.", sensor: ".$output.", ordered to: ".$order->x."/".$order->y.", shiftPotential: ".$shift."%");
-				//Debug::log($this->ships[$i]->name.", aShift: ".$aShift."°, pShift: ".$pShift."px");
+				$pShift = ceil($shift*2.5);
+
+				//Debug::log("jumpin: #".$this->ships[$i]->id.", class: ".$this->ships[$i]->name.", size: ".$this->ships[$i]->size.", sensor: ".$mod.", ordered to: ".$order->x."/".$order->y.", shiftPotential: ".$shift."%");
+				Debug::log($this->ships[$i]->name.", mod: ".$mod.", shift ".$shift.", aShift: ".$aShift."°, pShift: ".$pShift."px");
 
 				$aShift = mt_rand(-$aShift, $aShift);
 				$xShift = mt_rand(-$pShift, $pShift);
@@ -1771,10 +1788,6 @@
 		//this->turn = 1;
 
 		$do = 1;
-
-		//$this->getUnit(5)->destroyed = 1;
-		//$this->playerstatus[1]["globals"][] = array("scope" => 1, "value" => -22);
-
 
 		while ($do){
 			Debug::log("-----------------testFleetMorale  $this->turn/$this->phase");

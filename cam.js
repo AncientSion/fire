@@ -21,6 +21,7 @@ window.cam = {
 	},
 
 	setCamFocus(focus, instant){
+		instant = 1;
 		game.animating = 2;
 
 		this.tx = Math.floor(res.x/2 - (focus.x*cam.z));
@@ -70,16 +71,6 @@ window.cam = {
 			return true;
 		}
 		return false;
-	},
-
-	setFocusToPos(pos){
-		console.log("------setFocusToPos");
-		console.log(this.c);
-		console.log(this.o);
-		this.o.x = Math.floor(res.x/2 - (pos.x*cam.z));
-		this.o.y = Math.floor(res.y/2 - (pos.y*cam.z));
-		this.c = pos;
-		game.redraw();
 	},
 
 	setZoom: function(fire){

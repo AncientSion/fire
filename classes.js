@@ -1207,13 +1207,6 @@ FireOrder.prototype.addLogStartEntry = function(log){
 	var hull = 0;
 	var shield = 0;
 
-	var req = this.req.slice();
-		req.sort(function(a, b){return a-b});
-	var reqString = this.getReqString(req);
-
-	var rolls = this.rolls.slice().sort((a, b) => a-b);
-	var rollString = this.getRollsString(rolls, req);
-
 	if (this.shooter.salvo){
 		hits = this.hits.reduce((a, b) => a+b, 0);
 	}
@@ -1267,13 +1260,13 @@ FireOrder.prototype.addLogStartEntry = function(log){
 
 	this.weapon.attachLogHover(this, tr);
 
-	var req = this.req.slice();
-		req.sort(function(a, b){return a-b});
-	var reqString = this.getReqString(req);
 
 	var targetString = "";
 	if (this.target){targetString = "<font color='" + this.target.getCodeColor() + "'>" + this.target.name + " #" + this.target.id + "</font>";}
 	else targetString = "";
+
+
+	var reqString = this.getReqString();
 
 	tr
 	.append($("<td>").html(this.type))
@@ -1350,10 +1343,7 @@ FireOrder.prototype.assembleDmgData = function(){
 FireOrder.prototype.addLogRollsEntry = function(log, rolls){
 	if (this.weapon.aoe){return false;}
 
-	var req = this.req.slice();
-		req.sort(function(a, b){return a-b});
-	var reqString = this.getReqString(req);
-	var rollString = this.getRollsString(rolls, req);
+	var rollString = this.getRollsString(rolls);
 
 	$(log).append(
 		$("<tr>")
@@ -1411,7 +1401,11 @@ FireOrder.prototype.addLogShieldEntry = function(log, shield){
 	return true;
 }
 
-FireOrder.prototype.getRollsString = function(rolls, allReq){
+FireOrder.prototype.getRollsString = function(rolls){
+	var allReq = this.req.slice();
+		allReq = allReq.filter(e => e != 0);
+		allReq.sort(function(a, b){return a-b});
+
 	rolls.sort((a, b) => a-b);
 	var req = 0;
 	if (allReq.length == 1 && allReq[0] == 0){return "";} //area emine auto hit
@@ -1468,7 +1462,11 @@ FireOrder.prototype.getRollsString = function(rolls, allReq){
 	return string;
 }
 
-FireOrder.prototype.getReqString = function(req){
+FireOrder.prototype.getReqString = function(){
+	var req = this.req.slice();
+		req = req.filter(e => e != 0);
+		req.sort(function(a, b){return a-b});
+
 	//console.log(req);
 	var string = "";
 	if (req.length == 1){
@@ -1490,25 +1488,4 @@ FireOrder.prototype.getReqString = function(req){
 	}
 
 	return (string == "0" ? "" : string + " %"); //area emine auto hit
-}
-
-FireOrder.prototype.getRollsStrinpg = function(rolls, req){
-	var string = "";
-	for (var i = 0; i < rolls.length; i++){
-		if (rolls[i] <= req){
-			string += "<u>" + rolls[i] + "</u>";
-		} else string += rolls[i];
-
-		string += " / ";
-	}
-	return string;
-}
-
-FireOrder.prototype.getReqStringp = function(req){
-	var string = req[0];
-
-	if (req.length > 1 && req[0] != req[req.length-1]){
-		string = req[0] + " - " + req[req.length-1] + " %";
-	} else string += " %";
-	return string;
 }
