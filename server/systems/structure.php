@@ -175,6 +175,7 @@ class Primary {
 
 	public function addDamage($dmg){
 		if ($dmg->new){
+			Debug::log("adding new dmg");
 			if ($dmg->systemid == 1){
 				$dmg->hullDmg += $dmg->systemDmg;
 				$dmg->systemDmg = 0;
@@ -186,7 +187,9 @@ class Primary {
 			$this->damages[] = $dmg;
 		}
 
+		Debug::log("rem: ".$this->remaining);
 		$this->remaining -= $dmg->hullDmg;
+		Debug::log("rem new: ".$this->remaining);
 
 		if ($this->remaining < 1){
 			Debug::log("remaming : ".$this->remaining);
