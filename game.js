@@ -3161,11 +3161,10 @@ Game.prototype.showFleetMorale = function(e, userid){
 			descrip = crit.text;
 			val = crit.value > 0 ? ("+" + crit.value) : crit.value;
 		}
-		else 
+		else {
 			descrip = "Morale Test";
 			val = crit.value != 0 ? crit.value > 0 ? ("+" + crit.value) : crit.value : "";
 		}
-
 
 		table.append($("<tr>")
 			.append($("<td>").html(descrip + " (Turn " + crit.turn+")"))
