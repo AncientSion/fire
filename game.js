@@ -3808,15 +3808,18 @@ Game.prototype.doResolveFire = function(){
 }
 
 Game.prototype.hideUI = function(){
+	ui.upperGUI.find(".playerInfoWrapper").hide();
 	ui.combatLogWrapper.hide();
 	ui.unitSelector.hide();
 	$(".chatWrapper").hide();
 	$("#leftUnitWrapper").hide();
 	$(".optionsWrapper").hide();
+
 }
 
 Game.prototype.showUI = function(width){
 
+	ui.upperGUI.find(".playerInfoWrapper").show();
 	ui.unitSelector.show();
 	ui.combatLogWrapper.show();
 	this.setLeftWrapperVisibility();

@@ -22,6 +22,7 @@ window.ticks = 0;
 
 $(document).ready(function(){
 	window.ui = {
+		upperGUI: $("#upperGUI"),
 		popupWrapper: $("#popupWrapper"),
 		instructWrapper: $("#instructWrapper"),
 		collideWrapper: $("#collideWrapper"),
