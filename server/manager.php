@@ -682,12 +682,12 @@
 				$mod = 1 + ($sensor->getBoostLevel($this->turn)*0.3);
 				$output = $sensor->output;
 
-				$shift = round(45 / ($output * $mod) * (650 - ($this->ships[$i]->squad * 150))); 
+				$shift = round(30 / ($output * $mod) * (650 - ($this->ships[$i]->squad * 150))); 
 				$aShift = ceil($shift);
-				$pShift = ceil($shift*2.5);
+				$pShift = ceil($shift*3.5);
 
 				//Debug::log("jumpin: #".$this->ships[$i]->id.", class: ".$this->ships[$i]->name.", size: ".$this->ships[$i]->size.", sensor: ".$mod.", ordered to: ".$order->x."/".$order->y.", shiftPotential: ".$shift."%");
-				Debug::log($this->ships[$i]->name.", mod: ".$mod.", shift ".$shift.", aShift: ".$aShift."°, pShift: ".$pShift."px");
+				//Debug::log($this->ships[$i]->name.", mod: ".$mod.", shift ".$shift.", aShift: ".$aShift."°, pShift: ".$pShift."px");
 
 				$aShift = mt_rand(-$aShift, $aShift);
 				$xShift = mt_rand(-$pShift, $pShift);
