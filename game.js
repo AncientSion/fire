@@ -2651,6 +2651,8 @@ Game.prototype.drawShips = function(){
 		this.ships[i].draw();
 	}
 
+	if (game.animating == 1){return;} // 2 -> cam, 1 move/fire -> dont draw
+	
 	for (var i = 0; i < this.incoming.length; i++){
 		this.incoming[i].drawIncomingPreview();
 	}
