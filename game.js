@@ -3163,7 +3163,7 @@ Game.prototype.showFleetMorale = function(e, userid){
 		}
 		else {
 			descrip = "Morale Test";
-			val = crit.value != 0 ? crit.value > 0 ? ("+" + crit.value) : crit.value : "";
+			val = crit.value != 0 ? crit.value > 0 ? ("+" + crit.value) : crit.value : "/";
 		}
 
 		table.append($("<tr>")
