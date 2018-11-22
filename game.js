@@ -3154,20 +3154,22 @@ Game.prototype.showFleetMorale = function(e, userid){
 	// scope 0 start, 1 unit loss/gain, 2 morale test, 3 non trigger manual withdrawal
 	for (var j = 1; j < this.playerstatus[i].globals.length; j++){
 		var crit = this.playerstatus[i].globals[j];
-		var html = "";
+		var descrip = "";
+		var val = "";
 
-		if (crit.scope == 2){
-			html = "Morale Test";
-		} else html = crit.text;
-
-		var string = !crit.value ? crit.notes : crit.value > 0 ? "+" + crit.value : crit.value;
-		if (crit.type == "Rout"){
-			string = "Full Rout";
+		if (crit.text){
+			descrip = crit.text;
+			val = crit.value > 0 ? ("+" + crit.value) : crit.value;
 		}
-		
+		else 
+			descrip = "Morale Test";
+			val = crit.value <> 0 ? crit.value > 0 ? ("+" + crit.value) : crit.value : "";
+		}
+
+
 		table.append($("<tr>")
-			.append($("<td>").html(html + " (Turn " + crit.turn+")"))
-			.append($("<td>").html(string)))
+			.append($("<td>").html(descrip + " (Turn " + crit.turn+")"))
+			.append($("<td>").html(val)))
 			//.append($("<td>").html(crit.value ? crit.notes : crit.value > 0 ? "+" + crit.value : crit.value)))
 	}
 
