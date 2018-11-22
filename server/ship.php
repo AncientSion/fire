@@ -826,8 +826,7 @@ class Ship {
 		if ($this->destroyed){
 			//Debug::log("STOP - resolveFireOrder #".$fire->id.", TARGET: ".get_class($this)." destroyed");
 			for ($i = 0; $i < $fire->shots; $i++){
-				$fire->cancelShotResolution($i);
-				//$fire->rolls[] = 0;
+				$fire->rolls[] = 999;
 			}
 		}
 		else if ($fire->weapon->aoe){
@@ -856,11 +855,7 @@ class Ship {
 		}
 
 		if (sizeof($fire->rolls)){
-			for ($i = 0; $i < sizeof($fire->rolls); $i++){
-				//Debug::log("roll ".$fire->rolls[$i]);
-			}
 			$fire->notes .= implode(";", $fire->rolls).";";
-			//Debug::log("notes ".$fire->notes);
 		}
 		$fire->resolved = 1;
 	}

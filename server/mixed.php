@@ -333,44 +333,6 @@ class Mixed extends Ship {
 		}
 	}
 
-	public function determineHitso($fire){
-		//Debug::log("determineHits ".get_class($this)))
-
-		for ($i = 0; $i < $fire->shots; $i++){
-			$roll = mt_rand(1, 100);
-			$fire->rolls[] = $roll;
-		}
-
-		for ($i = 0; $i < sizeof($fire->rolls); $i++){
-			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
-			else {
-				$target = $this->getHitSystem($fire);
-				$fire->subtargetid = $target->id;
-				$fire->req = $fire->shooter->calculateToHit($fire);
-				if ($fire->rolls[$i] <= $fire->req){
-					if ($target->jamming){
-						Debug::log("hit but active jammer ".$target->jamming);
-						$roll = mt_rand(1, 100);
-						if ($roll <= $fire->target->jamming){
-							Debug::log("failed jamming roll ".$roll);
-							$fire->rolls[$i] *= -1;
-						}
-						else {
-							Debug::log("passed jamming roll");
-							$fire->hits++;
-							DmgCalc::doDmg($fire, $i, $target);
-						}
-					}
-					else {
-						$fire->hits++;
-						DmgCalc::doDmg($fire, $i, $target);
-					}
-				}
-				else Debug::log("miss");
-			}
-		}
-	}
-
 	public function determineObstacleHits($fire){
 		//Debug::log("determineObstacleHits ".get_class($this).", shots ".$fire->shots.", req ".$fire->req);
 
