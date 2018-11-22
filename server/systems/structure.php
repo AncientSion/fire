@@ -189,8 +189,10 @@ class Primary {
 		$this->remaining -= $dmg->hullDmg;
 
 		if ($this->remaining < 1){
+			Debug::log("remaming : ".$this->remaining);
 			$dmg->hullDmg += $this->remaining;
 			$this->destroyed = 1;
+			Debug::log("dead: ".$this->destroyed);
 		}
 	}
 

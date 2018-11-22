@@ -2288,7 +2288,7 @@ Ship.prototype.showUnitMoraleDiv = function(e){
 			.append($("<tr>")
 				.append($("<th>").attr("colSpan", 2).html("Morale Overview")))
 			.append($("<tr>")
-				.append($("<td>").html("Morale Value / Rel %"))
+				.append($("<td>").html("Morale Value"))
 				.append($("<td>").html(this.getRelativeMoraleValue())))
 			.append($("<tr>")
 				.append($("<td>").html("Base Morale"))

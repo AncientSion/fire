@@ -473,10 +473,8 @@ class DmgCalc {
 				$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 			);
 
-
 			$fire->damages[] = $entry;
 			$fire->target->addTopDamage($entry);
-
 
 			if ($destroyed && (!$okSystem || $system->id == 1)){
 				Debug::log("target destroyed!, abandon raking");

@@ -1577,6 +1577,7 @@ class Medium extends Ship {
 			}
 
 			if ($this->primary->isDestroyed()){
+				Debug::log("isDestroyed()!");
 				$this->destroyed = 1;}
 		}
 	}
