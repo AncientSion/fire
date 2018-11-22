@@ -1461,7 +1461,7 @@ this.doAnimateMovement = function(){
 				else {
 					html += "The fleet suffers no effect.</span>";
 				}
-				html += "</br><span>(Severity: Roll " + numbers[2] + " + " + (numbers[3]-numbers[2]) + " = " + numbers[3] +")</span></br>";
+				html += "</br><span>(D100: " + numbers[2] + ", modified by a total moral loss of " + (numbers[3]-numbers[2]) + " for a total of <span class='yellow'" + numbers[3] +"</span>)</span></br>";
 			}
 
 			if (html.length > 2){
