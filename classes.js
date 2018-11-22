@@ -1469,7 +1469,10 @@ FireOrder.prototype.getReqString = function(){
 
 	//console.log(req);
 	var string = "";
-	if (req.length == 1){
+	if (req.length == ){
+		string = "0";
+	}
+	else if (req.length == 1){
 		string = req[0];
 	}
 	else {
