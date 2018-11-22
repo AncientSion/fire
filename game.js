@@ -4100,6 +4100,19 @@ Game.prototype.handleAllFireOrders = function(){
 	console.log(this.fireOrders);
 	for (var i = 0; i < this.fireOrders.length; i++){
 		this.fireOrders[i].tr.show();
+
+		var doAnim = false;
+		for (var j = 0; j < this.fireOrders[i].anims.length){
+			if (this.fireOrders[i].anims.length > 0){
+				doAnim = true;
+			}
+		}
+
+		if (!doAnim){
+			this.fireOrders[i].animated = true;
+		}
+
+
 		if (!this.fireOrders[i].animated){
 			console.log(game.fireOrders[i]);
 			this.handleSingleFireOrder(i);

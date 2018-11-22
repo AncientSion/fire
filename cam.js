@@ -21,7 +21,7 @@ window.cam = {
 	},
 
 	setCamFocus(focus, instant){
-		instant = 1;
+		//instant = 1;
 		game.animating = 2;
 
 		this.tx = Math.floor(res.x/2 - (focus.x*cam.z));
