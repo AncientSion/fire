@@ -2567,12 +2567,8 @@ Pulse.prototype.getAnimation = function(fire){
 			roll++;
 			var hasHit = 0;
 			var dest;
-			if (fire.hits[i] > j){
-				hasHit = 1;
-				hits++;
-			}
-
 			var tx, ty;
+			
 			if (fire.rolls[roll] == 999 || fire.rolls[roll] == 0){
 				continue;
 			}
