@@ -270,7 +270,7 @@ class FireOrder {
 
 	public function cancelShotResolution($i){
 		Debug::log("cancelShotResolution from shot $i");
-		for ($j = $i; $j < sizeof($this->shots); $j++){
+		for ($j = $i; $j <= $this->rolls; $j++){
 			$this->rolls[$j] = 999;
 		}
 	}
