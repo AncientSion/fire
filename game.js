@@ -1532,6 +1532,7 @@ this.doAnimateMovement = function(){
 			$("#phaseSwitchDiv").click(function(){
 				game.draw();
 				$(this).hide();
+				ui.upperGUI.find(".playerInfoWrapper").hide();
 				game.resetImageData();
 				game.redraw();
 				game.timeout = setTimeout(function(){
