@@ -286,7 +286,7 @@ Ship.prototype.doDeploy = function(pos){
 
 		var shipId = this.id;
 		var table = $("#deployTable").find("tr").each(function(i){
-			if ($(this).data("shipid") == shipId){
+			if ($(this).data("unitid") == shipId){
 				$(this).remove();
 				return;
 			}
@@ -1536,15 +1536,15 @@ Ship.prototype.getCodeColor = function(){
 Ship.prototype.attachLogEntry = function(html){
 	$("#combatLog").find("tbody")
 		.append($("<tr>")
-			.data("shipid", this.id)
+			.data("unitid", this.id)
 			.hover(
 				function(){
 					var data = $(this).data();
-					game.getUnit($(this).data("shipid")).doHighlight()
+					game.getUnit($(this).data("unitid")).doHighlight()
 				},
 				function(){
 					var data = $(this).data();
-					game.getUnit($(this).data("shipid")).highlight = 0;
+					game.getUnit($(this).data("unitid")).highlight = 0;
 					game.redraw();
 				}
 			)
@@ -1630,7 +1630,7 @@ Ship.prototype.createDeployEntry = function(){
 	this.attachLogEntry("<th colSpan=9><span>" + this.getLogTitleSpan() + " jumps into local space.</span></th>");
 	$("#combatLog").find("tbody tr").last()
 		.hover(
-			function(){game.getUnit($(this).data("shipid")).highlightJumpShift();},
+			function(){game.getUnit($(this).data("unitid")).highlightJumpShift();},
 			function(){game.redraw()}
 		)
 }
@@ -4277,7 +4277,7 @@ Ship.prototype.drawShortenTurnUI = function(){
 		var top = p.y * cam.z  + cam.o.y - $(ele).height()/2;
 
 		$(ele)
-			.data("shipid", this.id)
+			.data("unitid", this.id)
 			.data("dist", remDelay)
 			.html("<div>"+remDelay+"<div>")
 			.css("left", left)
@@ -4338,9 +4338,6 @@ Ship.prototype.drawVectorUI = function(){
 		var top = p.y * cam.z  + cam.o.y - $(ele).height()/2;
 
 		$(ele)
-			//.data("shipid", this.id)
-			//.data("dist", remSpeed)
-			//.html("<div style='margin-left: 4px; margin-top: 7px'>"+rem+"<div>")
 			.html("<div>"+remSpeed+"</div>")
 			.css("left", left)
 			.css("top", top)
@@ -4354,9 +4351,6 @@ Ship.prototype.drawVectorUI = function(){
 		var top = p.y * cam.z  + cam.o.y - $(ele).height()/2;
 
 		$(ele)
-			.data("shipid", this.id)
-			.data("dist", remSpeed)
-			//.html("<div style='margin-left: 4px; margin-top: 7px'>"+rem+"<div>")
 			.html("<div>"+remDelay+"</div>")
 			.css("left", left)
 			.css("top", top)
