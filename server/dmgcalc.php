@@ -465,10 +465,6 @@ class DmgCalc {
 				}
 				$dmg->systemDmg = $remInt;
 				Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->systemDmg.", OK for: ".$dmg->hullDmg." dmg");
-				if (!$okSystem || $system->id == 1){
-					Debug::log("target destroyed!, abandon raking");
-					break;
-				}
 			}
 
 
@@ -480,31 +476,16 @@ class DmgCalc {
 
 			$fire->damages[] = $entry;
 			$fire->target->addTopDamage($entry);
+
+
+			if ($destroyed && (!$okSystem || $system->id == 1)){
+				Debug::log("target destroyed!, abandon raking");
+				break;
+			}
 		}
 
 		Debug::log($print);
-
-
-
-
-/*
-			if (!$fire->target->squad || $rakes == $fire->weapon->rakes-1){
-				$entry = new Damage(
-					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
-					$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
-				);
-			}
-
-			if (!$fire->target->squad || !$rakes){
-				$fire->damages[] = $entry;
-				$fire->target->addTopDamage($entry);
-			}
-			else if ($rakes){
-				$enarmtry->shieldDmg += $dmg->shieldDmg; $entry->systemDmg += $dmg->systemDmg; $entry->armourDmg += $dmg->ourDmg; $entry->destroyed = $destroyed;
-			}
-		}
-		Debug::log($print);
-*/	}
+	}
 
 	public static function doFlashDmg($fire, $hit, $ignored){
 		$system;
