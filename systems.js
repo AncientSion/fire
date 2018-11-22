@@ -2566,21 +2566,32 @@ Pulse.prototype.getAnimation = function(fire){
 		for (var j = 0; j < this.shots; j++){
 			roll++;
 			var hasHit = 0;
+			var dest;
 			if (fire.hits[i] > j){
 				hasHit = 1;
 				hits++;
 			}
 
 			var tx, ty;
-
-			if (fire.rolls[roll] < 0 && fire.rolls[roll] > -100){
-				//console.log("obstacle roll");
-				var dest = game.getObstructionPoint(fire);
-				tx = dest.x;
-				ty = dest.y;
+			if (fire.rolls[roll] == 999 || fire.rolls[roll] == 0){
+				continue;
+			}
+			else if (fire.rolls[roll] < 0){
+				if (fire.rolls[roll] >= -99){ // blocked
+					dest = game.getObstructionPoint(fire);
+				}
+				else if (fire.rolls[roll] >= -199){ // jammed
+					dest = fire.target.getFireDest(fire, hasHit, hits-1);
+					dest.x += t.x;
+					dest.y += t.y;
+				}
 			}
 			else {
-				var dest = fire.target.getFireDest(fire, hasHit, hits-1);
+				if (fire.rolls[roll] > 0 && fire.rolls[roll] <= fire.req[i]){ // hit
+					hasHit = 1;
+					hits++;
+				}
+				dest = fire.target.getFireDest(fire, hasHit, hits-1);
 				tx = t.x + dest.x;
 				ty = t.y + dest.y;
 			}
