@@ -866,7 +866,10 @@ class DmgCalc {
 
 		}
 
-		$armourDmg += floor(($totalDmg-$shieldDmg) / 100 * $weapon->melt);
+		$melt = floor(($totalDmg-$shieldDmg) / 100 * $weapon->melt);
+
+		//Debug::log("Plasma, adding ".$melt);
+		$armourDmg += $melt;
 
 
 		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $systemDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);

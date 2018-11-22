@@ -28,6 +28,7 @@ window.cam = {
 		this.ty = Math.floor(res.y/2 - (focus.y*cam.z));
 
 		if (instant){
+			game.animating = false;
 			this.o.x = this.tx;
 			this.o.y = this.ty;
 			game.redraw();

@@ -679,15 +679,14 @@
 			if (($this->ships[$i]->ship || $this->ships[$i]->squad) && $this->ships[$i]->available == $this->turn){
 				$order = $this->ships[$i]->actions[0];
 				$sensor = $this->ships[$i]->getSystemByName("Sensor");
-				$mod = 1 + ($sensor->getBoostLevel($this->turn)*0.3);
+				$mod = 1 + ($sensor->getBoostLevel($this->turn)*0.25);
 				$output = $sensor->output;
 
 				$shift = round(30 / ($output * $mod) * (650 - ($this->ships[$i]->squad * 150))); 
 				$aShift = ceil($shift);
 				$pShift = ceil($shift*3.5);
 
-				//Debug::log("jumpin: #".$this->ships[$i]->id.", class: ".$this->ships[$i]->name.", size: ".$this->ships[$i]->size.", sensor: ".$mod.", ordered to: ".$order->x."/".$order->y.", shiftPotential: ".$shift."%");
-				//Debug::log($this->ships[$i]->name.", mod: ".$mod.", shift ".$shift.", aShift: ".$aShift."°, pShift: ".$pShift."px");
+				Debug::log($this->ships[$i]->name.", mod: ".$mod.", total output: ".floor($output*$mod).", shift ".$shift.", aShift: ".$aShift."°, pShift: ".$pShift."px");
 
 				$aShift = mt_rand(-$aShift, $aShift);
 				$xShift = mt_rand(-$pShift, $pShift);
@@ -1016,8 +1015,7 @@
 
 	public function setCollisionForSingleUnit($unit){
 		if ($unit->obstacle){return;}
-		//if ($unit->flight || $unit->salvo){return;}
-		Debug::log("setCollisionForSingleUnit for unit #".$unit->id);
+		//Debug::log("setCollisionForSingleUnit for unit #".$unit->id);
 		$unit->collides = array();
 		$unitPos = $unit->getTurnStartPosition();
 		$unitSpeed = $unit->getCurSpeed();
@@ -1033,7 +1031,7 @@
 			if ($distBetween > 200){continue;}
 
 
-			Debug::log("obstacle ".$obstacle->id.", pos: ".$tPos->x."/".$tPos->y.", dist between ".$distBetween);
+			//Debug::log("obstacle ".$obstacle->id.", pos: ".$tPos->x."/".$tPos->y.", dist between ".$distBetween);
 
 			for ($j = 0; $j < sizeof($unit->actions); $j++){
 				$action = $unit->actions[$j];
@@ -1096,7 +1094,7 @@
 			$string = (round($totalDist).";".$this->ships[$i]->collision.";".round($req).";");
 			$shots = ceil($this->ships[$i]->getSystem(2)->getShots($this->turn) / 100 * $totalDist);
 
-			Debug::log($req."/".$string."/".$shots);
+			//Debug::log($req."/".$string."/".$shots);
 
 			$fire = new FireOrder(
 				//$id, $gameid, $turn, $shooter, $target, $x, $y, $weapon, $shots, $req, $notes, $hits, $res

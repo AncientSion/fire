@@ -302,10 +302,10 @@ function collide(text){
     		.html("<div class='popupSingle'>" + text + "</div>")
 
 	var ox = ui.collideWrapper.width()/2;
-		oy = 600;
+	//var height = ui.collideWrapper.height();
 
     ui.collideWrapper
-		.css("top", window.innerHeight / 2 - oy)
+		.css("top", 70)
 		.css("left", window.innerWidth / 2 - ox)
 }
 

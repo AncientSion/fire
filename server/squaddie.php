@@ -16,8 +16,6 @@ class Squaddie extends Single {
 	public $ew = 0;
 	public $power = 0;
 
-	public $powers = array();
-	public $boostEffect = array();
 	public $effiency = 0;
 
 	public $bonusNegation = 0;

@@ -1604,7 +1604,7 @@
 			");
 
 			for ($i = 0; $i < sizeof($fires); $i++){
-				Debug::log("fire id: ".$fires[$i]->id.", notes: ".$fires[$i]->notes);
+				//Debug::log("fire id: ".$fires[$i]->id.", notes: ".$fires[$i]->notes);
 				$stmt->bindParam(":shots", $fires[$i]->shots);
 				$stmt->bindParam(":req", $fires[$i]->req);
 				$stmt->bindParam(":notes", $fires[$i]->notes);
@@ -2037,14 +2037,15 @@
 			//var_export($result);
 
 			$stmt = $this->connection->prepare(
-				"SELECT * FROM units WHERE userid = :userid AND destroyed = 0 AND (focus = 1 OR type = 2)"
+				"SELECT * FROM units WHERE userid = :userid AND gameid = :gameid AND destroyed = 0 AND (focus = 1 OR type = 2)"
 			);
 
 			$phaseSkip = 1;
 
 			for ($i = 0; $i < sizeof($otherPlayers); $i++){
-				Debug::log("checking userid ".$otherPlayers[$i]["userid"]);
+				//Debug::log("checking userid ".$otherPlayers[$i]["userid"]);
 				$stmt->bindParam(":userid", $otherPlayers[$i]["userid"]);
+				$stmt->bindParam(":gameid", $otherPlayers[$i]["gameid"]);
 				$stmt->execute();
 
 				if ($stmt->errorCode() == 0){

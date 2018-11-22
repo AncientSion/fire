@@ -62,7 +62,7 @@ class Ship {
 	public $blocks = array();
 	public $collisions = array();
 
-	public $turnAngle = 30;
+	public $turnAngle = 60;
 	public $slipAngle = 15;
 	public $baseImpulseCost = 30;
 	public $turnStep = 1;

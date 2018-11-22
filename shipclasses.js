@@ -570,8 +570,10 @@ Ship.prototype.drawImpulseUI = function(){
 	} else $("#minusImpulse").addClass("disabled");
 }
 
-Ship.prototype.issueMove = function(pos, dist){
-	if (this.actions.length && this.actions[this.actions.length-1].type == "move" && this.actions[this.actions.length-1].turn == game.turn){
+Ship.prototype.doIssueMove = function(pos, dist){
+	var remDelay = this.getRemDelay();
+
+	if (!remDelay && this.actions.length && this.actions[this.actions.length-1].type == "move" && this.actions[this.actions.length-1].turn == game.turn){
 		this.actions[this.actions.length-1].dist+= dist;	
 		this.actions[this.actions.length-1].x = pos.x;
 		this.actions[this.actions.length-1].y = pos.y;
@@ -587,12 +589,14 @@ Ship.prototype.issueMove = function(pos, dist){
 	if (this.actions[this.actions.length-1].type == "move"){
 		game.setCollisionData(this);
 		this.alertCollisions();
-	} else ui.collisionWrapper.hide();
+	} else ui.collideWrapper.hide();
 }
 
-
 Ship.prototype.alertCollisions = function(){
-	if (!this.collisions.length){return;}
+	if (!this.collisions.length){ 
+		ui.collideWrapper.hide();
+		return;
+	}
 	var html = "Collision Alert for " + this.name + " #" + this.id + "</br>";
 		html += "<div>" + getUnitType(this.traverse) + ", size " + this.traverse + " - collision multiplier " + game.getCollisionMod(this.traverse) + "</div>";
 
@@ -706,14 +710,14 @@ Ship.prototype.moveInVector = function(){
 	var pos = this.getPlannedPos();
 	var dist = this.getRemSpeed();
 	var goal = getPointInDir(dist, this.getPlannedFacing(), pos.x, pos.y);
-		this.issueMove(goal, dist);
+		this.doIssueMove(goal, dist);
 }
 
 Ship.prototype.moveToMaxVector = function(){
 	var pos = this.getPlannedPos();
 	var dist = this.getRemSpeed();
 	var goal = getPointInDir(dist, this.getPlannedFacing(), pos.x, pos.y);
-		this.issueMove(goal, dist);
+		this.doIssueMove(goal, dist);
 }
 
 Ship.prototype.moveToMaxTurnVector = function(){
@@ -721,7 +725,7 @@ Ship.prototype.moveToMaxTurnVector = function(){
 	var dist = this.getRemDelay();
 	var impulse = this.getRemSpeed();
 	var goal = getPointInDir(dist, this.getPlannedFacing(), pos.x, pos.y);
-	this.issueMove(goal, dist);
+	this.doIssueMove(goal, dist);
 }	
 
 Ship.prototype.moveToMaCutVector = function(){
@@ -729,7 +733,7 @@ Ship.prototype.moveToMaCutVector = function(){
 	var dist = this.getRemDelay();
 	var impulse = this.getRemSpeed();
 	var goal = getPointInDir(dist, this.getPlannedFacing(), pos.x, pos.y);
-	this.issueMove(goal, dist);
+	this.doIssueMove(goal, dist);
 }
 
 Ship.prototype.canTurn = function(){

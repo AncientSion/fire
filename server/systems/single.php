@@ -14,6 +14,8 @@ class Single {
 	public $systems = array();
 	public $damages = array();
 	public $crits = array();
+	public $powers = array();
+	public $boostEffect = array();
 	public $baseImpulse = 0;
 	public $baseHitChance = 0;
 	public $name = "";
@@ -192,7 +194,7 @@ class Single {
 	}	
 
 	public function setBonusNegation($turn){
-		if (!sizeof($this->boostEffect)){return;}
+		if (!sizeof($this->boostEffect) || $this->destroyed){return;}
 		$this->bonusNegation = $this->getBoostEffect("Armour") * $this->getBoostLevel($turn);
 	}
 
