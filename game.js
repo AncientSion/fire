@@ -4103,7 +4103,7 @@ Game.prototype.handleAllFireOrders = function(){
 
 		var doAnim = false;
 		for (var j = 0; j < this.fireOrders[i].anim.length; j++){
-			if (this.fireOrders[i].anim.length > 0){
+			if (this.fireOrders[i].anim[j].length > 0){
 				doAnim = true;
 			}
 		}
