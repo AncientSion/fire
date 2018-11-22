@@ -4286,10 +4286,10 @@ Game.prototype.animateSingleUnitExplo = function(i){
 			}
 			
 			if (game.unitExploAnims[i].entries[j].anims[k].t[0] > game.unitExploAnims[i].entries[j].anims[k].t[1] * 0.7){
-				if (game.unitExploAnims[i].entries[j].doDraw){
+				if (game.unitExploAnims[i].entries[j].u.doDraw){
 					game.unitExploAnims[i].entries[j].u.doDestroy();
 				}
-				ctx.translate(cam.o.x, cam.o.y);
+	/*			ctx.translate(cam.o.x, cam.o.y);
 				ctx.scale(cam.z, cam.z)
 				ctx.globalAlpha = 1;
 				ctx.beginPath();
@@ -4303,7 +4303,7 @@ Game.prototype.animateSingleUnitExplo = function(i){
 				ctx.fill();
 				ctx.globalCompositeOperation = "source-over";
 				ctx.setTransform(1,0,0,1,0,0);
-			}
+	*/		}
 
 			if (game.unitExploAnims[i].entries[j].anims[k].t[0] < game.unitExploAnims[i].entries[j].anims[k].t[1]){
 				game.unitExploAnims[i].entries[j].anims[k].t[0]++;

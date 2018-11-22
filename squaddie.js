@@ -410,7 +410,8 @@ Squaddie.prototype.armourOut = function(e){
 }
 
 Squaddie.prototype.doDestroy = function(){
-	this.doDraw = 0;
+	this.doDraw = false;
+	this.destroyed = true;
 	for (var i = 0; i < this.systems.length; i++){
 		//this.systems[i].destroyed = true;
 		this.systems[i].locked = true;

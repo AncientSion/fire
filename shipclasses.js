@@ -3277,18 +3277,8 @@ Ship.prototype.updateDiv = function(){
 }
 
 Ship.prototype.doDestroy = function(){
-	this.doDraw = 0;
-	this.destroyed = 1;
-	/*for (var i = this.cc.length-1; i >= 0; i--){
-		var attach = game.getUnit(this.cc[i]);
-		if (attach.flight){
-			attach.doDraw = 1;
-		}
-		this.cc.splice(i, 1);
-	}
-	this.setSupportImage();
-	*/
-
+	this.doDraw = false;
+	this.destroyed = true;
 }
 
 Ship.prototype.detachUnit = function(id){
