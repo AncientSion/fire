@@ -175,25 +175,22 @@ class Primary {
 
 	public function addDamage($dmg){
 		if ($dmg->new){
-			//Debug::log("adding new dmg");
 			if ($dmg->systemid == 1){
 				$dmg->hullDmg += $dmg->systemDmg;
 				$dmg->systemDmg = 0;
+				$this->damages[] = $dmg;
 			}
 			$this->newDmg += $dmg->hullDmg;
 			$this->emDmg += $dmg->emDmg;
+		} else if ($dmg->systemid == 1){
+			$this->damages[] = $dmg;
 		}
 
-		$this->damages[] = $dmg;
-		//Debug::log("rem: ".$this->remaining);
 		$this->remaining -= $dmg->hullDmg;
-		//Debug::log("rem new: ".$this->remaining);
 
 		if ($this->remaining < 1){
-			//Debug::log("remaming : ".$this->remaining);
 			$dmg->hullDmg += $this->remaining;
 			$this->destroyed = 1;
-			//Debug::log("dead: ".$this->destroyed);
 		}
 	}
 
