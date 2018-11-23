@@ -1949,9 +1949,9 @@ this.doAnimateMovement = function(){
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 		this.setUnitTransform();
-		//ctx.beginPath(); ctx.arc(0, 0, 5, 0, 2*Math.PI); ctx.fillStyle = "yellow"; ctx.fill(); ctx.closePath();
-		//ctx.beginPath(); ctx.rect(-475, -500, 325, 1000); ctx.strokeStyle = "yellow"; ctx.stroke(); ctx.closePath();
-		//ctx.beginPath(); ctx.rect(150, -500, 325, 1000); ctx.strokeStyle = "yellow"; ctx.stroke(); ctx.closePath();
+		ctx.beginPath(); ctx.arc(0, 0, 5, 0, 2*Math.PI); ctx.fillStyle = "yellow"; ctx.fill(); ctx.closePath();
+		ctx.beginPath(); ctx.rect(-475, -500, 325, 1000); ctx.strokeStyle = "yellow"; ctx.stroke(); ctx.closePath();
+		ctx.beginPath(); ctx.rect(150, -500, 325, 1000); ctx.strokeStyle = "yellow"; ctx.stroke(); ctx.closePath();
 		this.drawShips();
 		this.drawBorders();
 		this.resetUnitTransform();
@@ -3788,7 +3788,7 @@ Game.prototype.DamageControlResolved = function(){
 		ui.reinforceWrapper.show();
 	}
 	this.createLogEntry("-- Initial Events concluded --");
-	this.showUI(400);
+	this.showUI(500);
 }
 
 Game.prototype.resolvePostMoveFires = function(){

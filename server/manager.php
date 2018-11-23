@@ -670,11 +670,6 @@
 		Debug::log("handleJumpIn");
 		$new = array();
 
-		$mod = 1;
-		if ($this->turn == 1){
-			$mod = 0;
-		}
-
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (($this->ships[$i]->ship || $this->ships[$i]->squad) && $this->ships[$i]->available == $this->turn){
 				$order = $this->ships[$i]->actions[0];

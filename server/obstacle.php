@@ -22,7 +22,7 @@ class Obstacle extends Minor {
         $this->scale = $data["flipped"];
 
        // $this->curImp = round($this->curImp * 125 / $this->size / $this->rockSize * 2);
-        $this->interference = round($this->density*0.66);
+        $this->interference = round($this->density*1.5);
         $this->collision = round($this->density / 20 * $this->curImp);
 	}		
 
@@ -33,7 +33,7 @@ class Obstacle extends Minor {
 
 		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id,
 		// minDmg, maxDmg, $shots
-		$this->totalCost, $this->moraleCost, ceil($this->density / 4 / max(1, floor($this->rockSize /2))));
+		$this->totalCost, $this->moraleCost, ceil($this->density / $this->rockSize));
 	}
 
 	public function getDeployState($turn){

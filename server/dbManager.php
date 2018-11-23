@@ -844,19 +844,19 @@
 			$templates = array();
 
 			for ($i = 1; $i <= $amount; $i++){
-				$templates[] = array(mt_rand($min, $max), mt_rand(1, 8));
+				$templates[] = array(mt_rand($min, $max), mt_rand(1, 6));
 			}
 
 
 			$fields = array();
 
 			for ($i = 1; $i <= $players; $i++){
-				Debug::log("player ".$i);
+				//Debug::log("player ".$i);
 
 				$shift = ($i == 1 ? 1 : -1);
 
 				for ($j = 0; $j < sizeof($templates); $j++){
-					Debug::log("template ".($j+1));
+					//Debug::log("template ".($j+1));
 
 					$attempts = 5;
 
@@ -865,20 +865,20 @@
 					while ($attempts){
 						$redo = 0;
 						$attempts--;
-						Debug::log("attempts ".$attempts);
+						//Debug::log("attempts ".$attempts);
 
 						$x = mt_rand(150, 475) * $shift;
-						$y = mt_rand(50, 500) * $shift;
+						$y = mt_rand(-500, 500);
 						$size = round($templates[$j][0] / 10 * mt_rand(8, 12));
 						$rockSize = min(8, max(1, $templates[$j][1] + mt_rand(-2, 2)));
 
 						for ($k = 0; $k < sizeof($fields); $k++){
 							$dist = Math::getDist($fields[$k][0], $fields[$k][1], $x, $y);
-							Debug::log("checking vs field ".$k.", dist: ".$dist);
+							//Debug::log("checking vs field ".$k.", dist: ".$dist);
 
 							if ($dist - 75 - $size/2 - $fields[$k][4]/2 <= 0){
-								Debug::log("----RETRY, dist $dist, sizeA ".round($size/2).", sizeeB ".round($fields[$k][4]/2));
-								Debug::log("----".$x."/".$y." versus ".$fields[$k][0]."/".$fields[$k][1]);
+								//Debug::log("----RETRY, dist $dist, sizeA ".round($size/2).", sizeeB ".round($fields[$k][4]/2));
+								//Debug::log("----".$x."/".$y." versus ".$fields[$k][0]."/".$fields[$k][1]);
 								$redo = 1;
 								break;
 							} //else Debug::log("no problem !");
@@ -886,7 +886,7 @@
 
 						if (!$redo){
 							break;
-						} else Debug::log("redoing, attempts left: ".$attempts);
+						}// else Debug::log("redoing, attempts left: ".$attempts);
 					}
 
 					if (!$attempts){continue;}
@@ -897,10 +897,10 @@
 					//$facing = ($shift == 1 ? mt_rand(120, 240) : mt_rand(-60, 60));
 					$facing = mt_rand($angleToCenter-60, $angleToCenter+60);
 
-					Debug::log("Angle center to pos ".$x."/".$y." is ".$angleToCenter."°, picking vector ".$facing);
+					//Debug::log("Angle center to pos ".$x."/".$y." is ".$angleToCenter."°, picking vector ".$facing);
 					$density = mt_rand(5, 20);
 
-					$thrust = mt_rand(25, 35);
+					$thrust = mt_rand(15, 40);
 
 					$minDmg = round(mt_rand(8, 10) * $rockSize);
 					$maxDmg = round($minDmg*1.3);
@@ -910,7 +910,7 @@
 				}
 			}
 
-			Debug::log("fields to add ".sizeof($fields));
+			//Debug::log("fields to add ".sizeof($fields));
 			$stmt = $this->connection->prepare("
 				INSERT INTO units
 				(gameid, name, status, x, y, facing, delay, thrust, rolling, rolled, turn, phase, totalCost, moraleCost)
