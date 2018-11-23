@@ -1261,7 +1261,7 @@ this.doAnimateMovement = function(){
 		}
 		else {
 			if (this.phase == -1){
-				this.showUI(500);
+				this.DamageControlResolved();
 				this.drawingEvents = 1;
 			}
 			else if (this.phase == 1){
