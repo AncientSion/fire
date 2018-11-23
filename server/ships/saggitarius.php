@@ -81,7 +81,7 @@ class Saggitarius extends Medium {
 							"display" => "Port B Missile Launcher",
 							"name" => "Naga",
 							"amount" => 12
-						)
+						),
 						array(
 							"systemid" => 17,
 							"display" => "Starboard A Missile Launcher",
@@ -115,7 +115,7 @@ class Saggitarius extends Medium {
 							"display" => "Port B Missile Launcher",
 							"name" => "Cyclops",
 							"amount" => 6
-						)
+						),
 						array(
 							"systemid" => 17,
 							"display" => "Starboard A Missile Launcher",

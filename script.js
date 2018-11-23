@@ -183,8 +183,10 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			baseHit = target.getAngledHitChance(angle);
 
 			impulse = 1 - target.getImpulseMod();
-			lock = round(shooter.getLockEffect(target), 2);
-			mask = round(target.getMaskEffect(shooter), 2);
+
+			lock = round(shooter.getLockEffect(target, targetPos, shooterPos, dist), 2);
+			mask = round(target.getMaskEffect(shooter, shooterPos, targetPos, dist), 2);
+
 
 			if (lock){
 				multi += lock;

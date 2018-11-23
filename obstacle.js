@@ -395,7 +395,12 @@ Obstacle.prototype.setTrueImage = function(info){
 			0 -40 -vectorSize/2,
 			vectorSize, 
 			vectorSize
-		);*/
+		);
+		ctx.fillStyle = "white";
+		ctx.font = "24px Arial";
+		ctx.textAlign = "center";
+		ctx.fillText(this.density + "%", 0, 0 - 75)
+*/
 
 		ctx.clearRect(-40, -60, 80, 105);
 

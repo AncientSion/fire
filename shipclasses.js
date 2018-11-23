@@ -3541,19 +3541,14 @@ Ship.prototype.getSensorSizeRating = function(){
 	return (this.faction == "Minbari Federation" ? this.traverse -1 : this.traverse-4);
 }
 
-Ship.prototype.getLockEffect = function(target){
+Ship.prototype.getLockEffect = function(target, targetPos, shooterPos, dist){
 	var sensor = this.getSystemByName("Sensor");
 	var ew = sensor.getEW();
 	if (sensor.disabled || sensor.destroyed || ew.type == 1){return 0;}
 
-	var tPos = target.getPlannedPos();
-	var origin = this.getPlannedPos();
-	var d = getDistance(origin, tPos);
 	var multi = 0;
 
-	if (target.ship || target.squad){
-		multi = 0.5;
-		multi += (0.6 / 10 * (this.getSensorSizeRating()));
+	if (target.ship || target.squad){		multi += (0.6 / 10 * (this.getSensorSizeRating()));
 	}
 	else if (target.flight){
 		multi = 1;
@@ -3563,7 +3558,7 @@ Ship.prototype.getLockEffect = function(target){
 	}
 
 	if (game.isCloseCombat(this, target)){
-		if (target.salvo && this.isInEWArc(origin, target.getTrajectory(), sensor, ew)){
+		if (target.salvo && this.isInEWArc(shooterPos, target.getTrajectory(), sensor, ew)){
 			return multi;
 		}
 		else if (target.flight){
@@ -3571,26 +3566,21 @@ Ship.prototype.getLockEffect = function(target){
 			else return Math.round(multi / 180 * (Math.min(180, game.const.ew.len * Math.pow(sensor.getOutput()/ew.dist, game.const.ew.p)))*100)/100;
 		}
 	}
-	else if (d <= ew.dist && this.isInEWArc(origin, tPos, sensor, ew)){
+	else if (dist <= ew.dist && this.isInEWArc(shooterPos, targetPos, sensor, ew)){
 		return multi;
 	}
 	else return 0;
 }
 
-Ship.prototype.getMaskEffect = function(shooter){
+Ship.prototype.getMaskEffect = function(shooter, shooterPos, targetPos, dist){
 	if (this.flight || this.salvo || shooter.flight){return 0;}
 
 	var sensor = this.getSystemByName("Sensor");
 	var ew = sensor.getEW();
 	if (sensor.disabled || sensor.destroyed || ew.type == 0){return 0;}
-
-	var tPos = shooter.getPlannedPos();
-	var origin = this.getPlannedPos();
-	var d = getDistance(origin, tPos);
 	var multi = 0;
 
 	if (shooter.ship || shooter.squad){
-		multi = 0.5;
 		multi += (0.6 / 10 * (this.getSensorSizeRating()));
 	}
 	else if (shooter.flight){
@@ -3598,14 +3588,14 @@ Ship.prototype.getMaskEffect = function(shooter){
 	}
 	else if (shooter.salvo){
 		multi = 0.5;
-	}	
+	}
 
-	if (d == 0 && game.isCloseCombat(this, shooter) && this.isInEWArc(origin, shooter.getTrajectory(), sensor, ew)){
+	if (d == 0 && game.isCloseCombat(this, shooter) && this.isInEWArc(shooterPos, shooter.getTrajectory(), sensor, ew)){
 		if (shooter.salvo){
 			return multi;
 		}
 	}
-	else if (d <= ew.dist && this.isInEWArc(origin, tPos, sensor, ew)){
+	else if (d <= ew.dist && this.isInEWArc(shooterPos, targetPos, sensor, ew)){
 		return multi;
 	}
 	else return 0;

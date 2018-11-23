@@ -305,10 +305,10 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 							</tr>
 							<tr>
 								<td>
-									Number of asteroid fields spawned per player
+									Asteroid fields created per player
 								</td>
 								<td>
-									<input type="number" style="width: 100%; text-align: center" value=4 placeholder="4" name="obstaclesAmount" step="1" min="0" max="20"></input>		
+									<input type="number" style="width: 100%; text-align: center" value=3 placeholder="3" name="obstaclesAmount" step="1" min="0" max="10"></input>		
 								</td>
 							</tr>
 							<tr>

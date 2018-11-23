@@ -869,14 +869,14 @@
 
 						$x = mt_rand(150, 475) * $shift;
 						$y = mt_rand(50, 500) * $shift;
-						$size = round($templates[$j][0] / 10 * mt_rand(9, 11));
-						$rockSize = min(8, max(1, $templates[$j][1] + mt_rand(-1, 1)));
+						$size = round($templates[$j][0] / 10 * mt_rand(8, 12));
+						$rockSize = min(8, max(1, $templates[$j][1] + mt_rand(-2, 2)));
 
 						for ($k = 0; $k < sizeof($fields); $k++){
 							$dist = Math::getDist($fields[$k][0], $fields[$k][1], $x, $y);
 							Debug::log("checking vs field ".$k.", dist: ".$dist);
 
-							if ($dist - $size/2 - $fields[$k][4]/2 <= 0){
+							if ($dist - 75 - $size/2 - $fields[$k][4]/2 <= 0){
 								Debug::log("----RETRY, dist $dist, sizeA ".round($size/2).", sizeeB ".round($fields[$k][4]/2));
 								Debug::log("----".$x."/".$y." versus ".$fields[$k][0]."/".$fields[$k][1]);
 								$redo = 1;
@@ -885,9 +885,8 @@
 						}
 
 						if (!$redo){
-							Debug::log("!redo");
 							break;
-						}
+						} else Debug::log("redoing, attempts left: ".$attempts);
 					}
 
 					if (!$attempts){continue;}
@@ -899,7 +898,7 @@
 					$facing = mt_rand($angleToCenter-60, $angleToCenter+60);
 
 					Debug::log("Angle center to pos ".$x."/".$y." is ".$angleToCenter."°, picking vector ".$facing);
-					$density = mt_rand(15, 35);
+					$density = mt_rand(5, 20);
 
 					$thrust = mt_rand(25, 35);
 
@@ -940,103 +939,6 @@
 				$stmt->bindParam(":rolled", $fields[$i][6]);
 				$stmt->bindParam(":totalCost", $fields[$i][7]);
 				$stmt->bindParam(":moraleCost", $fields[$i][8]);
-
-				$stmt->execute();
-
-				if ($stmt->errorCode() == 0){
-					continue;
-				} else return false;
-			}
-
-			return true;
-		}
-
-		public function acreateObstacles($gameid, $data){
-			Debug::log("createObstacles #".$gameid);
-			$rocks = array();
-
-			$amount = $data["obstaclesAmount"];
-			$min = $data["obstaclesSizeMin"];
-			$max = $data["obstaclesSizeMax"];
-
-
-			$sizes = array();
-
-			//$amount = 10;
-			//Debug::log("amount: ".$amount);
-			for ($i = 1; $i <= $amount; $i++){
-				Debug::log("rock ".$i);
-				
-				$attempts = 3;
-
-				while ($attempts){
-					$attempts--;
-					//Debug::log("attempts left ".$attempts);
-					$size = mt_rand($min, $max);
-
-					$x = mt_rand(100, 350) * (1 - (mt_rand(0, 1)*2));
-					$y = mt_rand(100, 500) * (1 - (mt_rand(0, 1)*2));					
-
-					$redo = 0;
-
-					for ($j = 0; $j < sizeof($rocks); $j++){
-						$dist = Math::getDist($rocks[$j][0], $rocks[$j][1], $x, $y);
-
-						if ($dist - $size/2 < $rocks[$j][4]/2){
-							Debug::log("retry, dist $dist, rad1 ".($size/2).", rad2 ".($rocks[$j][4]/2));
-							$redo = 1;
-							break;
-						}
-					}
-
-					if ($redo){continue;}
-					else $attempts = 0;
-
-					$angleFromCenter = round(Math::getAngle(0, 0, $x, $y));
-					Debug::log("Angle center to pos ".$x."/".$y." is ".$angleFromCenter."°");
-
-					$facing = mt_rand(0, 360);
-					$size = mt_rand($min, $max);
-					$density = mt_rand(15, 35);
-					$rockSize = mt_rand(1, 10);
-
-					$thrust = mt_rand(50, 70) / $size * 125 / $rockSize * 2;
-
-					$minDmg = round(mt_rand(10, 14) * $rockSize);
-					$maxDmg = round($minDmg*1.3);
-
-					$rocks[] = array($x, $y, $facing, $size, $thrust, $density, $rockSize, $minDmg, $maxDmg);
-				}
-			}
-
-			//Debug::log("rocks ".sizeof($rocks));
-			$stmt = $this->connection->prepare("
-				INSERT INTO units
-				(gameid, name, status, x, y, facing, delay, thrust, rolling, rolled, turn, phase, totalCost, moraleCost)
-				VALUES
-				(:gameid, 'Obstacle', 'deployed', :x, :y, :facing, :delay, :thrust, :rolling, :rolled, 1, -1, :totalCost, :moraleCost)
-			");
-
-			for ($i = 0; $i < sizeof($rocks); $i++){
-
-				//foreach ($rocks as $rock){
-				//	foreach ($rock as $val){
-				//		Debug::log($val);
-				//	}
-				//}
-
-				//Debug::log("rolling ".$rocks[$i][5]);
-
-				$stmt->bindParam(":gameid", $gameid);
-				$stmt->bindParam(":x", $rocks[$i][0]);
-				$stmt->bindParam(":y", $rocks[$i][1]);
-				$stmt->bindParam(":facing", $rocks[$i][2]);
-				$stmt->bindParam(":delay", $rocks[$i][3]);
-				$stmt->bindParam(":thrust", $rocks[$i][4]);
-				$stmt->bindParam(":rolling", $rocks[$i][5]);
-				$stmt->bindParam(":rolled", $rocks[$i][6]);
-				$stmt->bindParam(":totalCost", $rocks[$i][7]);
-				$stmt->bindParam(":moraleCost", $rocks[$i][8]);
 
 				$stmt->execute();
 
