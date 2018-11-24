@@ -255,6 +255,7 @@ this.doAnimateMovement = function(){
 	this.doAbortMission = function(){
 		var flight = game.getUnit(aUnit);
 
+		if (!flight.friendly){return;}
 		if (flight.oldMission.id != flight.mission.id){
 			game.UndoAbortMission(flight); return;
 		}
@@ -288,6 +289,7 @@ this.doAnimateMovement = function(){
 		flight.setImage();
 		flight.setCurSpeed();
 		flight.setNextMove();
+		game.updateSingleIntercept(flight);
 		$(flight.element).find("input").attr("value", "Abort Mission");
 		game.redraw();
 	}
@@ -1949,9 +1951,9 @@ this.doAnimateMovement = function(){
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 		this.setUnitTransform();
-		ctx.beginPath(); ctx.arc(0, 0, 5, 0, 2*Math.PI); ctx.fillStyle = "yellow"; ctx.fill(); ctx.closePath();
-		ctx.beginPath(); ctx.rect(-475, -500, 325, 1000); ctx.strokeStyle = "yellow"; ctx.stroke(); ctx.closePath();
-		ctx.beginPath(); ctx.rect(150, -500, 325, 1000); ctx.strokeStyle = "yellow"; ctx.stroke(); ctx.closePath();
+		//ctx.beginPath(); ctx.arc(0, 0, 5, 0, 2*Math.PI); ctx.fillStyle = "yellow"; ctx.fill(); ctx.closePath();
+		//ctx.beginPath(); ctx.rect(-475, -500, 325, 1000); ctx.strokeStyle = "yellow"; ctx.stroke(); ctx.closePath();
+		//ctx.beginPath(); ctx.rect(150, -500, 325, 1000); ctx.strokeStyle = "yellow"; ctx.stroke(); ctx.closePath();
 		this.drawShips();
 		this.drawBorders();
 		this.resetUnitTransform();
@@ -2669,7 +2671,7 @@ Game.prototype.drawEvents = function(){
 
 Game.prototype.drawBorders = function(){
 	ctx.beginPath();
-	ctx.arc(0, 0, 1500, 0, 2*Math.PI);
+	ctx.arc(0, 0, 1000, 0, 2*Math.PI);
 	ctx.closePath();
 
 	ctx.strokeStyle = "yellow";

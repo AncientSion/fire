@@ -206,7 +206,7 @@ Flight.prototype.createBaseDiv = function(){
 		missionContainer
 			.append($("<input>")
 				.attr("type", "button")
-				.attr("value", "Abort current mission")
+				.attr("value", "Abort Mission")
 				.click(function(e){
 					if (aUnit == $(this).parent().parent().data("shipId")){
 						game.doAbortMission();

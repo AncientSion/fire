@@ -38,7 +38,7 @@ function Salvo(data){
 		var base = 80;
 		var trackStep = 20;
 		var target = this.getTarget();
-		var spoof = target.getMaskEffect(this);
+		//var spoof = target.getMaskEffect(this);
 			spoof = 0;
 		var trackingLack = Math.max(0, (this.structures[0].systems[0].tracking - target.traverse));
 		var final = base * (1-spoof) / 100 * (100-(trackingLack * trackStep))

@@ -84,7 +84,6 @@ Mixed.prototype.drawNextMove = function(){
 	planCtx.beginPath();
 	planCtx.moveTo(this.x, this.y);
 
-//for (var i = 0; i < this.actions.length - (game.phase < 2 ? 0 : 1); i++){
 	for (var i = 0; i < this.actions.length; i++){
 		if (this.actions[i].type == "move"){
 			planCtx.lineTo(this.actions[i].x, this.actions[i].y);
@@ -255,28 +254,44 @@ Mixed.prototype.setNextMove = function(){
 			}
 			else if (target.flight){
 				if (target.mission.targetid == this.id){
-					if (s > target.getCurSpeed() || s == target.getCurSpeed() && this.id > target.id){
-						popup("Flight #" + this.id + " (targeting Flight #" + target.id + ") has the advantage (is faster) and will move last");
+					this.facing = getAngleFromTo(p, target.getGamePos());
+
+					var otherSpeed = target.getCurSpeed();
+					d = Math.ceil(getDistance(p, target.getGamePos()));
+
+					if (s + otherSpeed >= d){
+						console.log("_________________")
+						console.log("flight vs flight")
+						console.log("this id " + this.id + ", friendly " + this.friendly);
+						console.log("selfSpeed is " + s);
+						console.log("otherSpeed is " + otherSpeed);
+						console.log("dist is " + d);
+
+						var ownDist = d / (s + otherSpeed) * s;
+						var otherDist = d - ownDist;
+
+						console.log("own will be " + ownDist);
+						console.log("other will be " + otherDist);
+
+						next = getPointInDir(ownDist, this.facing, p.x, p.y);
+						console.log("_________________");
+					}
+					else {
+						next = getPointInDir(s, this.facing, p.x, p.y);
+					}
+					this.finalStep = next;
+				}
+				else {
+					if (!target.finalStep){
 						target.setNextMove();
 					}
-
 					this.finalStep = target.getPlannedPos();
 					this.facing = getAngleFromTo(p, this.finalStep);
-
 					d = getDistance(p, this.finalStep);
-
-					next = getPointInDir(Math.min(d, s), this.facing, p.x, p.y);
+					if (d < s){
+						next = target.getPlannedPos();
+					} else next = getPointInDir(s, getAngleFromTo(p, this.finalStep), p.x, p.y);
 				}
-				else if (!target.finalStep){
-					target.setNextMove();
-				}
-				this.finalStep = target.getPlannedPos();
-				//this.facing = getAngleFromTo(p, target.getPlannedPos());
-				this.facing = getAngleFromTo(p, this.finalStep);
-				d = getDistance(p, this.finalStep);
-				if (d < s){
-					next = target.getPlannedPos();
-				} else next = getPointInDir(s, getAngleFromTo(p, this.finalStep), p.x, p.y);
 			}
 			else if (target.salvo){
 			}
@@ -351,11 +366,7 @@ Mixed.prototype.getLockEffect = function(target){
 	else return 0;
 }
 
-Mixed.prototype.getMaskEffect = function(shooter){
-	return 0;
-	if (this.flight /*&& this.mission.arrived*/ && this.mission.targetid == shooter.id && !shooter.flight){
-		return 0.5;
-	}
+Mixed.prototype.getMaskEffect = function(shooter, shooterPos, targetPos, dist){
 	return 0;
 }
 

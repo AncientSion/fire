@@ -412,17 +412,22 @@ class Minor extends Mixed {
 		if ($this->salvo){$this->mission = new Mission($data[sizeof($data)-1]); return;}
 		
 		//Debug::log("addMission to #".$this->id.", turn: ".$turn.", phase: ".$phase.", userid: ".$userid);
-		//if ($this->id == 29){var_export($data);}
 		if (!$userid || $this->userid == $userid || sizeof($data) == 1){
-			//echo "id ".$this->id.", adding____";
+			//Debug::log("no user or friendly user or size 1");
 			$this->mission = new Mission($data[sizeof($data)-1]);
 		}
 		else if ($phase == -1 || $phase == 1){
 			$possible = array();
 
 			for ($i = sizeof($data)-1; $i >= 0; $i--){
-				if ($data[$i]["turn"] < $turn){$this->mission = new Mission($data[sizeof($data)-1]); return;}
-				if ($data[$i]["phase"] >= $phase){$this->mission = new Mission($data[sizeof($data)-1]); return;}
+				if ($data[$i]["turn"] < $turn){
+					$this->mission = new Mission($data[$i]);
+					return;
+				}
+				else if ($data[$i]["phase"] < $phase){
+					$this->mission = new Mission($data[$i]);
+					return;
+				}
 			}
 		}
 		else $this->mission = new Mission($data[sizeof($data)-1]);
