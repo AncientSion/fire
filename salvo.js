@@ -102,7 +102,7 @@ Salvo.prototype.createBaseDiv = function(){
 			.append($("<td>").html(this.getProfileString())))
 		.append($("<tr>")
 			.append($("<td>").html("Current Speed"))
-			.append($("<td>").addClass("speedStats").html(this.getCurSpeed() + (this.missile ? " (max: " + this.getMaxSpeed() + ")" : "")))
+			.append($("<td>").addClass("speedStats").html(this.getCurSpeed() + (this.missile ? " (max: " + this.getMaxSpeed() + ")" : ""))))
 		.append($("<tr>")
 			.append($("<td>").html("Acceleration"))
 			.append($("<td>").html(accel)))
