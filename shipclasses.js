@@ -3595,7 +3595,7 @@ Ship.prototype.getMaskEffect = function(shooter, shooterPos, targetPos, dist){
 			return multi;
 		}
 	}
-	else if (dist <= ew.dist && this.isInEWArc(shooterPos, targetPos, sensor, ew)){
+	else if (dist <= ew.dist && this.isInEWArc(targetPos, shooterPos, sensor, ew)){
 		return multi;
 	}
 	else return 0;
