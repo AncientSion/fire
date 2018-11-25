@@ -3590,12 +3590,12 @@ Ship.prototype.getMaskEffect = function(shooter, shooterPos, targetPos, dist){
 		multi = 0.5;
 	}
 
-	if (d == 0 && game.isCloseCombat(this, shooter) && this.isInEWArc(shooterPos, shooter.getTrajectory(), sensor, ew)){
+	if (dist == 0 && game.isCloseCombat(this, shooter) && this.isInEWArc(shooterPos, shooter.getTrajectory(), sensor, ew)){
 		if (shooter.salvo){
 			return multi;
 		}
 	}
-	else if (d <= ew.dist && this.isInEWArc(shooterPos, targetPos, sensor, ew)){
+	else if (dist <= ew.dist && this.isInEWArc(shooterPos, targetPos, sensor, ew)){
 		return multi;
 	}
 	else return 0;
