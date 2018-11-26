@@ -757,7 +757,7 @@ this.doAnimateMovement = function(){
 		return false;
 	}
 	
-	this.handleDmgControlWarnings = function(){
+	this.handleFleetCommandWarning = function(){
 		var hasCommand = this.userHasCommandUnit(this.getPlayerStatus().userid);
 		if (!hasCommand){
 			popup("There is no legal Fleet Command for the next turn.</br>Please select a unit to act as Fleet Command.");
@@ -765,6 +765,25 @@ this.doAnimateMovement = function(){
 		}
 		return false;
 	}
+
+	this.hasNoFocus = function(){
+		var noFocus = 1;
+		var data = [];
+
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].userid != this.userid){continue}
+			if (this.ships[i].focus){noFocus = 0;break;}
+		}
+
+		if (noFocus){
+			var html = "You have not issued Focus for any unit.";
+			html += "<input type='button' class='popupEntryConfirm' value='Confirm Orders' onclick='game.doConfirmOrders()'>";
+			popup(html);
+			return true;
+		}
+		return false;
+	}
+
 
 	this.userHasCommandUnit = function(userid){
 		for (var i = 0; i < this.ships.length; i++){
@@ -841,14 +860,15 @@ this.doAnimateMovement = function(){
 			else if (this.phase == 0 || this.phase == 1){ // SHIP MOVEMENT
 				if (this.hasUnusedSpeed()){return;}
 				if (this.handleMoveWarnings()){return;}
-				else this.doConfirmOrders();
+				this.doConfirmOrders();
 			}
 			else if (this.phase == 2){
 				if (this.handleFireWarnings()){return;}
-				else this.doConfirmOrders();
+				this.doConfirmOrders();
 			}
 			else if (this.phase == 3){
-				if (this.handleDmgControlWarnings()){return;}
+				if (this.handleFleetCommandWarning()){return;}
+				if (this.hasNoFocus()){return;}
 				this.doConfirmOrders();
 			}
 		}
@@ -3566,6 +3586,7 @@ Game.prototype.setUnitMoveDetails = function(){
 
 	for (var i = 0; i < this.ships.length; i++){
 		if (!this.ships[i].toAnimate){continue;}
+		else if (!this.ships[i].actions.length){continue;}
 
 		if (this.ships[i].cc.length){
 			if (this.ships[i].ship || this.ships[i].squad){
@@ -3713,9 +3734,14 @@ Game.prototype.handleAllDeployOut = function(){
 Game.prototype.handleSingleDeployOut = function(i){
 	console.log("handleSingleDeployOut");
 	//this.unitExploAnims[i].animating = 1;
-	this.setCallback("animateSingleDeployOut", i);
+	this.setCallback("initAnimateSingleDeployOut", i);
 	cam.z = 1.5;
 	cam.setCamFocus(this.ships[i].getDrawPos(), false);
+}
+
+Game.prototype.initAnimateSingleDeployOut = function(i){
+	game.animating = 1;
+	this.animateSingleDeployOut(i);
 }
 
 Game.prototype.animateSingleDeployOut = function(j){
@@ -3736,30 +3762,24 @@ Game.prototype.animateSingleDeployOut = function(j){
 	ctx.scale(cam.z, cam.z);
 
 	for (var i = 0; i < this.ships.length; i++){
-		if (i == j){
-
+		if (this.ships[i].deployAnim[1]){
+			if (!this.ships[i].deployed){continue;}
+			else if (doing){this.ships[i].draw(); continue;}
+			else {
+				this.ships[i].animateDeployOut();
+				doing = 1;
+				done = 0;
+			}
 		}
-
-
-	if (this.ships[i].deployAnim[1]){
-		if (!this.ships[i].deployed){continue;}
-		else if (doing){this.ships[i].draw(); continue;}
-		else {
-			this.ships[i].animateDeployOut();
-			doing = 1;
-			done = 0;
-		}
-	}
-	else this.ships[i].draw();
+		else this.ships[i].draw();
 	}
 
 	ctx.setTransform(1,0,0,1,0,0);
 
-
 	if (done){
 		window.cancelAnimationFrame(anim);
 		game.animating = 0;
-		this.resolveObstacleMovement();
+		game.handleAllDeployOut();
 	}
 }
 

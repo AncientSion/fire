@@ -45,16 +45,8 @@ class Obstacle extends Minor {
 
 		//Debug::log("getEndState for ".$this->id.", destroyed: ".$this->destroyed);
 
-		$x; $y;
-
-		if ($turn > 1){
-			$x = $this->actions[0]->x;
-			$y = $this->actions[0]->y;
-		}
-		else {
-			$x = $this->x;
-			$y = $this->y;
-		}
+		$x = sizeof($this->actions) ? $this->actions[sizeof($this->actions)-1]->x : $this->x;
+		$y = sizeof($this->actions) ? $this->actions[sizeof($this->actions)-1]->y : $this->y;
 
 		return array(
 			"id" => $this->id,
@@ -111,7 +103,7 @@ class Obstacle extends Minor {
 		return false;
 	}
 
-	public function setMove(&$gd){
+	public function setMove(){
 		//Debug::log("**** setMove ".$this->id);
 		if ($this->moveSet){return;}
 
@@ -120,7 +112,7 @@ class Obstacle extends Minor {
 		$angle = $this->getCurFacing();
 		$target = Math::getPointInDirection($speed, $angle, $origin->x, $origin->y);
 
-		$move = new Action(-1, $this->id, $gd->turn, "move", 0, $speed, $target->x, $target->y, 0, 0, 0, 0, 1, 1);
+		$move = new Action(-1, $this->id, $gd::$turn, "move", 0, $speed, $target->x, $target->y, 0, 0, 0, 0, 1, 1);
 		$this->actions[] = $move;
 		$this->moveSet = 1;
 	}

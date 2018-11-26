@@ -5,7 +5,7 @@ class Trakk extends SuperLight {
 	public $display = "Trakk";
 	public $role = "Attack Frigate";
 	public $faction = "Narn Regime";
-	public static $value = 260;
+	public static $value = 240;
 	public $mass = 1250;
 
 	public $integrity = 380;

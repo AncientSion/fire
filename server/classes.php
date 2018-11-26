@@ -24,7 +24,7 @@ class RelDmg {
 	public $old = 0.00;
 	public $rel = 0.00;
 
-	function __construct($new, $old, $integrity){//331 30, 0, 90
+	function __construct($new, $old, $integrity){ // 331 30, 0, 90
 		$this->new = round($new / $integrity, 2); // 60  - 0.25
 		$this->old = round($old / $integrity, 2); // 120 - 0.50
 		$this->rel = round($new / ($integrity-$old), 2); // rem 0.25
@@ -108,6 +108,7 @@ class GD {
 	public $focusMod = 0;
 
 	function __construct($data){
+		//Debug::log("creating GD");
 		//var_export($data);
 		$this->id = $data["id"];
 		$this->name = $data["name"];

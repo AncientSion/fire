@@ -489,9 +489,9 @@ Mixed.prototype.hasPatrolLayout = function(){
 		if (game.phase == 1 || game.phase == 3){
 			return true;
 		}
-		else if (game.phase == 2 && this.actions[this.actions.length-1].type[0] == "p"){
+		else if (game.phase == 2 && (this.actions[this.actions.length-1].type[0] == "p" || game.subPhase == 2)){
 			return true;
-		}	
+		}
 	}
 	
 

@@ -519,7 +519,7 @@ Flight.prototype.setBaseLayout = function(){
 	//var num = Math.ceil(this.structures.length/3);
 	//this.size = num*10;
 
-	var reach = 15 + Math.max(0, (Math.floor(this.structures.length-3)/3)*12);
+	var reach = 15 + Math.max(0, (Math.floor(this.structures.length-3)/3)*9);
 
 	for (var i = 0; i < this.structures.length/3; i++){
 

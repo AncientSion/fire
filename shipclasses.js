@@ -1953,6 +1953,25 @@ Ship.prototype.getDmgByFire = function(fire){
 	return dmgs;
 }
 
+Ship.prototype.getFlashHitSection = function(fire){
+	var o = fire.shooter.getPlannedPos();
+	var t = this.getPlannedPos();
+	var a = getAngleFromTo(o, t) + range(-5, 5);
+	var d = -this.size/3;
+	return getPointInDir(d, a, 0, 0);
+}
+
+Ship.prototype.getFireDest = function(fire, isHit, num){
+	if (isHit){return fire.damages[num].loc;}
+	else {
+		var o = fire.shooter.getPlannedPos();
+		var t = this.getPlannedPos();
+		var a = getAngleFromTo(o, t) + range(-5, 5);
+		var d = this.size * (10-(range(-1, 1)*3))/10;
+		return rotate(0, 0, getPointInDir(d, a, 0, 0), this.getDrawFacing());
+	}
+}
+
 Ship.prototype.getSystemLocation = function(i, name){
 	var p;
 	if (i == -1){
@@ -1966,7 +1985,7 @@ Ship.prototype.getSystemLocation = function(i, name){
 		}
 	}
 	else {
-		p = getPointInDir(this.size/4, getSystemArcDir(this.structures[i]) + this.getDrawFacing(), 0, 0);
+		p = getPointInDir(this.size/4, getSystemArcDir(this.structures[i]) + this.getDrawFacing() + range(-10, 10), 0, 0);
 	}
 	p.x += range(-8, 8);
 	p.y += range(-8, 8);
@@ -2032,26 +2051,6 @@ Ship.prototype.getRemSpeed = function(){
 		}
 	}
 	return impulse;
-}
-
-Ship.prototype.getFlashHitSection = function(fire){
-	var o = fire.shooter.getPlannedPos();
-	var t = this.getPlannedPos();
-	var a = getAngleFromTo(o, t) + range(-5, 5);
-	var d = -this.size/3;
-	return getPointInDir(d, a, 0, 0);
-}
-
-
-Ship.prototype.getFireDest = function(fire, isHit, num){
-	if (isHit){return fire.damages[num].loc;}
-	else {
-		var o = fire.shooter.getPlannedPos();
-		var t = this.getPlannedPos();
-		var a = getAngleFromTo(o, t) + range(-5, 5);
-		var d = this.size * (10-(range(-1, 1)*3))/10;
-		return getPointInDir(d, a, 0, 0);
-	}
 }
 
 Ship.prototype.getHitSection = function(fire){

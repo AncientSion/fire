@@ -1550,7 +1550,8 @@ class Medium extends Ship {
 	}
 
 	public function addTopDamage($dmg){
-		//Debug::log("addTopDamage dmg ".$dmg->id);
+		//Debug::log("addDamage ".get_class($this));
+
 		$this->primary->addDamage($dmg);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){

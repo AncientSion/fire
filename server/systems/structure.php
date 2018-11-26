@@ -151,6 +151,7 @@ class Primary {
 	public $systems = array();
 	public $damages = array();
 	public $remaining = 0;
+	public $recentDmg = 0;
 	public $damaged = 0;
 	public $emDmg = 0;
 	public $newDmg = 0;
@@ -187,6 +188,9 @@ class Primary {
 		}
 
 		$this->remaining -= $dmg->hullDmg;
+		if ($dmg->turn == Manager::$turn){
+			$this->recentDmg += $dmg->hullDmg;
+		}
 
 		if ($this->remaining < 1){
 			$dmg->hullDmg += $this->remaining;

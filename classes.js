@@ -528,6 +528,7 @@ function Primary(data){
 	this.parentId = data.parentId;
 	this.integrity = data.integrity;
 	this.remaining = data.remaining;
+	this.recentDmg = data.recentDmg;
 	this.newDmg = data.newDmg;
 	this.destroyed = data.destroyed;
 	this.damages = [];
@@ -611,15 +612,22 @@ Primary.prototype.getSysDiv = function(){
 				.append($("<td>").html("Integrity"))
 				.append($("<td>").html(this.remaining + " / " + this.integrity)))
 			.append($("<tr>")
-				.append($("<td>"))
+				.append($("<td>").html("Integrity Remaining"))
 				.append($("<td>").html(Math.round(this.remaining / this.integrity * 100) + " %")))
 			.append($("<tr>")
-				.append($("<td>").html("EM Damage"))
-				.append($("<td>").html(this.getEMDmg()))));
+				.append($("<td>").html("Recent EM Damage"))
+				.append($("<td>").html(this.getEMDmg())))
+			.append($("<tr>")
+				.append($("<td>").html("Recent Stock Damage"))
+				.append($("<td>").html(this.getRecentDmg()))));
 }
 
 Primary.prototype.getEMDmg = function(){
 	return System.prototype.getEMDmg.call(this);
+}
+
+Primary.prototype.getRecentDmg = function(){
+	return (this.recentDmg + " / " + Math.round(this.recentDmg / this.integrity * 100) + " %");
 }
 
 Primary.prototype.getRemIntegrity = function(){
@@ -797,7 +805,7 @@ Single.prototype.getSysDiv = function(){
 			.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
 			.append($("<tr>").append($("<td>").html("Armour").css("width", "70%")).append($("<td>").html(this.negation)))
 			.append($("<tr>").append($("<td>").html("Acceleration")).append($("<td>").html(this.baseImpulse)))
-			.append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html(this.getEMDmg())))
+			.append($("<tr>").append($("<td>").html("Recent EM Damage")).append($("<td>").html(this.getEMDmg())))
 			.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
 		)
 
