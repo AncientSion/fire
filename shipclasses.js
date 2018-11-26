@@ -3549,7 +3549,7 @@ Ship.prototype.getLockEffect = function(target, targetPos, shooterPos, dist){
 	var multi = 0;
 
 	if (target.ship || target.squad){
-		multi += (0.6 / 10 * (this.getSensorSizeRating()));
+		multi += 0.5 + (0.6 / 10 * (this.getSensorSizeRating()));
 	}
 	else if (target.flight){
 		multi = 1;
