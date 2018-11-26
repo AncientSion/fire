@@ -1234,7 +1234,9 @@
 
 	public function doFirstDestroyedCheck(){
 		//Debug::log("doFirstDestroyedCheck");
-		for ($i = 0; $i < sizeof($this->ships); $i++){
+		for ($i = 0; $i < sizeof($this->ships); $i++)
+			if ($this->ships[$i]->obstacle){continue;}
+		
 			if ($this->ships[$i]->salvo && sizeof($this->ships[$i]->structures[0]->systems[0]->fireOrders)){ // impact salvo
 				$this->ships[$i]->destroyed = true;
 			}
@@ -1251,11 +1253,10 @@
 	public function doSecondDestroyedCheck(){
 		//Debug::log("doSecondDestroyedCheck");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->destroyed){
-				for ($j = 0; $j < sizeof($this->ships); $j++){
-					if ($this->ships[$j]->salvo && $this->ships[$j]->mission->targetid == $this->ships[$i]->id){
-						$this->ships[$j]->destroyed = true;
-					}
+			if ($this->ships[$i]->obstacle || !$this->ships[$i]->destroyed){continue;}
+			for ($j = 0; $j < sizeof($this->ships); $j++){
+				if ($this->ships[$j]->salvo && $this->ships[$j]->mission->targetid == $this->ships[$i]->id){
+					$this->ships[$j]->destroyed = true;
 				}
 			}
 		}
