@@ -74,6 +74,102 @@ class Flight extends Minor {
 			return 0.5;
 		}
 	}
+
+	public function setMove(){
+		Debug::log("**** setMove ".$this->id);
+		if ($this->moveSet){return;}
+
+		$origin = $this->getCurPos();
+		$speed = $this->getCurSpeed();
+		$t;
+		$tPos;
+		$dist = 0;
+		$angle = 0;
+		$type = "move";
+
+		Debug::log("**** Handling ".get_class($this)." #".$this->id.", speed ".$speed);
+		if ($this->mission->type == 1){ // PATROL
+			//Debug::log("PATROL");
+			if ($this->mission->arrived){
+				$tPos = $this->getCurPos();
+				$type = "patrol";
+				//Debug::log("drag");
+			}
+			else {
+				$dist = Math::getDist2($origin, $this->mission);
+				$angle = Math::getAngle2($origin, $this->mission);
+
+				if ($speed < $dist){
+					//Debug::log("close in");
+					$tPos = Math::getPointInDirection($speed, $angle, $origin->x, $origin->y);
+				}
+				else {
+					//Debug::log("arrival");
+					$this->mission->arrived = Manager::$turn;
+					$tPos = new Point($this->mission->x, $this->mission->y);
+				}
+			}
+		}
+		else if ($this->mission->type == 2){ // STRIKE
+			$t = $this->mission->target;
+
+			Debug::log("Target: ".get_class($t)." #".$t->id);
+
+			if ($t->ship || $t->squad || ($t->flight && $t->mission->targetid != $this->id)){
+				Debug::log("ship, squad, dumb flight");
+				if ($t->moveSet){
+					Debug::log("switch context");
+					$t->setMove();
+				}
+
+				$tPos = $t->getCurPos();
+				$dist = Math::getDist2($origin, $tPos);
+				$angle = Math::getAngle2($origin, $tPos);
+
+				if ($dist == 0){
+					Debug::log("dist 0");
+					$type = "patrol";
+				}
+				else if ($speed >= $dist){ // on route or drag -> own speed
+					Debug::log("arrival");
+					$this->mission->arrived = Manager::$turn;
+				}
+				else { // ON ROUTE; REACH
+					Debug::log("close in");
+					$tPos = Math::getPointInDirection($speed, $angle, $origin->x, $origin->y);
+				}
+			}
+			else if ($t->flight && $t->mission->targetid == $this->id){
+				Debug::log("flight on flight");
+				$tPos = $t->getCurPos();
+				$otherSpeed = $t->getCurSpeed();
+				$dist = Math::getDist2($origin, $tPos);
+				$angle = Math::getAngle2($origin, $tPos);
+
+				if ($dist == 0){
+					Debug::log("dist 0");
+					$type = "patrol";
+				}
+				else if ($speed + $otherSpeed >= $dist){
+					Debug::log("flight vs Flight arrival");
+					$ownDist = $dist / ($speed + $otherSpeed) * $speed;
+					$tPos = Math::getPointInDirection($ownDist, $angle, $origin->x, $origin->y);
+					$this->mission->arrived = Manager::$turn;
+				}
+				else {
+					Debug::log("close in");
+					$dist = $speed;
+					$tPos = Math::getPointInDirection($speed, $angle, $origin->x, $origin->y);
+				}
+			}
+
+		}
+
+		$move = new Action(-1, $this->id, Manager::$turn, $type, 0, $dist, $tPos->x, $tPos->y, $angle, 0, 0, 0, 1, 1);
+		Debug::log($this->id." --- adding ".$move->type." to => ".$move->x."/".$move->y.", dist: ".$dist);
+		$this->actions[] = $move;
+		$this->moveSet = 1;
+	}
 }
 
 ?>
