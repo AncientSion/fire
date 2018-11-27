@@ -1755,14 +1755,12 @@ Ship.prototype.draw = function(){
  	if (this.doDraw){this.drawPositionMarker();}
 
 	ctx.translate(this.drawX, this.drawY);
-	ctx.rotate(this.getDrawFacing() * Math.PI/180);
+	//ctx.rotate(this.getDrawFacing() * Math.PI/180);
 
-	//if (this.flight){console.log("draw #" + this.id);
-	//}
- 	if (this.doDraw){this.drawSelf();}
+	if (this.doDraw){this.drawSelf();}
 
 	this.drawEscort();
-	ctx.rotate(-this.getDrawFacing() * Math.PI/180);
+	//ctx.rotate(-this.getDrawFacing() * Math.PI/180);
 	ctx.translate(-this.drawX, -this.drawY);
 }
 
@@ -2369,7 +2367,7 @@ Ship.prototype.getBaseMorale = function(){
 Ship.prototype.getSumMoraleModifers = function(){
 	var baseMorale = this.getBaseMorale();
 	var cmd = this.getSystemByName("Command");
-	var flagship = this.command == true ? 10 : 0;
+	var flagship = this.command ? 10 : 0;
 	var upgrade = this.getCrewLevel(0) * cmd.crewEffect;
 	var crits = cmd.getCritMod("Morale");
 	var dmg = this.getDamageMoraleMalus();
@@ -2402,24 +2400,6 @@ Ship.prototype.getEffectiveRoutChance = function(){
 		return 0;
 	}
 	else return this.morale.effChance;
-}
-
-Ship.prototype.getMoraleDiv = function(){
-	//if (!this.ship){return false}
-	return ($("<tr>")
-			.append($("<td>").html("Morale"))
-			.append($("<td>").attr("colSpan", 1).addClass("Morale")
-				//.append($("<div>").addClass("moraleFull"))
-				//.append($("<div>").addClass("moraleTrigger").css("width", (this.getMoraleTrigger() + "%")))
-				.append($("<div>").addClass("moraleNow").css("width", (Math.min(100, this.getRefmMorale()) + "%")))
-				.hover(
-					function(e){
-						game.getUnit($(this).parent().parent().parent().parent().parent().parent().data("shipId")).showfMoraleDiv(e);
-					},
-					function(e){
-						game.getUnit($(this).parent().parent().parent().parent().parent().parent().data("shipId")).hidefMoraleDiv();
-					}))
-				)
 }
 
 Ship.prototype.createBaseDiv = function(){

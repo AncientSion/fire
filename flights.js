@@ -476,7 +476,7 @@ Flight.prototype.setImage = function(){
 		ctx.translate(-this.structures[i].layout.x, -this.structures[i].layout.y);
 	}
 
-	ctx.arc(0, 0, 5, 0, 2*Math.PI, false);
+	ctx.arc(0, 0, 3, 0, 2*Math.PI, false);
 	ctx.fillStyle = (this.friendly ? "#00ea00" : "red");
 	ctx.fill();
 	ctx.setTransform(1,0,0,1,0,0);

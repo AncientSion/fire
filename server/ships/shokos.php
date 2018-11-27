@@ -5,7 +5,7 @@ class Shokos extends UltraLight {
 	public $display = "Shokos";
 	public $role = "Light Corvette";
 	public $faction = "Narn Regime";
-	public static $value = 220;
+	public static $value = 210;
 	public $mass = 1000;
 
 	public $integrity = 330;
