@@ -80,12 +80,12 @@ class Ship {
 	public $modFocusRate = 0;
 
 	public $critEffects = array( // type, min%, dura, effect
-		//array("Rout", 10, -2, 0.00),
-		array("Morale", 30, -2, -5.00),
+		array("Rout", 10, -2, 0.00),
+	/*	array("Morale", 30, -2, -5.00),
 		array("Morale", 60, -2, -15.00),
 		array("Morale", 100, -2, -25.00),
 		array("Rout", 150, -2, 0.00),
-	);
+	*/);
 
 	function __construct($data){
 		if (!$data){return;}
@@ -839,7 +839,6 @@ class Ship {
 		else if ($fire->shooter->obstacle){
 			Debug::log("resolveFireOrder OBSTACLE - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots.", type: ".$fire->weapon->dmgType);
 
-			$this->doRollShots($fire);
 			$this->determineObstacleHits($fire);
 		}
 		else {
@@ -870,6 +869,7 @@ class Ship {
 
 	public function determineObstacleHits($fire){
 		//Debug::log("determineObstacleHits ".get_class($this).", req: ".$fire->req);
+		$this->doRollShots($fire);
 
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			//Debug::log("roll ".$fire->rolls[$i]);

@@ -221,7 +221,7 @@ class Mixed extends Ship {
 			//Debug::log($shots);
 
 			for ($j = 0; $j < sizeof($fire->rolls); $j++){
-				if ($this->structures[$i]->destroyed){$fire->cancelShotResolution($j); break;}
+				if ($this->structures[$i]->destroyed){break;} // no cancel, rolls are emptied anyway
 				else if ($fire->rolls[$j] <= $fire->req){
 					$fire->hits++;
 					DmgCalc::doDmg($fire, $i, $this->structures[$i]);

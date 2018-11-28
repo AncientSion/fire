@@ -1778,7 +1778,7 @@
 		$do = 1;
 
 		while ($do){
-			Debug::log("-----------------testFleetMorale  static::$turn/static::$phase");
+			Debug::log("-----------------testFleetMorale".static::$turn."/".static::$phase);
 			$do--;
 			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 				//Debug::log("userid ".$this->playerstatus[$i]["userid"]);

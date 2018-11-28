@@ -1755,12 +1755,12 @@ Ship.prototype.draw = function(){
  	if (this.doDraw){this.drawPositionMarker();}
 
 	ctx.translate(this.drawX, this.drawY);
-	//ctx.rotate(this.getDrawFacing() * Math.PI/180);
+	ctx.rotate(this.getDrawFacing() * Math.PI/180);
 
 	if (this.doDraw){this.drawSelf();}
 
 	this.drawEscort();
-	//ctx.rotate(-this.getDrawFacing() * Math.PI/180);
+	ctx.rotate(-this.getDrawFacing() * Math.PI/180);
 	ctx.translate(-this.drawX, -this.drawY);
 }
 
