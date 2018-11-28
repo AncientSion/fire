@@ -89,6 +89,40 @@ class Salvo extends Minor {
 	public function getMaskEffect($shooter){
 		return 0;
 	}
+
+	public function setMove(){
+		Debug::log("**** setMove ".$this->id);
+		if ($this->moveSet){return;}
+
+		$origin = $this->getCurPos();
+		$speed = $this->getCurSpeed();
+		$t;
+		$tPos;
+		$dist = 0;
+		$angle = 0;
+		$type = "move";
+
+		$t = $this->mission->target;
+	
+		$tPos = $t->getCurPos();
+		$dist = Math::getDist2($origin, $tPos);
+		$angle = Math::getAngle2($origin, $tPos);
+
+		if ($speed < $dist){ // on route or drag -> own speed
+			Debug::log("close in");
+			$dist = $speed;
+			$tPos = Math::getPointInDirection($speed, $angle, $origin->x, $origin->y);
+		}
+		else { // ON ROUTE; REACH
+			Debug::log("arrival");
+			$this->mission->arrived = Manager::$turn;
+		}
+
+		$move = new Action(-1, $this->id, Manager::$turn, $type, 0, $dist, $tPos->x, $tPos->y, $angle, 0, 0, 0, 1, 1);
+		Debug::log($this->id." --- adding ".$move->type." to => ".$move->x."/".$move->y.", dist: ".$dist);
+		$this->actions[] = $move;
+		$this->moveSet = 1;
+	}
 }
 
 ?>

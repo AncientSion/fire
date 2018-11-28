@@ -268,10 +268,10 @@ Mixed.prototype.setNextMove = function(){
 						console.log("dist is " + d);
 
 						var ownDist = d / (s + otherSpeed) * s;
-						var otherDist = d - ownDist;
+						//var otherDist = d - ownDist;
 
 						console.log("own will be " + ownDist);
-						console.log("other will be " + otherDist);
+						//console.log("other will be " + otherDist);
 
 						next = getPointInDir(ownDist, this.facing, p.x, p.y);
 						console.log("_________________");

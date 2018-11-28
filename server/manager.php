@@ -952,11 +952,11 @@
 		});
 
 		for ($i = 0; $i < sizeof($patrols); $i++){
-			$patrols[$i]->setMove($this);
+			$patrols[$i]->setMove();
 		}
 
 		for ($i = 0; $i < sizeof($flights); $i++){
-			$flights[$i]->setMove($this);
+			$flights[$i]->setMove();
 		}
 
 		return;
@@ -969,7 +969,7 @@
 			if (!$this->ships[$i]->salvo){continue;}
 
 			$this->ships[$i]->mission->target = $this->getUnit($this->ships[$i]->mission->targetid);
-			$this->ships[$i]->setMove($this);
+			$this->ships[$i]->setMove();
 		}
 	}
 
@@ -978,7 +978,7 @@
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (!$this->ships[$i]->obstacle){continue;}
-			$this->ships[$i]->setMove($this);
+			$this->ships[$i]->setMove();
 		}
 	}
 
@@ -1194,7 +1194,6 @@
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (!$this->ships[$i]->flight){continue;}
 			if ($this->ships[$i]->mission->type != 2){continue;}
-			if ($this->ships[$i]->mission->type == 1 && !$this->mission->arrived){continue;} // player issue new patrol in same initial phase as flight target jumpsOut
 
 			$t = $this->getUnit($this->ships[$i]->mission->targetid);
 			if ($t->destroyed || $t->status == "jumpOut"){
@@ -1235,10 +1234,12 @@
 	public function doFirstDestroyedCheck(){
 		//Debug::log("doFirstDestroyedCheck");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->obstacle){continue;}
+		
 			if ($this->ships[$i]->salvo && sizeof($this->ships[$i]->structures[0]->systems[0]->fireOrders)){ // impact salvo
 				$this->ships[$i]->destroyed = true;
 			}
-			else if (static::$phase == 3 && $this->ships[$i]->salvo && $this->ships[$i]->structures[0]->torpedo){ // torps out of range
+			else if (static::$phase == 3 && $this->ships[$i]->salvo && $this->ships[$i]->structures[0]->torpedo){ // range
 				Debug::log("Torpedo out of range!");
 				$this->ships[$i]->destroyed = true;
 			}
@@ -1251,12 +1252,9 @@
 	public function doSecondDestroyedCheck(){
 		//Debug::log("doSecondDestroyedCheck");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->destroyed){
-				for ($j = 0; $j < sizeof($this->ships); $j++){
-					if ($this->ships[$j]->salvo && $this->ships[$j]->mission->targetid == $this->ships[$i]->id){
-						$this->ships[$j]->destroyed = true;
-					}
-				}
+			if ($this->ships[$i]->obstacle || !$this->ships[$i]->destroyed){continue;}
+			if ($this->ships[$j]->salvo && $this->ships[$j]->mission->targetid == $this->ships[$i]->id){
+				$this->ships[$j]->destroyed = true;
 			}
 		}
 	}
