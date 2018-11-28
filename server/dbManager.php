@@ -21,53 +21,52 @@
 	        return self::$instance;
 		}
 
+	    public function dump(){
+	    	$os = PHP_OS;
+			$access = Debug::access();
 
-    public function dump(){
-    	$os = PHP_OS;
-		$access = Debug::access();
+			if ($os != "WINNT"){
+				exec('mysqldump -u '.$access[0].' -p'.$access[1].' spacecombat > '.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
+			}
+			else {
+				exec('C:/xampp/mysql/bin/mysqldump -u '.$access[0].' -p'.$access[1].' spacecombat > '.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
+			}
+	    }
 
-		if ($os != "WINNT"){
-			exec('mysqldump -u '.$access[0].' -p'.$access[1].' spacecombat > '.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
+	    public function anew(){
+	    	$os = PHP_OS;
+			$access = Debug::access();
+			
+			$dump = file("dump.sql");
+
+			if (!$dump){return;}
+
+			$sql = "";	
+			$tables = array();
+
+			foreach ($this->query("show tables") as $result){
+				$tables[] = $result["Tables_in_spacecombat"];
+			}
+
+			for ($i = 0; $i < sizeof($tables); $i++){
+				$sql = "drop table ".$tables[$i];
+
+				$stmt = $this->connection->prepare($sql);
+				$stmt->execute();
+				if ($stmt->errorCode() == 0){
+					$sql = "";
+					//echo "<div>dropping: ".$tables[$i]."</div>";
+				} else continue;
+			}
+
+
+			if ($os != "WINNT"){
+				exec('mysql -u '.$access[0].' -p'.$access[1].' spacecombat < '.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
+			}
+			else {
+				exec('C:/xampp/mysql/bin/mysql -u '.$access[0].' -p'.$access[1].' spacecombat < '.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
+			}
 		}
-		else {
-			exec('C:/xampp/mysql/bin/mysqldump -u '.$access[0].' -p'.$access[1].' spacecombat > '.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
-		}
-    }
-
-    public function anew(){
-    	$os = PHP_OS;
-		$access = Debug::access();
-		
-		$dump = file("dump.sql");
-
-		if (!$dump){return;}
-
-		$sql = "";	
-		$tables = array();
-
-		foreach ($this->query("show tables") as $result){
-			$tables[] = $result["Tables_in_spacecombat"];
-		}
-
-		for ($i = 0; $i < sizeof($tables); $i++){
-			$sql = "drop table ".$tables[$i];
-
-			$stmt = $this->connection->prepare($sql);
-			$stmt->execute();
-			if ($stmt->errorCode() == 0){
-				$sql = "";
-				//echo "<div>dropping: ".$tables[$i]."</div>";
-			} else continue;
-		}
-
-
-		if ($os != "WINNT"){
-			exec('mysql -u '.$access[0].' -p'.$access[1].' spacecombat < '.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
-		}
-		else {
-			exec('C:/xampp/mysql/bin/mysql -u '.$access[0].' -p'.$access[1].' spacecombat < '.$_SERVER["DOCUMENT_ROOT"].'/fire/dump.sql');
-		}
-	}
 
 		public function getLastInsertId(){
 			return $this->connection->lastInsertId();

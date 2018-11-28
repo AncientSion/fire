@@ -112,7 +112,7 @@ class Obstacle extends Minor {
 		$angle = $this->getCurFacing();
 		$target = Math::getPointInDirection($speed, $angle, $origin->x, $origin->y);
 
-		$move = new Action(-1, $this->id, $gd::$turn, "move", 0, $speed, $target->x, $target->y, 0, 0, 0, 0, 1, 1);
+		$move = new Action(-1, $this->id, Manager::$turn, "move", 0, $speed, $target->x, $target->y, 0, 0, 0, 0, 1, 1);
 		$this->actions[] = $move;
 		$this->moveSet = 1;
 	}

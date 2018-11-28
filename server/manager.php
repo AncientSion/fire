@@ -94,7 +94,7 @@
 		//Debug::log("getClientData");
 		//$this->setupShips(); return;
 		//$this->testUnitMorale(); return;
-		//$this->setPostFireFocusValues(); return;
+		//$this->adjustFocusValues(); return;
 		//$this->testFleetMorale();
 		//if ($this->hasNewGlobalEntries()){DBManager::app()->insertNewGlobalEntries($this->playerstatus);}
 
@@ -181,7 +181,6 @@
 			}
 		}
 	}
-
 
 	public function getBaseFacing(){
 		return 0 + (180 * ($this->userindex % 2));
@@ -593,27 +592,10 @@
 		$this->destroyJumpedUnits();
 		$this->assembleDeployStates();
 		$this->deleteAllReinforcements();
-
-		if (static::$turn == 1){
-			$this->setPostFireFocusValues();
-		}
+		$this->adjustFocusValues();
 
 		DBManager::app()->deleteEmptyLoads($this->gameid);
 	}
-
-	public function handleJumpOutAction(){
-		Debug::log("handleJumpOutAction");
-
-		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$len = sizeof($this->ships[$i]->actions)-1;
-			if ($len < 0){continue;}
-			if ($this->ships[$i]->actions[$len]->type == "jumpOut" && !$this->ships[$i]->actions[$len]->forced){
-				$this->ships[$i]->withdraw = static::$turn +2;
-				$this->ships[$i]->manual = 1;
-			}
-		}
-	}
-
 	public function handleDeployActions(){
 		$data = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1147,7 +1129,7 @@
 		$this->testUnitMorale();
 		$this->adjustFleetMorale();
 		$this->testFleetMorale();
-		$this->setPostFireFocusValues();
+		$this->adjustFocusValues();
 
 		$this->handleResolvedFireData();
 
@@ -1160,6 +1142,19 @@
 		$this->handleJumpOutAction();
 		$this->handleJumpImminentUnits();
 		return true;
+	}
+
+	public function handleJumpOutAction(){
+		Debug::log("handleJumpOutAction");
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			$len = sizeof($this->ships[$i]->actions)-1;
+			if ($len < 0){continue;}
+			if ($this->ships[$i]->actions[$len]->type == "jumpOut" && !$this->ships[$i]->actions[$len]->forced){
+				$this->ships[$i]->withdraw = static::$turn + GD::$jumpTimer;
+				$this->ships[$i]->manual = 1;
+			}
+		}
 	}
 
 	public function handleJumpImminentUnits(){
@@ -1253,8 +1248,8 @@
 		//Debug::log("doSecondDestroyedCheck");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->obstacle || !$this->ships[$i]->destroyed){continue;}
-			if ($this->ships[$j]->salvo && $this->ships[$j]->mission->targetid == $this->ships[$i]->id){
-				$this->ships[$j]->destroyed = true;
+			if ($this->ships[$i]->salvo && $this->ships[$i]->mission->targetid == $this->ships[$i]->id){
+				$this->ships[$i]->destroyed = true;
 			}
 		}
 	}
@@ -1778,10 +1773,10 @@
 		$do = 1;
 
 		while ($do){
-			Debug::log("-----------------testFleetMorale".static::$turn."/".static::$phase);
+			Debug::log("-----------------testFleetMorale turn/phase ".static::$turn." / ".static::$phase);
 			$do--;
 			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-				//Debug::log("userid ".$this->playerstatus[$i]["userid"]);
+				Debug::log("userid ".$this->playerstatus[$i]["userid"]);
 				$totalMoraleWorth = 0;
 				$moraleLost = 0;
 
@@ -1795,15 +1790,8 @@
 				}
 
 				Debug::log("totalMoraleWorth ".$totalMoraleWorth.", moraleLost ".$moraleLost);
+				if (!$totalMoraleWorth || !$moraleLost){continue;}
 				$rel = round($moraleLost / $totalMoraleWorth, 2);
-
-				if (!$moraleLost){
-					Debug::log("no loss, continue"); continue;
-				} 
-				else if (!$rel){
-					Debug::log("no rel, continue"); continue;
-				} else Debug::log("loss!");
-
 
 				Debug::log("userid ".$this->playerstatus[$i]["userid"].", totalMoraleWorth ".$totalMoraleWorth.", moraleLost ".$moraleLost.", rel: ".$rel);
 
@@ -1895,8 +1883,8 @@
 		return false;
 	}
 
-	public function setPostFireFocusValues(){
-		//Debug::log("setPostFireFocusValues");
+	public function adjustFocusValues(){
+		//Debug::log("adjustFocusValues()");
 		$data = array();
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){

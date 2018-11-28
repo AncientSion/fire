@@ -106,6 +106,7 @@ class GD {
 	public $reinforceETA = 0;
 	public $reinforceAmount = 0;
 	public $focusMod = 0;
+	public static $jumpTimer = 1;
 
 	function __construct($data){
 		//Debug::log("creating GD");

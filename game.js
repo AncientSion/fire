@@ -759,7 +759,8 @@ this.doAnimateMovement = function(){
 	
 	this.handleFleetCommandWarning = function(){
 		var hasCommand = this.userHasCommandUnit(this.getPlayerStatus().userid);
-		if (!hasCommand){
+		var canHaveCommand = this.userCanHaveCommandUnit(this.getPlayerStatus().userid);
+		if (canHaveCommand && !hasCommand){
 			popup("There is no legal Fleet Command for the next turn.</br>Please select a unit to act as Fleet Command.");
 			return true;
 		}
@@ -784,12 +785,21 @@ this.doAnimateMovement = function(){
 		return false;
 	}
 
-
 	this.userHasCommandUnit = function(userid){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid != userid){continue;}
 			if (this.ships[i].jumpIsImminent() || this.ships[i].isDestroyed()){continue;}
 			if (this.ships[i].command){return true;}
+		}
+		return false;
+	}
+
+	this.userCanHaveCommandUnit = function(userid){
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].userid != userid){continue;}
+			if (this.ships[i].jumpIsImminent() || this.ships[i].isDestroyed()){continue;}
+			if (this.ships[i].flight || this.ships[i].salvo){continue;}
+			return true;
 		}
 		return false;
 	}
@@ -3234,7 +3244,7 @@ Game.prototype.showFocusInfo = function(e, userid){
 	}
 
 	var flagship = game.getCommandUnit(userid);
-	var command = flagship.getSystemByName("Command");
+	var command = flagship ? flagship.getSystemByName("Command") : 0;
 
 	$(document.body)
 	.append(
@@ -3250,11 +3260,11 @@ Game.prototype.showFocusInfo = function(e, userid){
 			)
 			.append($("<tr>")
 				.append($("<td>").html("Flagship Command Rating"))
-				.append($("<td>").html(flagship.baseFocusRate + " %"))
+				.append($("<td>").html((flagship ? flagship.baseFocusRate : 0) + " %" ))
 			)
 			.append($("<tr>")
 				.append($("<td>").html("Base Focus Generation"))
-				.append($("<td>").html(Math.floor(game.settings.pv / 10 * game.settings.focusMod) / 100 * flagship.baseFocusRate))
+				.append($("<td>").html((flagship ? Math.floor(game.settings.pv / 10 * game.settings.focusMod) / 100 * flagship.baseFocusRate : 0)))
 			)
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 10))

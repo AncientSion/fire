@@ -739,9 +739,7 @@ class Ship {
 			if ($this->destroyed){
 				return true;
 			}
-		}
-		else if ($phase == 3){
-			if ($turn+1 == $this->withdraw){
+			else if ($this->withdraw == $turn + GD::$jumpTimer){
 				return true;
 			}
 		}
@@ -754,21 +752,13 @@ class Ship {
 	}
 
 	public function triggersFleetMoraleTest($turn, $phase){
-		Debug::log("triggersFleetMoraleTest #".$this->id.", $turn/$phase, withdraw: ".$this->withdraw.", manaul: ".$this->manual);
-		if ($phase == 2){
-			if ($this->destroyed){
-				return true;
-			}
+		Debug::log("triggersFleetMoraleTest #".$this->id.", $turn/$phase, withdraw: ".$this->withdraw.", manual: ".$this->manual);
+		
+		if ($this->destroyed){
+			return true;
 		}
-		else if ($phase == 3){
-			if ($turn+1 == $this->withdraw && !$this->manual){
-				return true;
-			}
-		}
-		else if ($phase == -1){
-			if ($this->isReinforcing($turn, $phase)){
-				return true;
-			}
+		else if ($this->withdraw == $turn + GD::$jumpTimer && !$this->manual){
+			return true;
 		}
 		return false;
 	}
@@ -777,13 +767,13 @@ class Ship {
 		if ($this->destroyed){
 			return "destroyed";
 		}
-		else if ($phase == 2){
-			return "routed";
-		}
 		else if ($this->isReinforcing($turn, $phase)){
 			return "reinforcing";
 		}
-		else return "withdrawn";
+		else if ($this->manual){
+			return "withdrawn";
+		}
+		else return "routed";
 	}
 
 	public function getMoraleChangeValue($turn, $phase){
@@ -792,14 +782,14 @@ class Ship {
 		if ($this->destroyed){
 			$multi = -100;
 		}
-		else if ($phase == 2){
-			$multi = -75;
-		}
 		else if ($this->isReinforcing($turn, $phase)){
 			$multi = 50;
 		}
-		else $multi = -50;
-
+		else if ($this->manual){
+			$multi = -50;
+		}
+		else $multi = -75;
+		
 		//Debug::log("getMoraleChangeValue ".$this->id.", multi ".$multi);
 		return $this->moraleCost / 100  * $multi;
 	}
@@ -1278,7 +1268,7 @@ class Ship {
 		$this->notes = $crit->notes;
 		if ($crit->type == "Rout"){
 			$this->actions[] = new Action(-1, $this->id, $turn, "jumpOut", 1, 0, $this->x, $this->y, 0, 0, 0, 0, 1, 1);
-			$this->withdraw = $turn +2;
+			$this->withdraw = $turn + GD::$jumpTimer;
 		}
 		else $this->getSystemByName("Command")->crits[] = $crit;
 	}
