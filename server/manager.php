@@ -811,10 +811,7 @@
 		$newMoves = array();
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->ship || $this->ships[$i]->squad){continue;}
-			if (!$this->ships[$i]->hasMoved()){continue;}		
-			if (!$this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1]->new){continue;}
-			$newMoves[] = $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1];
+			$newMoves = array_merge($newMoves, $this->ships[$i]->getServerActions());
 		}
 
 		if (sizeof($newMoves)){
@@ -955,12 +952,13 @@
 		}
 	}
 
-	public function handleObstacleMovement(){
-		Debug::log("handleObstacleMovement");
+	public function handleAutomatedStartMoves(){
+		Debug::log("handleTurnStartMoves");
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if (!$this->ships[$i]->obstacle){continue;}
-			$this->ships[$i]->setMove();
+			if ($this->ships[$i]->obstacle || $this->ships[$i]->faction[0] == "V"){
+				$this->ships[$i]->setMove();
+			}
 		}
 	}
 
@@ -1276,14 +1274,14 @@
 		$this->handleCommandTransfer();
 		$this->handleFocusGain();
 		$this->pickReinforcements();
-		$this->handleObstacleMovement();
-		$this->handleServerNewActions();
 
 		return true;
 	}
 
 	public function startDeployPhase(){
 		$this->updatePlayerStatus("waiting");
+		$this->handleAutomatedStartMoves();
+		$this->handleServerNewActions();
 	}
 
 	public function setupShips(){

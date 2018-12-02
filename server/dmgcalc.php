@@ -88,6 +88,12 @@ class DmgCalc {
 		return $crit;
 	}
 
+	public static function getBonusDamage($fire, $baseDmg, $hit){
+		if (!$fire->weapon->amBonus){
+			return 0;
+		}
+		return min($baseDmg / 100 * $fire->weapon->amMax, ($fire->req - $fire->rolls[$hit]) * $fire->weapon->amBonus);
+	}
 
 	public static function setWeaponPriority(){
 		$names = array(
@@ -97,7 +103,8 @@ class DmgCalc {
 			"HeavyAntimatterConverter", "AntimatterConverter",  "MagCompressor",
 			"LightPulse", "MediumPulse", "HeavyPulse", "NeutronPulsar",
 			"LightPlasmaPulse", "MediumPlasmaPulse", "HeavyPlasmaPulse",
-			"MediumRailGun", "HeavyRailGun"
+			"MediumRailGun", "HeavyRailGun",
+			"AntiMatterCannon", "AntiProtonEmitter"
 		);
 
 		$weapons = array();

@@ -110,9 +110,9 @@ class HeavyParticle extends MediumParticle {
 	public $name = "HeavyParticle";
 	public $display = "Heavy Particle Cannon";
 	public static $prio = 0;
-	public $minDmg = 154;
-	public $maxDmg = 169;
-	public $accDecay = -80;
+	public $minDmg = 54;
+	public $maxDmg = 69;
+	public $accDecay = 80;
 	public $shots = 2;
 	public $reload = 4;
 	public $integrity = 64;
@@ -286,14 +286,8 @@ class AntimatterConverter extends Particle {
 		if ($fire->target->squad){return $this->dmgs[1];}
 		return mt_rand($this->getMinDamage(), $this->getMaxDamage());
 	}
-
-	public function getBonusDamage($fire, $baseDmg, $hit){
-		//Debug::log("hit #".$hit);
-		//Debug::log("req: ".$fire->req);p
-		//Debug::log("roll: ".$fire->rolls[$hit]);
-		return min($baseDmg / 100 * $this->amMax, ($fire->req - $fire->rolls[$hit]) * $this->amBonus);
-	}
 }
+
 class HeavyAntimatterConverter extends AntimatterConverter {
 	public $name = "HeavyAntimatterConverter";
 	public $display = "Heavy Antimatter-Converter";
@@ -367,6 +361,55 @@ class EMSubjugator extends EM {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $start, $end, $output, $width);
+	}
+}
+
+class AntimatterCannon extends Particle {
+	public $name = "AntimatterCannon";
+	public $display = "Anti-Matter Cannon";
+	public static $prio = 0;
+	public $minDmg = 37;
+	public $maxDmg = 46;
+	public $accDecay = 120;
+	public $shots = 3;
+	public $reload = 3;
+	public $integrity = 84;
+	public $powerReq = 8;
+	public $tracking = 3;
+
+	public $animColor = "green";
+	public $projSize = 4;
+	public $projSpeed = 6;
+	public $amBonus = 1;
+	public $amMax = 30;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+		parent::__construct($id, $parentId, $start, $end, $output, $width);
+        $this->setAntimatterData();
+	}
+}
+
+class AntiProtonEmitter extends Particle {
+	public $name = "AntiProtonEmitter";
+	public $display = "Anti-Proton Emitter";
+	public static $prio = 0;
+	public $minDmg = 17;
+	public $maxDmg = 23;
+	public $accDecay = 120;
+	public $shots = 2;	
+	public $reload = 2;
+	public $integrity = 30;
+	public $powerReq = 3;
+	public $tracking = 3;
+	//public $effiency = 3;
+	//public $maxBoost = 1;
+
+	public $animColor = "green";
+	public $projSize = 2;
+	public $projSpeed = 8;
+	
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 

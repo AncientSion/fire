@@ -177,7 +177,8 @@ spl_autoload_register(
                 'superheavyparticle' => '/server/systems/weapons/particle.php',
                 'fusioncannon' => '/server/systems/weapons/particle.php',
                 'heavyfusioncannon' => '/server/systems/weapons/particle.php',
-
+                'antimattercannon' => '/server/systems/weapons/particle.php',
+                'antiprotonemitter' => '/server/systems/weapons/particle.php',
                 'antimatterconverter' => '/server/systems/weapons/particle.php',
                 'heavyantimatterconverter' => '/server/systems/weapons/particle.php',
 

@@ -147,7 +147,11 @@ Ship.prototype.canDeploy = function(){
 	return false;
 }
 
-Ship.prototype.canDeployHere = function(pos){
+Ship.prototype.canDeployHere = function(e, pos){
+
+	var p = planCtx.getImageData(e.clientX, e.clientY, 1, 1).data;
+	var hex = game.rgbToHex(p[0], p[1], p[2])//.slice(-6);
+	console.log(hex);
 	var valid = false;	
 
 	var deploy = game.getDeployArea();
@@ -174,96 +178,6 @@ Ship.prototype.canDeployHere = function(pos){
 	}
 	return false;
 }
-
-
-Ship.prototype.canDeployHereO = function(pos){
-	var valid = false;		
-	
-	/*
-	if (game.turn >= 2){
-		if (getDistance({x: 0, y: 0}, pos) >= 750){
-			return false;
-		} return true;
-	}
-	else {
-		for (var i = 0; i < game.deploys.length; i++){
-			if (game.deploys[i].userid != this.userid){continue;}
-
-			if (getDistance(game.deploys[i], pos) + this.size/2 < game.deploys[i].s){
-				for (var j = 0; j < game.ships.length; j++){
-					if (game.ships[j].deployed && game.ships[j].id != this.id && game.ships[j].userid == this.userid){ // different ship, different owners
-						var step = game.ships[j].getGamePos();
-						if (getDistance(pos, step) <= (game.ships[j].size/2 + this.size/2)){
-						popup("The selected position is too close to the position or planned position of vessel (#"+game.ships[i].id+")");
-							return false;
-						}
-					}
-				}
-				return true;
-			}
-		}
-
-		return false;
-	}
-	*/
-
-	if (game.turn == 1){
-		for (var i = 0; i < game.deployArea.length; i++){
-			if (game.deployArea[i].id != game.userid){continue;}
-			if (game.deployArea[i].x > 0){
-				if (pos.x >= game.deployArea[i].x && pos.x <= game.deployArea[i].x + game.deployArea[i].w){
-					if (pos.y >= game.deployArea[i].y && pos.y <= game.deployArea[i].y + game.deployArea[i].h){
-						valid = true; break;
-					}
-				}
-			}
-			else if (pos.x <= game.deployArea[i].x && pos.x >= game.deployArea[i].x + game.deployArea[i].w){
-				if (pos.y >= game.deployArea[i].y && pos.y <= game.deployArea[i].y + game.deployArea[i].h){
-					valid = true; break;
-				}
-			}
-			else if (pos.x > game.deployArea[i].x && pos.x < game.deployArea[i].x + game.deployArea[i].w){
-				if (pos.y > game.deployArea[i].y && pos.y < game.deployArea[i].y + game.deployArea[i].h){
-					valid = true; break;
-				}
-			}
-		}
-		if (valid){
-			for (var i = 0; i < game.ships.length; i++){
-				if (game.ships[i].deployed && game.ships[i].id != this.id && game.ships[i].userid == this.userid){ // different ship, different owners
-					var step = game.ships[i].getGamePos();
-					if (getDistance(pos, step) <= (game.ships[i].size/2 + this.size/2)){
-					popup("The selected position is too close to the position or planned position of vessel (#"+game.ships[i].id+")");
-						return false;
-					}
-				}
-			}
-			return true;
-		}
-
-		return false;
-	}
-	else if (game.turn > 1){
-		//console.log(game.deployArea);
-		var d = getDistance(pos, {x: game.deployArea[0].x, y: game.deployArea[0].y});
-		if (d > game.deployArea[0].b && d < game.deployArea[0].s){
-			return true;
-		}
-		return false;
-	}
-	else {
-		for (var i = 0; i < game.deployArea.length; i++){
-			if (game.deployArea[i].id != this.userid){continue;}
-
-			if (getDistance(game.deployArea[i], pos) < game.deployArea[i].s){
-				return true;
-			}
-		}
-
-		return false;
-	}
-}
-
 
 Ship.prototype.doDeploy = function(pos){
 	console.log(this);
@@ -1512,7 +1426,11 @@ Ship.prototype.setSubSystemState = function(){
 }
 
 Ship.prototype.setStringHitChance = function(){
-	this.stringHitChance = Math.floor(this.baseHitChance * this.profile[0]) + " - " + Math.floor(this.baseHitChance * this.profile[1]) + "%"
+	if (this.profile[0] != this.profile[1]){
+		string = Math.floor(this.baseHitChance * this.profile[0]) + " - " + Math.floor(this.baseHitChance * this.profile[1]);
+	}
+	else string = Math.floor(this.baseHitChance * this.profile[0]);
+	this.stringHitChance = (string + "%");
 }
 
 Ship.prototype.getStringHitChance = function(){
@@ -2888,6 +2806,14 @@ Ship.prototype.expandDiv = function(div){
 		else if (a == 60 || a == 300 || noAft){
 			offsetX += 10;
 		}
+
+
+
+		if (this.structures.length == 4 && this.faction[0] == "V"){
+			offsetX = 20 + ((i % 2 == 0) * -25);
+			offsetY = -35 + ((i % 2 == 0) * 10);
+		}
+
 		
 		var pos = getPointInDir(130 - offsetX, a-90, conWidth/2, conHeight/2-40);
 		var w = $(structDiv).width();
@@ -2920,6 +2846,7 @@ Ship.prototype.expandDiv = function(div){
 		else if (!noFront && !noAft){
 			offsetY -= 30;
 		}
+
 		
 		$(structDiv)
 			.data("id", this.structures[i].id)

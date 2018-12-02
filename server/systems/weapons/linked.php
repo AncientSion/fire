@@ -60,19 +60,7 @@ class FighterStrafe extends FighterWeapon {
 		parent::__construct($id, $parentId, $fighterId, $linked, $shots, $minDmg, $maxDmg);
         $this->setAntimatterData();
 	}
-
-	public function getBonusDamage($fire, $baseDmg, $hit){
-		//Debug::log("hit #".$hit);
-		//Debug::log("req: ".$fire->req);p
-		//Debug::log("roll: ".$fire->rolls[$hit]);
-		return min($baseDmg / 100 * $this->amMax, ($fire->req - $fire->rolls[$hit]) * $this->amBonus);
-	}
-	//public function getMultiShotHits($fire, $hit, $element){
-		//Debug::log("req: ".$fire->req.", roll: ".$fire->rolls[sizeof($fire->rolls)-1].", grouping: ".$this->grouping);
-	//	return $this->basePulses + min($this->extraPulses, floor(($fire->req - $fire->rolls[$hit]) / $this->grouping));
-	//}
 }
-
 
 class NeutronRepeater extends FighterWeapon {
 	public $name = "NeutronRepeater";

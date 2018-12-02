@@ -866,8 +866,8 @@
 						$attempts--;
 						//Debug::log("attempts ".$attempts);
 
-						$x = mt_rand(150, 475) * $shift;
-						$y = mt_rand(-500, 500);
+						$x = mt_rand(150, 525) * $shift;
+						$y = mt_rand(-550, 550);
 						$size = round($templates[$j][0] / 10 * mt_rand(8, 12));
 						$rockSize = min(8, max(1, $templates[$j][1] + mt_rand(-2, 2)));
 

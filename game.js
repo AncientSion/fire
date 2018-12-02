@@ -68,6 +68,7 @@ function Game(data){
 	this.animMoves = 0;
 	this.exclusiveSystem = false;
 	this.obstacleDataSet = 0;
+	this.deployImage = false;
 
 this.initAnimateMovement = function(){
 	this.drawingEvents = 0;
@@ -899,6 +900,7 @@ this.doAnimateMovement = function(){
 		this.deploying = false;
 		this.deployArea = [];
 		this.deployBlock = false;
+		//this.deployImage = false;
 		moveCtx.clearRect(0, 0, res.x, res.y);
 		planCtx.clearRect(0, 0, res.x, res.y);
 		mouseCtx.clearRect(0, 0, res.x, res.y);
@@ -1034,11 +1036,18 @@ this.doAnimateMovement = function(){
 				b: Math.min(550 + (game.turn > 1)*200, Math.round(d*2.5)),
 				deleteW: 850 + (game.turn > 1)*200,
 				start: step == -1 ? 90 : 270,
-				end: step == -1 ? 270 : 90
+				end: step == -1 ? 270 : 90,
+				pick: ""
 			});
 		}
 	}
 
+	this.rgbToHex = function(r, g, b, a) {
+    if (r > 255 || g > 255 || b > 255 || a > 255){
+        throw "Invalid color component";
+    }
+   return ((r << 16) | (g << 8) | b).toString(16);
+	}
 
 	this.drawDeployZone = function(){
 		for (var i = 0; i < this.deployArea.length; i++){
@@ -1049,14 +1058,7 @@ this.doAnimateMovement = function(){
 			drawCtx.closePath();
 			drawCtx.fillStyle = this.deployArea[i].c;
 			drawCtx.fill();
-
-		/*	drawCtx.beginPath();
-			drawCtx.arc(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].b, degreeToRadian(this.deployArea[i].start), degreeToRadian(this.deployArea[i].end));
-			drawCtx.closePath();
-			drawCtx.globalCompositeOperation = "destination-out";
-			drawCtx.fill();
-		*/	drawCtx.setTransform(1,0,0,1,0,0);
-			//drawCtx.globalCompositeOperation = "source-over";
+			drawCtx.setTransform(1,0,0,1,0,0);
 		}
 
 		for (var i = 0; i < this.deployArea.length; i++){
@@ -1072,7 +1074,6 @@ this.doAnimateMovement = function(){
 			drawCtx.setTransform(1,0,0,1,0,0);
 		}
 
-
 		var center = {x: (this.deployArea[0].x + this.deployArea[1].x)/2, y: (this.deployArea[0].y + this.deployArea[1].y)/2};
 		var deleteW = (this.deployArea[0].deleteW + this.deployArea[0].deleteW)/2;
 
@@ -1087,70 +1088,31 @@ this.doAnimateMovement = function(){
 		drawCtx.setTransform(1,0,0,1,0,0);
 		drawCtx.globalCompositeOperation = "source-over";
 
-
+	//	this.deployImage = new Image();
+	//	this.deployImage.src = drawCanvas.toDataURL();
+	//	console.log(drawCanvas.toDataURL());
+	//	return;
 
 		planCtx.clearRect(0, 0, res.x, res.y);
 		planCtx.globalAlpha = 0.3;
 		planCtx.drawImage(drawCanvas, 0, 0);
 		drawCtx.clearRect(0, 0, res.x, res.y);
+	}
+
+	this.redrawDeploymentZone = function(){
+		planCtx.clearRect(0, 0, res.x, res.y);
+		planCtx.translate(cam.o.x, cam.o.y);
+		planCtx.scale(cam.z, cam.z);
+		planCtx.globalAlpha = 0.3;
+		planCtx.drawImage(this.deployImage, -this.deployImage/2, -this.deployImage/2, this.deployImage.width, this.deployImage.height);
+		planCtx.globalAlpha = 1;
+		planCtx.setTransform(0,0,1,0,0,1);
 	}
 
 	this.getDeployArea = function(){
 		for (var i = 0; i < this.deployArea.length; i++){
 			if (this.deployArea[i].userid == this.userid){return this.deployArea[i];}
 		}
-	}
-
-	this.drawDeployZoneO = function(){
-		if (game.turn == 1){
-			for (var i = 0; i < this.deployArea.length; i++){
-				drawCtx.translate(cam.o.x, cam.o.y)
-				drawCtx.scale(cam.z, cam.z)
-				drawCtx.beginPath();
-				drawCtx.rect(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].w, this.deployArea[i].h);
-				drawCtx.closePath();
-				drawCtx.fillStyle = this.deployArea[i].c;
-				drawCtx.fill();
-				drawCtx.setTransform(1,0,0,1,0,0);
-			}
-		}
-		else if (game.turn > 1){
-			for (var i = 0; i < this.deployArea.length; i++){
-				drawCtx.translate(cam.o.x, cam.o.y)
-				drawCtx.scale(cam.z, cam.z)
-				drawCtx.beginPath();
-				drawCtx.arc(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].s, 0, 2*Math.PI);
-				drawCtx.closePath();
-				drawCtx.fillStyle = this.deployArea[i].c;
-				drawCtx.fill();
-
-				drawCtx.beginPath();
-				drawCtx.arc(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].b, 0, 2*Math.PI);
-				drawCtx.closePath();
-				drawCtx.globalCompositeOperation = "destination-out";
-				//drawCtx.fillStyle = "red";
-				drawCtx.fill();
-				drawCtx.setTransform(1,0,0,1,0,0);
-				drawCtx.globalCompositeOperation = "source-over";
-			};
-		}
-		else {
-			for (var i = 0; i < this.deployArea.length; i++){
-				drawCtx.translate(cam.o.x, cam.o.y)
-				drawCtx.scale(cam.z, cam.z)
-				drawCtx.beginPath();
-				drawCtx.arc(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].s, 0, 2*Math.PI);
-				drawCtx.closePath();
-				drawCtx.fillStyle = this.deployArea[i].c;
-				drawCtx.fill();
-				drawCtx.setTransform(1,0,0,1,0,0);
-			};
-		}
-
-		planCtx.clearRect(0, 0, res.x, res.y);
-		planCtx.globalAlpha = 0.3;
-		planCtx.drawImage(drawCanvas, 0, 0);
-		drawCtx.clearRect(0, 0, res.x, res.y);
 	}
 
 	this.initDeploy = function(){
@@ -1976,22 +1938,22 @@ this.doAnimateMovement = function(){
 		this.shortInfo = false;
 		game.redraw();
 	}
-	
+
 	this.draw = function(){
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 		this.setUnitTransform();
-		//ctx.beginPath(); ctx.arc(0, 0, 5, 0, 2*Math.PI); ctx.fillStyle = "yellow"; ctx.fill(); ctx.closePath();
-		//ctx.beginPath(); ctx.rect(-475, -500, 325, 1000); ctx.strokeStyle = "yellow"; ctx.stroke(); ctx.closePath();
-		//ctx.beginPath(); ctx.rect(150, -500, 325, 1000); ctx.strokeStyle = "yellow"; ctx.stroke(); ctx.closePath();
+		if (0){
+			ctx.beginPath(); ctx.arc(0, 0, 5, 0, 2*Math.PI); ctx.fillStyle = "yellow"; ctx.fill(); ctx.closePath();
+			ctx.beginPath(); ctx.rect(-525, -550, 325, 1100); ctx.strokeStyle = "yellow"; ctx.stroke(); ctx.closePath();
+			ctx.beginPath(); ctx.rect(150, -550, 375, 1100); ctx.strokeStyle = "yellow"; ctx.stroke(); ctx.closePath();
+		}
 		this.drawShips();
 		this.drawBorders();
 		this.resetUnitTransform();
 		this.drawEvents();
-		
-		if (this.deploying){
-			this.drawDeployZone();
-		}
+
+		if (this.deploying){game.drawDeployZone();}
 	}
 
 	this.redraw = function(){
@@ -2892,20 +2854,20 @@ Game.prototype.shiftCam = function(){
 	}
 }
 
-Game.prototype.resolveObstacleMovement = function(){
+Game.prototype.resolveTurnStartMoves = function(){
 	var need = 1;
-	if (!this.hasObstaclesPresent()){
+	if (!this.hasObstaclesPresent() && !this.hasVreePresent()){
 		need = 0;
 	}
 
 	if (!need){
 		this.DamageControlResolved();
 	}
-	else this.handleObstacleMovement();
+	else this.handleTurnStartMoves();
 }
 
-Game.prototype.handleObstacleMovement = function(){
-	console.log("handleObstacleMovement");
+Game.prototype.handleTurnStartMoves = function(){
+	console.log("handleTurnStartMoves");
 
 	this.prepResolveMovement();
 	game.timeout = setTimeout(function(){
@@ -2917,6 +2879,13 @@ Game.prototype.handleObstacleMovement = function(){
 Game.prototype.hasObstaclesPresent = function(){
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].obstacle){return true;}
+	}
+	return false;
+}
+
+Game.prototype.hasVreePresent = function(){
+	for (var i = 0; i < this.ships.length; i++){
+		if (this.ships[i].faction[0] == "V"){return true;}
 	}
 	return false;
 }
@@ -3726,7 +3695,7 @@ Game.prototype.resolveDamageControl = function(){
 		window.startTime = then;
 		this.animating = 1;
 		this.handleAllDeployOut();
-	} else this.resolveObstacleMovement();
+	} else this.resolveTurnStartMoves();
 }
 
 Game.prototype.handleAllDeployOut = function(){
@@ -3738,7 +3707,7 @@ Game.prototype.handleAllDeployOut = function(){
 		}
 	}
 
-	this.resolveObstacleMovement();
+	this.resolveTurnStartMoves();
 }
 
 Game.prototype.handleSingleDeployOut = function(i){

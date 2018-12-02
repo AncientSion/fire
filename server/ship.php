@@ -131,6 +131,26 @@ class Ship {
 		return;
 	}
 
+	public function getServerActions(){
+		$actions = array();
+		if (!$this->hasMoved()){return $actions;}
+		for ($i = 0; $i < sizeof($this->actions); $i++){
+			if ($this->actions[$i]->new){
+				$actions[] = $this->actions[$i];
+			}
+		}
+		return $actions;
+	}
+
+	public function setMove(){
+		if ($this->moveSet){return;}
+
+		$origin = $this->getCurPos();
+		$move = new Action(-1, $this->id, Manager::$turn, "turn", 0, 0, $origin->x, $origin->y, 120, 0, 0, 0, 1, 1);
+		$this->actions[] = $move;
+		$this->moveSet = 1;
+	}
+
 	public function getId(){
 		$this->index++;
 		return $this->index;
@@ -179,10 +199,10 @@ class Ship {
 		}
 		else if ($this->faction == "Vree Conglomerate"){
 			if ($this->ship){
-				$this->slipAngle = 60;
+				$this->slipAngle = 30;
 			}
 			else if ($this->squad){
-				$this->slipAngle = 90;
+				$this->slipAngle = 45;
 			}
 		}
 		//Debug::log("setSpecialAbilities #".$this->id.", now: ".$this->baseMorale);

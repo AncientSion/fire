@@ -13,6 +13,7 @@ class Obstacle extends Minor {
 	public $systems = array();
 	public $critEffects = array();
 	public $density;
+	public $faction = "Neutral";
 
 	function __construct($data = false){
         parent::__construct($data);

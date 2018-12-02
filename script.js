@@ -511,7 +511,7 @@ function planPhase(e, pos, unit){
 		else if (game.turnMode){
 			game.deploying.handleTurnAttempt(pos);
 		}
-		else if (game.deploying.canDeployHere(pos)){
+		else if (game.deploying.canDeployHere(e, pos)){
 			game.doDeployShip(e, game.deploying, pos);
 		}
 	}

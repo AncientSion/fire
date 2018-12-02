@@ -6,14 +6,14 @@ class Xill extends Heavy {
 	public $faction = "Vree Conglomerate";
 	public $size =  80;
 	public static $value = 775;
-	public $profile = array(0.9, 1.1);
-	public $mass = 8000;
+	public $profile = array(1, 1);
+	public $mass = 7000;
 
-	public $integrity = 1000;
-	public $vitalHP = 115;
-	public $ep = 70;
-	public $ew = 700;
-	public $power = 4;
+	public $integrity = 800;
+	public $vitalHP = 80;
+	public $ep = 80;
+	public $ew = 775;
+	public $power = 0;
 
 	function __construct($data = false){
         parent::__construct($data);
@@ -22,34 +22,32 @@ class Xill extends Heavy {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 315, 45, 625, 19, 3);
-		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 315, 45);
-		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 315, 45);
-		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 315, 45);
+		$front = new Structure($this->getId(), $this->id, 315, 45, 625, 16, 3);
+		$front->systems[] = new AntiProtonEmitter($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new AntimatterCannon($this->getId(), $this->id, 315, 45);
+		$front->systems[] = new AntiProtonEmitter($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 45, 135, 800, 18, 1);
-		$right->systems[] = new MediumRailGun($this->getId(), $this->id, 45, 135);
-		$right->systems[] = new MediumRailGun($this->getId(), $this->id, 45, 135);
-		$right->systems[] = new MediumRailGun($this->getId(), $this->id, 45, 135);
+		$right = new Structure($this->getId(), $this->id, 45, 135, 800, 16, 1);
+		$right->systems[] = new AntiProtonEmitter($this->getId(), $this->id, 30, 150);
+		$right->systems[] = new AntimatterCannon($this->getId(), $this->id, 45, 135);
+		$right->systems[] = new AntiProtonEmitter($this->getId(), $this->id, 30, 150);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 135, 225, 550, 16, 3);
-		$aft->systems[] = new MediumRailGun($this->getId(), $this->id, 135, 225);
-		$aft->systems[] = new MediumRailGun($this->getId(), $this->id, 135, 225);
-		$aft->systems[] = new MediumRailGun($this->getId(), $this->id, 135, 225);
+		$aft->systems[] = new AntiProtonEmitter($this->getId(), $this->id, 120, 240);
+		$aft->systems[] = new AntimatterCannon($this->getId(), $this->id, 135, 225);
+		$aft->systems[] = new AntiProtonEmitter($this->getId(), $this->id, 120, 210);
 		$structs[] = $aft;
 
-		$left = new Structure($this->getId(), $this->id, 225, 315, 800, 18, 1);
-		$left->systems[] = new MediumRailGun($this->getId(), $this->id, 225, 315);
-		$left->systems[] = new MediumRailGun($this->getId(), $this->id, 225, 315);
-		$left->systems[] = new MediumRailGun($this->getId(), $this->id, 225, 315);
+		$left = new Structure($this->getId(), $this->id, 225, 315, 800, 16, 1);
+		$left->systems[] = new AntiProtonEmitter($this->getId(), $this->id, 210, 330);
+		$left->systems[] = new AntimatterCannon($this->getId(), $this->id, 225, 315);
+		$left->systems[] = new AntiProtonEmitter($this->getId(), $this->id, 210, 330);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
-			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
-			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse-1;
 		}
 	}
 
