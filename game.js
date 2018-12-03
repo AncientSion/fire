@@ -362,7 +362,7 @@ this.doAnimateMovement = function(){
 		$(s.element).find(".header")
 			.find(".missionType").html(this.getMissionTypeString(s, s.getTarget())).end()
 			.find(".missionTarget").html(this.getMissionTargetString(mission)).end()
-			s.facing = a;
+			s.heading = a;
 			s.setCurSpeed();
 			s.setNextMove();
 
@@ -399,7 +399,7 @@ this.doAnimateMovement = function(){
 		);
 
 		//flight.primary = new Primary(0, flight.id, 0, 0, 0);
-		flight.actions.push(new Move(-1, flight.id, "deploy", 0, 0, o.x, o.y, facing, 0, 0, 0, 1, 1));
+		flight.actions.push(new Move(-1, flight.id, "deploy", 0, 0, o.x, o.y, facing, 0, 0, 0, 0, 1, 1));
 		flight.launch = {
 			unitid: aUnit,
 			systemid: flightDeploy.id,
@@ -457,7 +457,7 @@ this.doAnimateMovement = function(){
 			{id: range(-0, -100), name: "Salvo", mission: mission, traverse: 0, flight: 0, salvo: 1, ship: 0, squad: 0, obstacle: 0, notes: (aUnit + ";" + launcher.id), focus: 0, disabled: 0, command: 0, 
 			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, curImp: 0, size: 50, fSize: 0, baseSize: 0, unitSize: 0, userid: this.userid, available: this.turn}
 		);
-		salvo.actions.push(new Move(-1, salvo.id, "deploy", 0, 0, o.x, o.y, facing, 0, 0, 0, 1, 1));
+		salvo.actions.push(new Move(-1, salvo.id, "deploy", 0, 0, o.x, o.y, facing, 0, 0, 0, 0, 1, 1));
 
 		var shots = launcher.getShots();
 		for (var i = 1; i <= shots; i++){
@@ -3451,7 +3451,7 @@ Game.prototype.create = function(data){
 
 		this.incoming[i].drawX = this.incoming[i].actions[0].x;
 		this.incoming[i].drawY = this.incoming[i].actions[0].y;
-		this.incoming[i].drawFacing = this.incoming[i].actions[0].a;
+		this.incoming[i].drawFacing = this.incoming[i].actions[0].h;
 
 		//this.incoming[i].friendly = 1;
 		//this.incoming[i].deployed = 0;

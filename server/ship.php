@@ -11,6 +11,7 @@ class Ship {
 	public $destroyed;
 	public $x;
 	public $y;
+	public $heading;
 	public $facing;
 	public $delay;
 	public $thrust;
@@ -103,6 +104,7 @@ class Ship {
 		$this->destroyed = $data["destroyed"];
 		$this->x = $data["x"];
 		$this->y = $data["y"];
+		$this->heading = $data["heading"];
 		$this->facing = $data["facing"];
 		$this->remDelay = $data["delay"];
 		$this->curImp = $data["thrust"];
@@ -146,7 +148,7 @@ class Ship {
 		if ($this->moveSet){return;}
 
 		$origin = $this->getCurPos();
-		$move = new Action(-1, $this->id, Manager::$turn, "turn", 0, 0, $origin->x, $origin->y, 120, 0, 0, 0, 1, 1);
+		$move = new Move(-1, $this->id, Manager::$turn, "turn", 0, 0, $origin->x, $origin->y, 0, 120, 0, 0, 0, 1, 1);
 		$this->actions[] = $move;
 		$this->moveSet = 1;
 	}
@@ -460,7 +462,8 @@ class Ship {
 			"x" => $this->actions[sizeof($this->actions)-1]->x,
 			"y" => $this->actions[sizeof($this->actions)-1]->y,
 			"delay" => 0,
-			"facing" => $this->actions[sizeof($this->actions)-1]->a,
+			"facing" => 0,
+			"heading" => $this->actions[sizeof($this->actions)-1]->a,
 			"thrust" => $this->getCurSpeed(),
 			"rolling" => $this->isRolling(),
 			"rolled" => $this->isRolled(),
@@ -473,7 +476,9 @@ class Ship {
 	public function getEndState($turn){
 		//Debug::log("getEndState for ".$this->id);
 		$delay = $this->remDelay;
-		$facing = $this->facing;
+		$heading = $this->heading;
+		$facing = 0;
+
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			//Debug::log("checking");
 			if ($this->actions[$i]->turn < $turn){continue;}
@@ -482,25 +487,25 @@ class Ship {
 				$delay = max(0, $delay - $this->actions[$i]->dist);
 			} else if ($this->actions[$i]->type == "turn"){
 				$delay += $this->actions[$i]->delay;
-				$facing += $this->actions[$i]->a;
+				$heading += $this->actions[$i]->a;
 			} else if ($this->actions[$i]->type == "deploy"){
-				$facing += $this->actions[$i]->a;
+				$heading += $this->actions[$i]->a;
 			} else if ($this->actions[$i]->type == "jumpIn"){
-				$facing += $this->actions[$i]->a;
+				$heading += $this->actions[$i]->a;
 			} else if ($this->actions[$i]->type == "flip"){
 				$this->flipped = $turn;
-				$facing += 180;
+				$heading += 180;
 			}
 		}
 
-		if ($facing > 360){
-			$facing -= 360;
+		if ($heading > 360){
+			$heading -= 360;
 		}
-		else if ($facing < 0){
-			$facing += 360;
+		else if ($heading < 0){
+			$heading += 360;
 		}
 
-		//Debug::log("getEndState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$facing.", rolling: ".$this->rolling.", rolled: ".$this->rolled);
+		//Debug::log("getEndState for ".get_class($this)." #".$this->id." current facing ".$this->heading.", now: ".$facing.", rolling: ".$this->rolling.", rolled: ".$this->rolled);
 
 		return array(
 			"id" => $this->id,
@@ -510,6 +515,7 @@ class Ship {
 			"x" => $this->actions[sizeof($this->actions)-1]->x,
 			"y" => $this->actions[sizeof($this->actions)-1]->y,
 			"delay" => $delay,
+			"heading" => $heading,
 			"facing" => $facing,
 			"thrust" => $this->getCurSpeed(),
 			"rolling" => $this->isRolling(),
@@ -1194,23 +1200,23 @@ class Ship {
 	}
 	
 	public function getFacing(){
-		return $this->facing;
+		return $this->heading;
 	}
 
 	public function setFacing(){
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			//if ($this->actions[$i]->type == "turn"){
-				$this->facing += $this->actions[$i]->a;
+				$this->heading += $this->actions[$i]->a;
 			//}
 		}
 
-		if ($this->facing > 360){
-			$this->facing -= 360;
-		} else if ($this->facing < 0){
-			$this->facing += 360;
+		if ($this->heading > 360){
+			$this->heading -= 360;
+		} else if ($this->heading < 0){
+			$this->heading += 360;
 		}
 		
-		//Debug::log("setting facing for: #".$this->id.": ".$thia->facing);
+		//Debug::log("setting facing for: #".$this->id.": ".$thia->heading);
 	}
 
 	public function getHitDist($fire){
@@ -1249,7 +1255,7 @@ class Ship {
 	}
 
 	public function getCurFacing(){
-		$facing = $this->facing;
+		$facing = $this->heading;
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			$facing += $this->actions[$i]->a;
 		}
@@ -1259,8 +1265,8 @@ class Ship {
 	public function getHitSection($fire){
 		if ($fire->cc && $fire->shooter->flight || $fire->shooter->obstacle){return $this->structures[mt_rand(0, sizeof($this->structures)-1)]->id;}
 
-		//Debug::log("fire-angle: ".$fire->angle.", facing: ".$this->facing);
-		$fire->angle = Math::addAngle($this->facing, $fire->angle);
+		//Debug::log("fire-angle: ".$fire->angle.", facing: ".$this->heading);
+		$fire->angle = Math::addAngle($this->heading, $fire->angle);
 		if ($this->rolled){$fire->angle = Math::getMirrorAngle($fire->angle);}
 
 		$locs = array();
@@ -1287,7 +1293,7 @@ class Ship {
 
 		$this->notes = $crit->notes;
 		if ($crit->type == "Rout"){
-			$this->actions[] = new Action(-1, $this->id, $turn, "jumpOut", 1, 0, $this->x, $this->y, 0, 0, 0, 0, 1, 1);
+			$this->actions[] = new Move(-1, $this->id, $turn, "jumpOut", 1, 0, $this->x, $this->y, 0, 0, 0, 0, 1, 1);
 			$this->withdraw = $turn + GD::$jumpTimer;
 		}
 		else $this->getSystemByName("Command")->crits[] = $crit;

@@ -104,7 +104,7 @@ class GraviticMine extends Area {
 		//$target = Math::getPointInDirection($shiftDist, $angle, $impact->x, $impact->y); // pull
 		$target = Math::getPointInDirection($shiftDist, $angle-180, $impact->x, $impact->y); // push
 
-		$fire->target->actions[] = new Action(-1, $fire->target->id, $fire->turn, "move", 1, $shiftDist, $target->x, $target->y, 0, 0, 0, 0, 1, 1);
+		$fire->target->actions[] = new Move(-1, $fire->target->id, $fire->turn, "move", 1, $shiftDist, $target->x, $target->y, 0, 0, 0, 0, 1, 1);
 	}
 }
 

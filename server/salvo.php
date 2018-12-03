@@ -118,7 +118,7 @@ class Salvo extends Minor {
 			$this->mission->arrived = Manager::$turn;
 		}
 
-		$move = new Action(-1, $this->id, Manager::$turn, $type, 0, $dist, $tPos->x, $tPos->y, $angle, 0, 0, 0, 1, 1);
+		$move = new Move(-1, $this->id, Manager::$turn, $type, 0, $dist, $tPos->x, $tPos->y, $angle, 0, 0, 0, 0, 1, 1);
 		Debug::log($this->id." --- adding ".$move->type." to => ".$move->x."/".$move->y.", dist: ".$dist);
 		$this->actions[] = $move;
 		$this->moveSet = 1;

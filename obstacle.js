@@ -11,9 +11,9 @@ function Obstacle(data){
 Obstacle.prototype = Object.create(Mixed.prototype);
 
 Obstacle.prototype.setPostMoveFacing = function(){
-	this.drawFacing = this.facing;
+	this.drawFacing = this.heading;
 	for (var i = 0; i < this.actions.length; i++){
-		this.drawFacing += this.actions[i].a;
+		this.drawFacing += this.actions[i].h;
 	}
 }
 
@@ -59,10 +59,10 @@ Obstacle.prototype.setNextMove = function(){
 
 	if (this.actions.length){
 		p = this.getPlannedPos();
-		p = getPointInDir(this.getCurSpeed(), this.facing, p.x, p.y);
+		p = getPointInDir(this.getCurSpeed(), this.heading, p.x, p.y);
 	}
 	else {
-		p = getPointInDir(this.getCurSpeed(), this.facing, this.x, this.y);
+		p = getPointInDir(this.getCurSpeed(), this.heading, this.x, this.y);
 	}
 	this.actions.push(new Move(-1, this.id, "move", 0, this.getCurSpeed(), p.x, p.y, 0, 0, 0, 1, 1, 0));
 }
@@ -137,7 +137,7 @@ Obstacle.prototype.createBaseDiv = function(){
 			.append($("<td>").html(this.size)))
 		//.append($("<tr>")
 		//	.append($("<td>").html("Vector"))
-		//	.append($("<td>").html(this.facing + " degree")))
+		//	.append($("<td>").html(this.heading + " degree")))
 		.append($("<tr>")
 			.append($("<td>").html("Speed"))
 			.append($("<td>").html(this.getCurSpeed())))
@@ -376,8 +376,8 @@ Obstacle.prototype.setTrueImage = function(info){
 	}
 	
 	if (info){
-		var vectorStart = getPointInDir(60, this.facing, 0, 0);
-		var vectorEnd = getPointInDir(this.size-63, this.facing, vectorStart.x, vectorStart.y);
+		var vectorStart = getPointInDir(60, this.heading, 0, 0);
+		var vectorEnd = getPointInDir(this.size-63, this.heading, vectorStart.x, vectorStart.y);
 
 		ctx.beginPath();
 		ctx.moveTo(vectorStart.x, vectorStart.y);

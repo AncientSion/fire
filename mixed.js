@@ -11,7 +11,7 @@ function Mixed(data){
 Mixed.prototype = Object.create(Ship.prototype);
 
 Mixed.prototype.getPlannedFacing = function(){
-	return this.facing;
+	return this.heading;
 }
 
 Mixed.prototype.getCameraStartPos = function(){
@@ -22,7 +22,7 @@ Mixed.prototype.getCameraStartPos = function(){
 }
 
 Mixed.prototype.getDrawFacing = function(){
-	return this.facing;
+	return this.heading;
 }
 
 Mixed.prototype.canDeploy = function(){
@@ -235,18 +235,18 @@ Mixed.prototype.setNextMove = function(){
 
 	if (this.mission.type == 1){  // patrol goal
 		this.finalStep = {x: this.mission.x, y: this.mission.y};
-		this.facing = getAngleFromTo(this, this.finalStep);
+		this.heading = getAngleFromTo(this, this.finalStep);
 		d = getDistance(p, this.finalStep);
 		if (d < s){
 			next = this.finalStep;
-		} else next = getPointInDir(s, this.facing, p.x, p.y);
+		} else next = getPointInDir(s, this.heading, p.x, p.y);
 	}
 	else {
 		if (this.mission.type == 2){
 			var target = this.getTarget();
 			if (target.ship || target.squad){
 				this.finalStep = target.getPlannedPos();
-				this.facing = getAngleFromTo(this, this.finalStep);
+				this.heading = getAngleFromTo(this, this.finalStep);
 				d = getDistance(p, this.finalStep);
 				if (d < s){
 					next = this.finalStep;
@@ -254,7 +254,7 @@ Mixed.prototype.setNextMove = function(){
 			}
 			else if (target.flight){
 				if (target.mission.targetid == this.id){
-					this.facing = getAngleFromTo(p, target.getGamePos());
+					this.heading = getAngleFromTo(p, target.getGamePos());
 
 					var otherSpeed = target.getCurSpeed();
 					d = Math.ceil(getDistance(p, target.getGamePos()));
@@ -273,11 +273,11 @@ Mixed.prototype.setNextMove = function(){
 						console.log("own will be " + ownDist);
 						//console.log("other will be " + otherDist);
 
-						next = getPointInDir(ownDist, this.facing, p.x, p.y);
+						next = getPointInDir(ownDist, this.heading, p.x, p.y);
 						console.log("_________________");
 					}
 					else {
-						next = getPointInDir(s, this.facing, p.x, p.y);
+						next = getPointInDir(s, this.heading, p.x, p.y);
 					}
 					this.finalStep = next;
 				}
@@ -286,7 +286,7 @@ Mixed.prototype.setNextMove = function(){
 						target.setNextMove();
 					}
 					this.finalStep = target.getPlannedPos();
-					this.facing = getAngleFromTo(p, this.finalStep);
+					this.heading = getAngleFromTo(p, this.finalStep);
 					d = getDistance(p, this.finalStep);
 					if (d < s){
 						next = target.getPlannedPos();
@@ -302,7 +302,7 @@ Mixed.prototype.setNextMove = function(){
 		this.actions[this.actions.length-1].x = next.x;
 		this.actions[this.actions.length-1].y = next.y;
 	}
-	else this.actions.push(new Move(-1, this.id, "move", 0, this.getCurSpeed(), next.x, next.y, 0, 0, 0, 1, 1, 0));
+	else this.actions.push(new Move(-1, this.id, "move", 0, this.getCurSpeed(), next.x, next.y, 0, 0, 0, 0, 1, 1, 0));
 	game.setCollisionData(this);
 
 }
@@ -312,23 +312,23 @@ Mixed.prototype.setPreMoveFacing = function(){
 	//if (this.salvo){console.log("setPreMoveFacing");}
 	if (this.mission.turn == game.turn){
 		if (game.phase == 2){
-			this.facing = getAngleFromTo({x: this.x, y: this.y}, this.getTargetPos());
+			this.heading = getAngleFromTo({x: this.x, y: this.y}, this.getTargetPos());
 		}
 		else {
-			this.facing = getAngleFromTo(this.getPlannedPos(), this.getTargetPos());
+			this.heading = getAngleFromTo(this.getPlannedPos(), this.getTargetPos());
 		}
 		return;
 	}
 
 	if (this.actions.length){
-		this.facing = getAngleFromTo(this, this.actions[this.actions.length-1]);
+		this.heading = getAngleFromTo(this, this.actions[this.actions.length-1]);
 	}
-	else this.facing = getAngleFromTo(this.getGamePos(), this.getPlannedPos());
+	else this.heading = getAngleFromTo(this.getGamePos(), this.getPlannedPos());
 }
 
 Mixed.prototype.setPostMoveFacing = function(){
 	if (!this.finalStep){return;}
-	this.facing = getAngleFromTo(this.getGamePos(), this.finalStep);
+	this.heading = getAngleFromTo(this.getGamePos(), this.finalStep);
 }
 
 Mixed.prototype.canShortenTurn = function(){

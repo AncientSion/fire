@@ -388,10 +388,15 @@
 		public function processInitialBuy($userid, $gameid, $units, $faction){
 			Debug::log("processInitialBuy");
 			$this->insertUnits($userid, $gameid, $units);
+			//Debug::log("A");
 			$this->insertLoads($userid, $gameid, $units);
+			//Debug::log("B");
 			$this->setInitialFleetData($userid, $gameid, $units, $faction);
+			//Debug::log("C");
 			$this->setInitialMorale($userid, $gameid, $faction);
+			//Debug::log("D");
 			$this->setInitialCommandUnit($userid, $gameid, $units);
+			//Debug::log("E");
 			$this->setPlayerStatus($userid, $gameid, 0, 3, "ready");
 			Debug::log("processInitialBuy done");
 			return true;
@@ -778,9 +783,9 @@
 			Debug::log("DB insertServerActions s: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				INSERT INTO actions 
-					(unitid, turn, type, forced, dist, x, y, a, cost, delay, costmod, resolved)
+					(unitid, turn, type, forced, dist, x, y, h, f, cost, delay, costmod, resolved)
 				VALUES
-					(:unitid, :turn, :type, :forced, :dist, :x, :y, :a, :cost, :delay, :costmod, :resolved)
+					(:unitid, :turn, :type, :forced, :dist, :x, :y, :h, :f, :cost, :delay, :costmod, :resolved)
 			");
 
 			for ($j = 0; $j < sizeof($data); $j++){
@@ -793,7 +798,8 @@
 				$stmt->bindParam(":dist", $data[$j]->dist);
 				$stmt->bindParam(":x", $data[$j]->x);
 				$stmt->bindParam(":y", $data[$j]->y);
-				$stmt->bindParam(":a", $data[$j]->a);
+				$stmt->bindParam(":h", $data[$j]->h);
+				$stmt->bindParam(":f", $data[$j]->f);
 				$stmt->bindParam(":cost", $data[$j]->cost);
 				$stmt->bindParam(":delay", $data[$j]->delay);
 				$stmt->bindParam(":costmod", $data[$j]->costmod);
@@ -835,6 +841,7 @@
 			Debug::log("createObstacles #".$gameid);
 
 			$amount = $data["obstaclesAmount"];
+			//$amount = 1;
 			$min = $data["obstaclesSizeMin"];
 			$max = $data["obstaclesSizeMax"];
 
@@ -893,10 +900,9 @@
 					$angleFromCenter = round(Math::getAngle(0, 0, $x, $y));
 					$angleToCenter = round(Math::getAngle($x, $y, 0, 0));
 
-					//$facing = ($shift == 1 ? mt_rand(120, 240) : mt_rand(-60, 60));
-					$facing = mt_rand($angleToCenter-60, $angleToCenter+60);
+					$heading = mt_rand($angleToCenter-60, $angleToCenter+60);
 
-					//Debug::log("Angle center to pos ".$x."/".$y." is ".$angleToCenter."°, picking vector ".$facing);
+					//Debug::log("Angle center to pos ".$x."/".$y." is ".$angleToCenter."°, picking vector ".$heading);
 					$density = mt_rand(5, 20);
 
 					$thrust = mt_rand(15, 40);
@@ -905,33 +911,28 @@
 					$maxDmg = round($minDmg*1.3);
 
 					//Debug::log("PUSHING!");
-					$fields[] = array($x, $y, $facing, $size, $thrust, $density, $rockSize, $minDmg, $maxDmg);
+					$fields[] = array($x, $y, $heading, $size, $thrust, $density, $rockSize, $minDmg, $maxDmg);
 				}
 			}
 
 			//Debug::log("fields to add ".sizeof($fields));
 			$stmt = $this->connection->prepare("
 				INSERT INTO units
-				(gameid, name, status, x, y, facing, delay, thrust, rolling, rolled, turn, phase, totalCost, moraleCost)
+				(gameid, name, status, x, y, heading, facing, delay, thrust, rolling, rolled, turn, phase, totalCost, moraleCost)
 				VALUES
-				(:gameid, 'Obstacle', 'deployed', :x, :y, :facing, :delay, :thrust, :rolling, :rolled, 1, -1, :totalCost, :moraleCost)
+				(:gameid, 'Obstacle', 'deployed', :x, :y, :heading, 0, :delay, :thrust, :rolling, :rolled, 1, -1, :totalCost, :moraleCost)
 			");
 
 
 			for ($i = 0; $i < sizeof($fields); $i++){
 
-				//foreach ($fields as $rock){
-				//	foreach ($rock as $val){
-				//		Debug::log($val);
-				//	}
-				//}
-
+				//foreach ($fields as $rock){foreach ($rock as $val){Debug::log($val);}}
 				//Debug::log("rolling ".$fields[$i][5]);
 
 				$stmt->bindParam(":gameid", $gameid);
 				$stmt->bindParam(":x", $fields[$i][0]);
 				$stmt->bindParam(":y", $fields[$i][1]);
-				$stmt->bindParam(":facing", $fields[$i][2]);
+				$stmt->bindParam(":heading", $fields[$i][2]);
 				$stmt->bindParam(":delay", $fields[$i][3]);
 				$stmt->bindParam(":thrust", $fields[$i][4]);
 				$stmt->bindParam(":rolling", $fields[$i][5]);
@@ -1052,6 +1053,7 @@
 				UPDATE units
 				SET status = 'bought',
 					available = available + :eta,
+					heading = 0,
 					facing = 0,
 					turn = :turn,
 					phase = -1,
@@ -1180,6 +1182,7 @@
 					manual = :manual,
 					x = :x,
 					y = :y,
+					heading = :heading,
 					facing = :facing,
 					delay = :delay,
 					thrust = :thrust,
@@ -1201,6 +1204,7 @@
 				$stmt->bindParam(":manual", $states[$i]["manual"]);
 				$stmt->bindParam(":x", $states[$i]["x"]);
 				$stmt->bindParam(":y", $states[$i]["y"]);
+				$stmt->bindParam(":heading", $states[$i]["heading"]);
 				$stmt->bindParam(":facing", $states[$i]["facing"]);
 				$stmt->bindParam(":delay", $states[$i]["delay"]);
 				$stmt->bindParam(":thrust", $states[$i]["thrust"]);
@@ -1367,9 +1371,9 @@
 			//Debug::log("insertClientActions s: ".sizeof($units));
 			$stmt = $this->connection->prepare("
 				INSERT INTO actions 
-					(unitid, turn, type, dist, x, y, a, cost, delay, costmod, resolved)
+					(unitid, turn, type, dist, x, y, h, f, cost, delay, costmod, resolved)
 				VALUES
-					(:unitid, :turn, :type, :dist, :x, :y, :a, :cost, :delay, :costmod, 0)
+					(:unitid, :turn, :type, :dist, :x, :y, :h, :f, :cost, :delay, :costmod, 0)
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){
@@ -1383,7 +1387,8 @@
 					$stmt->bindParam(":dist", $units[$i]["actions"][$j]["dist"]);
 					$stmt->bindParam(":x", $units[$i]["actions"][$j]["x"]);
 					$stmt->bindParam(":y", $units[$i]["actions"][$j]["y"]);
-					$stmt->bindParam(":a", $units[$i]["actions"][$j]["a"]);
+					$stmt->bindParam(":h", $units[$i]["actions"][$j]["h"]);
+					$stmt->bindParam(":f", $units[$i]["actions"][$j]["f"]);
 					$stmt->bindParam(":cost", $units[$i]["actions"][$j]["cost"]);
 					$stmt->bindParam(":delay", $units[$i]["actions"][$j]["delay"]);
 					$stmt->bindParam(":costmod", $units[$i]["actions"][$j]["costmod"]);
@@ -1706,7 +1711,7 @@
 					//Debug::log("fetching actions for #".$units[$i]->id);
 					for ($j = 0; $j < sizeof($result); $j++){
 						//Debug::log("result #".$j);
-						$units[$i]->actions[] = new Action(
+						$units[$i]->actions[] = new Move(
 							$result[$j]["id"],
 							$result[$j]["unitid"],
 							$result[$j]["turn"],
@@ -1715,7 +1720,8 @@
 							$result[$j]["dist"],
 							$result[$j]["x"],
 							$result[$j]["y"],
-							$result[$j]["a"],
+							$result[$j]["h"],
+							$result[$j]["f"],
 							$result[$j]["cost"],
 							$result[$j]["delay"],
 							$result[$j]["costmod"],
@@ -1755,7 +1761,7 @@
 							$result[$j]["type"]
 						);
 					}
-					//Debug::log($units[$i]->classname." facing: ".$units[$i]->facing);
+					//Debug::log($units[$i]->classname." facing: ".$units[$i]->heading);
 				}
 			}
 			return true;

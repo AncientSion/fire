@@ -7,7 +7,7 @@ function Point(x, y){
 	}
 }
 
-function Move(id, unitid, type, forced, dist, x, y, a, delay, cost, costmod, manual, resolved){
+function Move(id, unitid, type, forced, dist, x, y, h, f, delay, cost, costmod, manual, resolved){
 	this.id = id;
 	this.unitid = unitid;
 	this.turn = game.turn;
@@ -16,7 +16,8 @@ function Move(id, unitid, type, forced, dist, x, y, a, delay, cost, costmod, man
 	this.dist = dist;
 	this.x = x;
 	this.y = y;
-	this.a = a;
+	this.h = h;
+	this.f = f;
 	this.delay = delay;
 	this.cost = cost;
 	this.costmod = costmod;

@@ -116,7 +116,7 @@ window.cam = {
 
 function Turn(){
 	this.id;
-	this.a;
+	this.h;
 	this.mod;
 	this.cost;
 	this.delay;
@@ -126,7 +126,7 @@ function Turn(){
 
 	this.reset = function(){
 		//this.id = 0;
-		this.a = 0;
+		this.h = 0;
 		this.mod = 1;
 		this.cost = 0;
 		this.delay = 0;
@@ -134,7 +134,7 @@ function Turn(){
 
 	this.set = function(unit){
 		this.id = unit.id;
-		this.a = 0;
+		this.h = 0;
 		this.mod = 1;
 		this.mod = 1;
 		this.cost = 1;
@@ -145,7 +145,7 @@ function Turn(){
 
 	this.alter = function(unit, turn){
 		this.id = unit.id;
-		this.a = Math.abs(turn.a);
+		this.h = Math.abs(turn.a);
 		this.mod = turn.costmod;
 		this.cost = 1;
 		this.delay = unit.baseTurnDelay;

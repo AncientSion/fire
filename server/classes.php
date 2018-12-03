@@ -158,7 +158,7 @@ class HitTable {
 	}
 }
 
-class Action {
+class Move {
 	public $id;
 	public $unitid;
 	public $turn;
@@ -171,7 +171,8 @@ class Action {
 	public $new;
 	public $manual = 0;
 
-	function __construct($id, $unitid, $turn, $type, $forced, $dist, $x, $y, $a, $cost, $delay, $costmod, $resolved, $new){
+	function __construct($id, $unitid, $turn, $type, $forced, $dist, $x, $y, $h, $f, $cost, $delay, $costmod, $resolved, $new){#
+		
 		$this->id = $id;
 		$this->unitid = $unitid;
 		$this->turn = $turn;
@@ -180,7 +181,8 @@ class Action {
 		$this->dist = $dist;
 		$this->x = $x;
 		$this->y = $y;
-		$this->a = $a;
+		$this->h = $h;
+		$this->f = $f;
 		$this->cost = $cost;
 		$this->delay = $delay;
 		$this->costmod = $costmod;

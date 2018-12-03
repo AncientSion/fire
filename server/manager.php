@@ -321,6 +321,7 @@
 					"destroyed" => $possible[$i]["destroyed"],
 					"x" => $possible[$i]["x"],
 					"y" => $possible[$i]["y"],
+					"heading" => $possible[$i]["heading"],
 					"facing" => $possible[$i]["facing"],
 					"delay" =>  $possible[$i]["delay"],
 					"thrust" => $possible[$i]["thrust"],
@@ -670,7 +671,7 @@
 				//Debug::log("--> aShift: ".$aShift."°, psShift: ".$xShift."/".$yShift." (".$dist."px)");
 
 				$this->ships[$i]->actions[0]->resolved = 1;
-				$this->ships[$i]->actions[] = new Action(-1, $this->ships[$i]->id, static::$turn, "jumpIn", 0, $dist, $order->x + $xShift, $order->y + $yShift, $aShift, 0, 0, 0, 1, 1);
+				$this->ships[$i]->actions[] = new Move(-1, $this->ships[$i]->id, static::$turn, "jumpIn", 0, $dist, $order->x + $xShift, $order->y + $yShift, $aShift, 0, 0, 0, 0, 1, 1);
 				$new[] = $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1];
 			}
 		}
@@ -774,14 +775,14 @@
 				$this->ships[] = new Salvo(
 					array(
 						"id" => $units[$i]["id"], "userid" => $units[$i]["userid"], "command" => 0, "available" => static::$turn, "withdraw" => 0, "manual" => 0, "callsign" => "",
-						"totalCost" => 0, "moraleCost" => 0, "status" => "deployed", "destroyed" => 0, "x" => 0, "y" => 0, "facing" => 270, "delay" => 0, "thrust" => 0, 
+						"totalCost" => 0, "moraleCost" => 0, "status" => "deployed", "destroyed" => 0, "x" => 0, "y" => 0, "heading" => 270, "facing" => 0, "delay" => 0, "thrust" => 0, 
 						"rolling" => 0, "rolled" => 0, "flipped" => 0, "focus" => 0, "notes" => ""
 					)
 				);
 
 			//	$this->ships[sizeof($this->ships)-1]->setUnitState(static::$turn, static::$phase);
 
-				$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->ships[$i]->id, static::$turn, "deploy", 0, 0, $units[$i]["actions"][0]["x"], $units[$i]["actions"][0]["y"], $a, 0, 0, 0, 1, 1);
+				$this->ships[sizeof($this->ships)-1]->actions[] = new Move(-1, $this->ships[$i]->id, static::$turn, "deploy", 0, 0, $units[$i]["actions"][0]["x"], $units[$i]["actions"][0]["y"], $a, 0, 0, 0, 0, 1, 1);
 			}
 		}
 	}
@@ -956,7 +957,7 @@
 		Debug::log("handleTurnStartMoves");
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->obstacle || $this->ships[$i]->faction[0] == "V"){
+			if ($this->ships[$i]->obstacle || static::$turn > 1 && $this->ships[$i]->faction[0] == "V"){
 				$this->ships[$i]->setMove();
 			}
 		}
@@ -2296,7 +2297,7 @@
 			$unit = new $get["name"](
 				array(
 					"id" => $get["purchases"], "userid" => 1, "command" => 0, "available" => 0, "withdraw" => 0, "manual" => 0, "callsign" => "", "status" => "", "totalCost" => 0,"moraleCost" => 0,
-					"destroyed" => 0, "x" => 0, "y" => 0, "facing" => 270, "delay" => 0, "thrust" => 0, 
+					"destroyed" => 0, "x" => 0, "y" => 0, "heading" => 270, "facing" => 0, "delay" => 0, "thrust" => 0, 
 					"rolling" => 0, "rolled" => 0, "flipped" => 0, "focus" => 0, "notes" => ""
 				)
 			);

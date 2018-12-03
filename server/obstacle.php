@@ -56,7 +56,7 @@ class Obstacle extends Minor {
 			"manual" => $this->manual,
 			"x" => $x,
 			"y" => $y,
-			"facing" => $this->facing,
+			"heading" => $this->heading,
 			"thrust" => $this->getCurSpeed(),
 			"delay" => $this->size,
 			"rolling" => $this->density,
@@ -113,7 +113,7 @@ class Obstacle extends Minor {
 		$angle = $this->getCurFacing();
 		$target = Math::getPointInDirection($speed, $angle, $origin->x, $origin->y);
 
-		$move = new Action(-1, $this->id, Manager::$turn, "move", 0, $speed, $target->x, $target->y, 0, 0, 0, 0, 1, 1);
+		$move = new Move(-1, $this->id, Manager::$turn, "move", 0, $speed, $target->x, $target->y, 0, 0, 0, 0, 0, 1, 1);
 		$this->actions[] = $move;
 		$this->moveSet = 1;
 	}

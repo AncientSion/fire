@@ -218,7 +218,7 @@ spl_autoload_register(
                 'shared' => '/server/classes.php',
                 'point' => '/server/classes.php',
                 'vector' => '/server/classes.php',
-                'action' => '/server/classes.php',
+                'move' => '/server/classes.php',
                 'fireorder' => '/server/classes.php',
                 'mission' => '/server/classes.php',
                 'damage' => '/server/classes.php',

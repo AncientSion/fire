@@ -186,7 +186,7 @@ class DmgCalc {
 			//Debug::log("eMine impact distance to ".$gd->ships[$i]->name." #".$gd->ships[$i]->id.": ".$dist);
 
 			if ($dist + $fire->weapon->aoe <= $fire->weapon->aoe*2){
-				$angle = round(Math::addAngle($gd->ships[$i]->getCurFacing() - $gd->ships[$i]->facing, Math::getAngle2($gd->ships[$i]->getCurPos(), $impact)));
+				$angle = round(Math::addAngle($gd->ships[$i]->getCurFacing() - $gd->ships[$i]->heading, Math::getAngle2($gd->ships[$i]->getCurPos(), $impact)));
 				//var_export($newTarget);var_export($gd->ships[$i]->x);var_export($gd->ships[$i]->y);
 				//Debug::log("hitting, dist to impact: ".$dist.", impact from: ".$angle);
 
