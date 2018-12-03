@@ -148,7 +148,7 @@ class Ship {
 		if ($this->moveSet){return;}
 
 		$origin = $this->getCurPos();
-		$move = new Move(-1, $this->id, Manager::$turn, "turn", 0, 0, $origin->x, $origin->y, 0, 120, 0, 0, 0, 1, 1);
+		$move = new Move(-1, $this->id, Manager::$turn, "pivot", 0, 0, $origin->x, $origin->y, 0, 120, 0, 0, 0, 1, 1);
 		$this->actions[] = $move;
 		$this->moveSet = 1;
 	}
@@ -463,7 +463,7 @@ class Ship {
 			"y" => $this->actions[sizeof($this->actions)-1]->y,
 			"delay" => 0,
 			"facing" => 0,
-			"heading" => $this->actions[sizeof($this->actions)-1]->a,
+			"heading" => $this->actions[sizeof($this->actions)-1]->h,
 			"thrust" => $this->getCurSpeed(),
 			"rolling" => $this->isRolling(),
 			"rolled" => $this->isRolled(),
@@ -487,11 +487,11 @@ class Ship {
 				$delay = max(0, $delay - $this->actions[$i]->dist);
 			} else if ($this->actions[$i]->type == "turn"){
 				$delay += $this->actions[$i]->delay;
-				$heading += $this->actions[$i]->a;
+				$heading += $this->actions[$i]->h;
 			} else if ($this->actions[$i]->type == "deploy"){
-				$heading += $this->actions[$i]->a;
+				$heading += $this->actions[$i]->h;
 			} else if ($this->actions[$i]->type == "jumpIn"){
-				$heading += $this->actions[$i]->a;
+				$heading += $this->actions[$i]->h;
 			} else if ($this->actions[$i]->type == "flip"){
 				$this->flipped = $turn;
 				$heading += 180;
@@ -993,7 +993,7 @@ class Ship {
 		return $valid[mt_rand(0, sizeof($valid)-1)];
 	}
 	
-	public function getFacingElement($fire){
+	public function getHeadingElement($fire){
 		return $this->getStruct($fire->section);
 	}
 
@@ -1008,7 +1008,7 @@ class Ship {
 		//$main = 10;
 		$total = $main;
 
-		$struct = $this->getFacingElement($fire);
+		$struct = $this->getHeadingElement($fire);
 
 		for ($i = 0; $i < sizeof($struct->systems); $i++){
 			if ($struct->systems[$i]->destroyed){continue;}
@@ -1199,15 +1199,13 @@ class Ship {
 		return new Point($this->x, $this->y);
 	}
 	
-	public function getFacing(){
+	public function getHeading(){
 		return $this->heading;
 	}
 
-	public function setFacing(){
+	public function setHeading(){
 		for ($i = 0; $i < sizeof($this->actions); $i++){
-			//if ($this->actions[$i]->type == "turn"){
-				$this->heading += $this->actions[$i]->a;
-			//}
+			$this->heading += $this->actions[$i]->h;
 		}
 
 		if ($this->heading > 360){
@@ -1257,7 +1255,7 @@ class Ship {
 	public function getCurFacing(){
 		$facing = $this->heading;
 		for ($i = 0; $i < sizeof($this->actions); $i++){
-			$facing += $this->actions[$i]->a;
+			$facing += $this->actions[$i]->h;
 		}
 		return $facing;
 	}

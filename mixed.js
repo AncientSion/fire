@@ -10,7 +10,7 @@ function Mixed(data){
 
 Mixed.prototype = Object.create(Ship.prototype);
 
-Mixed.prototype.getPlannedFacing = function(){
+Mixed.prototype.getPlannedHeading = function(){
 	return this.heading;
 }
 
@@ -302,7 +302,7 @@ Mixed.prototype.setNextMove = function(){
 		this.actions[this.actions.length-1].x = next.x;
 		this.actions[this.actions.length-1].y = next.y;
 	}
-	else this.actions.push(new Move(-1, this.id, "move", 0, this.getCurSpeed(), next.x, next.y, 0, 0, 0, 0, 1, 1, 0));
+	else this.actions.push(new Move(-1, this.id, game.turn, "move", 0, this.getCurSpeed(), next.x, next.y, 0, 0, 0, 0, 1, 1, 0));
 	game.setCollisionData(this);
 
 }
@@ -709,6 +709,12 @@ Mixed.prototype.getSelfExplo = function(){
 	return data;
 }
 
+Mixed.prototype.willBeAnimated = function(){
+	if (game.phase == 2){
+		return true;
+	} return false;
+}
+
 Mixed.prototype.readyForAnim = function(){
 	this.setPreMovePosition();
 	this.setPreMoveFacing();	
@@ -721,26 +727,22 @@ Mixed.prototype.readyForAnim = function(){
 	var frameMod = 1000 / window.fpsTicks / this.actions[this.actions.length-1].dist;
 
 	for (var i = 0; i < this.actions.length; i++){
-		if (this.actions[i].turn == game.turn){
-			var action = this.actions[i];
+		var short = this.actions[i].type[0];
+		var t = [0, 0];
+		var v = false;
 
-			if (action.dist == 0 || action.type == "deploy" || action.type == "patrol"){
-				this.actions[i].animated = 1;
+		if (short == "m"){ // move
+			if (i == 0){
+				var v = new MoveVector({x: this.x, y: this.y}, {x: this.actions[i].x, y: this.actions[i].y});
 			}
 			else {
-				this.actions[i].animated = 0;
-				if (i == 0 && action.type == "move"){
-					var v = new MoveVector({x: this.x, y: this.y}, {x: action.x, y: action.y});
-					v.t = [0, action.dist * frameMod];
-					this.actions[i].v = v;
-				}
-				else if (action.type == "move"){
-					var v = new MoveVector({x: this.actions[i-1].x, y: this.actions[i-1].y}, {x: action.x, y: action.y});
-						v.t = [0, action.dist * frameMod];
-					this.actions[i].v = v;
-				}
+				var v = new MoveVector({x: this.actions[i-1].x, y: this.actions[i-1].y}, {x: this.actions[i].x, y: this.actions[i].y});
 			}
+			t = [0, this.actions[i].dist * frameMod];
 		}
+
+		this.actions[i].t = t;
+		this.actions[i].v = v;
 	}
 }
 

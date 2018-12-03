@@ -915,6 +915,13 @@
 				}
 			}
 
+
+			for ($i = 0; $i < sizeof($fields); $i++){
+				for ($j = $i+1; $j < sizeof($fields); $j++){
+					
+				}
+			}
+
 			//Debug::log("fields to add ".sizeof($fields));
 			$stmt = $this->connection->prepare("
 				INSERT INTO units

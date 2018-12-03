@@ -30,7 +30,7 @@ function Ship(data){
 	this.rolled = data.rolled;
 	this.flipping = data.flipping;
 	this.flipped = data.flipped;
-	this.actions = data.actions || [];
+	this.actions = [];
 	this.morale = data.morale;
 	this.baseFocusRate = data.baseFocusRate;
 	this.modFocusRate = data.modFocusRate;
@@ -51,7 +51,6 @@ function Ship(data){
 
 	this.turnAngles = {};
 	this.moveAngles = {};
-	this.attachAnims = [];
 
 	this.blocks = [];
 	this.collisions = [];
@@ -87,7 +86,16 @@ function Ship(data){
 	this.drawImg;
 	this.deployAnim = [0, 0];
 	this.doDraw = 1;
+
+	for (var i = 0; i < data.actions.length; i++){
+		this.actions.push(new Move(
+			data.actions[i].id, data.actions[i].unitid, data.actions[i].turn, data.actions[i].type, data.actions[i].forced, 
+			data.actions[i].dist, data.actions[i].x, data.actions[i].y, data.actions[i].h, data.actions[i].f, 
+			data.actions[i].delay, data.actions[i].cost, data.actions[i].costmod, data.actions[i].manual, data.actions[i].resolved
+		));
+	}
 }
+
 Ship.prototype.doRefit = function(){
 	//if (!this.ship){return;}
 	//console.log("doRefit");
@@ -193,7 +201,7 @@ Ship.prototype.doDeploy = function(pos){
 		this.drawY = pos.y;
 	}
 	else {
-		this.actions.push(new Move(-1, this.id, "deploy", 0, 0, pos.x, pos.y, this.drawFacing, 0, 0, 0, 1, 1, 0));
+		this.actions.push(new Move(-1, this.id,  game.turn, "deploy", 0, 0, pos.x, pos.y, this.drawFacing, 0, 0, 0, 1, 1, 0));
 		this.deployed = 1;
 		this.isReady = 1;
 		this.x = pos.x;
@@ -380,7 +388,7 @@ Ship.prototype.getTurnDelay = function(){
 Ship.prototype.drawSystemArcIndicator = function(){
 	return;
 	var shipPos = this.getGamePos();
-	var angle = this.getPlannedFacing();
+	var angle = this.getPlannedHeading();
 
 	var p1 = getPointInDir(80, 90+angle, shipPos.x, shipPos.y);
 	var p2 = getPointInDir(-80, 90+angle, shipPos.x, shipPos.y);
@@ -494,7 +502,7 @@ Ship.prototype.doIssueMove = function(pos, dist){
 		this.actions[this.actions.length-1].dist+= dist;	
 		this.actions[this.actions.length-1].x = pos.x;
 		this.actions[this.actions.length-1].y = pos.y;
-	} else this.actions.push(new Move(-1, this.id, "move", 0, dist, pos.x, pos.y, 0, 0, 0, 0, 1, 1, 0));	
+	} else this.actions.push(new Move(-1, this.id, game.turn, "move", 0, dist, pos.x, pos.y, 0, 0, 0, 0, 1, 1, 0));	
 	
 	this.turnAngles = {}
 	$("#popupWrapper").hide();
@@ -626,14 +634,14 @@ Ship.prototype.doUndoLastAction = function(pos){
 Ship.prototype.moveInVector = function(){
 	var pos = this.getPlannedPos();
 	var dist = this.getRemSpeed();
-	var goal = getPointInDir(dist, this.getPlannedFacing(), pos.x, pos.y);
+	var goal = getPointInDir(dist, this.getPlannedHeading(), pos.x, pos.y);
 		this.doIssueMove(goal, dist);
 }
 
 Ship.prototype.moveToMaxVector = function(){
 	var pos = this.getPlannedPos();
 	var dist = this.getRemSpeed();
-	var goal = getPointInDir(dist, this.getPlannedFacing(), pos.x, pos.y);
+	var goal = getPointInDir(dist, this.getPlannedHeading(), pos.x, pos.y);
 		this.doIssueMove(goal, dist);
 }
 
@@ -641,7 +649,7 @@ Ship.prototype.moveToMaxTurnVector = function(){
 	var pos = this.getPlannedPos();
 	var dist = this.getRemDelay();
 	var impulse = this.getRemSpeed();
-	var goal = getPointInDir(dist, this.getPlannedFacing(), pos.x, pos.y);
+	var goal = getPointInDir(dist, this.getPlannedHeading(), pos.x, pos.y);
 	this.doIssueMove(goal, dist);
 }	
 
@@ -649,7 +657,7 @@ Ship.prototype.moveToMaCutVector = function(){
 	var pos = this.getPlannedPos();
 	var dist = this.getRemDelay();
 	var impulse = this.getRemSpeed();
-	var goal = getPointInDir(dist, this.getPlannedFacing(), pos.x, pos.y);
+	var goal = getPointInDir(dist, this.getPlannedHeading(), pos.x, pos.y);
 	this.doIssueMove(goal, dist);
 }
 
@@ -768,7 +776,7 @@ Ship.prototype.handleTurnAttempt = function(dest){
 	}
 	var origin = this.getPlannedPos();
 	var a = getAngleFromTo(origin, dest);
-		a = addAngle(this.getPlannedFacing(), a);
+		a = addAngle(this.getPlannedHeading(), a);
 	if (a > 180){a -= 360;}
 	var max = this.getMaxTurnAngle();
 
@@ -817,7 +825,7 @@ Ship.prototype.issueTurn = function(a){
 	else {
 		var o = this.getPlannedPos();
 		this.actions.push(
-			new Move(-1, this.id, "turn", 0, 0, o.x, o.y, 
+			new Move(-1, this.id, game.turn, "turn", 0, 0, o.x, o.y, 
 				a, 0,
 				Math.ceil(Math.abs(this.getTurnDelay()*a)),
 				Math.ceil(Math.abs(this.getTurnCost()*a)),
@@ -971,7 +979,7 @@ Ship.prototype.isInEWArc = function(origin, target, sensor, ew){
 	var	w = Math.min(180, game.const.ew.len * Math.pow(str/ew.dist, game.const.ew.p));
 	var start = addAngle(0 + w, ew.angle);
 	var end = addAngle(360 - w, ew.angle);
-	return isInArc(getCompassHeadingOfPoint(origin,  target, this.getPlannedFacing()), start, end);
+	return isInArc(getCompassHeadingOfPoint(origin,  target, this.getPlannedHeading()), start, end);
 }
 
 Ship.prototype.canSetSensor = function(sensor){
@@ -1073,6 +1081,7 @@ Ship.prototype.setPreMoveFacing = function(){
 
 Ship.prototype.setPostMoveFacing = function(){
 	//console.log("setPostMoveFacing #"+this.id);
+	if (this.faction[0] == "V"){console.log("ding");}
 	this.drawFacing = this.heading;
 	for (var i = 0; i < this.actions.length; i++){
 		this.drawFacing += this.actions[i].h;
@@ -1730,7 +1739,7 @@ Ship.prototype.highlightJumpShift = function(){
 	ctx.fillStyle = "yellow";
 	ctx.fill();
 
-	var p = getPointInDir(100, this.actions[0].a, 0, 0);
+	var p = getPointInDir(100, this.actions[0].h, 0, 0);
 	//console.log(p);
 	ctx.beginPath();
 	ctx.moveTo(0, 0)
@@ -1775,13 +1784,23 @@ Ship.prototype.drawMarker = function(x, y, c, context){
 	context.strokeStyle = "black";
 }
 
-Ship.prototype.getPlannedFacing = function(){
-	var angle = 0;
+Ship.prototype.getPlannedHeading = function(){
+	var heading = 0;
 
 	for (var i = 0; i < this.actions.length; i++){
-		angle += this.actions[i].h;
+		heading += this.actions[i].h;
 	}
-	return this.heading + angle;
+	return this.heading + heading;
+}
+
+Ship.prototype.getPlannedFacing = function(){
+	var adjust = 0;
+
+	for (var i = 0; i < this.actions.length; i++){
+		adjust += this.actions[i].a;
+		adjust += this.actions[i].a;
+	}
+	return this.heading + adjust;
 }
 
 Ship.prototype.getDrawFacing = function(){
@@ -1988,7 +2007,7 @@ Ship.prototype.getExploSize = function(i){
 }
 
 Ship.prototype.setMoveAngles = function(){
-	var angle = this.getPlannedFacing();
+	var angle = this.getPlannedHeading();
 	var slipAngle = this.getSlipAngle();	
 	this.moveAngles = {start: addAngle(0 + slipAngle, angle), end: addAngle(360 - slipAngle, angle)};
 }
@@ -3051,7 +3070,7 @@ Ship.prototype.requestJumpOut = function(){
 
 Ship.prototype.doJumpOut = function(){
 	var p = this.getPlannedPos();
-	this.actions.push(new Move(-1, this.id, "jumpOut", 0, 0, p.x, p.y, 0, 0, 0, 0, 1, 1, 0));
+	this.actions.push(new Move(-1, this.id, game.turn,  "jumpOut", 0, 0, p.x, p.y, 0, 0, 0, 0, 1, 1, 0));
 	this.withdraw = game.turn + 2;
 	this.setJumpOutTimer();
 	this.setNotes();
@@ -3414,34 +3433,50 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 	ctx.setTransform(1,0,0,1,0,0);
 }
 
+Ship.prototype.willBeAnimated = function(){
+	if (game.phase == -1 && this.faction[0] == "V"){
+		return true;
+	}
+	else if (game.phase == 1){
+		if (this.focus){return false;}
+		return true;
+	}
+	else if (game.phase == 2){
+		return true;
+	}
+	return false;
+}
+
 Ship.prototype.readyForAnim = function(){
 	this.setPreMovePosition();
 	this.setPreMoveFacing();
 	var frameMod = 1000 / window.fpsTicks / this.getCurSpeed();
-	//console.log(frameMod)
-	for (var i = 0; i < this.actions.length; i++){
-		var action = this.actions[i];
-		if (action.forced){console.log("forced move!");}
-		this.actions[i].animated = 0;
 
-		if (action.type == "speed" || action.type == "deploy" || action.type == "jumpIn"){
-			this.actions[i].animated = 1;
+	for (var i = 0; i < this.actions.length; i++){
+		var short = this.actions[i].type[0];
+		var t = [0, 0];
+		var v = false;
+
+		if (short == "r" || short == "f" || short == "d" || short == "j"){
 		}
-		else if (action.type == "turn"){
-			this.actions[i].t = [0, Math.abs(this.actions[i].a*2), this.actions[i].a/Math.abs(this.actions[i].a*2)];
+		else if (short == "t"){ // turn
+			t = [0, Math.abs(this.actions[i].h*2), this.actions[i].h/Math.abs(this.actions[i].h*2)];
 		}
-		else {
+		else if (short == "p"){ // pivot
+			t = [0, Math.abs(this.actions[i].f*2), this.actions[i].f/Math.abs(this.actions[i].f*2)];
+		}
+		else if (short == "m"){ // move
 			if (i == 0){
-				var v = new MoveVector({x: this.x, y: this.y}, {x: action.x, y: action.y});
-					v.t = [0, action.dist * frameMod];
+				var v = new MoveVector({x: this.x, y: this.y}, {x: this.actions[i].x, y: this.actions[i].y});
 			}
 			else {
-				var v = new MoveVector({x: this.actions[i-1].x, y: this.actions[i-1].y}, {x: action.x, y: action.y});
-					v.t = [0, action.dist * frameMod];
+				var v = new MoveVector({x: this.actions[i-1].x, y: this.actions[i-1].y}, {x: this.actions[i].x, y: this.actions[i].y});
 			}
-
-			this.actions[i].v = v;
+			t = [0, this.actions[i].dist * frameMod];
 		}
+
+		this.actions[i].t = t;
+		this.actions[i].v = v;
 	}
 }
 
@@ -3572,7 +3607,7 @@ Ship.prototype.getPrimarySection = function(){
 }
 
 Ship.prototype.highlightSingleSystem = function(system){
-	var angle = this.getPlannedFacing();
+	var angle = this.getPlannedHeading();
 	var pos = this.getPlannedPos();
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
@@ -3592,7 +3627,7 @@ Ship.prototype.highlightAllSelectedWeapons = function(){
 	fxCtx.scale(cam.z, cam.z);
 
 	//$(fxCanvas).css("opacity", 1);
-	var angle = this.getPlannedFacing();
+	var angle = this.getPlannedHeading();
 	var pos = this.getPlannedPos();
 
 	for (var i = 0; i < this.structures.length; i++){
@@ -3615,7 +3650,7 @@ Ship.prototype.weaponHighlight = function(weapon){
 	}
 	else {
 		$("#weaponTable" + weapon.id).removeClass("disabled");	
-		var angle = this.getPlannedFacing();
+		var angle = this.getPlannedHeading();
 		var shipPos = this.getPlannedPos();
 		weapon.highlight = true;		
 		weapon.drawSystemArc(angle, this.rolled, shipPos);
@@ -3967,7 +4002,7 @@ Ship.prototype.doPowerAll = function(id){
 
 Ship.prototype.drawTurnUI = function(){
 	//var center = this.getPlannedPos();
-	//var angle = this.getPlannedFacing();
+	//var angle = this.getPlannedHeading();
 
 	var center = {x: this.x, y: this.y};
 	var angle = this.getDrawFacing();
@@ -4007,6 +4042,7 @@ Ship.prototype.canDoAction = function(type){
 	}
 	return false;
 }
+
 Ship.prototype.canIncreaseImpulse = function(){
 	if (this.actions.length && this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == -1){
 		return true;
@@ -4087,7 +4123,7 @@ Ship.prototype.adjustMaxTurn = function(){
 
 Ship.prototype.doRoll = function(){
 	var shipPos = this.getPlannedPos();
-	this.actions.push(new Move(-1, this.id, "roll", 0, 1, shipPos.x, shipPos.y, 0, 0, 0, this.getActionCost(0), 1, 1, 0));
+	this.actions.push(new Move(-1, this.id, game.turn, "roll", 0, 1, shipPos.x, shipPos.y, 0, 0, 0, this.getActionCost(0), 1, 1, 0));
 	this.rolling = !this.rolling;
 	this.setNotes();
 	this.resetMoveMode();
@@ -4096,7 +4132,7 @@ Ship.prototype.doRoll = function(){
 
 Ship.prototype.doFlip = function(){
 	var shipPos = this.getPlannedPos();
-	this.actions.push(new Move(-1, this.id, "flip", 0, 1, shipPos.x, shipPos.y, 0, 0, 0, this.getActionCost(1), 1, 1, 0));
+	this.actions.push(new Move(-1, this.id, game.turn, "flip", 0, 1, shipPos.x, shipPos.y, 0, 0, 0, this.getActionCost(1), 1, 1, 0));
 	this.flipping = !this.flipping;
 	this.setNotes();
 	this.resetMoveMode();
@@ -4109,7 +4145,7 @@ Ship.prototype.doIncreaseImpulse = function(){
 		this.actions.splice(this.actions.length-1, 1);
 	}
 	else {
-		var action = new Move(-1, this.id, "speed", 0, 1, shipPos.x, shipPos.y, 0, 0, 0, this.getImpulseChangeCost(), 1, 1, 0);
+		var action = new Move(-1, this.id, game.turn, "speed", 0, 1, shipPos.x, shipPos.y, 0, 0, 0, this.getImpulseChangeCost(), 1, 1, 0);
 		this.actions.push(action);
 	}
 	$(this.element).find(".speed").html(this.getRemSpeed() + " / " + this.getCurSpeed());
@@ -4123,7 +4159,7 @@ Ship.prototype.doDecreaseImpulse = function(){
 		this.actions.splice(this.actions.length-1, 1);
 	}
 	else {
-		var action = new Move(-1, this.id, "speed", 0, -1, shipPos.x, shipPos.y, 0, 0, 0, this.getImpulseChangeCost(), 1, 1, 0);
+		var action = new Move(-1, this.id, game.turn, "speed", 0, -1, shipPos.x, shipPos.y, 0, 0, 0, this.getImpulseChangeCost(), 1, 1, 0);
 		this.actions.push(action);
 	}
 	$(this.element).find(".speed").html(this.getRemSpeed() + " / " + this.getCurSpeed());
@@ -4151,7 +4187,7 @@ Ship.prototype.drawShortenTurnUI = function(){
 	if (!remDelay || !this.getRemEP()){$(ui.doShorten).addClass("disabled");}
 	else {
 		var o = this.getGamePos()
-		var angle = this.getPlannedFacing();
+		var angle = this.getPlannedHeading();
 		var p = getPointInDir(100, angle-180, o.x, o.y);
 		var left = p.x * cam.z  + cam.o.x - $(ui.doShorten).width()/2;
 		var top = p.y * cam.z  + cam.o.y - $(ui.doShorten).height()/2;
@@ -4220,7 +4256,7 @@ Ship.prototype.getShortenTurnCost = function(delay){
 
 Ship.prototype.drawVectorUI = function(){
 	var center = this.getPlannedPos();
-	var angle = this.getPlannedFacing();
+	var angle = this.getPlannedHeading();
 	var remSpeed = this.getRemSpeed();
 	var remDelay = this.getRemDelay();
 	var ele;
@@ -4292,19 +4328,19 @@ Ship.prototype.getMaxTurnAngle = function(){
 }
 
 Ship.prototype.drawTurnArcs = function(){
-	//var angle = this.getPlannedFacing();
+	//var angle = this.getPlannedHeading();
 	//var turnAngle = this.getMaxTurnAngle();
 	//this.turnAngles = {start: addAngle(0 + turnAngle, angle), end: addAngle(360 - turnAngle, angle)};
 
 	var turnAngle = this.getMaxTurnAngle();
-	var angle = this.getPlannedFacing();
+	var angle = this.getPlannedHeading();
 	
 	this.turnAngles = {start: addAngle(0 + turnAngle, angle), end: addAngle(360 - turnAngle, angle)};
 
 	//return;
 
 	var center = this.getPlannedPos();
-	//var angle = this.getPlannedFacing();
+	//var angle = this.getPlannedHeading();
 	//var turnAngle = this.getMaxTurnAngle();
 	var w = this.getTurnStep();
 
@@ -4341,7 +4377,7 @@ Ship.prototype.drawDelay = function(){
 	}
 	var delay = turn.h * this.getTurnDelay();
 	if (delay){
-		var angle = this.getPlannedFacing();
+		var angle = this.getPlannedHeading();
 		var center = this.getPlannedPos();
 		var delayRad1 = degreeToRadian(angle-45);
 		var delayRad2 = degreeToRadian(angle+45);

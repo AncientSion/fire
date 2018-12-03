@@ -398,7 +398,7 @@ Squadron.prototype.highlightAllSelectedWeapons = function(){
 	fxCtx.scale(cam.z, cam.z);
 
 	//$(fxCanvas).css("opacity", 1);
-	var angle = this.getPlannedFacing();
+	var angle = this.getPlannedHeading();
 	var pos = this.getPlannedPos();
 
 	for (var i = 0; i < this.structures.length; i++){

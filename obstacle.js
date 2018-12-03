@@ -64,7 +64,7 @@ Obstacle.prototype.setNextMove = function(){
 	else {
 		p = getPointInDir(this.getCurSpeed(), this.heading, this.x, this.y);
 	}
-	this.actions.push(new Move(-1, this.id, "move", 0, this.getCurSpeed(), p.x, p.y, 0, 0, 0, 1, 1, 0));
+	this.actions.push(new Move(-1, this.id, game.turn, "move", 0, this.getCurSpeed(), p.x, p.y, 0, 0, 0, 1, 1, 0));
 }
 
 Obstacle.prototype.getMaxInterference = function(){
@@ -256,6 +256,12 @@ Obstacle.prototype.getEvents = function(){
 
 Obstacle.prototype.create = function(){
 	this.setUnitState();
+}
+
+Obstacle.prototype.willBeAnimated = function(){
+	if (game.phase == -1 && this.actions.length){
+		return true;
+	} return false;
 }
 
 Obstacle.prototype.setUnitState = function(){

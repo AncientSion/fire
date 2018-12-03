@@ -7,7 +7,7 @@ function Point(x, y){
 	}
 }
 
-function Move(id, unitid, type, forced, dist, x, y, h, f, delay, cost, costmod, manual, resolved){
+function Move(id, unitid, turn, type, forced, dist, x, y, h, f, delay, cost, costmod, manual, resolved){
 	this.id = id;
 	this.unitid = unitid;
 	this.turn = game.turn;
@@ -23,8 +23,9 @@ function Move(id, unitid, type, forced, dist, x, y, h, f, delay, cost, costmod, 
 	this.costmod = costmod;
 	this.manual = manual;
 	this.resolved = resolved;
-	this.animated = false
+	this.animated = false;
 	this.s = false;
+	this.t = [0, 0]
 }
 
 function ShotVector(a, b, s, h){
@@ -348,7 +349,7 @@ Structure.prototype.hover = function(e){
 	}
 	else {
 		this.highlight = true;
-		this.drawStructArc(p.getPlannedFacing(), p.rolled, p.getPlannedPos());
+		this.drawStructArc(p.getPlannedHeading(), p.rolled, p.getPlannedPos());
 		this.showSysDiv(e);
 		this.showOptions();
 	}

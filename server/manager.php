@@ -1290,7 +1290,7 @@
 
 		Debug::log("setupShips");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$this->ships[$i]->setFacing();
+			$this->ships[$i]->setHeading();
 			$this->ships[$i]->setPosition();
 			//$this->ships[$i]->setCurSpeed(static::$turn, static::$phase);
 			$this->ships[$i]->setImpulseProfileMod();
@@ -1468,9 +1468,9 @@
 				else {
 					$str = $sensor->getOutput(static::$turn);
 					$w = min(180, $this->const["ew"]["len"] * pow($str/$ew->dist, $this->const["ew"]["p"]));
-					$start = Math::addAngle(0 + $w-$origin->getFacing(), $ew->angle);
-					$end = Math::addAngle(360 - $w-$origin->getFacing(), $ew->angle);
-					//Debug::log("specific EW for ship #".$origin->id.", str: ".$str.", facing: ".$origin->getFacing().", w: ".$w.", EW @ ".$ew->angle." -> from ".$start." to ".$end.", dist: ".$ew->dist);
+					$start = Math::addAngle(0 + $w-$origin->getHeading(), $ew->angle);
+					$end = Math::addAngle(360 - $w-$origin->getHeading(), $ew->angle);
+					//Debug::log("specific EW for ship #".$origin->id.", str: ".$str.", facing: ".$origin->getHeading().", w: ".$w.", EW @ ".$ew->angle." -> from ".$start." to ".$end.", dist: ".$ew->dist);
 				}
 
 				for ($i = 0; $i < sizeof($this->ships); $i++){

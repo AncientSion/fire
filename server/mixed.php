@@ -309,7 +309,7 @@ class Minor extends Mixed {
 
 	public function getEndState($turn){
 		//Debug::log("getEndState for ".$this->id);
-		$facing = $this->actions[sizeof($this->actions)-1]->a;
+		$facing = $this->actions[sizeof($this->actions)-1]->h;
 
 		if ($facing > 360){
 			$facing -= 360;

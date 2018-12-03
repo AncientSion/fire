@@ -107,34 +107,37 @@ this.doAnimateMovement = function(){
 						}
 
 						if (action.type[0] == "m"){ // move
-							action.v.t[0] += 1;
-							game.ships[i].drawX += action.v.x * 1 / action.v.t[1];
-							game.ships[i].drawY += action.v.y * 1 / action.v.t[1];
-							if (action.v.t[0] >= action.v.t[1]){
-								action.animated = true;
+							action.t[0] += 1;
+							game.ships[i].drawX += action.v.x * 1 / action.t[1];
+							game.ships[i].drawY += action.v.y * 1 / action.t[1];
+							if (action.t[0] >= action.t[1]){
 								game.ships[i].drawX = action.x;
 								game.ships[i].drawY = action.y;
-								if (game.ships[i].doesContinueRolling()){game.ships[i].createStillRollingEntry()}
+								if (game.ships[i].doesContinueRolling()){game.ships[i].createStillRollingEntry();}
 							}
 						}
-						else if (action.type[0] == "t"){ // turn
-							action.t[0]++;
-							game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[2]);
+						else {
+							if (action.type[0] == "t"){ // turn
+								action.t[0]++;
+								game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[2]);
+							}
+							else if (action.type[0] == "p"){ // pivot
+								action.t[0]++;
+								game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[2]);
+							}
+							else if (action.type[0] == "r"){//roll
+							}
+							else if (action.type[0] == "f"){//flip
+							}
+							else if (action.type[0] == "p"){//patrol
+							}
+							else if (action.type[0] == "d"){//deploy
+							}
+							else if (action.type[0] == "j"){//jumpIn/Out
+							}
+						}
 
-							if (action.t[0] >= action.t[1]){
-								action.animated = true;
-							}
-						}
-						else if (action.type[0] == "r"){//roll
-							action.animated = true;
-						}
-						else if (action.type[0] == "f"){//flip
-							action.animated = true;
-						}
-						else if (action.type[0] == "p"){//patrol
-							action.animated = true;
-						}
-						else if (action.type[0] == "d"){//deploy
+						if (action.t[0] >= action.t[1]){
 							action.animated = true;
 						}
 
@@ -399,7 +402,7 @@ this.doAnimateMovement = function(){
 		);
 
 		//flight.primary = new Primary(0, flight.id, 0, 0, 0);
-		flight.actions.push(new Move(-1, flight.id, "deploy", 0, 0, o.x, o.y, facing, 0, 0, 0, 0, 1, 1));
+		flight.actions.push(new Move(-1, flight.id, this.turn, "deploy", 0, 0, o.x, o.y, facing, 0, 0, 0, 0, 1, 1));
 		flight.launch = {
 			unitid: aUnit,
 			systemid: flightDeploy.id,
@@ -457,7 +460,7 @@ this.doAnimateMovement = function(){
 			{id: range(-0, -100), name: "Salvo", mission: mission, traverse: 0, flight: 0, salvo: 1, ship: 0, squad: 0, obstacle: 0, notes: (aUnit + ";" + launcher.id), focus: 0, disabled: 0, command: 0, 
 			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, curImp: 0, size: 50, fSize: 0, baseSize: 0, unitSize: 0, userid: this.userid, available: this.turn}
 		);
-		salvo.actions.push(new Move(-1, salvo.id, "deploy", 0, 0, o.x, o.y, facing, 0, 0, 0, 0, 1, 1));
+		salvo.actions.push(new Move(-1, salvo.id, this.turn, "deploy", 0, 0, o.x, o.y, facing, 0, 0, 0, 0, 1, 1));
 
 		var shots = launcher.getShots();
 		for (var i = 1; i <= shots; i++){
@@ -2871,7 +2874,12 @@ Game.prototype.handleTurnStartMoves = function(){
 
 	this.prepResolveMovement();
 	game.timeout = setTimeout(function(){
-		game.animObstacles = 1;
+		if (game.hasObstaclesPresent()){
+			game.animObstacles = 1;
+		}
+		if (game.hasVreePresent()){
+			game.animShip = 1;
+		}
 		game.doResolveMovement();
 	}, 1500);
 }
@@ -3544,45 +3552,12 @@ Game.prototype.doCloneSquaddie = function(){
 }
 
 Game.prototype.setUnitMoveDetails = function(){
-	if (this.phase == 1){
-		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].focus || this.ships[i].flight || this.ships[i].salvo || this.ships[i].obstacle){continue;}
-			this.ships[i].toAnimate = true;
-		}
-	}
-	else if (this.phase == 2){
-		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].obstacle){continue;}
-			this.ships[i].toAnimate = true;
-		}
-	}
-	else if (this.phase == -1){
-		for (var i = 0; i < this.ships.length; i++){
-			if (!this.ships[i].obstacle){continue;}
-			this.ships[i].toAnimate = true;
-		}
-	}
 
 	for (var i = 0; i < this.ships.length; i++){
-		if (!this.ships[i].toAnimate){continue;}
-		else if (!this.ships[i].actions.length){continue;}
-
-		if (this.ships[i].cc.length){
-			if (this.ships[i].ship || this.ships[i].squad){
-				for (var j = 0; j < this.ships[i].cc.length; j++){
-					var attach = this.getUnit(this.ships[i].cc[j]);
-					if (attach.mission.arrived < this.turn){
-						this.ships[i].attachAnims.push(attach);
-					}
-				}
-			} else if (this.ships[i].flight){
-				var attach = this.getUnit(this.ships[i].cc[j]);
-				if (attach.salvo){
-					this.ships[i].attachAnims.push(attach);
-				}
-			}
-		}
-
+		this.ships.toAnimate = false;
+		if (!this.ships[i].actions.length){continue;}
+		if (!this.ships[i].willBeAnimated()){continue;}
+		this.ships[i].toAnimate = true;
 		this.ships[i].readyForAnim();
 	}
 }
@@ -3643,9 +3618,12 @@ Game.prototype.finishMoveSubPhase = function(time){
 		this.animForcedMoves = 0;
 		this.handleAllUnitExplos();
 	}
-	else if (this.animObstacles){ // phase 3 post fire
+	else if (this.animObstacles){ // phase -1
 		game.timeout = setTimeout(function(){
-			game.animObstacles = 0; 
+			game.animShip = 0;
+			game.animFlight = 0;
+			game.animSalvo = 0;
+			game.animObstacles = 0;
 			game.moveResolved();
 		}, time);
 	}
@@ -4607,7 +4585,7 @@ Game.prototype.initSelectionWrapper = function(){
 						var	ship = game.getUnit(aUnit);
 						if (ship.salvo){return;}
 						var shipLoc = ship.getPlannedPos();
-						var facing = ship.getPlannedFacing();
+						var facing = ship.getPlannedHeading();
 						if (ship.hasWeaponsSelected()){
 							if (ship.id != vessel.id){
 								handleWeaponAimEvent(ship, vessel, e);

@@ -889,7 +889,7 @@ else header("Location: index.php");
 		window.shipCtx.clearRect(0, 0, res.x, res.y);
 		window.shipCtx.save();
 		window.shipCtx.translate(res.x/2, res.y/2);
-		window.shipCtx.rotate(unit.getPlannedFacing()*(Math.PI/180));
+		window.shipCtx.rotate(unit.getPlannedHeading()*(Math.PI/180));
 		window.shipCtx.drawImage(unit.getBaseImage(), -size, -size, size*2, size*2);
 		window.shipCtx.restore();
 	}
