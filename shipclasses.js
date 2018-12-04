@@ -329,7 +329,7 @@ Ship.prototype.handleHovering = function(){
 			this.drawTurnArcs();
 		}
 		
-		this.drawVectorIndicator();
+		this.drawDirectionIndicator();
 		this.resetMoveTranslation();
 	}
 
@@ -388,7 +388,7 @@ Ship.prototype.getTurnDelay = function(){
 Ship.prototype.drawSystemArcIndicator = function(){
 	return;
 	var shipPos = this.getGamePos();
-	var angle = this.getPlannedHeading();
+	var angle = this.getPlannedFacing();
 
 	var p1 = getPointInDir(80, 90+angle, shipPos.x, shipPos.y);
 	var p2 = getPointInDir(-80, 90+angle, shipPos.x, shipPos.y);
@@ -776,7 +776,7 @@ Ship.prototype.handleTurnAttempt = function(dest){
 	}
 	var origin = this.getPlannedPos();
 	var a = getAngleFromTo(origin, dest);
-		a = addAngle(this.getPlannedHeading(), a);
+		a = addAngle(this.getPlannedFacing(), a);
 	if (a > 180){a -= 360;}
 	var max = this.getMaxTurnAngle();
 
@@ -979,7 +979,7 @@ Ship.prototype.isInEWArc = function(origin, target, sensor, ew){
 	var	w = Math.min(180, game.const.ew.len * Math.pow(str/ew.dist, game.const.ew.p));
 	var start = addAngle(0 + w, ew.angle);
 	var end = addAngle(360 - w, ew.angle);
-	return isInArc(getCompassHeadingOfPoint(origin,  target, this.getPlannedHeading()), start, end);
+	return isInArc(getCompassHeadingOfPoint(origin,  target, this.getPlannedFacing()), start, end);
 }
 
 Ship.prototype.canSetSensor = function(sensor){
@@ -1081,10 +1081,11 @@ Ship.prototype.setPreMoveFacing = function(){
 
 Ship.prototype.setPostMoveFacing = function(){
 	//console.log("setPostMoveFacing #"+this.id);
-	if (this.faction[0] == "V"){console.log("ding");}
+	//if (this.faction[0] == "V"){console.log("ding");}
 	this.drawFacing = this.heading;
 	for (var i = 0; i < this.actions.length; i++){
 		this.drawFacing += this.actions[i].h;
+		this.drawFacing += this.actions[i].f;
 	}
 }
 
@@ -1797,8 +1798,8 @@ Ship.prototype.getPlannedFacing = function(){
 	var adjust = 0;
 
 	for (var i = 0; i < this.actions.length; i++){
-		adjust += this.actions[i].a;
-		adjust += this.actions[i].a;
+		adjust += this.actions[i].f;
+		adjust += this.actions[i].h;
 	}
 	return this.heading + adjust;
 }
@@ -3607,7 +3608,7 @@ Ship.prototype.getPrimarySection = function(){
 }
 
 Ship.prototype.highlightSingleSystem = function(system){
-	var angle = this.getPlannedHeading();
+	var angle = this.getPlannedFacing();
 	var pos = this.getPlannedPos();
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
@@ -3627,7 +3628,7 @@ Ship.prototype.highlightAllSelectedWeapons = function(){
 	fxCtx.scale(cam.z, cam.z);
 
 	//$(fxCanvas).css("opacity", 1);
-	var angle = this.getPlannedHeading();
+	var angle = this.getPlannedFacing();
 	var pos = this.getPlannedPos();
 
 	for (var i = 0; i < this.structures.length; i++){
@@ -3650,7 +3651,7 @@ Ship.prototype.weaponHighlight = function(weapon){
 	}
 	else {
 		$("#weaponTable" + weapon.id).removeClass("disabled");	
-		var angle = this.getPlannedHeading();
+		var angle = this.getPlannedFacing();
 		var shipPos = this.getPlannedPos();
 		weapon.highlight = true;		
 		weapon.drawSystemArc(angle, this.rolled, shipPos);
@@ -4002,7 +4003,7 @@ Ship.prototype.doPowerAll = function(id){
 
 Ship.prototype.drawTurnUI = function(){
 	//var center = this.getPlannedPos();
-	//var angle = this.getPlannedHeading();
+	//var angle = this.getPlannedFacing();
 
 	var center = {x: this.x, y: this.y};
 	var angle = this.getDrawFacing();
@@ -4116,7 +4117,7 @@ Ship.prototype.adjustMaxTurn = function(){
 		moveCtx.clearRect(0, 0, res.x, res.y);
 		this.setMoveTranslation();
 		this.drawTurnArcs();
-		this.drawVectorIndicator();
+		this.drawDirectionIndicator();
 		this.resetMoveTranslation();
 	}
 }
@@ -4187,7 +4188,7 @@ Ship.prototype.drawShortenTurnUI = function(){
 	if (!remDelay || !this.getRemEP()){$(ui.doShorten).addClass("disabled");}
 	else {
 		var o = this.getGamePos()
-		var angle = this.getPlannedHeading();
+		var angle = this.getPlannedFacing();
 		var p = getPointInDir(100, angle-180, o.x, o.y);
 		var left = p.x * cam.z  + cam.o.x - $(ui.doShorten).width()/2;
 		var top = p.y * cam.z  + cam.o.y - $(ui.doShorten).height()/2;
@@ -4288,10 +4289,11 @@ Ship.prototype.drawVectorUI = function(){
 	}
 }
 
-Ship.prototype.drawVectorIndicator = function(){
+Ship.prototype.drawDirectionIndicator = function(){
 	var center = this.getPlannedPos();
-	var angle = this.getPlannedFacing();
-	var p = getPointInDir(this.getCurSpeed(), angle, center.x, center.y);
+	var heading = this.getPlannedHeading();
+	var facing = this.getPlannedFacing();
+	var p = getPointInDir(this.getCurSpeed(), heading, center.x, center.y);
 	
 	moveCtx.beginPath();			
 	moveCtx.moveTo(center.x, center.y);
@@ -4303,6 +4305,21 @@ Ship.prototype.drawVectorIndicator = function(){
 	moveCtx.stroke();
 	moveCtx.globalAlpha = 1;
 	moveCtx.strokeStyle = "black";
+
+	if (facing != heading){
+		var p = getPointInDir(this.getCurSpeed(), facing, center.x, center.y);
+		
+		moveCtx.beginPath();			
+		moveCtx.moveTo(center.x, center.y);
+		moveCtx.lineTo(p.x, p.y);
+		moveCtx.closePath();
+		moveCtx.lineWidth = 1;
+		moveCtx.strokeStyle = "blue";
+		moveCtx.globalAlpha = 0.5;
+		moveCtx.stroke();
+		moveCtx.globalAlpha = 1;
+		moveCtx.strokeStyle = "black";
+	}
 }
 
 Ship.prototype.getTurnAngle = function(){
@@ -4328,7 +4345,7 @@ Ship.prototype.getMaxTurnAngle = function(){
 }
 
 Ship.prototype.drawTurnArcs = function(){
-	//var angle = this.getPlannedHeading();
+	//var angle = this.getPlannedFacing();
 	//var turnAngle = this.getMaxTurnAngle();
 	//this.turnAngles = {start: addAngle(0 + turnAngle, angle), end: addAngle(360 - turnAngle, angle)};
 
@@ -4340,7 +4357,7 @@ Ship.prototype.drawTurnArcs = function(){
 	//return;
 
 	var center = this.getPlannedPos();
-	//var angle = this.getPlannedHeading();
+	//var angle = this.getPlannedFacing();
 	//var turnAngle = this.getMaxTurnAngle();
 	var w = this.getTurnStep();
 
@@ -4377,7 +4394,7 @@ Ship.prototype.drawDelay = function(){
 	}
 	var delay = turn.h * this.getTurnDelay();
 	if (delay){
-		var angle = this.getPlannedHeading();
+		var angle = this.getPlannedFacing();
 		var center = this.getPlannedPos();
 		var delayRad1 = degreeToRadian(angle-45);
 		var delayRad2 = degreeToRadian(angle+45);

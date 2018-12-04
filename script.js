@@ -127,7 +127,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	
 	//var shooterPos = (shooter.flight ? shooter.getGamePos() : shooter.getPlannedPos());
 	var shooterPos = (game.phase == 2 ? shooter.getGamePos() : shooter.getPlannedPos())
-	var facing = shooter.getPlannedHeading();
+	var facing = shooter.getPlannedFacing();
 	var targetDataA = ui.aimDiv.find("#targetDataA");
 	var targetDataB = ui.aimDiv.find("#targetDataB");
 	var targetDataC = ui.aimDiv.find("#targetDataC");
@@ -172,11 +172,11 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			if (shooter.ship || shooter.squad){
 				if (target.salvo){
 					angle = getAngleFromTo(target.getTrajectory(), shooterPos);
-					angle = addAngle(-shooter.getPlannedHeading(), angle);
+					angle = addAngle(-shooter.getPlannedFacing(), angle);
 				}
 				else {
 					angle = getAngleFromTo(target.getPlannedPos(), shooterPos);
-					angle = addAngle(target.getPlannedHeading(), angle);
+					angle = addAngle(target.getPlannedFacing(), angle);
 				}
 			} else angle = range(0, 359);
 			
@@ -445,7 +445,7 @@ function canvasMouseMove(e){
 			if (!ship){return;}
 
 			var shipLoc = ((ship.flight || ship.salvo || ship.obstacle) ? ship.getGamePos() : ship.getPlannedPos());
-			var	facing = ship.getPlannedHeading();
+			var	facing = ship.getPlannedFacing();
 
 			if (game.vector){
 				var dist = Math.floor(getDistance(shipLoc, pos));
@@ -485,7 +485,7 @@ function handleTurnShortening(unit, e, pos){
 	if (!remDelay){return;}
 
 	var o = unit.getGamePos()
-	var p = getPointInDir(100, unit.getPlannedHeading()-180, o.x, o.y);
+	var p = getPointInDir(100, unit.getPlannedFacing()-180, o.x, o.y);
 	var left;
 	var top;
 	var last = unit.getLastTurn();
@@ -496,7 +496,7 @@ function handleTurnShortening(unit, e, pos){
 
 
 function sensorize(ship, pos){
-	var facing = ship.getPlannedHeading();
+	var facing = ship.getPlannedFacing();
 	var shipLoc = ship.getPlannedPos();
 	var a = addAngle(facing, getAngleFromTo(shipLoc, pos));
 	sensorEvent(true, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), a);

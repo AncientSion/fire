@@ -349,7 +349,7 @@ Structure.prototype.hover = function(e){
 	}
 	else {
 		this.highlight = true;
-		this.drawStructArc(p.getPlannedHeading(), p.rolled, p.getPlannedPos());
+		this.drawStructArc(p.getPlannedFacing(), p.rolled, p.getPlannedPos());
 		this.showSysDiv(e);
 		this.showOptions();
 	}

@@ -121,7 +121,7 @@ this.doAnimateMovement = function(){
 								action.t[0]++;
 								game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[2]);
 							}
-							else if (action.type[0] == "p"){ // pivot
+							else if (action.type == "pivot"){ // pivot
 								action.t[0]++;
 								game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[2]);
 							}
@@ -1986,7 +1986,7 @@ this.doAnimateMovement = function(){
 				if (unit.ship || unit.squad){
 					unit.setMoveTranslation();
 					unit.drawMoveArea();
-					unit.drawVectorIndicator();
+					unit.drawDirectionIndicator();
 					unit.drawTurnArcs();
 					unit.resetMoveTranslation();
 				}
@@ -4585,7 +4585,7 @@ Game.prototype.initSelectionWrapper = function(){
 						var	ship = game.getUnit(aUnit);
 						if (ship.salvo){return;}
 						var shipLoc = ship.getPlannedPos();
-						var facing = ship.getPlannedHeading();
+						var facing = ship.getPlannedFacing();
 						if (ship.hasWeaponsSelected()){
 							if (ship.id != vessel.id){
 								handleWeaponAimEvent(ship, vessel, e);

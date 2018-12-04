@@ -10,7 +10,7 @@ function Mixed(data){
 
 Mixed.prototype = Object.create(Ship.prototype);
 
-Mixed.prototype.getPlannedHeading = function(){
+Mixed.prototype.getPlannedFacing = function(){
 	return this.heading;
 }
 

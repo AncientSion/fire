@@ -252,7 +252,7 @@ System.prototype.hover = function(e){
 			fxCtx.clearRect(0, 0, res.x, res.y);
 			fxCtx.translate(cam.o.x, cam.o.y);
 			fxCtx.scale(cam.z, cam.z);
-			this.drawSystemArc(p.getPlannedHeading(), p.rolled, p.getPlannedPos());
+			this.drawSystemArc(p.getPlannedFacing(), p.rolled, p.getPlannedPos());
 			fxCtx.setTransform(1,0,0,1,0,0);
 		}
 		if (this.hasUnresolvedFireOrder()){
@@ -618,7 +618,7 @@ System.prototype.redrawSystemArc = function(){
 	fxCtx.scale(cam.z, cam.z);
 
 	var p = game.getUnit(this.parentId);
-	this.drawSystemArc(p.getPlannedHeading(), p.rolled, p.getPlannedPos());
+	this.drawSystemArc(p.getPlannedFacing(), p.rolled, p.getPlannedPos());
 	fxCtx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
@@ -1679,7 +1679,7 @@ Sensor.prototype.setTempEW = function(){
 	var loc = {x: 0, y: 0}
 	var ew = this.ew[this.ew.length-1];
 	var str = this.getOutput();
-	var facing = ship.getPlannedHeading();
+	var facing = ship.getPlannedFacing();
 	var w;
 	if (ew.angle == -1){w = 180;}
 	else w = Math.min(180, game.const.ew.len * Math.pow(str/ew.dist, game.const.ew.p));
