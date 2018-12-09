@@ -307,9 +307,9 @@ Mixed.prototype.setNextMove = function(){
 
 }
 
-Mixed.prototype.setPreMoveFacing = function(){
-	//console.log("setPreMoveFacing");
-	//if (this.salvo){console.log("setPreMoveFacing");}
+Mixed.prototype.setPreMoveFaceHead = function(){
+	//console.log("setPreMoveFaceHead");
+	//if (this.salvo){console.log("setPreMoveFaceHead");}
 	if (this.mission.turn == game.turn){
 		if (game.phase == 2){
 			this.heading = getAngleFromTo({x: this.x, y: this.y}, this.getTargetPos());
@@ -326,7 +326,7 @@ Mixed.prototype.setPreMoveFacing = function(){
 	else this.heading = getAngleFromTo(this.getGamePos(), this.getPlannedPos());
 }
 
-Mixed.prototype.setPostMoveFacing = function(){
+Mixed.prototype.setPostMoveFaceHead = function(){
 	if (!this.finalStep){return;}
 	this.heading = getAngleFromTo(this.getGamePos(), this.finalStep);
 }
@@ -392,28 +392,17 @@ Mixed.prototype.setSubSystemState = function(){
 	}
 }
 
-Mixed.prototype.setPreMovePosition = function(){
-	if (this.available == game.turn && game.phase <= 2){
-		this.drawX = this.actions[0].x;
-		this.drawY = this.actions[0].y;
-	}
-	else {
-		this.drawX = this.x;
-		this.drawY = this.y;
-	}
-}
-
 Mixed.prototype.setDrawData = function(){
 	//console.log("MIXED setDrawData");
 	if (this.available > game.turn || !this.available || game.turn == 1 && game.phase == -1){
 		if (this.friendly && this.isReady){
 			this.setPostMovePosition();
-			this.setPostMoveFacing();
+			this.setPostMoveFaceHead();
 			return;
 		}
 	}
 
-	this.setPostMoveFacing();
+	this.setPostMoveFaceHead();
 
 	if (game.phase < 2){
 		this.setPreMovePosition();
@@ -717,7 +706,7 @@ Mixed.prototype.willBeAnimated = function(){
 
 Mixed.prototype.readyForAnim = function(){
 	this.setPreMovePosition();
-	this.setPreMoveFacing();	
+	this.setPreMoveFaceHead();	
 
 	if (this.actions[this.actions.length-1].dist == 0){
 		this.actions[this.actions.length-1].animated = 1;
@@ -727,11 +716,10 @@ Mixed.prototype.readyForAnim = function(){
 	var frameMod = 1000 / window.fpsTicks / this.actions[this.actions.length-1].dist;
 
 	for (var i = 0; i < this.actions.length; i++){
-		var short = this.actions[i].type[0];
 		var t = [0, 0];
 		var v = false;
 
-		if (short == "m"){ // move
+		if (this.actions[i].type == "move"){ // move
 			if (i == 0){
 				var v = new MoveVector({x: this.x, y: this.y}, {x: this.actions[i].x, y: this.actions[i].y});
 			}

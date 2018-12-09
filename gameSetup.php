@@ -809,7 +809,7 @@ else header("Location: index.php");
 			game.ships[0] = ship;
 			game.system = 0;
 
-			ship.actions.push(new Move(-1, ship.id, "deploy", 0, 0, res.x/2, res.y/2, 0, 0, 0, 1, 1, 1));
+			ship.actions.push(new Move(-1, ship.id, 0, "deploy", 0, 0, res.x/2, res.y/2, 0, 0, 0, 0, 1, 1, 1));
 			ship.setUnitState();
 			ship.setSubSystemState();
 			ship.create();

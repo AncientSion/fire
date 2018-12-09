@@ -171,7 +171,7 @@ class Move {
 	public $new;
 	public $manual = 0;
 
-	function __construct($id, $unitid, $turn, $type, $forced, $dist, $x, $y, $h, $f, $cost, $delay, $costmod, $resolved, $new){#
+	function __construct($id, $unitid, $turn, $type, $forced, $dist, $x, $y, $h, $f, $cost, $delay, $costmod, $resolved, $new){
 		
 		$this->id = $id;
 		$this->unitid = $unitid;

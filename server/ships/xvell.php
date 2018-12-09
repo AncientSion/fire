@@ -19,9 +19,9 @@ class Xvell extends UltraLight {
 	}
 
 	public function addSystems(){
-		$this->addSubSystem(new AntiProtonEmitter($this->getId(), $this->parentId, 270, 90));
-		$this->addSubSystem(new AntiProtonEmitter($this->getId(), $this->parentId, 270, 90));
-		$this->addSubSystem(new AntiProtonEmitter($this->getId(), $this->parentId, 270, 90));
+		$this->addSubSystem(new AntiProtonPulsar($this->getId(), $this->parentId, 30, 210), 120);
+		$this->addSubSystem(new AntiProtonPulsar($this->getId(), $this->parentId, 270, 90), 0);
+		$this->addSubSystem(new AntiProtonPulsar($this->getId(), $this->parentId, 150, 330), 240);
 	}
 }
 

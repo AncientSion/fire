@@ -927,7 +927,7 @@
 				INSERT INTO units
 				(gameid, name, status, x, y, heading, facing, delay, thrust, rolling, rolled, turn, phase, totalCost, moraleCost)
 				VALUES
-				(:gameid, 'Obstacle', 'deployed', :x, :y, :heading, 0, :delay, :thrust, :rolling, :rolled, 1, -1, :totalCost, :moraleCost)
+				(:gameid, 'Obstacle', 'deployed', :x, :y, :heading, :facing, :delay, :thrust, :rolling, :rolled, 1, -1, :totalCost, :moraleCost)
 			");
 
 
@@ -940,6 +940,7 @@
 				$stmt->bindParam(":x", $fields[$i][0]);
 				$stmt->bindParam(":y", $fields[$i][1]);
 				$stmt->bindParam(":heading", $fields[$i][2]);
+				$stmt->bindParam(":facing", $fields[$i][2]);
 				$stmt->bindParam(":delay", $fields[$i][3]);
 				$stmt->bindParam(":thrust", $fields[$i][4]);
 				$stmt->bindParam(":rolling", $fields[$i][5]);
@@ -1768,7 +1769,7 @@
 							$result[$j]["type"]
 						);
 					}
-					//Debug::log($units[$i]->classname." facing: ".$units[$i]->heading);
+					//Debug::log($units[$i]->classname." heading: ".$units[$i]->heading);
 				}
 			}
 			return true;

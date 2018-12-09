@@ -309,16 +309,17 @@ class Minor extends Mixed {
 
 	public function getEndState($turn){
 		//Debug::log("getEndState for ".$this->id);
-		$facing = $this->actions[sizeof($this->actions)-1]->h;
+		$heading = $this->actions[sizeof($this->actions)-1]->h;
+		$facing = $this->actions[sizeof($this->actions)-1]->f;
 
-		if ($facing > 360){
-			$facing -= 360;
+		if ($heading > 360){
+			$heading -= 360;
 		}
-		else if ($facing < 0){
-			$facing += 360;
+		else if ($heading < 0){
+			$heading += 360;
 		}
 
-		//Debug::log("getEndState for ".get_class($this)." #".$this->id." current facing ".$this->heading.", now: ".$facing.", rolling: ".$this->rolling.", rolled: ".$this->rolled);
+		//Debug::log("getEndState for ".get_class($this)." #".$this->id." current heading ".$this->heading.", now: ".$heading.", rolling: ".$this->rolling.", rolled: ".$this->rolled);
 	
 		return array(
 			"id" => $this->id,
@@ -329,6 +330,7 @@ class Minor extends Mixed {
 			"y" => $this->actions[sizeof($this->actions)-1]->y,
 			"delay" => 0,
 			"heading" => $this->heading,
+			"facing" => $this->facing,
 			"thrust" => $this->getCurSpeed(),
 			"rolling" => $this->isRolling(),
 			"rolled" => $this->isRolled(),

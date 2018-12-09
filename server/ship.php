@@ -81,12 +81,12 @@ class Ship {
 	public $modFocusRate = 0;
 
 	public $critEffects = array( // type, min%, dura, effect
-		array("Rout", 10, -2, 0.00),
-	/*	array("Morale", 30, -2, -5.00),
+	//	array("Rout", 10, -2, 0.00),
+		array("Morale", 30, -2, -5.00),
 		array("Morale", 60, -2, -15.00),
 		array("Morale", 100, -2, -25.00),
 		array("Rout", 150, -2, 0.00),
-	*/);
+	);
 
 	function __construct($data){
 		if (!$data){return;}
@@ -148,7 +148,7 @@ class Ship {
 		if ($this->moveSet){return;}
 
 		$origin = $this->getCurPos();
-		$move = new Move(-1, $this->id, Manager::$turn, "pivot", 0, 0, $origin->x, $origin->y, 0, 120, 0, 0, 0, 1, 1);
+		$move = new Move(-1, $this->id, Manager::$turn, "rotate", 0, 0, $origin->x, $origin->y, 0, 120, 0, 0, 0, 1, 1);
 		$this->actions[] = $move;
 		$this->moveSet = 1;
 	}
@@ -200,11 +200,11 @@ class Ship {
 			}
 		}
 		else if ($this->faction == "Vree Conglomerate"){
-			if ($this->ship){
+			//if ($this->ship){
+			//	$this->slipAngle = 20;
+			//}
+			if ($this->squad){
 				$this->slipAngle = 30;
-			}
-			else if ($this->squad){
-				$this->slipAngle = 45;
 			}
 		}
 		//Debug::log("setSpecialAbilities #".$this->id.", now: ".$this->baseMorale);
@@ -238,6 +238,7 @@ class Ship {
 			}
 		}
 
+		$this->getSystemByName("Engine")->setPowerReq($this->mass);
 		$this->getSystemByName("Engine")->setPowerReq($this->mass);
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
 
@@ -462,8 +463,8 @@ class Ship {
 			"x" => $this->actions[sizeof($this->actions)-1]->x,
 			"y" => $this->actions[sizeof($this->actions)-1]->y,
 			"delay" => 0,
-			"facing" => 0,
 			"heading" => $this->actions[sizeof($this->actions)-1]->h,
+			"facing" => $this->actions[sizeof($this->actions)-1]->f,
 			"thrust" => $this->getCurSpeed(),
 			"rolling" => $this->isRolling(),
 			"rolled" => $this->isRolled(),
@@ -477,22 +478,18 @@ class Ship {
 		//Debug::log("getEndState for ".$this->id);
 		$delay = $this->remDelay;
 		$heading = $this->heading;
-		$facing = 0;
+		$facing = $this->facing;
 
 		for ($i = 0; $i < sizeof($this->actions); $i++){
-			//Debug::log("checking");
 			if ($this->actions[$i]->turn < $turn){continue;}
-			//Debug::log("adding");
+				$heading += $this->actions[$i]->h;
+				$facing += $this->actions[$i]->f;
+				$delay += $this->actions[$i]->delay;
+
 			if ($delay && $this->actions[$i]->type == "move"){
 				$delay = max(0, $delay - $this->actions[$i]->dist);
-			} else if ($this->actions[$i]->type == "turn"){
-				$delay += $this->actions[$i]->delay;
-				$heading += $this->actions[$i]->h;
-			} else if ($this->actions[$i]->type == "deploy"){
-				$heading += $this->actions[$i]->h;
-			} else if ($this->actions[$i]->type == "jumpIn"){
-				$heading += $this->actions[$i]->h;
-			} else if ($this->actions[$i]->type == "flip"){
+			}
+			else if ($this->actions[$i]->type == "flip"){
 				$this->flipped = $turn;
 				$heading += 180;
 			}
@@ -505,7 +502,7 @@ class Ship {
 			$heading += 360;
 		}
 
-		//Debug::log("getEndState for ".get_class($this)." #".$this->id." current facing ".$this->heading.", now: ".$facing.", rolling: ".$this->rolling.", rolled: ".$this->rolled);
+		Debug::log("getEndState for ".get_class($this)." #".$this->id." heading ".$heading.", facing: ".$facing.", rolling: ".$this->rolling.", rolled: ".$this->rolled);
 
 		return array(
 			"id" => $this->id,
@@ -1203,9 +1200,10 @@ class Ship {
 		return $this->heading;
 	}
 
-	public function setHeading(){
+	public function setHeadingAndFacing(){
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			$this->heading += $this->actions[$i]->h;
+			$this->facing += $this->actions[$i]->f;
 		}
 
 		if ($this->heading > 360){
@@ -1213,8 +1211,14 @@ class Ship {
 		} else if ($this->heading < 0){
 			$this->heading += 360;
 		}
+
+		if ($this->facing > 360){
+			$this->facing -= 360;
+		} else if ($this->facing < 0){
+			$this->facing += 360;
+		}
 		
-		//Debug::log("setting facing for: #".$this->id.": ".$thia->heading);
+		Debug::log("setting setHeadingAndFacing for: #".$this->id.": ".$this->heading.", facing: ".$this->facing);
 	}
 
 	public function getHitDist($fire){
@@ -1252,7 +1256,7 @@ class Ship {
 		Debug::log("got no ANGLE set on ".$this->id." targeted by #".$fire->shooter->id);
 	}
 
-	public function getCurFacing(){
+	public function getActualHeading(){
 		$facing = $this->heading;
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			$facing += $this->actions[$i]->h;
@@ -1260,11 +1264,20 @@ class Ship {
 		return $facing;
 	}
 
+	public function getActualFacing(){
+		$angle = $this->heading;
+		for ($i = 0; $i < sizeof($this->actions); $i++){
+			$facing += $this->actions[$i]->h;
+			$facing += $this->actions[$i]->f;
+		}
+		return $facing;
+	}
+
 	public function getHitSection($fire){
 		if ($fire->cc && $fire->shooter->flight || $fire->shooter->obstacle){return $this->structures[mt_rand(0, sizeof($this->structures)-1)]->id;}
 
-		//Debug::log("fire-angle: ".$fire->angle.", facing: ".$this->heading);
-		$fire->angle = Math::addAngle($this->heading, $fire->angle);
+		Debug::log("fire-angle: ".$fire->angle.", heading: ".$this->heading.", facing: ".$this->facing);
+		$fire->angle = Math::addAngle($this->facing, $fire->angle);
 		if ($this->rolled){$fire->angle = Math::getMirrorAngle($fire->angle);}
 
 		$locs = array();
@@ -1291,7 +1304,7 @@ class Ship {
 
 		$this->notes = $crit->notes;
 		if ($crit->type == "Rout"){
-			$this->actions[] = new Move(-1, $this->id, $turn, "jumpOut", 1, 0, $this->x, $this->y, 0, 0, 0, 0, 1, 1);
+			$this->actions[] = new Move(-1, $this->id, $turn, "jumpOut", 1, 0, $this->x, $this->y, 0, 0, 0, 0, 1, 1, 1);
 			$this->withdraw = $turn + GD::$jumpTimer;
 		}
 		else $this->getSystemByName("Command")->crits[] = $crit;

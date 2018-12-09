@@ -107,6 +107,7 @@ spl_autoload_register(
                 'primarysystem' => '/server/systems/nonweapon.php',
                 'command' => '/server/systems/nonweapon.php',
                 'engine' => '/server/systems/nonweapon.php',
+                'gravitonsupressor' => '/server/systems/nonweapon.php',
                 'reactor' => '/server/systems/nonweapon.php',
                 'lifesupport' => '/server/systems/nonweapon.php',
                 'sensor' => '/server/systems/nonweapon.php',
@@ -162,6 +163,7 @@ spl_autoload_register(
                 'mediumplasmapulse' => '/server/systems/weapons/pulse.php',
                 'heavyplasmapulse' => '/server/systems/weapons/pulse.php',
                 'lightempulse' => '/server/systems/weapons/pulse.php',
+                'antiprotonpulsar' => '/server/systems/weapons/pulse.php',
                 
                 'em' => '/server/systems/weapons/em.php',
                 'twinemprojector' => '/server/systems/weapons/particle.php',
@@ -178,7 +180,6 @@ spl_autoload_register(
                 'fusioncannon' => '/server/systems/weapons/particle.php',
                 'heavyfusioncannon' => '/server/systems/weapons/particle.php',
                 'antimattercannon' => '/server/systems/weapons/particle.php',
-                'antiprotonemitter' => '/server/systems/weapons/particle.php',
                 'antimatterconverter' => '/server/systems/weapons/particle.php',
                 'heavyantimatterconverter' => '/server/systems/weapons/particle.php',
 

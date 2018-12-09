@@ -1288,7 +1288,7 @@ PrimarySystem.prototype.getOutputString = function(){
 }
 
 PrimarySystem.prototype.getBoostCostIncrease = function(){
-	return 0.35;
+	return 0.33;
 }
 
 PrimarySystem.prototype.getSysDiv = function(){
@@ -1496,10 +1496,50 @@ LifeSupport.prototype = Object.create(PrimarySystem.prototype);
 
 function Jammer(system){
 	PrimarySystem.call(this, system)
-	this.used = 0;
 }
 Jammer.prototype = Object.create(PrimarySystem.prototype);
+
+function GravitonSupressor(system){
+	PrimarySystem.call(this, system)
+}
+GravitonSupressor.prototype = Object.create(PrimarySystem.prototype);
 				
+GravitonSupressor.prototype.doBoost = function(){
+	System.prototype.doBoost.call(this);
+	game.getUnit(this.parentId).setSlipAngle();
+	if (this.parentId == aUnit){
+		game.getUnit(this.parentId).resetMoveMode();
+		game.redraw();
+	}
+}
+
+GravitonSupressor.prototype.doUnboost = function(){
+	System.prototype.doUnboost.call(this);
+	game.getUnit(this.parentId).setSlipAngle();
+	if (this.parentId == aUnit){
+		game.getUnit(this.parentId).resetMoveMode();
+		game.redraw();
+	}
+}
+
+GravitonSupressor.prototype.doPower = function(){
+	System.prototype.doPower.call(this);
+	game.getUnit(this.parentId).setSlipAngle();
+	if (this.parentId == aUnit){
+		game.getUnit(this.parentId).resetMoveMode();
+		game.redraw();
+	}
+}
+
+GravitonSupressor.prototype.doUnpower = function(){
+	System.prototype.doUnpower.call(this);
+	game.getUnit(this.parentId).setSlipAngle();
+	if (this.parentId == aUnit){
+		game.getUnit(this.parentId).resetMoveMode();
+		game.redraw();
+	}
+}
+
 function Sensor(system){
 	PrimarySystem.call(this, system)
 	this.ew = system.ew;
@@ -1679,7 +1719,7 @@ Sensor.prototype.setTempEW = function(){
 	var loc = {x: 0, y: 0}
 	var ew = this.ew[this.ew.length-1];
 	var str = this.getOutput();
-	var facing = ship.getPlannedFacing();
+	var facing = ship.getPlannedHeading();
 	var w;
 	if (ew.angle == -1){w = 180;}
 	else w = Math.min(180, game.const.ew.len * Math.pow(str/ew.dist, game.const.ew.p));

@@ -10,7 +10,7 @@ function Obstacle(data){
 }
 Obstacle.prototype = Object.create(Mixed.prototype);
 
-Obstacle.prototype.setPostMoveFacing = function(){
+Obstacle.prototype.setPostMoveFaceHead = function(){
 	this.drawFacing = this.heading;
 	for (var i = 0; i < this.actions.length; i++){
 		this.drawFacing += this.actions[i].h;
@@ -278,16 +278,11 @@ Obstacle.prototype.setDrawData = function(){
 		this.setPostMovePosition();
 	}
 }
-Obstacle.prototype.setPreMovePosition = function(){
-	//console.log("setPreMovePosition #" + this.id);
-	this.drawX = this.x;
-	this.drawY = this.y;
+
+Obstacle.prototype.setPreMoveFaceHead = function(){
 }
 
-Obstacle.prototype.setPreMoveFacing = function(){
-}
-
-Obstacle.prototype.setPreMoveFacing = function(){
+Obstacle.prototype.setPreMoveFaceHead = function(){
 }
 
 Obstacle.prototype.draw = function(){

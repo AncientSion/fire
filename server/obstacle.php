@@ -23,8 +23,8 @@ class Obstacle extends Minor {
         $this->scale = $data["flipped"];
 
        // $this->curImp = round($this->curImp * 125 / $this->size / $this->rockSize * 2);
-        $this->interference = round($this->density*0.66);
-        $this->collision = round($this->density / 20 * $this->curImp);
+        $this->interference = round($this->density*0.8);
+        $this->collision = round($this->density / 25 * $this->curImp);
 	}		
 
 	public function addPrimary(){
@@ -57,6 +57,7 @@ class Obstacle extends Minor {
 			"x" => $x,
 			"y" => $y,
 			"heading" => $this->heading,
+			"facing" => $this->facing,
 			"thrust" => $this->getCurSpeed(),
 			"delay" => $this->size,
 			"rolling" => $this->density,
@@ -110,7 +111,7 @@ class Obstacle extends Minor {
 
 		$origin = $this->getCurPos();
 		$speed = $this->getCurSpeed();
-		$angle = $this->getCurFacing();
+		$angle = $this->getActualHeading();
 		$target = Math::getPointInDirection($speed, $angle, $origin->x, $origin->y);
 
 		$move = new Move(-1, $this->id, Manager::$turn, "move", 0, $speed, $target->x, $target->y, 0, 0, 0, 0, 0, 1, 1);

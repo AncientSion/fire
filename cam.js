@@ -27,7 +27,7 @@ window.cam = {
 		this.tx = Math.floor(res.x/2 - (focus.x*cam.z));
 		this.ty = Math.floor(res.y/2 - (focus.y*cam.z));
 
-		if (instant){
+		if (instant || (focus.x == 0 && focus.y == 0)){
 			game.animating = false;
 			this.o.x = this.tx;
 			this.o.y = this.ty;

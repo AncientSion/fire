@@ -671,7 +671,7 @@
 				//Debug::log("--> aShift: ".$aShift."°, psShift: ".$xShift."/".$yShift." (".$dist."px)");
 
 				$this->ships[$i]->actions[0]->resolved = 1;
-				$this->ships[$i]->actions[] = new Move(-1, $this->ships[$i]->id, static::$turn, "jumpIn", 0, $dist, $order->x + $xShift, $order->y + $yShift, $aShift, 0, 0, 0, 0, 1, 1);
+				$this->ships[$i]->actions[] = new Move(-1, $this->ships[$i]->id, static::$turn, "jumpIn", 0, $dist, $order->x + $xShift, $order->y + $yShift, $aShift, $aShift, 0, 0, 0, 1, 1);
 				$new[] = $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1];
 			}
 		}
@@ -759,7 +759,7 @@
 			//Debug::log("i = ".$i.", shooterid: ".$shooter->id);
 			//$devi = Math::getPointInDirection($this->fires[$i]->shooter->size/3, $a, $sPos->x + mt_rand(-10, 10), $sPos->y + mt_rand(-10, 10));
 			$mission = array("type" => 2, "turn" => static::$turn, "phase" => -1, "targetid" => $this->fires[$i]->targetid, "x" => $tPos->x, "y" => $tPos->y, "arrived" => 0, "new" => 1);
-			$move = array("turn" => static::$turn, "type" => "deploy", "dist" => 0, "x" => $sPos->x, "y" => $sPos->y, "a" => $a, "cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
+			$move = array("turn" => static::$turn, "type" => "deploy", "dist" => 0, "x" => $sPos->x, "y" => $sPos->y, "heading" => $a, "facing" => 0,"cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
 			$upgrades = array(array("active" => 1, "unitid" => $this->fires[$i]->shooter->id, "systemid" => $this->fires[$i]->weapon->id, "units" => array(0 => array("amount" => $this->fires[$i]->shots, "name" => $name))));
 
 			$units[] = array("gameid" => $this->gameid, "userid" => $this->fires[$i]->shooter->userid, "type" => "Salvo", "name" => "Salvo", "callsign" => "", "totalCost" => 0, "moraleCost" => 0, "turn" => static::$turn, "eta" => 0, "mission" => $mission, "actions" => array($move), "upgrades" => $upgrades);
@@ -782,7 +782,7 @@
 
 			//	$this->ships[sizeof($this->ships)-1]->setUnitState(static::$turn, static::$phase);
 
-				$this->ships[sizeof($this->ships)-1]->actions[] = new Move(-1, $this->ships[$i]->id, static::$turn, "deploy", 0, 0, $units[$i]["actions"][0]["x"], $units[$i]["actions"][0]["y"], $a, 0, 0, 0, 0, 1, 1);
+				$this->ships[sizeof($this->ships)-1]->actions[] = new Move(-1, $this->ships[$i]->id, static::$turn, "deploy", 0, 0, $units[$i]["actions"][0]["x"], $units[$i]["actions"][0]["y"], $a, $a, 0, 0, 0, 1, 1);
 			}
 		}
 	}
@@ -1078,6 +1078,7 @@
 	}
 
 	public function assembleDeployStates(){
+		return;
 		//Debug::log("assembleDeployStates");
 		$states = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1290,9 +1291,8 @@
 
 		Debug::log("setupShips");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$this->ships[$i]->setHeading();
+			$this->ships[$i]->setHeadingAndFacing();
 			$this->ships[$i]->setPosition();
-			//$this->ships[$i]->setCurSpeed(static::$turn, static::$phase);
 			$this->ships[$i]->setImpulseProfileMod();
 			$this->ships[$i]->setBonusNegation(static::$turn);
 			$this->ships[$i]->setJamming(static::$turn);
@@ -1363,25 +1363,12 @@
 
 						//Debug::log("pierceIn ".$pierceIn); Debug::log("pierceOut ".$pierceOut);	Debug::log("real ".$realDist);
 
-
-
 						if (!$realDist){continue;}
 
 						$effInterference = round($this->ships[$k]->interference / 100 * $realDist);
-						//$effectiveBlock = 100;
 						//Debug::log("effInterference ".$effInterference);
 						$this->ships[$i]->blocks[] = array($this->ships[$j]->id, $effInterference);
 						$this->ships[$j]->blocks[] = array($this->ships[$i]->id, $effInterference);
-
-						/*$data = array(
-							"id" => $this->ships[$k]->id, 
-							"dist" => $result[1]*2,
-							"size" => $this->ships[$k]->size,
-							"exposure" => round((1-($result[1] / ($this->ships[$k]->size/2)))*100),
-							"effInterference" => round($this->ships[$k]->interference / 100 * $result[1]*2),
-							"interference" => $this->ships[$k]->interference
-						);*/
-						
 					}
 				}
 			}
@@ -1470,7 +1457,7 @@
 					$w = min(180, $this->const["ew"]["len"] * pow($str/$ew->dist, $this->const["ew"]["p"]));
 					$start = Math::addAngle(0 + $w-$origin->getHeading(), $ew->angle);
 					$end = Math::addAngle(360 - $w-$origin->getHeading(), $ew->angle);
-					//Debug::log("specific EW for ship #".$origin->id.", str: ".$str.", facing: ".$origin->getHeading().", w: ".$w.", EW @ ".$ew->angle." -> from ".$start." to ".$end.", dist: ".$ew->dist);
+					Debug::log("specific EW for ship #".$origin->id.", str: ".$str.", heading: ".$origin->getHeading().", w: ".$w.", EW @ ".$ew->angle." -> from ".$start." to ".$end.", dist: ".$ew->dist);
 				}
 
 				for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1503,7 +1490,7 @@
 						else if ($ew->type == 1){ // ship MASK in cc, only working against salvo ATM
 							if ($this->ships[$i]->salvo){ // salvo, in trajectory ?
 								$angle = Math::getAngle2($origin, $this->ships[$i]->getTurnStartPosition());
-								Debug::log("emitter: ".$origin->id." vs salvo: ".$this->ships[$i]->id.", angle: ".$angle);
+								//Debug::log("emitter: ".$origin->id." vs salvo: ".$this->ships[$i]->id.", angle: ".$angle);
 								if (Math::isInArc($angle, $start, $end)){
 									//Debug::log("adding CC mask from ship vs salvo");
 									$origin->masks[] = array($this->ships[$i]->id, $origin->getMaskEffect($this->ships[$i]));
@@ -1519,7 +1506,7 @@
 					$dist = Math::getDist2($oPos, $tPos);
 					if ($dist <= $ew->dist){
 						$a = Math::getAngle2($oPos, $tPos);
-						//Debug::log("versus #".$this->ships[$i]->id.", angle: ".$a.", dist: ".$dist);
+						Debug::log("versus #".$this->ships[$i]->id.", angle: ".$a.", dist: ".$dist);
 						if (Math::isInArc($a, $start, $end)){
 							if ($ew->type == 0){ // LOCK
 								$origin->locks[] = array($this->ships[$i]->id, $origin->getLockEffect($this->ships[$i]));

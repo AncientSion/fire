@@ -183,6 +183,20 @@ class Engine extends PrimarySystem {
 	}
 }
 
+class GravitonSupressor extends PrimarySystem {
+	public $name = "GravitonSupressor";
+	public $display = "Graviton Supressor";
+	public $crewEffect = 0;
+	public $hitMod = 2.5;
+
+	function __construct($id, $parentId, $integrity, $unitSize){
+		$this->boostEffect[] = new Effect("Output", 100);
+		$this->powerReq = ceil($unitSize*1);
+		$this->effiency = ceil($this->powerReq*2);
+        parent::__construct($id, $parentId, $integrity/2, 5, 1); //hp, output, width
+    }
+}
+
 class Sensor extends PrimarySystem {
 	public $name = "Sensor";
 	public $display = "Sensor & Analyzing";
@@ -245,11 +259,10 @@ class Jammer extends PrimarySystem {
 	public $display = "Passive Jamming Suite";
 	public $hitMod = 1.5;
 	public $effiency = 6;
-	public $powerReq = 4;
 
-	function __construct($id, $parentId, $integrity, $powerReq){
+	function __construct($id, $parentId, $integrity, $unitSize){
 		$this->boostEffect[] = new Effect("Output", 50);
-		$this->powerReq = $powerReq;
+		$this->powerReq = $unitSize*2;
 		$this->effiency = floor($this->powerReq*2);
         parent::__construct($id, $parentId, $integrity/2, 20, 1); //hp, output, width
     }

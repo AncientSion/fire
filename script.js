@@ -95,7 +95,6 @@ function init(data){
 	turn = new Turn();
 	game = new Game(data);
 	game.create(data);
-	initUI();
 	window.initChat();
 	window.initiateKeyDowns();
 
@@ -445,21 +444,21 @@ function canvasMouseMove(e){
 			if (!ship){return;}
 
 			var shipLoc = ((ship.flight || ship.salvo || ship.obstacle) ? ship.getGamePos() : ship.getPlannedPos());
-			var	facing = ship.getPlannedFacing();
+			var	heading = ship.getPlannedHeading();
 
 			if (game.vector){
 				var dist = Math.floor(getDistance(shipLoc, pos));
 				var a = getAngleFromTo(shipLoc, pos);
-					a = addAngle(facing, a);
+					a = addAngle(heading, a);
 				drawVector(ship, shipLoc, {x: e.clientX, y: e.clientY}, dist, a);
 			}
 
 			if (ship.salvo){}
 			else if (game.sensorMode){
-				sensorEvent(false, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), addAngle(facing, getAngleFromTo(shipLoc, pos)));
+				sensorEvent(false, ship, shipLoc, heading, Math.floor(getDistance(shipLoc, pos)), addAngle(heading, getAngleFromTo(shipLoc, pos)));
 			}
 			else if (game.turnMode){
-				ship.handleTurning(e, shipLoc, facing, pos);
+				ship.handleTurning(e, shipLoc, heading, pos);
 			}
 			else if (ship.hasWeaponsSelected()){
 				handleWeaponAimEvent(ship, unit, e, pos);
@@ -477,7 +476,7 @@ function canvasMouseMove(e){
 	}
 	 
 	if (unit){game.handleHoverEvent(e, 1, unit);
-	} else if (game.shortInfo){game.resetHover(e, shipLoc, facing, pos);}
+	} else if (game.shortInfo){game.resetHover()}
 }
 
 function handleTurnShortening(unit, e, pos){
@@ -496,7 +495,7 @@ function handleTurnShortening(unit, e, pos){
 
 
 function sensorize(ship, pos){
-	var facing = ship.getPlannedFacing();
+	var facing = ship.getPlannedHeading();
 	var shipLoc = ship.getPlannedPos();
 	var a = addAngle(facing, getAngleFromTo(shipLoc, pos));
 	sensorEvent(true, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), a);

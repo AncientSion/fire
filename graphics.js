@@ -668,7 +668,7 @@ function getRadialGradient(x, y, s){
 	return grad;
 }	
 
-function drawSensorArc(w, d, str, loc, facing, a, sensor){
+function drawSensorArc(w, d, str, loc, heading, a, sensor){
 	//console.log("drawSensorArc");
 	if (game.sensorMode){salvoCtx.clearRect(0, 0, res.x, res.y);}
 	salvoCtx.translate(cam.o.x, cam.o.y);
@@ -694,8 +694,8 @@ function drawSensorArc(w, d, str, loc, facing, a, sensor){
 		salvoCtx.closePath();
 	}
 	else {
-		var start = addAngle(0 + w-facing, a);
-		var end = addAngle(360 - w-facing, a);
+		var start = addAngle(0 + w-heading, a);
+		var end = addAngle(360 - w-heading, a);
 		var p1 = getPointInDir(str, start, loc.x, loc.y);
 		var rad1 = degreeToRadian(start);
 		var rad2 = degreeToRadian(end);

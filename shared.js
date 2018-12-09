@@ -461,7 +461,7 @@ function handleMouseOut(e){
 	cam.scroll = 0;
 }
 
-function sensorEvent(isClick, ship, loc, facing, d, a){
+function sensorEvent(isClick, ship, loc, heading, d, a){
 	var sensor = ship.getSystemByName("Sensor");
 	var str = sensor.getOutput();
 		d = Math.min(str*2, d);
@@ -473,7 +473,7 @@ function sensorEvent(isClick, ship, loc, facing, d, a){
 
 	//console.log(w);
 	//console.log(Math.floor(d));
-	//console.log("angle from facing: " + a + ", dist: " + dist + ", strength: "+str + ", FINAL: " + newidth);
+	//console.log("angle from heading: " + a + ", dist: " + dist + ", strength: "+str + ", FINAL: " + newidth);
 
 	if (isClick && ship.canSetSensor(sensor)){
 		//console.log("setting sensor to w: "+w*2+", dist: "+d+", angle: "+a);
@@ -489,5 +489,5 @@ function sensorEvent(isClick, ship, loc, facing, d, a){
 		sensor.setTempEW();
 		game.redraw();
 	}
-	else drawSensorArc(w, d, str, loc, facing, a, sensor);
+	else drawSensorArc(w, d, str, loc, heading, a, sensor);
 }

@@ -33,6 +33,7 @@ function Game(data){
 	this.unitExploAnims = [];
 	this.shortInfo = false;
 	this.turnMode = 0;
+	this.moveArea = 0;
 	this.zIndex = 10;
 	this.sensorMode = 0;
 	this.target = 0;
@@ -81,95 +82,98 @@ this.doAnimateMovement = function(){
 	anim = window.requestAnimationFrame(game.doAnimateMovement.bind(this));
 	window.now = Date.now();		
 	window.elapsed = window.now - window.then;
-	if (elapsed < window.fpsTicks){}
-	else {
-		window.then = window.now - (window.elapsed % window.fpsTicks);
-		ctx.clearRect(0, 0, res.x, res.y);
-		fxCtx.clearRect(0, 0, res.x, res.y);
-		salvoCtx.clearRect(0, 0, res.x, res.y);
+	if (elapsed < window.fpsTicks){return;}
 
-		ctx.translate(cam.o.x, cam.o.y);
-		ctx.scale(cam.z, cam.z);
+	window.then = window.now - (window.elapsed % window.fpsTicks);
+	ctx.clearRect(0, 0, res.x, res.y);
+	fxCtx.clearRect(0, 0, res.x, res.y);
+	salvoCtx.clearRect(0, 0, res.x, res.y);
 
-		//game.drawEvents();
-	
-		for (var i = 0; i < game.ships.length; i++){
-			if (game.ships[i].deployed){
-				if (!game.ships[i].animatesThisSegment()){game.ships[i].draw(); continue;}
+	ctx.translate(cam.o.x, cam.o.y);
+	ctx.scale(cam.z, cam.z);
 
-				for (var j = 0; j < game.ships[i].actions.length; j++){
-					if (game.ships[i].actions[j].turn == game.turn && !game.ships[i].actions[j].animated){
-						var action = game.ships[i].actions[j];
+	//game.drawEvents();
 
-						if (action.forced && !game.animForcedMoves){
-							action.animated = 1;
-							continue;
-						}
+	for (var i = 0; i < game.ships.length; i++){
+		if (game.ships[i].deployed){
+			if (!game.ships[i].animatesThisSegment()){game.ships[i].draw(); continue;}
 
-						if (action.type[0] == "m"){ // move
-							action.t[0] += 1;
-							game.ships[i].drawX += action.v.x * 1 / action.t[1];
-							game.ships[i].drawY += action.v.y * 1 / action.t[1];
-							if (action.t[0] >= action.t[1]){
-								game.ships[i].drawX = action.x;
-								game.ships[i].drawY = action.y;
-								if (game.ships[i].doesContinueRolling()){game.ships[i].createStillRollingEntry();}
-							}
-						}
-						else {
-							if (action.type[0] == "t"){ // turn
-								action.t[0]++;
-								game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[2]);
-							}
-							else if (action.type == "pivot"){ // pivot
-								action.t[0]++;
-								game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[2]);
-							}
-							else if (action.type[0] == "r"){//roll
-							}
-							else if (action.type[0] == "f"){//flip
-							}
-							else if (action.type[0] == "p"){//patrol
-							}
-							else if (action.type[0] == "d"){//deploy
-							}
-							else if (action.type[0] == "j"){//jumpIn/Out
-							}
-						}
+			for (var j = 0; j < game.ships[i].actions.length; j++){
+				if (game.ships[i].actions[j].turn == game.turn && !game.ships[i].actions[j].animated){
+					var action = game.ships[i].actions[j];
 
+					if (action.forced && !game.animForcedMoves || action.t[1] == 0){
+						action.animated = 1;
+						continue;
+					}
+
+					if (action.type[0] == "m"){ // move
+						action.t[0] += 1;
+						game.ships[i].drawX += action.v.x * 1 / action.t[1];
+						game.ships[i].drawY += action.v.y * 1 / action.t[1];
 						if (action.t[0] >= action.t[1]){
-							action.animated = true;
+							game.ships[i].drawX = action.x;
+							game.ships[i].drawY = action.y;
+							if (game.ships[i].doesContinueRolling()){game.ships[i].createStillRollingEntry();}
 						}
+					}
+					else {
+						if (action.type[0] == "t"){ // turn
+							action.t[0]++;
+							game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[2]);
+						}
+						else if (action.type == "pivot"){ // pivot
+							action.t[0]++;
+							game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[2]);
+						}
+						else if (action.type == "rotate"){ // pivot
+							action.t[0]++;
+							game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[2]);
+						}
+						else if (action.type[0] == "r"){//roll
+						}
+						else if (action.type[0] == "f"){//flip
+						}
+						else if (action.type[0] == "p"){//patrol
+						}
+						else if (action.type[0] == "d"){//deploy
+						}
+						else if (action.type[0] == "j"){//jumpIn/Out
+						}
+					}
 
+					if (action.t[0] >= action.t[1]){
+						action.animated = true;
+					}
+
+					break;
+				}
+			}
+			game.ships[i].draw();
+		}
+	}
+
+	ctx.setTransform(1,0,0,1,0,0);
+	
+	var done = true;
+	
+	for (var i = 0; i < game.ships.length; i++){
+		if (!done){break;}
+		else if (game.ships[i].animatesThisSegment()){
+			for (var j = 0; j < game.ships[i].actions.length; j++){
+				if (game.ships[i].actions[j].turn == game.turn){
+					if (!game.ships[i].actions[j].animated){
+						done = false;
 						break;
 					}
 				}
-				game.ships[i].draw();
 			}
 		}
-
-		ctx.setTransform(1,0,0,1,0,0);
-		
-		var done = true;
-		
-		for (var i = 0; i < game.ships.length; i++){
-			if (!done){break;}
-			else if (game.ships[i].animatesThisSegment()){
-				for (var j = 0; j < game.ships[i].actions.length; j++){
-					if (game.ships[i].actions[j].turn == game.turn){
-						if (!game.ships[i].actions[j].animated){
-							done = false;
-							break;
-						}
-					}
-				}
-			}
-		}
-		
-		if (done){
-			window.cancelAnimationFrame(anim);
-			game.finishMoveSubPhase(500);
-		}
+	}
+	
+	if (done){
+		window.cancelAnimationFrame(anim);
+		game.finishMoveSubPhase(500);
 	}
 }
 
@@ -1168,7 +1172,7 @@ this.doAnimateMovement = function(){
 
 			if (this.ships[i].flight && this.animFlight || this.ships[i].salvo && this.animSalvo){
 				this.ships[i].setPostMovePosition();
-				this.ships[i].setPostMoveFacing();
+				this.ships[i].setPostMoveFaceHead();
 
 				if (this.ships[i].mission.arrived){
 					this.ships[i].setPostMoveSize();
@@ -1181,11 +1185,11 @@ this.doAnimateMovement = function(){
 			}
 			else if ((this.ships[i].ship || this.ships[i].squad) && this.animShip){
 				this.ships[i].setPostMovePosition();
-				this.ships[i].setPostMoveFacing();
+				this.ships[i].setPostMoveFaceHead();
 			}
 			else if (this.ships[i].obstacle && this.animObstacles){
 				this.ships[i].setPostMovePosition();
-				this.ships[i].setPostMoveFacing();
+				this.ships[i].setPostMoveFaceHead();
 			}
 		}
 	}
@@ -1219,7 +1223,7 @@ this.doAnimateMovement = function(){
 		else if (this.phase == -1){
 			for (var i = 0; i < this.ships.length; i++){
 				if (!this.ships[i].obstacle){continue;}
-				this.ships[i].setPostMoveFacing();
+				this.ships[i].setPostMoveFaceHead();
 				this.ships[i].setPostMovePosition();
 				this.ships[i].setNextMove();
 			}
@@ -1227,7 +1231,7 @@ this.doAnimateMovement = function(){
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (!this.ships[i].hasMoved()){continue;}
-			this.ships[i].setPostMoveFacing();
+			this.ships[i].setPostMoveFaceHead();
 			this.ships[i].setPostMovePosition();
 			if (this.ships[i].flight || this.ships[i].salvo){this.ships[i].setNextMove();}
 		}
@@ -1936,9 +1940,10 @@ this.doAnimateMovement = function(){
 		if (unit.id != aUnit){unit.handleHovering();}
 	}
 
-	this.resetHover = function(es){
+	this.resetHover = function(){
 		ui.shortInfo.html("").hide();
 		this.shortInfo = false;
+		game.moveArea = 0;
 		game.redraw();
 	}
 
@@ -3406,6 +3411,7 @@ Game.prototype.setConfirmInfo = function(){
 
 Game.prototype.create = function(data){
 
+	this.initUI();
 	setFPS(90);
 	this.setPhaseSwitchDiv();
 	this.setGameInfo();
@@ -3483,6 +3489,7 @@ Game.prototype.create = function(data){
 	cam.z = 0.5;
 	cam.setCamFocus({x: 0, y:0}, true);
 	this.startPhase(this.phase);
+
 }
 
 Game.prototype.setCommandUnits = function(){
@@ -3555,7 +3562,7 @@ Game.prototype.setUnitMoveDetails = function(){
 
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships.toAnimate = false;
-		if (!this.ships[i].actions.length){continue;}
+		if (!this.ships[i].actions.length || !this.ships[i].deployed){continue;}
 		if (!this.ships[i].willBeAnimated()){continue;}
 		this.ships[i].toAnimate = true;
 		this.ships[i].readyForAnim();
@@ -4385,7 +4392,7 @@ Game.prototype.initIncomingTable = function(){
 							$(this).removeClass("selected");
 							game.disableDeployment();
 						}
-						else if (!game.deploying && !game.aUnit && game.getUnit($(this).data("unitid")).canDeploy()){
+						else if (!game.deploying && !aUnit && game.getUnit($(this).data("unitid")).canDeploy()){
 							$(this).addClass("selected");
 							game.enableDeployment($(this).data("unitid"));
 						}
@@ -4599,7 +4606,7 @@ Game.prototype.initSelectionWrapper = function(){
 				function(e){
 					var vessel = game.getUnit($(this).data("id"));
 						vessel.doHighlight();
-					game.resetHover(e);
+					game.resetHover();
 				}
 			)
 		)
@@ -4627,4 +4634,113 @@ Game.prototype.initSelectionWrapper = function(){
 	}
 
 	//ui.unitSelector.width(Math.min(res.x - 240 - 20 - $(".chatWrapper").width(), w)).removeClass("disabled");
+}
+
+Game.prototype.initUI = function(){
+	$("#mouseCanvas").on("mouseleave", function(){
+		$("#aimDiv").hide();
+	})
+
+	$(".missionOption").mousedown(function(e){
+		e.stopPropagation();
+	})
+
+	$("input[type=button").mousedown(function(e){
+		e.stopPropagation();
+	})
+
+	$("input[type=radio").mousedown(function(e){
+		e.stopPropagation();
+	})
+
+	ui.combatLogWrapper
+		.find("#combatLog")
+			.contextmenu(function(e){
+				e.preventDefault(); e.stopPropagation();
+			}).end()
+			.find(".combatLogHeader").contextmenu(function(e){
+				e.preventDefault(); e.stopPropagation();
+				$(this).parent().find("#combatLog").toggleClass("disabled");
+			});
+
+	ui.combatLogWrapper.drag();
+
+	$("#upperGUI").removeClass("disabled")
+	$("#canvasDiv").removeClass("disabled")
+
+	ui.deployOverlay.hide();
+
+	$("#roll")
+	.click(function(){
+		game.getUnit(aUnit).doRoll()
+	});
+	
+	$("#flip")
+	.click(function(){
+		game.getUnit(aUnit).doFlip()
+	});
+
+	$("#doUndoLastAction")
+	.click(function(){
+		game.getUnit(aUnit).doUndoLastAction()
+	});
+
+
+	$("#plusImpulse")
+	.click(function(){
+		game.getUnit(aUnit).doAccel();
+	});
+
+	$("#minusImpulse")
+	.click(function(){
+		game.getUnit(aUnit).doDeccel();
+	});
+
+	$("#turnButton")
+	.click(function(){
+		game.getUnit(aUnit).switchTurnMode();
+	})
+
+	$("#maxCutVector")
+	.click(function(){
+		//console.log("maxVector")
+		game.getActiveUnit().moveInVector();
+		//game.getUnit($(this).data("unitid")).moveInVector($(this).data("dist"));
+	})	
+	$("#maxTurnVector")
+	.click(function(){
+		//console.log("maxVector")
+		game.getActiveUnit().moveToMaxTurnVector();
+		//game.getUnit($(this).data("unitid")).moveToMaxTurnVector();
+	})	
+	$("#maxVector")
+	.click(function(){
+		//console.log("maxVector")
+		game.getActiveUnit().moveToMaxVector();
+		//game.getUnit($(this).data("unitid")).moveToMaxVector();
+	})
+
+	$("#popupWrapper")
+		.contextmenu(function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			$(this).hide();
+		});
+
+	$("#instructWrapper")
+		.contextmenu(function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			$(this).hide();
+		});
+
+	$("#collideWrapper")
+		.contextmenu(function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			$(this).hide();
+		});
+
+	$("#hangarDiv").drag()
+	$("#crewDiv").drag()
 }

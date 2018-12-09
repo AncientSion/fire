@@ -20,7 +20,7 @@ class Sharlin extends SuperHeavy {
 	}	
 
 	public function addSpecials(){
-		$this->primary->systems[] = new Jammer($this->getId(), $this->id, $this->vitalHP, $this->traverse*2);
+		$this->primary->systems[] = new Jammer($this->getId(), $this->id, $this->vitalHP, $this->traverse);
 	}
 
 	public function addStructures(){
