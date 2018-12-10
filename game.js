@@ -399,14 +399,14 @@ this.doAnimateMovement = function(){
 		var o = s.getGamePos();
 		var facing = 0;
 		var p = getPointInDir(0, facing, o.x, o.y);
+		var id = range(0, -100);
+
+		var move = new Move(-1, id, this.turn, "deploy", 0, 0, o.x, o.y, facing, 0, 0, 0, 0, 1, 1);
 
 		var flight = new Flight(
-			{id: range(-0, -100), name: "Flight", mission: false, traverse: 1,
+			{id: id, name: "Flight", mission: false, traverse: 1, actions: [move],
 			x: o.x, y: o.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, curImp: 0, size: 0, fSize: 15, baseSize: 25, unitSize: 4, userid: this.userid, available: this.turn}
 		);
-
-		//flight.primary = new Primary(0, flight.id, 0, 0, 0);
-		flight.actions.push(new Move(-1, flight.id, this.turn, "deploy", 0, 0, o.x, o.y, facing, 0, 0, 0, 0, 1, 1));
 		flight.launch = {
 			unitid: aUnit,
 			systemid: flightDeploy.id,
@@ -3014,6 +3014,7 @@ Game.prototype.logWeaponEvents = function(){
 			body.append(
 			$("<tr>")
 				.append($("<th>")
+					.attr("colSpan", 9)
 					.html(this.events[i].getUsageString())
 					.data("shipId", shipId)
 					.data("systemId", systemId)

@@ -147,7 +147,7 @@ class DmgCalc {
 		return $weapons;
 	}
 
-	public static function createAreaFireOrders($gd, $fire){
+	public static function createAreaFireOrders($manager, $fire){
 		Debug::log("createAreaFireOrders");
 
 		$origin = new Point($fire->shooter->x, $fire->shooter->y);
@@ -180,18 +180,18 @@ class DmgCalc {
 
 		$newFires = array();
 
-		for ($i = 0; $i < sizeof($gd->ships); $i++){
-			if ($gd->ships[$i]->obstacle){continue;}
-			$dist = Math::getDist2($gd->ships[$i]->getCurPos(), $impact);
-			//Debug::log("eMine impact distance to ".$gd->ships[$i]->name." #".$gd->ships[$i]->id.": ".$dist);
+		for ($i = 0; $i < sizeof($manager->ships); $i++){
+			if ($manager->ships[$i]->obstacle){continue;}
+			$dist = Math::getDist2($manager->ships[$i]->getCurPos(), $impact);
+			//Debug::log("eMine impact distance to ".$manager->ships[$i]->name." #".$manager->ships[$i]->id.": ".$dist);
 
 			if ($dist + $fire->weapon->aoe <= $fire->weapon->aoe*2){
-				$angle = round(Math::addAngle($gd->ships[$i]->facing, Math::getAngle2($gd->ships[$i]->getCurPos(), $impact)));
-				//var_export($newTarget);var_export($gd->ships[$i]->x);var_export($gd->ships[$i]->y);
+				$angle = round(Math::addAngle($manager->ships[$i]->facing, Math::getAngle2($manager->ships[$i]->getCurPos(), $impact)));
+				//var_export($newTarget);var_export($manager->ships[$i]->x);var_export($manager->ships[$i]->y);
 				//Debug::log("hitting, dist to impact: ".$dist.", impact from: ".$angle);
 
 				$subFire = new FireOrder(
-					$fire->id, $gd->gameid, $gd->turn, $fire->shooterid, $gd->ships[$i]->id, $impact->x, $impact->y, $fire->weapon->id, 0, 0, $fire->notes, 1, 0
+					$fire->id, $manager->gameid, Manager::$turn, $fire->shooterid, $manager->ships[$i]->id, $impact->x, $impact->y, $fire->weapon->id, 0, 0, $fire->notes, 1, 0
 				);
 
 				$subFire->cc = 0;

@@ -900,7 +900,7 @@
 					$angleFromCenter = round(Math::getAngle(0, 0, $x, $y));
 					$angleToCenter = round(Math::getAngle($x, $y, 0, 0));
 
-					$heading = mt_rand($angleToCenter-60, $angleToCenter+60);
+					$heading = $angleToCenter + (mt_rand(20, 60) * (1 - mt_rand(0, 1) * 2));
 
 					//Debug::log("Angle center to pos ".$x."/".$y." is ".$angleToCenter."°, picking vector ".$heading);
 					$density = mt_rand(5, 20);
