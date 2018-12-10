@@ -848,7 +848,13 @@ System.prototype.hasOutput = function(){
 }
 
 System.prototype.getFighterSystemData = function(){
-	var file = "sysIcons/" + this.getImageName() + (this.dual ? "" : this.linked) + ".png";
+	var file = "sysIcons/" + this.getImageName();
+
+	if (this.linked){
+		file += this.linked;
+	}
+	file += ".png";
+
 	var sysDiv = $("<div>").addClass("system");
 		sysDiv
 		.data("systemId", this.id)

@@ -222,6 +222,9 @@ window.graphics = {
 
 		this.images.frazi = new Image();
 		this.images.frazi.src = "shipIcons/frazi.png";
+
+		this.images.zorth = new Image();
+		this.images.zorth.src = "shipIcons/zorth.png";
 	},
 
 	preLoadFactions: function(){

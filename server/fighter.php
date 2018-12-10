@@ -26,6 +26,32 @@ class Fighter extends Single {
 	}
 }
 
+class Zorth extends Fighter {
+	public $name = "Zorth";
+	public $role = "Light Interceptor";
+	public $faction = "Vree Conglomerate";
+	public static $value =  20;
+	public $mass = 28;
+	public $integrity = 19;
+	public $negation = 3;
+	public $baseImpulse = 150;
+	public $baseHitChance = 20;
+
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
+	}
+
+	public function addSystems(){
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 1, 
+			array(
+				array("FighterStandard", 1, 8, 11),
+				array("FighterStrafe", 1, 8, 11)
+			)
+		);
+
+	}
+}
+
 class Aurora extends Fighter {
 	public $name = "Aurora";
 	public $role = "Medium Fighter";
@@ -34,7 +60,7 @@ class Aurora extends Fighter {
 	public $mass = 34;
 	public $integrity = 26;
 	public $negation = 4;
-	public $baseImpulse = 50;
+	public $baseImpulse = 125;
 	public $baseHitChance = 24;
 
 	function __construct($id, $parentId){

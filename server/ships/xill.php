@@ -28,7 +28,8 @@ class Xill extends Heavy {
 
 		$front = new Structure($this->getId(), $this->id, 315, 45, 625, 16, 3);
 		$front->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new AntimatterCannon($this->getId(), $this->id, 315, 45);
+		//$front->systems[] = new AntimatterCannon($this->getId(), $this->id, 315, 45);
+		$front->systems[] = new Hangar($this->getId(), $this->id, 8, array("Zorth"), 8);
 		$front->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
