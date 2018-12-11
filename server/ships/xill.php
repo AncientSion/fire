@@ -36,7 +36,7 @@ class Xill extends Heavy {
 		$right = new Structure($this->getId(), $this->id, 45, 135, 800, 16, 1);
 		$right->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 30, 150);
 		$right->systems[] = new AntimatterCannon($this->getId(), $this->id, 45, 135);
-		$right->systems[] = new AntimatterCannon($this->getId(), $this->id, 315, 45);
+		$right->systems[] = new AntimatterCannon($this->getId(), $this->id, 45, 135);
 		$right->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 30, 150);
 		$structs[] = $right;
 
@@ -50,7 +50,7 @@ class Xill extends Heavy {
 		$left = new Structure($this->getId(), $this->id, 225, 315, 800, 16, 1);
 		$left->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 210, 330);
 		$left->systems[] = new AntimatterCannon($this->getId(), $this->id, 225, 315);
-		$left->systems[] = new AntimatterCannon($this->getId(), $this->id, 315, 45);
+		$left->systems[] = new AntimatterCannon($this->getId(), $this->id, 225, 315);
 		$left->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 210, 330);
 		$structs[] = $left;
 

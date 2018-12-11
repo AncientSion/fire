@@ -23,8 +23,8 @@ class Obstacle extends Minor {
         $this->scale = $data["flipped"];
 
        // $this->curImp = round($this->curImp * 125 / $this->size / $this->rockSize * 2);
-        $this->interference = round($this->density*0.8);
-        $this->collision = round($this->density / 25 * $this->curImp);
+        $this->interference = round($this->density * 0.8);
+        $this->collision = round($this->density / 30 * ($this->curImp ? $this->curImp : 30));
 	}		
 
 	public function addPrimary(){

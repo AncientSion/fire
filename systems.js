@@ -2708,6 +2708,10 @@ Beam.prototype.getAnimation = function(fire){
 	var devi = fire.weapon.output * 6;
 	var roll = -1;
 	var oPos = fire.shooter.getDrawPos();
+
+	if (fire.guns > 2){
+		grouping = 2;
+	}
 	
 	for (var i = 0; i < fire.guns; i++){
 		var gunAnims = [];

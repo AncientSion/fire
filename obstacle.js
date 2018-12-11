@@ -71,6 +71,7 @@ Obstacle.prototype.setNextMove = function(){
 }
 
 Obstacle.prototype.getMaxInterference = function(){
+	return this.interference;
 	return Math.round(this.interference / 100 * this.size);
 }
 

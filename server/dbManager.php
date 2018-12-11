@@ -902,7 +902,7 @@
 					$heading = $angleToCenter + (mt_rand(20, 60) * (1 - mt_rand(0, 1) * 2));
 
 					//Debug::log("Angle center to pos ".$x."/".$y." is ".$angleToCenter."°, picking vector ".$heading);
-					$density = mt_rand(5, 20);
+					$density = mt_rand(10, 30);
 
 					$thrust = mt_rand(15, 40);
 
@@ -936,9 +936,9 @@
 					$attempts--;
 					//Debug::log("attempts ".$attempts);
 
-					$x = mt_rand(-400, 400);
-					$y = mt_rand(-550, 550);
-					$size = mt_rand(50, 200);
+					$x = mt_rand(-450, 450);
+					$y = mt_rand(-500, 500);
+					$size = mt_rand($min, $max);
 					$rockSize = min(8, max(1, mt_rand(1, 6) + mt_rand(-2, 2)));
 
 					for ($k = 0; $k < sizeof($fields); $k++){
@@ -960,7 +960,7 @@
 
 				if (!$attempts){continue;}
 
-				$density = mt_rand(5, 20);
+				$density = mt_rand(10, 30);
 				$minDmg = round(mt_rand(8, 10) * $rockSize);
 				$maxDmg = round($minDmg*1.3);
 
