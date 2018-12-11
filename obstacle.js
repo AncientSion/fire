@@ -18,6 +18,8 @@ Obstacle.prototype.setPostMoveFaceHead = function(){
 }
 
 Obstacle.prototype.handleHovering = function(){
+	if (!game.hasAutomatedStartMoves()){return false;}
+
 	var preset = game.showObstacleMoves;
 	game.showObstacleMoves = 1;
 	this.drawNextMove();
@@ -54,7 +56,8 @@ Obstacle.prototype.drawNextMarker = function(x, y, c, context){
 }
 
 Obstacle.prototype.setNextMove = function(){
-	//console.log("setNextMove");
+	if (!this.movingObstacles){return false;}
+
 	var p;
 
 	if (this.actions.length){
@@ -64,7 +67,7 @@ Obstacle.prototype.setNextMove = function(){
 	else {
 		p = getPointInDir(this.getCurSpeed(), this.heading, this.x, this.y);
 	}
-	this.actions.push(new Move(-1, this.id, game.turn, "move", 0, this.getCurSpeed(), p.x, p.y, 0, 0, 0, 1, 1, 0));
+	this.actions.push(new Move(-1, this.id, game.turn, "move", 0, this.getCurSpeed(), p.x, p.y, 0, 0, 0, 0, 1, 1, 0));
 }
 
 Obstacle.prototype.getMaxInterference = function(){
@@ -377,20 +380,22 @@ Obstacle.prototype.setTrueImage = function(info){
 	}
 	
 	if (info){
-		var vectorStart = getPointInDir(60, this.heading, 0, 0);
-		var vectorEnd = getPointInDir(this.size-63, this.heading, vectorStart.x, vectorStart.y);
+		if (game.movingObstacles){
+			var vectorStart = getPointInDir(60, this.heading, 0, 0);
+			var vectorEnd = getPointInDir(this.size-63, this.heading, vectorStart.x, vectorStart.y);
 
-		ctx.beginPath();
-		ctx.moveTo(vectorStart.x, vectorStart.y);
-		ctx.lineTo(vectorEnd.x, vectorEnd.y);
-		ctx.closePath();
-		ctx.lineWidth = 3;
-		ctx.strokeStyle = "white";
-		ctx.stroke();
+			ctx.beginPath();
+			ctx.moveTo(vectorStart.x, vectorStart.y);
+			ctx.lineTo(vectorEnd.x, vectorEnd.y);
+			ctx.closePath();
+			ctx.lineWidth = 3;
+			ctx.strokeStyle = "white";
+			ctx.stroke();
+		}
 
+		/*
 		var vectorSize = 60;
-
-		/*ctx.drawImage(
+		ctx.drawImage(
 			graphics.images.interference,
 			0 -vectorSize/2,
 			0 -40 -vectorSize/2,
@@ -401,7 +406,7 @@ Obstacle.prototype.setTrueImage = function(info){
 		ctx.font = "24px Arial";
 		ctx.textAlign = "center";
 		ctx.fillText(this.density + "%", 0, 0 - 75)
-*/
+	*/
 
 		ctx.clearRect(-40, -60, 80, 105);
 
@@ -446,6 +451,30 @@ Obstacle.prototype.getRealCollisionPct = function(traverse){
 Obstacle.prototype.getBaseImage = function(){
 	return this.img;
 }
+
+Obstacle.prototype.setPreMovePosition = function(){
+	this.drawX = this.x;
+	this.drawY = this.y;
+}
+
+Obstacle.prototype.setPostMovePosition = function(){
+	if (!this.actions.length){
+		this.drawX = this.x;
+		this.drawY = this.y;
+		return;	
+	}
+	for (var i = this.actions.length-1; i >= 0; i--){
+		if (this.actions[i].resolved){
+			this.drawX = this.actions[i].x;
+			this.drawY = this.actions[i].y;
+			return;
+		}
+	}
+}
+
+
+
+
 
 function Asteroid(data){
 	this.layout = data.layout;

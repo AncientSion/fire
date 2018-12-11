@@ -30,12 +30,11 @@ class Zorth extends Fighter {
 	public $name = "Zorth";
 	public $role = "Light Interceptor";
 	public $faction = "Vree Conglomerate";
-	public static $value =  20;
-	public $mass = 28;
-	public $integrity = 19;
+	public static $value =  18;
+	public $integrity = 16;
 	public $negation = 3;
-	public $baseImpulse = 150;
-	public $baseHitChance = 20;
+	public $baseImpulse = 160;
+	public $baseHitChance = 18;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -44,8 +43,8 @@ class Zorth extends Fighter {
 	public function addSystems(){
 		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 1, 
 			array(
-				array("FighterStandard", 1, 8, 11),
-				array("FighterStrafe", 1, 8, 11)
+				array("FighterStandard", 1, 10, 14),
+				array("FighterStrafe", 1, 10, 14)
 			)
 		);
 
@@ -57,7 +56,6 @@ class Aurora extends Fighter {
 	public $role = "Medium Fighter";
 	public $faction = "Earth Alliance";
 	public static $value =  28;
-	public $mass = 34;
 	public $integrity = 26;
 	public $negation = 4;
 	public $baseImpulse = 125;
@@ -83,7 +81,6 @@ class Thunderbolt extends Fighter {
 	public $role = "Superiority Fighter";
 	public $faction = "Earth Alliance";
 	public static $value =  34;
-	public $mass = 36;
 	public $integrity = 28;
 	public $negation = 5;
 	public $baseImpulse = 125;
@@ -103,7 +100,6 @@ class Sentri extends Fighter {
 	public $role = "Interceptor";
 	public $faction = "Centauri Republic";
 	public static $value =  26;
-	public $mass = 32;
 	public $integrity = 24;
 	public $negation = 5;
 	public $baseImpulse = 140;
@@ -129,7 +125,6 @@ class Sitara extends Fighter {
 	public $name = "Sitara";
 	public $role = "Strike Fighter";
 	public static $value =  26;
-	public $mass = 34;
 	public $integrity = 22;
 	public $negation = 6;
 	public $baseImpulse = 115;
@@ -149,7 +144,6 @@ class Nial extends Fighter {
 	public $role = "Advanced Superiority Fighter";
 	public $faction = "Minbari Federation";
 	public static $value =  40;
-	public $mass = 31;
 	public $integrity = 30;
 	public $negation = 7;
 	public $baseImpulse = 150;
@@ -174,7 +168,6 @@ class Tishat extends Fighter {
 	public $role = "Medium Fighter";
 	public $faction = "Minbari Federation";
 	public static $value =  34;
-	public $mass = 29;
 	public $integrity = 28;
 	public $negation = 6;
 	public $baseImpulse = 150;
@@ -199,7 +192,6 @@ class Gorith extends Fighter {
 	public $role = "Medium Fighter";
 	public $faction = "Narn Regime";
 	public static $value =  23;
-	public $mass = 34;
 	public $integrity = 22;
 	public $negation = 3;
 	public $baseImpulse = 125;
@@ -230,7 +222,6 @@ class Frazi extends Fighter {
 	public $role = "Heavy Fighter";
 	public $faction = "Narn Regime";
 	public static $value =  30;
-	public $mass = 34;
 	public $integrity = 26;
 	public $negation = 5;
 	public $baseImpulse = 120;

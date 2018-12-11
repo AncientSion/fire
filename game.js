@@ -58,6 +58,7 @@ function Game(data){
 	this.showFriendlyEW = 0;
 	this.showHostileEW = 0;
 	this.showObstacleMoves = 1;
+	this.movingObstacles = 0;
 
 	this.snapTurn = 0;
 	this.events = [];
@@ -2862,16 +2863,20 @@ Game.prototype.shiftCam = function(){
 	}
 }
 
-Game.prototype.resolveTurnStartMoves = function(){
-	var need = 1;
-	if (!this.hasObstaclesPresent() && !this.hasVreePresent()){
-		need = 0;
+Game.prototype.hasAutomatedStartMoves = function(){
+	return false;
+	if (!this.hasMovingObstacles() && !this.hasVreePresent()){
+		return false;
 	}
+	return true;
 
-	if (!need){
-		this.DamageControlResolved();
+}
+
+Game.prototype.resolveTurnStartMoves = function(){
+	if (this.hasAutomatedStartMoves()){
+		this.handleTurnStartMoves();
 	}
-	else this.handleTurnStartMoves();
+	else this.DamageControlResolved();
 }
 
 Game.prototype.handleTurnStartMoves = function(){
@@ -2879,7 +2884,7 @@ Game.prototype.handleTurnStartMoves = function(){
 
 	this.prepResolveMovement();
 	game.timeout = setTimeout(function(){
-		if (game.hasObstaclesPresent()){
+		if (game.hasMovingObstacles()){
 			game.animObstacles = 1;
 		}
 		if (game.hasVreePresent()){
@@ -2889,7 +2894,8 @@ Game.prototype.handleTurnStartMoves = function(){
 	}, 1500);
 }
 
-Game.prototype.hasObstaclesPresent = function(){
+Game.prototype.hasMovingObstacles = function(){
+	if (!this.movingObstacles){return false;}
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].obstacle){return true;}
 	}
@@ -3753,6 +3759,7 @@ Game.prototype.DamageControlResolved = function(){
 
 	var show = 0;
 	for (var i = 0; i < this.ships.length; i++){
+		if (this.ships[i].obstacle){continue;}
 		if (this.ships[i].isRolling()){
 			show = 1;
 			this.ships[i].createMoveStartEntry("roll");
@@ -3815,7 +3822,16 @@ Game.prototype.showUI = function(width){
 	$(".optionsWrapper").show();
 
 	this.doSizeLog(width);
-	if (game.turn == 1 && game.phase == -1){ui.combatLogWrapper.hide();}
+	//if (game.turn == 1 && game.phase == -1){ui.combatLogWrapper.hide();}
+
+	if (game.turn == 1 && game.phase == -1){
+		ui.combatLogWrapper.find("#combatLog tr").each(function(i){
+			if (i == 0 || i == 1){
+				console.log("ding");
+				$(this).remove();
+			}
+		})
+	}
 }
 
 Game.prototype.doSizeLog = function(width){
@@ -3844,21 +3860,13 @@ Game.prototype.doSizeLog = function(width){
 		ui.combatLogWrapper.css("top", 80).css("left", 240);
 	}
 
-
 	var top = ui.combatLogWrapper.css("top");
 		top = Math.floor(top.slice(0, top.length-2));
 
 	var h = ui.combatLogWrapper.height();
-	//console.log(top);
-	//console.log(h);
-	//console.log(res.y);
 
 	if (top + h > res.y - 10){
-		//console.log("overflow");
 		ui.combatLogWrapper.css("overflow", "auto").css("max-height", 500);
-	}
-	else {
-		//console.log("fitting!");
 	}
 }
 

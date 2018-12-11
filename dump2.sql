@@ -38,7 +38,7 @@ CREATE TABLE `actions` (
   `costmod` float DEFAULT NULL,
   `resolved` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,7 +47,7 @@ CREATE TABLE `actions` (
 
 LOCK TABLES `actions` WRITE;
 /*!40000 ALTER TABLE `actions` DISABLE KEYS */;
-INSERT INTO `actions` VALUES (1,4,1,'move',0,32,332,-20,0.00,0.00,0,0,0,1),(2,5,1,'move',0,29,406,-435,0.00,0.00,0,0,0,1),(3,6,1,'move',0,32,170,-53,0.00,0.00,0,0,0,1),(4,7,1,'move',0,18,-167,14,0.00,0.00,0,0,0,1),(5,8,1,'move',0,32,-371,-430,0.00,0.00,0,0,0,1),(6,9,1,'move',0,31,-501,508,0.00,0.00,0,0,0,1),(7,3,1,'deploy',0,0,468,373,180.00,0.00,0,0,1,1),(8,2,1,'deploy',0,0,509,-306,180.00,0.00,0,0,1,1),(9,1,1,'deploy',0,0,-556,-167,0.00,0.00,0,0,1,1),(10,1,1,'jumpIn',0,105,-474,-103,23.00,0.00,0,0,0,1),(11,2,1,'jumpIn',0,73,581,-297,33.00,0.00,0,0,0,1),(12,3,1,'jumpIn',0,64,442,315,8.00,0.00,0,0,0,1),(13,1,1,'move',0,140,-377,-2,0.00,0.00,0,0,1,1),(14,3,1,'turn',0,0,442,315,-30.00,0.00,30,81,1,1),(15,3,1,'move',0,155,292,352,0.00,0.00,0,0,1,1),(16,3,1,'turn',0,0,292,352,30.00,0.00,50,27,1,1),(17,2,1,'turn',0,0,581,-297,-45.00,0.00,45,50,1,1),(18,2,1,'move',0,185,408,-363,0.00,0.00,0,0,1,1),(19,2,1,'turn',0,0,408,-363,-45.00,0.00,85,6,1,1),(20,4,2,'move',0,32,306,-39,0.00,0.00,0,0,0,1),(21,5,2,'move',0,29,383,-418,0.00,0.00,0,0,0,1),(22,6,2,'move',0,32,149,-78,0.00,0.00,0,0,0,1),(23,7,2,'move',0,18,-149,18,0.00,0.00,0,0,0,1),(24,8,2,'move',0,32,-349,-407,0.00,0.00,0,0,0,1),(25,9,2,'move',0,31,-504,477,0.00,0.00,0,0,0,1),(26,2,2,'pivot',0,0,408,-363,0.00,120.00,0,0,0,1),(27,3,2,'pivot',0,0,292,352,0.00,120.00,0,0,0,1);
+INSERT INTO `actions` VALUES (1,2,1,'deploy',0,0,556,-188,180.00,180.00,0,0,1,1),(2,3,1,'deploy',0,0,452,-350,180.00,180.00,0,0,1,1),(3,1,1,'deploy',0,0,-579,30,0.00,0.00,0,0,1,1),(4,3,1,'jumpIn',0,27,453,-376,-5.00,-5.00,0,0,0,1),(5,2,1,'jumpIn',0,74,483,-199,20.00,20.00,0,0,0,1),(6,1,1,'jumpIn',0,21,-559,32,-24.00,-24.00,0,0,0,1),(7,1,1,'move',0,140,-431,-25,0.00,0.00,0,0,1,1),(8,2,1,'turn',0,0,483,-199,-27.21,-27.21,28,74,1,1),(9,2,1,'move',0,155,329,-180,0.00,0.00,0,0,1,1),(10,3,1,'move',0,185,269,-360,0.00,0.00,0,0,1,1);
 /*!40000 ALTER TABLE `actions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -139,7 +139,7 @@ CREATE TABLE `fireorders` (
   `hits` int(3) NOT NULL DEFAULT '0',
   `resolved` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,7 +148,6 @@ CREATE TABLE `fireorders` (
 
 LOCK TABLES `fireorders` WRITE;
 /*!40000 ALTER TABLE `fireorders` DISABLE KEYS */;
-INSERT INTO `fireorders` VALUES (1,1,1,3,1,-388,-4,8,3,5,'32;17;52;',0,1);
 /*!40000 ALTER TABLE `fireorders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -305,7 +304,7 @@ CREATE TABLE `playerstatus` (
 
 LOCK TABLES `playerstatus` WRITE;
 /*!40000 ALTER TABLE `playerstatus` DISABLE KEYS */;
-INSERT INTO `playerstatus` VALUES (1,1,1,2,-1,'Earth Alliance',1100,3900,1680,420,840,'waiting'),(2,2,1,2,-1,'Vree Conglomerate',1215,3785,1540,385,770,'waiting');
+INSERT INTO `playerstatus` VALUES (1,2,1,2,-1,'Earth Alliance',1100,3900,1680,420,840,'waiting'),(2,1,1,2,-1,'Vree Conglomerate',1215,3785,1540,385,770,'waiting');
 /*!40000 ALTER TABLE `playerstatus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -362,7 +361,7 @@ CREATE TABLE `sensors` (
 
 LOCK TABLES `sensors` WRITE;
 /*!40000 ALTER TABLE `sensors` DISABLE KEYS */;
-INSERT INTO `sensors` VALUES (1,3,4,1,-1.00,113,0),(2,2,3,1,-1.00,66,0),(3,1,4,1,-1.00,117,0);
+INSERT INTO `sensors` VALUES (1,2,4,1,-1.00,113,0),(2,3,3,1,-1.00,66,0),(3,1,4,1,-1.00,117,0);
 /*!40000 ALTER TABLE `sensors` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -388,7 +387,7 @@ CREATE TABLE `subunits` (
 
 LOCK TABLES `subunits` WRITE;
 /*!40000 ALTER TABLE `subunits` DISABLE KEYS */;
-INSERT INTO `subunits` VALUES (1,2,1,'Xvell'),(2,2,1,'Xvell');
+INSERT INTO `subunits` VALUES (1,3,1,'Xvell'),(2,3,1,'Xvell');
 /*!40000 ALTER TABLE `subunits` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -456,7 +455,7 @@ CREATE TABLE `units` (
   `focus` tinyint(4) DEFAULT '0',
   `notes` varchar(50) DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -465,7 +464,7 @@ CREATE TABLE `units` (
 
 LOCK TABLES `units` WRITE;
 /*!40000 ALTER TABLE `units` DISABLE KEYS */;
-INSERT INTO `units` VALUES (1,1,1,4,'Omega','',1100,1100,'bought',1,1,0,0,0,-377,-2,46.00,0.00,0,140,0,0,0,1,3,0,''),(2,1,2,3,'Squadron','',440,440,'bought',0,1,0,0,0,408,-363,156.00,0.00,6,185,0,0,0,1,3,0,''),(3,1,2,4,'Xill','',775,775,'bought',1,1,0,0,0,292,352,196.00,0.00,27,155,0,0,0,1,3,0,''),(4,1,0,0,'Obstacle','',80,104,'deployed',0,0,0,0,0,332,-20,217.00,0.00,132,32,10,8,0,1,3,0,''),(5,1,0,0,'Obstacle','',72,94,'deployed',0,0,0,0,0,406,-435,144.00,0.00,83,29,18,8,0,1,3,0,''),(6,1,0,0,'Obstacle','',18,23,'deployed',0,0,0,0,0,170,-53,230.00,0.00,140,32,9,2,0,1,3,0,''),(7,1,0,0,'Obstacle','',64,83,'deployed',0,0,0,0,0,-167,14,12.00,0.00,147,18,17,8,0,1,3,0,''),(8,1,0,0,'Obstacle','',50,65,'deployed',0,0,0,0,0,-371,-430,46.00,0.00,92,32,9,5,0,1,3,0,''),(9,1,0,0,'Obstacle','',20,26,'deployed',0,0,0,0,0,-501,508,-96.00,0.00,168,31,16,2,0,1,3,0,'');
+INSERT INTO `units` VALUES (1,1,2,4,'Omega','',1100,1100,'bought',1,1,0,0,0,-431,-25,336.00,-24.00,0,140,0,0,0,1,3,0,''),(2,1,1,4,'Xill','',775,775,'bought',1,1,0,0,0,329,-180,172.79,172.79,0,155,0,0,0,1,3,0,''),(3,1,1,3,'Squadron','',440,440,'bought',0,1,0,0,0,269,-360,175.00,175.00,0,185,0,0,0,1,3,0,''),(4,1,0,0,'Obstacle','',27,35,'deployed',0,0,0,0,0,21,-547,0.00,0.00,183,0,12,3,0,1,3,0,''),(5,1,0,0,'Obstacle','',40,52,'deployed',0,0,0,0,0,327,-527,0.00,0.00,63,0,14,4,0,1,3,0,''),(6,1,0,0,'Obstacle','',9,12,'deployed',0,0,0,0,0,363,-2,0.00,0.00,185,0,17,1,0,1,3,0,''),(7,1,0,0,'Obstacle','',27,35,'deployed',0,0,0,0,0,-254,25,0.00,0.00,98,0,18,3,0,1,3,0,''),(8,1,0,0,'Obstacle','',30,39,'deployed',0,0,0,0,0,-113,126,0.00,0.00,142,0,9,3,0,1,3,0,''),(9,1,0,0,'Obstacle','',40,52,'deployed',0,0,0,0,0,-336,-339,0.00,0.00,140,0,20,4,0,1,3,0,''),(10,1,0,0,'Obstacle','',40,52,'deployed',0,0,0,0,0,-1,356,0.00,0.00,197,0,12,5,0,1,3,0,''),(11,1,0,0,'Obstacle','',40,52,'deployed',0,0,0,0,0,121,-230,0.00,0.00,51,0,12,4,0,1,3,0,''),(12,1,0,0,'Obstacle','',70,91,'deployed',0,0,0,0,0,-87,-239,0.00,0.00,177,0,8,7,0,1,3,0,'');
 /*!40000 ALTER TABLE `units` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -504,4 +503,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-04 16:03:19
+-- Dump completed on 2018-12-11 16:54:55

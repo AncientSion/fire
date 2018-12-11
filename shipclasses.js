@@ -2069,9 +2069,9 @@ Ship.prototype.setMoveAngles = function(){
 }
 
 Ship.prototype.drawMoveArea = function(){
-	console.log("drawMoveArea");
+	//console.log("drawMoveArea");
 	if (game.moveArea == this.id){return;}
-	console.log("IN!");
+	//console.log("IN!");
 	this.setMoveAngles();
 	moveCtx.clearRect(0, 0, res.x, res.y);
 	game.moveArea = this.id;
@@ -3211,7 +3211,6 @@ Ship.prototype.getAttachDivs = function(){
 
 			$(this.element).append($(ccContainer).css("width", pWidth));
 		}
-
 	}
 }
 

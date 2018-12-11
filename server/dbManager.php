@@ -837,11 +837,10 @@
 			return false;
 		}
 
-		public function createObstacles($gameid, $data){
-			Debug::log("createObstacles #".$gameid);
+		public function createMovingObstacles($gameid, $data){
+			Debug::log("createMovingObstacles #".$gameid);
 
 			$amount = $data["obstaclesAmount"];
-			//$amount = 1;
 			$min = $data["obstaclesSizeMin"];
 			$max = $data["obstaclesSizeMax"];
 
@@ -914,22 +913,72 @@
 					$fields[] = array($x, $y, $heading, $size, $thrust, $density, $rockSize, $minDmg, $maxDmg);
 				}
 			}
+			$this->insertObstacles($gameid, $fields);
+		}
+
+		public function createStaticObstacles($gameid, $data){
+			Debug::log("createStaticObstacles #".$gameid);
+
+			$amount = $data["obstaclesAmount"]*3;
+			$min = $data["obstaclesSizeMin"];
+			$max = $data["obstaclesSizeMax"];
 
 
-			for ($i = 0; $i < sizeof($fields); $i++){
-				for ($j = $i+1; $j < sizeof($fields); $j++){
-					
+			$fields = array();
+
+			for ($j = 1; $j <= ($amount); $j++){
+				$attempts = 5;
+
+				$x; $y; $size; $rockSize;
+
+				while ($attempts){
+					$redo = 0;
+					$attempts--;
+					//Debug::log("attempts ".$attempts);
+
+					$x = mt_rand(-400, 400);
+					$y = mt_rand(-550, 550);
+					$size = mt_rand(50, 200);
+					$rockSize = min(8, max(1, mt_rand(1, 6) + mt_rand(-2, 2)));
+
+					for ($k = 0; $k < sizeof($fields); $k++){
+						$dist = Math::getDist($fields[$k][0], $fields[$k][1], $x, $y);
+						//Debug::log("checking vs field ".$k.", dist: ".$dist);
+
+						if ($dist - 75 - $size/2 - $fields[$k][4]/2 <= 0){
+							//Debug::log("----RETRY, dist $dist, sizeA ".round($size/2).", sizeeB ".round($fields[$k][4]/2));
+							//Debug::log("----".$x."/".$y." versus ".$fields[$k][0]."/".$fields[$k][1]);
+							$redo = 1;
+							break;
+						} //else Debug::log("no problem !");
+					}
+
+					if (!$redo){
+						break;
+					}// else Debug::log("redoing, attempts left: ".$attempts);
 				}
-			}
 
-			//Debug::log("fields to add ".sizeof($fields));
+				if (!$attempts){continue;}
+
+				$density = mt_rand(5, 20);
+				$minDmg = round(mt_rand(8, 10) * $rockSize);
+				$maxDmg = round($minDmg*1.3);
+
+				//Debug::log("PUSHING!");
+				$fields[] = array($x, $y, 0, $size, 0, $density, $rockSize, $minDmg, $maxDmg);
+			}
+			$this->insertObstacles($gameid, $fields);
+		}
+
+		public function insertObstacles($gameid,$fields){
+
+			Debug::log("fields to add ".sizeof($fields));
 			$stmt = $this->connection->prepare("
 				INSERT INTO units
 				(gameid, name, status, x, y, heading, facing, delay, thrust, rolling, rolled, turn, phase, totalCost, moraleCost)
 				VALUES
 				(:gameid, 'Obstacle', 'deployed', :x, :y, :heading, :facing, :delay, :thrust, :rolling, :rolled, 1, -1, :totalCost, :moraleCost)
 			");
-
 
 			for ($i = 0; $i < sizeof($fields); $i++){
 
@@ -956,13 +1005,15 @@
 			}
 
 			return true;
+
 		}
 
 		public function startGame($gameid){
 			Debug::log("startGame #".$gameid);
 
 			$data = $this->query("SELECT * FROM games where id = ".$gameid);
-			if (sizeof($data)){$this->createObstacles($gameid, $data[0]);}
+			//if (sizeof($data)){$this->createMovingObstacles($gameid, $data[0]);}
+			if (sizeof($data)){$this->createStaticObstacles($gameid, $data[0]);}
 
 			$stmt = $this->connection->prepare("
 				UPDATE games 

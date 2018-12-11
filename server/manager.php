@@ -953,7 +953,12 @@
 		}
 	}
 
+	public function hasAutomatedStartMoves(){
+		return false;
+	}
+
 	public function handleAutomatedStartMoves(){
+		if (!$this->hasAutomatedStartMoves()){return;}
 		Debug::log("handleTurnStartMoves");
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
