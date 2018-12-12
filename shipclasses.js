@@ -2745,11 +2745,14 @@ Ship.prototype.expandDiv = function(div){
 
 	// OUTER STRUCTS
 	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].start == 0 && this.structures[i].end == 360){
+			continue;
+		}
 
-		var structDiv = $("<div>").addClass("structDiv")
+		var structDiv = $("<div>").addClass("structDiv");
 		structContainer.append(structDiv);
 			
-		var structTable = $("<table>").addClass("structTable")
+		var structTable = $("<table>").addClass("structTable");
 		structDiv.append(structTable);
 
 		var armour = this.structures[i].getTableData();
@@ -2865,13 +2868,9 @@ Ship.prototype.expandDiv = function(div){
 			offsetX += 10;
 		}
 
-
-
-		if (this.structures.length == 4 && this.faction[0] == "V"){
-			offsetX = 20 + ((i % 2 == 0) * -25);
-			offsetY = -35 + ((i % 2 == 0) * 10);
+		if (this.faction[0] == "V" && i % 2 != 0){
+			offsetX -= 10;
 		}
-
 		
 		var pos = getPointInDir(130 - offsetX, a-90, conWidth/2, conHeight/2-40);
 		var w = $(structDiv).width();
@@ -2901,6 +2900,9 @@ Ship.prototype.expandDiv = function(div){
 		else if (sides >= 2 && a-90 != 0 && a-90 != 180){
 			offsetY += 0;
 		}
+		else if (this.faction[0] == "V" && i % 2 != 0){
+			offsetY = -(structDiv.height()/2) - 10;
+		}
 		else if (!noFront && !noAft){
 			offsetY -= 30;
 		}
@@ -2910,10 +2912,13 @@ Ship.prototype.expandDiv = function(div){
 			.data("id", this.structures[i].id)
 			.css("left", pos.x + -w/2)
 			.css("top", pos.y + offsetY)
+
+		if (a >= 120 && a <= 240){
+			//console.log("dign");
+			let armour = $($(structTable).children().children()[0]);
+			structTable.children().append(armour);
+		}
 	}
-
-
-
 
 
 
@@ -2974,10 +2979,21 @@ Ship.prototype.expandDiv = function(div){
 	var w = $(primaryDiv).width();
 	var h = $(primaryDiv).height();
 	var primX = conWidth/2 - w/2;
-	var primY = conHeight/2 - h/2 + offsetY
+	var primY = conHeight/2 - h/2 + offsetY;
 	$(primaryDiv)
 		.css("left", primX)
 		.css("top", primY);
+
+	//TURRETS
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].start != 0 || this.structures[i].end != 360){continue;}
+
+		var structDiv = $("<div>").addClass("structDiv turret");
+		structContainer.append(structDiv);
+	}
+
+
+
 
 	var width = 0;
 	var height = 0;
@@ -2992,10 +3008,7 @@ Ship.prototype.expandDiv = function(div){
 		}
 	})
 
-	structContainer.css("height", Math.max($(primaryDiv).position().top + $(primaryDiv).height(), height) + 20);
-
-
-	//$(structContainer).append($("<div>").addClass("unusedPower").html(this.getSystemByName("Reactor").getOutput()));
+	structContainer.css("height", Math.max($(primaryDiv).position().top + $(primaryDiv).height(), height) + 10);
 
 	var top = 0;
 	var left = structContainer.width() - 45;
@@ -3010,7 +3023,6 @@ Ship.prototype.expandDiv = function(div){
 			.append($("<div>")
 				.addClass("unusedPower")
 				.html(this.getSystemByName("Reactor").getOutput())))
-		//console.log($(structContainer).width());
 
 	// JUMP OUT
 	$(structContainer).append(this.getJumpDiv().css("top", top+5).css("left", left));
@@ -3058,10 +3070,6 @@ Ship.prototype.expandDiv = function(div){
 			$(this.getBaseImage().cloneNode(true))
 				.addClass("rotate270")
 				.css("width", "100%")
-				//.css("border-left", "1px solid white")
-				//.css("width", goal)
-				//.css("height", goal)
-				//.css("margin-left", (conW - goal)/2)
 		)
 		.append($("<div>")
 			.addClass("notes")

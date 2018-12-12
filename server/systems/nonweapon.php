@@ -25,7 +25,6 @@ class PrimarySystem extends System {
 
 	public function setHitChanceValue(){
 		$this->hitChance = ($this->integrity / $this->hitMod);
-
 	}
 
 	public function getHitChance(){

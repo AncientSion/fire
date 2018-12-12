@@ -979,6 +979,13 @@ div.integrityFull {
 	width: 100%;
 }
 
+.structDiv.turret {
+	width: 30px;
+	height:30px;
+	background-color: yellow;
+	border-radius: 50px;
+}
+
 .structDiv .outputMask, .primaryDiv .outputMask {
 	margin: auto;
 	position: absolute;

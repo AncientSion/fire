@@ -273,7 +273,7 @@ Structure.prototype.getTableData = function(){
 
 	var lowerDiv = document.createElement("div");
 		lowerDiv.className = "integrityNow";
-		lowerDiv.style.width =  this.getRemNegation()/this.negation * 100 + "%";
+		lowerDiv.style.width =  this.getRemNegation() / this.negation * 100 + "%";
 		td.append(lowerDiv);
 		
 	var upperDiv = document.createElement("div");

@@ -502,7 +502,7 @@ class Ship {
 			$heading += 360;
 		}
 
-		Debug::log("getEndState for ".get_class($this)." #".$this->id." heading ".$heading.", facing: ".$facing.", rolling: ".$this->rolling.", rolled: ".$this->rolled);
+		//Debug::log("getEndState for ".get_class($this)." #".$this->id." heading ".$heading.", facing: ".$facing.", rolling: ".$this->rolling.", rolled: ".$this->rolled);
 
 		return array(
 			"id" => $this->id,
