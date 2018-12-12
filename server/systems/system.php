@@ -11,6 +11,7 @@ class System {
 	public $disabled = 0;
 	public $locked = 0;
 	public $dual = 0;
+	public $turret = 0;
 	public $powerReq = 1;
 	public $output = 0;
 	public $name = "";

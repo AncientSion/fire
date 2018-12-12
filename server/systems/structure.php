@@ -1,11 +1,32 @@
 <?php
 
+class Turret extends Structure {
+	public $name = "Turret";
+	public $display = "Turret";
+	public $turret = 1;
+
+	function __construct($id, $parentId, $start, $end, $integrity, $negation){
+		parent::__construct($id, $parentId, $start, $end, $integrity, $negation, 0);
+	}
+
+	public function setName(){
+		$this->type = $this->getName();
+	}
+
+	public function getName(){
+		return "Main Turret";
+	}
+}
+
 class Structure {
+	public $name = "Structure";
+	public $display = "Structure";
 	public $id;
 	public $parentId;
 	public $start;
 	public $end;
 	public $integrity;
+	public $remaining;
 	public $negation;
 	public $width;
 	public $type;
@@ -21,13 +42,15 @@ class Structure {
 	public $modes = array();
 	public $effiency = 0;
 	public $bonusNegation = 0;
+	public $turret = 0;
 
 	function __construct($id, $parentId, $start, $end, $integrity, $negation, $width = 2){
 		$this->id = $id;
 		$this->parentId = $parentId;
 		$this->start = $start;
 		$this->end = $end;
-		$this->integrity = $integrity;
+		$this->integrity = floor($integrity*0.85);
+		$this->remaining = floor($integrity*0.85);
 		$this->negation = $negation;
 		$this->width = $width;
 
@@ -216,7 +239,6 @@ class Primary {
 		return $this->remaining;
 	}
 }
-
 
 
 

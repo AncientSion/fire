@@ -209,6 +209,7 @@ spl_autoload_register(
 
                 'structure' => '/server/systems/structure.php',
                 'primary' => '/server/systems/structure.php',
+                'turret' => '/server/systems/structure.php',
                 'single' => '/server/systems/single.php',
 
                 'debug' => '/server/debug.php',

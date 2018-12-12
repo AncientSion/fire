@@ -193,17 +193,7 @@ function initSquaddie(data){
 	for (var i = 0; i < data.crits.length; i++){
 		unit.crits.push(new Crit(data.crits[i]));
 	}
-
-/*	for (var j = 0; j < data.structures.length; j++){
-		var struct = new Section(data.structures[j]);
-
-		for (var k = 0; k < data.structures[j].systems.length; k++){
-			var system = new window[data.structures[j].systems[k].type](data.structures[j].systems[k]);		
-			struct.systems.push(system);
-		}
-		unit.structures.push(struct);
-	}
-*/
+	
 	for (var i = 0; i < data.systems.length; i++){
 		var system = new window[data.systems[i].type](data.systems[i]);		
 		unit.systems.push(system);
@@ -228,7 +218,7 @@ function initShip(data){
 	}
 
 	for (var j = 0; j < data.structures.length; j++){
-		var struct = new Structure(data.structures[j]);
+		var struct = new window[data.structures[j].name](data.structures[j]);
 		if (data.structures[j].damages.length){
 			for (var k = 0; k < data.structures[j].damages.length; k++){
 				struct.damages.push(new Damage(data.structures[j].damages[k]));

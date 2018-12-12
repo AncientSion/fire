@@ -783,12 +783,20 @@ table, th, tr, td {
 	height: 18px;
 }
 
-.structContainer {
+.structContainer, .turretContainer {
 	height: 400px;
 	position: relative;
 	color: white;
 	margin: auto;
 	border-top: 1px solid white;
+}
+
+.turretContainer {
+	height: 110px;
+	position: relative;
+	color: white;
+	margin: auto;
+	border-top: unset;
 }
 
 .structContainer.squad {
@@ -816,6 +824,13 @@ table, th, tr, td {
 	position: absolute;
 	color: black;
 	border: 1px solid white;
+}
+
+.turretDiv {
+	display: inline-block;
+	position: absolute;
+	margin: auto;
+	border-radius: 50px
 }
 
 .ccContainer {
@@ -888,6 +903,25 @@ div.system {
 	z-index: 1;
 	background-color: rgb(109, 118, 162);
 	height: 100%;
+}
+
+.turretDiv .armour, .turretDiv .core {
+	height: 20px;
+	border-top: 2px solid black;
+	border-bottom: 2px solid black;
+}
+
+.turretDiv div.integrityNow {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 1;
+	background-color: "green";
+	height: 100%;
+}
+.turretDiv div.integrityAmount {
+	top: -1;
 }
 
 .system.integrityNow {
@@ -977,13 +1011,6 @@ div.integrityFull {
 	background-color: white;
 	z-index: -2;
 	width: 100%;
-}
-
-.structDiv.turret {
-	width: 30px;
-	height:30px;
-	background-color: yellow;
-	border-radius: 50px;
 }
 
 .structDiv .outputMask, .primaryDiv .outputMask {
@@ -1211,6 +1238,7 @@ div.integrityFull {
 }
 
 .shipDiv {
+	width: 350px;
 	position: absolute;
 	border: 1px solid white;
 	border-radius: 5px;

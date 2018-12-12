@@ -119,6 +119,14 @@ class Ship {
 		$this->addPrimary();
 		$this->addSpecials();
 		$this->addStructures();
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($this->structures[$i]->turret){
+				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+					$this->structures[$i]->systems[$j]->turret = 1;
+				}
+			}
+		}
 	}
 
 	public function addPrimary(){

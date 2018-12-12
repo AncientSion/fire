@@ -59,15 +59,20 @@ class Xill extends Heavy {
 		$left->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 210, 330);
 		$structs[] = $left;
 
-		$turretA = new Structure($this->getId(), $this->id, 0, 360, 0, 13, 0);
+		$turretA = new Turret($this->getId(), $this->id, 0, 360, 200, 13);
+		$turretA->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 0, 360);
 		$turretA->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 0, 360);
 		$structs[] = $turretA;
-		$turretB = new Structure($this->getId(), $this->id, 0, 360, 0, 13, 0);
+		
+		$turretB = new Turret($this->getId(), $this->id, 0, 360, 200, 13);
+		$turretB->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 0, 360);
 		$turretB->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 0, 360);
 		$structs[] = $turretB;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
+			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
+			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse-1;
 		}
 	}
 

@@ -22,6 +22,7 @@
 	<script src='shared.js'></script>
 	<script src='shipclasses.js'></script>
 	<script src='systems.js'></script>
+	<script src='structure.js'></script>
 	<script src='classes.js'></script>
 	<script src='mixed.js'></script>
 	<script src='salvo.js'></script>

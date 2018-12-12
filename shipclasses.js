@@ -830,10 +830,8 @@ Ship.prototype.issueTurn = function(a){
 	if (this.canTurnFreely()){
 		//this.actions[0].h += Math.round(a);
 		this.actions[0].h += a;
-		if (this.actions[0].h > 360){
-			this.actions[0].h -= 360;
-		} else if (this.actions[0].h < 0){this.actions[0].h += 360;}
-		this.drawFacing = this.actions[0].h;
+		this.actions[0].f += a;
+		this.drawFacing += a;
 	}
 	else {
 		var o = this.getPlannedPos();
@@ -2745,9 +2743,7 @@ Ship.prototype.expandDiv = function(div){
 
 	// OUTER STRUCTS
 	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].start == 0 && this.structures[i].end == 360){
-			continue;
-		}
+		if (this.structures[i].start == 0 && this.structures[i].end == 360){continue;} // turret
 
 		var structDiv = $("<div>").addClass("structDiv");
 		structContainer.append(structDiv);
@@ -2812,7 +2808,7 @@ Ship.prototype.expandDiv = function(div){
 				tr = document.createElement("tr");
 			}
 
-			var td = this.structures[i].systems[j].getTableData(false);
+			var td = this.structures[i].systems[j].getTableData();
 				td = this.attachEvent(td);
 
 			col+= this.structures[i].systems[j].width;
@@ -2938,7 +2934,7 @@ Ship.prototype.expandDiv = function(div){
 				var tr = document.createElement("tr");
 			}
 
-			var td = this.primary.systems[i].getTableData(false);
+			var td = this.primary.systems[i].getTableData();
 				td = this.attachEvent(td);
 
 			if (this.id > 0 || game.turn == 1){
@@ -2984,16 +2980,7 @@ Ship.prototype.expandDiv = function(div){
 		.css("left", primX)
 		.css("top", primY);
 
-	//TURRETS
-	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].start != 0 || this.structures[i].end != 360){continue;}
-
-		var structDiv = $("<div>").addClass("structDiv turret");
-		structContainer.append(structDiv);
-	}
-
-
-
+	this.addTurrets(div);
 
 	var width = 0;
 	var height = 0;
@@ -4169,6 +4156,88 @@ Ship.prototype.adjustMaxTurn = function(){
 		this.drawTurnArcs();
 		this.drawDirectionIndicator();
 		this.resetMoveTranslation();
+	}
+}
+
+Ship.prototype.addTurrets = function(shipDiv){
+
+	var turretDivs = [];
+
+	//TURRETS
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].start != 0 || this.structures[i].end != 360){continue;}
+		var turretDiv = $("<div>").addClass("structDiv turretDiv");
+		var turretTable = $("<table>").addClass("structTable");
+		turretDiv.append(turretTable);
+
+		var armour = $(this.structures[i].getArmourData());
+			armour.attr("colSpan", this.structures[i].systems.length).css("height", 22)
+		turretTable.append($("<tr>").append(armour));
+
+		tr = document.createElement("tr");
+		for (var j = 0; j < this.structures[i].systems.length; j++){
+
+			var td = this.structures[i].systems[j].getTableData();
+				td = this.attachEvent(td);
+				$(td).find(".integrityNow").remove().end().find(".integrityFull").remove();
+
+			tr.appendChild(td);
+
+			if (this.id > 0 || game.turn == 1){
+			/*	var boostDiv = this.structures[i].systems[j].getBoostDiv();
+				if (boostDiv){td.appendChild(boostDiv);}
+
+				var powerDiv = this.structures[i].systems[j].getPowerDiv();
+				if (powerDiv){td.appendChild(powerDiv);}
+
+			*/	var modeDiv = this.structures[i].systems[j].getModeDiv();
+				if (modeDiv){td.appendChild(modeDiv);}
+			}
+
+			if (this.structures[i].systems[j].dual && !this.structures[i].systems[j].effiency){
+				$(td).find(".outputMask").hide();
+			}
+		}
+		turretTable.append(tr);
+
+		var core = $(this.structures[i].getCoreData());
+			core.attr("colSpan", this.structures[i].systems.length);
+		turretTable.append($("<tr>").append(core));
+
+		turretDivs.push(turretDiv);
+	}
+
+	if (!turretDivs.length){return;} // no turrets
+	var turretContainer = $("<div>").addClass("turretContainer");
+	shipDiv.append(turretContainer);
+	var spacing = shipDiv.width() / turretDivs.length;
+
+	//var width = shipDiv.width() / turretDivs.length;
+	for (var i = 0; i < turretDivs.length; i++){ // set turret width
+		turretDivs[i]
+			.css("width", 100)
+			.css("height", 100)
+			.css("left", spacing*(i+1) - spacing/2 - 50)
+		turretContainer.append(turretDivs[i])
+	}
+
+	for (var i = 0; i < turretDivs.length; i++){ // adjust armour TD width
+		var armour = turretDivs[i].find(".armour");
+		if (armour.width() < 70){
+			armour.css("width", 70);
+		}
+
+		var conWidth = turretDivs[i].width();
+		var conHeight = turretDivs[i].height();
+
+		var table = turretDivs[i].children(); // center turret table in wrapper div
+		var width = table.width();
+		var height = table.height();
+
+		table
+		.css("position", "absolute")
+		.css("left", conWidth / 2 - width/2)
+		.css("top", conHeight / 2 - height/2)
 	}
 }
 

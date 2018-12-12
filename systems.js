@@ -34,6 +34,7 @@ function System(system){
 	this.element;
 	this.type = system.type || "Internal";
 	this.dual = 0;
+	this.turret = system.turret;
 	this.loadout = system.loadout;
 	this.emDmg = system.emDmg;
 	this.loaded = 0;
@@ -874,7 +875,7 @@ System.prototype.getFighterSystemData = function(){
 	return this.element;
 }
 
-System.prototype.getTableData = function(forFighter){
+System.prototype.getTableData = function(){
 	td = $("<td>")
 	.addClass("system")
 	.attr("colSpan", this.width)
