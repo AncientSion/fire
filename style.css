@@ -792,7 +792,7 @@ table, th, tr, td {
 }
 
 .turretContainer {
-	height: 110px;
+	height: 100px;
 	position: relative;
 	color: white;
 	margin: auto;
@@ -2405,6 +2405,10 @@ body {
 .turretDiv .core {
 	border-top: 4px solid black;
 	height: 20px;
+}
+
+.turretDiv .core .powerDiv {
+	left: 70px;
 }
 
 .turretDiv span {

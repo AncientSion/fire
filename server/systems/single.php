@@ -11,6 +11,7 @@ class Single {
 	public $disabled = 0;
 	public $amount = 0;
 	public $launch = 0;
+	public $powerReq = 0;
 	public $systems = array();
 	public $damages = array();
 	public $crits = array();

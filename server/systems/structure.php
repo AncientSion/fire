@@ -61,6 +61,7 @@ class Structure {
 	public $armourDmg = 0;
 	public $parentIntegrity = 0;
 	public $parentPow;
+	public $powerReq = 0;
 	public $systems = array();
 	public $damages = array();
 	public $powers = array();
@@ -126,7 +127,7 @@ class Structure {
 	public function setNegation($main, $armourDmg){
 		$p = 1.25;
 		$avg = 15;
-		$this->parentIntegrity = round($main / $avg *$this->negation);
+		$this->parentIntegrity = round($main / $avg * $this->negation);
 
 		$this->parentPow = round(pow($this->parentIntegrity, $p));
 		$this->armourDmg += $armourDmg;

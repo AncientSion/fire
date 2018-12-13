@@ -240,6 +240,7 @@ function Single(data){
 	this.disabled = data.disabled;
 	this.baseImpulse = data.baseImpulse;
 	this.critEffects = data.critEffects;
+	this.powerReq = data.powerReq;
 	this.size = data.size;
 	this.damages = [];
 	this.crits = [];

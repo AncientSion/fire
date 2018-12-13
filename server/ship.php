@@ -125,8 +125,10 @@ class Ship {
 	public function handleTurrets(){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->turret){
+
 				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 					$this->structures[$i]->systems[$j]->turret = $this->structures[$i]->id;
+					$this->structures[$i]->powerReq += $this->structures[$i]->systems[$j]->powerReq;
 					//$this->structures[$i]->systems[$j]->specialId = $this->structures[$i]->id;
 				}
 			}

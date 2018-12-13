@@ -4212,26 +4212,29 @@ Ship.prototype.addTurrets = function(shipDiv){
 				.find(".integrityNow").remove().end().find(".integrityFull").remove();
 
 			tr.appendChild(td);
-
-			if (this.id > 0 || game.turn == 1){
-			/*	var boostDiv = this.structures[i].systems[j].getBoostDiv();
+			
+		/*	if (this.id > 0 || game.turn == 1){
+				var boostDiv = this.structures[i].systems[j].getBoostDiv();
 				if (boostDiv){td.appendChild(boostDiv);}
 
 				var powerDiv = this.structures[i].systems[j].getPowerDiv();
 				if (powerDiv){td.appendChild(powerDiv);}
 
-			*/	var modeDiv = this.structures[i].systems[j].getModeDiv();
+				var modeDiv = this.structures[i].systems[j].getModeDiv();
 				if (modeDiv){td.appendChild(modeDiv);}
 			}
+
 
 			if (this.structures[i].systems[j].dual && !this.structures[i].systems[j].effiency){
 				$(td).find(".outputMask").hide();
 			}
+		*/	
 		}
 		turretTable.append(tr);
 
 		var core = $(this.structures[i].getCoreData());
 			core.attr("colSpan", this.structures[i].systems.length);
+			core.append(this.structures[i].getPowerDiv())
 		turretTable.append($("<tr>").append(core));
 		var armour = $(this.structures[i].getArmourData());
 			armour.attr("colSpan", this.structures[i].systems.length)

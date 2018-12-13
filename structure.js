@@ -11,7 +11,7 @@ function Structure(data){
 	this.armourDmg = data.armourDmg;
 	this.negation = data.negation;
 	this.remNegation = data.remNegation;
-	this.bonusNegation = 0;
+	this.powerReq = data.powerReq;
 	this.destroyed = data.destroyed || false;
 	this.highlight = false;
 	this.systems = [];
@@ -167,7 +167,7 @@ Structure.prototype.getSysDiv = function(){
 			.append($("<td>").html("Armour Strength"))
 			.append($("<td>").html(this.getRemNegation() + " / " + this.negation)))
 		.append($("<tr>")
-			.append($("<td>").html("Realtive Durability"))
+			.append($("<td>").html("Relative Durability"))
 			.append($("<td>").html(((this.parentIntegrity - this.armourDmg) + " / " + this.parentIntegrity))))
 
 	if (this.boostEffect.length){

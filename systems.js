@@ -504,6 +504,7 @@ System.prototype.getBoostDiv = function(){
 
 System.prototype.getPowerDiv = function(){
 	if (this.destroyed || !this.powerReq){return};
+
 	var div = document.createElement("div");
 		$(div).addClass("powerDiv")
 		.data("shipId", this.parentId)
@@ -636,6 +637,7 @@ System.prototype.isPowered = function(){
 	}
 	return true;
 }
+
 System.prototype.isUnpowered = function(){
 	if (!this.isPowered()){
 		return true;
@@ -658,6 +660,7 @@ System.prototype.forceUnpower = function(){
 	}
 	this.doUnpower();
 }
+
 System.prototype.doUnpower = function(){
 	if (this.selected){
 		this.select();
@@ -783,19 +786,11 @@ System.prototype.hideOptions = function(){
 			ele.find(".modeDiv").hide();
 		}
 	}
-	//if (game.phase == -1){
-		//var boost = this.effiency;
-		//var canPower = this.canPower();
-		//var canUnpower = this.canUnpower();
-
-		///if (boost || canPower || canUnpower){
-			$(ele)
-				.find(".boostDiv").hide().end()
-				.find(".modeDiv").hide().end()
-				.find(".powerDiv").children().hide();
-			return;
-		//}
-	//}
+	$(ele)
+		.find(".boostDiv").hide().end()
+		.find(".modeDiv").hide().end()
+		.find(".powerDiv").children().hide();
+	return;
 }
 
 System.prototype.showSysDiv = function(e){
@@ -1088,7 +1083,7 @@ System.prototype.getPowerReqString = function(){
 }
 
 System.prototype.getPowerUsage = function(){
-	var usage = this.powerReq || 0;
+	var usage = this.powerReq;
 	for (var i = this.powers.length-1; i >= 0; i--){
 		if (this.powers[i].turn == game.turn && this.powers[i].type > 0){
 			usage += this.powers[i].cost;
@@ -1478,7 +1473,6 @@ Reactor.prototype.getOutputUsage  = function(){
 	var use = 0;
 	var ship = game.getUnit(this.parentId);
 	for (var i = 0; i < ship.structures.length; i++){
-		use += ship.structures[i].getPowerUsage();
 		for (var j = 0; j < ship.structures[i].systems.length; j++){
 			if (ship.structures[i].systems[j].isPowered()){
 				use += ship.structures[i].systems[j].getPowerUsage();
