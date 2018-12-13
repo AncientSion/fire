@@ -119,11 +119,15 @@ class Ship {
 		$this->addPrimary();
 		$this->addSpecials();
 		$this->addStructures();
+		$this->handleTurrets();
+	}
 
+	public function handleTurrets(){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->turret){
 				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-					$this->structures[$i]->systems[$j]->turret = 1;
+					$this->structures[$i]->systems[$j]->turret = $this->structures[$i]->id;
+					//$this->structures[$i]->systems[$j]->specialId = $this->structures[$i]->id;
 				}
 			}
 		}
@@ -171,7 +175,7 @@ class Ship {
 	}
 
 	public function setInternalHitChance(){
-		$main = $this->primary->getHitChance();
+		$main = $this->primary->getTotalHitChance();
 		$all = $main;
 
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
@@ -664,11 +668,11 @@ class Ship {
 
 	public function addDamagesFromDB($dmgs){
 		for ($i = 0; $i < sizeof($dmgs); $i++){
-			$this->addTopDamage($dmgs[$i]);
+			$this->addTopDamages($dmgs[$i]);
 		}
 	}
 
-	public function addTopDamage($dmg){
+	public function addTopDamages($dmg){
 		//Debug::log("addDamage ".get_class($this));
 
 		if ($dmg->new){
@@ -998,7 +1002,7 @@ class Ship {
 		return $valid[mt_rand(0, sizeof($valid)-1)];
 	}
 	
-	public function getHeadingElement($fire){
+	public function getFacingElement($fire){
 		return $this->getStruct($fire->section);
 	}
 
@@ -1008,18 +1012,11 @@ class Ship {
 
 		$roll;
 		$current = 0;
-		$main = $this->primary->getHitChance();
-		//Debug::log("main: ".$main);
-		//$main = 10;
+		$main = $this->primary->getTotalHitChance();
 		$total = $main;
 
-		$struct = $this->getHeadingElement($fire);
-
-		for ($i = 0; $i < sizeof($struct->systems); $i++){
-			if ($struct->systems[$i]->destroyed){continue;}
-			$total += $struct->systems[$i]->getHitChance();
-			//Debug::log("adding: ".$struct->systems[$i]->name." for ".$struct->systems[$i]->getHitChance());
-		}
+		$struct = $this->getFacingElement($fire);
+		$total += $struct->getTotalHitChance();
 
 		//Debug::log("total: ".$total);
 
@@ -1030,19 +1027,10 @@ class Ship {
 			//Debug::log($roll.", get primary system");
 			return $this->getPrimaryHitSystem();
 		}
-		else {
-			for ($i = 0; $i < sizeof($struct->systems); $i++){
-				if (!$struct->systems[$i]->destroyed){
-					$current += $struct->systems[$i]->getHitChance();
-					//Debug::log("current: ".$current);
-					if ($roll > $current){continue;}
-					//Debug::log("EXTERNAL HIT: ".$struct->systems[$i]->name." #".$struct->systems[$i]->id);
-					return $struct->systems[$i];
-				}
-			}
-		}
+		else return $struct->getHitSystem($roll, $current);
 		//Debug::log("ERROR getHitSystem()");
 	}
+
 
 	public function getPrimaryHitSystem(){
 		//Debug::log("getPrimaryHitSystem: #".$this->id);
@@ -1061,13 +1049,13 @@ class Ship {
 
 		$roll;
 		$current = 0;
-		$total = $this->primary->getHitChance();
+		$total = $this->primary->getTotalHitChance();
 
 		for ($i = 0; $i < sizeof($valid); $i++){
 			$total += $valid[$i]->getHitChance();
 		}
 		$roll = mt_rand(0, $total);
-		$current += $this->primary->getHitChance();
+		$current += $this->primary->getTotalHitChance();
 
 		//Debug::log("roll: ".$roll.", all: ".$total);
 
@@ -1226,7 +1214,7 @@ class Ship {
 			$this->facing += 360;
 		}
 		
-		Debug::log("setting setHeadingAndFacing for: #".$this->id.": ".$this->heading.", facing: ".$this->facing);
+		//Debug::log("setting setHeadingAndFacing for: #".$this->id.": ".$this->heading.", facing: ".$this->facing);
 	}
 
 	public function getHitDist($fire){
@@ -1479,6 +1467,11 @@ class Ship {
 		}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
+			for ($j = 0; $j < sizeof($this->structures[$i]->damages); $j++){
+				if ($this->structures[$i]->damages[$j]->new){
+					$dmgs[] = $this->structures[$i]->damages[$j];
+				}
+			}
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->damages); $k++){
 					if ($this->structures[$i]->systems[$j]->damages[$k]->new){
@@ -1584,8 +1577,8 @@ class Medium extends Ship {
 		parent::__construct($data);
 	}
 
-	public function addTopDamage($dmg){
-		//Debug::log("addDamage ".get_class($this));
+	public function addTopDamages($dmg){
+		//Debug::log("addDamage ".get_class($this).", id ".$dmg->id.", target ".$dmg->systemid);
 
 		$this->primary->addDamage($dmg);
 
@@ -1596,18 +1589,20 @@ class Medium extends Ship {
 				if ($dmg->systemid == 1){break;}
 
 				if ($this->structures[$i]->id == $dmg->structureid){
+					if ($this->structures[$i]->turret){
+						$this->structures[$i]->addDamage($dmg);	break;
+					}
+
 					for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 						if ($this->structures[$i]->systems[$j]->id == $dmg->systemid){
-							$this->structures[$i]->systems[$j]->addDamage($dmg);
-							break 2;
+							$this->structures[$i]->systems[$j]->addDamage($dmg); break 2;
 						}
 					}
 				}
 
 				for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 					if ($this->primary->systems[$j]->id == $dmg->systemid){
-						$this->primary->systems[$j]->addDamage($dmg);
-						break 2;
+						$this->primary->systems[$j]->addDamage($dmg); break 2;
 					}
 				}
 			}

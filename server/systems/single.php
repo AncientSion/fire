@@ -52,7 +52,7 @@ class Single {
 		$this->addSystems();
 
 		for ($i = 0; $i < sizeof($this->systems); $i++){
-			$this->systems[$i]->fighterId = $this->id;
+			$this->systems[$i]->specialId = $this->id;
 		}
 		
 		$this->setPowerOutput();
@@ -173,9 +173,7 @@ class Single {
 	public function addDamage($dmg){
 		if ($dmg->new){
 			$this->emDmg += $dmg->emDmg;
-			//Debug::log($this->parentId."/".$this->id." total emDmg: ".$this->emDmg);
 			if (!$this->destroyed && $this->emDmg >= $this->integrity){
-				//Debug::log("immediate disable");
 				$this->doDropout();
 			}
 		}

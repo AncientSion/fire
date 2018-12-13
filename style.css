@@ -905,25 +905,6 @@ div.system {
 	height: 100%;
 }
 
-.turretDiv .armour, .turretDiv .core {
-	height: 20px;
-	border-top: 2px solid black;
-	border-bottom: 2px solid black;
-}
-
-.turretDiv div.integrityNow {
-	position: absolute;
-	left: 0;
-	top: 0;
-	bottom: 0;
-	z-index: 1;
-	background-color: "green";
-	height: 100%;
-}
-.turretDiv div.integrityAmount {
-	top: -1;
-}
-
 .system.integrityNow {
 	background-color: #607D8B;
 }
@@ -1238,7 +1219,7 @@ div.integrityFull {
 }
 
 .shipDiv {
-	width: 350px;
+	widdth: 300px;
 	position: absolute;
 	border: 1px solid white;
 	border-radius: 5px;
@@ -2407,6 +2388,41 @@ body {
 .ammoDiv .structContainer {
 	padding-top: 10px;
 	height: unset;
+}
+
+.turretDiv .system img {
+	height: 20px;
+	width: 20px;
+}
+
+.turretDiv .armour, .turretDiv .core {
+	height: 16px;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	top: -3px;
+}
+
+.turretDiv .core {
+	border-top: 4px solid black;
+	height: 20px;
+}
+
+.turretDiv span {
+	font-size: 14px !important;
+}
+
+.turretDiv div.integrityNow {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 1;
+	background-color: "green";
+	height: 100%;
+}
+
+.turretDiv div.integrityAmount {
+	top: -1;
 }
 
 textarea {	

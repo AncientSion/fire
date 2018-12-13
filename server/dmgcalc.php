@@ -278,7 +278,7 @@ class DmgCalc {
 		);
 
 		$fire->damages[] = $entry;
-		$fire->target->addTopDamage($entry);	
+		$fire->target->addTopDamages($entry);	
 	}
 
 	public static function doPulseDmg($fire, $hit, $system){
@@ -353,7 +353,7 @@ class DmgCalc {
 		);
 
 		$fire->damages[] = $entry;
-		$fire->target->addTopDamage($entry);
+		$fire->target->addTopDamages($entry);
 	}
 
 
@@ -422,7 +422,7 @@ class DmgCalc {
 		);
 
 		$fire->damages[] = $entry;
-		$fire->target->addTopDamage($entry);
+		$fire->target->addTopDamages($entry);
 	}
 
 	public static function doBeamDmg($fire, $hit, $system){
@@ -481,7 +481,7 @@ class DmgCalc {
 			);
 
 			$fire->damages[] = $entry;
-			$fire->target->addTopDamage($entry);
+			$fire->target->addTopDamages($entry);
 
 			if ($destroyed && (!$okSystem || $system->id == 1)){
 				Debug::log("target destroyed!, abandon raking");
@@ -544,7 +544,7 @@ class DmgCalc {
 			);
 
 			$fire->damages[] = $entry;
-			$fire->target->addTopDamage($entry);
+			$fire->target->addTopDamages($entry);
 			
 			//Debug::log("doing: ".$values[$index]."% to ".$system->name);
 			if ($index == sizeof($values)-1){
@@ -661,7 +661,7 @@ class DmgCalc {
 			);
 
 			$fire->damages[] = $entry;
-			$fire->target->addTopDamage($entry);
+			$fire->target->addTopDamages($entry);
 		}
 	}
 
@@ -691,7 +691,7 @@ class DmgCalc {
 			);
 
 			$fire->damages[] = $entry;
-			$fire->target->addTopDamage($entry);
+			$fire->target->addTopDamages($entry);
 
 		}
 	}
@@ -735,7 +735,7 @@ class DmgCalc {
 				);
 
 				$fire->damages[] = $entry;
-				$fire->target->addTopDamage($entry);	
+				$fire->target->addTopDamages($entry);	
 
 				if ($toDo){
 					$system = $fire->target->getFlashOverkillSystem($fire);

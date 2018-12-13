@@ -1,20 +1,46 @@
 <?php
 
-class Turret extends Structure {
+class Turret extends Squaddie {
 	public $name = "Turret";
-	public $display = "Turret";
+	public $display = "Large Turret";
 	public $turret = 1;
+	public $newDmg = 0;
+	public $recentDmg = 0;
+	
+	public $critEffects =  array( // type, mag, dura, effect
+		array("Disabled", 120, 0, 0.00),
+	);
 
 	function __construct($id, $parentId, $start, $end, $integrity, $negation){
-		parent::__construct($id, $parentId, $start, $end, $integrity, $negation, 0);
+		$this->id = $id;
+		$this->parentId = $parentId;
+		$this->start = $start;
+		$this->end = $end;
+		$this->integrity = $integrity;
+		$this->remaining = $integrity;
+		$this->negation = $negation;
 	}
 
-	public function setName(){
-		$this->type = $this->getName();
+	public function getTotalHitChance(){
+		return $this->integrity *4;
+	}
+	
+	public function getHitSystem($roll, $current){
+		return $this;
 	}
 
-	public function getName(){
-		return "Main Turret";
+	public function addDamage($dmg){
+		if ($dmg->new){
+			$this->emDmg += $dmg->emDmg;
+		}
+
+		$this->armourDmg += $dmg->armourDmg;
+		$this->remaining -= $dmg->systemDmg;
+		$this->damages[] = $dmg;
+
+		if ($dmg->destroyed){
+			$this->destroyed = true;
+		}
 	}
 }
 
@@ -55,6 +81,25 @@ class Structure {
 		$this->width = $width;
 
 		$this->setName();
+	}
+
+	public function getTotalHitChance(){
+		$total = 0;
+		for ($i = 0; $i < sizeof($this->systems); $i++){
+			if ($this->systems[$i]->destroyed){continue;}
+			$total += $this->systems[$i]->getHitChance();
+		}
+		return $total;
+	}
+	
+	public function getHitSystem($roll, $current){
+		for ($i = 0; $i < sizeof($this->systems); $i++){
+			if (!$this->systems[$i]->destroyed){
+				$current += $this->systems[$i]->getHitChance();
+				if ($roll > $current){continue;}
+				return $this->systems[$i];
+			}
+		}
 	}
 
 	public function adjustLoad($data){
@@ -206,7 +251,8 @@ class Primary {
 			}
 			$this->newDmg += $dmg->hullDmg;
 			$this->emDmg += $dmg->emDmg;
-		} else if ($dmg->systemid == 1){
+		}
+		else if ($dmg->systemid == 1){
 			$this->damages[] = $dmg;
 		}
 
@@ -225,10 +271,8 @@ class Primary {
 		return 1;
 	}
 
-	public function getHitChance(){
+	public function getTotalHitChance(){
 		return ($this->integrity * 0.7);
-		//return max($this->remaining *1.4, $this->integrity *0.2);
-		//return floor($this->remaining *1.4);
 	}
 
 	public function setMaxDmg($fire, $dmg){

@@ -3,15 +3,15 @@
 class FighterDual extends Dual {
 	public $tiny = 1;
 
-	function __construct($id, $parentId, $fighterId, $linked, $modes){
+	function __construct($id, $parentId, $specialId, $linked, $modes){
 		$this->linked = $linked;
 		Weapon::__construct($id, $parentId, 0, 0, 0, 0, 0);
 
 		for ($i = 0; $i < sizeof($modes); $i++){
 			$this->states[] = 0;
 			$this->modes[] = $modes[$i];
-			$this->weapons[] = new $modes[$i][0]($i, $parentId, $fighterId, $linked, $modes[$i][1], $modes[$i][2], $modes[$i][3]);
-			$this->weapons[$i]->dualParent = $id;
+			$this->weapons[] = new $modes[$i][0]($i, $parentId, $specialId, $linked, $modes[$i][1], $modes[$i][2], $modes[$i][3]);
+			$this->weapons[$i]->specialId = $id;
 			$this->display .= $this->weapons[$i]->display." / ";
 		}
 
@@ -26,7 +26,6 @@ class Dual extends Weapon {
 	public $states = array();
 	public $weapons = array();
 	public $dual = 1;
-	public $dualParent = 0;
 	public $powerReq = 0;
 
 	function __construct($id, $parentId, $start, $end, $integrity, $modes, $width = 1){
@@ -37,7 +36,7 @@ class Dual extends Weapon {
 			$this->states[] = 0;
 			$this->modes[] = $modes[$i];
 			$this->weapons[] = new $modes[$i]($i, $parentId, $start, $end, 0, 0);
-			$this->weapons[sizeof($this->weapons)-1]->dualParent = $this->id;
+			$this->weapons[sizeof($this->weapons)-1]->specialId = $this->id;
 			$this->powerReq = max($this->powerReq, $this->weapons[$i]->powerReq);
 
 			$this->display .= $this->weapons[$i]->display." / ";
@@ -78,13 +77,6 @@ class Dual extends Weapon {
 	}
 
 	public function getActiveSystem(){
-		//if ($this->parentId == 15 && $this->id == 14){
-		//	Debug::log("getActiveSystem: ".sizeof($this->powers));
-			//	echo "</br>getActiveSystem ".$this->parentId."/".$this->id."</br>";
-			//var_export($this->states); echo "<br><br>";
-			//	var_export($this->powers); echo "<br><br>";
-			//Debug::log("powers: ".sizeof($this->powers));
-		//}
 		for ($i = 0; $i < sizeof($this->states); $i++){
 			if ($this->states[$i]){
 				//echo "returning </br>";

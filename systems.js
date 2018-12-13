@@ -1,6 +1,6 @@
 function System(system){
 	this.id = system.id;
-	this.fighterId = system.fighterId;
+	this.specialId = system.specialId;
 	this.parentId = system.parentId;
 	this.name = system.name;
 	this.display = system.display;
@@ -33,7 +33,7 @@ function System(system){
 	this.modes = {};
 	this.element;
 	this.type = system.type || "Internal";
-	this.dual = 0;
+	this.dual = system.dual;
 	this.turret = system.turret;
 	this.loadout = system.loadout;
 	this.emDmg = system.emDmg;
@@ -2018,28 +2018,32 @@ Weapon.prototype.hasUnresolvedFireOrder = function(){
 	return false;
 }
 
+Weapon.setSensorToThis = function(){
+	var sensor = game.getUnit(this.parentId).getSystemByName("Sensor");
+	var str = sensor.getOutput();
+	var center = getSystemArcDir({start: this.arc[0][0], end: this.arc[0][1]});
+	var	w = this.getArcWidth() /2;
+	if (w == 180){a = -1;}
+	var d = str/Math.pow(w/game.const.ew.len, 1/game.const.ew.p);
+
+	sensor.setEW({
+		angle: center,
+		dist: Math.floor(d),
+		turn: game.turn,
+		unitid: this.parentId,
+		systemid: sensor.id,
+		type: sensor.ew[sensor.ew.length-1].type
+	});
+	salvoCtx.clearRect(0, 0, res.x, res.y);
+	sensor.setTempEW();
+	game.getUnit(this.parentId).drawEW();
+}
+
 Weapon.prototype.select = function(e){
 	var unit;
 
 	if (game.sensorMode){
-		var sensor = game.getUnit(this.parentId).getSystemByName("Sensor");
-		var str = sensor.getOutput();
-		var center = getSystemArcDir({start: this.arc[0][0], end: this.arc[0][1]});
-		var	w = this.getArcWidth() /2;
-		if (w == 180){a = -1;}
-		var d = str/Math.pow(w/game.const.ew.len, 1/game.const.ew.p);
-
-		sensor.setEW({
-			angle: center,
-			dist: Math.floor(d),
-			turn: game.turn,
-			unitid: this.parentId,
-			systemid: sensor.id,
-			type: sensor.ew[sensor.ew.length-1].type
-		});
-		salvoCtx.clearRect(0, 0, res.x, res.y);
-		sensor.setTempEW();
-		game.getUnit(this.parentId).drawEW();
+		this.setSensorToThis();
 		return;
 	}
 	else if (game.turn == 0 || game.turn == 1 && game.phase == -1){return;}
@@ -2049,24 +2053,22 @@ Weapon.prototype.select = function(e){
 	else {
 		console.log(this);
 		unit = game.getUnit(this.parentId);
-		if (/*unit.flight && !unit.cc.length ||*/ unit.ship && unit.hasSystemSelected("Sensor")){
-			return false;
-		}
-		else if (this.getLoadLevel() >= 1){
+		if (this.getLoadLevel() >= 1){
 			if (this.hasUnresolvedFireOrder()){
 				this.unsetFireOrder();
 			}
+
 			if (this.selected){
 				this.selected = false;
 				this.validTarget = 0;
 			}
-			else if(!unit.hasHangarSelected() && !game.exclusiveSystem){
+			else if(!game.exclusiveSystem){
 				this.selected = true;
 			}
 		}
-
-		this.setSystemBorder();
 	}
+
+	this.setSystemBorder();
 
 	if ((unit.ship || unit.squad) && unit.hasWeaponsSelected()){
 		game.mode = 2;
@@ -2115,7 +2117,7 @@ Weapon.prototype.getSysDiv = function(){
 	table.append($("<tr>").append($("<td>").html("Firing Mode").css("width", "50%")).append($("<td>").html(this.fireMode)));
 	table.append($("<tr>").append($("<td>").html("Damage Type")).append($("<td>").html(this.dmgType)));
 
-	if (!this.tiny){
+	if (!this.tiny && !this.turret){
 		if (game.getUnit(this.parentId).ship){
 			table.append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
 			if (this.getEMDmg()){table.append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html(this.getEMDmg())));}
@@ -2890,7 +2892,6 @@ Dual.prototype.copyProps = function(){
 		this.weapons[i].damages = this.damages;
 		this.weapons[i].crits = this.crits;
 		this.weapons[i].loaded = this.loaded;
-		this.weapons[i].dualParent = this.id;
 	}
 
 
@@ -3993,6 +3994,7 @@ Hangar.prototype.select = function(e){
 		}
 	}
 
+	game.exclusiveSystem = this.selected;
 	this.setSystemBorder();
 }
 

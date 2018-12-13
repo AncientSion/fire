@@ -1927,6 +1927,15 @@ Ship.prototype.getDmgByFire = function(fire){
 	}
 
 	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].damages.length; j++){
+			if (this.structures[i].damages[j].fireid == fire.id){
+				dmgs.push(this.structures[i].damages[j]);
+				dmgs[dmgs.length-1].system = this.structures[i].display;
+				dmgs[dmgs.length-1].loc = this.getSystemLocation(-1, "Main Structure");
+				lookup--;
+				if (!lookup){return dmgs};
+			}
+		}
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			for (var k = this.structures[i].systems[j].damages.length-1; k >= 0; k--){
 				if (this.structures[i].systems[j].damages[k].fireid == fire.id){
@@ -3949,9 +3958,32 @@ Ship.prototype.attachEvent = function(td){
 	)
 	.click(
 		function(e){
-			//console.log("click");
 			e.stopPropagation();
 			game.getUnit($(this).data("shipId")).getSystem($(this).data("systemId")).select(e);
+		}
+	)
+	.mousedown(function(e){e.stopPropagation();})
+	.contextmenu(
+		function(e){
+			e.preventDefault();
+			if (!game.sensorMode){game.getUnit($(this).data("shipId")).selectAll(e, $(this).data("systemId"));}
+		}
+	);
+	return td;
+}
+
+Ship.prototype.attachTurretEvent = function(td){
+	$(td).data("shipId", this.id);
+	$(td).hover(
+		function(e){
+			e.stopPropagation();
+			game.getUnit($(this).data("shipId")).getSystem($(this).data("systemId")).hover(e);
+		}
+	)
+	.click(
+		function(e){
+			e.stopPropagation();
+			game.getUnit($(this).data("shipId")).getSystem($(this).data("turretId")).select(e);
 		}
 	)
 	.mousedown(function(e){e.stopPropagation();})
@@ -4170,16 +4202,14 @@ Ship.prototype.addTurrets = function(shipDiv){
 		var turretTable = $("<table>").addClass("structTable");
 		turretDiv.append(turretTable);
 
-		var armour = $(this.structures[i].getArmourData());
-			armour.attr("colSpan", this.structures[i].systems.length).css("height", 22)
-		turretTable.append($("<tr>").append(armour));
-
 		tr = document.createElement("tr");
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 
 			var td = this.structures[i].systems[j].getTableData();
-				td = this.attachEvent(td);
-				$(td).find(".integrityNow").remove().end().find(".integrityFull").remove();
+				td = this.attachTurretEvent(td);
+				$(td)
+				.data("turretId", this.structures[i].id)
+				.find(".integrityNow").remove().end().find(".integrityFull").remove();
 
 			tr.appendChild(td);
 
@@ -4203,6 +4233,9 @@ Ship.prototype.addTurrets = function(shipDiv){
 		var core = $(this.structures[i].getCoreData());
 			core.attr("colSpan", this.structures[i].systems.length);
 		turretTable.append($("<tr>").append(core));
+		var armour = $(this.structures[i].getArmourData());
+			armour.attr("colSpan", this.structures[i].systems.length)
+		turretTable.append($("<tr>").append(armour));
 
 		turretDivs.push(turretDiv);
 	}
@@ -4213,11 +4246,12 @@ Ship.prototype.addTurrets = function(shipDiv){
 	var spacing = shipDiv.width() / turretDivs.length;
 
 	//var width = shipDiv.width() / turretDivs.length;
+	var subWidth = 90;
 	for (var i = 0; i < turretDivs.length; i++){ // set turret width
 		turretDivs[i]
-			.css("width", 100)
-			.css("height", 100)
-			.css("left", spacing*(i+1) - spacing/2 - 50)
+			.css("width", subWidth)
+			.css("height", subWidth)
+			.css("left", spacing*(i+1) - spacing/2 - subWidth/2)
 		turretContainer.append(turretDivs[i])
 	}
 

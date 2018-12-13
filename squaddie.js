@@ -477,3 +477,134 @@ Squaddie.prototype.previewSetup = function(){
 		}
 	}
 }
+
+
+
+
+
+
+
+function Turret(data){
+	Squaddie.call(this, data);
+	this.start = data.start;
+	this.end = data.end;
+	this.integrity = data.integrity;
+	this.remaining = data.remaining;
+	this.recentDmg = data.recentDmg;
+	this.newDmg = data.newDmg;
+	this.destroyed = data.destroyed;
+	this.highlight = false;
+	this.selected = false;
+	this.turret = 1;
+}
+Turret.prototype = Object.create(Squaddie.prototype);
+
+Turret.prototype.setBonusNegation = function(){
+	return Structure.prototype.setBonusNegation.call(this);
+}
+
+Turret.prototype.select = function(){
+	console.log(this);
+	if (this.destroyed || !this.isPowered()){return;}
+	
+	for (var i = 0; i < this.systems.length; i++){
+		this.systems[i].select();
+	}
+}
+
+Turret.prototype.isPowered = function(){
+	return System.prototype.isPowered.call(this);
+}
+
+Turret.prototype.getCoreData = function(){
+	return $("<td>")
+		.addClass("core")
+		.append($("<div>")
+			.addClass("integrityAmount")
+			.html("<span>" + this.remaining + " / " + this.integrity + "</span>")
+		)
+		.append($("<div>")
+			.addClass("integrityNow")
+			.css("width",  (this.remaining/this.integrity * 100) + "%")
+		)
+		.append($("<div>")
+			.addClass("integrityFull")
+		)
+}
+
+Turret.prototype.getArmourData = function(){
+	var td = $("<td>").addClass("armour")
+
+	var div = $("<div>")
+		.addClass("integrityAmount")
+		.html(this.getArmourString())
+	td.append(div);
+
+	var lowerDiv = document.createElement("div");
+		lowerDiv.className = "integrityNow";
+		lowerDiv.style.width =  this.getRemNegation() / this.negation * 100 + "%";
+		td.append(lowerDiv);
+		
+	var upperDiv = document.createElement("div");
+		upperDiv.className = "integrityFull";
+		td.append(upperDiv);
+
+	this.element = td;
+	return td;
+
+	$(td)
+		.data("shipId", this.parentId)
+		.data("systemId", this.id)
+		.attr("colSpan", this.width)
+		.hover(
+			function(e){
+				var shipId = $(this).data("shipId");
+				var systemId = $(this).data("systemId");
+				game.getUnit(shipId).getSystem(systemId).hover(e);
+			}
+		)
+		.mousedown(function(e){e.stopPropagation();})
+		.click(function(e){
+			var shipId = $(this).data("shipId");
+			var systemId = $(this).data("systemId");
+			game.getUnit(shipId).getSystem(systemId).select(e);
+		})
+}
+
+Turret.prototype.getSysDiv = function(){
+	var div = $("<div>").attr("id", "sysDiv")
+
+	var table = $("<table>")
+		.append($("<tr>")
+			.append($("<th>").html(this.type).attr("colSpan", 2)))
+		.append($("<tr>")
+			.append($("<td>").html("Armour Strength"))
+			.append($("<td>").html(this.getRemNegation() + " / " + this.negation)))
+		.append($("<tr>")
+			.append($("<td>").html("Realtive Durability"))
+			.append($("<td>").html(((this.parentIntegrity - this.armourDmg) + " / " + this.parentIntegrity))))
+		.append($("<tr>")
+			.append($("<td>").html("Integrity"))
+			.append($("<td>").html(this.remaining + " / " + this.integrity)))
+
+	if (this.boostEffect.length){
+		for (var i = 0; i < this.boostEffect.length; i++){
+			var boost = this.getBoostEffect(this.boostEffect[i].type);
+			if (boost){
+				table.append($("<tr>")
+						.append($("<th>").html("EA Energy Web").attr("colSpan", 2)))
+					.append($("<tr>")
+						.append($("<td>").html("Current Extra Armour"))
+						.append($("<td>").html(this.getBoostEffect("Armour") * this.getBoostLevel()).addClass("boostEffect")))
+					.append($("<tr>")
+						.append($("<td>").html("Current Power Usage"))
+						.append($("<td>").html(this.getPowerUsage()).addClass("powerUse")))
+					.append($("<tr>")
+						.append($("<td>").html("Boost Power Cost"))
+						.append($("<td>").html(this.getEffiency()).addClass("powerCost")))
+			}
+		}
+	}
+
+	return div.append(table);
+}
