@@ -133,7 +133,6 @@ class Mixed extends Ship {
 	}
 
 	public function getHitSection($fire){
-		//Debug::log("Mixed getHitSection");
 		return 0;
 	}
 

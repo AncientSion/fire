@@ -91,8 +91,8 @@ class Salvo extends Minor {
 	}
 
 	public function setMove(){
-		Debug::log("**** setMove ".$this->id);
 		if ($this->moveSet){return;}
+		Debug::log("**** setMove ".$this->id);
 
 		$origin = $this->getCurPos();
 		$speed = $this->getCurSpeed();
@@ -101,6 +101,7 @@ class Salvo extends Minor {
 		$dist = 0;
 		$angle = 0;
 		$type = "move";
+		Debug::log("**** Handling ".get_class($this)." #".$this->id.", speed ".$speed);
 
 		$t = $this->mission->target;
 	
@@ -110,8 +111,8 @@ class Salvo extends Minor {
 
 		if ($speed < $dist){ // on route or drag -> own speed
 			Debug::log("close in");
-			$dist = $speed;
 			$tPos = Math::getPointInDirection($speed, $angle, $origin->x, $origin->y);
+			$dist = $speed;
 		}
 		else { // ON ROUTE; REACH
 			Debug::log("arrival");

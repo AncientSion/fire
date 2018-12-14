@@ -76,8 +76,8 @@ class Flight extends Minor {
 	}
 
 	public function setMove(){
-		Debug::log("**** setMove ".$this->id);
 		if ($this->moveSet){return;}
+		Debug::log("**** setMove ".$this->id);
 
 		$origin = $this->getCurPos();
 		$speed = $this->getCurSpeed();
@@ -86,8 +86,8 @@ class Flight extends Minor {
 		$dist = 0;
 		$angle = 0;
 		$type = "move";
-
 		Debug::log("**** Handling ".get_class($this)." #".$this->id.", speed ".$speed);
+		
 		if ($this->mission->type == 1){ // PATROL
 			//Debug::log("PATROL");
 			if ($this->mission->arrived){
@@ -117,7 +117,7 @@ class Flight extends Minor {
 
 			if ($t->ship || $t->squad || ($t->flight && $t->mission->targetid != $this->id)){
 				Debug::log("ship, squad, dumb flight");
-				if ($t->moveSet){
+				if (!$t->moveSet){
 					Debug::log("switch context");
 					$t->setMove();
 				}
@@ -137,6 +137,7 @@ class Flight extends Minor {
 				else { // ON ROUTE; REACH
 					Debug::log("close in");
 					$tPos = Math::getPointInDirection($speed, $angle, $origin->x, $origin->y);
+					$dist = $speed;
 				}
 			}
 			else if ($t->flight && $t->mission->targetid == $this->id){
@@ -158,8 +159,8 @@ class Flight extends Minor {
 				}
 				else {
 					Debug::log("close in");
-					$dist = $speed;
 					$tPos = Math::getPointInDirection($speed, $angle, $origin->x, $origin->y);
+					$dist = $speed;
 				}
 			}
 

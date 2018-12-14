@@ -19,10 +19,11 @@ class Turret extends Squaddie {
 		$this->integrity = $integrity;
 		$this->remaining = $integrity;
 		$this->negation = $negation;
+		$this->display .= " #".$id;
 	}
 
 	public function getTotalHitChance(){
-		return $this->integrity *4;
+		return $this->integrity *2;
 	}
 	
 	public function getHitSystem($roll, $current){

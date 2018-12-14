@@ -919,7 +919,7 @@
 		public function createStaticObstacles($gameid, $data){
 			Debug::log("createStaticObstacles #".$gameid);
 
-			$amount = $data["obstaclesAmount"]*3;
+			$amount = $data["obstaclesAmount"]*2;
 			$min = $data["obstaclesSizeMin"];
 			$max = $data["obstaclesSizeMax"];
 

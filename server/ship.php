@@ -974,7 +974,7 @@ class Ship {
 	}
 
 	public function getArmour($fire, $system){
-		return $this->getStruct($fire->section)->getArmourValue($system);
+		return $fire->section->getArmourValue($system);
 	}
 
 	public function getOverkillSystem($fire){
@@ -1012,12 +1012,13 @@ class Ship {
 		//return $this->getSystemByName("Command");
 		//return $this->getPrimaryHitSystem();
 
+		Debug::log("getHitSystem on ".get_class($this).", section: ".$fire->section->id);
 		$roll;
 		$current = 0;
 		$main = $this->primary->getTotalHitChance();
 		$total = $main;
 
-		$struct = $this->getFacingElement($fire);
+		$struct = $fire->section;
 		$total += $struct->getTotalHitChance();
 
 		//Debug::log("total: ".$total);
@@ -1274,14 +1275,14 @@ class Ship {
 	public function getHitSection($fire){
 		if ($fire->cc && $fire->shooter->flight || $fire->shooter->obstacle){return $this->structures[mt_rand(0, sizeof($this->structures)-1)]->id;}
 
-		Debug::log("fire-angle: ".$fire->angle.", heading: ".$this->heading.", facing: ".$this->facing);
+		//Debug::log("fire-angle: ".$fire->angle.", heading: ".$this->heading.", facing: ".$this->facing);
 		$fire->angle = Math::addAngle($this->facing, $fire->angle);
 		if ($this->rolled){$fire->angle = Math::getMirrorAngle($fire->angle);}
 
 		$locs = array();
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (Math::isInArc($fire->angle, $this->structures[$i]->start, $this->structures[$i]->end)){
-				$locs[] = $this->structures[$i]->id;
+				$locs[] = $this->structures[$i];
 			}
 		}
 		return $locs[mt_rand(0, sizeof($locs)-1)];

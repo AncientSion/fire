@@ -30,8 +30,8 @@ class Zorth extends Fighter {
 	public $name = "Zorth";
 	public $role = "Light Interceptor";
 	public $faction = "Vree Conglomerate";
-	public static $value =  18;
-	public $integrity = 16;
+	public static $value =  16;
+	public $integrity = 18;
 	public $negation = 3;
 	public $baseImpulse = 160;
 	public $baseHitChance = 18;

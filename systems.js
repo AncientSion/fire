@@ -208,10 +208,9 @@ System.prototype.setState = function(){
 				}
 			}
 		}
-		if (this.isUnpowered()){
+		if (!this.isPowered()){
 			this.disabled = true;
 		}
-		//this.setTimeLoaded();
 	}
 
 	this.init();
@@ -320,7 +319,7 @@ System.prototype.setTableRow = function(){
 			if (this.disabled){
 				ele.find(".modeDiv").hide()
 			}
-			else if (this.canChangeMode()){
+			else if (this.canSwitchMode()){
 				ele.find(".modeDiv").show()
 			}
 		}
@@ -468,7 +467,7 @@ System.prototype.getBoostDiv = function(){
 	var subDiv = document.createElement("div");
 		subDiv.className = "plus";
 		subDiv.innerHTML = "<img src='varIcons/plus.png'</img>";
-		subDiv.childNodes[0].className = "img100pct";
+		//subDiv.childNodes[0].className = "img100pct";
 		$(subDiv).click(function(e){
 			e.stopPropagation();
 			if (game.phase != -1){return;}
@@ -485,7 +484,7 @@ System.prototype.getBoostDiv = function(){
 	var subDiv = document.createElement("div");
 		subDiv.className = "minus";
 		subDiv.innerHTML = "<img src='varIcons/minus.png'</img>";
-		subDiv.childNodes[0].className = "img100pct";
+		//subDiv.childNodes[0].className = "img100pct";
 		$(subDiv).click(function(e){
 			e.stopPropagation();
 			if (game.phase != -1){return;}
@@ -513,7 +512,7 @@ System.prototype.getPowerDiv = function(){
 	var subDiv = document.createElement("div");
 		subDiv.className = "power";
 		subDiv.innerHTML = "<img src='varIcons/power.png'</img>";
-		subDiv.childNodes[0].className = "img100pct";
+		//subDiv.childNodes[0].className = "img100pct";
 		$(subDiv)
 			.hide()
 			.click(function(e){
@@ -532,7 +531,7 @@ System.prototype.getPowerDiv = function(){
 	var subDiv = document.createElement("div");
 		subDiv.className = "unpower";
 		subDiv.innerHTML = "<img src='varIcons/unpower.png'</img>";
-		subDiv.childNodes[0].className = "img100pct";
+		//subDiv.childNodes[0].className = "img100pct";
 		$(subDiv)
 			.hide()
 			.click(function(e){
@@ -561,7 +560,7 @@ System.prototype.getModeDiv = function(){
 	var subDiv = document.createElement("div");
 		subDiv.className = "mode";
 		subDiv.innerHTML = "<img src='varIcons/mode.png'</img>";
-		subDiv.childNodes[0].className = "img100pct";
+		//subDiv.childNodes[0].className = "img100pct";
 		$(subDiv)
 			.click(function(e){
 				e.stopPropagation(); e.preventDefault();
@@ -638,22 +637,18 @@ System.prototype.isPowered = function(){
 	return true;
 }
 
-System.prototype.isUnpowered = function(){
-	if (!this.isPowered()){
-		return true;
-	}
-	else return false;
-}
 System.prototype.canUnpower = function(){
 	if (!this.tiny && this.powerReq && this.isPowered()){
 		return true;
 	} else return false;
 }
+
 System.prototype.canPower = function(){
 	if (!this.tiny && this.powerReq && !this.isPowered()){
 		return true;
 	} else return false;
 }
+
 System.prototype.forceUnpower = function(){
 	if (this.powers.length && this.powers[this.powers.length-1].type == 0){
 		this.powers.splice(this.powers.length-1, 1);
@@ -730,7 +725,7 @@ System.prototype.minus = function(max){
 	if (change){ship.updateShipPower(this);}
 }
 
-System.prototype.canChangeMode = function(){
+System.prototype.canSwitchMode = function(){
 	if (!(Object.keys(this.modes).length)){
 		return false;
 	}
@@ -746,7 +741,7 @@ System.prototype.showOptions = function(){
 
 	var ele = $(this.element);
 	var boost = this.effiency;
-	var canModeChange = this.canChangeMode();
+	var canModeChange = this.canSwitchMode();
 	var canPower = this.canPower();
 	var canUnpower = this.canUnpower();
 
@@ -829,8 +824,8 @@ System.prototype.unsetFireOrder = function(){
 	}
 }
 
-System.prototype.getImageName = function(){
-	return this.name;
+System.prototype.getImageName = function(){	
+	return (this.name + (this.tiny ? this.linked : ""));
 }
 
 System.prototype.canBeBoosted = function(){
@@ -843,13 +838,8 @@ System.prototype.hasOutput = function(){
 	}
 }
 
-System.prototype.getFighterSystemData = function(){
-	var file = "sysIcons/" + this.getImageName();
-
-	if (this.linked){
-		file += this.linked;
-	}
-	file += ".png";
+System.prototype.getFighterSystemData = function(){	
+	var file = "sysIcons/" + this.getImageName() + ".png";
 
 	var sysDiv = $("<div>").addClass("system");
 		sysDiv
@@ -1383,7 +1373,7 @@ Engine.prototype = Object.create(PrimarySystem.prototype);
 
 Engine.prototype.doUnboost = function(){
 	System.prototype.doUnboost.call(this);
-	game.getUnit(this.parentId).checkUnboostEngine();
+	game.getUnit(this.parentId).undoPlannedMovement();
 }
 
 Engine.prototype.update = function(){
@@ -1473,6 +1463,7 @@ Reactor.prototype.getOutputUsage  = function(){
 	var use = 0;
 	var ship = game.getUnit(this.parentId);
 	for (var i = 0; i < ship.structures.length; i++){
+		use += ship.structures[i].getPowerUsage();
 		for (var j = 0; j < ship.structures[i].systems.length; j++){
 			if (ship.structures[i].systems[j].isPowered()){
 				use += ship.structures[i].systems[j].getPowerUsage();
@@ -1515,7 +1506,7 @@ GravitonSupressor.prototype.doBoost = function(){
 }
 
 GravitonSupressor.prototype.doUnboost = function(){
-	System.prototype.doUnboost.call(this);
+	Engine.prototype.doUnboost.call(this);
 	game.getUnit(this.parentId).setSlipAngle();
 	if (this.parentId == aUnit){
 		game.getUnit(this.parentId).resetMoveMode();
@@ -1550,7 +1541,7 @@ function Sensor(system){
 }
 Sensor.prototype = Object.create(PrimarySystem.prototype);
 
-Sensor.prototype.canChangeMode = function(){
+Sensor.prototype.canSwitchMode = function(){
 	if (game.getUnit(this.parentId).isPreparingJump()){return false;}
 	return true;
 }
@@ -1694,7 +1685,7 @@ Sensor.prototype.getEW = function(data){
 }
 
 Sensor.prototype.drawEW = function(){
-	if (!this.ew.length || this.destroyed || this.isUnpowered()){return;}
+	if (!this.ew.length || this.destroyed || !this.isPowered()){return;}
 	else if (this.img == undefined){
 		//console.log("NO EW DEFINED!");
 		this.setTempEW();
@@ -2111,8 +2102,8 @@ Weapon.prototype.getSysDiv = function(){
 	table.append($("<tr>").append($("<td>").html("Firing Mode").css("width", "50%")).append($("<td>").html(this.fireMode)));
 	table.append($("<tr>").append($("<td>").html("Damage Type")).append($("<td>").html(this.dmgType)));
 
-	if (!this.tiny && !this.turret){
-		if (game.getUnit(this.parentId).ship){
+	if (!this.tiny){
+		if (!this.turret && game.getUnit(this.parentId).ship){
 			table.append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
 			if (this.getEMDmg()){table.append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html(this.getEMDmg())));}
 			table.append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMountArmour())));
@@ -2800,7 +2791,7 @@ Dual.prototype.setFireOrder = function(targetid, pos){
 }
 
 Dual.prototype.getImageName = function(){
-	return this.getActiveSystem().name;
+	return this.getActiveSystem().getImageName();
 }
 
 Dual.prototype.initSubWeapons = function(weapons){
@@ -2840,9 +2831,7 @@ Dual.prototype.switchMode = function(id){
 }
 
 Dual.prototype.setSystemImage = function(){
-	//console.log($(this.element).find("img")); return;
 	$(this.element).find(".sysIcon").attr("src", "sysIcons/" + this.getImageName() + ".png"); return;
-	this.element.childNodes[0].src = "sysIcons/" + this.getImageName() + ".png";
 }
 
 Dual.prototype.resetPowers = function(){

@@ -27,6 +27,10 @@ function Structure(data){
 
 Structure.prototype = Object.create(System.prototype);
 
+Structure.prototype.setState = function(){
+	return;
+}
+
 Structure.prototype.getRemNegation = function(){
 	return this.remNegation;
 }

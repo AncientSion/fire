@@ -1455,16 +1455,6 @@ Ship.prototype.create = function(){
 	this.setSubSystemState();
 	this.setStringHitChance();
 	this.setShipSystemMods();
-
-	return;
-	if (this.ship || this.squad){
-		if (game.turn > 1 && game.phase == -1 && this.available == game.turn){
-			this.x = this.actions[0].x;
-			this.y = this.actions[0].y;
-			this.drawX = this.actions[0].x;
-			this.drawY = this.actions[0].y;
-		}
-	}
 }
 
 Ship.prototype.setSubSystemState = function(){
@@ -1472,6 +1462,7 @@ Ship.prototype.setSubSystemState = function(){
 		this.primary.systems[i].setState();
 	}
 	for (var i = 0; i < this.structures.length; i++){
+		this.structures[i].setState();
 		this.structures[i].setBonusNegation();
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			this.structures[i].systems[j].setState();
@@ -3996,7 +3987,7 @@ Ship.prototype.attachTurretEvent = function(td){
 	return td;
 }
 
-Ship.prototype.checkUnboostEngine = function(){
+Ship.prototype.undoPlannedMovement = function(){
 	var redraw = 0;
 
 	for (var i = this.actions.length-1; i >= 0; i--){
@@ -4213,22 +4204,21 @@ Ship.prototype.addTurrets = function(shipDiv){
 
 			tr.appendChild(td);
 			
-		/*	if (this.id > 0 || game.turn == 1){
+			if (this.id > 0 || game.turn == 1){
 				var boostDiv = this.structures[i].systems[j].getBoostDiv();
 				if (boostDiv){td.appendChild(boostDiv);}
 
-				var powerDiv = this.structures[i].systems[j].getPowerDiv();
-				if (powerDiv){td.appendChild(powerDiv);}
+			//	var powerDiv = this.structures[i].systems[j].getPowerDiv();
+			//	if (powerDiv){td.appendChild(powerDiv);}
 
 				var modeDiv = this.structures[i].systems[j].getModeDiv();
 				if (modeDiv){td.appendChild(modeDiv);}
 			}
 
-
 			if (this.structures[i].systems[j].dual && !this.structures[i].systems[j].effiency){
 				$(td).find(".outputMask").hide();
 			}
-		*/	
+			
 		}
 		turretTable.append(tr);
 

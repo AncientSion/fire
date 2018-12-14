@@ -374,7 +374,7 @@ class AntimatterCannon extends Particle {
 	public $shots = 3;
 	public $reload = 3;
 	public $integrity = 84;
-	public $powerReq = 8;
+	public $powerReq = 6;
 	public $tracking = 3;
 
 	public $animColor = "green";
@@ -383,9 +383,13 @@ class AntimatterCannon extends Particle {
 	public $amBonus = 1;
 	public $amMax = 30;
 
+	public $effiency = 1;
+	public $maxBoost = 1;
+
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $start, $end, $output, $width);
         $this->setAntimatterData();
+        $this->boostEffect[] = new Effect("Reload", -1);
 	}
 }
 

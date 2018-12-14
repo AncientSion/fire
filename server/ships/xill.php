@@ -21,53 +21,43 @@ class Xill extends Heavy {
 
 	public function addSpecials(){
 		$this->primary->systems[] = new GravitonSupressor($this->getId(), $this->id, $this->vitalHP, $this->traverse);
-		$this->primary->systems[] = new Hangar($this->getId(), $this->id, 12, array("Zorth"), 12);
 	}
 
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 315, 45, 625, 16, 5);
+		$front = new Structure($this->getId(), $this->id, 315, 45, 625, 16, 3);
 		$front->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new AntimatterCannon($this->getId(), $this->id, 315, 45);
 		$front->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new AntimatterCannon($this->getId(), $this->id, 315, 45);
 		$front->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 45, 135, 800, 16, 1);
 		$right->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 30, 150);
-		$right->systems[] = new AntimatterCannon($this->getId(), $this->id, 45, 135);
 		$right->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 30, 150);
-		$right->systems[] = new AntimatterCannon($this->getId(), $this->id, 45, 135);
 		$right->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 30, 150);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 135, 225, 550, 16, 5);
+		$aft = new Structure($this->getId(), $this->id, 135, 225, 550, 14, 3);
 		$aft->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 120, 240);
-		$aft->systems[] = new AntimatterCannon($this->getId(), $this->id, 135, 225);
-		$aft->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 120, 240);
-		$aft->systems[] = new AntimatterCannon($this->getId(), $this->id, 135, 225);
+		$aft->systems[] = new Hangar($this->getId(), $this->id, 12, array("Zorth"), 12, 1);
 		$aft->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 120, 240);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 225, 315, 800, 16, 1);
 		$left->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 210, 330);
-		$left->systems[] = new AntimatterCannon($this->getId(), $this->id, 225, 315);
 		$left->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 210, 330);
-		$left->systems[] = new AntimatterCannon($this->getId(), $this->id, 225, 315);
 		$left->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 210, 330);
 		$structs[] = $left;
 
-		$turretA = new Turret($this->getId(), $this->id, 0, 360, 200, 13);
-		$turretA->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 0, 360);
-		$turretA->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 0, 360);
+		$turretA = new Turret($this->getId(), $this->id, 0, 360, 140, 12);
+		$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
+		$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 		$structs[] = $turretA;
 		
-		$turretB = new Turret($this->getId(), $this->id, 0, 360, 200, 13);
-		$turretB->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 0, 360);
-		$turretB->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 0, 360);
-		$turretB->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 0, 360);
+		$turretB = new Turret($this->getId(), $this->id, 0, 360, 140, 12);
+		$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
+		$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 		$structs[] = $turretB;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

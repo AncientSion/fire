@@ -273,7 +273,7 @@ class DmgCalc {
 		}
 
 		$entry = new Damage(
-			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
+			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section->id, $system->id, $fire->turn, $fire->weapon->type,
 			$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 		);
 
@@ -348,7 +348,7 @@ class DmgCalc {
 		}
 
 		$entry = new Damage(
-			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
+			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section->id, $system->id, $fire->turn, $fire->weapon->type,
 			$total, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 		);
 
@@ -417,7 +417,7 @@ class DmgCalc {
 		}
 
 		$entry = new Damage(
-			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
+			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section->id, $system->id, $fire->turn, $fire->weapon->type,
 			$total, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 		);
 
@@ -476,7 +476,7 @@ class DmgCalc {
 
 
 			$entry = new Damage(
-				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
+				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section->id, $system->id, $fire->turn, $fire->weapon->type,
 				$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 			);
 
@@ -539,7 +539,7 @@ class DmgCalc {
 			}
 
 			$entry = new Damage(
-				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
+				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section->id, $system->id, $fire->turn, $fire->weapon->type,
 				$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 			);
 
@@ -606,7 +606,7 @@ class DmgCalc {
 
 			$coreDmg = floor($totalDmg / 100 * $fire->weapon->flashDiv[0]); // 160
 			$systemDmg = floor($totalDmg / 100 * $fire->weapon->flashDiv[1]); // 80
-			$allSystems = sizeof($fire->target->getStruct($fire->section)->systems); // 3
+			$allSystems = sizeof($fire->section->systems); // 3
 
 			if (sizeof($targets)){
 				$subDmg = floor($systemDmg / $allSystems);
@@ -656,7 +656,7 @@ class DmgCalc {
 			Debug::log("dealing ".$dmg->armourDmg."/".$dmg->systemDmg."/".$dmg->hullDmg." to ".$targets[$i]->display);
 
 			$entry = new Damage(
-				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
+				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section->id, $system->id, $fire->turn, $fire->weapon->type,
 				$dmgs[$i], $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 			);
 
@@ -686,7 +686,7 @@ class DmgCalc {
 			}
 			
 			$entry = new Damage(
-				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
+				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section->id, $system->id, $fire->turn, $fire->weapon->type,
 				$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 			);
 
@@ -730,7 +730,7 @@ class DmgCalc {
 				$fire->hits++;
 				
 				$entry = new Damage(
-					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
+					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section->id, $system->id, $fire->turn, $fire->weapon->type,
 					$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 				);
 

@@ -409,15 +409,6 @@ Squaddie.prototype.armourOut = function(e){
 	$(this.armourElement).find(".boostDiv").hide();
 }
 
-Squaddie.prototype.doDestroy = function(){
-	this.doDraw = false;
-	this.destroyed = true;
-	for (var i = 0; i < this.systems.length; i++){
-		//this.systems[i].destroyed = true;
-		this.systems[i].locked = true;
-	}
-}
-
 Squaddie.prototype.drawSystemArc = function(){
 	return;
 }
@@ -486,6 +477,7 @@ Squaddie.prototype.previewSetup = function(){
 
 function Turret(data){
 	Squaddie.call(this, data);
+	this.powerReq = 0;
 	this.start = data.start;
 	this.end = data.end;
 	this.integrity = data.integrity;
@@ -499,6 +491,49 @@ function Turret(data){
 }
 Turret.prototype = Object.create(Squaddie.prototype);
 
+
+Turret.prototype.setState = function(){
+	if (this.isDestroyed()){
+		this.doDestroy();
+	}
+	else {
+		if (game.phase == -1 && game.turn > 1){
+			for (var i = this.powers.length-1; i >= 0; i--){
+				if (this.powers[i].turn == game.turn-1){
+					this.copyPowers();
+					break;
+				}
+				else if (this.powers[i].turn < game.turn -1){
+					break;
+				}
+			}
+		}
+		if (!this.isPowered()){
+			this.disabled = true;
+		}
+	}
+
+	this.init();
+}
+
+Turret.prototype.copyPowers = function(){
+	var copy = [];
+	for (var i = 0; i < this.powers.length; i++){
+		if (this.powers[i].turn == game.turn-1 && this.powers[i].type <= 0){
+			copy.push($.extend(true, {}, this.powers[i]));
+		}
+	}
+	for (var i = 0; i < copy.length; i++){
+		copy[i].new = 1;
+		copy[i].turn = game.turn;
+		this.powers.push(copy[i]);
+	}
+}
+
+Turret.prototype.init = function(){
+	return;
+}
+
 Turret.prototype.setBonusNegation = function(){
 	return Structure.prototype.setBonusNegation.call(this);
 }
@@ -510,12 +545,6 @@ Turret.prototype.select = function(){
 	for (var i = 0; i < this.systems.length; i++){
 		this.systems[i].select();
 	}
-}
-
-Turret.prototype.isPowered = function(){
-	if (this.destroyed){return false;}
-	if (!this.powerReq){return false;}
-	return true;
 }
 
 Turret.prototype.getCoreData = function(){
@@ -595,7 +624,7 @@ Turret.prototype.getSysDiv = function(){
 Turret.prototype.getPowerReqString = function(){
 	var string = "";
 	for (var i = 0; i < this.systems.length; i++){
-		string += this.systems[i].powerReq + " / ";
+		string += this.systems[i].powerReq + ", ";
 	}
 	return string.slice(0, string.length-2);
 }
@@ -609,19 +638,30 @@ Turret.prototype.drawStructArc = function(facing, rolled, pos){
 }
 
 Turret.prototype.doUnpower = function(){
+	this.powers.push({
+			id: this.powers.length+1, unitid: this.parentId, systemid: this.id,
+			turn: game.turn, type: 0, cost: 0, new: 1
+		})
 	for (var i = 0; i < this.systems.length; i++){
 		this.systems[i].doUnpower();
 	}
-	this.powerReq = 0;
+	this.disabled = 1;
 	this.element.find(".powerDiv").find(".power").show().end().find(".unpower").hide().end();
 }
 
 Turret.prototype.doPower = function(){
+	if (this.powers.length && this.powers[this.powers.length-1].turn == game.turn && this.powers[this.powers.length-1].type == 0){
+		this.powers.splice(this.powers.length-1, 1);
+		this.disabled = 0;
+	}
 	for (var i = 0; i < this.systems.length; i++){
 		this.systems[i].doPower();
-		this.powerReq += this.systems[i].powerReq;
 	}
 	this.element.find(".powerDiv").find(".unpower").show().end().find(".power").hide().end();
+}
+
+Turret.prototype.isPowered = function(){
+	return System.prototype.isPowered.call(this);
 }
 
 Turret.prototype.showOptions = function(){
@@ -636,7 +676,7 @@ Turret.prototype.hideOptions = function(){
 }
 
 Turret.prototype.getPowerDiv = function(){
-	if (this.destroyed || !this.powerReq){return};
+	if (this.destroyed){return};
 
 	var div = document.createElement("div");
 		$(div).addClass("powerDiv")

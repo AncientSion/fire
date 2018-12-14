@@ -287,6 +287,7 @@ Single.prototype.doDestroy = function(){
 	this.doDraw = false;
 	this.destroyed = true;
 	for (var i = 0; i < this.systems.length; i++){
+		this.systems[i].locked = true;
 		this.systems[i].destroyed = true;
 	}
 }

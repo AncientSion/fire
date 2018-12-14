@@ -336,7 +336,7 @@ Obstacle.prototype.setPostFireImage = function(){
 Obstacle.prototype.setImage = function(){
 	var info = true;
 	if ((game.phase == 1 || game.phase == 2) && game.subPhase < 3){
-		console.log("ding");
+		//console.log("ding");
 		info = false;
 	}
 	this.setTrueImage(info);

@@ -555,7 +555,7 @@ this.doAnimateMovement = function(){
 
 			for (var j = 0; j < this.ships.length; j++){
 				if (!this.ships[j].flight || !this.ships[i].doDraw){continue;}
-				if (game.phase != 0 && this.subPhase == 1){continue;}
+				if (game.phase != 0 && this.subPhase == 1 && (!(game.phase == -1 && this.ships[j].available == game.turn))){continue;}
 				var bPos = this.ships[j].getDrawPos();
 
 				if (aPos.x == bPos.x && aPos.y == bPos.y){

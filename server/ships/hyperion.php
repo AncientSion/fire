@@ -26,7 +26,7 @@ class Hyperion extends Heavy {
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new MediumPulse($this->getId(), $this->id, 240, 120);
 		$front->systems[] = new Hangar($this->getId(), $this->id, 10, array("Aurora"), 10);
-		$front->systems[] = new MediumPulse($this->getId(), $this->id, 240, 120);
+		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 240, 120);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
@@ -42,7 +42,7 @@ class Hyperion extends Heavy {
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 18, 1);
-		$left->systems[] = new HeavyLaser($this->getId(), $this->id, 300, 360);
+		$left->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 360);
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $left;

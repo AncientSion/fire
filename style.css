@@ -716,12 +716,6 @@ table, th, tr, td {
     box-shadow: inset 0 0 0px 3px #ffeb3e;
 }
 
-.unitContainer .boostDiv img, .unitContainer .powerDiv img, .unitContainer .modeDiv img {
-	color: black;
-	width: 100%;
-	height: 100%;
-}
-
 .unitContainer .primaryDiv {
 	width: 80px;
 	height: 120px;
@@ -1051,14 +1045,9 @@ div.integrityFull {
 	border-bottom: 4px solid black;
 }
 
-.structTable .boostDiv img, .structTable .powerDiv img, .structTable .modeDiv img {
-	width: 100%;
-	height: 100%;
-}
-
-.primaryTable .boostDiv img, .primaryTable .powerDiv img, .primaryTable .modeDiv img {
-	width: 100%;
-	height: 100%;
+.boostDiv img, .powerDiv img, .modeDiv img {
+	width: 100% !important;
+	height: 100% !important;
 }
 
 .emptySystem {
@@ -1531,6 +1520,11 @@ tr.rowBorderBottom {
 	border: 1px solid red;
 	width: 15px;
 	height: 15px;
+}
+
+.turgretDiv .system .plus, .turrgetDiv .system .minus, {
+	width: 12px;
+	height: 12px;
 }
 
 .powerDiv {
@@ -2390,7 +2384,7 @@ body {
 	height: unset;
 }
 
-.turretDiv .system img {
+.turretDiv .sysIcon img {
 	height: 20px;
 	width: 20px;
 }
