@@ -196,6 +196,12 @@ Structure.prototype.getSysDiv = function(){
 	return div.append(table);
 }
 
+Structure.prototype.getWeaponPosition = function(size, facing){
+	var a = getSystemArcDir(this);
+		a = addAngle(a, facing);
+	return getPointInDir(size/4, a, range(-10, 10), range(-10, 10));
+}
+
 Structure.prototype.update = function(){
 	this.updateSysDiv();
 	//$(this.element).find(".outputMask").html(this.getOutput());

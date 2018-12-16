@@ -66,7 +66,6 @@ class Weapon extends System {
 
 	public function getTotalDamage($fire, $hit, $system){
 		$base = $this->getBaseDamage($fire, $system);
-		//$bonus = $this->getBonusDamage($fire, $base, $hit);
 		$bonus = DmgCalc::getBonusDamage($fire, $base, $hit);
 		$mod = $this->getDamageMod($fire);
 		$range = $this->getDmgRangeMod($fire);
@@ -155,7 +154,7 @@ class Weapon extends System {
 
 	public function setAntimatterData(){
 		//$this->notes[] = "<span class='yellow'>".$this->amBonus."</span> extra damage per 1 point of passing the to-hit roll.";
-		$this->notes[] = "<span class='yellow'>+".($this->amBonus*10)."</span> extra damage caused per 10 points of passing the to-hit roll.";
+		$this->notes[] = "<span class='yellow'>+".($this->amBonus*10)."%</span> extra damage caused per 10 points of passing the to-hit roll.";
 		$this->notes[] = "Extra damage capped at <span class='yellow'>".$this->amMax."%</span> of base damage after all modifiers.";
 	}
 

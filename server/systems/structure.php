@@ -2,46 +2,84 @@
 
 class Turret extends Squaddie {
 	public $name = "Turret";
-	public $display = "Large Turret";
 	public $turret = 1;
 	public $newDmg = 0;
 	public $recentDmg = 0;
+	public $overloads = array();
 	
 	public $critEffects =  array( // type, mag, dura, effect
-		array("Disabled", 120, 0, 0.00),
+		array("Accuracy", 100, 0, 0),
+		array("Damage", 120, 0, 0),
 	);
 
-	function __construct($id, $parentId, $start, $end, $integrity, $negation){
+	function __construct($id, $parentId, $display, $start, $end, $integrity, $negation){
 		$this->id = $id;
 		$this->parentId = $parentId;
+		$this->display = $display;
 		$this->start = $start;
 		$this->end = $end;
 		$this->integrity = $integrity;
 		$this->remaining = $integrity;
 		$this->negation = $negation;
-		$this->display .= " #".$id;
-	}
-
-	public function getTotalHitChance(){
-		return $this->integrity *2;
-	}
-	
-	public function getHitSystem($roll, $current){
-		return $this;
 	}
 
 	public function addDamage($dmg){
+		//Debug::log("addDamage ".get_class($this)." #".$this->id.", armourDmg ".$dmg->armourDmg);
 		if ($dmg->new){
 			$this->emDmg += $dmg->emDmg;
 		}
 
-		$this->armourDmg += $dmg->armourDmg;
 		$this->remaining -= $dmg->systemDmg;
 		$this->damages[] = $dmg;
 
 		if ($dmg->destroyed){
 			$this->destroyed = true;
 		}
+	}
+
+	public function handleStructCrits($turn){
+		if ($this->destroyed){return;}
+		$dmg = $this->getRelDmg($turn);
+		$crit = $this->determineCrit($dmg, $turn, 0);
+		if (!$crit){return;}
+
+		for ($i = 0; $i < sizeof($this->systems); $i++){
+			$newCrit = clone $crit;
+			$newCrit->systemid = $this->systems[$i]->id;
+			$this->systems[$i]->crits[] = $newCrit;
+		}
+	}
+
+	public function determineCrit($dmg, $turn, $squad){
+		if (!$dmg->rel){return;}
+
+		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old.", rel: ".$dmg->rel.", Squad: ".$squad);
+
+		$sumDmg = ($dmg->new + $dmg->old)*100 + $squad*60;
+		$crit = DmgCalc::critProcedure($this->parentId, $this->id, $turn, $dmg->rel, $this->critEffects, $sumDmg);
+
+		if ($crit){
+			$crit->value = $this->getCritModMax($sumDmg);
+			return $crit;
+		}
+		return false;
+	}
+
+	public function getCritModMax($relDmg){
+		return (min(30, round($relDmg*100/20) * 10)*-1);
+	}
+
+	public function getRelDmg($turn){
+		Debug::log("getRelDmg ".get_class($this)." #".$this->id);
+		$old = 0; $new = 0;
+		for ($i = 0; $i < sizeof($this->damages); $i++){
+			if ($this->damages[$i]->turn == $turn){
+				$new += $this->damages[$i]->systemDmg;
+				$new += $this->damages[$i]->emDmg*2;
+			} else $old += $this->damages[$i]->systemDmg;
+		}
+
+		return new RelDmg($new, $old, $this->integrity);
 	}
 }
 
@@ -71,6 +109,7 @@ class Structure {
 	public $effiency = 0;
 	public $bonusNegation = 0;
 	public $turret = 0;
+	public $overloads = array();
 
 	function __construct($id, $parentId, $start, $end, $integrity, $negation, $width = 2){
 		$this->id = $id;
@@ -85,6 +124,22 @@ class Structure {
 		$this->setName();
 	}
 
+	public function handleStructCrits($turn){
+		$potential = array();
+		for ($i = 0; $i < sizeof($this->systems); $i++){
+			if (!$this->systems[$i]->destroyed){
+				$dmg = $this->systems[$i]->getRelDmg($turn);
+				if ($dmg->new){$this->systems[$i]->determineCrit($dmg, $turn, 0);}
+			}
+			else if ($this->systems[$i]->isDestroyedThisTurn($turn)){
+				$usage = $this->systems[$i]->getPowerUsage($turn);
+				if (!$usage){continue;}
+				$this->overloads[] = $usage;
+				$this->systems[$i]->damages[sizeof($this->systems[$i]->damages)-1]->notes .= "o".$usage.";";
+			}
+		}
+	}
+
 	public function getTotalHitChance(){
 		$total = 0;
 		for ($i = 0; $i < sizeof($this->systems); $i++){
@@ -94,7 +149,7 @@ class Structure {
 		return $total;
 	}
 	
-	public function getHitSystem($roll, $current){
+	public function getSubHitSystem($roll, $current){
 		for ($i = 0; $i < sizeof($this->systems); $i++){
 			if (!$this->systems[$i]->destroyed){
 				$current += $this->systems[$i]->getHitChance();
@@ -242,6 +297,50 @@ class Primary {
 			return true;
 		}
 		return false;
+	}
+
+	public function getSubHitSystem(){
+		//Debug::log("getPrimaryHitSystem: #".$this->id);
+		$valid = array();
+		$fraction = round($this->remaining / $this->integrity, 2);
+		for ($i = 0; $i < sizeof($this->systems); $i++){
+			if ($this->systems[$i]->destroyed){continue;}
+			//if (!$this->isExposed($fraction, $this->systems[$i])){continue;}
+			$valid[] = $this->systems[$i];
+		}
+
+		if (!sizeof($valid)){
+			Debug::log("no internals -> MAIN");
+			return $this;
+		}
+
+		$roll;
+		$current = 0;
+		$total = $this->getTotalHitChance();
+
+		for ($i = 0; $i < sizeof($valid); $i++){
+			$total += $valid[$i]->getHitChance();
+		}
+		$roll = mt_rand(0, $total);
+		$current += $this->getTotalHitChance();
+
+		//Debug::log("roll: ".$roll.", all: ".$total);
+
+		if ($roll <= $current){
+			//Debug::log("roll ".$roll.", total: ".$total.", current ".$current.", HITTING main structure");
+			return $this;
+		}
+		else {
+			//Debug::log("hitting internal");
+			for ($i = 0; $i < sizeof($valid); $i++){
+				$current += $valid[$i]->getHitChance();
+				//Debug::log("current: ".$current);
+				if ($roll <= $current){
+					//Debug::log("roll ".$roll.", total:".$total.", current ".$current.", HITTING INTERNAL ".$valid[$i]->name." #".$valid[$i]->id.", odds: ".$valid[$i]->getHitChance()."/".$total);
+					return $valid[$i];
+				}
+			}
+		}
 	}
 
 	public function addDamage($dmg){

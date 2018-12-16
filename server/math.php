@@ -109,6 +109,16 @@ class Math {
 		}
 	}
 
+	static function adjustAngle($angle){
+		if ($angle > 360){
+			$angle -= 360;
+		}
+		else if ($angle < 0){
+			$angle += 360;
+		}
+		return $angle;
+	}
+
 	static function getVector($a, $b, $s){
 		return new Vector($a, $b, $s);
 	}

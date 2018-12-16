@@ -189,17 +189,6 @@ Mixed.prototype.setCurSpeed = function(){
 	$(this.element).find(".speedStats").html(this.getCurSpeed() + " (max: " + this.getMaxSpeed() + ")");
 }
 
-
-Mixed.prototype.getWeaponPosition = function(){
-	for (var i = 0; i < this.structures.length; i++){
-		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (this.structures[i].systems[j].id == fire.weaponid){
-				return {x: this.layout[i].x, y: this.layout[i].y};
-			}
-		}
-	}
-}
-
 Mixed.prototype.getTargetPos = function(){
 	if (this.mission.targetid){
 		return this.getTarget().getPlannedPos();

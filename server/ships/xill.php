@@ -50,12 +50,12 @@ class Xill extends Heavy {
 		$left->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 210, 330);
 		$structs[] = $left;
 
-		$turretA = new Turret($this->getId(), $this->id, 0, 360, 140, 12);
+		$turretA = new Turret($this->getId(), $this->id, "Dorsal Main Turret", 0, 360, 160, 12);
 		$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 		$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 		$structs[] = $turretA;
 		
-		$turretB = new Turret($this->getId(), $this->id, 0, 360, 140, 12);
+		$turretB = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 160, 12);
 		$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 		$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 		$structs[] = $turretB;

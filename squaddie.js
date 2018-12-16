@@ -534,6 +534,10 @@ Turret.prototype.init = function(){
 	return;
 }
 
+Turret.prototype.getWeaponPosition = function(size, facing){
+	return {x: range(-size/3, size/3), y: range(-size/3, size/3)}
+}
+
 Turret.prototype.setBonusNegation = function(){
 	return Structure.prototype.setBonusNegation.call(this);
 }

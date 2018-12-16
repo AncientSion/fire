@@ -325,7 +325,7 @@ Ship.prototype.handleHovering = function(){
 		this.setMoveTranslation();
 
 		if (!this.isDestroyed()){
-			this.drawMoveArea();
+			//this.drawMoveArea();
 			this.drawTurnArcs();
 		}
 		
@@ -1268,14 +1268,12 @@ Ship.prototype.drawMovePlan = function(){
 		if (this.actions[i].type == "move"){
 			planCtx.lineTo(this.actions[i].x, this.actions[i].y);
 			planCtx.stroke();
-			//console.log("draw 1 move #" + i);
 		}
 		else if (this.actions[i].type == "turn"){
 			planCtx.beginPath();
 			planCtx.arc(this.actions[i].x, this.actions[i].y, 5, 0, 2*Math.PI, false);
 			planCtx.stroke();
 			planCtx.moveTo(this.actions[i].x, this.actions[i].y);
-			//console.log("draw 1 turn #" + i);
 		}
 	}
 
@@ -1545,12 +1543,12 @@ Ship.prototype.createMoraleLogEntry = function(){
 
 	if (numbers[0] == 100){return;}
 
-	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Severe damage forces " + this.getLogTitleSpan() + " into a morale check.</br>";
+	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Severe damage (> 15%) forces a morale check from " + this.getLogTitleSpan() + "</br>";
 		html += "Initial chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] + " - ";
 
 		html += "<span class='yellow'>" + ((type == "p") ? " Passed ! (-30 on final severity)" : " Failed !") +"</span></br>";
 
-		html +=	"The unit rolled " + numbers[2] + " on effect, modified by a combined " + (numbers[3]-numbers[2]) + " for a total of <span class='yellow'> " + numbers[3] +".</span></br>";
+		html +=	"The unit rolled <span class='yellow'>" + numbers[2] + "</span> for effect, in addition to its existing total penalties of <span class='yellow'>" + (numbers[3]-numbers[2]) + "</span> for a total of <span class='yellow'> " + numbers[3] +".</span></br>";
 
 	var effect = 0;
 	if (this.actions.length && this.actions[this.actions.length-1].type == "jumpOut"){
@@ -1987,9 +1985,7 @@ Ship.prototype.getSystemLocation = function(i, name){
 Ship.prototype.getWeaponOrigin = function(id){
 	for (var i = 0; i < this.structures.length; i++){
 		if (i == this.structures.length-1 || id > this.structures[i].id && id < this.structures[i+1].id){
-			var devi = this.size/8;
-			var p = getPointInDir(this.size/4 + range (-devi, devi), (getSystemArcDir(this.structures[i]) + this.getDrawFacing()), 0, 0);
-			return p;
+			return this.structures[i].getWeaponPosition(this.size, this.getDrawFacing());
 		}
 	}
 	console.log("lacking gun origin");
@@ -2202,17 +2198,6 @@ Ship.prototype.getGamePos = function(){
 
 Ship.prototype.getDrawPos = function(){
 	return {x: this.drawX, y: this.drawY};
-}
-
-Ship.prototype.getWeaponPosition = function(){
-	for (var i = 0; i < this.structures.length; i++){
-		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (this.structures[i].systems[j].id == fire.weaponid){
-				var a = range(this.structures[i].start, this.structures[i].end);
-				return getPointInDir(range(-size/3, size / 3), a, 0, 0);
-			}
-		}
-	}
 }
 
 Ship.prototype.unpowerAllSystems = function(){
@@ -4193,6 +4178,14 @@ Ship.prototype.addTurrets = function(shipDiv){
 		var turretTable = $("<table>").addClass("structTable");
 		turretDiv.append(turretTable);
 
+		var core = $(this.structures[i].getCoreData());
+			core.attr("colSpan", this.structures[i].systems.length);
+			core.append(this.structures[i].getPowerDiv())
+		turretTable.append($("<tr>").append(core));
+		var armour = $(this.structures[i].getArmourData());
+			armour.attr("colSpan", this.structures[i].systems.length)
+		turretTable.append($("<tr>").append(armour));
+
 		tr = document.createElement("tr");
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 
@@ -4221,14 +4214,6 @@ Ship.prototype.addTurrets = function(shipDiv){
 			
 		}
 		turretTable.append(tr);
-
-		var core = $(this.structures[i].getCoreData());
-			core.attr("colSpan", this.structures[i].systems.length);
-			core.append(this.structures[i].getPowerDiv())
-		turretTable.append($("<tr>").append(core));
-		var armour = $(this.structures[i].getArmourData());
-			armour.attr("colSpan", this.structures[i].systems.length)
-		turretTable.append($("<tr>").append(armour));
 
 		turretDivs.push(turretDiv);
 	}
@@ -4491,41 +4476,28 @@ Ship.prototype.getMaxTurnAngle = function(){
 }
 
 Ship.prototype.drawTurnArcs = function(){
-	//var angle = this.getPlannedFacing();
-	//var turnAngle = this.getMaxTurnAngle();
-	//this.turnAngles = {start: addAngle(0 + turnAngle, angle), end: addAngle(360 - turnAngle, angle)};
-
-	var turnAngle = this.getMaxTurnAngle();
+	var turnAngle = this.hasMoved() ? this.getTurnAngle() : this.getMaxTurnAngle();
 	var angle = this.getPlannedHeading();
 	
 	this.turnAngles = {start: addAngle(0 + turnAngle, angle), end: addAngle(360 - turnAngle, angle)};
 
-	//return;
-
 	var center = this.getPlannedPos();
-	//var angle = this.getPlannedFacing();
-	//var turnAngle = this.getMaxTurnAngle();
 	var w = this.getTurnStep();
-
-	//this.turnAngles = {start: addAngle(0 + turnAngle, angle), end: addAngle(360 - turnAngle, angle)};
 	
 	for (var j = 1; j >= -1; j = j-2){
 		for (var i = 1; i <= w; i++){			
 			var modAngle = turnAngle * i * j;
 			var newAngle = addToDirection(angle, modAngle);
-			//var p = getPointInDir(Math.max(this.getBaseImpulse(), this.getRemSpeed()*2), newAngle, center.x, center.y);
 			var p = getPointInDir(75, newAngle, center.x, center.y);
-			if (turnAngle != 180){
-				moveCtx.beginPath();
-				moveCtx.moveTo(center.x, center.y);
-				moveCtx.lineTo(p.x, p.y);
-				moveCtx.closePath();
-				moveCtx.globalAlpha = 0.5;
-				moveCtx.strokeStyle = "yellow";
-				moveCtx.lineWidth = 1;
-				moveCtx.stroke();
-				moveCtx.globalAlpha = 1;
-			}
+			moveCtx.beginPath();
+			moveCtx.moveTo(center.x, center.y);
+			moveCtx.lineTo(p.x, p.y);
+			moveCtx.closePath();
+			moveCtx.globalAlpha = 0.5;
+			moveCtx.strokeStyle = "yellow";
+			moveCtx.lineWidth = 1;
+			moveCtx.stroke();
+			moveCtx.globalAlpha = 1;
 		}
 	}
 }

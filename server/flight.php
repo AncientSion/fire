@@ -77,7 +77,7 @@ class Flight extends Minor {
 
 	public function setMove(){
 		if ($this->moveSet){return;}
-		Debug::log("**** setMove ".$this->id);
+		Debug::log("**** setMove ".get_class($this)." #".$this->id);
 
 		$origin = $this->getCurPos();
 		$speed = $this->getCurSpeed();

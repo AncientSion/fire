@@ -66,6 +66,27 @@ function System(system){
 	}
 }
 
+System.prototype.setSensorToThis = function(){
+	var sensor = game.getUnit(this.parentId).getSystemByName("Sensor");
+	var str = sensor.getOutput();
+	var center = getSystemArcDir({start: this.arc[0][0], end: this.arc[0][1]});
+	var	w = this.getArcWidth() /2;
+	if (w == 180){a = -1;}
+	var d = str/Math.pow(w/game.const.ew.len, 1/game.const.ew.p);
+
+	sensor.setEW({
+		angle: center,
+		dist: Math.floor(d),
+		turn: game.turn,
+		unitid: this.parentId,
+		systemid: sensor.id,
+		type: sensor.ew[sensor.ew.length-1].type
+	});
+	salvoCtx.clearRect(0, 0, res.x, res.y);
+	sensor.setTempEW();
+	game.getUnit(this.parentId).drawEW();
+}
+
 System.prototype.attachLogHover = function(fire, tr){
 	tr.hover(function(){
 		var data = $(this).data();
@@ -457,7 +478,7 @@ System.prototype.getBoostEffectElements = function(table, boost){
 }
 
 System.prototype.getBoostDiv = function(){
-	if (this.destroyed || !this.effiency){return};
+	if (this.destroyed || !this.maxBoost){return};
 	//if (this.boostEffect.length == 1 && this.boostEffect[0].type == "Reload" && this.getLoadLevel() == 1){return;}
 	var div = document.createElement("div");
 		$(div).addClass("boostDiv").hide()
@@ -740,7 +761,7 @@ System.prototype.showOptions = function(){
 	if (this.destroyed || this.locked){return;}
 
 	var ele = $(this.element);
-	var boost = this.effiency;
+	var boost = this.maxBoost;
 	var canModeChange = this.canSwitchMode();
 	var canPower = this.canPower();
 	var canUnpower = this.canUnpower();
@@ -2003,27 +2024,6 @@ Weapon.prototype.hasUnresolvedFireOrder = function(){
 	return false;
 }
 
-Weapon.setSensorToThis = function(){
-	var sensor = game.getUnit(this.parentId).getSystemByName("Sensor");
-	var str = sensor.getOutput();
-	var center = getSystemArcDir({start: this.arc[0][0], end: this.arc[0][1]});
-	var	w = this.getArcWidth() /2;
-	if (w == 180){a = -1;}
-	var d = str/Math.pow(w/game.const.ew.len, 1/game.const.ew.p);
-
-	sensor.setEW({
-		angle: center,
-		dist: Math.floor(d),
-		turn: game.turn,
-		unitid: this.parentId,
-		systemid: sensor.id,
-		type: sensor.ew[sensor.ew.length-1].type
-	});
-	salvoCtx.clearRect(0, 0, res.x, res.y);
-	sensor.setTempEW();
-	game.getUnit(this.parentId).drawEW();
-}
-
 Weapon.prototype.select = function(e){
 	var unit;
 
@@ -2491,7 +2491,7 @@ Particle.prototype.getAnimation = function(fire){
 		var ox = fire.shooter.drawX + o.x;
 		var oy = fire.shooter.drawY + o.y;
 
-		for (var j = 0; j < this.shots; j++){
+		for (var j = 0; j < this.getShots(); j++){
 			roll++;
 			var hasHit = 0;
 			var dest;
@@ -2557,7 +2557,7 @@ Pulse.prototype.getShots = function(){
 	
 Pulse.prototype.getAnimation = function(fire){
 	var allAnims = [];
-	var grouping = 2;
+	var grouping = fire.guns % 2 == 0 ? 2 : fire.guns % 3 == 0 ? 3 : 2;
 	var speed = this.projSpeed;
 	var linked = this.linked -1;
 	var gunDelay = 30;

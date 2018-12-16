@@ -472,29 +472,3 @@ Obstacle.prototype.setPostMovePosition = function(){
 		}
 	}
 }
-
-
-
-
-
-function Asteroid(data){
-	this.layout = data.layout;
-	this.systems = data.systems;
-	this.size = data.size;
-	this.doDraw = 1;
-	this.img;
-
-	this.setBaseImage();
-}
-
-Asteroid.prototype.setBaseImage = function(){
-	//this.img = graphics.images.rocks[range(0, graphics.images.rocks.length-1)].cloneNode(true);
-}
-
-Asteroid.prototype.getBaseImage = function(){
-	return this.img;
-}
-
-Asteroid.prototype.isDestroyedThisTurn = function(){
-	return false;
-}

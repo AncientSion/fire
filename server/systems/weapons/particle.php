@@ -306,6 +306,61 @@ class HeavyAntimatterConverter extends AntimatterConverter {
 	}
 }
 
+class AntimatterCannon extends Particle {
+	public $name = "AntimatterCannon";
+	public $display = "Anti-Matter Cannon";
+	public static $prio = 0;
+	public $minDmg = 39;
+	public $maxDmg = 51;
+	public $accDecay = 90;
+	public $shots = 2;
+	public $reload = 3;
+	public $integrity = 48;
+	public $powerReq = 6;
+	public $tracking = 4;
+
+	public $animColor = "green";
+	public $projSize = 4;
+	public $projSpeed = 6;
+	public $amBonus = 0.5;
+	public $amMax = 30;
+
+	public $effiency = 0;
+	public $maxBoost = 1;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+		parent::__construct($id, $parentId, $start, $end, $output, $width);
+        $this->setAntimatterData();
+       //$this->setFlashData();
+        $this->boostEffect[] = new Effect("Accuracy", -30);
+        $this->boostEffect[] = new Effect("Shots", 1);
+	}
+}
+
+class AntiProtonEmitter extends Particle {
+	public $name = "AntiProtonEmitter";
+	public $display = "Anti-Proton Emitter";
+	public static $prio = 0;
+	public $minDmg = 17;
+	public $maxDmg = 23;
+	public $accDecay = 120;
+	public $shots = 2;	
+	public $reload = 2;
+	public $integrity = 34;
+	public $powerReq = 3;
+	public $tracking = 3;
+	//public $effiency = 3;
+	//public $maxBoost = 1;
+
+	public $animColor = "green";
+	public $projSize = 2;
+	public $projSpeed = 8;
+	
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+	}
+}
+
 class EM extends Particle {
 	public $animation = "em";
 	public $animColor = "lightBlue";
@@ -361,59 +416,6 @@ class EMSubjugator extends EM {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $start, $end, $output, $width);
-	}
-}
-
-class AntimatterCannon extends Particle {
-	public $name = "AntimatterCannon";
-	public $display = "Anti-Matter Cannon";
-	public static $prio = 0;
-	public $minDmg = 37;
-	public $maxDmg = 46;
-	public $accDecay = 120;
-	public $shots = 3;
-	public $reload = 3;
-	public $integrity = 84;
-	public $powerReq = 6;
-	public $tracking = 3;
-
-	public $animColor = "green";
-	public $projSize = 4;
-	public $projSpeed = 6;
-	public $amBonus = 1;
-	public $amMax = 30;
-
-	public $effiency = 1;
-	public $maxBoost = 1;
-
-	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
-		parent::__construct($id, $parentId, $start, $end, $output, $width);
-        $this->setAntimatterData();
-        $this->boostEffect[] = new Effect("Reload", -1);
-	}
-}
-
-class AntiProtonEmitter extends Particle {
-	public $name = "AntiProtonEmitter";
-	public $display = "Anti-Proton Emitter";
-	public static $prio = 0;
-	public $minDmg = 17;
-	public $maxDmg = 23;
-	public $accDecay = 120;
-	public $shots = 2;	
-	public $reload = 2;
-	public $integrity = 30;
-	public $powerReq = 3;
-	public $tracking = 3;
-	//public $effiency = 3;
-	//public $maxBoost = 1;
-
-	public $animColor = "green";
-	public $projSize = 2;
-	public $projSpeed = 8;
-	
-	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
-        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 

@@ -889,10 +889,10 @@
 		Debug::log("handleShipMovement");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->flight || $this->ships[$i]->salvo || $this->ships[$i]->obstacle){continue;}
-			if (!$this->ships[$i]->focus && static::$phase != 0){continue;}
-			if ($this->ships[$i]->focus && static::$phase != 1){continue;}
-			
-			$this->ships[$i]->moveSet = 1;
+			if (!$this->ships[$i]->focus && static::$phase != 0 || $this->ships[$i]->focus && static::$phase != 1){
+				$this->ships[$i]->moveSet = 1;
+				continue;
+			}
 			
 			for ($j = sizeof($this->ships[$i]->actions)-1; $j >= 0; $j--){
 				if ($this->ships[$i]->actions[$j]->resolved == 0){

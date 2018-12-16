@@ -129,7 +129,6 @@ class Ship {
 				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 					$this->structures[$i]->systems[$j]->turret = $this->structures[$i]->id;
 					$this->structures[$i]->powerReq += $this->structures[$i]->systems[$j]->powerReq;
-					//$this->structures[$i]->systems[$j]->specialId = $this->structures[$i]->id;
 				}
 			}
 		}
@@ -160,6 +159,7 @@ class Ship {
 
 	public function setMove(){
 		if ($this->moveSet){return;}
+		Debug::log("**** setMove ".get_class($this)." #".$this->id);
 
 		$origin = $this->getCurPos();
 		$move = new Move(-1, $this->id, Manager::$turn, "rotate", 0, 0, $origin->x, $origin->y, 0, 120, 0, 0, 0, 1, 1);
@@ -509,14 +509,10 @@ class Ship {
 			}
 		}
 
-		if ($heading > 360){
-			$heading -= 360;
-		}
-		else if ($heading < 0){
-			$heading += 360;
-		}
+		$heading = Math::adjustAngle($heading);
+		$facing = Math::adjustAngle($facing);
 
-		//Debug::log("getEndState for ".get_class($this)." #".$this->id." heading ".$heading.", facing: ".$facing.", rolling: ".$this->rolling.", rolled: ".$this->rolled);
+		Debug::log("getEndState for ".get_class($this)." #".$this->id." heading ".$heading.", facing: ".$facing.", rolling: ".$this->rolling.", rolled: ".$this->rolled);
 
 		return array(
 			"id" => $this->id,
@@ -675,7 +671,7 @@ class Ship {
 	}
 
 	public function addTopDamages($dmg){
-		//Debug::log("addDamage ".get_class($this));
+		//Debug::log("addTopDamages ".get_class($this).", id #".$dmg->id);
 
 		if ($dmg->new){
 			$dmg->hullDmg += $dmg->systemDmg;
@@ -863,21 +859,23 @@ class Ship {
 			DmgCalc::doDmg($fire, 0, $this->getHitSystem($fire));
 
 		}
-		else if ($fire->shooter->obstacle){
-			Debug::log("resolveFireOrder OBSTACLE - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots.", type: ".$fire->weapon->dmgType);
-
-			$this->determineObstacleHits($fire);
-		}
 		else {
-			Debug::log("resolveFireOrder STOCK - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots.", type: ".$fire->weapon->dmgType);
-
-			$fire->cc = $this->isCloseCombat($fire->shooter->id);
-			$fire->dist = $this->getHitDist($fire);
-			$fire->angle = $this->getIncomingFireAngle($fire);
-			$fire->section = $this->getHitSection($fire);
-
 			$this->doRollShots($fire);
-			$this->determineHits($fire);
+
+			if ($fire->shooter->obstacle){
+				Debug::log("resolveFireOrder OBSTACLE - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots.", type: ".$fire->weapon->dmgType);
+
+				$this->determineObstacleHits($fire);
+			}
+			else {
+				Debug::log("resolveFireOrder STOCK - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots.", type: ".$fire->weapon->dmgType);
+
+				$fire->cc = $this->isCloseCombat($fire->shooter->id);
+				$fire->dist = $this->getHitDist($fire);
+				$fire->angle = $this->getIncomingFireAngle($fire);
+
+				$this->determineHits($fire);
+			}
 		}
 
 		if (sizeof($fire->rolls)){
@@ -896,15 +894,13 @@ class Ship {
 
 	public function determineObstacleHits($fire){
 		//Debug::log("determineObstacleHits ".get_class($this).", req: ".$fire->req);
-		$this->doRollShots($fire);
 
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			//Debug::log("roll ".$fire->rolls[$i]);
 			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
 			else if ($fire->rolls[$i] <= $fire->req){
-				//Debug::log("hit");
-				$fire->hits++;
 				$fire->section = $this->getHitSection($fire);
+				$fire->hits++;
 				DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
 			}
 		}
@@ -918,6 +914,7 @@ class Ship {
 			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
 			else if ($fire->rolls[$i] <= $fire->req){
 				if ($this->didPassDefenses($fire, $i, $this)){
+					$fire->section = $this->getHitSection($fire);
 					$fire->hits++;
 					DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
 				}
@@ -984,28 +981,22 @@ class Ship {
 
 	public function getFlashTargets($fire){
 		$valid = array();
-		$struct = $this->getStruct($fire->section);
-		for ($i = 0; $i < sizeof($struct->systems); $i++){
-			if ($struct->systems[$i]->destroyed){continue;}
-			$valid[] = $struct->systems[$i];
+		for ($i = 0; $i < sizeof($fire->section->systems); $i++){
+			if ($fire->section->systems[$i]->destroyed){continue;}
+			$valid[] = $fire->section->systems[$i];
 		}
 		return $valid;
 	}
 
 	public function getFlashOverkillSystem($fire){
 		$valid = array();
-		$struct = $this->getStruct($fire->section);
-		for ($i = 0; $i < sizeof($struct->systems); $i++){
-			if ($struct->systems[$i]->destroyed){continue;}
-			$valid[] = $struct->systems[$i];
+		for ($i = 0; $i < sizeof($fire->section->systems); $i++){
+			if ($fire->section->systems[$i]->destroyed){continue;}
+			$valid[] = $fire->section->systems[$i];
 		}
 
 		if (!sizeof($valid)){return $this->primary;}
 		return $valid[mt_rand(0, sizeof($valid)-1)];
-	}
-	
-	public function getFacingElement($fire){
-		return $this->getStruct($fire->section);
 	}
 
 	public function getHitSystem($fire){
@@ -1013,13 +1004,15 @@ class Ship {
 		//return $this->getPrimaryHitSystem();
 
 		Debug::log("getHitSystem on ".get_class($this).", section: ".$fire->section->id);
+
+		if ($fire->section->turret){return $fire->section;}
+
 		$roll;
 		$current = 0;
 		$main = $this->primary->getTotalHitChance();
 		$total = $main;
 
-		$struct = $fire->section;
-		$total += $struct->getTotalHitChance();
+		$total += $fire->section->getTotalHitChance();
 
 		//Debug::log("total: ".$total);
 
@@ -1028,55 +1021,10 @@ class Ship {
 		$current += $main;
 		if ($roll <= $current){
 			//Debug::log($roll.", get primary system");
-			return $this->getPrimaryHitSystem();
+			return $this->primary->getSubHitSystem();
 		}
-		else return $struct->getHitSystem($roll, $current);
+		else return $fire->section->getSubHitSystem($roll, $current);
 		//Debug::log("ERROR getHitSystem()");
-	}
-
-
-	public function getPrimaryHitSystem(){
-		//Debug::log("getPrimaryHitSystem: #".$this->id);
-		$valid = array();
-		$fraction = round($this->primary->remaining / $this->primary->integrity, 2);
-		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
-			if ($this->primary->systems[$i]->destroyed){continue;}
-			//if (!$this->isExposed($fraction, $this->primary->systems[$i])){continue;}
-			$valid[] = $this->primary->systems[$i];
-		}
-
-		if (!sizeof($valid)){
-			Debug::log("no internals -> MAIN");
-			return $this->primary;
-		}
-
-		$roll;
-		$current = 0;
-		$total = $this->primary->getTotalHitChance();
-
-		for ($i = 0; $i < sizeof($valid); $i++){
-			$total += $valid[$i]->getHitChance();
-		}
-		$roll = mt_rand(0, $total);
-		$current += $this->primary->getTotalHitChance();
-
-		//Debug::log("roll: ".$roll.", all: ".$total);
-
-		if ($roll <= $current){
-			//Debug::log("roll ".$roll.", total: ".$total.", current ".$current.", HITTING main structure");
-			return $this->primary;
-		}
-		else {
-			//Debug::log("hitting internal");
-			for ($i = 0; $i < sizeof($valid); $i++){
-				$current += $valid[$i]->getHitChance();
-				//Debug::log("current: ".$current);
-				if ($roll <= $current){
-					//Debug::log("roll ".$roll.", total:".$total.", current ".$current.", HITTING INTERNAL ".$valid[$i]->name." #".$valid[$i]->id.", odds: ".$valid[$i]->getHitChance()."/".$total);
-					return $valid[$i];
-				}
-			}
-		}
 	}
 
 	public function isExposed($fraction, $system){
@@ -1281,10 +1229,13 @@ class Ship {
 
 		$locs = array();
 		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($this->structures[$i]->destroyed){continue;}
 			if (Math::isInArc($fire->angle, $this->structures[$i]->start, $this->structures[$i]->end)){
 				$locs[] = $this->structures[$i];
 			}
 		}
+
+		Debug::log("fire #".$fire->id.", possible: ".sizeof($locs));
 		return $locs[mt_rand(0, sizeof($locs)-1)];
 	}
 
@@ -1542,20 +1493,9 @@ class Ship {
 
 			$potential = array();
 			for ($i = 0; $i < sizeof($this->structures); $i++){
-				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-					if (!$this->structures[$i]->systems[$j]->destroyed){
-						$dmg = $this->structures[$i]->systems[$j]->getRelDmg($turn);
-						if ($dmg->new){$this->structures[$i]->systems[$j]->determineCrit($dmg, $turn, 0);}
-					}
-					else if ($this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){
-						$usage = $this->structures[$i]->systems[$j]->getPowerUsage($turn);
-						if (!$usage){continue;}
-						$potential[] = $usage;
-						$this->structures[$i]->systems[$j]->damages[sizeof($this->structures[$i]->systems[$j]->damages)-1]->notes .= "o".$usage.";";
-					}
-				}
+				$this->structures[$i]->handleStructCrits($turn);
+				$potential = array_merge($potential, $this->structures[$i]->overloads);
 			}
-
 
 			if (sizeof($potential) || array_sum($potential) || $this->primary->emDmg){
 				for ($j = 0; $j < sizeof($this->primary->systems); $j++){
@@ -1593,7 +1533,7 @@ class Medium extends Ship {
 
 				if ($this->structures[$i]->id == $dmg->structureid){
 					if ($this->structures[$i]->turret){
-						$this->structures[$i]->addDamage($dmg);	break;
+						$this->structures[$i]->addDamage($dmg);	break; 
 					}
 
 					for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){

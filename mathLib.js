@@ -355,6 +355,7 @@ function range(min, max){
 
 function getSystemArcDir(element){
 	var a = 0;
+	if (element.turret){return }
 	if (element.start > element.end){
 		if (element.start < 360 && element.end > 0){
 			a = element.start + (360 - element.start + element.end)/2;

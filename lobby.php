@@ -24,7 +24,7 @@ if (isset($_SESSION["userid"])){
 		header("Location: lobby.php");
 		return;
 	}
-	elseif (isset($_POST["dump"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
+	else if (isset($_POST["dump"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
 		echo $dbManager->dump();
 		//$dbManager->startGame(1);
 		header("Location: lobby.php");

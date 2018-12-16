@@ -132,10 +132,6 @@ class Mixed extends Ship {
 		return array("stock" => $system->negation, "bonus" => 0);
 	}
 
-	public function getHitSection($fire){
-		return 0;
-	}
-
 	public function getFlashTargets($fire){
 		$valid = array();
 
@@ -311,12 +307,8 @@ class Minor extends Mixed {
 		$heading = $this->actions[sizeof($this->actions)-1]->h;
 		$facing = $this->actions[sizeof($this->actions)-1]->f;
 
-		if ($heading > 360){
-			$heading -= 360;
-		}
-		else if ($heading < 0){
-			$heading += 360;
-		}
+		$heading = Math::adjustAngle($heading);
+		$facing = Math::adjustAngle($facing);
 
 		//Debug::log("getEndState for ".get_class($this)." #".$this->id." current heading ".$this->heading.", now: ".$heading.", rolling: ".$this->rolling.", rolled: ".$this->rolled);
 	

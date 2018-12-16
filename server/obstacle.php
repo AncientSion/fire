@@ -106,7 +106,7 @@ class Obstacle extends Minor {
 	}
 
 	public function setMove(){
-		//Debug::log("**** setMove ".$this->id);
+		Debug::log("**** setMove ".get_class($this)." #".$this->id);
 		if ($this->moveSet){return;}
 
 		$origin = $this->getCurPos();
@@ -129,18 +129,6 @@ class Obstacle extends Minor {
 
 	public function getNewCrits($turn){
 		return array();
-	}
-}
-
-class Asteroid {
-	public $id = 0;
-	public $size;
-	public $layout;
-	public $systems = array();
-	public $crits = array();
-
-	function __construct($parentSize, $amount){
-		$this->size = mt_rand(10, 30) / 100 * $parentSize;
 	}
 }
 ?>

@@ -89,10 +89,13 @@ class DmgCalc {
 	}
 
 	public static function getBonusDamage($fire, $baseDmg, $hit){
-		if (!$fire->weapon->amBonus){
-			return 0;
-		}
-		return min($baseDmg / 100 * $fire->weapon->amMax, ($fire->req - $fire->rolls[$hit]) * $fire->weapon->amBonus);
+		if (!$fire->weapon->amBonus){return 0;}
+		$undercut = ($fire->req - $fire->rolls[$hit]) * $fire->weapon->amBonus;
+		$maxBonus = $fire->weapon->amMax;
+		$ret = round($baseDmg / 100 * min($undercut, $maxBonus));
+		Debug::log("undercut: ".$undercut.", maxBonus: ".$maxBonus.", baseDmg: ".$baseDmg.", returning: ".$ret);
+
+		return $ret;
 	}
 
 	public static function setWeaponPriority(){
