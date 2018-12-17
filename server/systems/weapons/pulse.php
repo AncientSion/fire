@@ -48,8 +48,8 @@ class LightAntiProtonPulsar extends Pulse {
 	}
 }
 
-class AntiProtonPulsar extends LightAntiProtonPulsar {
-	public $name = "AntiProtonPulsar";
+class MediumAntiProtonPulsar extends LightAntiProtonPulsar {
+	public $name = "MediumAntiProtonPulsar";
 	public $display = "Anti-Proton Pulsar";
 	public static $prio = 0;
 	public $minDmg = 16;

@@ -27,18 +27,18 @@ class Ximm extends Medium {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 625, 14, 2);
-		$front->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 800, 14, 1);
-		$right->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 30, 150);
-		$right->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 30, 150);
+		$right->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 30, 150);
+		$right->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 30, 150);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 800, 14,1);
-		$left->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 210, 330);
-		$left->systems[] = new AntiProtonPulsar($this->getId(), $this->id, 210, 330);
+		$left->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 210, 330);
+		$left->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 210, 330);
 		$structs[] = $left;
 
 		$turretA = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 160, 11);

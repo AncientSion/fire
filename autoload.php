@@ -168,7 +168,7 @@ spl_autoload_register(
                 'heavyplasmapulse' => '/server/systems/weapons/pulse.php',
                 'lightempulse' => '/server/systems/weapons/pulse.php',
                 'lightantiprotonpulsar' => '/server/systems/weapons/pulse.php',
-                'antiprotonpulsar' => '/server/systems/weapons/pulse.php',
+                'mediumantiprotonpulsar' => '/server/systems/weapons/pulse.php',
                 
                 'em' => '/server/systems/weapons/em.php',
                 'twinemprojector' => '/server/systems/weapons/particle.php',
