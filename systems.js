@@ -882,10 +882,15 @@ System.prototype.getFighterSystemData = function(){
 }
 
 System.prototype.getTableData = function(){
+	var w = this.width > 1 ? this.width * 30 : 0;
 	td = $("<td>")
 	.addClass("system")
 	.attr("colSpan", this.width)
 	.data("systemid", this.id)
+
+	if (w){
+		td.css("width", w);
+	}
 
 	var img = new Image();
 		img.className = "sysIcon"

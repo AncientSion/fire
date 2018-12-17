@@ -2707,6 +2707,7 @@ Ship.prototype.expandDiv = function(div){
 	var widen = 0;
 
 	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].start == 0 && this.structures[i].end == 360){continue;} // turret
 		this.structures[i].direction = getLayoutDir(this.structures[i]);
 		if (this.structures[i].direction == 0 || this.structures[i].direction == 360){
 			noFront = false;
@@ -2849,7 +2850,7 @@ Ship.prototype.expandDiv = function(div){
 			offsetX += 10;
 		}
 
-		if (this.faction[0] == "V" && i % 2 != 0){
+		if (this.faction[0] == "V" && i % 2 != 0 && this.structures[i].systems.length >= 5){
 			offsetX -= 10;
 		}
 		
@@ -4174,7 +4175,8 @@ Ship.prototype.addTurrets = function(shipDiv){
 	//TURRETS
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].start != 0 || this.structures[i].end != 360){continue;}
-		var turretDiv = $("<div>").addClass("structDiv turretDiv");
+		var width = Math.max(90, this.structures[i].systems.length*30)
+		var turretDiv = $("<div>").addClass("structDiv turretDiv").css("width", width).css("height", 90);
 		var turretTable = $("<table>").addClass("structTable");
 		turretDiv.append(turretTable);
 
@@ -4223,16 +4225,18 @@ Ship.prototype.addTurrets = function(shipDiv){
 	shipDiv.append(turretContainer);
 	var spacing = shipDiv.width() / turretDivs.length;
 
-	//var width = shipDiv.width() / turretDivs.length;
-	var subWidth = 90;
+	var maxHeight = 0;
 	for (var i = 0; i < turretDivs.length; i++){ // set turret width
+		var maxHeight = turretDivs[i].width();
+		maxHeight = Math.max(maxHeight, maxHeight)
 		turretDivs[i]
-			.css("width", subWidth)
-			.css("height", subWidth)
-			.css("left", spacing*(i+1) - spacing/2 - subWidth/2)
+			.css("left", spacing*(i+1) - spacing/2 - maxHeight/2)
 		turretContainer.append(turretDivs[i])
 	}
 
+	turretContainer.css("height", maxHeight+10);
+
+	var maxHeight = 0;
 	for (var i = 0; i < turretDivs.length; i++){ // adjust armour TD width
 		var armour = turretDivs[i].find(".armour");
 		if (armour.width() < 70){

@@ -192,8 +192,18 @@ window.graphics = {
 		this.images.shaveen = new Image();
 		this.images.shaveen.src = "shipIcons/shaveen.png";		
 
+		this.images.xonn = new Image();
+		this.images.xonn.src = "shipIcons/xonn.png";	
+
 		this.images.xill = new Image();
 		this.images.xill.src = "shipIcons/xill.png";
+
+		this.images.xorr = new Image();
+		this.images.xorr.src = "shipIcons/xorr.png";
+
+		this.images.ximm = new Image();
+		this.images.ximm.src = "shipIcons/xorr.png";
+
 		this.images.xvell = new Image();
 		this.images.xvell.src = "shipIcons/xvell.png";
 	},

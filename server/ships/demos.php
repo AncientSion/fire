@@ -12,7 +12,7 @@ class Demos extends Medium {
 	public $integrity = 550;
 	public $vitalHP = 70;
 	public $ep = 110;
-	public $ew = 700;
+	public $ew = 675;
 
 	function __construct($data = false){
         parent::__construct($data);

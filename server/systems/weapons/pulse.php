@@ -23,7 +23,32 @@ class Pulse extends Weapon {
 	}
 }
 
-class AntiProtonPulsar extends Pulse {
+class LightAntiProtonPulsar extends Pulse {
+	public $name = "LightAntiProtonPulsar";
+	public $display = "Light Anti-Proton Pulsar";
+	public static $prio = 0;
+	public $minDmg = 10;
+	public $maxDmg = 14;
+	public $accDecay = 180;
+	public $shots = 1;
+	public $animColor = "blue";
+	public $projSize = 2;
+	public $projSpeed = 8;
+	public $reload = 1;
+	public $integrity = 28;
+	public $powerReq = 2;
+	public $tracking = 0;
+	public $basePulses = 1;
+	public $extraPulses = 3;
+	public $grouping = 15;
+
+	
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+	}
+}
+
+class AntiProtonPulsar extends LightAntiProtonPulsar {
 	public $name = "AntiProtonPulsar";
 	public $display = "Anti-Proton Pulsar";
 	public static $prio = 0;

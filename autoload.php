@@ -97,7 +97,10 @@ spl_autoload_register(
                 'shokos' => '/server/ships/shokos.php',
                 'shokov' => '/server/ships/shokov.php',
 
+                'xonn' => '/server/ships/xonn.php',
                 'xill' => '/server/ships/xill.php',
+                'xorr' => '/server/ships/xorr.php',
+                'ximm' => '/server/ships/ximm.php',
                 'xvell' => '/server/ships/xvell.php',
 
                 'battlecrab' => '/server/ships/battlecrab.php',
@@ -164,6 +167,7 @@ spl_autoload_register(
                 'mediumplasmapulse' => '/server/systems/weapons/pulse.php',
                 'heavyplasmapulse' => '/server/systems/weapons/pulse.php',
                 'lightempulse' => '/server/systems/weapons/pulse.php',
+                'lightantiprotonpulsar' => '/server/systems/weapons/pulse.php',
                 'antiprotonpulsar' => '/server/systems/weapons/pulse.php',
                 
                 'em' => '/server/systems/weapons/em.php',

@@ -2169,7 +2169,10 @@
 			case "Vree Conglomerate";
 				$units = array(
 					array(
+						"Xonn",
 						"Xill",
+						"Xorr",
+						"Ximm"
 					),
 					array(
 						"Xvell",

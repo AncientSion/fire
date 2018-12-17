@@ -786,7 +786,6 @@ table, th, tr, td {
 }
 
 .turretContainer {
-	height: 100px;
 	position: relative;
 	color: white;
 	margin: auto;
@@ -824,7 +823,8 @@ table, th, tr, td {
 	display: inline-block;
 	position: absolute;
 	margin: auto;
-	border-radius: 50px
+	z-index: 1;
+	border-radius: 40px;
 }
 
 .ccContainer {
@@ -2393,12 +2393,11 @@ body {
 	height: 16px;
 	border-top: 1px solid black;
 	border-bottom: 1px solid black;
-	top: -3px;
+	top: -1px;
 }
 
 .turretDiv .core {
-	border-top: 4px solid black;
-	height: 20px;
+	height: 18px;
 }
 
 .turretDiv .core .powerDiv {
@@ -2414,10 +2413,14 @@ body {
 	left: 0;
 	top: 0;
 	bottom: 0;
-	z-index: 1;
-	background-color: "green";
+	z-index: -1;
 	height: 100%;
 }
+
+.turretDiv div.integrityFull {
+	z-index: -2;
+}
+
 
 .turretDiv div.integrityAmount {
 	top: -1;
