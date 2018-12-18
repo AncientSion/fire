@@ -81,8 +81,9 @@ function Ship(data){
 
 	this.hitTable;
 	this.img;
+	this.primary = [];
 	this.structures = [];
-	this.primary = {};
+	this.turrets = [];
 	this.drawImg;
 	this.deployAnim = [0, 0];
 	this.doDraw = 1;
@@ -1467,6 +1468,13 @@ Ship.prototype.setSubSystemState = function(){
 			this.structures[i].systems[j].setBonusNegation(this.structures[i].bonusNegation);
 		}
 	}
+	for (var i = 0; i < this.turrets.length; i++){
+		this.turrets[i].setState();
+		this.turrets[i].setBonusNegation();
+		for (var j = 0; j < this.turrets[i].systems.length; j++){
+			this.turrets[i].systems[j].setState();
+		}
+	}
 }
 
 Ship.prototype.setStringHitChance = function(){
@@ -2729,7 +2737,6 @@ Ship.prototype.expandDiv = function(div){
 
 	// OUTER STRUCTS
 	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].start == 0 && this.structures[i].end == 360){continue;} // turret
 
 		var structDiv = $("<div>").addClass("structDiv");
 		structContainer.append(structDiv);
@@ -3602,26 +3609,25 @@ Ship.prototype.hasSystemSelected = function(name){
 }
 
 Ship.prototype.getSystem = function(id){
-	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].id == id){
-			return this.structures[i];
+	for (var i = 0; i < this.primary.systems.length; i++){
+		if (this.primary.systems[i].id == id){return this.primary.systems[i];}
+	}
+	for (var i = 0; i < this.turrets.length; i++){
+		if (this.turrets[i].id == id){return this.turrets[i];}
+		for (var j = 0; j < this.turrets[i].systems.length; j++){
+			if (this.turrets[i].systems[j].id == id){
+				return this.turrets[i].systems[j];
+			}
 		}
-
+	}
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].id == id){return this.structures[i];}
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (this.structures[i].systems[j].id == id){
 				return this.structures[i].systems[j];
 			}
 		}
 	}
-	for (var j = 0; j < this.primary.systems.length; j++){
-		if (this.primary.systems[j].id == id){
-			return this.primary.systems[j];
-		}
-	}
-}
-
-Ship.prototype.getPrimarySection = function(){
-	return this.primary;
 }
 
 Ship.prototype.highlightSingleSystem = function(system){
@@ -4173,44 +4179,43 @@ Ship.prototype.addTurrets = function(shipDiv){
 	var turretDivs = [];
 
 	//TURRETS
-	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].start != 0 || this.structures[i].end != 360){continue;}
-		var width = Math.max(90, this.structures[i].systems.length*30)
+	for (var i = 0; i < this.turrets.length; i++){
+		var width = Math.max(90, this.turrets[i].systems.length*30)
 		var turretDiv = $("<div>").addClass("structDiv turretDiv").css("width", width).css("height", 90);
 		var turretTable = $("<table>").addClass("structTable");
 		turretDiv.append(turretTable);
 
-		var core = $(this.structures[i].getCoreData());
-			core.attr("colSpan", this.structures[i].systems.length);
-			core.append(this.structures[i].getPowerDiv())
+		var core = $(this.turrets[i].getCoreData());
+			core.attr("colSpan", this.turrets[i].systems.length);
+			core.append(this.turrets[i].getPowerDiv())
 		turretTable.append($("<tr>").append(core));
-		var armour = $(this.structures[i].getArmourData());
-			armour.attr("colSpan", this.structures[i].systems.length)
+		var armour = $(this.turrets[i].getArmourData());
+			armour.attr("colSpan", this.turrets[i].systems.length)
 		turretTable.append($("<tr>").append(armour));
 
 		tr = document.createElement("tr");
-		for (var j = 0; j < this.structures[i].systems.length; j++){
+		for (var j = 0; j < this.turrets[i].systems.length; j++){
 
-			var td = this.structures[i].systems[j].getTableData();
+			var td = this.turrets[i].systems[j].getTableData();
 				td = this.attachTurretEvent(td);
 				$(td)
-				.data("turretId", this.structures[i].id)
+				.data("turretId", this.turrets[i].id)
 				.find(".integrityNow").remove().end().find(".integrityFull").remove();
 
 			tr.appendChild(td);
 			
 			if (this.id > 0 || game.turn == 1){
-				var boostDiv = this.structures[i].systems[j].getBoostDiv();
+				var boostDiv = this.turrets[i].systems[j].getBoostDiv();
 				if (boostDiv){td.appendChild(boostDiv);}
 
-			//	var powerDiv = this.structures[i].systems[j].getPowerDiv();
+			//	var powerDiv = this.turrets[i].systems[j].getPowerDiv();
 			//	if (powerDiv){td.appendChild(powerDiv);}
 
-				var modeDiv = this.structures[i].systems[j].getModeDiv();
+				var modeDiv = this.turrets[i].systems[j].getModeDiv();
 				if (modeDiv){td.appendChild(modeDiv);}
 			}
 
-			if (this.structures[i].systems[j].dual && !this.structures[i].systems[j].effiency){
+			if (this.turrets[i].systems[j].dual && !this.turrets[i].systems[j].effiency){
 				$(td).find(".outputMask").hide();
 			}
 			

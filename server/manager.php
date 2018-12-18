@@ -1380,14 +1380,15 @@
 		//return $data;
 
 
-		/*
-		for ($i = 0; $i < sizeof($this->ships); $i++){
+		
+	/*	for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->obstacle){continue;}
 			$aPos = $this->ships[$i]->getCurPos();
 			Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
 			foreach ($this->ships[$i]->angles as $val){Debug::log("--> ANGLE TO: #".$val[0].": ".$val[1]);}
 			foreach ($this->ships[$i]->distances as $val){Debug::log("-->  DIST TO: #".$val[0].": ".$val[1]);}
 		}
-		*/
+	*/	
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$this->setLocks($this->ships[$i]); 
@@ -1460,7 +1461,7 @@
 					$w = min(180, $this->const["ew"]["len"] * pow($str/$ew->dist, $this->const["ew"]["p"]));
 					$start = Math::addAngle(0 + $w-$origin->getHeading(), $ew->angle);
 					$end = Math::addAngle(360 - $w-$origin->getHeading(), $ew->angle);
-					Debug::log("specific EW for ship #".$origin->id.", str: ".$str.", heading: ".$origin->getHeading().", w: ".$w.", EW @ ".$ew->angle." -> from ".$start." to ".$end.", dist: ".$ew->dist);
+					//Debug::log("specific EW for ship #".$origin->id.", str: ".$str.", heading: ".$origin->getHeading().", w: ".$w.", EW @ ".$ew->angle." -> from ".$start." to ".$end.", dist: ".$ew->dist);
 				}
 
 				for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1509,7 +1510,7 @@
 					$dist = Math::getDist2($oPos, $tPos);
 					if ($dist <= $ew->dist){
 						$a = Math::getAngle2($oPos, $tPos);
-						Debug::log("versus #".$this->ships[$i]->id.", angle: ".$a.", dist: ".$dist);
+						//Debug::log("versus #".$this->ships[$i]->id.", angle: ".$a.", dist: ".$dist);
 						if (Math::isInArc($a, $start, $end)){
 							if ($ew->type == 0){ // LOCK
 								$origin->locks[] = array($this->ships[$i]->id, $origin->getLockEffect($this->ships[$i]));

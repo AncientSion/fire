@@ -232,6 +232,21 @@ function initShip(data){
 		ship.structures.push(struct);
 	}
 
+	for (var j = 0; j < data.turrets.length; j++){
+		var turret = new window[data.turrets[j].name](data.turrets[j]);
+		if (data.turrets[j].damages.length){
+			for (var k = 0; k < data.turrets[j].damages.length; k++){
+				turret.damages.push(new Damage(data.turrets[j].damages[k]));
+			}
+		}		
+
+		for (var k = 0; k < data.turrets[j].systems.length; k++){
+			var system = new window[data.turrets[j].systems[k].type](data.turrets[j].systems[k]);
+			if (system){turret.systems.push(system);}	
+		}
+		ship.turrets.push(turret);
+	}
+
 	return ship;
 }
 

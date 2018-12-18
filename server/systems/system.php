@@ -210,7 +210,7 @@ class System {
 		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
 			if ($this->powers[$i]->turn == $turn){
 				switch ($this->powers[$i]->type){
-					case 0: return 0; break;
+					case 0: return 0;
 					case 1: $usage += $this->powers[$i]->cost; break;
 					default: continue;
 				}

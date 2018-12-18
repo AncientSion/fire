@@ -40,13 +40,6 @@ class Ximm extends Medium {
 		$left->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 210, 330);
 		$left->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 210, 330);
 		$structs[] = $left;
-
-		$turretA = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 160, 11);
-		$turretA->systems[] = new LightAntiProtonPulsar($this->getId(), $this->id, 0, 360);
-		$turretA->systems[] = new LightAntiProtonPulsar($this->getId(), $this->id, 0, 360);
-		$turretA->systems[] = new LightAntiProtonPulsar($this->getId(), $this->id, 0, 360);
-		$turretA->systems[] = new LightAntiProtonPulsar($this->getId(), $this->id, 0, 360);
-		$structs[] = $turretA;
 		
 	//	$turretB = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 160, 12);
 	//	$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
@@ -55,6 +48,23 @@ class Ximm extends Medium {
 
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
+			//$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
+			//$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse-1;
+		}
+	}
+
+	public function addTurrets(){
+		$turrets = array();
+
+		$turretA = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 160, 11);
+		$turretA->systems[] = new LightAntiProtonPulsar($this->getId(), $this->id, 0, 360);
+		$turretA->systems[] = new LightAntiProtonPulsar($this->getId(), $this->id, 0, 360);
+		$turretA->systems[] = new LightAntiProtonPulsar($this->getId(), $this->id, 0, 360);
+		$turretA->systems[] = new LightAntiProtonPulsar($this->getId(), $this->id, 0, 360);
+		$turrets[] = $turretA;
+
+		for ($i = 0; $i < sizeof($turrets); $i++){
+			$this->turrets[] = $turrets[$i];
 			//$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
 			//$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse-1;
 		}

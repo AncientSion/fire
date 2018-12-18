@@ -19,11 +19,11 @@ class MediumRailGun extends Matter {
 	public static $prio = 0;
 	public $minDmg = 36;
 	public $maxDmg = 36;
-	public $accDecay = -100;
-	public $shots = 3;
+	public $accDecay = 100;
+	public $shots = 2;
 	public $animColor = "grey";
 	public $projSize = 3;
-	public $projSpeed = 13;
+	public $projSpeed = 11;
 	public $reload = 3;
 	public $integrity = 44;
 	public $powerReq = 3;
@@ -44,7 +44,7 @@ class HeavyRailGun extends Matter {
 	public $shots = 2;
 	public $animColor = "grey";
 	public $projSize = 4;
-	public $projSpeed = 10;
+	public $projSpeed = 9;
 	public $reload = 4;
 	public $integrity = 56;
 	public $powerReq = 6;

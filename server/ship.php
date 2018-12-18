@@ -55,6 +55,7 @@ class Ship {
 	public $index = 0; 
 	public $actions = array();
 	public $structures = array();
+	public $turrets = array();
 
 	public $locks = array();
 	public $masks = array();
@@ -119,17 +120,19 @@ class Ship {
 		$this->addPrimary();
 		$this->addSpecials();
 		$this->addStructures();
+		$this->addTurrets();
 		$this->handleTurrets();
 	}
 
-	public function handleTurrets(){
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->turret){
+	public function addTurrets(){
+		return;
+	}
 
-				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-					$this->structures[$i]->systems[$j]->turret = $this->structures[$i]->id;
-					$this->structures[$i]->powerReq += $this->structures[$i]->systems[$j]->powerReq;
-				}
+	public function handleTurrets(){
+		for ($i = 0; $i < sizeof($this->turrets); $i++){
+			for ($j = 0; $j < sizeof($this->turrets[$i]->systems); $j++){
+				$this->turrets[$i]->systems[$j]->turret = $this->turrets[$i]->id;
+				$this->turrets[$i]->powerReq += $this->turrets[$i]->systems[$j]->powerReq;
 			}
 		}
 	}
@@ -253,7 +256,6 @@ class Ship {
 		}
 
 		$this->getSystemByName("Engine")->setPowerReq($this->mass);
-		$this->getSystemByName("Engine")->setPowerReq($this->mass);
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
@@ -315,11 +317,13 @@ class Ship {
 	}
 
 	public function setStructureState($turn, $phase){
-		$main = $this->primary->integrity;
-		$total = $main * 4 / sizeof($this->structures);
+		$total = $this->primary->integrity * 4 / sizeof($this->structures);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){ // 
 			$this->structures[$i]->setNegation($total, 0);
+		}
+		for ($i = 0; $i < sizeof($this->turrets); $i++){ // 
+			$this->turrets[$i]->setNegation($this->turrets[$i]->integrity*1.5, 0);
 		}
 	}
 
@@ -720,13 +724,16 @@ class Ship {
 
 	public function getPowerReq(){
 		$need = 0;
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			$need += $this->primary->systems[$i]->powerReq;
+		}
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				$need += $this->structures[$i]->systems[$j]->powerReq;
 			}
 		}
-		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
-			$need += $this->primary->systems[$i]->powerReq;
+		for ($i = 0; $i < sizeof($this->turrets); $i++){
+			$need += $this->turrets[$i]->powerReq;
 		}
 		return $need;
 	}
@@ -1203,6 +1210,26 @@ class Ship {
 		Debug::log("got no ANGLE set on ".$this->id." targeted by #".$fire->shooter->id);
 	}
 
+	public function getHitSection($fire){
+		if ($fire->cc && $fire->shooter->flight || $fire->shooter->obstacle){return $this->structures[mt_rand(0, sizeof($this->structures)-1)]->id;}
+
+		//Debug::log("fire-angle: ".$fire->angle.", heading: ".$this->heading.", facing: ".$this->facing);
+		$angle = Math::addAngle($this->facing, $this->getIncomingFireAngle($fire));
+		//Debug::log("fire-angle: ".$fire->angle);
+		if ($this->rolled){$fire->angle = Math::getMirrorAngle($fire->angle);}
+
+		$locs = array();
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($this->structures[$i]->destroyed){Debug::log("continue"); continue;}
+			if (Math::isInArc($angle, $this->structures[$i]->start, $this->structures[$i]->end)){
+				$locs[] = $this->structures[$i];
+			}
+		}
+
+		Debug::log("fire #".$fire->id.", possible: ".sizeof($locs));
+		return $locs[mt_rand(0, sizeof($locs)-1)];
+	}
+
 	public function getActualHeading(){
 		$facing = $this->heading;
 		for ($i = 0; $i < sizeof($this->actions); $i++){
@@ -1218,25 +1245,6 @@ class Ship {
 			$facing += $this->actions[$i]->f;
 		}
 		return $facing;
-	}
-
-	public function getHitSection($fire){
-		if ($fire->cc && $fire->shooter->flight || $fire->shooter->obstacle){return $this->structures[mt_rand(0, sizeof($this->structures)-1)]->id;}
-
-		//Debug::log("fire-angle: ".$fire->angle.", heading: ".$this->heading.", facing: ".$this->facing);
-		$fire->angle = Math::addAngle($this->facing, $fire->angle);
-		if ($this->rolled){$fire->angle = Math::getMirrorAngle($fire->angle);}
-
-		$locs = array();
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->destroyed){continue;}
-			if (Math::isInArc($fire->angle, $this->structures[$i]->start, $this->structures[$i]->end)){
-				$locs[] = $this->structures[$i];
-			}
-		}
-
-		Debug::log("fire #".$fire->id.", possible: ".sizeof($locs));
-		return $locs[mt_rand(0, sizeof($locs)-1)];
 	}
 
 	public function getRelDmg($turn){

@@ -65,23 +65,6 @@ class Xonn extends SuperHeavy {
 		$left->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 210, 330);
 		$left->systems[] = new LightAntiProtonPulsar($this->getId(), $this->id, 90, 270);
 		$structs[] = $left;
-
-		$turretA = new Turret($this->getId(), $this->id, "Dorsal Turret #1", 0, 360, 220, 14);
-		$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
-		$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
-		$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
-		$structs[] = $turretA;
-		
-		$turretC = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 160, 14);
-		$turretC->systems[] = new AntimatterConverter($this->getId(), $this->id, 0, 360);
-		$turretC->systems[] = new AntimatterConverter($this->getId(), $this->id, 0, 360);
-		$structs[] = $turretC;
-
-		$turretB = new Turret($this->getId(), $this->id, "Dorsal Turret #2", 0, 360, 120, 14);
-		$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
-		$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
-		$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
-		$structs[] = $turretB;
 		
 	//	$turretD = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 160, 12);
 	//	$turretD->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
@@ -90,6 +73,33 @@ class Xonn extends SuperHeavy {
 
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
+			//$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
+			//$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse-1;
+		}
+	}
+
+	public function addTurrets(){
+		$turrets = array();
+
+		$turretA = new Turret($this->getId(), $this->id, "Dorsal Turret #1", 0, 360, 220, 14);
+		$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
+		$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
+		$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
+		$turrets[] = $turretA;
+		
+		$turretC = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 160, 14);
+		$turretC->systems[] = new AntimatterConverter($this->getId(), $this->id, 0, 360);
+		$turretC->systems[] = new AntimatterConverter($this->getId(), $this->id, 0, 360);
+		$turrets[] = $turretC;
+
+		$turretB = new Turret($this->getId(), $this->id, "Dorsal Turret #2", 0, 360, 120, 14);
+		$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
+		$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
+		$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
+		$turrets[] = $turretB;
+		
+		for ($i = 0; $i < sizeof($turrets); $i++){
+			$this->turrets[] = $turrets[$i];
 			//$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
 			//$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse-1;
 		}

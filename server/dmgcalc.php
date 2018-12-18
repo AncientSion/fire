@@ -93,7 +93,7 @@ class DmgCalc {
 		$undercut = ($fire->req - $fire->rolls[$hit]) * $fire->weapon->amBonus;
 		$maxBonus = $fire->weapon->amMax;
 		$ret = round($baseDmg / 100 * min($undercut, $maxBonus));
-		Debug::log("undercut: ".$undercut.", maxBonus: ".$maxBonus.", baseDmg: ".$baseDmg.", returning: ".$ret);
+		//Debug::log("undercut: ".$undercut.", maxBonus: ".$maxBonus.", baseDmg: ".$baseDmg.", returning: ".$ret);
 
 		return $ret;
 	}

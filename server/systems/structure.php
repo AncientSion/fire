@@ -38,19 +38,36 @@ class Turret extends Squaddie {
 	}
 
 	public function handleStructCrits($turn){
-		if ($this->destroyed){return;}
-		$dmg = $this->getRelDmg($turn);
-		$crit = $this->determineCrit($dmg, $turn, 0);
-		if (!$crit){return;}
-
-		for ($i = 0; $i < sizeof($this->systems); $i++){
-			$newCrit = clone $crit;
-			$newCrit->systemid = $this->systems[$i]->id;
-			$this->systems[$i]->crits[] = $newCrit;
+		if ($this->isDestroyedThisTurn($turn)){
+			$usage = $this->getPowerUsage($turn);
+			if (!$usage){return;}
+			$this->overloads[] = $usage;
+			$this->damages[sizeof($this->damages)-1]->notes .= "o".$usage.";";
+		}
+		else {
+			$dmg = $this->getRelDmg($turn);
+			for ($i = 0; $i < sizeof($this->systems); $i++){
+				$crit = $this->systems[$i]->determineCrit($dmg, $turn, 0);
+			}
 		}
 	}
+	
+	public function getPowerUsage($turn){
+		$usage = $this->powerReq;
 
-	public function determineCrit($dmg, $turn, $squad){
+		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
+			if ($this->powers[$i]->turn == $turn){
+				switch ($this->powers[$i]->type){
+					case 0: return 0;
+					case 1: $usage += $this->powers[$i]->cost; break;
+					default: continue;
+				}
+			} else return $usage;
+		}
+		return $usage;
+	}
+
+	public function determineCrit($dmg, $turn, $squad){ // nt in use
 		if (!$dmg->rel){return;}
 
 		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old.", rel: ".$dmg->rel.", Squad: ".$squad);

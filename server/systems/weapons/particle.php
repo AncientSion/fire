@@ -332,7 +332,7 @@ class AntimatterCannon extends Particle {
 		parent::__construct($id, $parentId, $start, $end, $output, $width);
         $this->setAntimatterData();
        //$this->setFlashData();
-        $this->boostEffect[] = new Effect("Accuracy", -30);
+        $this->boostEffect[] = new Effect("Accuracy", -50);
         $this->boostEffect[] = new Effect("Shots", 1);
 	}
 }
