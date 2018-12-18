@@ -274,30 +274,28 @@ class Hangar extends Weapon {
 	public $loads = array();
 	public $reload = 2;
 	public $utility = 1;
-	public $capacity;
-	public $launchRate;
+	public $capacity = 0;
+	public $launchRate = 0;
 	public $usage = -1;
 	public $loadout = 1;
+	public $powerReq = 0;
+	public $armurMod = 0.5;
 	public $critEffects = array();
 
-	function __construct($id, $parentId, $launchRate, $loads, $capacity, $width = 1){
+	function __construct($id, $parentId, $integrity, $capacity, $launchRate, $loads, $width = 1){
 		parent::__construct($id, $parentId, 0, 0, 0, $width);
-		$this->launchRate = $launchRate;
+		$this->integrity = $integrity;
 		$this->capacity = $capacity;
-		$this->powerReq = 0;
-		$this->integrity = $capacity*8;
-
+		$this->launchRate = $launchRate;
 
 		for ($i = 0; $i < sizeof($loads); $i++){
 			$fighter = new $loads[$i](0, 0);
 			$this->loads[] = $fighter;
-			//$this->loads[$i]->amount = 10;
 		}
 	}
 
 	public function setArmourData($rem){
-		$this->armourMod = 0.5;
-		$this->armour = floor($rem * $this->armourMod);
+		$this->armour = floor($rem * $this->armurMod);
 	}
 	
 	public function adjustLoad($dbLoad){

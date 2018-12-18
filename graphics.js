@@ -235,6 +235,9 @@ window.graphics = {
 
 		this.images.zorth = new Image();
 		this.images.zorth.src = "shipIcons/zorth.png";
+
+		this.images.tzymm = new Image();
+		this.images.tzymm.src = "shipIcons/zorth.png";
 	},
 
 	preLoadFactions: function(){

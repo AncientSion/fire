@@ -325,7 +325,7 @@ Ship.prototype.handleHovering = function(){
 		this.setMoveTranslation();
 
 		if (!this.isDestroyed()){
-			//this.drawMoveArea();
+			this.drawMoveArea();
 			this.drawTurnArcs();
 		}
 		

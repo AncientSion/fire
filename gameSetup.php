@@ -174,11 +174,9 @@ else header("Location: index.php");
 		</div>
 		<div id="hangarDiv" class="disabled">
 			<div class="header">
-				<span>Configure Fighter loadout.</span>
+				Can launch up to <span id="launchRate"></span> kTs of units per cycle.
 				<br>
-				Can launch up to <span id="launchRate"></span> units per cycle.
-				<br>
-				Sufficient space for <span id="capacity"></span> units.
+				Can store a total tonnage of up to <span id="capacity"></span> kT.
 			</div>
 			<table id="hangarTable">
 			</table>

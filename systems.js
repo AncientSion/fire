@@ -478,7 +478,7 @@ System.prototype.getBoostEffectElements = function(table, boost){
 }
 
 System.prototype.getBoostDiv = function(){
-	if (this.destroyed || !this.maxBoost){return};
+	if (this.destroyed || (!this.maxBoost && !this.effiency)){return};
 	//if (this.boostEffect.length == 1 && this.boostEffect[0].type == "Reload" && this.getLoadLevel() == 1){return;}
 	var div = document.createElement("div");
 		$(div).addClass("boostDiv").hide()
@@ -4027,7 +4027,7 @@ Hangar.prototype.drawSystemArc = function(){
 
 Hangar.prototype.enableHangarDiv = function(e){
 	$("#launchRate").html(this.getOutput());
-	$("#capacity").html(this.capacity);
+	//$("#capacity").html(this.capacity);
 	var div = $("#hangarDiv");
 
 	this.unsetFireOrder();
@@ -4182,59 +4182,44 @@ Hangar.prototype.addFighter = function(ele, all){
 	var tCost = 0;
 	var add = 1;
 	var name = ele.childNodes[0].childNodes[0].innerHTML;
-	var sMass = 0;
-	var current = 0;
-	var max = this.capacity;
+	var pickIndex = 0;
+	var currentMass = 0;
+	var maxMass = this.capacity;
 
 	for (var i = 0; i < this.loads.length; i++){
-		tCost += this.loads[i].amount * this.loads[i].cost;
-		current += this.loads[i].amount;
+		currentMass += this.loads[i].amount * this.loads[i].mass;
+		if (this.loads[i].name == name){
+			pickIndex = i;
+		}
 	}
 
-	if (current == max){
+	if (currentMass + this.loads[pickIndex].mass > maxMass){
 		popup("Insufficient Hangar Space available");
 		return;
 	}
-	else if (all){
-		var multi = current / this.launchRate;
-		if (multi % 1 == 0){multi++;}
-		else multi = Math.ceil(multi);
-		add = Math.min(max, (this.launchRate * multi - current))
-	}
-
-	for (var i = 0; i < this.loads.length; i++){
-		if (this.loads[i].name == name){
-			this.loads[i].amount += add;
-			this.updateHangarDiv(i);
-			return;
-		}
-	}
-
-	for (var i = 0; i < this.loads.length; i++){
-		tMass += this.loads[i].amount * this.loads[i].mass;
-		tCost += this.loads[i].amount * this.loads[i].cost;
-		if (this.loads[i].name == name){
-			sMass = this.loads[i].mass;
-		}
-	}
 
 	if (all){
-		add = Math.floor((this.output - tMass) / sMass);
-	}
-
-
-	for (var i = 0; i < this.loads.length; i++){
-		if (this.loads[i].display == name){
-			if (tMass + this.loads[i].mass <= this.output){
-				this.loads[i].amount += add;
-				this.updateHangarDiv(i);
-				return;
-			}
-			else {
-				popup("Insufficient Hangar Space available");
-			}
+		var remMass = maxMass - currentMass;
+		//	add = Math.floor(remMass / this.loads[pickIndex].mass);
+		var massBreakPoint = Math.floor(this.launchRate / this.loads[pickIndex].mass);
+		if (this.loads[pickIndex].mass * this.loads[pickIndex].amount < massBreakPoint){
+			add = massBreakPoint - this.loads[pickIndex].amount;
 		}
+		else {
+			add = Math.min(massBreakPoint, Math.floor(remMass / this.loads[pickIndex].mass));
+		}
+			/*
+				var rate = this.launchRate[index];
+				var multi = this.loads[index].amount / rate;
+				if (multi % 1 == 0){multi++;}
+				else multi = Math.ceil(multi);
+				this.loads[index].amount = rate * multi
+			*/
+
 	}
+
+	this.loads[pickIndex].amount += add;
+	this.updateHangarDiv(pickIndex);
 }
 
 Hangar.prototype.removeFighter = function(ele, all){
@@ -4265,6 +4250,7 @@ Hangar.prototype.initHangarPurchaseDiv = function(){
 		.append($("<thead>")
 			.append($("<tr>")
 				.append($("<th>").html("Class"))
+				.append($("<th>").html("Tonnage").css("width", 40))
 				.append($("<th>").html("Cost").css("width", 40))
 				.append($("<th>").html(""))
 				.append($("<th>").html("Amount").css("width", 70))
@@ -4281,6 +4267,7 @@ Hangar.prototype.initHangarPurchaseDiv = function(){
 					.append($("<div>").addClass("yellow").html(this.loads[i].display))
 					.append($(this.loads[i].getElement(true)))
 				)
+				.append($("<td>").html(this.loads[i].mass))
 				.append($("<td>").html(this.loads[i].cost))
 				.append($("<td>")
 					.append($("<img>").addClass("size30").attr("src", "varIcons/plus.png"))
@@ -4312,7 +4299,11 @@ Hangar.prototype.initHangarPurchaseDiv = function(){
 	table
 		.append($("<tr>")
 			.css("fontSize", 18).css("height", 30)
-			.append($("<th>").attr("colSpan", 3).html("Grand Total"))
+			//.append($("<th>").attr("colSpan", 6).html("Grand Total"))
+			.append($("<th>"))
+			.append($("<th>"))
+			.append($("<th>"))
+			.append($("<th>"))
 			.append($("<th>"))
 			.append($("<th>"))
 			.append($("<th>").addClass("systemTotal")))
@@ -4321,31 +4312,37 @@ Hangar.prototype.initHangarPurchaseDiv = function(){
 }
 
 Hangar.prototype.setTotalBuyData = function(){
+	console.log("setTotalBuyData");
 	var table = $("#hangarTable");
 	var tAmount = 0;
 	var tCost = 0;
+	var tMass = 0;
 
 	for (let i = 0; i < this.loads.length; i++){
 		tAmount += this.loads[i].amount;
 		tCost += this.loads[i].amount * this.loads[i].cost;
+		tMass += this.loads[i].amount * this.loads[i].mass;
 	}
 
 	table.find("tr").last().children().each(function(i){
 		if (!i){return;}
-		else if (i == 1){$(this).html(tAmount);}
-		else if (i == 3){$(this).html(tCost);}
+		else if (i == 1){$(this).html(tMass);}
+		else if (i == 4){$(this).html(tAmount);}
+		else if (i == 6){$(this).html(tCost);}
 	});
 
 	this.cost = tCost;
 }
 
 Hangar.prototype.updateHangarDiv = function(index){
+	console.log("updateHangarDiv");
 	var amount = this.loads[index].amount;
 	var cost = this.loads[index].cost * amount;
+	var max = this.capacity[index];
 	var tr = $($("#hangarTable").find("tr")[index+1]);
 	var tds = tr.find("td");
-		$(tds[3]).html(amount);
-		$(tds[5]).html(cost);
+		$(tds[4]).html(amount);
+		$(tds[6]).html(cost);
 
 	this.setTotalBuyData();
 	this.canConfirm();

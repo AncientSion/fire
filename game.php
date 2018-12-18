@@ -404,9 +404,9 @@
 			<div class="header">
 				<span>Assemble and launch a flight</span>
 				<br>
-				Can launch up to <span id="launchRate"></span> units per cycle.
+				Can store a total tonnage of up to <span id="capacity"></span> kT.
 				<br>
-				Sufficient space for <span id="capacity"></span> units.
+				Can launch up to <span id="launchRate"></span> kTs of units per cycle.
 			</div>
 			<table id="hangarTable">
 			</table>

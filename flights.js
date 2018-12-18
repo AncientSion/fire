@@ -1,5 +1,6 @@
 function Fighter(data){
 	Single.call(this, data);
+	this.mass = data.mass;
 	this.ep = 0;
 	this.fighter = 1;
 
@@ -20,7 +21,6 @@ Fighter.prototype.create = function(data){
 		this.systems.push(system);
 	}
 }
-
 
 
 function Flight(data){

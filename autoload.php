@@ -52,6 +52,7 @@ spl_autoload_register(
                 'sitara' => '/server/fighter.php',
                 'gorith' => '/server/fighter.php',
                 'frazi' => '/server/fighter.php',
+                'tzymm' => '/server/fighter.php',
                 'zorth' => '/server/fighter.php',
                 
                 'vorchan' => '/server/ships/vorchan.php',

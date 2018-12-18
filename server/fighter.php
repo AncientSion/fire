@@ -3,9 +3,11 @@
 class Fighter extends Single {
 	public $traverse = 1;
 	public $size = 26;
+	public $mass = 0;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
+		$this->mass = $this->integrity + $this->negation*2;
 	}
 
 	public function setBaseStats($phase, $turn){
@@ -51,6 +53,36 @@ class Zorth extends Fighter {
 	}
 }
 
+class Tzymm extends Fighter {
+	public $name = "Tzymm";
+	public $role = "Heavy Strike Fighter";
+	public $faction = "Vree Conglomerate";
+	public static $value =  36;
+	public $integrity = 32;
+	public $negation = 5;
+	public $baseImpulse = 120;
+	public $baseHitChance = 26;
+
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
+	}
+
+	public function addSystems(){
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 1, 
+			array(
+				array("FighterStandard", 1, 10, 14),
+				array("FighterStrafe", 1, 10, 14)
+			)
+		);
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 1, 
+			array(
+				array("FighterStandard", 1, 10, 14),
+				array("FighterStrafe", 1, 10, 14)
+			)
+		);
+	}
+}
+
 class Aurora extends Fighter {
 	public $name = "Aurora";
 	public $role = "Medium Fighter";
@@ -84,7 +116,7 @@ class Thunderbolt extends Fighter {
 	public $integrity = 28;
 	public $negation = 5;
 	public $baseImpulse = 125;
-	public $baseHitChance = 25;
+	public $baseHitChance = 24;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
