@@ -3005,7 +3005,7 @@ Ship.prototype.expandDiv = function(div){
 
 	// System options positioning
 	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].turret){continue;}
+		//if (this.structures[i].turret){continue;}
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			var s = $(this.structures[i].systems[j].element)
 			var w = s.width();

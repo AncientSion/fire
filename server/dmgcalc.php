@@ -247,7 +247,7 @@ class DmgCalc {
 	}
 
 	public static function doStandardDmg($fire, $hit, $system){
-		//Debug::log("hitting: ".get_class($system). "# ".$system->id);
+		Debug::log("hitting: ".get_class($system). "# ".$system->id);
 		$destroyed = 0;
 		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 		$okSystem = 0;

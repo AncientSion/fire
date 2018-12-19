@@ -36,6 +36,7 @@ class Single {
 	public $system = false;
 	public $squaddie = false;
 	public $jamming = 0;
+	public $turret = 0;
 	
 	public $critEffects =  array( // type, mag, dura, effect
 		array("Disabled", 120, 0, 0.00),
@@ -107,7 +108,7 @@ class Single {
 		return;
 	}
 
-	public function getSubHitChance($fire){
+	public function getSubHitChance(){
 		return $this->baseHitChance;
 	}
 

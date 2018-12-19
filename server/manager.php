@@ -592,6 +592,7 @@
 		$this->handleJumpIn();
 		$this->destroyJumpedUnits();
 		$this->assembleDeployStates();
+		$this->assembleObstaclesMoveStates();
 		$this->deleteAllReinforcements();
 		$this->adjustFocusValues();
 
@@ -992,7 +993,6 @@
 	public function setCollisionForSingleUnit($unit){
 		if ($unit->obstacle){return;}
 		//Debug::log("setCollisionForSingleUnit for unit #".$unit->id);
-		$unit->collides = array();
 		$unitPos = $unit->getTurnStartPosition();
 		$unitSpeed = $unit->getCurSpeed();
 
@@ -1004,10 +1004,9 @@
 			$totalDist = 0;
 			$distBetween = Math::getDist2($unitPos, $tPos) - $obstacle->size/2 - $unitSpeed;
 
+			//Debug::log("obstacle ".$obstacle->id.", pos: ".$tPos->x."/".$tPos->y.", unitPos ".$unitPos->x."/".$unitPos->y." --- dist between ".$distBetween);
 			if ($distBetween > 200){continue;}
 
-
-			//Debug::log("obstacle ".$obstacle->id.", pos: ".$tPos->x."/".$tPos->y.", dist between ".$distBetween);
 
 			for ($j = 0; $j < sizeof($unit->actions); $j++){
 				$action = $unit->actions[$j];
@@ -1022,24 +1021,24 @@
 				$distInside = 0;
 
 				if ($result["points"][0][1]){
-					//Debug::log("enter!");
+				//	Debug::log("enter!");
 					$enter = true;
 				}
 				if ($result["points"][1][1]){
-					//Debug::log("leave!");
+				//	Debug::log("leave!");
 					$leave = true;
 				}
 
 				if ($enter && $leave){
-					//Debug::log("1!");
+				//	Debug::log("enter & leave");
 					$distInside = Math::getDist2($result["points"][0][0], $result["points"][1][0]);
 				}
 				else if ($enter){
-					//Debug::log("2!");
+				//	Debug::log("enter");
 					$distInside = Math::getDist2($result["points"][0][0], $action);
 				}
 				else if ($leave){
-					//Debug::log("3!");
+				//	Debug::log("leave");
 					$distInside = Math::getDist2($oPos, $result["points"][1][0]);
 				}
 				else {
@@ -1060,11 +1059,6 @@
 
 			if (!$totalDist){continue;}
 
-		/*	$weaponid = 2;
-			$req = $this->ships[$i]->collision / 100 * $totalDist;
-			$string = (round($totalDist).";".$this->ships[$i]->collision.";".round($req).";");
-			$shots = round($this->ships[$i]->getSystem(2)->getShots(static::$turn) * (1 + (0.3 * ($unit->traverse-4))));
-		*/	
 			$weaponid = 2;
 			$req = $this->ships[$i]->collision * max(0.1, (1 + ($this->const["collision"]["hitMod"] * ($unit->traverse-4))));
 			$string = (round($totalDist).";".$this->ships[$i]->collision.";".round($req).";");
@@ -1081,11 +1075,22 @@
 	}
 
 	public function assembleDeployStates(){
-		return;
 		//Debug::log("assembleDeployStates");
 		$states = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->available != static::$turn && !$this->ships[$i]->obstacle){continue;}// jumpin or field move
+			if ($this->ships[$i]->available != static::$turn){continue;}// jumpin or field move
+			$states[] = $this->ships[$i]->getDeployState(static::$turn);
+		}
+
+		if (sizeof($states)){DBManager::app()->updateUnitState($states, static::$turn, static::$phase);}	
+	}
+
+	public function assembleObstaclesMoveStates(){
+		return;
+		//Debug::log("assembleObstaclesMoveStates");
+		$states = array();
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if (!$this->ships[$i]->obstacle){continue;}// jumpin or field move
 			$states[] = $this->ships[$i]->getDeployState(static::$turn);
 		}
 

@@ -211,6 +211,7 @@ class Mixed extends Ship {
 			}
 
 			$fire->rolls = [];
+			$fire->section = $this->structures[$i];
 			$this->doRollShots($fire);
 			$shots += sizeof($fire->rolls);
 			//Debug::log($shots);
@@ -235,15 +236,14 @@ class Mixed extends Ship {
 		//Debug::log("determineHits ".get_class($this));
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
-			else {
-				$target = $this->getHitSystem($fire);
-				$fire->subtargetid = $target->id;
-				$fire->req = $fire->shooter->calculateToHit($fire);
-				if ($fire->rolls[$i] <= $fire->req){
-					if ($this->didPassDefenses($fire, $i, $target)){
-						$fire->hits++;
-						DmgCalc::doDmg($fire, $i, $target);
-					}
+
+			$target = $this->getHitSystem($fire);
+			$fire->section = $target;
+			$fire->req = $fire->shooter->calculateToHit($fire);
+			if ($fire->rolls[$i] <= $fire->req){
+				if ($this->didPassDefenses($fire, $i, $target)){
+					$fire->hits++;
+					DmgCalc::doDmg($fire, $i, $target);
 				}
 			}
 		}
@@ -251,7 +251,7 @@ class Mixed extends Ship {
 
 
 	public function getHitChance($fire){
-		return $this->getStruct($fire->subtargetid)->getSubHitChance($fire);
+		return $fire->section->getSubHitChance();
 	}
 
 	public function setImpulseProfileMod(){

@@ -132,7 +132,7 @@ class Ship {
 			if (!$this->structures[$i]->turret){continue;}
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				$this->structures[$i]->systems[$j]->turret = $this->structures[$i]->id;
-				$this->structures[$i]->powerReq += $this->structures[$i]->systems[$j]->powerReq;
+				//$this->structures[$i]->powerReq += $this->structures[$i]->systems[$j]->powerReq;
 			}
 		}
 	}
@@ -894,24 +894,25 @@ class Ship {
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (!$this->structures[$i]->turret || $this->structures[$i]->destroyed){continue;}
-			$total += $this->structures[$i]->integrity;
+			$total += $this->structures[$i]->getSubHitChance();
 		}
 		return $total;
 	}
 
 	public function getTurretHitSystem($fire, $total){
+		//Debug::log("getTurretHitSystem, total ".$total);
 		$current = 0;
 		$roll = mt_rand(0, $total);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (!$this->structures[$i]->turret || $this->structures[$i]->destroyed){continue;}
-			$current += $this->structures[$i]->integrity;
+			$current += $this->structures[$i]->getSubHitChance();
 
 			if ($roll <= $current){
 				return $this->structures[$i];
 			}
 		}
-		//Debug::log("ERROR getTurretHitSystem()");
+		Debug::log("ERROR getTurretHitSystem()");
 	}
 
 	public function doRollShots($fire){
@@ -936,13 +937,14 @@ class Ship {
 		}
 	}
 
-	public function determineHits($fire){ // target
+	public function determineHits($fire){
 		//Debug::log("determineHits ".get_class($this));
 		$fire->req = $fire->shooter->calculateToHit($fire);
 
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
-			else if ($fire->rolls[$i] <= $fire->req){
+
+			if ($fire->rolls[$i] <= $fire->req){
 				if ($this->didPassDefenses($fire, $i, $this)){
 					$fire->section = $this->getFacingSection($fire);
 					$fire->hits++;
@@ -1157,6 +1159,9 @@ class Ship {
 	}
 
 	public function getTurnStartPosition(){
+		if ($this->available == Manager::$turn){
+
+		}
 		return new Point($this->x, $this->y);
 	}
 

@@ -1,14 +1,14 @@
 <?php
 
-class Xvell extends UltraLight {
+class Xvell extends Light {
 	public $name = "Xvell";
 	public $display = "Xvell";
-	public $role = "Light Corvette";
+	public $role = "Light Frigate";
 	public $faction = "Vree Conglomerate";
 	public static $value = 220;
-	public $mass = 1000;
+	public $mass = 1200;
 
-	public $integrity = 330;
+	public $integrity = 350;
 	public $ep = 100;
 	public $ew = 450;
 	public $power = 2;

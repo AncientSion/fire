@@ -53,13 +53,9 @@ class Squaddie extends Single {
 		return $this->baseImpulse;
 	}
 
-	public function getSubHitChance($fire){
-		return $this->baseHitChance;
-	}
-
 	public function setNegation($main, $armourDmg){
 		$p = 1.25;
-		$this->parentIntegrity = round($this->integrity*2);
+		$this->parentIntegrity = round($this->integrity*1.75);
 
 		$this->parentPow = round(pow($this->parentIntegrity, $p));
 		$this->armourDmg += $armourDmg;
@@ -106,7 +102,7 @@ class Light extends Squaddie {
 	public $baseImpulse = 175;
 	public $baseImpulseCost = 30;
 	public $baseTurnDelay = 1.3;
-	public $baseHitChance = 60;
+	public $baseHitChance = 160;
 	public $size = 48;
 	public $space = 4;
 	

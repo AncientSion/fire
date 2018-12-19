@@ -102,20 +102,18 @@ Obstacle.prototype.getCurSpeed = function(){
 
 Obstacle.prototype.doSelect = function(){
 	console.log(this);
-	//aUnit = this.id;
-	//this.selected = true;
-	//game.redraw()
+	aUnit = this.id;
+	this.selected = true;
+	this.setUnitSelector();
 	this.switchDiv();
+	game.redraw()
 }
 
 Obstacle.prototype.doUnselect = function(){
-	//this.unselectSystems();
-	//aUnit = false;
-	//this.selected = false;
+	aUnit = false;
+	this.selected = false;
+	this.setUnitSelector();
 	this.switchDiv();
-	//mouseCtx.clearRect(0, 0, res.x, res.y);
-	$("#vectorDiv").addClass("disabled");
-	//game.redraw();
 }
 
 Obstacle.prototype.createBaseDiv = function(){

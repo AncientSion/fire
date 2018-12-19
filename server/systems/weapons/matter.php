@@ -6,7 +6,7 @@ class Matter extends Weapon {
 
 	public $fireMode = "Standard";
 	public $dmgType = "Matter";
-	public $armourSkip = 50;
+	public $armourSkip = 0;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -17,10 +17,10 @@ class MediumRailGun extends Matter {
 	public $name = "MediumRailGun";
 	public $display = "Medium Railgun";
 	public static $prio = 0;
-	public $minDmg = 26;
-	public $maxDmg = 26;
+	public $minDmg = 66;
+	public $maxDmg = 66;
 	public $accDecay = 100;
-	public $shots = 6;
+	public $shots = 10;
 	public $animColor = "grey";
 	public $projSize = 3;
 	public $projSpeed = 11;

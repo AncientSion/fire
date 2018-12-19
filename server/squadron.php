@@ -251,7 +251,7 @@ class Squadron extends Mixed {
 	}
 
 	public function getHitChance($fire){
-		return $this->getStruct($fire->subtargetid)->getSubHitChance($fire);
+		return $fire->section->getSubHitChance();
 	}
 
 	public function addCritDB($crits){

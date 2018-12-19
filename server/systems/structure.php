@@ -21,6 +21,7 @@ class Turret extends Squaddie {
 		$this->integrity = $integrity;
 		$this->remaining = $integrity;
 		$this->negation = $negation;
+		$this->baseHitChance = floor($integrity*2.75);
 	}
 
 	public function addDamage($dmg){
@@ -40,7 +41,12 @@ class Turret extends Squaddie {
 	public function handleStructCrits($turn){
 		Debug::log("handleStructCrits ".get_class($this));
 		if ($this->isDestroyedThisTurn($turn)){
-			$usage = $this->getPowerUsage($turn);
+			$usage = 0;
+
+			for ($i = 0; $i < sizeof($this->systems); $i++){
+				$usage += $this->systems[$i]->getPowerUsage($turn);
+			}
+
 			Debug::log("isDestroyedThisTurn && usage ".$usage);
 			if (!$usage){return;}
 			$this->overloads[] = $usage;
@@ -53,21 +59,6 @@ class Turret extends Squaddie {
 				$crit = $this->systems[$i]->determineCrit($dmg, $turn, 0);
 			}
 		}
-	}
-	
-	public function getPowerUsage($turn){
-		$usage = $this->powerReq;
-
-		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
-			if ($this->powers[$i]->turn == $turn){
-				switch ($this->powers[$i]->type){
-					case 0: return 0;
-					case 1: $usage += $this->powers[$i]->cost; break;
-					default: continue;
-				}
-			} else return $usage;
-		}
-		return $usage;
 	}
 
 	public function determineCrit($dmg, $turn, $squad){ // nt in use
