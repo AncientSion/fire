@@ -3940,7 +3940,7 @@ Game.prototype.getAreaDmgs = function(fire){
 		var color = this.ships[i].getCodeColor();
 
 		if (dist < fire.weapon.aoe){
-			var subDmgs = this.ships[i].getDmgByFire(fire);
+			var subDmgs = this.ships[i].getDmgsByFire(fire);
 			for (var j = 0; j < subDmgs.length; j++){
 				subDmgs[j].system = this.ships[i].getLogTitleSpan();
 			}
@@ -3958,7 +3958,7 @@ Game.prototype.getShotDetails = function(){
 		this.fireOrders[i].weapon = this.fireOrders[i].shooter.getSystem(this.fireOrders[i].weaponid).getActiveSystem();
 	//	this.fireOrders[i].target = game.getUnit(this.fireOrders[i].targetid);
 		this.fireOrders[i].setShotTarget();
-		//this.fireOrders[i].damages = this.fireOrders[i].target.getDmgByFire(this.fireOrders[i]);
+		//this.fireOrders[i].damages = this.fireOrders[i].target.getDmgsByFire(this.fireOrders[i]);
 		this.fireOrders[i].setDamages();
 		this.fireOrders[i].systems.push(this.fireOrders[i].weaponid);
 		//this.fireOrders[i].angle = getAngleFromTo(this.fireOrders[i].shooter.getGamePos(), this.fireOrders[i].target.getGamePos());
@@ -3967,7 +3967,7 @@ Game.prototype.getShotDetails = function(){
 	/*	this.fireOrders[i].setTarget() = game.getUnit(this.fireOrders[i].targetid);
 		this.fireOrders[i].setShooter() = game.getUnit(this.fireOrders[i].shooterid);
 		this.fireOrders[i].setWeapon() = this.fireOrders[i].shooter.getSystem(this.fireOrders[i].weaponid).getActiveSystem();
-		this.fireOrders[i].setDamages() = this.fireOrders[i].target.getDmgByFire(this.fireOrders[i]);
+		this.fireOrders[i].setDamages() = this.fireOrders[i].target.getDmgsByFire(this.fireOrders[i]);
 		this.fireOrders[i].setSystems() systems.push(this.fireOrders[i].weaponid);
 		this.fireOrders[i].setAngle() angle = getAngleFromTo(this.fireOrders[i].shooter.getGamePos(), this.fireOrders[i].target.getGamePos());
 	*/

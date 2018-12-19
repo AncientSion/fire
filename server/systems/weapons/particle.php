@@ -318,6 +318,8 @@ class AntimatterCannon extends Particle {
 	public $integrity = 48;
 	public $powerReq = 6;
 	public $tracking = 4;
+	public $maxRange = 600;
+	public $dmgLoss = 20;
 
 	public $animColor = "green";
 	public $projSize = 4;

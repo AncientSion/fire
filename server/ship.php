@@ -55,7 +55,6 @@ class Ship {
 	public $index = 0; 
 	public $actions = array();
 	public $structures = array();
-	public $turrets = array();
 
 	public $locks = array();
 	public $masks = array();
@@ -129,10 +128,11 @@ class Ship {
 	}
 
 	public function handleTurrets(){
-		for ($i = 0; $i < sizeof($this->turrets); $i++){
-			for ($j = 0; $j < sizeof($this->turrets[$i]->systems); $j++){
-				$this->turrets[$i]->systems[$j]->turret = $this->turrets[$i]->id;
-				$this->turrets[$i]->powerReq += $this->turrets[$i]->systems[$j]->powerReq;
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if (!$this->structures[$i]->turret){continue;}
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				$this->structures[$i]->systems[$j]->turret = $this->structures[$i]->id;
+				$this->structures[$i]->powerReq += $this->structures[$i]->systems[$j]->powerReq;
 			}
 		}
 	}
@@ -317,13 +317,15 @@ class Ship {
 	}
 
 	public function setStructureState($turn, $phase){
-		$total = $this->primary->integrity * 4 / sizeof($this->structures);
-
-		for ($i = 0; $i < sizeof($this->structures); $i++){ // 
-			$this->structures[$i]->setNegation($total, 0);
+		$sections = 0;
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($this->structures[$i]->turret){continue;}
+			$sections++;
 		}
-		for ($i = 0; $i < sizeof($this->turrets); $i++){ // 
-			$this->turrets[$i]->setNegation($this->turrets[$i]->integrity*1.5, 0);
+		$total = $this->primary->integrity * 4 / $sections;
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$this->structures[$i]->setNegation($total, 0);
 		}
 	}
 
@@ -613,9 +615,7 @@ class Ship {
 				}
 			}
 
-			if ($found){
-				continue;
-			}
+			if ($found){continue;}
 
 			for ($j = 0; $j < sizeof($this->structures); $j++){
 				for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
@@ -728,12 +728,10 @@ class Ship {
 			$need += $this->primary->systems[$i]->powerReq;
 		}
 		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$need += $this->structures[$i]->powerReq;
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				$need += $this->structures[$i]->systems[$j]->powerReq;
 			}
-		}
-		for ($i = 0; $i < sizeof($this->turrets); $i++){
-			$need += $this->turrets[$i]->powerReq;
 		}
 		return $need;
 	}
@@ -862,7 +860,7 @@ class Ship {
 		else if ($fire->weapon->aoe){
 			Debug::log("resolveFireOrder AREA - #".$fire->id.", TARGET ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
 
-			$fire->section = $this->getHitSection($fire);
+			$fire->section = $this->getFacingSection($fire);
 			DmgCalc::doDmg($fire, 0, $this->getHitSystem($fire));
 
 		}
@@ -891,6 +889,31 @@ class Ship {
 		$fire->resolved = 1;
 	}
 
+	public function getTurretHitChances(){
+		$total = 0;
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if (!$this->structures[$i]->turret || $this->structures[$i]->destroyed){continue;}
+			$total += $this->structures[$i]->integrity;
+		}
+		return $total;
+	}
+
+	public function getTurretHitSystem($fire, $total){
+		$current = 0;
+		$roll = mt_rand(0, $total);
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if (!$this->structures[$i]->turret || $this->structures[$i]->destroyed){continue;}
+			$current += $this->structures[$i]->integrity;
+
+			if ($roll <= $current){
+				return $this->structures[$i];
+			}
+		}
+		//Debug::log("ERROR getTurretHitSystem()");
+	}
+
 	public function doRollShots($fire){
 		//Debug::log("doRollShots ".$fire->shots);
 		for ($i = 0; $i < $fire->shots; $i++){
@@ -906,7 +929,7 @@ class Ship {
 			//Debug::log("roll ".$fire->rolls[$i]);
 			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
 			else if ($fire->rolls[$i] <= $fire->req){
-				$fire->section = $this->getHitSection($fire);
+				$fire->section = $this->getFacingSection($fire);
 				$fire->hits++;
 				DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
 			}
@@ -921,7 +944,7 @@ class Ship {
 			if ($this->destroyed){$fire->cancelShotResolution($i); return;}
 			else if ($fire->rolls[$i] <= $fire->req){
 				if ($this->didPassDefenses($fire, $i, $this)){
-					$fire->section = $this->getHitSection($fire);
+					$fire->section = $this->getFacingSection($fire);
 					$fire->hits++;
 					DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
 				}
@@ -930,6 +953,7 @@ class Ship {
 	}
 
 	public function didPassDefenses($fire, $shot, &$target){
+		return true;
 		if ($fire->shooter->obstacle){return true;}
 		if ($fire->shooter->flight){return true;}
 
@@ -977,10 +1001,6 @@ class Ship {
 		return round($req);
 	}
 
-	public function getArmour($fire, $system){
-		return $fire->section->getArmourValue($system);
-	}
-
 	public function getOverkillSystem($fire){
 		if (!$this->ship || $fire->weapon->fireMode == "Shockwave"){return false;}
 		return true;
@@ -1010,36 +1030,35 @@ class Ship {
 		//return $this->getSystemByName("Command");
 		//return $this->getPrimaryHitSystem();
 
-		Debug::log("getHitSystem on ".get_class($this).", section: ".$fire->section->id);
-
-		if ($fire->section->turret){return $fire->section;}
+		//Debug::log("getHitSystem on ".get_class($this).", section: ".$fire->section->id);
 
 		$roll;
 		$current = 0;
-		$main = $this->primary->getTotalHitChance();
-		$total = $main;
+		$primary = $this->primary->getTotalHitChance();
+		$section = $fire->section->getTotalHitChance();
+		$turrets = $this->getTurretHitChances();
 
-		$total += $fire->section->getTotalHitChance();
-
-		//Debug::log("total: ".$total);
+		$total = $primary;
+		//Debug::log("added primary ".$total);
+		$total += $section;
+		//Debug::log("added section ".$total);
+		$total += $turrets;
+		//Debug::log("added all turrets ".$total);
 
 		$roll = mt_rand(0, $total);
 		//Debug::log("roll: ".$roll);
-		$current += $main;
+		$current += $primary;
 		if ($roll <= $current){
 			//Debug::log($roll.", get primary system");
 			return $this->primary->getSubHitSystem();
 		}
-		else return $fire->section->getSubHitSystem($roll, $current);
-		//Debug::log("ERROR getHitSystem()");
-	}
-
-	public function isExposed($fraction, $system){
-		//return true;
-		if ($fraction <= $this->getHitTreshold($system)){
-			return true;
+		$current += $turrets;
+		if ($turrets && $roll <= $current){
+			return $this->getTurretHitSystem($fire, $turrets);
 		}
-		return false;
+
+		return $fire->section->getSubHitSystem($roll, $current);
+		Debug::log("ERROR getHitSystem()");
 	}
 
 	public function getHitChance($fire){
@@ -1194,11 +1213,7 @@ class Ship {
 	}
 
 	public function getIncomingFireAngle($fire){
-		if ($fire->cc){
-			if ($this->ship || $this->squad){
-				return $fire->shooter->getFireAngle($fire);
-			} else return 0;
-		}
+		if ($fire->cc){return $fire->shooter->getFireAngle($fire);}
 		
 		for ($i = 0; $i < sizeof($this->angles); $i++){
 			if ($this->angles[$i][0] == $fire->shooter->id){
@@ -1210,23 +1225,19 @@ class Ship {
 		Debug::log("got no ANGLE set on ".$this->id." targeted by #".$fire->shooter->id);
 	}
 
-	public function getHitSection($fire){
-		if ($fire->cc && $fire->shooter->flight || $fire->shooter->obstacle){return $this->structures[mt_rand(0, sizeof($this->structures)-1)]->id;}
-
-		//Debug::log("fire-angle: ".$fire->angle.", heading: ".$this->heading.", facing: ".$this->facing);
+	public function getFacingSection($fire){
 		$angle = Math::addAngle($this->facing, $this->getIncomingFireAngle($fire));
-		//Debug::log("fire-angle: ".$fire->angle);
 		if ($this->rolled){$fire->angle = Math::getMirrorAngle($fire->angle);}
 
 		$locs = array();
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->destroyed){Debug::log("continue"); continue;}
+			if ($this->structures[$i]->turret || $this->structures[$i]->destroyed){continue;}
 			if (Math::isInArc($angle, $this->structures[$i]->start, $this->structures[$i]->end)){
 				$locs[] = $this->structures[$i];
 			}
 		}
 
-		Debug::log("fire #".$fire->id.", possible: ".sizeof($locs));
+		//Debug::log("fire #".$fire->id.", possible: ".sizeof($locs));
 		return $locs[mt_rand(0, sizeof($locs)-1)];
 	}
 
@@ -1443,10 +1454,6 @@ class Ship {
 			}
 		}
 		return $dmgs;
-	}
-
-	public function getHitTreshold($system){
-		return $this->hitTable[$system->name];
 	}
 
 	public function getLockMultiplier(){

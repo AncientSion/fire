@@ -551,7 +551,7 @@ Mixed.prototype.getTrajectory = function(){
 	return {x: this.x, y: this.y};
 }
 
-Mixed.prototype.getDmgByFire = function(fire){
+Mixed.prototype.getDmgsByFire = function(fire){
 	var dmgs = [];
 	var lookup = 0;
 

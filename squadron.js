@@ -571,7 +571,7 @@ Squadron.prototype.getFireDest = function(fire, isHit, num){
 	}
 }
 
-Squadron.prototype.getDmgByFire = function(fire){
+Squadron.prototype.getDmgsByFire = function(fire){
 	var dmgs = [];
 	var lookup = 0;
 	
@@ -596,7 +596,7 @@ Squadron.prototype.getDmgByFire = function(fire){
 			}
 		}
 	}
-	console.log("ERROR getDmgByFire");
+	console.log("ERROR getDmgsByFire");
 	return dmgs;
 }
 

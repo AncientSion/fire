@@ -653,7 +653,7 @@ FireOrder.prototype.setWeapon = function(){
 
 FireOrder.prototype.setDamages = function(){
 	if (this.target){
-		this.damages = this.target.getDmgByFire(this);
+		this.damages = this.target.getDmgsByFire(this);
 	} else this.damages = [];
 }
 

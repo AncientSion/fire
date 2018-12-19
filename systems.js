@@ -1488,17 +1488,17 @@ Reactor.prototype.getUnusedPower = function(){
 Reactor.prototype.getOutputUsage  = function(){
 	var use = 0;
 	var ship = game.getUnit(this.parentId);
+	for (var i = 0; i < ship.primary.systems.length; i++){
+		if (ship.primary.systems[i].isPowered()){
+			use += ship.primary.systems[i].getPowerUsage();
+		}
+	}
 	for (var i = 0; i < ship.structures.length; i++){
 		use += ship.structures[i].getPowerUsage();
 		for (var j = 0; j < ship.structures[i].systems.length; j++){
 			if (ship.structures[i].systems[j].isPowered()){
 				use += ship.structures[i].systems[j].getPowerUsage();
 			}
-		}
-	}
-	for (var i = 0; i < ship.primary.systems.length; i++){
-		if (ship.primary.systems[i].isPowered()){
-			use += ship.primary.systems[i].getPowerUsage();
 		}
 	}
 	return use;
@@ -2734,7 +2734,7 @@ Beam.prototype.getAnimation = function(fire){
 			else if (fire.rolls[roll] > 0 && fire.rolls[roll] <= fire.req[i]){ // hit
 				hasHit = 1;
 				hits++;
-				if (fire.target.ship){dest = fire.target.getHitSection(fire);}
+				if (fire.target.ship){dest = fire.target.getFacingSectionPoint(fire);}
 				else {dest = fire.target.getFireDest(fire, hasHit, hits-1);}
 				dest.x += t.x;
 				dest.y += t.y;

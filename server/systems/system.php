@@ -106,6 +106,14 @@ class System {
 		return $this->armourMod;
 	}
 
+	public function getArmour($fire){
+		//Debug::log("getArmourValues".$this->getBoostEffect("Armour")."/".$this->getBoostLevel(2));
+		return array(
+			"stock" => round($fire->section->getRemNegation() * $this->getArmourMod()),
+			"bonus" => round($fire->section->getBonusNegation())
+		);
+	}
+
 	public function isPowered($turn){
 		if ($this->disabled || $this->destroyed){return false;}
 		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){

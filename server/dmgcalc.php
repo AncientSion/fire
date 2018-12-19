@@ -227,6 +227,7 @@ class DmgCalc {
 	}
 
 	public static function doDmg($fire, $hit, $system){
+
 		switch ($fire->weapon->fireMode){
 			case "Standard": static::doStandardDmg($fire, $hit, $system); break;
 			case "Ballistic": static::doStandardDmg($fire, $hit, $system); break;
@@ -252,7 +253,7 @@ class DmgCalc {
 		$okSystem = 0;
 		$remInt = $system->getRemIntegrity();
 		
-		$negation = $fire->target->getArmour($fire, $system);
+		$negation = $system->getArmour($fire);
 		
 		$dmg = static::calcDmg($fire->weapon, $totalDmg, $negation);
 		$dmg = $system->setMaxDmg($fire, $dmg);
@@ -276,7 +277,7 @@ class DmgCalc {
 		}
 
 		$entry = new Damage(
-			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section->id, $system->id, $fire->turn, $fire->weapon->type,
+			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->getSectionId($system), $system->id, $fire->turn, $fire->weapon->type,
 			$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 		);
 
@@ -290,7 +291,7 @@ class DmgCalc {
 		$okSystem = 0;
 
 		//$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
-		$negation = $fire->target->getArmour($fire, $system);
+		$negation = $system->getArmour($fire);
 		//$dmg = DmgCalc::calcDmg($fire->weapon, $totalDmg, $negation);
 
 		$total = 0;
@@ -351,7 +352,7 @@ class DmgCalc {
 		}
 
 		$entry = new Damage(
-			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section->id, $system->id, $fire->turn, $fire->weapon->type,
+			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->getSectionId($system), $system->id, $fire->turn, $fire->weapon->type,
 			$total, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 		);
 
@@ -366,7 +367,7 @@ class DmgCalc {
 		$remInt = $system->getRemIntegrity();
 		$okSystem = 0;
 
-		$negation = $fire->target->getArmour($fire, $system);
+		$negation = $system->getArmour($fire);
 		$dmg = DmgCalc::calcDmg($fire->weapon, $totalDmg, $negation);
 
 		$total = 0;
@@ -420,7 +421,7 @@ class DmgCalc {
 		}
 
 		$entry = new Damage(
-			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section->id, $system->id, $fire->turn, $fire->weapon->type,
+			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->getSectionId($system), $system->id, $fire->turn, $fire->weapon->type,
 			$total, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 		);
 
@@ -455,7 +456,7 @@ class DmgCalc {
 			$print .= " ".get_class($system)."/".$system->id.": ".$rake." dmg, ";
 			$destroyed = 0;
 			$remInt = $system->getRemIntegrity();
-			$negation = $fire->target->getArmour($fire, $system);
+			$negation = $system->getArmour($fire);
 
 			$dmg = DmgCalc::calcDmg($fire->weapon, $rake, $negation);
 			$dmg = $system->setMaxDmg($fire, $dmg);
@@ -479,7 +480,7 @@ class DmgCalc {
 
 
 			$entry = new Damage(
-				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section->id, $system->id, $fire->turn, $fire->weapon->type,
+				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->getSectionId($system), $system->id, $fire->turn, $fire->weapon->type,
 				$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 			);
 
@@ -525,7 +526,7 @@ class DmgCalc {
 			$system = $secondary[$i];
 			$remInt = $system->getRemIntegrity();
 			$destroyed = 0;
-			$negation = $fire->target->getArmour($fire, $system);	
+			$negation = $system->getArmour($fire);	
 			$subDamage = $values[$index];
 			$totalDmg = ceil($values[$index] * $damageMod);
 			$dmg = static::calcDmg($fire->weapon, $totalDmg, $negation);
@@ -542,7 +543,7 @@ class DmgCalc {
 			}
 
 			$entry = new Damage(
-				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section->id, $system->id, $fire->turn, $fire->weapon->type,
+				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->getSectionId($system), $system->id, $fire->turn, $fire->weapon->type,
 				$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 			);
 
@@ -645,7 +646,7 @@ class DmgCalc {
 			$system = $targets[$i];
 			$destroyed = 0;
 			$remInt = $system->getRemIntegrity();
-			$negation = $fire->target->getArmour($fire, $system);
+			$negation = $system->getArmour($fire);
 
 			$dmg = static::calcDmg($fire->weapon, $dmgs[$i], $negation);
 
@@ -659,7 +660,7 @@ class DmgCalc {
 			Debug::log("dealing ".$dmg->armourDmg."/".$dmg->systemDmg."/".$dmg->hullDmg." to ".$targets[$i]->display);
 
 			$entry = new Damage(
-				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section->id, $system->id, $fire->turn, $fire->weapon->type,
+				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->getSectionId($system), $system->id, $fire->turn, $fire->weapon->type,
 				$dmgs[$i], $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 			);
 
@@ -680,7 +681,7 @@ class DmgCalc {
 			$system = $targets[$i];
 			$destroyed = 0;
 			$remInt = $system->getRemIntegrity();
-			$negation = $fire->target->getArmour($fire, $system);
+			$negation = $system->getArmour($fire);
 			$dmg = static::calcDmg($fire->weapon, $totalDmg, $negation);
 
 			if ($remInt - $dmg->systemDmg < 1){
@@ -689,7 +690,7 @@ class DmgCalc {
 			}
 			
 			$entry = new Damage(
-				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section->id, $system->id, $fire->turn, $fire->weapon->type,
+				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->getSectionId($system), $system->id, $fire->turn, $fire->weapon->type,
 				$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 			);
 
@@ -708,7 +709,7 @@ class DmgCalc {
 			$push = false;
 			$destroyed = 0;
 			$remInt = $system->getRemIntegrity();
-			$negation = $fire->target->getArmour($fire, $system);
+			$negation = $system->getArmour($fire);
 			$dmg = static::calcDmg($fire->weapon, $toDo, $negation);
 			$name = get_class($system);
 
@@ -733,7 +734,7 @@ class DmgCalc {
 				$fire->hits++;
 				
 				$entry = new Damage(
-					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section->id, $system->id, $fire->turn, $fire->weapon->type,
+					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->getSectionId($system), $system->id, $fire->turn, $fire->weapon->type,
 					$totalDmg, $dmg->shieldDmg, $dmg->armourDmg, $dmg->systemDmg, $dmg->hullDmg, $dmg->emDmg, array_sum($negation), $destroyed, $dmg->notes, 1
 				);
 

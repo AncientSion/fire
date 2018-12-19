@@ -272,6 +272,12 @@ class FireOrder {
 		$this->resolved = $resolved;
 	}
 
+	public function getSectionId($system){
+		if ($system->turret){
+			return $system->id;
+		} return $this->section->id;
+	}
+
 	public function cancelShotResolution($i){
 		Debug::log("cancelShotResolution from shot $i");
 		for ($j = $i; $j < $this->rolls; $j++){

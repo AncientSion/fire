@@ -99,7 +99,7 @@ class Xonn extends SuperHeavy {
 		$turrets[] = $turretB;
 		
 		for ($i = 0; $i < sizeof($turrets); $i++){
-			$this->turrets[] = $turrets[$i];
+			$this->structures[] = $turrets[$i];
 			//$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
 			//$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse-1;
 		}

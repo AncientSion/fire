@@ -17,10 +17,10 @@ class MediumRailGun extends Matter {
 	public $name = "MediumRailGun";
 	public $display = "Medium Railgun";
 	public static $prio = 0;
-	public $minDmg = 36;
-	public $maxDmg = 36;
+	public $minDmg = 26;
+	public $maxDmg = 26;
 	public $accDecay = 100;
-	public $shots = 2;
+	public $shots = 6;
 	public $animColor = "grey";
 	public $projSize = 3;
 	public $projSpeed = 11;

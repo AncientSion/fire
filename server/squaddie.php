@@ -59,7 +59,7 @@ class Squaddie extends Single {
 
 	public function setNegation($main, $armourDmg){
 		$p = 1.25;
-		$this->parentIntegrity = round($main*1.5);
+		$this->parentIntegrity = round($this->integrity*2);
 
 		$this->parentPow = round(pow($this->parentIntegrity, $p));
 		$this->armourDmg += $armourDmg;
@@ -71,18 +71,6 @@ class Squaddie extends Single {
 	public function getRemNegation(){
 		$p = 1.25;
 		return round(pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow * $this->negation);
-	}
-	
-	public function getArmourValue($system){
-		return array(
-			"stock" => round($this->getRemNegation() * $system->getArmourMod()),
-			"bonus" => round($this->getBonusNegation())
-			//"bonus" => round($this->getBonusNegation() * $system->getArmourMod())
-		);
-	}
-
-	public function getArmourMod(){
-		return 1;
 	}
 
 	public function getName(){

@@ -219,6 +219,17 @@ class Single {
 		return $this->negation;
 	}
 
+	public function getArmour($fire){
+		return array(
+			"stock" => round($this->getRemNegation() * $this->getArmourMod()),
+			"bonus" => round($this->getBonusNegation())
+		);
+	}
+
+	public function getArmourMod(){
+		return 1;
+	}
+
 	public function getRelDmg($turn){
 		//Debug::log("getRelDmg on SINGLE #".$this->id."/".get_class($this));
 		$old = 0; $new = 0;

@@ -253,9 +253,6 @@ class Squadron extends Mixed {
 	public function getHitChance($fire){
 		return $this->getStruct($fire->subtargetid)->getSubHitChance($fire);
 	}
-	public function getArmour($fire, $system){
-		return $system->getArmourValue($system);
-	}
 
 	public function addCritDB($crits){
 		for ($i = 0; $i < sizeof($crits); $i++){

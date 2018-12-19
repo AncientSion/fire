@@ -1468,13 +1468,6 @@ Ship.prototype.setSubSystemState = function(){
 			this.structures[i].systems[j].setBonusNegation(this.structures[i].bonusNegation);
 		}
 	}
-	for (var i = 0; i < this.turrets.length; i++){
-		this.turrets[i].setState();
-		this.turrets[i].setBonusNegation();
-		for (var j = 0; j < this.turrets[i].systems.length; j++){
-			this.turrets[i].systems[j].setState();
-		}
-	}
 }
 
 Ship.prototype.setStringHitChance = function(){
@@ -1884,7 +1877,7 @@ Ship.prototype.getAngledHitChance = function(angle){
 	return Math.ceil(sub);
 }
 
-Ship.prototype.getDmgByFire = function(fire){
+Ship.prototype.getDmgsByFire = function(fire){
 	//console.log(fire.hits);
 	var dmgs = [];
 	var lookup = 0;
@@ -1980,6 +1973,7 @@ Ship.prototype.getSystemLocation = function(i, name){
 			case "Sensor": p = getPointInDir(this.size/3, this.getDrawFacing()+range(-15, 15), 0, 0); break;
 			case "Engine": p = getPointInDir(-this.size/4, this.getDrawFacing()+range(-15, 15), 0, 0); break;
 			case "Jammer": p = getPointInDir(-this.size/4, this.getDrawFacing()+range(-15, 15), 0, 0); break;
+			case "GravitonSupressor": p = getPointInDir(-this.size/4, this.getDrawFacing()+range(-15, 15), 0, 0); break;
 		}
 	}
 	else {
@@ -2049,7 +2043,7 @@ Ship.prototype.getRemSpeed = function(){
 	return impulse;
 }
 
-Ship.prototype.getHitSection = function(fire){
+Ship.prototype.getFacingSectionPoint = function(fire){
 	var o = fire.shooter.getPlannedPos();
 	var t = this.getPlannedPos();
 	var a = getAngleFromTo(o, t) + range(-5, 5);
@@ -2715,7 +2709,7 @@ Ship.prototype.expandDiv = function(div){
 	var widen = 0;
 
 	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].start == 0 && this.structures[i].end == 360){continue;} // turret
+		if (this.structures[i].turret){continue;} // turret
 		this.structures[i].direction = getLayoutDir(this.structures[i]);
 		if (this.structures[i].direction == 0 || this.structures[i].direction == 360){
 			noFront = false;
@@ -2737,6 +2731,7 @@ Ship.prototype.expandDiv = function(div){
 
 	// OUTER STRUCTS
 	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].turret){continue;}
 
 		var structDiv = $("<div>").addClass("structDiv");
 		structContainer.append(structDiv);
@@ -3010,6 +3005,7 @@ Ship.prototype.expandDiv = function(div){
 
 	// System options positioning
 	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].turret){continue;}
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			var s = $(this.structures[i].systems[j].element)
 			var w = s.width();
@@ -3612,14 +3608,6 @@ Ship.prototype.getSystem = function(id){
 	for (var i = 0; i < this.primary.systems.length; i++){
 		if (this.primary.systems[i].id == id){return this.primary.systems[i];}
 	}
-	for (var i = 0; i < this.turrets.length; i++){
-		if (this.turrets[i].id == id){return this.turrets[i];}
-		for (var j = 0; j < this.turrets[i].systems.length; j++){
-			if (this.turrets[i].systems[j].id == id){
-				return this.turrets[i].systems[j];
-			}
-		}
-	}
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].id == id){return this.structures[i];}
 		for (var j = 0; j < this.structures[i].systems.length; j++){
@@ -4179,43 +4167,41 @@ Ship.prototype.addTurrets = function(shipDiv){
 	var turretDivs = [];
 
 	//TURRETS
-	for (var i = 0; i < this.turrets.length; i++){
-		var width = Math.max(90, this.turrets[i].systems.length*30)
+	for (var i = 0; i < this.structures.length; i++){
+		if (!this.structures[i].turret){continue;}
+		var width = Math.max(90, this.structures[i].systems.length*30)
 		var turretDiv = $("<div>").addClass("structDiv turretDiv").css("width", width).css("height", 90);
 		var turretTable = $("<table>").addClass("structTable");
 		turretDiv.append(turretTable);
 
-		var core = $(this.turrets[i].getCoreData());
-			core.attr("colSpan", this.turrets[i].systems.length);
-			core.append(this.turrets[i].getPowerDiv())
+		var core = $(this.structures[i].getCoreData());
+			core.attr("colSpan", this.structures[i].systems.length);
+			core.append(this.structures[i].getPowerDiv())
 		turretTable.append($("<tr>").append(core));
-		var armour = $(this.turrets[i].getArmourData());
-			armour.attr("colSpan", this.turrets[i].systems.length)
+		var armour = $(this.structures[i].getArmourData());
+			armour.attr("colSpan", this.structures[i].systems.length)
 		turretTable.append($("<tr>").append(armour));
 
 		tr = document.createElement("tr");
-		for (var j = 0; j < this.turrets[i].systems.length; j++){
+		for (var j = 0; j < this.structures[i].systems.length; j++){
 
-			var td = this.turrets[i].systems[j].getTableData();
+			var td = this.structures[i].systems[j].getTableData();
 				td = this.attachTurretEvent(td);
 				$(td)
-				.data("turretId", this.turrets[i].id)
+				.data("turretId", this.structures[i].id)
 				.find(".integrityNow").remove().end().find(".integrityFull").remove();
 
 			tr.appendChild(td);
 			
 			if (this.id > 0 || game.turn == 1){
-				var boostDiv = this.turrets[i].systems[j].getBoostDiv();
+				var boostDiv = this.structures[i].systems[j].getBoostDiv();
 				if (boostDiv){td.appendChild(boostDiv);}
 
-			//	var powerDiv = this.turrets[i].systems[j].getPowerDiv();
-			//	if (powerDiv){td.appendChild(powerDiv);}
-
-				var modeDiv = this.turrets[i].systems[j].getModeDiv();
+				var modeDiv = this.structures[i].systems[j].getModeDiv();
 				if (modeDiv){td.appendChild(modeDiv);}
 			}
 
-			if (this.turrets[i].systems[j].dual && !this.turrets[i].systems[j].effiency){
+			if (this.structures[i].systems[j].dual && !this.structures[i].systems[j].effiency){
 				$(td).find(".outputMask").hide();
 			}
 			

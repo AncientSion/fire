@@ -38,13 +38,16 @@ class Turret extends Squaddie {
 	}
 
 	public function handleStructCrits($turn){
+		Debug::log("handleStructCrits ".get_class($this));
 		if ($this->isDestroyedThisTurn($turn)){
 			$usage = $this->getPowerUsage($turn);
+			Debug::log("isDestroyedThisTurn && usage ".$usage);
 			if (!$usage){return;}
 			$this->overloads[] = $usage;
 			$this->damages[sizeof($this->damages)-1]->notes .= "o".$usage.";";
 		}
 		else {
+			Debug::log("else");
 			$dmg = $this->getRelDmg($turn);
 			for ($i = 0; $i < sizeof($this->systems); $i++){
 				$crit = $this->systems[$i]->determineCrit($dmg, $turn, 0);
@@ -222,14 +225,6 @@ class Structure {
 		return $this->bonusNegation;
 	}
 
-	public function getArmourValue($system){
-		//Debug::log("getArmourValues".$this->getBoostEffect("Armour")."/".$this->getBoostLevel(2));
-		return array(
-			"stock" => round($this->getRemNegation() * $system->getArmourMod()),
-			"bonus" => round($this->getBonusNegation())
-		);
-	}
-
 	public function getBoostEffect($type){
 		for ($i = 0; $i < sizeof($this->boostEffect); $i++){
 			if ($this->boostEffect[$i]->type == $type){
@@ -297,7 +292,8 @@ class Primary {
 	public $damaged = 0;
 	public $emDmg = 0;
 	public $newDmg = 0;
-	public $system = false;
+	public $system = 0;
+	public $turret = 0;
 
 	function __construct($id, $parentId, $start, $end, $traverse, $integrity){
 		$this->id = $id;
@@ -314,6 +310,18 @@ class Primary {
 			return true;
 		}
 		return false;
+	}
+
+	public function getArmour($fire){
+		//Debug::log("getArmourValues".$this->getBoostEffect("Armour")."/".$this->getBoostLevel(2));
+		return array(
+			"stock" => round($fire->section->getRemNegation() * $this->getArmourMod()),
+			"bonus" => round($fire->section->getBonusNegation())
+		);
+	}
+
+	public function getArmourMod(){
+		return 1;
 	}
 
 	public function getSubHitSystem(){
@@ -383,10 +391,6 @@ class Primary {
 			$dmg->hullDmg += $this->remaining;
 			$this->destroyed = 1;
 		}
-	}
-
-	public function getArmourMod(){
-		return 1;
 	}
 
 	public function getTotalHitChance(){
