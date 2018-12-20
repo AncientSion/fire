@@ -955,7 +955,7 @@ class Ship {
 	}
 
 	public function didPassDefenses($fire, $shot, &$target){
-		return true;
+		//return true;
 		if ($fire->shooter->obstacle){return true;}
 		if ($fire->shooter->flight){return true;}
 

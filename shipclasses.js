@@ -1400,8 +1400,9 @@ Ship.prototype.doUnselect = function(){
 	this.switchDiv();
 	this.unsetMoveMode();
 	$("#hangarDiv").addClass("disabled");
-	$("#popupWrapper").hide()
-	$("#instructWrapper").hide()
+	$("#popupWrapper").hide();
+	$("#instructWrapper").hide();
+	$("#collideWrapper").hide();
 	$("#sysDiv").remove();
 	$(ui.doShorten).empty();
 	mouseCtx.clearRect(0, 0, res.x, res.y);
@@ -3605,9 +3606,6 @@ Ship.prototype.hasSystemSelected = function(name){
 }
 
 Ship.prototype.getSystem = function(id){
-	for (var i = 0; i < this.primary.systems.length; i++){
-		if (this.primary.systems[i].id == id){return this.primary.systems[i];}
-	}
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].id == id){return this.structures[i];}
 		for (var j = 0; j < this.structures[i].systems.length; j++){
@@ -3615,6 +3613,9 @@ Ship.prototype.getSystem = function(id){
 				return this.structures[i].systems[j];
 			}
 		}
+	}
+	for (var i = 0; i < this.primary.systems.length; i++){
+		if (this.primary.systems[i].id == id){return this.primary.systems[i];}
 	}
 }
 
@@ -4184,7 +4185,6 @@ Ship.prototype.addTurrets = function(shipDiv){
 
 		tr = document.createElement("tr");
 		for (var j = 0; j < this.structures[i].systems.length; j++){
-
 			var td = this.structures[i].systems[j].getTableData();
 				td = this.attachTurretEvent(td);
 				$(td)

@@ -1383,7 +1383,7 @@ div.integrityFull {
 	font-size: 14px;
 }
 
-.systemTotal {
+.systemTotal, .totalLaunch, .totalMass {
 	color: yellow;
 	font-size: 18px;
 }

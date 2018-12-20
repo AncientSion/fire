@@ -154,6 +154,9 @@ class Weapon extends System {
 
 	public function setAntimatterData(){
 		//$this->notes[] = "<span class='yellow'>".$this->amBonus."</span> extra damage per 1 point of passing the to-hit roll.";
+		$this->dmgType = "Antimatter";
+		$this->dmgLoss = 25;
+
 		$this->notes[] = "<span class='yellow'>+".($this->amBonus*10)."%</span> extra damage caused per 10 points of passing the to-hit roll.";
 		$this->notes[] = "Extra damage capped at <span class='yellow'>".$this->amMax."%</span> of base damage after all modifiers.";
 	}
@@ -186,7 +189,11 @@ class Weapon extends System {
 
 		$dist = $fire->dist;
 
-		if ($this->fireMode[0] == "B"){
+		if ($this->fireMode[0] == "B"){ // beam
+			if ($fire->dist <= $this->optRange){return 1;}
+			else $dist = $fire->dist - $this->optRange;
+		}
+		else if ($this->dmgType[0] == "A"){ // antimatter
 			if ($fire->dist <= $this->optRange){return 1;}
 			else $dist = $fire->dist - $this->optRange;
 		}

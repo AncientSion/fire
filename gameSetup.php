@@ -174,9 +174,9 @@ else header("Location: index.php");
 		</div>
 		<div id="hangarDiv" class="disabled">
 			<div class="header">
-				Can launch up to <span id="launchRate"></span> kTs of units per cycle.
-				<br>
 				Can store a total tonnage of up to <span id="capacity"></span> kT.
+				<br>
+				Can launch up to <span id="launchRate"></span> kTs of units per cycle.
 			</div>
 			<table id="hangarTable">
 			</table>

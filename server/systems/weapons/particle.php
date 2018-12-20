@@ -276,6 +276,8 @@ class AntimatterConverter extends Particle {
 	public $amBonus = 2;
 	public $amMax = 30;
 
+	public $optRange = 400;
+
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $start, $end, $output, $width);
         $this->setAntimatterData();
@@ -318,8 +320,7 @@ class AntimatterCannon extends Particle {
 	public $integrity = 48;
 	public $powerReq = 6;
 	public $tracking = 4;
-	public $maxRange = 600;
-	public $dmgLoss = 20;
+	public $optRange = 600;
 
 	public $animColor = "green";
 	public $projSize = 4;

@@ -53,7 +53,7 @@ class FighterStrafe extends FighterWeapon {
 	//public $extraPulses = 2;
 	//public $grouping = 30;
 	public $shots = 1;
-	public $amBonus = 0.1;
+	public $amBonus = 1;
 	public $amMax = 50;
 	
 	function __construct($id, $parentId, $specialId, $linked, $shots, $minDmg, $maxDmg){

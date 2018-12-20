@@ -761,7 +761,7 @@ System.prototype.showOptions = function(){
 	if (this.destroyed || this.locked){return;}
 
 	var ele = $(this.element);
-	var boost = this.maxBoost;
+	var boost = this.maxBoost || this.effiency;
 	var canModeChange = this.canSwitchMode();
 	var canPower = this.canPower();
 	var canUnpower = this.canUnpower();
@@ -1139,7 +1139,7 @@ System.prototype.drawSystemArc = function(facing, rolled, pos){
 		}*/
 
 	var dist = game.arcRange;
-	if (this.maxRange){dist = this.getMaxRange();}
+	if (this.maxRange && !this.dmgLoss){dist = this.getMaxRange();}
 	for (var i = 0; i < this.arc.length; i++){
 		var	start;
 		var	end;
@@ -1877,6 +1877,8 @@ function Weapon(system){
 	this.aoe = system.aoe;
 	this.animation = system.animation;
 	this.amBonus = system.amBonus;
+	this.optRange = system.optRange;
+	this.dmgLoss = system.dmgLoss;
 	this.amMax =
 	this.loaded;
 	this.mount;
@@ -1935,7 +1937,11 @@ Weapon.prototype.getRangeDmgMod = function(){
 Weapon.prototype.getDmgLoss = function(dist){
 	if (!this.dmgLoss){return 0;}
 
-	if (this.fireMode[0] == "B"){
+	if (this.fireMode[0] == "B"){ // beam
+		if (dist <= this.optRange){return 0;}
+		else dist = dist - this.optRange;
+	}
+	else if (this.dmgType[0] == "A"){
 		if (dist <= this.optRange){return 0;}
 		else dist = dist - this.optRange;
 	}
@@ -2123,7 +2129,12 @@ Weapon.prototype.getSysDiv = function(){
 	table.append($("<tr>").append($("<td>").html("Loading")).append($("<td>").addClass("loading").html(this.getTimeLoaded() + " / " + this.reload)));
 	if (this.tracking >= 0){table.append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTrackingRating() + " / " + getUnitType(this.getTrackingRating()))));}
 
-	if (this.fireMode == "Beam"){
+
+
+	if (this.dmgType == "Antimatter"){
+		table.append($("<tr>").append($("<td>").html("Top Range")).append($("<td>").html(this.optRange + "px")));
+	}
+	else if (this.fireMode == "Beam"){
 		table.append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").html(this.optRange + "px")));
 	}
 
@@ -2203,7 +2214,7 @@ Weapon.prototype.getFillStyle = function(x, y, dist){
 		grad.addColorStop(((this.optRange/1200*dist)+dist) / 2 / dist, "yellow");
 		grad.addColorStop(1, "red");
 	}
-	else if (this.dmgType[0] == "P" || this.dmgType[0] == "E"){
+	else if (this.dmgType[0] == "P" || this.dmgType[0] == "E"){ // plasma, EM
 		var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
 		var loss = this.dmgLoss * this.getRangeDmgMod();
 		var	red = 0.7/loss*10000/dist;
@@ -2213,6 +2224,14 @@ Weapon.prototype.getFillStyle = function(x, y, dist){
 		grad.addColorStop((Math.min(1, red) + Math.max(0, green))/2, "yellow");
 		grad.addColorStop(Math.max(0, green), "green");
 		grad.addColorStop(green, "green");	
+	}
+	else if (this.dmgType[0] == "A"){ // Antimatter
+		var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
+		grad.addColorStop(0, "green");
+		grad.addColorStop(this.optRange / dist * 0.9, "green");
+		grad.addColorStop(this.optRange / dist * 1.1, "yellow");
+		grad.addColorStop(this.optRange / dist * 1.4, "red");
+		grad.addColorStop(1,"red");
 	}
 	return grad;
 }
@@ -2675,9 +2694,7 @@ Pulse.prototype.getAnimation = function(fire){
 }
 
 function Beam(system){
-	Weapon.call(this, system);	
-	this.optRange = system.optRange;
-	this.dmgLoss = system.dmgLoss;
+	Weapon.call(this, system);
 	this.rakeTime = system.rakeTime;
 	this.output = system.rakes;
 	this.beamWidth = system.beamWidth || (this.minDmg+this.maxDmg)/system.rakes/35;
@@ -4026,8 +4043,8 @@ Hangar.prototype.drawSystemArc = function(){
 }
 
 Hangar.prototype.enableHangarDiv = function(e){
+	$("#capacity").html(this.capacity);
 	$("#launchRate").html(this.getOutput());
-	//$("#capacity").html(this.capacity);
 	var div = $("#hangarDiv");
 
 	this.unsetFireOrder();
@@ -4056,7 +4073,8 @@ Hangar.prototype.showHangarLaunchControl = function(){
 			.empty()
 			.append($("<tr>")
 				.append($("<th>").html("Class"))
-				.append($("<th>").html("Available"))
+				.append($("<th>").html("Loaded").css("width", 70))
+				.append($("<th>").html("Tonnage").css("width", 40))
 				.append($("<th>").html(""))
 				.append($("<th>").html(""))
 				.append($("<th>").html("to Launch")))
@@ -4073,6 +4091,7 @@ Hangar.prototype.showHangarLaunchControl = function(){
 					.append($(this.loads[i].getElement(true)))
 				)
 				.append($("<td>").html(this.loads[i].amount))
+				.append($("<td>").html(this.loads[i].mass))
 				.append($("<td>")
 					.append($("<img>").addClass("size30").attr("src", "varIcons/plus.png").data("name", this.loads[i].name).data("val", 1)
 					.click(function(e){
@@ -4097,6 +4116,14 @@ Hangar.prototype.showHangarLaunchControl = function(){
 				))
 				.append($("<td>").html(this.loads[i].launch).attr("id", this.loads[i].name + "Amount")));
 	}
+
+	table
+		.append($("<tr>")
+			.append($("<th>").html(""))
+			.append($("<th>").attr("colSpan",  2).addClass("totalMass").html(""))
+			.append($("<th>").html(""))
+			.append($("<th>").html(""))
+			.append($("<th>").addClass("totalLaunch").html("")))
 
 	var mission = this.getMission
 	var element = $("#hangarDiv");
@@ -4137,44 +4164,36 @@ Hangar.prototype.getMission = function(){
 Hangar.prototype.alterFlight = function(ele, max){
 	if (game.phase >= 0 || !this.canFire()){return false}
 	var name = $(ele).data("name");
-	var add = $(ele).data("val");
-	var launchRate = this.getOutput();
-	var current = 0;
+	var value = $(ele).data("val");
+	var maxLaunchMass = this.getOutput();
+	var currentLaunchMass = 0;
 
-	if (add > 0){
-		for (var i = 0; i < this.loads.length; i++){
-			current += this.loads[i].launch;
-		}
-		if (max){
-			add = launchRate - current;
-		}
+	for (var i = 0; i < this.loads.length; i++){
+		currentLaunchMass += this.loads[i].mass * this.loads[i].launch;
+	}
+
+	var capacityMass = maxLaunchMass - currentLaunchMass;
+	var index = 0;
+
+	for (var i = 0; i < this.loads.length; i++){
+		if (this.loads[i].name == name){index = i; break;}
+	}
+
+	if (value < 0){ // minus
+		currentLaunchMass -= this.loads[index].launch * this.loads[index].mass;
+		this.loads[index].launch = 0;
 	}
 	else {
 		if (max){
-			for (var i = 0; i < this.loads.length; i++){
-				if (this.loads[i].name == name){
-					add = -this.loads[i].launch;
-					break;
-				}
-			}
+			this.loads[i].launch += Math.max(0, Math.min(this.loads[index].amount - this.loads[index].launch, Math.floor(capacityMass / this.loads[index].mass)));
+		}
+		else {
+			this.loads[i].launch += Math.max(0, Math.min(1, Math.floor(capacityMass / this.loads[index].mass)));
 		}
 	}
 
-	for (var i = 0; i < this.loads.length; i++){
-		if (this.loads[i].name == name){
-			if (add > 0){
-				add = Math.min(add, this.loads[i].amount - this.loads[i].launch);
-				if (current + add <= launchRate && this.loads[i].launch + add <= this.loads[i].amount && this.loads[i].launch + add >= 0){
-					this.loads[i].launch += add;
-				}
-			}
-			else if (this.loads[i].launch > 0){
-				this.loads[i].launch += add;
-			}
-			$("#" + this.loads[i].name + "Amount").html(this.loads[i].launch);
-			break;
-		}
-	}
+	$("#" + this.loads[index].name + "Amount").html(this.loads[index].launch);
+	$("#hangarDiv").find(".totalMass").html(this.loads.map(x => x.launch * x.mass).reduce((l,r) => l+r, 0) + " / " + maxLaunchMass).end().find(".totalLaunch").html(this.loads.map(x => x.launch).reduce((l,r) => l+r, 0));
 }
 
 Hangar.prototype.addFighter = function(ele, all){
