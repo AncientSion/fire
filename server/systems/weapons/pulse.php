@@ -23,56 +23,6 @@ class Pulse extends Weapon {
 	}
 }
 
-class LightAntiProtonPulsar extends Pulse {
-	public $name = "LightAntiProtonPulsar";
-	public $display = "Light Anti-Proton Pulsar";
-	public static $prio = 0;
-	public $minDmg = 10;
-	public $maxDmg = 14;
-	public $accDecay = 180;
-	public $shots = 1;
-	public $animColor = "blue";
-	public $projSize = 2;
-	public $projSpeed = 8;
-	public $reload = 1;
-	public $integrity = 28;
-	public $powerReq = 2;
-	public $tracking = 0;
-	public $basePulses = 1;
-	public $extraPulses = 3;
-	public $grouping = 15;
-
-	
-	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
-        parent::__construct($id, $parentId, $start, $end, $output, $width);
-	}
-}
-
-class MediumAntiProtonPulsar extends LightAntiProtonPulsar {
-	public $name = "MediumAntiProtonPulsar";
-	public $display = "Anti-Proton Pulsar";
-	public static $prio = 0;
-	public $minDmg = 16;
-	public $maxDmg = 22;
-	public $accDecay = 120;
-	public $shots = 1;
-	public $animColor = "blue";
-	public $projSize = 2;
-	public $projSpeed = 8;
-	public $reload = 2;
-	public $integrity = 38;
-	public $powerReq = 2;
-	public $tracking = 3;
-	public $basePulses = 1;
-	public $extraPulses = 6;
-	public $grouping = 15;
-
-	
-	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
-        parent::__construct($id, $parentId, $start, $end, $output, $width);
-	}
-}
-
 class LightPulse extends Pulse {
 	public $name = "LightPulse";
 	public $display = "Light Pulse Cannon";

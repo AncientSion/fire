@@ -107,7 +107,7 @@ class DmgCalc {
 			"LightPulse", "MediumPulse", "HeavyPulse", "NeutronPulsar",
 			"LightPlasmaPulse", "MediumPlasmaPulse", "HeavyPlasmaPulse",
 			"MediumRailGun", "HeavyRailGun",
-			"AntiMatterCannon", "MediumAntiProtonPulsar", "LightAntiProtonPulsar"
+			"AntiMatterCannon", "MediumAntiProtonPulsar"
 		);
 
 		$weapons = array();
@@ -217,7 +217,6 @@ class DmgCalc {
 	public static function calcDmg($weapon, $totalDmg, $negation){
 		switch ($weapon->dmgType){
 			case "Standard": return static::calcStandardDmg($weapon, $totalDmg, $negation);
-			case "Antimatter": return static::calcStandardDmg($weapon, $totalDmg, $negation);
 			case "Matter": return static::calcMatterDmg($weapon, $totalDmg, $negation);
 			case "Phased": return static::calcMatterDmg($weapon, $totalDmg, $negation);
 			case "Plasma": return static::calcPlasmaDmg($weapon, $totalDmg, $negation);
@@ -248,7 +247,7 @@ class DmgCalc {
 	}
 
 	public static function doStandardDmg($fire, $hit, $system){
-		Debug::log("hitting: ".get_class($system). "# ".$system->id);
+		//Debug::log("hitting: ".get_class($system). "# ".$system->id);
 		$destroyed = 0;
 		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit, $system);
 		$okSystem = 0;

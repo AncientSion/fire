@@ -168,8 +168,6 @@ spl_autoload_register(
                 'mediumplasmapulse' => '/server/systems/weapons/pulse.php',
                 'heavyplasmapulse' => '/server/systems/weapons/pulse.php',
                 'lightempulse' => '/server/systems/weapons/pulse.php',
-                'lightantiprotonpulsar' => '/server/systems/weapons/pulse.php',
-                'mediumantiprotonpulsar' => '/server/systems/weapons/pulse.php',
                 
                 'em' => '/server/systems/weapons/em.php',
                 'twinemprojector' => '/server/systems/weapons/particle.php',
@@ -185,9 +183,12 @@ spl_autoload_register(
                 'superheavyparticle' => '/server/systems/weapons/particle.php',
                 'fusioncannon' => '/server/systems/weapons/particle.php',
                 'heavyfusioncannon' => '/server/systems/weapons/particle.php',
-                'antimattercannon' => '/server/systems/weapons/particle.php',
-                'antimatterconverter' => '/server/systems/weapons/particle.php',
-                'heavyantimatterconverter' => '/server/systems/weapons/particle.php',
+
+                'antimattercannon' => '/server/systems/weapons/am.php',
+                'antimatterconverter' => '/server/systems/weapons/am.php',
+                'heavyantimatterconverter' => '/server/systems/weapons/am.php',
+                'lightantiprotonpulsar' => '/server/systems/weapons/am.php',
+                'mediumantiprotonpulsar' => '/server/systems/weapons/am.php',
 
                 'mediumshock' => '/server/systems/weapons/particle.php',
 
