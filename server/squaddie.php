@@ -102,7 +102,7 @@ class Light extends Squaddie {
 	public $baseImpulse = 175;
 	public $baseImpulseCost = 30;
 	public $baseTurnDelay = 1.3;
-	public $baseHitChance = 160;
+	public $baseHitChance = 60;
 	public $size = 48;
 	public $space = 4;
 	

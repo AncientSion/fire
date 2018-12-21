@@ -1,6 +1,6 @@
 <?php
 
-class Xvell extends Light {
+class Xvell extends SuperLight {
 	public $name = "Xvell";
 	public $display = "Xvell";
 	public $role = "Light Frigate";
@@ -11,7 +11,7 @@ class Xvell extends Light {
 	public $integrity = 350;
 	public $ep = 100;
 	public $ew = 450;
-	public $power = 2;
+	public $power = 0;
 	public $negation = 8;
 
 	function __construct($id, $parentId){

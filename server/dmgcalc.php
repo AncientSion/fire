@@ -217,6 +217,7 @@ class DmgCalc {
 	public static function calcDmg($weapon, $totalDmg, $negation){
 		switch ($weapon->dmgType){
 			case "Standard": return static::calcStandardDmg($weapon, $totalDmg, $negation);
+			case "Antimatter": return static::calcStandardDmg($weapon, $totalDmg, $negation);
 			case "Matter": return static::calcMatterDmg($weapon, $totalDmg, $negation);
 			case "Phased": return static::calcMatterDmg($weapon, $totalDmg, $negation);
 			case "Plasma": return static::calcPlasmaDmg($weapon, $totalDmg, $negation);

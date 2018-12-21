@@ -4,7 +4,7 @@ class Xill extends Heavy {
 	public $name = "Xill";
 	public $display = "Xill";
 	public $faction = "Vree Conglomerate";
-	public $size =  80;
+	public $size =  70;
 	public static $value = 775;
 	public $profile = array(1, 1);
 	public $mass = 7000;

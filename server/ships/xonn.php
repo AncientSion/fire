@@ -4,7 +4,7 @@ class Xonn extends SuperHeavy {
 	public $name = "Xonn";
 	public $display = "Xonn";
 	public $faction = "Vree Conglomerate";
-	public $size =  90;
+	public $size =  80;
 	public static $value = 1240;
 	public $profile = array(1, 1);
 	public $mass = 12000;

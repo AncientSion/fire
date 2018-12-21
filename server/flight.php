@@ -117,7 +117,7 @@ class Flight extends Minor {
 
 			if ($t->ship || $t->squad || ($t->flight && $t->mission->targetid != $this->id)){
 				Debug::log("ship, squad, dumb flight");
-				if (!$t->moveSet){
+				if ($t->flight && !$t->moveSet){
 					Debug::log("switch context");
 					$t->setMove();
 				}
