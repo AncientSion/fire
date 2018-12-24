@@ -2228,9 +2228,9 @@ Weapon.prototype.getFillStyle = function(x, y, dist){
 	else if (this.dmgType[0] == "A"){ // Antimatter
 		var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
 		grad.addColorStop(0, "green");
-		grad.addColorStop(this.optRange / dist * 0.9, "green");
-		grad.addColorStop(this.optRange / dist * 1.1, "yellow");
-		grad.addColorStop(this.optRange / dist * 1.4, "red");
+		grad.addColorStop(this.optRange / 1200 * 0.9, "green");
+		grad.addColorStop(this.optRange / 1200 * 1.1, "yellow");
+		grad.addColorStop(this.optRange / 1200 * 1.4, "red");
 		grad.addColorStop(1,"red");
 	}
 	return grad;

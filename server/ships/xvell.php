@@ -24,7 +24,7 @@ class Xvell extends SuperLight {
 		$this->addSubSystem(new MediumAntiProtonPulsar($this->getId(), $this->parentId, 330, 150), 120);
 	*/
 		$this->addSubSystem(new LightAntiProtonPulsar($this->getId(), $this->parentId, 300, 60), 0);
-		$this->addSubSystem(new LightAntiProtonPulsar($this->getId(), $this->parentId, 300, 60), 0);
+		$this->addSubSystem(new MediumAntiProtonPulsar($this->getId(), $this->parentId, 300, 60), 0);
 		$this->addSubSystem(new LightAntiProtonPulsar($this->getId(), $this->parentId, 300, 60), 0);
 	}
 }

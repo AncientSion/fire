@@ -78,10 +78,10 @@ Squadron.prototype.setLayout = function(){
 			//minY = Math.min(minY, o.y);
 			//maxY = Math.max(maxY, o.y);
 
-			if (game.phase > -2){
-				o.x += range(-8, 8);
-				o.y += range(-8, 8);
-			}
+		//	if (game.phase > -2){
+		//		o.x += range(-8, 8);
+		//		o.y += range(-8, 8);
+		//	}
 
 			o = rotate(0, 0, o, 90);
 

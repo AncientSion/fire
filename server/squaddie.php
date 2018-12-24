@@ -112,7 +112,7 @@ class Light extends Squaddie {
 }
 
 class SuperLight extends Light {
-	public $size = 42;
+	public $size = 45;
 	public $space = 3;
 	public $baseTurnDelay = 1.2;
 	public $baseHitChance = 55;
@@ -123,7 +123,7 @@ class SuperLight extends Light {
 }
 
 class UltraLight extends SuperLight {
-	public $size = 37;
+	public $size = 42;
 	public $space = 2;
 	public $baseTurnDelay = 1.1;
 	public $baseHitChance = 50;

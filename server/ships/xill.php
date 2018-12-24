@@ -7,9 +7,9 @@ class Xill extends Heavy {
 	public $size =  70;
 	public static $value = 775;
 	public $profile = array(1, 1);
-	public $mass = 7000;
+	public $mass = 6000;
 
-	public $integrity = 800;
+	public $integrity = 850;
 	public $vitalHP = 80;
 	public $ep = 80;
 	public $ew = 775;
