@@ -4,20 +4,21 @@ class LightAntiProtonPulsar extends Pulse {
 	public $name = "LightAntiProtonPulsar";
 	public $display = "Light Anti-Proton Pulsar";
 	public static $prio = 0;
-	public $minDmg = 10;
-	public $maxDmg = 14;
+	public $minDmg = 11;
+	public $maxDmg = 15;
 	public $accDecay = 180;
 	public $shots = 1;
 	public $animColor = "blue";
-	public $projSize = 2;
+	public $projSize = 1;
 	public $projSpeed = 8;
-	public $reload = 1;
+	public $reload = 2;
 	public $integrity = 28;
 	public $powerReq = 2;
 	public $tracking = 0;
-	public $basePulses = 3;
-	public $extraPulses = 3;
+	public $basePulses = 2;
+	public $extraPulses = 2;
 	public $grouping = 15;
+	public $linked = 2;
 
 	public $optRange = 150;
 	
@@ -31,12 +32,12 @@ class MediumAntiProtonPulsar extends LightAntiProtonPulsar {
 	public $name = "MediumAntiProtonPulsar";
 	public $display = "Anti-Proton Pulsar";
 	public static $prio = 0;
-	public $minDmg = 16;
-	public $maxDmg = 22;
+	public $minDmg = 19;
+	public $maxDmg = 25;
 	public $accDecay = 120;
 	public $shots = 1;
 	public $animColor = "blue";
-	public $projSize = 2;
+	public $projSize = 1;
 	public $projSpeed = 8;
 	public $reload = 2;
 	public $integrity = 38;

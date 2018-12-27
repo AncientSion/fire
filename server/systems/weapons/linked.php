@@ -33,7 +33,7 @@ class ParticleGun extends FighterWeapon {
 
 class FighterStandard extends FighterWeapon {
 	public $name = "FighterStandard";
-	public $display = "Fighter - Burst Attack";
+	public $display = "Burst Fire";
 	public $animColor = "blue";
 	
 	function __construct($id, $parentId, $specialId, $linked, $shots, $minDmg, $maxDmg){
@@ -42,23 +42,20 @@ class FighterStandard extends FighterWeapon {
 }
 
 class FighterStrafe extends FighterWeapon {
-	//public $type = "Pulse";
-	//public $fireMode = "Pulse";
-	//public $fireMode = "Antimatter";
 	public $name = "FighterStrafe";
-	public $display = "Fighter - Strafe Attack";
+	public $display = "Strafing Run";
 	public $animColor = "blue";
 	public $tracking = 3;
-	//public $basePulses = 1;
-	//public $extraPulses = 2;
-	//public $grouping = 30;
 	public $shots = 1;
-	public $amBonus = 1;
-	public $amMax = 50;
 	
 	function __construct($id, $parentId, $specialId, $linked, $shots, $minDmg, $maxDmg){
 		parent::__construct($id, $parentId, $specialId, $linked, $shots, $minDmg, $maxDmg);
-        $this->setAntimatterData();
+
+		$this->amBonus = 0.5;
+		$this->amMax = 50;
+
+		$this->notes[] = "<span class='yellow'>+".($this->amBonus*10)."%</span> extra damage caused per 10 points of passing the to-hit roll.";
+		$this->notes[] = "Extra damage capped at <span class='yellow'>".$this->amMax."%</span> of base damage after all modifiers.";
 	}
 }
 

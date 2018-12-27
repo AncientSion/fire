@@ -1593,7 +1593,7 @@
 		for ($i = sizeof($this->fires)-1; $i >= 0; $i--){
 			if ($this->fires[$i]->resolved){continue;}
 			if (!$this->fires[$i]->shooter->flight){continue;}
-			if ($this->fires[$i]->shooter->getStruct($this->fires[$i]->weapon->specialId)->destroyed){
+			if ($this->fires[$i]->shooter->getStruct($this->fires[$i]->weapon->parentId)->destroyed){
 				//Debug::log("SKIPPING firorder, SINGLE (shooter) is destroyed");
 				$this->fires[$i]->resolved = 2;
 			}
@@ -1636,7 +1636,7 @@
 			if ($this->fires[$i]->resolved){continue;}
 
 			if ($this->fires[$i]->shooter->flight == true && $this->fires[$i]->target->flight == false){
-				if ($this->fires[$i]->shooter->getStruct($this->fires[$i]->weapon->specialId)->destroyed){
+				if ($this->fires[$i]->shooter->getStruct($this->fires[$i]->weapon->parentId)->destroyed){
 					//Debug::log("SKIPPING firorder, SINGLE (shooter) is destroyed");
 					$this->fires[$i]->resolved = 2;
 					continue;

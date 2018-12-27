@@ -19,6 +19,7 @@ class Single {
 	public $boostEffect = array();
 	public $baseImpulse = 0;
 	public $baseHitChance = 0;
+	public $bonusNegation = 0;
 	public $name = "";
 	public $display = "";
 	public $variant = "";
