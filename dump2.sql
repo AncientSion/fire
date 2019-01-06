@@ -1,29 +1,33 @@
--- MySQL dump 10.16  Distrib 10.1.16-MariaDB, for Win32 (AMD64)
+-- phpMyAdmin SQL Dump
+-- version 4.5.1
+-- http://www.phpmyadmin.net
 --
--- Host: localhost    Database: spacecombat
--- ------------------------------------------------------
--- Server version	10.1.16-MariaDB
+-- Host: 127.0.0.1
+-- Erstellungszeit: 06. Jan 2019 um 18:40
+-- Server-Version: 10.1.16-MariaDB
+-- PHP-Version: 7.0.9
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- Table structure for table `actions`
+-- Datenbank: `spacecombat`
 --
 
-DROP TABLE IF EXISTS `actions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `actions`
+--
+
 CREATE TABLE `actions` (
-  `id` int(3) NOT NULL AUTO_INCREMENT,
+  `id` int(3) NOT NULL,
   `unitid` int(3) DEFAULT NULL,
   `turn` int(3) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
@@ -36,56 +40,53 @@ CREATE TABLE `actions` (
   `cost` int(4) DEFAULT NULL,
   `delay` int(4) DEFAULT NULL,
   `costmod` float DEFAULT NULL,
-  `resolved` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `resolved` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `actions`
+-- Daten für Tabelle `actions`
 --
 
-LOCK TABLES `actions` WRITE;
-/*!40000 ALTER TABLE `actions` DISABLE KEYS */;
-INSERT INTO `actions` VALUES (1,3,1,'deploy',0,0,493,318,180.00,180.00,0,0,1,1),(2,4,1,'deploy',0,0,542,184,180.00,180.00,0,0,1,1),(3,2,1,'deploy',0,0,-529,197,0.00,0.00,0,0,1,1),(4,1,1,'deploy',0,0,-572,-34,0.00,0.00,0,0,1,1),(5,4,1,'jumpIn',0,129,427,242,-5.00,-5.00,0,0,0,1),(6,3,1,'jumpIn',0,46,504,274,-18.00,-18.00,0,0,0,1),(7,2,1,'jumpIn',0,49,-576,187,-13.00,-13.00,0,0,0,1),(8,1,1,'jumpIn',0,39,-609,-46,-13.00,-13.00,0,0,0,1),(9,2,1,'turn',0,0,-576,187,30.00,30.00,30,86,1,1),(10,2,1,'move',0,155,-421,198,0.00,0.00,0,0,1,1),(11,1,1,'turn',0,0,-609,-46,15.08,15.08,16,20,1,1),(12,1,1,'move',0,185,-427,-81,0.00,0.00,0,0,1,1),(13,3,1,'turn',0,0,504,274,30.00,30.00,30,81,1,1),(14,3,1,'move',0,155,350,290,0.00,0.00,0,0,1,1),(15,4,1,'turn',0,0,427,242,17.69,17.69,18,22,1,1),(16,4,1,'move',0,185,244,217,0.00,0.00,0,0,1,1),(31,11,2,'deploy',0,0,-421,198,0.00,0.00,0,0,0,1),(32,2,2,'turn',0,0,-421,198,-11.79,-11.79,12,34,1,1),(33,2,2,'move',0,109,-319,158,0.00,0.00,0,0,1,1),(34,2,2,'turn',0,0,-319,158,30.00,30.00,44,46,1,1),(35,2,2,'move',0,39,-280,165,0.00,0.00,0,0,1,1),(36,2,2,'move',0,7,-274,168,0.00,0.00,0,0,1,1),(37,1,2,'move',0,185,-245,-116,0.00,0.00,0,0,1,1),(38,1,2,'turn',0,0,-245,-116,45.00,45.00,80,14,1,1),(39,3,2,'move',0,45,305,286,0.00,0.00,0,0,1,1),(40,3,2,'turn',0,0,305,286,-30.00,-30.00,30,81,1,1),(41,3,2,'move',0,110,216,351,0.00,0.00,0,0,1,1),(42,4,2,'speed',0,1,244,217,0.00,0.00,30,0,1,1),(43,4,2,'turn',0,0,244,217,28.11,28.11,32,38,1,1),(44,4,2,'move',0,208,75,95,0.00,0.00,0,0,1,1),(45,4,2,'turn',0,0,75,95,-18.89,-18.89,36,10,1,1),(46,11,2,'move',0,125,-299,173,348.27,348.27,0,0,0,1);
-/*!40000 ALTER TABLE `actions` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `actions` (`id`, `unitid`, `turn`, `type`, `forced`, `dist`, `x`, `y`, `h`, `f`, `cost`, `delay`, `costmod`, `resolved`) VALUES
+(1, 1, 1, 'deploy', 0, 0, -547, 308, '-6.07', '-6.07', 0, 0, 1, 1),
+(2, 4, 1, 'deploy', 0, 0, -487, -266, '0.00', '0.00', 0, 0, 1, 1),
+(3, 2, 1, 'deploy', 0, 0, -548, -94, '0.00', '0.00', 0, 0, 1, 1),
+(4, 3, 1, 'deploy', 0, 0, -429, 524, '0.00', '0.00', 0, 0, 1, 1),
+(5, 7, 1, 'deploy', 0, 0, 427, 625, '180.00', '180.00', 0, 0, 1, 1),
+(6, 6, 1, 'deploy', 0, 0, 432, 484, '180.00', '180.00', 0, 0, 1, 1),
+(7, 5, 1, 'deploy', 0, 0, 643, 7, '180.00', '180.00', 0, 0, 1, 1),
+(8, 8, 1, 'deploy', 0, 0, 531, 223, '180.00', '180.00', 0, 0, 1, 1),
+(9, 1, 1, 'jumpIn', 0, 56, -500, 337, '17.00', '17.00', 0, 0, 0, 1),
+(10, 4, 1, 'jumpIn', 0, 70, -549, -297, '-6.00', '-6.00', 0, 0, 0, 1),
+(11, 3, 1, 'jumpIn', 0, 55, -444, 472, '27.00', '27.00', 0, 0, 0, 1),
+(12, 2, 1, 'jumpIn', 0, 91, -625, -47, '9.00', '9.00', 0, 0, 0, 1),
+(13, 7, 1, 'jumpIn', 0, 15, 440, 619, '-25.00', '-25.00', 0, 0, 0, 1),
+(14, 6, 1, 'jumpIn', 0, 80, 460, 558, '-22.00', '-22.00', 0, 0, 0, 1),
+(15, 5, 1, 'jumpIn', 0, 123, 741, 80, '-14.00', '-14.00', 0, 0, 0, 1),
+(16, 8, 1, 'jumpIn', 0, 109, 623, 280, '-3.00', '-3.00', 0, 0, 0, 1);
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `chat`
+-- Tabellenstruktur für Tabelle `chat`
 --
 
-DROP TABLE IF EXISTS `chat`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `chat` (
-  `id` int(5) NOT NULL AUTO_INCREMENT,
+  `id` int(5) NOT NULL,
   `username` varchar(30) DEFAULT NULL,
   `userid` int(3) DEFAULT NULL,
   `msg` varchar(255) DEFAULT NULL,
-  `time` int(10) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `time` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `chat`
+-- Tabellenstruktur für Tabelle `damages`
 --
 
-LOCK TABLES `chat` WRITE;
-/*!40000 ALTER TABLE `chat` DISABLE KEYS */;
-/*!40000 ALTER TABLE `chat` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `damages`
---
-
-DROP TABLE IF EXISTS `damages`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `damages` (
-  `id` int(5) NOT NULL AUTO_INCREMENT,
+  `id` int(5) NOT NULL,
   `fireid` int(5) DEFAULT NULL,
   `gameid` int(5) DEFAULT NULL,
   `unitid` int(5) DEFAULT NULL,
@@ -103,30 +104,17 @@ CREATE TABLE `damages` (
   `negation` int(4) DEFAULT NULL,
   `destroyed` tinyint(1) DEFAULT NULL,
   `notes` varchar(255) DEFAULT NULL,
-  `new` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `new` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `damages`
+-- Tabellenstruktur für Tabelle `fireorders`
 --
 
-LOCK TABLES `damages` WRITE;
-/*!40000 ALTER TABLE `damages` DISABLE KEYS */;
-INSERT INTO `damages` VALUES (1,1,1,3,26,26,1,0,'Particle',58,0,12,46,0,0,12,0,'p;',0);
-/*!40000 ALTER TABLE `damages` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `fireorders`
---
-
-DROP TABLE IF EXISTS `fireorders`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `fireorders` (
-  `id` int(5) NOT NULL AUTO_INCREMENT,
+  `id` int(5) NOT NULL,
   `gameid` int(3) DEFAULT '0',
   `turn` int(3) DEFAULT '0',
   `shooterid` int(5) DEFAULT '0',
@@ -138,30 +126,17 @@ CREATE TABLE `fireorders` (
   `req` int(3) NOT NULL DEFAULT '0',
   `notes` varchar(255) NOT NULL DEFAULT '',
   `hits` int(3) NOT NULL DEFAULT '0',
-  `resolved` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `resolved` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `fireorders`
+-- Tabellenstruktur für Tabelle `games`
 --
 
-LOCK TABLES `fireorders` WRITE;
-/*!40000 ALTER TABLE `fireorders` DISABLE KEYS */;
-INSERT INTO `fireorders` VALUES (1,1,1,9,3,0,0,2,4,26,'103;21;26;93;3;74;42;',1,1),(2,1,1,2,3,355,288,13,1,40,'67;',0,1),(3,1,2,2,0,240,217,9,0,0,'',0,2),(4,1,2,9,3,0,0,2,2,26,'42;21;26;70;34;',0,1),(5,1,2,2,3,215,357,7,0,0,'',0,0),(6,1,2,2,3,215,357,20,0,0,'',0,0),(7,1,2,1,3,215,348,6,0,0,'',0,0),(8,1,2,1,3,215,348,12,0,0,'',0,0);
-/*!40000 ALTER TABLE `fireorders` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `games`
---
-
-DROP TABLE IF EXISTS `games`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `games` (
-  `id` int(3) NOT NULL AUTO_INCREMENT,
+  `id` int(3) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
   `turn` int(3) DEFAULT NULL,
@@ -174,30 +149,24 @@ CREATE TABLE `games` (
   `focusMod` int(3) DEFAULT '100',
   `obstaclesAmount` int(3) NOT NULL DEFAULT '0',
   `obstaclesSizeMin` int(3) NOT NULL DEFAULT '0',
-  `obstaclesSizeMax` int(3) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `obstaclesSizeMax` int(3) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `games`
+-- Daten für Tabelle `games`
 --
 
-LOCK TABLES `games` WRITE;
-/*!40000 ALTER TABLE `games` DISABLE KEYS */;
-INSERT INTO `games` VALUES (1,'myGame','active',2,2,3500,1500,11,3,10,10,3,75,175);
-/*!40000 ALTER TABLE `games` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `games` (`id`, `name`, `status`, `turn`, `phase`, `pv`, `reinforce`, `reinforceTurn`, `reinforceETA`, `reinforceAmount`, `focusMod`, `obstaclesAmount`, `obstaclesSizeMin`, `obstaclesSizeMax`) VALUES
+(1, 'myGame', 'active', 1, 0, 3500, 1500, 11, 3, 10, 10, 3, 75, 175);
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `globals`
+-- Tabellenstruktur für Tabelle `globals`
 --
 
-DROP TABLE IF EXISTS `globals`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `globals` (
-  `id` int(4) NOT NULL AUTO_INCREMENT,
+  `id` int(4) NOT NULL,
   `playerstatusid` int(4) DEFAULT '0',
   `unitid` int(3) NOT NULL DEFAULT '0',
   `turn` int(4) DEFAULT '0',
@@ -205,56 +174,57 @@ CREATE TABLE `globals` (
   `scope` int(11) NOT NULL DEFAULT '0',
   `value` decimal(5,2) DEFAULT '0.00',
   `notes` varchar(20) NOT NULL DEFAULT '',
-  `text` varchar(50) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `text` varchar(50) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `globals`
+-- Daten für Tabelle `globals`
 --
 
-LOCK TABLES `globals` WRITE;
-/*!40000 ALTER TABLE `globals` DISABLE KEYS */;
-INSERT INTO `globals` VALUES (1,1,0,0,'Morale',0,100.00,'',''),(2,2,0,0,'Morale',0,100.00,'','');
-/*!40000 ALTER TABLE `globals` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `globals` (`id`, `playerstatusid`, `unitid`, `turn`, `type`, `scope`, `value`, `notes`, `text`) VALUES
+(1, 1, 0, 0, 'Morale', 0, '115.00', '', ''),
+(2, 2, 0, 0, 'Morale', 0, '100.00', '', '');
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `loads`
+-- Tabellenstruktur für Tabelle `loads`
 --
 
-DROP TABLE IF EXISTS `loads`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `loads` (
-  `id` int(4) NOT NULL AUTO_INCREMENT,
+  `id` int(4) NOT NULL,
   `unitid` int(5) DEFAULT NULL,
   `systemid` int(3) DEFAULT NULL,
   `name` varchar(20) DEFAULT NULL,
-  `amount` int(3) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `amount` int(3) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `loads`
+-- Daten für Tabelle `loads`
 --
 
-LOCK TABLES `loads` WRITE;
-/*!40000 ALTER TABLE `loads` DISABLE KEYS */;
-/*!40000 ALTER TABLE `loads` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `loads` (`id`, `unitid`, `systemid`, `name`, `amount`) VALUES
+(1, 1, 2, 'Command', 1),
+(2, 1, 2, 'Engine', 1),
+(3, 1, 2, 'Sensor', 1),
+(4, 1, 17, 'Gorith', 12),
+(5, 2, 7, 'Vranoth', 12),
+(6, 2, 9, 'Vranoth', 12),
+(7, 4, 7, 'Vranoth', 12),
+(8, 4, 9, 'Vranoth', 12),
+(9, 5, 13, 'Zorth', 12),
+(10, 5, 13, 'Tzymm', 6),
+(11, 5, 21, 'Zorth', 12),
+(12, 5, 21, 'Tzymm', 6);
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `missions`
+-- Tabellenstruktur für Tabelle `missions`
 --
 
-DROP TABLE IF EXISTS `missions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `missions` (
-  `id` int(4) NOT NULL AUTO_INCREMENT,
+  `id` int(4) NOT NULL,
   `unitid` int(4) NOT NULL DEFAULT '0',
   `type` varchar(20) NOT NULL DEFAULT '1',
   `turn` int(1) NOT NULL DEFAULT '0',
@@ -262,30 +232,17 @@ CREATE TABLE `missions` (
   `targetid` int(4) NOT NULL DEFAULT '0',
   `x` int(4) NOT NULL DEFAULT '0',
   `y` int(4) NOT NULL DEFAULT '0',
-  `arrived` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `arrived` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `missions`
+-- Tabellenstruktur für Tabelle `playerstatus`
 --
 
-LOCK TABLES `missions` WRITE;
-/*!40000 ALTER TABLE `missions` DISABLE KEYS */;
-INSERT INTO `missions` VALUES (1,11,'2',2,-1,4,244,217,0),(2,-68,'2',2,-1,4,244,217,0);
-/*!40000 ALTER TABLE `missions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `playerstatus`
---
-
-DROP TABLE IF EXISTS `playerstatus`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `playerstatus` (
-  `id` int(3) NOT NULL AUTO_INCREMENT,
+  `id` int(3) NOT NULL,
   `userid` int(3) DEFAULT NULL,
   `gameid` int(3) DEFAULT NULL,
   `turn` int(3) DEFAULT NULL,
@@ -296,141 +253,123 @@ CREATE TABLE `playerstatus` (
   `maxFocus` int(4) DEFAULT '0',
   `gainFocus` int(4) DEFAULT '0',
   `curFocus` int(4) DEFAULT '0',
-  `status` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `status` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `playerstatus`
+-- Daten für Tabelle `playerstatus`
 --
 
-LOCK TABLES `playerstatus` WRITE;
-/*!40000 ALTER TABLE `playerstatus` DISABLE KEYS */;
-INSERT INTO `playerstatus` VALUES (1,2,1,2,2,'Earth Alliance',1355,3365,1540,385,770,'ready'),(2,1,1,2,2,'Vree Conglomerate',1435,3565,1540,385,770,'waiting');
-/*!40000 ALTER TABLE `playerstatus` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `playerstatus` (`id`, `userid`, `gameid`, `turn`, `phase`, `faction`, `morale`, `value`, `maxFocus`, `gainFocus`, `curFocus`, `status`) VALUES
+(1, 1, 1, 1, 0, 'Narn Regime', 3210, 1510, 1616, 404, 404, 'waiting'),
+(2, 2, 1, 1, 0, 'Vree Conglomerate', 2630, 1554, 1540, 385, 385, 'waiting');
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `powers`
+-- Tabellenstruktur für Tabelle `powers`
 --
 
-DROP TABLE IF EXISTS `powers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `powers` (
-  `id` int(5) NOT NULL AUTO_INCREMENT,
+  `id` int(5) NOT NULL,
   `unitid` int(5) DEFAULT NULL,
   `systemid` int(5) DEFAULT NULL,
   `turn` int(2) DEFAULT NULL,
   `type` varchar(10) DEFAULT NULL,
-  `cost` int(3) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `cost` int(3) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `powers`
+-- Daten für Tabelle `powers`
 --
 
-LOCK TABLES `powers` WRITE;
-/*!40000 ALTER TABLE `powers` DISABLE KEYS */;
-INSERT INTO `powers` VALUES (1,2,14,1,'-1',0),(2,2,15,1,'-1',0),(3,2,21,1,'-1',0),(4,2,22,1,'-1',0),(5,1,7,1,'-1',0),(6,1,8,1,'-1',0),(7,1,9,1,'-1',0),(8,1,10,1,'-1',0),(9,1,13,1,'-1',0),(10,1,14,1,'-1',0),(11,1,15,1,'-1',0),(12,1,16,1,'-1',0),(13,2,14,2,'-1',0),(14,2,15,2,'-1',0),(15,2,21,2,'-1',0),(16,2,22,2,'-1',0),(17,2,4,2,'1',3),(18,1,5,2,'1',2),(19,1,7,2,'-1',0),(20,1,8,2,'-1',0),(21,1,9,2,'-1',0),(22,1,10,2,'-1',0),(23,1,11,2,'1',2),(24,1,13,2,'-1',0),(25,1,14,2,'-1',0),(26,1,15,2,'-1',0),(27,1,16,2,'-1',0);
-/*!40000 ALTER TABLE `powers` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `powers` (`id`, `unitid`, `systemid`, `turn`, `type`, `cost`) VALUES
+(1, 1, 7, 1, '1', 5),
+(2, 1, 9, 1, '1', 5),
+(3, 1, 13, 1, '0', 0),
+(4, 1, 14, 1, '0', 0),
+(5, 1, 16, 1, '0', 0),
+(6, 1, 18, 1, '0', 0),
+(7, 1, 22, 1, '0', 0),
+(8, 1, 23, 1, '0', 0);
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `sensors`
+-- Tabellenstruktur für Tabelle `sensors`
 --
 
-DROP TABLE IF EXISTS `sensors`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sensors` (
-  `id` int(5) NOT NULL AUTO_INCREMENT,
+  `id` int(5) NOT NULL,
   `unitid` int(5) DEFAULT NULL,
   `systemid` int(5) DEFAULT NULL,
   `turn` int(3) DEFAULT NULL,
   `angle` decimal(5,2) DEFAULT NULL,
   `dist` int(4) DEFAULT NULL,
-  `type` int(3) DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `type` int(3) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `sensors`
+-- Daten für Tabelle `sensors`
 --
 
-LOCK TABLES `sensors` WRITE;
-/*!40000 ALTER TABLE `sensors` DISABLE KEYS */;
-INSERT INTO `sensors` VALUES (1,3,4,1,-1.00,113,0),(2,4,3,1,-1.00,66,0),(3,2,4,1,-1.00,102,0),(4,1,3,1,-1.00,73,0),(5,3,4,2,49.68,579,1),(6,4,3,2,326.00,418,1),(7,2,4,2,345.87,590,0),(8,1,3,2,6.14,670,0);
-/*!40000 ALTER TABLE `sensors` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `sensors` (`id`, `unitid`, `systemid`, `turn`, `angle`, `dist`, `type`) VALUES
+(1, 1, 4, 1, '0.63', 928, 0),
+(2, 4, 4, 1, '-1.00', 110, 0),
+(3, 2, 4, 1, '-1.00', 110, 0),
+(4, 3, 3, 1, '-1.00', 73, 0),
+(5, 7, 4, 1, '8.25', 843, 1),
+(6, 6, 4, 1, '7.80', 861, 1),
+(7, 5, 4, 1, '359.64', 1106, 1),
+(8, 8, 3, 1, '-1.00', 66, 0);
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `subunits`
+-- Tabellenstruktur für Tabelle `subunits`
 --
 
-DROP TABLE IF EXISTS `subunits`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `subunits` (
-  `id` int(4) NOT NULL AUTO_INCREMENT,
+  `id` int(4) NOT NULL,
   `unitid` int(4) DEFAULT NULL,
   `amount` int(2) DEFAULT NULL,
-  `name` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `name` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `subunits`
+-- Daten für Tabelle `subunits`
 --
 
-LOCK TABLES `subunits` WRITE;
-/*!40000 ALTER TABLE `subunits` DISABLE KEYS */;
-INSERT INTO `subunits` VALUES (1,1,1,'Crius'),(2,1,1,'Crius'),(3,4,1,'Xvell'),(4,4,1,'Xvell'),(5,4,1,'Xvell'),(6,11,10,'Aurora');
-/*!40000 ALTER TABLE `subunits` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `subunits` (`id`, `unitid`, `amount`, `name`) VALUES
+(1, 3, 1, 'Thentus'),
+(2, 3, 1, 'Thentus'),
+(3, 8, 1, 'Xvell'),
+(4, 8, 1, 'Xvell');
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `systemcrits`
+-- Tabellenstruktur für Tabelle `systemcrits`
 --
 
-DROP TABLE IF EXISTS `systemcrits`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `systemcrits` (
-  `id` int(4) NOT NULL AUTO_INCREMENT,
+  `id` int(4) NOT NULL,
   `unitid` int(4) DEFAULT NULL,
   `systemid` int(4) DEFAULT NULL,
   `turn` int(3) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
   `duration` int(3) DEFAULT NULL,
-  `value` decimal(5,2) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `value` decimal(5,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `systemcrits`
+-- Tabellenstruktur für Tabelle `units`
 --
 
-LOCK TABLES `systemcrits` WRITE;
-/*!40000 ALTER TABLE `systemcrits` DISABLE KEYS */;
-/*!40000 ALTER TABLE `systemcrits` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `units`
---
-
-DROP TABLE IF EXISTS `units`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `units` (
-  `id` int(3) NOT NULL AUTO_INCREMENT,
+  `id` int(3) NOT NULL,
   `gameid` int(3) DEFAULT '0',
   `userid` int(3) DEFAULT '0',
   `type` int(1) NOT NULL DEFAULT '0',
@@ -456,54 +395,223 @@ CREATE TABLE `units` (
   `turn` int(1) DEFAULT '0',
   `phase` int(1) DEFAULT '0',
   `focus` tinyint(4) DEFAULT '0',
-  `notes` varchar(50) DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `notes` varchar(50) DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `units`
+-- Daten für Tabelle `units`
 --
 
-LOCK TABLES `units` WRITE;
-/*!40000 ALTER TABLE `units` DISABLE KEYS */;
-INSERT INTO `units` VALUES (1,1,2,3,'Squadron','',580,580,'bought',0,1,0,0,0,-427,-81,349.08,349.08,0,185,0,0,0,1,3,0,''),(2,1,2,4,'Hyperion','',1055,775,'bought',1,1,0,0,0,-421,198,4.00,4.00,0,155,0,0,0,1,3,0,''),(3,1,1,4,'Xill','',775,775,'bought',1,1,0,0,0,350,290,174.00,174.00,0,155,0,0,0,1,3,0,''),(4,1,1,3,'Squadron','',660,660,'bought',0,1,0,0,0,244,217,187.69,187.69,0,185,0,0,0,1,3,0,''),(5,1,0,0,'Obstacle','',36,47,'deployed',0,0,0,0,0,-96,78,0.00,0.00,130,0,10,4,0,1,3,0,''),(6,1,0,0,'Obstacle','',9,12,'deployed',0,0,0,0,0,135,59,0.00,0.00,106,0,18,1,0,1,3,0,''),(7,1,0,0,'Obstacle','',27,35,'deployed',0,0,0,0,0,261,-72,0.00,0.00,115,0,13,3,0,1,3,0,''),(8,1,0,0,'Obstacle','',10,13,'deployed',0,0,0,0,0,-437,48,0.00,0.00,88,0,20,1,0,1,3,0,''),(9,1,0,0,'Obstacle','',45,59,'deployed',0,0,0,0,0,382,321,0.00,0.00,163,0,21,5,0,1,3,0,''),(10,1,0,0,'Obstacle','',36,47,'deployed',0,0,0,0,0,-91,286,0.00,0.00,133,0,16,4,0,1,3,0,''),(11,1,2,2,'Flight','Blue-Epsilon',280,280,'deployed',0,2,0,0,0,-421,198,0.00,0.00,0,125,0,0,0,2,-1,0,'');
-/*!40000 ALTER TABLE `units` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `units` (`id`, `gameid`, `userid`, `type`, `name`, `callsign`, `totalCost`, `moraleCost`, `status`, `command`, `available`, `withdraw`, `manual`, `destroyed`, `x`, `y`, `heading`, `facing`, `delay`, `thrust`, `rolling`, `rolled`, `flipped`, `turn`, `phase`, `focus`, `notes`) VALUES
+(1, 1, 1, 4, 'GQuan', '', 1336, 1060, 'bought', 1, 1, 0, 0, 0, -500, 337, '17.00', '17.00', 0, 155, 0, 0, 0, 1, -1, 0, ''),
+(2, 1, 1, 4, 'GSten', '', 752, 750, 'bought', 0, 1, 0, 0, 0, -625, -47, '9.00', '9.00', 0, 155, 0, 0, 0, 1, -1, 0, ''),
+(3, 1, 1, 3, 'Squadron', '', 650, 650, 'bought', 0, 1, 0, 0, 0, -444, 472, '27.00', '27.00', 0, 185, 0, 0, 0, 1, -1, 0, ''),
+(4, 1, 1, 4, 'GSten', '', 752, 750, 'bought', 0, 1, 0, 0, 0, -549, -297, '-6.00', '-6.00', 0, 155, 0, 0, 0, 1, -1, 0, ''),
+(5, 1, 2, 4, 'Zitomm', '', 1416, 600, 'bought', 1, 1, 0, 0, 0, 741, 80, '-14.00', '-14.00', 0, 155, 0, 0, 0, 1, -1, 0, ''),
+(6, 1, 2, 4, 'Xill', '', 775, 775, 'bought', 0, 1, 0, 0, 0, 460, 558, '-22.00', '-22.00', 0, 155, 0, 0, 0, 1, -1, 0, ''),
+(7, 1, 2, 4, 'Xill', '', 775, 775, 'bought', 0, 1, 0, 0, 0, 440, 619, '-25.00', '-25.00', 0, 155, 0, 0, 0, 1, -1, 0, ''),
+(8, 1, 2, 3, 'Squadron', '', 480, 480, 'bought', 0, 1, 0, 0, 0, 623, 280, '-3.00', '-3.00', 0, 185, 0, 0, 0, 1, -1, 0, ''),
+(9, 1, 0, 0, 'Obstacle', '', 36, 47, 'deployed', 0, 0, 0, 0, 0, 80, 356, '0.00', '0.00', 106, 0, 14, 4, 0, 0, 3, 0, ''),
+(10, 1, 0, 0, 'Obstacle', '', 64, 83, 'deployed', 0, 0, 0, 0, 0, -218, -141, '0.00', '0.00', 134, 0, 21, 8, 0, 0, 3, 0, ''),
+(11, 1, 0, 0, 'Obstacle', '', 24, 31, 'deployed', 0, 0, 0, 0, 0, -116, 431, '0.00', '0.00', 88, 0, 28, 3, 0, 0, 3, 0, ''),
+(12, 1, 0, 0, 'Obstacle', '', 9, 12, 'deployed', 0, 0, 0, 0, 0, -382, 371, '0.00', '0.00', 105, 0, 15, 1, 0, 0, 3, 0, ''),
+(13, 1, 0, 0, 'Obstacle', '', 9, 12, 'deployed', 0, 0, 0, 0, 0, -443, -33, '0.00', '0.00', 76, 0, 13, 1, 0, 0, 3, 0, ''),
+(14, 1, 0, 0, 'Obstacle', '', 20, 26, 'deployed', 0, 0, 0, 0, 0, -299, -379, '0.00', '0.00', 171, 0, 11, 2, 0, 0, 3, 0, '');
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Tabellenstruktur für Tabelle `users`
 --
 
-DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `id` int(3) NOT NULL AUTO_INCREMENT,
+  `id` int(3) NOT NULL,
   `username` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `access` int(3) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `access` int(3) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `users`
+-- Daten für Tabelle `users`
 --
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Chris','1',0),(2,'1','1',0);
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+INSERT INTO `users` (`id`, `username`, `password`, `access`) VALUES
+(1, 'Chris', '1', 0),
+(2, '1', '1', 0);
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+--
+-- Indizes der exportierten Tabellen
+--
+
+--
+-- Indizes für die Tabelle `actions`
+--
+ALTER TABLE `actions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `chat`
+--
+ALTER TABLE `chat`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `damages`
+--
+ALTER TABLE `damages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `fireorders`
+--
+ALTER TABLE `fireorders`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `games`
+--
+ALTER TABLE `games`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `globals`
+--
+ALTER TABLE `globals`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `loads`
+--
+ALTER TABLE `loads`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `missions`
+--
+ALTER TABLE `missions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `playerstatus`
+--
+ALTER TABLE `playerstatus`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `powers`
+--
+ALTER TABLE `powers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `sensors`
+--
+ALTER TABLE `sensors`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `subunits`
+--
+ALTER TABLE `subunits`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `systemcrits`
+--
+ALTER TABLE `systemcrits`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `units`
+--
+ALTER TABLE `units`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT für exportierte Tabellen
+--
+
+--
+-- AUTO_INCREMENT für Tabelle `actions`
+--
+ALTER TABLE `actions`
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+--
+-- AUTO_INCREMENT für Tabelle `chat`
+--
+ALTER TABLE `chat`
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT für Tabelle `damages`
+--
+ALTER TABLE `damages`
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT für Tabelle `fireorders`
+--
+ALTER TABLE `fireorders`
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT für Tabelle `games`
+--
+ALTER TABLE `games`
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT für Tabelle `globals`
+--
+ALTER TABLE `globals`
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT für Tabelle `loads`
+--
+ALTER TABLE `loads`
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+--
+-- AUTO_INCREMENT für Tabelle `missions`
+--
+ALTER TABLE `missions`
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT für Tabelle `playerstatus`
+--
+ALTER TABLE `playerstatus`
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT für Tabelle `powers`
+--
+ALTER TABLE `powers`
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT für Tabelle `sensors`
+--
+ALTER TABLE `sensors`
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT für Tabelle `subunits`
+--
+ALTER TABLE `subunits`
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT für Tabelle `systemcrits`
+--
+ALTER TABLE `systemcrits`
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT für Tabelle `units`
+--
+ALTER TABLE `units`
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+--
+-- AUTO_INCREMENT für Tabelle `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2018-12-21 10:32:50

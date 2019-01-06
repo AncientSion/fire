@@ -5,6 +5,9 @@ class Single {
 	public $parentId = 0;
 	public $integrity = 0;
 	public $remaining = 0;
+	public $newDmg = 0;
+	public $recentDmg = 0;
+	public $emDmg = 0;
 	public $negation = 0;
 	public $armourDmg = 0;
 	public $destroyed = 0;
@@ -33,7 +36,6 @@ class Single {
 	public $damaged = 0;
 	public $traverse = 0;
 	public $index = 0;
-	public $emDmg = 0;
 	public $system = false;
 	public $squaddie = false;
 	public $jamming = 0;
@@ -176,6 +178,7 @@ class Single {
 	public function addDamage($dmg){
 		if ($dmg->new){
 			$this->emDmg += $dmg->emDmg;
+			$this->newDmg += $dmg->hullDmg;
 			if (!$this->destroyed && $this->emDmg >= $this->integrity){
 				$this->doDropout();
 			}
@@ -185,6 +188,9 @@ class Single {
 		$this->remaining -= $dmg->hullDmg;
 		$this->damages[] = $dmg;
 
+		if ($dmg->turn == Manager::$turn){
+			$this->recentDmg += $dmg->hullDmg;
+		}
 		if ($dmg->destroyed){
 			$this->destroyed = true;
 		}

@@ -20,6 +20,7 @@ class Ship {
 	public $flipping = 0;
 	public $flipped;
 	public $baseFocusRate = 0;
+	public $carrier = 0;
 
 	public $disabled = false;
 

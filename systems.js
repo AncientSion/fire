@@ -471,7 +471,11 @@ System.prototype.getBoostEffectElements = function(table, boost){
 		}
 
 		$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).html(html)));
+		if (i == this.getBoostEffect.length-1){
+			table.find("tr").last().addClass("rowBorderBottom");
+		}
 	}
+
 
 	//$(table).find("tr").last().css("background-color", "#397a68")
 	//$(table).find("tr").last().addClass("rowBorderBottom")
@@ -623,7 +627,7 @@ System.prototype.doBoost = function(){
 		turn: game.turn,type: 1, cost: this.getEffiency(), new: 1
 	})
 	if (this.getBoostEffect("Reload")){this.setTimeLoaded();}
-	if (this.getBoostEffect("Damage Loss")){this.redrawSystemArc();}
+	if (this.getBoostEffect("Damage Loss") || this.getBoostEffect("Top Range")){this.redrawSystemArc();}
 }
 
 System.prototype.doUnboost = function(){
@@ -631,7 +635,7 @@ System.prototype.doUnboost = function(){
 		this.powers.splice(this.powers.length-1, 1);
 	}
 	if (this.getBoostEffect("Reload")){this.setTimeLoaded();}
-	if (this.getBoostEffect("Damage Loss")){this.redrawSystemArc();}
+	if (this.getBoostEffect("Damage Loss") || this.getBoostEffect("Top Range")){this.redrawSystemArc();}
 }
 
 System.prototype.redrawSystemArc = function(){
@@ -1002,6 +1006,10 @@ System.prototype.getEMDmg = function(){
 		dmg += this.damages[i].emDmg;
 	}
 	return dmg;
+}
+
+System.prototype.getRecentDmgInt = function(){
+	return Math.round(this.recentDmg / (this.remaining + this.recentDmg) * 100);
 }
 
 System.prototype.isDestroyed = function(){
@@ -1938,12 +1946,14 @@ Weapon.prototype.getDmgLoss = function(dist){
 	if (!this.dmgLoss){return 0;}
 
 	if (this.fireMode[0] == "B"){ // beam
-		if (dist <= this.optRange){return 0;}
-		else dist = dist - this.optRange;
+		optRange = this.getOptimalRange();
+		if (dist <= optRange){return 0;}
+		else dist = dist - optRange;
 	}
-	else if (this.dmgType[0] == "A"){
-		if (dist <= this.optRange){return 0;}
-		else dist = dist - this.optRange;
+	else if (this.dmgType[0] == "A"){ // AM
+		optRange = this.getTopRange();
+		if (dist <= optRange){return 0;}
+		else dist = dist - optRange;
 	}
 	return Math.ceil(this.dmgLoss * dist / 100 * this.getRangeDmgMod());
 }
@@ -2042,7 +2052,8 @@ Weapon.prototype.select = function(e){
 		this.setSensorToThis();
 		return;
 	}
-	else if (game.turn == 0 || game.turn == 1 && game.phase == -1){return;}
+	else if (game.turn == 0){return;}
+	//else if (game.turn == 1 && game.phase == -1){return;}
 	else if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || this.parentId < 0 || game.turnMode){
 		return false;
 	}
@@ -2121,7 +2132,8 @@ Weapon.prototype.getSysDiv = function(){
 		}
 		table.append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
 		if (this.boostEffect.length){
-			table.append($("<tr>").addClass("rowBorderTop").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency() + " (max: " + this.maxBoost + ")")));
+			table.append($("<tr>").addClass("rowBorderTop").append($("<td>").html("Boost Power Cost"))
+				.append($("<td>").addClass("powerCost").html(this.getEffiency() + " (up to " + this.maxBoost + " time/s)")));
 			this.getBoostEffectElements(table, 1);
 		}
 	}
@@ -2129,13 +2141,11 @@ Weapon.prototype.getSysDiv = function(){
 	table.append($("<tr>").append($("<td>").html("Loading")).append($("<td>").addClass("loading").html(this.getTimeLoaded() + " / " + this.reload)));
 	if (this.tracking >= 0){table.append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTrackingRating() + " / " + getUnitType(this.getTrackingRating()))));}
 
-
-
 	if (this.dmgType == "Antimatter"){
-		table.append($("<tr>").append($("<td>").html("Top Range")).append($("<td>").html(this.optRange + "px")));
+		table.append($("<tr>").append($("<td>").html("Top Range")).append($("<td>").addClass("topRange").html(this.getTopRange() + "px")));
 	}
 	else if (this.fireMode == "Beam"){
-		table.append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").html(this.optRange + "px")));
+		table.append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").addClass("topRange").html(this.getOptimalRange() + "px")));
 	}
 
 	if (this.dmgLoss){
@@ -2187,6 +2197,7 @@ Weapon.prototype.updateSysDiv = function(){
 	var dmg = this.getDmgString();
 	var acc = this.getAccuracy();
 	var dmgLoss = this.getDmgLoss((this.optRange ? this.optRange : 0) +100);
+	var optRange = this.getTopRange((this.optRange ? this.optRange : 0) +100);
 	var power = this.getPowerReqString()
 	var shots = this.getShots();
 
@@ -2194,6 +2205,7 @@ Weapon.prototype.updateSysDiv = function(){
 	.find(".damage").html(dmg).end()
 	.find(".accuracy").html(acc + "% per 100px").end()
 	.find(".dmgLoss").html(dmgLoss + "% per 100px").end()
+	.find(".topRange").html(optRange + "px").end()
 	.find(".powerReq").html(power).end()
 	.find(".shots").html(this.getShotsString()).end()
 
@@ -2208,6 +2220,7 @@ Weapon.prototype.getFillStyle = function(x, y, dist){
 	if (!this.dmgLoss){return "green";}
 
 	if (this.fireMode[0] == "B"){ // laser
+		//var optRange = this.getTopRange()
 		var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
 		grad.addColorStop(0, "green");
 		grad.addColorStop((this.optRange/1200*dist) / dist, "green");
@@ -2226,14 +2239,23 @@ Weapon.prototype.getFillStyle = function(x, y, dist){
 		grad.addColorStop(green, "green");	
 	}
 	else if (this.dmgType[0] == "A"){ // Antimatter
+		var optRange = this.getTopRange()
 		var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
 		grad.addColorStop(0, "green");
-		grad.addColorStop(this.optRange / 1200 * 0.9, "green");
-		grad.addColorStop(this.optRange / 1200 * 1.1, "yellow");
-		grad.addColorStop(this.optRange / 1200 * 1.4, "red");
+		grad.addColorStop(optRange / 1200 * 0.9, "green");
+		grad.addColorStop(optRange / 1200 * 1.1, "yellow");
+		grad.addColorStop(optRange / 1200 * 1.4, "red");
 		grad.addColorStop(1,"red");
 	}
 	return grad;
+}
+
+Weapon.prototype.getTopRange = function(){
+	return this.optRange / 100 * (100  + this.getBoostEffect("Top Range") * this.getBoostLevel());
+}
+
+Weapon.prototype.getOptimalRange = function(){
+	return this.optRange;
 }
 
 Weapon.prototype.getAccuracy = function(){
@@ -4043,10 +4065,9 @@ Hangar.prototype.drawSystemArc = function(){
 }
 
 Hangar.prototype.enableHangarDiv = function(e){
-	$("#capacity").html(this.capacity);
-	$("#launchRate").html(this.getOutput());
 	var div = $("#hangarDiv");
 
+	this.setHangarDivContent(div);
 	this.unsetFireOrder();
 	this.doUndoActions();
 	this.showHangarLaunchControl(e);
@@ -4065,6 +4086,15 @@ Hangar.prototype.enableHangarDiv = function(e){
 	if (game.phase != -1 || this.parentId < 0 || game.getUnit(this.parentId).available == game.turn){
 		div.find("#missionType").hide();
 	} else div.find("#missionType").show();
+}
+
+Hangar.prototype.setHangarDivContent = function(ele){
+	ele.find("#launchRate").html(this.getOutput());
+	ele.find("#capacity").html(this.capacity);
+
+	if (game.getUnit(this.parentId).carrier){
+		ele.find(".dedicatedCarrier").show();
+	} else ele.find(".dedicatedCarrier").hide();
 }
 
 Hangar.prototype.showHangarLaunchControl = function(){
@@ -4141,8 +4171,8 @@ Hangar.prototype.showHangarLaunchControl = function(){
 				})
 
 	if (game.getUnit(this.parentId).available == game.turn){
-		element.find("input").hide();
-	} else element.find("input").show();
+		element.find(".missionContainer").hide();
+	} else element.find("missionContainer").show();
 
 }
 
@@ -4278,12 +4308,14 @@ Hangar.prototype.initHangarPurchaseDiv = function(){
 
 	table.append($("<tbody>"));
 
+	var cost = game.getUnit(aUnit).carrier ? 70 : 100;
+
 	for (var i = 0; i < this.loads.length; i++){
 		table
 			.append($("<tr>")
 				.append($("<td>")
 					.append($("<div>").addClass("yellow").html(this.loads[i].name))
-					.append($("<div>").addClass("yellow").html(this.loads[i].display))
+					.append($("<div>").addClass("yellow").html(this.loads[i].role))
 					.append($(this.loads[i].getElement(true)))
 				)
 				.append($("<td>").html(this.loads[i].mass))
@@ -4311,7 +4343,7 @@ Hangar.prototype.initHangarPurchaseDiv = function(){
 						game.getUnit(aUnit).getSystem($("#hangarDiv").data("systemid")).removeFighter(this.parentNode, true);
 					})
 				)
-				.append($("<td>").html(this.loads[i].amount * this.loads[i].cost))
+				.append($("<td>").html(Math.floor(this.loads[i].amount * this.loads[i].cost / 100 * cost)))
 			)
 	}
 
@@ -4331,15 +4363,16 @@ Hangar.prototype.initHangarPurchaseDiv = function(){
 }
 
 Hangar.prototype.setTotalBuyData = function(){
-	console.log("setTotalBuyData");
+	//console.log("setTotalBuyData");
 	var table = $("#hangarTable");
 	var tAmount = 0;
 	var tCost = 0;
 	var tMass = 0;
+	var cost = game.getUnit(aUnit).carrier ? 70 : 100;
 
 	for (let i = 0; i < this.loads.length; i++){
 		tAmount += this.loads[i].amount;
-		tCost += this.loads[i].amount * this.loads[i].cost;
+		tCost = tCost + Math.ceil(this.loads[i].amount * this.loads[i].cost / 100 * cost);
 		tMass += this.loads[i].amount * this.loads[i].mass;
 	}
 
@@ -4354,32 +4387,31 @@ Hangar.prototype.setTotalBuyData = function(){
 }
 
 Hangar.prototype.updateHangarDiv = function(index){
-	console.log("updateHangarDiv");
 	var amount = this.loads[index].amount;
-	var cost = this.loads[index].cost * amount;
+	var cost = game.getUnit(aUnit).carrier ? 70 : 100;
+	var allCost = Math.ceil(this.loads[index].cost / 100 * cost * amount);
 	var max = this.capacity[index];
 	var tr = $($("#hangarTable").find("tr")[index+1]);
 	var tds = tr.find("td");
 		$(tds[4]).html(amount);
-		$(tds[6]).html(cost);
+		$(tds[6]).html(allCost);
 
 	this.setTotalBuyData();
 	this.canConfirm();
 }
 
 Hangar.prototype.setupHangarLoadout = function(e){
-	var div = document.getElementById("hangarDiv");
-	if ($(div).hasClass("disabled")){
-		$(div).find("#launchRate").html(this.getOutput());
-		$(div).find("#capacity").html(this.capacity);
-		$(div).data("systemid", this.id).css("left", 750).css("top", 400).removeClass("disabled");
+	var div = $("#hangarDiv");
+	if (div.hasClass("disabled")){
+		this.setHangarDivContent(div);
+		div.data("systemid", this.id).css("left", 750).css("top", 400).removeClass("disabled");
 		this.initHangarPurchaseDiv();
 	}
 	else {
 		var parent = game.getUnit(this.parentId);
 		game.setUnitTotal(parent);
 		//if (parent.available == game.turn){div.find("input").hide()};
-		$(div).addClass("disabled");
+		div.addClass("disabled");
 	}
 }
 

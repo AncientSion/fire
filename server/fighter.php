@@ -58,8 +58,8 @@ class Tzymm extends Fighter {
 	public $role = "Heavy Strike Fighter";
 	public $faction = "Vree Conglomerate";
 	public static $value =  36;
-	public $integrity = 32;
-	public $negation = 5;
+	public $integrity = 35;
+	public $negation = 6;
 	public $baseImpulse = 120;
 	public $baseHitChance = 26;
 
@@ -68,18 +68,13 @@ class Tzymm extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 1, 
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
 			array(
-				array("FighterStandard", 1, 10, 14),
-				array("FighterStrafe", 1, 10, 14)
+				array("FighterStandard", 1, 12, 16),
+				array("FighterStrafe", 1, 12, 16)
 			)
 		);
-		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 1, 
-			array(
-				array("FighterStandard", 1, 10, 14),
-				array("FighterStrafe", 1, 10, 14)
-			)
-		);
+		$this->systems[] = new SuperLightAntimatterCannon($this->getId(), $this->parentId, $this->id, 1, 1, 0, 360);
 	}
 }
 

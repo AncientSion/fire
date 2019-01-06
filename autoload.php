@@ -100,6 +100,8 @@ spl_autoload_register(
 
                 'xonn' => '/server/ships/xonn.php',
                 'xill' => '/server/ships/xill.php',
+                'zitomm' => '/server/ships/zitomm.php',
+                'zaatrr' => '/server/ships/zaatrr.php',
                 'xorr' => '/server/ships/xorr.php',
                 'ximm' => '/server/ships/ximm.php',
                 'xvell' => '/server/ships/xvell.php',
@@ -154,9 +156,9 @@ spl_autoload_register(
                 'test' => '/server/systems/weapons/matter.php',
 
                 'pulse' => '/server/systems/weapons/pulse.php',
-                'lightpulse' => '/server/systems/weapons/pulse.php',
-                'mediumpulse' => '/server/systems/weapons/pulse.php',
-                'heavypulse' => '/server/systems/weapons/pulse.php',
+                'lightpulsecannon' => '/server/systems/weapons/pulse.php',
+                'mediumpulsecannon' => '/server/systems/weapons/pulse.php',
+                'heavypulsecannon' => '/server/systems/weapons/pulse.php',
                 'neutronpulsar' => '/server/systems/weapons/pulse.php',
                 'fusionpulseccannonas' => '/server/systems/weapons/pulse.php',
                 'fusionpulseccannonaf' => '/server/systems/weapons/pulse.php',
@@ -187,7 +189,8 @@ spl_autoload_register(
                 'antimattercannon' => '/server/systems/weapons/am.php',
                 'antimatterconverter' => '/server/systems/weapons/am.php',
                 'heavyantimatterconverter' => '/server/systems/weapons/am.php',
-                'lightantiprotonpulsar' => '/server/systems/weapons/am.php',
+                'triparticleinterdictor' => '/server/systems/weapons/am.php',
+                'heavyantiprotonpulsar' => '/server/systems/weapons/am.php',
                 'mediumantiprotonpulsar' => '/server/systems/weapons/am.php',
 
                 'mediumshock' => '/server/systems/weapons/particle.php',
@@ -212,6 +215,7 @@ spl_autoload_register(
 
                 'fighterstandard' => '/server/systems/weapons/linked.php',
                 'fighterstrafe' => '/server/systems/weapons/linked.php',
+                'superlightantimattercannon' => '/server/systems/weapons/linked.php',
 
                 'structure' => '/server/systems/structure.php',
                 'primary' => '/server/systems/structure.php',

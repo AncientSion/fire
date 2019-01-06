@@ -27,21 +27,21 @@ class Xonn extends SuperHeavy {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 315, 45, 625, 18, 5);
-		$front->systems[] = new LightAntiProtonPulsar($this->getId(), $this->id, 270, 90);
+		$front->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 270, 90);
 		$front->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 300, 60);
 		//$front->systems[] = new AntimatterCannon($this->getId(), $this->id, 315, 45);
 		$front->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new LightAntiProtonPulsar($this->getId(), $this->id, 270, 90);
+		$front->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 270, 90);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 45, 135, 800, 18, 1);
-		$right->systems[] = new LightAntiProtonPulsar($this->getId(), $this->id, 0, 180);
+		$right->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 0, 180);
 		$right->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 30, 150);
 		$right->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 30, 150);
 		//$right->systems[] = new AntimatterCannon($this->getId(), $this->id, 45, 135);
 		$right->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 30, 150);
-		$right->systems[] = new LightAntiProtonPulsar($this->getId(), $this->id, 0, 180);
+		$right->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 135, 225, 550, 18, 4);
@@ -58,12 +58,12 @@ class Xonn extends SuperHeavy {
 	*/	$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 225, 315, 800, 18, 1);
-		$left->systems[] = new LightAntiProtonPulsar($this->getId(), $this->id, 90, 270);
+		$left->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 180, 360);
 		$left->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 210, 330);
 		$left->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 210, 330);
 		//$left->systems[] = new AntimatterCannon($this->getId(), $this->id, 225, 315);
 		$left->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 210, 330);
-		$left->systems[] = new LightAntiProtonPulsar($this->getId(), $this->id, 90, 270);
+		$left->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 		
 	//	$turretD = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 160, 12);
@@ -81,18 +81,18 @@ class Xonn extends SuperHeavy {
 	public function addTurrets(){
 		$turrets = array();
 
-		$turretA = new Turret($this->getId(), $this->id, "Dorsal Turret #1", 0, 360, 220, 14);
+		$turretA = new Turret($this->getId(), $this->id, "Dorsal Turret #1", 0, 360, 180, 14);
 		$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 		$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 		$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 		$turrets[] = $turretA;
 		
-		$turretC = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 160, 14);
-		$turretC->systems[] = new AntimatterConverter($this->getId(), $this->id, 0, 360);
-		$turretC->systems[] = new AntimatterConverter($this->getId(), $this->id, 0, 360);
+		$turretC = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 140, 14);
+		$turretC->systems[] = new HeavyAntiProtonPulsar($this->getId(), $this->id, 0, 360);
+		$turretC->systems[] = new HeavyAntiProtonPulsar($this->getId(), $this->id, 0, 360);
 		$turrets[] = $turretC;
 
-		$turretB = new Turret($this->getId(), $this->id, "Dorsal Turret #2", 0, 360, 120, 14);
+		$turretB = new Turret($this->getId(), $this->id, "Dorsal Turret #2", 0, 360, 180, 14);
 		$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 		$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 		$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);

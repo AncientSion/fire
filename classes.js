@@ -233,6 +233,9 @@ function Single(data){
 	this.ep = data.ep || 0;
 	this.mass = data.mass;
 	this.remaining = data.remaining;
+	this.recentDmg = data.recentDmg;
+	this.newDmg = data.newDmg;
+	this.emDmg = data.emDmg;
 	this.integrity = data.integrity;
 	this.negation = data.negation;
 	this.baseHitChance = data.baseHitChance;
@@ -361,13 +364,11 @@ Single.prototype.hover = function(e){
 }
 
 Single.prototype.getEMDmg = function(){
-	//return this.damages.map(x => x.emDmg).reduce((l,r) => l+r, 0);
-	var dmg = 0;
-	for (var i = this.damages.length-1; i >= 0; i--){
-		if (this.damages[i].turn < game.turn){return dmg;}
-		dmg += this.damages[i].emDmg;
-	}
-	return dmg;
+	return System.prototype.getEMDmg.call(this);
+}
+
+Single.prototype.getRecentDmgInt = function(){
+	return System.prototype.getRecentDmgInt.call(this);
 }
 
 Single.prototype.getSysDiv = function(){
@@ -377,9 +378,11 @@ Single.prototype.getSysDiv = function(){
 			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.name + " #" + this.id)))
 			.append($("<tr>").append($("<td>").attr("colSpan", 2).html(this.role)))
 			.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
+			.append($("<tr>").append($("<td>").html("Profile").css("width", "70%")).append($("<td>").html(this.baseHitChance + "%")))
 			.append($("<tr>").append($("<td>").html("Armour").css("width", "70%")).append($("<td>").html(this.negation)))
 			.append($("<tr>").append($("<td>").html("Acceleration")).append($("<td>").html(this.baseImpulse)))
 			.append($("<tr>").append($("<td>").html("Recent EM Damage")).append($("<td>").html(this.getEMDmg())))
+			//.append($("<tr>").append($("<td>").html("Recent Stock Damage")).append($($("<td>").html((this.recentDmg + " / " + this.getRecentDmgInt() + " %")))))
 			.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
 		)
 
@@ -488,7 +491,7 @@ Single.prototype.addSysEvents = function(div, isBuy){
 		.css("zIndex", 1)
 		.hover(function(e){
 			e.stopPropagation();
-			game.getSampleSubUnit($(this).parent().data("class")).systems[0].hover(e);
+			game.getSampleSubUnit($(this).parent().data("class")).systems[$(this).data("systemId")-1].hover(e);
 		})
 		return;
 	}
@@ -553,7 +556,8 @@ Single.prototype.getElement = function(isBuy){
 
 	div.append(wrap);
 
-	var s = 20;
+	var divWidth = 50;
+	var sysWidth = 20;
 	for (var i = 0; i < this.systems.length; i++){
 		var ele = $(this.systems[i].getFighterSystemData(true));
 		var modeDiv = this.systems[i].getModeDiv();
@@ -561,6 +565,10 @@ Single.prototype.getElement = function(isBuy){
 
 		this.addSysEvents(ele, isBuy)
 		div.append(ele);
+		if (this.systems.length == 1){
+			ele.css("left", divWidth / 2 - sysWidth/2);
+		}
+		else ele.css("left", (i == 0 ? -1 : divWidth - sysWidth -2))
 	}
 
 	return div;

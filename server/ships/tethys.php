@@ -8,7 +8,7 @@ class Tethys extends UltraLight {
 	public static $value = 200;
 	public $mass = 1000;
 
-	public $integrity = 330;
+	public $integrity = 320;
 	public $ep = 110;
 	public $ew = 375;
 	public $negation = 8;
@@ -21,9 +21,9 @@ class Tethys extends UltraLight {
 	}
 
 	public function addSystems(){
-		$this->addSubSystem(new LightPulse($this->getId(), $this->parentId, 240, 120), 120);
+		$this->addSubSystem(new LightPulseCannon($this->getId(), $this->parentId, 240, 120), 120);
 		$this->addSubSystem(new LightLaser($this->getId(), $this->parentId, 300, 60), 0);
-		$this->addSubSystem(new LightPulse($this->getId(), $this->parentId, 240, 120), 240);
+		$this->addSubSystem(new LightPulseCannon($this->getId(), $this->parentId, 240, 120), 240);
 	}
 }
 

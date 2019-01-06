@@ -1045,3 +1045,16 @@ Squadron.prototype.getJammerStrength = function(){
 
 	return values;
 }
+
+Squadron.prototype.getRecentMoraleCheckDamage = function(){
+	var amount = 0;
+	var pct = 0;
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].recentDmg){
+			amount++;
+			pct += this.structures[i].getRecentDmgInt();
+		}
+	}
+
+	return round(pct / amount);
+}

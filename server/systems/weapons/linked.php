@@ -20,7 +20,7 @@ class FighterWeapon extends Particle {
 	}
 }
 
-class ParticleGun extends FighterWeapon {
+class ParticleGun extends Particle {
 	public $name = "ParticleGun";
 	public $display = "Particle Gun";
 	public $animColor = "blue";
@@ -30,6 +30,28 @@ class ParticleGun extends FighterWeapon {
 	}
 }
 
+class SuperLightAntimatterCannon extends Particle {
+	public $name = "SuperLightAntimatterCannon";
+	public $display = "Super Light Anti-Matter Cannon";
+	public static $prio = 0;
+	public $minDmg = 28;
+	public $maxDmg = 36;
+	public $accDecay = 300;
+	public $shots = 1;
+	public $reload = 3;
+	public $tracking = 3;
+	public $animColor = "pink";
+	public $projSize = 4;
+	public $projSpeed = 6;
+
+	public $optRange = 300;
+	public $tiny = 1;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+		parent::__construct($id, $parentId, $start, $end, $output, $width);
+        $this->setAntimatterData();
+	}
+}
 
 class FighterStandard extends FighterWeapon {
 	public $name = "FighterStandard";

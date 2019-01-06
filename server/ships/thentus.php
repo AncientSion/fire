@@ -8,7 +8,7 @@ class Thentus extends Light {
 	public static $value = 325;
 	public $mass = 1300;
 
-	public $integrity = 400;
+	public $integrity = 390;
 	public $ep = 110;
 	public $ew = 500;
 	public $negation = 10;

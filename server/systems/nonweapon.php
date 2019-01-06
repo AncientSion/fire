@@ -189,9 +189,9 @@ class GravitonSupressor extends PrimarySystem {
 	public $hitMod = 2.5;
 
 	function __construct($id, $parentId, $integrity, $unitSize){
-		$this->boostEffect[] = new Effect("Output", 150);
+		$this->boostEffect[] = new Effect("Output", 100);
 		$this->powerReq = ceil($unitSize*1);
-		$this->effiency = ceil($this->powerReq*2);
+		$this->effiency = ceil($this->powerReq*1.5);
         parent::__construct($id, $parentId, $integrity/2, 5, 1); //hp, output, width
     }
 }

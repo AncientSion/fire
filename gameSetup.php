@@ -177,6 +177,11 @@ else header("Location: index.php");
 				Can store a total tonnage of up to <span id="capacity"></span> kT.
 				<br>
 				Can launch up to <span id="launchRate"></span> kTs of units per cycle.
+				<br>
+				<br>
+				<span class="dedicatedCarrier">
+					Dedicated carrier unit, <span class='yellow'>30 % cost discount</span>.
+				</span>
 			</div>
 			<table id="hangarTable">
 			</table>
@@ -340,17 +345,20 @@ else header("Location: index.php");
 					} else if (cur + add > max){
 						popup("You have insufficient point value left");
 					}
+					else if (unit.hasPristineSystems()){
+
+					}
 					else {this.doConfirmUnitPurchase(unit);}
 				},
 
 				doConfirmUnitPurchase: function(unit){
 					unit.callsign = $("#nameWrapper").find("input").val();
-
+					$("#popupWrapper").hide();
 
 					if (game.system){
 						game.getUnit(aUnit).doConfirmSystemLoadout();
 						game.setUnitTotal(game.getUnit(aUnit));
-						}
+					}
 						
 
 					if (this.refit){

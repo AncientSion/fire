@@ -35,6 +35,7 @@ function Ship(data){
 	this.baseFocusRate = data.baseFocusRate;
 	this.modFocusRate = data.modFocusRate;
 	this.critEffects = data.critEffects;
+	this.carrier = data.carrier;
 	this.cc = [];
 	this.upgrades = [];
 	this.stringHitChance = "";
@@ -406,16 +407,22 @@ Ship.prototype.drawSystemArcIndicator = function(){
 }
 
 Ship.prototype.setSlipAngle = function(){
-	this.slipAngle = 15;
-	if (this.ship && this.faction[0] == "V"){
-		var graviton = this.getSystemByName("GravitonSupressor");
-		if (graviton.isPowered()){
-			var mod = 100;
-				mod += 50;
-				mod += graviton.getBoostLevel() * graviton.getBoostEffect("Output");
+	if (this.faction[0] == "V"){
+		if (this.ship){
+			var graviton = this.getSystemByName("GravitonSupressor");
+			if (graviton.isPowered()){
+				var mod = 100;
+					mod += 50;
+					mod += graviton.getBoostLevel() * graviton.getBoostEffect("Output");
 
-				this.slipAngle = Math.floor(15 / 100 * mod)
+					this.slipAngle = Math.floor(15 / 100 * mod)
+			}
 		}
+		else if (this.squad){
+		}
+	}
+	else {
+		this.slipAngle = 15;
 	}
 }
 
@@ -1545,12 +1552,15 @@ Ship.prototype.createMoraleLogEntry = function(){
 
 	if (numbers[0] == 100){return;}
 
-	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Severe damage (> 15%) forces a morale check from " + this.getLogTitleSpan() + "</br>";
-		html += "Initial chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] + " - ";
+	//var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Severe damage (> 15%) forces a morale check from " + this.getLogTitleSpan() + "</br>";
+		//html += "CLIENT: " + this.getRecentMoraleCheckDamage() + " %</br>";
+	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>";
+		html += this.getLogTitleSpan() + " lost " + this.getRecentMoraleCheckDamage() + "% of its remaining health, causing a morale check.</br>";
+	//	html += "Initial chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] + " - ";
 
-		html += "<span class='yellow'>" + ((type == "p") ? " Passed ! (-30 on final severity)" : " Failed !") +"</span></br>";
+	//	html += "<span class='yellow'>" + ((type == "p") ? " Passed ! (-30 on final severity)" : " Failed !") +"</span></br>";
 
-		html +=	"The unit rolled <span class='yellow'>" + numbers[2] + "</span> for effect, in addition to its existing total penalties of <span class='yellow'>" + (numbers[3]-numbers[2]) + "</span> for a total of <span class='yellow'> " + numbers[3] +".</span></br>";
+	//	html +=	"The unit rolled <span class='yellow'>" + numbers[2] + "</span> for effect, in addition to its existing total penalties of <span class='yellow'>" + (numbers[3]-numbers[2]) + "</span> for a total of <span class='yellow'> " + numbers[3] +".</span></br>";
 
 	var effect = 0;
 	if (this.actions.length && this.actions[this.actions.length-1].type == "jumpOut"){
@@ -2246,9 +2256,9 @@ Ship.prototype.showUnitMoraleDiv = function(e){
 		.append($("<table>")
 			.append($("<tr>")
 				.append($("<th>").attr("colSpan", 2).html("Morale Overview")))
-			.append($("<tr>")
-				.append($("<td>").html("Morale Value"))
-				.append($("<td>").html(this.getRelativeMoraleValue())))
+		//	.append($("<tr>")
+		//		.append($("<td>").html("Morale Value"))
+		//		.append($("<td>").html(this.getRelativeMoraleValue())))
 			.append($("<tr>")
 				.append($("<td>").html("Base Morale"))
 				.append($("<td>").html(this.getBaseMorale())))
@@ -4639,6 +4649,35 @@ Ship.prototype.getSelfExplo = function(){
 	return data;
 }
 
+Ship.prototype.hasPristineSystems = function(){
+	if (this.flight || this.salvo){return false;}
+
+	var html = "";
+
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].systems.length; j++){
+			if (!this.structures[i].systems[j].loadout){continue;}
+			var set = false;
+			for (var k = 0; k < this.structures[i].systems[j].loads.length; k++){
+				if (this.structures[i].systems[j].loads[k].amount){
+					set = true; 
+					break;
+				}
+			}
+			if (!set){
+				html += this.structures[i].systems[j].display + "</br>";
+			}
+		}
+	}
+
+
+	if (html.length){
+		popup ("The following systems lack a complete setup:</br></br>" + html + "</br></br><input type='button' class='popupEntryConfirm' value='Confirm Purchase' onclick='game.doConfirmUnitPurchase(game.getUnit(aUnit))'>");
+		return true;
+	}
+	return false;
+}
+
 Ship.prototype.disableMissionMode = function(){
 	game.flightDeploy = 0;
 	game.mission = 0;
@@ -4677,4 +4716,8 @@ Ship.prototype.getJammingString = function(){
 Ship.prototype.getJammerStrength = function(){
 	var jammer = this.getSystemByName("Jammer");
 	return jammer.getOutput();
+}
+
+Ship.prototype.getRecentMoraleCheckDamage = function(){
+	return this.primary.getRecentDmgInt();
 }

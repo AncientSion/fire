@@ -198,6 +198,12 @@ window.graphics = {
 		this.images.xill = new Image();
 		this.images.xill.src = "shipIcons/xill.png";
 
+		this.images.zaatrr = new Image();
+		this.images.zaatrr.src = "shipIcons/zaatrr.png";
+
+		this.images.zitomm = new Image();
+		this.images.zitomm.src = "shipIcons/zitomm.png";
+
 		this.images.xorr = new Image();
 		this.images.xorr.src = "shipIcons/xorr.png";
 

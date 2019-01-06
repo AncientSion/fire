@@ -8,7 +8,7 @@ class Hermes extends SuperLight {
 	public static $value = 230;
 	public $mass = 1200;
 
-	public $integrity = 380;
+	public $integrity = 360;
 	public $ep = 120;
 	public $ew = 425;
 	public $power = 2;
@@ -22,9 +22,9 @@ class Hermes extends SuperLight {
 	}
 
 	public function addSystems(){
-		$this->addSubSystem(new LightPulse($this->getId(), $this->parentId, 270, 90), 0);
+		$this->addSubSystem(new LightPulseCannon($this->getId(), $this->parentId, 270, 90), 0);
 		$this->addSubSystem(new MissileLauncher($this->getId(), $this->parentId, 270, 90, 0, array(array("Needle", 8, 4), array("Naga", 6, 3))), 0);
-		$this->addSubSystem(new LightPulse($this->getId(), $this->parentId, 270, 90), 0);
+		$this->addSubSystem(new LightPulseCannon($this->getId(), $this->parentId, 270, 90), 0);
 	}
 }
 

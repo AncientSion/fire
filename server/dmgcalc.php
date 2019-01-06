@@ -104,7 +104,7 @@ class DmgCalc {
 			"SuperHeavyParticle", "HeavyParticle", "MediumParticle", "LightParticle", "TwinParticleBolter", "FusionCannon", "HeavyFusionCannon",
 			"HeavyPlasma", "MediumPlasma", "LightPlasma", "LightPlasmaShredder",
 			"HeavyAntimatterConverter", "AntimatterConverter",  "MagCompressor",
-			"LightPulse", "MediumPulse", "HeavyPulse", "NeutronPulsar",
+			"LightPulseCannon", "MediumPulseCannon", "HeavyPulseCannon", "NeutronPulsar",
 			"LightPlasmaPulse", "MediumPlasmaPulse", "HeavyPlasmaPulse",
 			"MediumRailGun", "HeavyRailGun",
 			"AntiMatterCannon", "MediumAntiProtonPulsar"

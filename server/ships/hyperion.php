@@ -24,16 +24,16 @@ class Hyperion extends Heavy {
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 19, 5);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new MediumPulse($this->getId(), $this->id, 240, 120);
+		$front->systems[] = new MediumPulseCannon($this->getId(), $this->id, 240, 120);
 		$front->systems[] = new Hangar($this->getId(), $this->id, 80, 350, 350, array("Aurora", "Thunderbolt"));
-		$front->systems[] = new MediumPulse($this->getId(), $this->id, 240, 120);
+		$front->systems[] = new MediumPulseCannon($this->getId(), $this->id, 240, 120);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 18, 1);
 		$right->systems[] = new HeavyLaser($this->getId(), $this->id, 0, 60);
-		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulseCannon", "LightParticleBeam"));
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 16);
@@ -43,8 +43,8 @@ class Hyperion extends Heavy {
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 18, 1);
 		$left->systems[] = new HeavyLaser($this->getId(), $this->id, 300, 360);
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulseCannon", "LightParticleBeam"));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

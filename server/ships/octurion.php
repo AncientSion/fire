@@ -39,15 +39,15 @@ class Octurion extends SuperHeavy {
 		$rightTop->systems[] = new MediumParticle($this->getId(), $this->id, 30, 150);
 		$structs[] = $rightTop;
 
-		$rightBottomm = new Structure($this->getId(), $this->id, 120, 180, 800, 22,3);
+		$rightBottomm = new Structure($this->getId(), $this->id, 120, 180, 800, 22, 4);
 		$rightBottomm->systems[] = new LightParticle($this->getId(), $this->id, 54, 234);
-		$rightBottomm->systems[] = new Hangar($this->getId(), $this->id, 10, array("Sentri", "Sitara"), 20, 1);
+		$rightBottomm->systems[] = new Hangar($this->getId(), $this->id, 120, 625, 325, array("Sentri", "Sitara"), 2);
 		$rightBottomm->systems[] = new LightParticle($this->getId(), $this->id, 54, 234);
 		$structs[] = $rightBottomm;
 
-		$leftBottom = new Structure($this->getId(), $this->id, 180, 240, 800, 22, 3);
+		$leftBottom = new Structure($this->getId(), $this->id, 180, 240, 800, 22, 4);
 		$leftBottom->systems[] = new LightParticle($this->getId(), $this->id, 126, 306);
-		$leftBottom->systems[] = new Hangar($this->getId(), $this->id, 10, array("Sentri", "Sitara"), 20, 1);
+		$leftBottom->systems[] = new Hangar($this->getId(), $this->id, 120, 625, 325, array("Sentri", "Sitara"), 2);
 		$leftBottom->systems[] = new LightParticle($this->getId(), $this->id, 126, 306);
 		$structs[] = $leftBottom;
 

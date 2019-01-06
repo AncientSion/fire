@@ -253,7 +253,7 @@ class System {
 	}
 
 	public function getCritModMax($relDmg){
-		return (min(30, round($relDmg*100/20) * 10)*-1);
+		return (min(25, round($relDmg*100/20) * 10)*-1);
 	}
 
 	public function determineCrit($dmg, $turn, $squad){

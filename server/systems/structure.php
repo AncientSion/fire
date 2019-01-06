@@ -3,8 +3,6 @@
 class Turret extends Squaddie {
 	public $name = "Turret";
 	public $turret = 1;
-	public $newDmg = 0;
-	public $recentDmg = 0;
 	public $overloads = array();
 	
 	public $critEffects =  array( // type, mag, dura, effect
@@ -374,10 +372,10 @@ class Primary {
 		}
 
 		$this->remaining -= $dmg->hullDmg;
+
 		if ($dmg->turn == Manager::$turn){
 			$this->recentDmg += $dmg->hullDmg;
 		}
-
 		if ($this->remaining < 1){
 			$dmg->hullDmg += $this->remaining;
 			$this->destroyed = 1;

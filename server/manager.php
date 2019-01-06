@@ -2176,10 +2176,12 @@
 					array(
 						"Xonn",
 						"Xill",
-						"Xorr",
-						"Ximm"
+						"Zitomm",
+						"Zaatrr",
 					),
 					array(
+						"Xorr",
+						"Ximm",
 						"Xvell",
 					),
 					array(

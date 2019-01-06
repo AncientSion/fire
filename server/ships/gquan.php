@@ -38,9 +38,9 @@ class GQuan extends Heavy {
 		$right->systems[] = new TwinParticleBolter($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 17, 4);
+		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 17, 3);
 		$aft->systems[] = new TwinParticleBolter($this->getId(), $this->id, 90, 270);
-		$aft->systems[] = new Hangar($this->getId(), $this->id, 10, array("Gorith", "Frazi"), 10, 2);
+		$aft->systems[] = new Hangar($this->getId(), $this->id, 160, 350, 350, array("Gorith", "Frazi"));
 		$aft->systems[] = new TwinParticleBolter($this->getId(), $this->id, 90, 270);
 		$structs[] = $aft;
 

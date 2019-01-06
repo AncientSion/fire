@@ -23,8 +23,8 @@ class Pulse extends Weapon {
 	}
 }
 
-class LightPulse extends Pulse {
-	public $name = "LightPulse";
+class LightPulseCannon extends Pulse {
+	public $name = "LightPulseCannon";
 	public $display = "Light Pulse Cannon";
 	public static $prio = 0;
 	public $minDmg = 13;
@@ -44,8 +44,8 @@ class LightPulse extends Pulse {
 	}
 }
 
-class MediumPulse extends Pulse {
-	public $name = "MediumPulse";
+class MediumPulseCannon extends Pulse {
+	public $name = "MediumPulseCannon";
 	public $display = "Medium Pulse Cannon";
 	public static $prio = 0;
 	public $minDmg = 23;
@@ -65,8 +65,8 @@ class MediumPulse extends Pulse {
 	}
 }
 
-class HeavyPulse extends Pulse {
-	public $name = "HeavyPulse";
+class HeavyPulseCannon extends Pulse {
+	public $name = "HeavyPulseCannon";
 	public $display = "Heavy Pulse Cannon";
 	public static $prio = 0;
 	public $minDmg = 39;
@@ -151,7 +151,7 @@ class FusionPulseCannonAF extends Particle {
 	}
 }
 
-class LightPlasmaPulse extends LightPulse {
+class LightPlasmaPulse extends LightPulseCannon {
 	public $name = "LightPlasmaPulse";
 	public $display = "Light Plasma Pulse Cannon";
 	public static $prio = 0;
@@ -217,7 +217,7 @@ class HeavyPlasmaPulse extends MediumPlasmaPulse {
    }
 }
 
-class LightEMPulse extends LightPulse {
+class LightEMPulse extends LightPulseCannon {
 	public $name = "LightEMPulse";
 	public $display = "Light EM Pulse Cannon";
 	public static $prio = 0;

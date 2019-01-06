@@ -64,7 +64,7 @@ function Game(data){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.animData = {jump: 30};
+	this.animData = {jump: 3};
 	this.commandChange = {old: 0, new: 0, original: 0}
 	this.subPhase = 1;
 	this.animMoves = 0;
@@ -658,7 +658,7 @@ this.doAnimateMovement = function(){
 
 		var power = this.getHasUnusedPower();
 		if (power.length){
-			data.push({data: power, msg: "The following units have unspent power:"});
+			data.push({data: power, msg: (ew.length ? "</br></br>" : "") + "The following units have unspent power:"});
 		}
 
 		if (data.length){
@@ -3825,12 +3825,10 @@ Game.prototype.showUI = function(width){
 	//if (game.turn == 1 && game.phase == -1){ui.combatLogWrapper.hide();}
 
 	if (game.turn == 1 && game.phase == -1){
-		ui.combatLogWrapper.find("#combatLog tr").each(function(i){
-			if (i == 0 || i == 1){
-				console.log("ding");
-				$(this).remove();
-			}
-		})
+		ui.unitSelector.remove();
+		ui.combatLogWrapper.css("top", 5).css("left", 300).find("#combatLog tr").each(function(i){
+			$(this).remove()
+		}).end().find("th").addClass("yellow").html("The match starts. Fleets are deployed.");
 	}
 }
 

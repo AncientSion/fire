@@ -75,6 +75,12 @@ Squaddie.prototype.getSysDiv = function(){
 				.append($("<td>").html("Base Hit Chance"))
 				.append($("<td>").html(this.baseHitChance + "%")))
 			.append($("<tr>")
+				.append($("<td>").html("Recent EM Damage"))
+				.append($("<td>").html(this.getEMDmg())))
+			.append($("<tr>")
+				.append($("<td>").html("Recent Stock Damage"))
+				.append($("<td>").html(this.recentDmg + " / " + this.getRecentDmgInt() + " %")))
+			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
 		)
 

@@ -33,7 +33,7 @@ class Varnic extends Heavy {
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 15, 2);
-		$aft->systems[] = new Hangar($this->getId(), $this->id, 6, array("Gorith"), 6, 2);
+		$aft->systems[] = new Hangar($this->getId(), $this->id, 160, 200, 200, array("Gorith"), 2);
 		$aft->systems[] = new TwinParticleBolter($this->getId(), $this->id, 90, 270);
 		$aft->systems[] = new TwinParticleBolter($this->getId(), $this->id, 90, 270);
 		$structs[] = $aft;

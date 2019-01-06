@@ -408,15 +408,15 @@ Primary.prototype.getSysDiv = function(){
 				.append($("<td>").html(this.getEMDmg())))
 			.append($("<tr>")
 				.append($("<td>").html("Recent Stock Damage"))
-				.append($("<td>").html(this.getRecentDmg()))));
+				.append($("<td>").html(this.recentDmg + " / " + this.getRecentDmgInt() + " %"))));
 }
 
 Primary.prototype.getEMDmg = function(){
 	return System.prototype.getEMDmg.call(this);
 }
 
-Primary.prototype.getRecentDmg = function(){
-	return (this.recentDmg + " / " + Math.round(this.recentDmg / this.integrity * 100) + " %");
+Primary.prototype.getRecentDmgInt = function(){
+	return System.prototype.getRecentDmgInt.call(this);
 }
 
 Primary.prototype.getRemIntegrity = function(){
@@ -424,7 +424,7 @@ Primary.prototype.getRemIntegrity = function(){
 	for (var i = 0; i < this.damages.length; i++){
 		integrity -= this.damages[i].systemDmg;
 		if (this.damages[i].hullDmg){
-			console.log("dnig");
+			console.log("ERROR");
 		}
 	}
 	return integrity;

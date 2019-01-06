@@ -24,23 +24,23 @@ class Omega extends SuperHeavy {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 1200, 21, 5);
-		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 60, array("HeavyLaser", "HeavyPulse"));
-		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 60, array("HeavyLaser", "HeavyPulse"));
+		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 60, array("HeavyLaser", "HeavyPulseCannon"));
+		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 60, array("HeavyLaser", "HeavyPulseCannon"));
 		//$front->systems[] = new EnergyMine($this->getId(), $this->id, 0, 360);
 		$front->systems[] = new Hangar($this->getId(), $this->id, 160, 800, 400, array("Aurora", "Thunderbolt"));
-		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 60, array("HeavyLaser", "HeavyPulse"));
-		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 60, array("HeavyLaser", "HeavyPulse"));
+		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 60, array("HeavyLaser", "HeavyPulseCannon"));
+		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 60, array("HeavyLaser", "HeavyPulseCannon"));
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 1500, 19);
-		$right->systems[] = new Dual($this->getId(), $this->id, 300, 120, 28, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new Dual($this->getId(), $this->id, 300, 120, 28, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new Dual($this->getId(), $this->id, 60, 240, 28, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new Dual($this->getId(), $this->id, 60, 240, 28, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 300, 120, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 300, 120, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 60, 240, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 60, 240, 28, array("LightPulseCannon", "LightParticleBeam"));
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 1050, 17, 4);
@@ -48,21 +48,21 @@ class Omega extends SuperHeavy {
 		$aft->systems[] = new HeavyRailGun($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new HeavyRailGun($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new HeavyRailGun($this->getId(), $this->id, 120, 240);
-	*/	$aft->systems[] = new MediumPulse($this->getId(), $this->id, 180, 240);
-		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 180, 240);
-		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 180);
-		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 180);
+	*/	$aft->systems[] = new MediumPulseCannon($this->getId(), $this->id, 180, 240);
+		$aft->systems[] = new MediumPulseCannon($this->getId(), $this->id, 180, 240);
+		$aft->systems[] = new MediumPulseCannon($this->getId(), $this->id, 120, 180);
+		$aft->systems[] = new MediumPulseCannon($this->getId(), $this->id, 120, 180);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 1500, 19);
-		$left->systems[] = new Dual($this->getId(), $this->id, 240, 60, 28, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Dual($this->getId(), $this->id, 240, 60, 28, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Dual($this->getId(), $this->id, 120, 300, 28, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Dual($this->getId(), $this->id, 120, 300, 28, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 240, 60, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 240, 60, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 120, 300, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 120, 300, 28, array("LightPulseCannon", "LightParticleBeam"));
 		$structs[] = $left;		
 
 		for ($i = 0; $i < sizeof($structs); $i++){
