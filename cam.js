@@ -61,7 +61,7 @@ window.cam = {
 
 		if (this.doing >= this.steps){
 			this.doing = 0;
-			this.steps = 30;
+			this.steps = 10;
 			this.state++;
 		}
 	},

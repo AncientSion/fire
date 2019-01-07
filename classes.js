@@ -727,7 +727,7 @@ FireOrder.prototype.setNumberAnim = function(){
 				y: drawPos.y,
 				//n: Math.floor(len*0.4)*-1,
 				n: 0,
-				m: 70,
+				m: 20,
 				shots: shots,
 				armour: armour,
 				system: system,

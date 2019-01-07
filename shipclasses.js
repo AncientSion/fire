@@ -3480,7 +3480,7 @@ Ship.prototype.willBeAnimated = function(){
 Ship.prototype.readyForAnim = function(){
 	this.setPreMovePosition();
 	this.setPreMoveFaceHead();
-	var frameMod = 1000 / window.fpsTicks / this.getCurSpeed();
+	var frameMod = 100 / window.fpsTicks / this.getCurSpeed();
 
 	for (var i = 0; i < this.actions.length; i++){
 		var t = [0, 0];
@@ -3504,9 +3504,9 @@ Ship.prototype.readyForAnim = function(){
 			else {
 				var v = new MoveVector({x: this.actions[i-1].x, y: this.actions[i-1].y}, {x: this.actions[i].x, y: this.actions[i].y});
 			}
+			//t = [0, this.actions[i].dist * frameMod];
 			t = [0, this.actions[i].dist * frameMod];
 		}
-
 		this.actions[i].t = t;
 		this.actions[i].v = v;
 	}

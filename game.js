@@ -64,6 +64,7 @@ function Game(data){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
+	this.phaseDelay = 100;
 	this.animData = {jump: 3};
 	this.commandChange = {old: 0, new: 0, original: 0}
 	this.subPhase = 1;
@@ -174,7 +175,7 @@ this.doAnimateMovement = function(){
 	
 	if (done){
 		window.cancelAnimationFrame(anim);
-		game.finishMoveSubPhase(500);
+		game.finishMoveSubPhase(game.phaseDelay);
 	}
 }
 
@@ -1252,7 +1253,7 @@ this.doAnimateMovement = function(){
 				game.timeout = setTimeout(function(){
 					game.showUI(800);
 					game.resolvePostMoveFires();
-				}, 2000);
+				}, game.phaseDelay*4);
 			}
 			else if (this.phase == 1){ // firing eMine
 				this.showUI(500);
@@ -1497,7 +1498,7 @@ this.doAnimateMovement = function(){
 				$(this).hide();
 				game.timeout = setTimeout(function(){
 					game.initDeploy();
-				}, 500);
+				}, game.phaseDelay);
 			});
 		}
 		else if (this.phase == 0){
@@ -1517,7 +1518,7 @@ this.doAnimateMovement = function(){
 				game.timeout = setTimeout(function(){
 					game.animShip = 1;
 					game.doResolveMovement();
-				}, 500);
+				}, game.phaseDelay);
 			});
 		}
 		else if (this.phase == 2){
@@ -1527,7 +1528,7 @@ this.doAnimateMovement = function(){
 				game.timeout = setTimeout(function(){
 					game.animShip = 1;
 					game.doResolveMovement();
-				}, 500);
+				}, game.phaseDelay);
 			});
 		}
 		else if (this.phase == 3){
@@ -1539,7 +1540,7 @@ this.doAnimateMovement = function(){
 				game.redraw();
 				game.timeout = setTimeout(function(){
 					game.initDamageControl();
-				}, 500);
+				}, game.phaseDelay);
 			});
 		};
 	}
@@ -2891,7 +2892,7 @@ Game.prototype.handleTurnStartMoves = function(){
 			game.animShip = 1;
 		}
 		game.doResolveMovement();
-	}, 1500);
+	}, game.phaseDelay);
 }
 
 Game.prototype.hasMovingObstacles = function(){
