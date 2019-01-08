@@ -7,7 +7,7 @@ if (isset($_SESSION["userid"])){$userid = $_SESSION["userid"];}
 if (isset($_SESSION["gameid"])){$gameid = $_SESSION["gameid"];}
 
 
-//Debug::log("getGameData.php");
+//Debug::log("getGameData.php ".$_GET["type"]); return;
 //Debug::log("userid: ".$userid); Debug::log("gameid: ".$gameid);
 
 

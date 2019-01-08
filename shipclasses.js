@@ -406,6 +406,8 @@ Ship.prototype.drawSystemArcIndicator = function(){
 	moveCtx.stroke();
 }
 
+
+
 Ship.prototype.setSlipAngle = function(){
 	if (this.faction[0] == "V"){
 		if (this.ship){
@@ -3480,7 +3482,7 @@ Ship.prototype.willBeAnimated = function(){
 Ship.prototype.readyForAnim = function(){
 	this.setPreMovePosition();
 	this.setPreMoveFaceHead();
-	var frameMod = 100 / window.fpsTicks / this.getCurSpeed();
+	var frameMod = 500 / window.fpsTicks / this.getCurSpeed();
 
 	for (var i = 0; i < this.actions.length; i++){
 		var t = [0, 0];

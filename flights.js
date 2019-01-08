@@ -537,7 +537,8 @@ Flight.prototype.setBaseLayout = function(){
 				case 2: ox += osx; oy += osy; break;
 				default: break;
 			}
-			this.structures[(i*3)+j].layout = {x: ox + range(-3, 3), y: oy + range(-3, 3)};
+			//this.structures[(i*3)+j].layout = {x: ox + range(-3, 3), y: oy + range(-3, 3)};
+			this.structures[(i*3)+j].layout = {x: ox, y: oy};
 		}
 	}
 	this.patrolLayout = 0;

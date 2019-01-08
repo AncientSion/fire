@@ -471,11 +471,12 @@ System.prototype.getBoostEffectElements = function(table, boost){
 		}
 
 		$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).html(html)));
-		if (i == this.getBoostEffect.length-1){
-			table.find("tr").last().addClass("rowBorderBottom");
-		}
 	}
 
+
+	if (this.getBoostEffect.length){
+		table.find("tr").last().addClass("rowBorderBottom");
+	}
 
 	//$(table).find("tr").last().css("background-color", "#397a68")
 	//$(table).find("tr").last().addClass("rowBorderBottom")
@@ -3614,7 +3615,7 @@ Area.prototype.select = function(){
 
 
 Area.prototype.getDmgString = function(){
-	return Weapon.prototype.getDmgString.call(this) + " * target size";
+	return Weapon.prototype.getDmgString.call(this) + " (<span class='yellow'>variable</span>)";
 	return Weapon.prototype.getDmgString.call(this) + " per hit";
 }
 

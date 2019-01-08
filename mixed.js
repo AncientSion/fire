@@ -10,6 +10,10 @@ function Mixed(data){
 
 Mixed.prototype = Object.create(Ship.prototype);
 
+Mixed.prototype.setSlipAngle = function(){
+	return;
+}
+
 Mixed.prototype.getPlannedFacing = function(){
 	return this.heading;
 }

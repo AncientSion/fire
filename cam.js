@@ -103,11 +103,12 @@ window.cam = {
 	},
 	
 	adjustZoom: function(e){
+		var step = 0.2;
 		if (e.originalEvent.wheelDelta == 120 || e.originalEvent.deltaY < 0){
-			this.z = Math.min(3, this.z + 0.2);
+			this.z = Math.min(3, this.z + step);
 		}
 		else {
-			this.z = Math.max(0.2, this.z - 0.2);
+			this.z = Math.max(0.2, this.z - step);
 		}
 		
 		game.redraw();

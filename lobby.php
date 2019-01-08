@@ -43,6 +43,7 @@ if (isset($_SESSION["userid"])){
 		if ($_POST["reinforceETA"] == ""){return;}
 		if ($_POST["reinforceAmount"] == ""){return;}
 		if ($_POST["obstaclesAmount"] == ""){return;}
+		if ($_POST["nebulaAmount"] == ""){return;}
 		if ($_POST["obstaclesSizeMin"] == ""){return;}
 		if ($_POST["obstaclesSizeMax"] == ""){return;}
 
@@ -52,6 +53,7 @@ if (isset($_SESSION["userid"])){
 		if (!ctype_digit($_POST["reinforceETA"])){return;}
 		if (!ctype_digit($_POST["reinforceAmount"])){return;}
 		if (!ctype_digit($_POST["obstaclesAmount"])){return;}
+		if (!ctype_digit($_POST["nebulaAmount"])){return;}
 		if (!ctype_digit($_POST["obstaclesSizeMin"])){return;}
 		if (!ctype_digit($_POST["obstaclesSizeMax"])){return;}
 
@@ -272,6 +274,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 									<input type="number" style="text-align: center" value=3500 placeholder="3500" name="pointValue" step="250"></input>
 								</td>
 							</tr>
+							<tr style="height: 10px"><td></td></tr>
 							<tr>
 								<td>
 									Reinforcements Point Value
@@ -303,17 +306,27 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 									<input type="number" style="width: 100%; text-align: center" value=10 placeholder="10" name="reinforceAmount" step="1" min="0" max="20"></input>		
 								</td>
 							</tr>
+							<tr style="height: 10px"><td></td></tr>
 							<tr>
 								<td>
-									Asteroid fields created per player
+									Total amount of Asteroid fields
 								</td>
 								<td>
-									<input type="number" style="width: 100%; text-align: center" value=3 placeholder="3" name="obstaclesAmount" step="1" min="0" max="10"></input>		
+									<input type="number" style="width: 100%; text-align: center" value=6 placeholder="6" name="obstaclesAmount" step="1" min="0" max="10"></input>		
 								</td>
 							</tr>
 							<tr>
 								<td>
-									Minimum size per asteroid field
+									Total amount of Nebula
+								</td>
+								<td>
+									<input type="number" style="width: 100%; text-align: center" value=3 placeholder="3" name="nebulaAmount" step="1" min="0" max="5"></input>		
+								</td>
+							</tr>
+							<tr style="height: 10px"><td></td></tr>
+							<tr>
+								<td>
+									Minimum size per field / nebula
 								</td>
 								<td>
 									<input type="number" style="width: 100%; text-align: center" value=75 placeholder="75" name="obstaclesSizeMin" step="25" min="50"></input>		
@@ -321,7 +334,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 							</tr>
 							<tr>
 								<td>
-									Maximum size per asteroid field
+									Maximum size per field / nebula
 								</td>
 								<td>
 									<input type="number" style="width: 100%; text-align: center" value=175 placeholder="175" name="obstaclesSizeMax" step="25" min="100" max="300"></input>		

@@ -527,6 +527,7 @@ this.doAnimateMovement = function(){
 	}
 
 	this.checkUnitOffsetting = function(){
+		//console.log("checkUnitOffsetting");
 		this.offsetFlightFlight();
 		this.offsetFlightShip();
 		this.offsetAllSalvo();
@@ -1204,7 +1205,6 @@ this.doAnimateMovement = function(){
 		this.animating = 0;
 		this.animMoves = 0;
 		this.setPostMoveCC();
-		this.checkUnitOffsetting();
 		this.setAllCollisionData();
 
 		if (this.phase == 2){
@@ -1246,6 +1246,7 @@ this.doAnimateMovement = function(){
 			}
 		}
 
+		this.checkUnitOffsetting();
 		this.createLogEntry("-- Movement concluded --");
 
 		if (this.events.length){
@@ -1953,6 +1954,9 @@ this.doAnimateMovement = function(){
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 		this.setUnitTransform();
+		if (1){
+			ctx.beginPath(); ctx.arc(0, 0, 5, 0, 2*Math.PI); ctx.fillStyle = "yellow"; ctx.fill(); ctx.closePath();
+		}
 		if (0){
 			ctx.beginPath(); ctx.arc(0, 0, 5, 0, 2*Math.PI); ctx.fillStyle = "yellow"; ctx.fill(); ctx.closePath();
 			ctx.beginPath(); ctx.rect(-525, -550, 325, 1100); ctx.strokeStyle = "yellow"; ctx.stroke(); ctx.closePath();

@@ -365,6 +365,7 @@
 			$units[] = $unit;
 		}
 
+		//return;
 		DBManager::app()->getDamages($units);
 		DBManager::app()->getPowers($units);
 		DBManager::app()->getCrits($units);

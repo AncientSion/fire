@@ -333,9 +333,9 @@
 		public function createNewGame($post){
 			$stmt = $this->connection->prepare("
 				INSERT INTO games
-					(name, status, turn, phase, pv, reinforce, reinforceTurn, reinforceETA, reinforceAmount, focusMod, obstaclesAmount, obstaclesSizeMin, obstaclesSizeMax)
+					(name, status, turn, phase, pv, reinforce, reinforceTurn, reinforceETA, reinforceAmount, focusMod, obstaclesAmount, nebulaAmount, obstaclesSizeMin, obstaclesSizeMax)
 				VALUES
-					(:name, 'open', 0, 3, :pv, :reinforce, :reinforceTurn, :reinforceETA, :reinforceAmount, 10, :obstaclesAmount, :obstaclesSizeMin, :obstaclesSizeMax)
+					(:name, 'open', 0, 3, :pv, :reinforce, :reinforceTurn, :reinforceETA, :reinforceAmount, 10, :obstaclesAmount, :nebulaAmount, :obstaclesSizeMin, :obstaclesSizeMax)
 			");
 			
 			$stmt->bindParam(":name", $post["gameName"]);
@@ -344,6 +344,7 @@
 			$stmt->bindParam(":reinforceTurn", $post["reinforceTurn"]);
 			$stmt->bindParam(":reinforceETA", $post["reinforceETA"]);
 			$stmt->bindParam(":reinforceAmount", $post["reinforceAmount"]);
+			$stmt->bindParam(":nebulaAmount", $post["nebulaAmount"]);
 			$stmt->bindParam(":obstaclesAmount", $post["obstaclesAmount"]);
 			$stmt->bindParam(":obstaclesSizeMin", $post["obstaclesSizeMin"]);
 			$stmt->bindParam(":obstaclesSizeMax", $post["obstaclesSizeMax"]);
@@ -917,16 +918,24 @@
 		}
 
 		public function createStaticObstacles($gameid, $data){
-			Debug::log("createStaticObstacles #".$gameid);
+			$obstacles = array();
+			$obstacles = array_splice($elements, $this->getNewAsteroidFields($data));
+			$obstacles = array_splice($elements,$this->getNewNebulas($obstacles, $data));
 
-			$amount = $data["obstaclesAmount"]*3;
+			$this->insertObstacles($gameid, $obstacles);
+
+		}
+
+		public function getNewNebulas($obstacles, $data){
+			Debug::log("getNewNebula");
+
+			$amount = $data["nebulaAmount"];
 			$min = $data["obstaclesSizeMin"];
 			$max = $data["obstaclesSizeMax"];
-
-
-			$fields = array();
-
-			for ($j = 1; $j <= ($amount); $j++){
+			$nebulas = array();
+			if (!$amount){return $nebulas;}
+			
+			for ($i = 1; $i <= ($amount); $i++){
 				$attempts = 5;
 
 				$x; $y; $size; $rockSize;
@@ -934,20 +943,72 @@
 				while ($attempts){
 					$redo = 0;
 					$attempts--;
-					//Debug::log("attempts ".$attempts);
+					
+					$x = mt_rand(-450, 450);
+					$y = mt_rand(-500, 500);
+					$size = mt_rand($min, $max);
+					$rockSize = min(8, max(1, mt_rand(1, 6) + mt_rand(-2, 2)));
+
+					for ($j = 0; $j < sizeof($nebulas); $j++){
+						$dist = Math::getDist($nebulas[$j][0], $nebulas[$j][1], $x, $y);
+						//Debug::log("checking vs field ".$j.", dist: ".$dist);
+
+						if ($dist - 75 - $size/2 - $nebulas[$j][4]/2 <= 0){
+							//Debug::log("----RETRY, dist $dist, sizeA ".round($size/2).", sizeeB ".round($nebulas[$j][4]/2));
+							//Debug::log("----".$x."/".$y." versus ".$nebulas[$j][0]."/".$nebulas[$j][1]);
+							$redo = 1;
+							break;
+						} //else Debug::log("no problem !");
+					}
+
+					if (!$redo){
+						break;
+					}// else Debug::log("redoing, attempts left: ".$attempts);
+				}
+
+				if (!$attempts){continue;}
+
+				$density = mt_rand(10, 30);
+				$minDmg = round(mt_rand(8, 10) * $rockSize);
+				$maxDmg = round($minDmg*1.3);
+
+				//Debug::log("PUSHING!");
+				$nebulas[] = array($x, $y, 0, $size, 0, $density, $rockSize, $minDmg, $maxDmg);
+			}
+			return $nebulas;
+		}
+
+		public function getNewAsteroidFields($gameid, $data){
+			Debug::log("getNewAsteroidFields");
+
+			$amount = $data["obstaclesAmount"];
+			$min = $data["obstaclesSizeMin"];
+			$max = $data["obstaclesSizeMax"];
+			$fields = array();
+
+			if (!$amount){return $fields;}
+
+			for ($i = 1; $i <= ($amount); $i++){
+				$attempts = 5;
+
+				$x; $y; $size; $rockSize;
+
+				while ($attempts){
+					$redo = 0;
+					$attempts--;
 
 					$x = mt_rand(-450, 450);
 					$y = mt_rand(-500, 500);
 					$size = mt_rand($min, $max);
 					$rockSize = min(8, max(1, mt_rand(1, 6) + mt_rand(-2, 2)));
 
-					for ($k = 0; $k < sizeof($fields); $k++){
-						$dist = Math::getDist($fields[$k][0], $fields[$k][1], $x, $y);
-						//Debug::log("checking vs field ".$k.", dist: ".$dist);
+					for ($j = 0; $j < sizeof($fields); $j++){
+						$dist = Math::getDist($fields[$j][0], $fields[$j][1], $x, $y);
+						//Debug::log("checking vs field ".$j.", dist: ".$dist);
 
-						if ($dist - 75 - $size/2 - $fields[$k][4]/2 <= 0){
-							//Debug::log("----RETRY, dist $dist, sizeA ".round($size/2).", sizeeB ".round($fields[$k][4]/2));
-							//Debug::log("----".$x."/".$y." versus ".$fields[$k][0]."/".$fields[$k][1]);
+						if ($dist - 75 - $size/2 - $fields[$j][4]/2 <= 0){
+							//Debug::log("----RETRY, dist $dist, sizeA ".round($size/2).", sizeeB ".round($fields[$j][4]/2));
+							//Debug::log("----".$x."/".$y." versus ".$fields[$j][0]."/".$fields[$j][1]);
 							$redo = 1;
 							break;
 						} //else Debug::log("no problem !");
@@ -967,7 +1028,7 @@
 				//Debug::log("PUSHING!");
 				$fields[] = array($x, $y, 0, $size, 0, $density, $rockSize, $minDmg, $maxDmg);
 			}
-			$this->insertObstacles($gameid, $fields);
+			return $fields;
 		}
 
 		public function insertObstacles($gameid,$fields){
