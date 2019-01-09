@@ -1,55 +1,5 @@
 <?php
 
-class MediumAntiProtonPulsar extends Pulse {
-	public $name = "MediumAntiProtonPulsar";
-	public $display = "Medium Anti-Matter Pulsar";
-	public static $prio = 0;
-	public $minDmg = 25;
-	public $maxDmg = 33;
-	public $accDecay = 120;
-	public $shots = 1;
-	public $animColor = "#a1ff00";
-	public $projSize = 1.5;
-	public $projSpeed = 8;
-	public $reload = 3;
-	public $integrity = 38;
-	public $powerReq = 4;
-	public $tracking = 3;
-	public $basePulses = 2;
-	public $extraPulses = 2;
-
-	public $optRange = 300;
-	public $maxBoost = 1;
-	public $effiency = 0;
-	
-	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
-        parent::__construct($id, $parentId, $start, $end, $output, $width);
-        $this->setAntimatterData();
-        $this->boostEffect[] = new Effect("Reload", -1);
-        $this->boostEffect[] = new Effect("Top Range", -30);
-	}
-}
-
-class HeavyAntiProtonPulsar extends MediumAntiProtonPulsar {
-	public $name = "HeavyAntiProtonPulsar";
-	public $display = "Heavy Anti-Matter Pulsar";
-	public static $prio = 0;
-	public $minDmg = 30;
-	public $maxDmg = 38;
-	public $accDecay = 100;
-	public $reload = 2;
-	public $integrity = 44;
-	public $powerReq = 5;
-	public $tracking = 4;
-
-	public $optRange = 450;
-	
-	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
-        parent::__construct($id, $parentId, $start, $end, $output, $width);
-        //$this->setAntimatterData();
-	}
-}
-
 class AntimatterConverter extends Particle {
 	public $name = "AntimatterConverter";
 	public $display = "Antimatter-Converter";
@@ -114,7 +64,7 @@ class AntimatterCannon extends Particle {
 	public $projSize = 4;
 	public $projSpeed = 6;
 
-	public $optRange = 700;
+	public $optRange = 600;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $start, $end, $output, $width);

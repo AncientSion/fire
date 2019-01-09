@@ -975,7 +975,7 @@ Squadron.prototype.getPurchaseHeader = function(){
 
 	ret = ret.substr(0, ret.length-3) + ")</span>";
 
-	return "<span style='font-size: 16px;'>Squadron</span>" + (this.display ? "<span class='green'> -- " + this.display + " -- </span>" : "") + ret;
+	return "<span style='font-size: 16px;'>Squadron</span>" + (this.callsign ? "<span class='green'> -- " + this.callsign + " -- </span>" : "") + ret;
 }
 
 Squadron.prototype.getSlotsUsed = function(){

@@ -1888,6 +1888,8 @@ function Weapon(system){
 	this.amBonus = system.amBonus;
 	this.optRange = system.optRange;
 	this.dmgLoss = system.dmgLoss;
+	this.projSize = system.projSize;
+	this.projSpeed = game.phaseDelay == 100 ? system.projSpeed * 4 : system.projSpeed;
 	this.amMax =
 	this.loaded;
 	this.mount;
@@ -2492,9 +2494,7 @@ Flash.prototype.getAnimation = function(fire){
 }
 
 function Particle(system){
-	Weapon.call(this, system);	
-	this.projSize = system.projSize;
-	this.projSpeed = system.projSpeed;
+	Weapon.call(this, system);
 }
 Particle.prototype = Object.create(Weapon.prototype);
 

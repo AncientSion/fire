@@ -238,7 +238,7 @@ else header("Location: index.php");
 			window.turn = new Turn();
 			window.preview = true;
 			window.aUnit = 1;
-			window.res = {x: 200, y: 200};
+			window.res = {x: 150, y: 150};
 			window.game = {
 				turn: 0,
 			 	phase: -2,
@@ -345,7 +345,7 @@ else header("Location: index.php");
 					} else if (cur + add > max){
 						popup("You have insufficient point value left");
 					}
-					else if (unit.hasPristineSystems()){
+					else if (unit.hasUnsetupedSystems()){
 
 					}
 					else {this.doConfirmUnitPurchase(unit);}
@@ -362,8 +362,6 @@ else header("Location: index.php");
 						
 
 					if (this.refit){
-						//console.log("confirmRefit");
-						//console.log($(unit.tr).html());
 						$(unit.tr).removeClass("selected").find("td").each(function(i){
 							if (i == 2){$(this).html(unit.getPurchaseHeader())}
 							else if (i == 3){$(this).html(unit.totalCost)}
@@ -378,9 +376,6 @@ else header("Location: index.php");
 						var tr = $("<tr>")
 							.addClass("purchase")
 							.data("purchaseId", game.shipsBought[game.shipsBought.length-1].purchaseId)
-							//.hover(function(e){
-							//	$(this).toggleClass("highlight");
-							//})
 							.contextmenu(function(e){
 								e.preventDefault(); e.stopPropagation();
 							})
@@ -834,7 +829,9 @@ else header("Location: index.php");
 
 		$("#game").show();
 		$(unit.element)
-			.css("left", "450px").css("top", Math.max(240, $(".fleetBought").height()+30)).removeClass("disabled")
+			//.css("left", "450px").css("top", Math.max(240, $(".fleetBought").height()+30))
+			.css("left", 800).css("top", 10)
+			.removeClass("disabled")
 			.find(".structContainer").show();
 
 		addNamingDiv(unit);
@@ -889,9 +886,7 @@ else header("Location: index.php");
 	function drawShipPreview(){
 		var unit = game.getUnit(aUnit);
 		var size = shipCanvas.width/4;
-		if (unit.squad && unit.structures.length > 2){
-			size *= 1.25;
-		}
+		//if (unit.squad && unit.structures.length > 2){size *= 1.25;}
 
 		window.shipCtx.clearRect(0, 0, res.x, res.y);
 		window.shipCtx.save();

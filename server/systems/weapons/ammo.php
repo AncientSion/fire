@@ -70,7 +70,7 @@ class Vran extends Torpedo {
 	public $name = "Vran";
 	public $role = "Light Particle Torpedo";
 	public static $prio = 0;
-	public $integrity = 4;
+	public $integrity = 6;
 	public $negation = 1;
 	public $tracking = 3;
 	public $maxRange = 700;
@@ -90,6 +90,8 @@ class Vranoth extends Vran {
 	public $name = "Vranoth";
 	public $role = "Medium Particle Torpedo";
 	public static $prio = 0;
+	public $integrity = 8;
+	public $negation = 2;
 	public $tracking = 4;
 	public $maxRange = 850;
 	public $reload = 3;
@@ -108,6 +110,8 @@ class VranothKa extends Vranoth {
 	public $name = "VranothKa";
 	public $role = "Heavy Particle Torpedo";
 	public static $prio = 0;
+	public $integrity = 10;
+	public $negation = 3;
 	public $tracking = 5;
 	public $maxRange = 1000;
 	public $reload = 3;
@@ -122,13 +126,33 @@ class VranothKa extends Vranoth {
 	}
 }
 
+class Ullt extends Torpedo {
+	public $name = "Torpedo";
+	public $role = "Medium Antimatter Torpedo";
+	public static $prio = 0;
+	public $integrity = 8;
+	public $negation = 3;
+	public $tracking = 4;
+	public $maxRange = 700;
+	public $reload = 3;
+	public static $value = 0;
+
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
+	}
+
+	function addSystems(){
+		$this->addSubSystem(new Warhead($this->getId(), $this->parentId, $this->tracking, 42, 51));
+	}
+}
+
 class Hasta extends Missile {
 	public $name = "Hasta";
 	public $role = "Light Anti-Fighter Missiles";
 	public static $prio = 0;
 	public $mass = 2;
 	public $integrity = 4;
-	public $negation = 0;
+	public $negation = 1;
 	public static $value = 3;
 	public $tracking = 1;
 	public $baseImpulse = 175;

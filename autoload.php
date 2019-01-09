@@ -24,6 +24,7 @@ spl_autoload_register(
                 'naga' => '/server/systems/weapons/ammo.php',
                 'cyclops' => '/server/systems/weapons/ammo.php',
                 'titan' => '/server/systems/weapons/ammo.php',
+                'ullt' => '/server/systems/weapons/ammo.php',
                 'vran' => '/server/systems/weapons/ammo.php',
                 'vranoth' => '/server/systems/weapons/ammo.php',
                 'vranothka' => '/server/systems/weapons/ammo.php',

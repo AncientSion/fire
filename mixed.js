@@ -706,10 +706,10 @@ Mixed.prototype.readyForAnim = function(){
 		return;
 	}
 	
-	var frameMod = 1000 / window.fpsTicks / this.actions[this.actions.length-1].dist;
+	var frameMod = (game.phaseDelay * 2) / window.fpsTicks / this.actions[this.actions.length-1].dist;
 
 	for (var i = 0; i < this.actions.length; i++){
-		var t = [0, 0];
+		var t = [0, 0, 0];
 		var v = false;
 
 		if (this.actions[i].type == "move"){ // move

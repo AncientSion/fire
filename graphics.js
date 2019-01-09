@@ -393,7 +393,7 @@ function drawAreaProjectile(weapon, anim){
 	if (anim.n >= anim.m){
 		anim.p = 1;
 		anim.n = 0;
-		anim.m = 80;
+		anim.m = game.phaseDelay / 5;
 	}
 }
 

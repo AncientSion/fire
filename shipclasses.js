@@ -3482,16 +3482,17 @@ Ship.prototype.willBeAnimated = function(){
 Ship.prototype.readyForAnim = function(){
 	this.setPreMovePosition();
 	this.setPreMoveFaceHead();
-	var frameMod = 500 / window.fpsTicks / this.getCurSpeed();
+	var frameMod = (game.phaseDelay * 2) / window.fpsTicks / this.getCurSpeed();
 
 	for (var i = 0; i < this.actions.length; i++){
-		var t = [0, 0];
+		var t = [0, 0, 0];
 		var v = false;
 
 		if (this.actions[i].type == "roll" || this.actions[i].type == "flip" || this.actions[i].type == "deploy" || this.actions[i].type[0] == "j"){ //roll, flip, deploy, jump
 		}
 		else if (this.actions[i].type == "turn"){ // turn
 			t = [0, Math.abs(this.actions[i].h*2), this.actions[i].h/Math.abs(this.actions[i].h*2)];
+			if (game.phaseDelay == 100){t = [0, 1, this.actions[i].h];}
 		}
 		else if (this.actions[i].type == "pivot"){ // pivot
 			t = [0, Math.abs(this.actions[i].f*2), this.actions[i].f/Math.abs(this.actions[i].f*2)];
@@ -3509,6 +3510,7 @@ Ship.prototype.readyForAnim = function(){
 			//t = [0, this.actions[i].dist * frameMod];
 			t = [0, this.actions[i].dist * frameMod];
 		}
+		//if (this.actions[i].type == "turn"){console.log(t);}
 		this.actions[i].t = t;
 		this.actions[i].v = v;
 	}
@@ -4651,7 +4653,7 @@ Ship.prototype.getSelfExplo = function(){
 	return data;
 }
 
-Ship.prototype.hasPristineSystems = function(){
+Ship.prototype.hasUnsetupedSystems = function(){
 	if (this.flight || this.salvo){return false;}
 
 	var html = "";
@@ -4674,7 +4676,7 @@ Ship.prototype.hasPristineSystems = function(){
 
 
 	if (html.length){
-		popup ("The following systems lack a complete setup:</br></br>" + html + "</br></br><input type='button' class='popupEntryConfirm' value='Confirm Purchase' onclick='game.doConfirmUnitPurchase(game.getUnit(aUnit))'>");
+		popup ("The following systems lack a complete setup:</br></br>" + html + "<input type='button' class='popupEntryConfirm' value='Confirm Purchase' onclick='game.doConfirmUnitPurchase(game.getUnit(aUnit))'>");
 		return true;
 	}
 	return false;

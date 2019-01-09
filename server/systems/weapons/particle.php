@@ -11,7 +11,7 @@ class Particle extends Weapon {
 
 class AsteroidRam extends Particle {
 	public $name = "AsteroidRam";
-	public $display = "Asteroid Ram Display";
+	public $display = "Asteroid Collision";
 	public $animation = "contact";
 	public static $prio = 0;
 	public $accDecay = 180;

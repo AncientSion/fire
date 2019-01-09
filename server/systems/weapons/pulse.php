@@ -86,6 +86,55 @@ class HeavyPulseCannon extends Pulse {
 	}
 }
 
+class MediumAntiProtonPulsar extends Pulse {
+	public $name = "MediumAntiProtonPulsar";
+	public $display = "Medium Photon Pulsar";
+	public static $prio = 0;
+	public $minDmg = 19;
+	public $maxDmg = 25;
+	public $accDecay = 80;
+	public $shots = 1;
+	public $animColor = "#a1ff00";
+	public $projSize = 2;
+	public $projSpeed = 8;
+	public $reload = 3;
+	public $integrity = 38;
+	public $powerReq = 4;
+	public $tracking = 3;
+//	public $basePulses = 3;
+//	public $extraPulses = 2;
+
+	//public $optRange = 200;
+	//public $maxBoost = 1;
+	//public $effiency = 0;
+	
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+       // $this->setAntimatterData();
+       // $this->boostEffect[] = new Effect("Reload", -1);
+       // $this->boostEffect[] = new Effect("Top Range", -30);
+	}
+}
+
+class HeavyAntiProtonPulsar extends MediumAntiProtonPulsar {
+	public $name = "HeavyAntiProtonPulsar";
+	public $display = "Heavy Photon Pulsar";
+	public static $prio = 0;
+	public $minDmg = 19;
+	public $maxDmg = 25;
+	public $reload = 3;
+	public $integrity = 48;
+	public $powerReq = 5;
+	public $tracking = 4;
+
+//	public $optRange = 350;
+	
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+        //$this->setAntimatterData();
+	}
+}
+
 class NeutronPulsar extends Pulse {
 	public $name = "NeutronPulsar";
 	public $display = "Neutron Pulsar";

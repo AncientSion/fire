@@ -877,6 +877,7 @@ FireOrder.prototype.addLogStartEntry = function(log){
 }
 
 FireOrder.prototype.toggleAllRows = function(){
+	if (!this.rows.length){return;}
 	this.tr.toggleClass("selected");
 	for (var i = 0; i < this.rows.length; i++){
 		this.rows[i].addClass("selected").toggle();

@@ -968,7 +968,7 @@
 
 				if (!$attempts){continue;}
 
-				$density = mt_rand(10, 30);
+				$density = mt_rand(10, 35);
 				$minDmg = round(mt_rand(8, 10) * $rockSize);
 				$maxDmg = round($minDmg*1.3);
 

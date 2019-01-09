@@ -40,7 +40,7 @@ window.cam = {
 		this.vy = this.ty - this.o.y;
 
 		var dist = getDistance(this.o, {x: this.tx, y: this.ty});
-		this.steps = Math.ceil(Math.max(Math.abs(this.vx), Math.abs(this.vy))/50)
+		this.steps = game.phaseDelay == 100 ? 3 : Math.ceil(Math.max(Math.abs(this.vx), Math.abs(this.vy))/100)
 
 
 		//this.state = (this.steps <= 5 ? 2 : 1); //state:    1 pan // 2 pause, 3 done
