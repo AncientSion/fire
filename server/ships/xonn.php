@@ -88,8 +88,8 @@ class Xonn extends SuperHeavy {
 		$turrets[] = $turretA;
 		
 		$turretC = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 140, 14);
-			$turretC->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 0, 360, array(array("Ullt", 20, 5)));
-			$turretC->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 0, 360, array(array("Ullt", 20, 5)));
+			$turretC->systems[] = new TorpedoLauncher($this->getId(), $this->id, 0, 360, 0, array(array("Ullt", 20, 5)));
+			$turretC->systems[] = new TorpedoLauncher($this->getId(), $this->id, 0, 360, 0, array(array("Ullt", 20, 5)));
 		$turrets[] = $turretC;
 
 		$turretB = new Turret($this->getId(), $this->id, "Dorsal Turret #2", 0, 360, 180, 14);

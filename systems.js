@@ -867,8 +867,8 @@ System.prototype.hasOutput = function(){
 System.prototype.getFighterSystemData = function(){	
 	var file = "sysIcons/" + this.getImageName() + ".png";
 
-	var sysDiv = $("<div>").addClass("system");
-		sysDiv
+	var sysDiv = $("<div>")
+		.addClass("system")
 		.data("systemId", this.id)
 		.append(
 			$("<img>").attr("src", file).addClass("sysIcon")
@@ -3375,14 +3375,14 @@ Launcher.prototype.updateSysDiv = function(){
 Launcher.prototype.setupLauncherLoadout = function(e){
 	var div = $("#weaponDiv");
 	if (div.hasClass("disabled")){
-		$(div).find("#launchRate").html(this.getOutput());
-		$(div).find("#capacity").html(this.capacity);
-		$(div).data("systemid", this.id).css("left", 750).css("top", 400).removeClass("disabled");
+		div.find("#launchRate").html(this.getOutput());
+		div.find("#capacity").html(this.capacity);
+		div.data("systemid", this.id).css("left", 450).css("top", 600).removeClass("disabled");
 		this.initLauncherDiv();
 	}
 	else {
 		game.setUnitTotal(game.getUnit(this.parentId));
-		$(div).addClass("disabled");
+		div.addClass("disabled");
 	}
 }
 
@@ -4405,7 +4405,7 @@ Hangar.prototype.setupHangarLoadout = function(e){
 	var div = $("#hangarDiv");
 	if (div.hasClass("disabled")){
 		this.setHangarDivContent(div);
-		div.data("systemid", this.id).css("left", 750).css("top", 400).removeClass("disabled");
+		div.data("systemid", this.id).css("left", 450).css("top", 600).removeClass("disabled");
 		this.initHangarPurchaseDiv();
 	}
 	else {

@@ -455,15 +455,15 @@ Single.prototype.addMainDivEvents = function(div, alive, isPreview){
 		.hover(function(e){
 			e.stopPropagation();
 			var shipId = $(this).parent().parent().parent().data("shipId");
-			var subId = $(this).parent().data("subId");
-			game.getUnit(shipId).getSystem(subId).hover(e);
+			var systemId = $(this).parent().data("systemId");
+			game.getUnit(shipId).getSystem(systemId).hover(e);
 		})
 		.mousedown(function(e){e.stopPropagation();})
 		.click(function(e){
 			e.stopPropagation();
 			var shipId = $(this).parent().parent().parent().data("shipId");
-			var subId = $(this).parent().data("subId");
-			console.log(game.getUnit(shipId).getSystem(subId));
+			var systemId = $(this).parent().data("systemId");
+			console.log(game.getUnit(shipId).getSystem(systemId));
 		});
 	}
 	else {
@@ -472,15 +472,15 @@ Single.prototype.addMainDivEvents = function(div, alive, isPreview){
 		.hover(function(e){
 			e.stopPropagation();
 			var shipId = $(this).parent().parent().parent().data("shipId");
-			var subId = $(this).parent().data("subId");
-			game.getUnit(shipId).getSystem(subId).hover(e);
+			var systemId = $(this).parent().data("systemId");
+			game.getUnit(shipId).getSystem(systemId).hover(e);
 		})
 		.mousedown(function(e){e.stopPropagation();})
 		.click(function(e){
 			e.stopPropagation();
 			var shipId = $(this).parent().parent().parent().data("shipId");
-			var subId = $(this).parent().data("subId");
-			console.log(game.getUnit(shipId).getSystem(subId));
+			var systemId = $(this).parent().data("systemId");
+			console.log(game.getUnit(shipId).getSystem(systemId));
 		})
 	}
 }
@@ -520,7 +520,7 @@ Single.prototype.addSysEvents = function(div, isBuy){
 Single.prototype.getElement = function(isBuy){
 	var div = $("<div>")
 		.addClass("singleDiv")
-		.data("subId", this.id)
+		.data("systemId", this.id)
 		.append($(this.getBaseImage().cloneNode(true))
 			.addClass("rotate270 img80pct"))
 

@@ -168,7 +168,7 @@ else header("Location: index.php");
 		</div>
 
 
-		<div id="game" style="position: absolute; top: 5px; left: 875px">
+		<div id="game" style="position: absolute; top: 350px; left: 525px">
 			<canvas id="shipCanvas" class="gameCanvas" style='border: 1px solid white; z-index: 2'></canvas>
 			<canvas id="fxCanvas" class="gameCanvas" style='z-index: 1'></canvas>
 		</div>
@@ -238,7 +238,7 @@ else header("Location: index.php");
 			window.turn = new Turn();
 			window.preview = true;
 			window.aUnit = 1;
-			window.res = {x: 150, y: 150};
+			window.res = {x: 200, y: 200};
 			window.game = {
 				turn: 0,
 			 	phase: -2,
@@ -374,7 +374,7 @@ else header("Location: index.php");
 						game.purchases++;
 
 						var tr = $("<tr>")
-							.addClass("purchase")
+							.addClass("purchasedUnit")
 							.data("purchaseId", game.shipsBought[game.shipsBought.length-1].purchaseId)
 							.contextmenu(function(e){
 								e.preventDefault(); e.stopPropagation();
@@ -830,7 +830,7 @@ else header("Location: index.php");
 		$("#game").show();
 		$(unit.element)
 			//.css("left", "450px").css("top", Math.max(240, $(".fleetBought").height()+30))
-			.css("left", 800).css("top", 10)
+			.css("left", 850).css("top", 5)
 			.removeClass("disabled")
 			.find(".structContainer").show();
 

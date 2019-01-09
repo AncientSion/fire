@@ -127,7 +127,7 @@ class VranothKa extends Vranoth {
 }
 
 class Ullt extends Torpedo {
-	public $name = "Torpedo";
+	public $name = "Ullt";
 	public $role = "Medium Antimatter Torpedo";
 	public static $prio = 0;
 	public $integrity = 8;

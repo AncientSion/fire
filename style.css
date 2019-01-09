@@ -230,7 +230,7 @@ table, th, tr, td {
 .fleetBought {
 	position: absolute;
 	top: 5px;
-	left: 445px;
+	left: 430px;
 	border: 1px solid white;
 	border-radius: 5px;
 }
@@ -474,11 +474,12 @@ table, th, tr, td {
 	background-color: white;
 }
 
-#shipsBoughtTable tr.purchase {
+#shipsBoughtTable tr.purchasedUnit {
 	border-bottom: 1px solid white;
+	height: 30px;
 }
 
-#shipsBoughtTable tr.purchase.selected {
+#shipsBoughtTable tr.purchasedUnit.selected {
 	color: yellow;
 }
 

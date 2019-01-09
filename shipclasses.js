@@ -4200,7 +4200,8 @@ Ship.prototype.addTurrets = function(shipDiv){
 		tr = document.createElement("tr");
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			var td = this.structures[i].systems[j].getTableData();
-				td = this.attachTurretEvent(td);
+				if (game.phase == -2){this.attachEvent(td);}
+				else {td = this.attachTurretEvent(td);}
 				$(td)
 				.data("turretId", this.structures[i].id)
 				.find(".integrityNow").remove().end().find(".integrityFull").remove();

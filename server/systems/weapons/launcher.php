@@ -53,7 +53,8 @@ class MissileLauncher extends Launcher {
         parent::__construct($id, $parentId, $start, $end, $integrity, $width);
 
 		for ($i = 0; $i < sizeof($loads); $i++){
-			$this->loads[] = new $loads[$i][0]($this->id, -1);
+			//$this->loads[] = new $loads[$i][0]($this->id, -1);
+			$this->loads[] = new $loads[$i][0](0, 0);
 			$this->capacity[] = $loads[$i][1];
 			$this->launchRate[] = $loads[$i][2];
 		}
