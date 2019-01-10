@@ -1954,10 +1954,10 @@ this.doAnimateMovement = function(){
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 		this.setUnitTransform();
-		if (1){
+		if (0){
 			ctx.beginPath(); ctx.arc(0, 0, 5, 0, 2*Math.PI); ctx.fillStyle = "yellow"; ctx.fill(); ctx.closePath();
 		}
-		if (1){
+		if (0){
 			ctx.beginPath(); ctx.rect(-400, -500, 800, 1000); ctx.strokeStyle = "yellow"; ctx.stroke(); ctx.closePath();
 		}
 		this.drawShips();

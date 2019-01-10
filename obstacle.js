@@ -455,15 +455,27 @@ NebulaCloud.prototype.setTrueImage = function(info){
 		t.height = this.size*2;
 	var ctx = t.getContext("2d");
 		ctx.translate(t.width/2, t.height/2);
+		ctx.globalAlpha = 0.8;
+
+	var rota = range(0, 360);
+
+		ctx.rotate(rota * (Math.PI/180))
+		ctx.drawImage(
+			graphics.images.nebula[range(0, graphics.images.nebula.length-1)],
+			-this.size*.8,
+			-this.size*.8,
+			this.size*1.6, 
+			this.size*1.6
+		)
+		ctx.rotate(-rota * (Math.PI/180))
 	
 	if (info){
-
-		ctx.clearRect(-40, -60, 80, 105);
+		ctx.clearRect(-30, -18, 60, 36);
 
 		ctx.fillStyle = "yellow";
 		ctx.font = "24px Arial";
 		ctx.textAlign = "center";
-		ctx.fillText(this.getMaxInterference() + "%", 0, 0 - 35)
+		ctx.fillText(this.getMaxInterference() + "%", 3, 7)
 	}
 
 	ctx.setTransform(1,0,0,1,0,0);

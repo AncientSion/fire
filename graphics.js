@@ -53,11 +53,17 @@ window.graphics = {
 		this.images.interference.src = "varIcons/interference.png";
 
 		this.images.rocks = [];
-
 		for (var i = 1; i <= 11; i++){
 			var img = new Image();
-				img.src = "varIcons/rocks/rock" + i + ".png";
+				img.src = "varIcons/rock/rock" + i + ".png";
 			this.images.rocks.push(img);
+		}
+
+		this.images.nebula = [];
+		for (var i = 1; i <= 7; i++){
+			var img = new Image();
+				img.src = "varIcons/nebula/nebula" + i + ".png";
+			this.images.nebula.push(img);
 		}
 	},
 
