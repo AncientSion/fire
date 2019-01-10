@@ -164,7 +164,7 @@ function initSquadron(data){
 }
 
 function initObstacle(data){
-	var obstacle = new Obstacle(data);
+	var obstacle = new window[data.name](data);
 	for (var i = 0; i < data.primary.systems.length; i++){
 		var primSystem = new window[data.primary.systems[i].name](data.primary.systems[i]);
 		obstacle.primary.systems.push(primSystem);
@@ -198,7 +198,6 @@ function initSquaddie(data){
 		var system = new window[data.systems[i].type](data.systems[i]);		
 		unit.systems.push(system);
 	}
-
 	return unit;
 }
 

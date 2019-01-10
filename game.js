@@ -1957,10 +1957,8 @@ this.doAnimateMovement = function(){
 		if (1){
 			ctx.beginPath(); ctx.arc(0, 0, 5, 0, 2*Math.PI); ctx.fillStyle = "yellow"; ctx.fill(); ctx.closePath();
 		}
-		if (0){
-			ctx.beginPath(); ctx.arc(0, 0, 5, 0, 2*Math.PI); ctx.fillStyle = "yellow"; ctx.fill(); ctx.closePath();
-			ctx.beginPath(); ctx.rect(-525, -550, 325, 1100); ctx.strokeStyle = "yellow"; ctx.stroke(); ctx.closePath();
-			ctx.beginPath(); ctx.rect(150, -550, 375, 1100); ctx.strokeStyle = "yellow"; ctx.stroke(); ctx.closePath();
+		if (1){
+			ctx.beginPath(); ctx.rect(-400, -500, 800, 1000); ctx.strokeStyle = "yellow"; ctx.stroke(); ctx.closePath();
 		}
 		this.drawShips();
 		this.drawBorders();

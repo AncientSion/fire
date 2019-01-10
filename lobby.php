@@ -312,7 +312,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 									Total amount of Asteroid fields
 								</td>
 								<td>
-									<input type="number" style="width: 100%; text-align: center" value=6 placeholder="6" name="obstaclesAmount" step="1" min="0" max="10"></input>		
+									<input type="number" style="width: 100%; text-align: center" value=4 placeholder="4" name="obstaclesAmount" step="1" min="0" max="10"></input>		
 								</td>
 							</tr>
 							<tr>
@@ -320,7 +320,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 									Total amount of Nebula
 								</td>
 								<td>
-									<input type="number" style="width: 100%; text-align: center" value=3 placeholder="3" name="nebulaAmount" step="1" min="0" max="5"></input>		
+									<input type="number" style="width: 100%; text-align: center" value=4 placeholder="4" name="nebulaAmount" step="1" min="0" max="5"></input>		
 								</td>
 							</tr>
 							<tr style="height: 10px"><td></td></tr>

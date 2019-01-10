@@ -11,6 +11,8 @@ spl_autoload_register(
                 'medium' => '/server/ship.php',
                 
                 'obstacle' => '/server/obstacle.php',
+                'asteroidfield' => '/server/obstacle.php',
+                'nebulacloud' => '/server/obstacle.php',
                 'asteroid' => '/server/asteroid.php',
                 'asteroidram' => '/server/particle.php',
 

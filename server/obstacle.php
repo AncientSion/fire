@@ -1,40 +1,35 @@
 <?php 
 
 class Obstacle extends Minor {
-	
-	public $name = "Obstacle";
-	public $display = "Asteroid Cluster";
 	public $obstacle = 1;
 	public $traverse = 10;
-	public $interference;
-	public $collision;
-	public $rockSize;
-	public $scale;
+	public $density = 0;
+	public $interference = 0;
+	public $collision = 0;
+	public $rockSize = 0;
 	public $systems = array();
 	public $critEffects = array();
-	public $density;
 	public $faction = "Neutral";
 
 	function __construct($data = false){
         parent::__construct($data);
-        $this->size = $data["delay"];
+	}
+
+		
+    /*    $this->size = $data["delay"];
         $this->density = $data["rolling"];
         $this->rockSize = $data["rolled"];
         $this->scale = $data["flipped"];
-
-       // $this->curImp = round($this->curImp * 125 / $this->size / $this->rockSize * 2);
         $this->interference = round($this->density * 0.8);
         $this->collision = round($this->density / 30 * ($this->curImp ? $this->curImp : 30));
-	}		
+	*/
+
 
 	public function addPrimary(){
-		//Debug::log("addPrimary #".$this->id.", index: ".$this->index);
 		$this->primary = new Shared($this->getId());
-		//Debug::log("density ".$this->density.", rockSize ".$this->rockSize.", result: ".round($this->density / 3 / $this->rockSize));
-
-		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id,
-		// minDmg, maxDmg, $shots
-		$this->totalCost, $this->moraleCost, ceil($this->density / $this->rockSize / 2));
+		if ($this->collision){
+			$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, $this->minDmg, $this->maxDmg, 5);
+		}
 	}
 
 	public function getDeployState($turn){
@@ -51,20 +46,20 @@ class Obstacle extends Minor {
 
 		return array(
 			"id" => $this->id,
-			"destroyed" => $this->destroyed,
-			"withdraw" => $this->withdraw,
-			"manual" => $this->manual,
+			"destroyed" => 0,
+			"withdraw" =>  0,
+			"manual" =>  0,
 			"x" => $x,
 			"y" => $y,
-			"heading" => $this->heading,
-			"facing" => $this->facing,
-			"thrust" => $this->getCurSpeed(),
-			"delay" => $this->size,
-			"rolling" => $this->density,
-			"rolled" => $this->rockSize,
-			"flipped" => $this->scale,
+			"heading" => 0,
+			"facing" =>  0,
+			"thrust" => 0,
+			"delay" => 0,
+			"rolling" => 0,
+			"rolled" => 0,
+			"flipped" => 0,
 			"status" => $this->status,
-			"notes" => "",
+			"notes" => $this->notes,
 		);
 	}
 	
@@ -129,6 +124,39 @@ class Obstacle extends Minor {
 
 	public function getNewCrits($turn){
 		return array();
+	}
+}
+
+
+class AsteroidField extends Obstacle {	
+	public $name = "AsteroidField";
+	public $display = "Asteroid Field";
+
+	function __construct($data = false){
+		parent::__construct($data);
+        $arr = explode(";", $this->notes);
+        $this->size = $arr[0];
+        $this->density = $arr[1];
+        $this->rockSize = $arr[2];
+        $this->minDmg = $arr[3];
+        $this->maxDmg = round($this->minDmg * 1.3);
+
+      	$this->interference = round($this->density * 1.0);
+      	$this->collision = round($this->density * 1.0);
+	}
+}
+
+class NebulaCloud extends Obstacle {	
+	public $name = "NebulaCloud";
+	public $display = "Nebula Cloud";
+
+	function __construct($data = false){
+		parent::__construct($data);
+        $arr = explode(";", $this->notes);
+        $this->size = $arr[0];
+        $this->density = $arr[1];
+
+      	$this->interference = round($this->density * 1.0);
 	}
 }
 ?>
