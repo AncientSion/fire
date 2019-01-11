@@ -455,17 +455,17 @@ NebulaCloud.prototype.setTrueImage = function(info){
 		t.height = this.size*2;
 	var ctx = t.getContext("2d");
 		ctx.translate(t.width/2, t.height/2);
-		ctx.globalAlpha = 0.8;
+		ctx.globalAlpha = 1;
 
 	var rota = range(0, 360);
 
 		ctx.rotate(rota * (Math.PI/180))
 		ctx.drawImage(
 			graphics.images.nebula[range(0, graphics.images.nebula.length-1)],
-			-this.size*.8,
-			-this.size*.8,
-			this.size*1.6, 
-			this.size*1.6
+			-this.size,
+			-this.size,
+			this.size*2, 
+			this.size*2
 		)
 		ctx.rotate(-rota * (Math.PI/180))
 	

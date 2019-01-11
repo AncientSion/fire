@@ -1545,7 +1545,7 @@ Ship.prototype.createCritLogEntry = function(){
 	return false;
 }
 Ship.prototype.createMoraleLogEntry = function(){
-	if (!this.notes || this.flight || this.salvo){return false;}
+	if (!this.notes || this.flight || this.salvo || this.obstacle){return false;}
 	//var data = this.notes.slice(0, this.notes.length-1).split(";");
 	//var morale = "";
 	//for (var i = 0; i < data.length; i++){if (data[i][0] == "m"){morale = data[i].slice(1, data[i].length); break;}}

@@ -47,7 +47,7 @@ function dot(a, b){
 	return (a.x * b.x) + (a.y * b.y); 
 }
 
-function isInPath(a, b, c, size) {
+function isInPathCircular(a, b, c, size) {
 	// Calculate the euclidean distance between a & b
 	var eDistAtoB = Math.sqrt( Math.pow(b.x-a.x, 2) + Math.pow(b.y-a.y, 2) );
 

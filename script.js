@@ -338,7 +338,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 		for (var i = 0; i < obstacles.length; i++){
 			//html += "Obstacle #" + obstacles[i].obstacleId + " - Exposure " + obstacles[i].exposure + "%, ";
 			//html += "<span class='yellow'>" + obstacles[i].effectiveBlock + "% chance to miss</span></br>";
-			html += "Obstacle #" + obstacles[i].obstacleId + ", penetration depth: " + obstacles[i].dist + " --- ";
+			html += obstacles[i].type + " #" + obstacles[i].obstacleId + ", penetration depth: " + obstacles[i].dist + " --- ";
 			html += "<span class='yellow'>" + obstacles[i].EffInterference + "% chance to miss</span></br>";
 		}
 		ui.targetDataC.html(html)//.show();

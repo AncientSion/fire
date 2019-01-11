@@ -2341,7 +2341,7 @@ Game.prototype.setInterferenceData = function(){
 
 				//var obstaclePos = game.phase == 3 ? {x: this.ships[k].x, y: this.ships[k].y} : this.ships[k].gePlannedPos();
 				var obstaclePos = this.ships[k].getDrawPos();
-				var result = isInPath(oPos, tPos, obstaclePos, this.ships[k].size/2);
+				var result = isInPathCircular(oPos, tPos, obstaclePos, this.ships[k].size/2);
 
 				if (!result || !result.points[0].onLine && !result.points[1].onLine){continue;}
 
@@ -2383,7 +2383,7 @@ Game.prototype.setCollisionData = function (unit){
 			if (action.type != "move"){continue;}
 			var oPos = j == 0 ? unitPos : unit.actions[j-1];
 
-			var result = isInPath(oPos, action, tPos, obstacle.size/2);
+			var result = isInPathCircular(oPos, action, tPos, obstacle.size/2);
 			if (!result){continue;}
 
 			var enter = false;
@@ -2453,7 +2453,7 @@ Game.prototype.hasObstacleInVector = function(oPos, tPos, unit){
 		if (!this.ships[j].obstacle){continue;}
 		//if (this.ships[j].id != 24){continue;}
 
-		var result = isInPath(oPos, tPos, this.ships[j].getGamePos(), this.ships[j].size/2);
+		var result = isInPathCircular(oPos, tPos, this.ships[j].getGamePos(), this.ships[j].size/2);
 		if (!result){continue;}
 
 		var pierceIn = 0;
@@ -2485,6 +2485,7 @@ Game.prototype.hasObstacleInVector = function(oPos, tPos, unit){
 	*/
 		if (!realDist){continue;}
 		inPath.push({
+			type: this.ships[j].display,
 			obstacleId: this.ships[j].id, 
 			dist: Math.round(realDist),
 			size: this.ships[j].size,

@@ -593,7 +593,6 @@
 		$this->handleJumpIn();
 		$this->destroyJumpedUnits();
 		$this->assembleDeployStates();
-		$this->assembleObstaclesMoveStates();
 		$this->deleteAllReinforcements();
 		$this->adjustFocusValues();
 
@@ -999,14 +998,14 @@
 		$unitSpeed = $unit->getCurSpeed();
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if (!$this->ships[$i]->obstacle){continue;}
+			if (!$this->ships[$i]->obstacle || !$this->ships[$i]->collision){continue;}
 
-			$obstacle = $this->ships[$i];
-			$tPos = $obstacle->getCurPos();
+			$field = $this->ships[$i];
+			$tPos = $field->getCurPos();
 			$totalDist = 0;
-			$distBetween = Math::getDist2($unitPos, $tPos) - $obstacle->size/2 - $unitSpeed;
+			$distBetween = Math::getDist2($unitPos, $tPos) - $field->size/2 - $unitSpeed;
 
-			//Debug::log("obstacle ".$obstacle->id.", pos: ".$tPos->x."/".$tPos->y.", unitPos ".$unitPos->x."/".$unitPos->y." --- dist between ".$distBetween);
+			//Debug::log("field ".$field->id.", pos: ".$tPos->x."/".$tPos->y.", unitPos ".$unitPos->x."/".$unitPos->y." --- dist between ".$distBetween);
 			if ($distBetween > 200){continue;}
 
 
@@ -1015,7 +1014,7 @@
 				if ($action->type != "move"){continue;}
 				$oPos = $j == 0 ? $unitPos : $unit->actions[$j-1];
 
-				$result = Math::isInPath($oPos, $action, $tPos, $obstacle->size/2);
+				$result = Math::isInPathCircular($oPos, $action, $tPos, $field->size/2);
 				if (!$result){continue;}
 
 				$enter = false;
@@ -1047,7 +1046,7 @@
 					//Debug::log("4!");
 					$start = Math::getDist2($oPos, $tPos);
 					$end = Math::getDist2($action, $tPos);
-					if ($start < $obstacle->size/2 && $end < $obstacle->size/2){
+					if ($start < $field->size/2 && $end < $field->size/2){
 					//Debug::log("5!");
 						$distInside += $action->dist;
 					}
@@ -1081,18 +1080,6 @@
 		$states = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->available != static::$turn){continue;}// jumpin or field move
-			$states[] = $this->ships[$i]->getDeployState(static::$turn);
-		}
-
-		if (sizeof($states)){DBManager::app()->updateUnitState($states, static::$turn, static::$phase);}	
-	}
-
-	public function assembleObstaclesMoveStates(){
-		return;
-		//Debug::log("assembleObstaclesMoveStates");
-		$states = array();
-		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if (!$this->ships[$i]->obstacle){continue;}// jumpin or field move
 			$states[] = $this->ships[$i]->getDeployState(static::$turn);
 		}
 
@@ -1327,19 +1314,20 @@
 
 				if ($this->ships[$i]->obstacle || $this->ships[$j]->obstacle){continue;}
 				if (static::$phase != 2){continue;}
-				if ($oPos->x == $tPos->x && $oPos->y == $tPos->y){Debug::log("same position, continue"); continue;}
+				if ($oPos->x == $tPos->x && $oPos->y == $tPos->y){continue;}
 				//Debug::log("TO ".$this->ships[$j]->id." / " .$this->ships[$j]->display);
 				//Debug::log("position #".$this->ships[$j]->id.": ".$tPos->x."/".$tPos->y);
 
 				for ($k = 0; $k < sizeof($this->ships); $k++){
 					if (!$this->ships[$k]->obstacle){continue;}
+					if (!$this->ships[$i]->interference){continue;}
 
 					$blockPos = $this->ships[$k]->getCurPos();
 					//Debug::log("checking if ".$this->ships[$k]->display." / " .$this->ships[$k]->id." is in path");
 					//Debug::log("position #".$this->ships[$j]->id.": ".$blockPos->x."/".$blockPos->y);
 
 
-					$result = Math::isInPath($oPos, $tPos, $blockPos, $this->ships[$k]->size/2);
+					$result = Math::isInPathCircular($oPos, $tPos, $blockPos, $this->ships[$k]->size/2);
 
 					//$data[] = $result;
 					//continue;

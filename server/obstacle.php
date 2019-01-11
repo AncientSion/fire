@@ -141,8 +141,8 @@ class AsteroidField extends Obstacle {
         $this->minDmg = $arr[3];
         $this->maxDmg = round($this->minDmg * 1.3);
 
-      	$this->interference = round($this->density * 1.0);
-      	$this->collision = round($this->density * 1.0);
+        $this->collision = round($this->density * 1.0);
+      	//$this->interference = round($this->density * 0.5);
 	}
 }
 
@@ -156,7 +156,7 @@ class NebulaCloud extends Obstacle {
         $this->size = $arr[0];
         $this->density = $arr[1];
 
-      	$this->interference = round($this->density * 1.0);
+      	$this->interference = round($this->density * 1.3);
 	}
 }
 ?>

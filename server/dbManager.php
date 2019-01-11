@@ -856,6 +856,8 @@
 			$nebulas = array();
 			if (!$amount){return $nebulas;}
 			
+			$densities = array(10, 20, 30);
+			
 			for ($i = 1; $i <= ($amount); $i++){
 				$attempts = 5;
 
@@ -896,12 +898,12 @@
 
 					if (!$redo){
 						break;
-					}// else Debug::log("redoing, attempts left: ".$attempts);
+					} else Debug::log("redoing, attempts left: ".$attempts);
 				}
 
 				if (!$attempts){continue;}
 
-				$density = mt_rand(10, 35);
+				$density = $densities[mt_rand(0, sizeof($densities))];
 
 				$nebulas[] = array("NebulaCloud", $x, $y, $size, $density);
 			}
@@ -918,6 +920,8 @@
 
 			if (!$amount){return $fields;}
 
+			$densities = array(10, 20, 30);
+
 			for ($i = 1; $i <= $amount; $i++){
 				$attempts = 5;
 
@@ -931,7 +935,7 @@
 					$x = mt_rand(-400, 400);
 					$y = mt_rand(-500, 500);
 					$size = mt_rand($min, $max);
-					$rockSize = min(8, max(1, mt_rand(1, 6) + mt_rand(-2, 2)));
+					$rockSize = mt_rand(1, 10);
 
 					for ($j = 0; $j < sizeof($fields); $j++){
 						$dist = Math::getDist($fields[$j][1], $fields[$j][2], $x, $y);
@@ -947,12 +951,13 @@
 
 					if (!$redo){
 						break;
-					}// else Debug::log("redoing, attempts left: ".$attempts);
+					} else Debug::log("redoing, attempts left: ".$attempts);
 				}
 
 				if (!$attempts){continue;}
 
-				$density = mt_rand(10, 30);
+
+				$density = $densities[mt_rand(0, sizeof($densities))];
 				$minDmg = round(mt_rand(8, 10) * $rockSize);
 
 				$fields[] = array("AsteroidField", $x, $y, $size, ($density.";".$rockSize.";".$minDmg));
