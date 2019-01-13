@@ -120,11 +120,10 @@ class HeavyAntiProtonPulsar extends MediumAntiProtonPulsar {
 	public $name = "HeavyAntiProtonPulsar";
 	public $display = "Heavy Photon Pulsar";
 	public static $prio = 0;
-	public $minDmg = 19;
-	public $maxDmg = 25;
-	public $reload = 3;
+	public $minDmg = 30;
+	public $maxDmg = 41;
 	public $integrity = 48;
-	public $powerReq = 5;
+	public $powerReq = 6;
 	public $tracking = 4;
 
 //	public $optRange = 350;

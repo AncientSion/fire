@@ -25,13 +25,6 @@ class Obstacle extends Minor {
 	*/
 
 
-	public function addPrimary(){
-		$this->primary = new Shared($this->getId());
-		if ($this->collision){
-			$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, $this->minDmg, $this->maxDmg, 5);
-		}
-	}
-
 	public function getDeployState($turn){
 		//Debug::log("getDeployState for ".$this->id.", destroyed: ".$this->destroyed);
 		return $this->getEndState($turn);
@@ -140,9 +133,18 @@ class AsteroidField extends Obstacle {
         $this->rockSize = $arr[2];
         $this->minDmg = $arr[3];
         $this->maxDmg = round($this->minDmg * 1.3);
+	}
 
-        $this->collision = round($this->density * 1.0);
-      	//$this->interference = round($this->density * 0.5);
+	public function addPrimary(){
+
+        $avgRockSize = 3;
+        $avgDensity = 20;
+
+        $this->collision = round(100 / $avgRockSize * $this->rockSize / $avgDensity * $this->density / 5);
+		$this->interference = round($this->density / 2);
+		
+		$this->primary = new Shared($this->getId());
+		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, $this->minDmg, $this->maxDmg, round($this->density * $avgRockSize / $this->rockSize / 5));
 	}
 }
 
@@ -156,7 +158,11 @@ class NebulaCloud extends Obstacle {
         $this->size = $arr[0];
         $this->density = $arr[1];
 
-      	$this->interference = round($this->density * 1.3);
+      	$this->interference = round($this->density * 1);
+	}
+
+	public function addPrimary(){
+		$this->primary = new Shared($this->getId());
 	}
 }
 ?>

@@ -7,7 +7,6 @@ include_once $_SERVER["DOCUMENT_ROOT"]."/fire/global.php";
 
 
 if (0){
-	DBManager::app()->startGame(2);
 	return;
 	echo Manager::alterShipFiles();
 	return;
@@ -19,14 +18,19 @@ if (isset($_SESSION["userid"])){
 
 	$dbManager = DBManager::app();
 
-	if (isset($_POST["anew"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
+	if (isset($_POST["anew"])){
 		echo $dbManager->anew();
 		header("Location: lobby.php");
 		return;
 	}
-	else if (isset($_POST["dump"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
+	else if (isset($_POST["dump"])){
 		echo $dbManager->dump();
 		//$dbManager->startGame(1);
+		header("Location: lobby.php");
+		return;
+	}
+	else if (isset($_POST["startGame"])){
+		DBManager::app()->startGame(1);
 		header("Location: lobby.php");
 		return;
 	}
@@ -44,8 +48,8 @@ if (isset($_SESSION["userid"])){
 		if ($_POST["reinforceAmount"] == ""){return;}
 		if ($_POST["obstaclesAmount"] == ""){return;}
 		if ($_POST["nebulaAmount"] == ""){return;}
-		if ($_POST["obstaclesSizeMin"] == ""){return;}
-		if ($_POST["obstaclesSizeMax"] == ""){return;}
+	//	if ($_POST["obstaclesSizeMin"] == ""){return;}
+	//	if ($_POST["obstaclesSizeMax"] == ""){return;}
 
 		if (!ctype_digit($_POST["pointValue"])){return;}
 		if (!ctype_digit($_POST["reinforceValue"])){return;}
@@ -54,8 +58,8 @@ if (isset($_SESSION["userid"])){
 		if (!ctype_digit($_POST["reinforceAmount"])){return;}
 		if (!ctype_digit($_POST["obstaclesAmount"])){return;}
 		if (!ctype_digit($_POST["nebulaAmount"])){return;}
-		if (!ctype_digit($_POST["obstaclesSizeMin"])){return;}
-		if (!ctype_digit($_POST["obstaclesSizeMax"])){return;}
+	//	if (!ctype_digit($_POST["obstaclesSizeMin"])){return;}
+	//	if (!ctype_digit($_POST["obstaclesSizeMax"])){return;}
 
 		$id = $dbManager->createNewGameAndJoin($_SESSION["userid"], $_POST);
 		if ($id){header("Location: gameSetup.php?gameid=".$id);}
@@ -233,6 +237,12 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 				if (isset($_SESSION['userid']) && $_SESSION['userid'] == 1){
 					echo "<div class='lobbyDiv'>";
 						echo "<form method='post'>";
+							echo "<input type='submit' value='startGame' name='startGame'>";
+						echo "</form>";
+					echo "</div>";
+
+					echo "<div class='lobbyDiv'>";
+						echo "<form method='post'>";
 							echo "<input type='submit' value='anew' name='anew'>";
 						echo "</form>";
 					echo "</div>";
@@ -337,7 +347,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 									Maximum size per field / nebula
 								</td>
 								<td>
-									<input type="number" style="width: 100%; text-align: center" value=175 placeholder="175" name="obstaclesSizeMax" step="25" min="100" max="300"></input>		
+									<input type="number" style="width: 100%; text-align: center" value=150 placeholder="175" name="obstaclesSizeMax" step="25" min="100" max="300"></input>		
 								</td>
 							</tr>
 							<tr>

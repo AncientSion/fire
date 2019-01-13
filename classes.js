@@ -513,7 +513,8 @@ Single.prototype.addSysEvents = function(div, isBuy){
 		e.stopPropagation();
 		$("#sysDiv").remove();
 		var shipId = $(this).parent().parent().parent().data("shipId");
-		game.getUnit(shipId).getSystem($(this).data("systemId")).hover(e)
+		var systemId = $(this).data("systemId");
+		game.getUnit(shipId).getSystem(systemId).hover(e)
 	})
 }
 

@@ -40,7 +40,8 @@
 				array("Rout", 150, 0, 0.00)
 			),
 			"collision" => array(
-				"hitMod" => 0.25
+				"baseMulti" => 1.5,
+				"hitMod" => 0.3
 			)
 		);
 
@@ -760,7 +761,7 @@
 			//Debug::log("i = ".$i.", shooterid: ".$shooter->id);
 			//$devi = Math::getPointInDirection($this->fires[$i]->shooter->size/3, $a, $sPos->x + mt_rand(-10, 10), $sPos->y + mt_rand(-10, 10));
 			$mission = array("type" => 2, "turn" => static::$turn, "phase" => -1, "targetid" => $this->fires[$i]->targetid, "x" => $tPos->x, "y" => $tPos->y, "arrived" => 0, "new" => 1);
-			$move = array("turn" => static::$turn, "type" => "deploy", "dist" => 0, "x" => $sPos->x, "y" => $sPos->y, "heading" => $a, "facing" => 0,"cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
+			$move = array("turn" => static::$turn, "type" => "deploy", "dist" => 0, "x" => $sPos->x, "y" => $sPos->y, "h" => $a, "f" => 0,"cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
 			$upgrades = array(array("active" => 1, "unitid" => $this->fires[$i]->shooter->id, "systemid" => $this->fires[$i]->weapon->id, "units" => array(0 => array("amount" => $this->fires[$i]->shots, "name" => $name))));
 
 			$units[] = array("gameid" => $this->gameid, "userid" => $this->fires[$i]->shooter->userid, "type" => "Salvo", "name" => "Salvo", "callsign" => "", "totalCost" => 0, "moraleCost" => 0, "turn" => static::$turn, "eta" => 0, "mission" => $mission, "actions" => array($move), "upgrades" => $upgrades);
@@ -999,6 +1000,7 @@
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (!$this->ships[$i]->obstacle || !$this->ships[$i]->collision){continue;}
+			if (!$this->ships[$i]->collision){continue;}
 
 			$field = $this->ships[$i];
 			$tPos = $field->getCurPos();
@@ -1061,7 +1063,8 @@
 			if (!$totalDist){continue;}
 
 			$weaponid = 2;
-			$req = $this->ships[$i]->collision * max(0.1, (1 + ($this->const["collision"]["hitMod"] * ($unit->traverse-4))));
+			$req = $this->ships[$i]->collision * $this->const["collision"]["baseMulti"] - ($this->const["collision"]["hitMod"] * (4 - ($unit->traverse)));
+			//$req = $this->ships[$i]->collision * max(0.1, (1 + ($this->const["collision"]["hitMod"] * ($unit->traverse-4))));
 			$string = (round($totalDist).";".$this->ships[$i]->collision.";".round($req).";");
 			$shots = ceil($this->ships[$i]->getSystem(2)->getShots(static::$turn) / 100 * $totalDist);
 
@@ -1320,7 +1323,7 @@
 
 				for ($k = 0; $k < sizeof($this->ships); $k++){
 					if (!$this->ships[$k]->obstacle){continue;}
-					if (!$this->ships[$i]->interference){continue;}
+					if (!$this->ships[$k]->interference){continue;}
 
 					$blockPos = $this->ships[$k]->getCurPos();
 					//Debug::log("checking if ".$this->ships[$k]->display." / " .$this->ships[$k]->id." is in path");

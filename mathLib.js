@@ -47,6 +47,17 @@ function dot(a, b){
 	return (a.x * b.x) + (a.y * b.y); 
 }
 
+
+/*
+static int AVERAGINGFACTOR = 3; //the higher this is the closer to the average the results will be
+float density = 0;
+for (int x=0; x < AVERAGINGFACTOR; x++)
+{
+    density += (float)Random.Next(1,10);
+}
+density = density/AVERAGINGFACTOR;
+*/
+
 function isInPathCircular(a, b, c, size) {
 	// Calculate the euclidean distance between a & b
 	var eDistAtoB = Math.sqrt( Math.pow(b.x-a.x, 2) + Math.pow(b.y-a.y, 2) );

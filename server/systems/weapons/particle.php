@@ -14,17 +14,7 @@ class AsteroidRam extends Particle {
 	public $display = "Asteroid Collision";
 	public $animation = "contact";
 	public static $prio = 0;
-	public $accDecay = 180;
-	public $shots = 4;	
-	public $reload = 2;
-	public $integrity = 28;
-	public $powerReq = 3;
-	public $tracking = 1;
-
-	public $animColor = "orange";
-	public $projSize = 2;
-	public $projSpeed = 8;
-
+	public $tracking = 0;
 	public $critEffects = array();
 
 	function __construct($id, $parentId, $minDmg, $maxDmg, $shots){

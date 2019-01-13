@@ -406,7 +406,7 @@ this.doAnimateMovement = function(){
 		var move = new Move(-1, id, this.turn, "deploy", 0, 0, o.x, o.y, facing, 0, 0, 0, 0, 1, 1);
 
 		var flight = new Flight(
-			{id: id, name: "Flight", mission: false, traverse: 1, actions: [move],
+			{id: id, name: "Flight", mission: false, traverse: 1, actions: [move], index: 0,
 			x: o.x, y: o.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, curImp: 0, size: 0, fSize: 15, baseSize: 25, unitSize: 4, userid: this.userid, available: this.turn}
 		);
 		flight.launch = {
@@ -416,7 +416,14 @@ this.doAnimateMovement = function(){
 		};
 		for (var i = 0; i < flightDeploy.loads.length; i++){
 			for (var j = 1; j <= flightDeploy.loads[i].launch; j++){
-				flight.structures.push(new Fighter(flightDeploy.loads[i]));
+				flight.index++;
+				var fighter = new Fighter(flightDeploy.loads[i]);
+					fighter.id = flight.index;
+				for (var k = 0; k < fighter.systems.length; k++){
+					flight.index++;
+					fighter.systems[k].id = flight.index;
+				}
+				flight.structures.push(fighter);
 			}
 		}
 
@@ -462,11 +469,13 @@ this.doAnimateMovement = function(){
 
 		var mission = {id: 0, unitid: id, type: 2, targetid: targetid, turn: game.turn, x: pos.x, y: pos.y, arrivd: 0, new: 1, target: false};
 
+		var id = range(0, -100);
+		var deploy = new Move(-1, id, this.turn, "deploy", 0, 0, o.x, o.y, facing, 0, 0, 0, 0, 1, 1);
+
 		var salvo = new Salvo (
-			{id: range(-0, -100), name: "Salvo", mission: mission, traverse: 0, flight: 0, salvo: 1, ship: 0, squad: 0, obstacle: 0, notes: (aUnit + ";" + launcher.id), focus: 0, disabled: 0, command: 0, 
-			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, curImp: 0, size: 50, fSize: 0, baseSize: 0, unitSize: 0, userid: this.userid, available: this.turn}
+			{id: id, name: "Salvo", mission: mission, traverse: 0, flight: 0, salvo: 1, ship: 0, squad: 0, obstacle: 0, notes: (aUnit + ";" + launcher.id), focus: 0, disabled: 0, command: 0, 
+			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, curImp: 0, size: 50, fSize: 0, baseSize: 0, unitSize: 0, userid: this.userid, available: this.turn, actions: [deploy]}
 		);
-		salvo.actions.push(new Move(-1, salvo.id, this.turn, "deploy", 0, 0, o.x, o.y, facing, 0, 0, 0, 0, 1, 1));
 
 		var shots = launcher.getShots();
 		for (var i = 1; i <= shots; i++){
@@ -2291,6 +2300,7 @@ Game.prototype.getUnitByClick = function(pos){
 }
 
 Game.prototype.getCollisionMod = function(traverse){
+	return game.const.collision.baseMulti - (game.const.collision.hitMod * (4 - traverse));
 	return Math.max(0.1, (1+( game.const.collision.hitMod * (traverse-4))));
 }
 
@@ -2368,6 +2378,7 @@ Game.prototype.setCollisionData = function (unit){
 
 	for (var i = 0; i < this.ships.length; i++){
 		if (!this.ships[i].obstacle){continue;}
+		if (!this.ships[i].primary.systems.length){continue;}
 
 		var obstacle = this.ships[i];
 		var tPos = obstacle.getGamePos();

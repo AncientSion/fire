@@ -30,6 +30,7 @@ if (isset($_POST["type"])) {
 	else if ($_POST["type"] == "buyInitialFleet"){	
 		//echo $dbManager->processInitialBuy($_POST["userid"], $_POST["gameid"], $_POST["ships"], $_POST["faction"]); return;
 		if ($dbManager->processInitialBuy($_POST["userid"], $_POST["gameid"], $_POST["ships"], $_POST["faction"])){
+			return;
 			if ($dbManager->gameIsReady($_POST["gameid"])) {
 				if ($dbManager->startGame($_POST["gameid"])) {
 					header("Location: game.php?gameid=".$_POST["gameid"]);

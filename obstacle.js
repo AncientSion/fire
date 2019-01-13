@@ -8,7 +8,20 @@ function Obstacle(data){
 	this.rockSize = data.rockSize;
 	this.scale = data.scale;
 	this.collision = data.collision;
+
+/*	var dimA = range(20, 40);
+	var dimB = dimA * 2.5
+
+	if (dimA % 2){
+		this.width = dimA;
+		this.height = dimB;
+	}
+	else {
+		this.width = dimB;
+		this.height = dimA;
+	}*/
 }
+
 Obstacle.prototype = Object.create(Mixed.prototype);
 
 Obstacle.prototype.setPostMoveFaceHead = function(){
@@ -31,12 +44,26 @@ Obstacle.prototype.drawNextMarker = function(x, y, c, context){
 	return;
 }
 
+Obstacle.prototype.drawMarkerA = function(x, y, c, context){
+	context.beginPath();
+	context.rect(x, y, this.width, this.height);
+	context.closePath();
+	context.lineWidth = 1 + Math.floor(this.selected*2 + (this.focus == 1)*2);
+	context.globalAlpha = 0.7 + (this.focus == 1) * 0.1;
+	context.globalCompositeOperation = "source-over";
+	context.strokeStyle = c;
+	context.stroke();
+	context.globalAlpha = 1;
+	context.lineWidth = 1;
+	context.strokeStyle = "black";
+}
+
 Obstacle.prototype.setNextMove = function(){
 	return;
 }
 
 Obstacle.prototype.getMaxInterference = function(){
-	return this.interference;
+	//return this.interference;
 	return Math.round(this.interference / 100 * this.size);
 }
 
@@ -242,7 +269,7 @@ AsteroidField.prototype.createBaseDiv = function(){
 		table.append($("<tr>")
 			.append($("<td>").attr("colSpan", 2)
 				.append($("<table>").addClass("collisionTable")
-					.append($("<tr>").append($("<td>").attr("colSpan", 7).html("<span class='yellow'>Collision Chance (mod: " + game.const.collision.hitMod + ", min 0.1)</span>")))
+					.append($("<tr>").append($("<td>").attr("colSpan", 7).html("<span class='yellow'>Collision Chance)</span>")))
 					.append(trA)
 					.append(trB))))
 		.append($("<tr>")
@@ -299,8 +326,7 @@ AsteroidField.prototype.expandDiv = function(div){
 
 AsteroidField.prototype.setTrueImage = function(info){
 
-	var amount = Math.round(Math.pow(this.size, 2) / 2500 * this.interference / (this.rockSize));
-		amount = 50;
+	var amount = Math.round(Math.pow(this.size, 2) / 2000 * this.density / this.rockSize);
 
 	var t = document.createElement("canvas");
 		t.width = this.size*2;

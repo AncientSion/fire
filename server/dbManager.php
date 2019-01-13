@@ -855,21 +855,20 @@
 			$max = $data["obstaclesSizeMax"];
 			$nebulas = array();
 			if (!$amount){return $nebulas;}
-			
-			$densities = array(10, 20, 30);
-			
+						
 			for ($i = 1; $i <= ($amount); $i++){
-				$attempts = 5;
+				$attempts = 10;
 
 				$x; $y; $size;
 
 				while ($attempts){
 					$redo = 0;
+					$dist;
 					$attempts--;
 					
 					$x = mt_rand(-400, 400);
 					$y = mt_rand(-500, 500);
-					$size = mt_rand($min, $max);
+					$size = mt_rand(100, 175);
 
 					for ($j = 0; $j < sizeof($nebulas); $j++){
 						$dist = Math::getDist($nebulas[$j][1], $nebulas[$j][2], $x, $y);
@@ -898,12 +897,12 @@
 
 					if (!$redo){
 						break;
-					} else Debug::log("redoing, attempts left: ".$attempts);
+					} else Debug::log("redoing dist is $dist, attempts left: ".$attempts);
 				}
 
-				if (!$attempts){continue;}
+				if (!$attempts){Debug::log("pass!"); continue;}
 
-				$density = $densities[mt_rand(0, sizeof($densities))];
+				$density = mt_rand(20, 30);
 
 				$nebulas[] = array("NebulaCloud", $x, $y, $size, $density);
 			}
@@ -923,7 +922,7 @@
 			$densities = array(10, 20, 30);
 
 			for ($i = 1; $i <= $amount; $i++){
-				$attempts = 5;
+				$attempts = 10;
 
 				$x; $y; $size; $rockSize;
 
@@ -934,8 +933,8 @@
 
 					$x = mt_rand(-400, 400);
 					$y = mt_rand(-500, 500);
-					$size = mt_rand($min, $max);
-					$rockSize = mt_rand(1, 10);
+					$size = mt_rand(75, 125);
+					$rockSize = mt_rand(1, 5);
 
 					for ($j = 0; $j < sizeof($fields); $j++){
 						$dist = Math::getDist($fields[$j][1], $fields[$j][2], $x, $y);
@@ -957,8 +956,8 @@
 				if (!$attempts){continue;}
 
 
-				$density = $densities[mt_rand(0, sizeof($densities))];
-				$minDmg = round(mt_rand(8, 10) * $rockSize);
+				$density = $densities[mt_rand(0, sizeof($densities)-1)];
+				$minDmg = round(mt_rand(14, 19) * $rockSize);
 
 				$fields[] = array("AsteroidField", $x, $y, $size, ($density.";".$rockSize.";".$minDmg));
 			}
@@ -1002,6 +1001,7 @@
 
 			$data = $this->query("SELECT * FROM games where id = ".$gameid);
 			//if (sizeof($data)){$this->createMovingObstacles($gameid, $data[0]);}
+			if ($data[0]["status"] == "active"){return;}
 			if (sizeof($data)){$this->createStaticObstacles($gameid, $data[0]);}
 
 			$stmt = $this->connection->prepare("
@@ -1416,7 +1416,7 @@
 		}
 
 		public function insertClientActions($units){
-			//Debug::log("insertClientActions s: ".sizeof($units));
+			Debug::log("insertClientActions s: ".sizeof($units));
 			$stmt = $this->connection->prepare("
 				INSERT INTO actions 
 					(unitid, turn, type, dist, x, y, h, f, cost, delay, costmod, resolved)
@@ -1429,6 +1429,10 @@
 
 				for ($j = 0; $j < sizeof($units[$i]["actions"]); $j++){
 					if ($units[$i]["actions"][$j]["resolved"]){continue;}
+
+					foreach ($units[$i]["actions"][$j] as $key => $value){
+						Debug::log($key.".".$value);
+					}
 
 					$stmt->bindParam(":turn", $units[$i]["actions"][$j]["turn"]);
 					$stmt->bindParam(":type", $units[$i]["actions"][$j]["type"]);
