@@ -8,18 +8,6 @@ function Obstacle(data){
 	this.rockSize = data.rockSize;
 	this.scale = data.scale;
 	this.collision = data.collision;
-
-/*	var dimA = range(20, 40);
-	var dimB = dimA * 2.5
-
-	if (dimA % 2){
-		this.width = dimA;
-		this.height = dimB;
-	}
-	else {
-		this.width = dimB;
-		this.height = dimA;
-	}*/
 }
 
 Obstacle.prototype = Object.create(Mixed.prototype);
@@ -42,20 +30,6 @@ Obstacle.prototype.drawNextMove = function(){
 
 Obstacle.prototype.drawNextMarker = function(x, y, c, context){
 	return;
-}
-
-Obstacle.prototype.drawMarkerA = function(x, y, c, context){
-	context.beginPath();
-	context.rect(x, y, this.width, this.height);
-	context.closePath();
-	context.lineWidth = 1 + Math.floor(this.selected*2 + (this.focus == 1)*2);
-	context.globalAlpha = 0.7 + (this.focus == 1) * 0.1;
-	context.globalCompositeOperation = "source-over";
-	context.strokeStyle = c;
-	context.stroke();
-	context.globalAlpha = 1;
-	context.lineWidth = 1;
-	context.strokeStyle = "black";
 }
 
 Obstacle.prototype.setNextMove = function(){
@@ -201,14 +175,16 @@ Obstacle.prototype.setPostMovePosition = function(){
 	this.drawY = this.y;
 }
 
+
+
+
+
+
+
 function AsteroidField(data){
 	Obstacle.call(this, data);
 }
 AsteroidField.prototype = Object.create(Obstacle.prototype);
-
-
-
-
 
 
 AsteroidField.prototype.getShortInfo = function(){
@@ -385,13 +361,53 @@ AsteroidField.prototype.setTrueImage = function(info){
 	this.img = t;
 }
 
+AsteroidField.prototype.testObstruction = function(oPos, tPos){
+	return isInPathCircular(oPos, tPos, this.getGamePos(), this.size/2);
+}
+
 
 
 
 function NebulaCloud(data){
 	Obstacle.call(this, data);
+
+
+	this.points = [];
+	this.points.push(new Point(this.x, this.y));
+
+	var dimA = range(20, 40);
+	var dimB = dimA * 2.5
+	var w = 0; var h = 0;
+
+	if (dimA % 2){
+		w  = dimA;
+		h = dimB;
+	}
+	else {
+		w = dimB;
+		h = dimA;
+	}
+
+	//var w = 30; var h = 80;
+
+	var rota = range(0, 360);
+	//	r = 0;
+
+
+	var b = getPointInDir(h, rota, this.x, this.y);
+	var c = getPointInDir(w, rota-90, b.x, b.y);
+	var d = getPointInDir(h, rota-180, c.x, c.y);
+
+
+	this.points.push(b);
+	this.points.push(c);
+	this.points.push(d);
 }
 NebulaCloud.prototype = Object.create(Obstacle.prototype);
+
+NebulaCloud.prototype.testObstruction = function(oPos, tPos){
+	return lineRectIntersect(oPos, tPos, this.points);
+}
 
 NebulaCloud.prototype.getShortInfo = function(){
 	var ele = ui.shortInfo.attr("class", "hostile");
@@ -475,7 +491,56 @@ NebulaCloud.prototype.expandDiv = function(div){
 	return div;
 }
 
+NebulaCloud.prototype.drawMarker = function(x, y, c, ctx){
+	ctx.globalCompositeOperation = "source-over";
+	ctx.strokeStyle = c;
+
+	for (var i = 0; i < this.points.length-1; i++){
+		ctx.beginPath();
+		ctx.moveTo(this.points[i].x, this.points[i].y);
+		ctx.lineTo(this.points[i+1].x, this.points[i+1].y);
+		ctx.closePath();
+
+		ctx.globalAlpha = 0.25 + (i*0.2);
+		ctx.stroke();
+	}
+
+	ctx.beginPath();
+	ctx.moveTo(this.points[3].x, this.points[3].y);
+	ctx.lineTo(this.points[0].x, this.points[0].y);
+	ctx.closePath();
+
+	ctx.globalAlpha = 1;
+	ctx.stroke();
+
+	//ctx.rect(x, y, this.width, this.height);
+	ctx.globalAlpha = 1;
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = "black";
+}
+
 NebulaCloud.prototype.setTrueImage = function(info){
+	var t = document.createElement("canvas");
+		t.width = this.size*2;
+		t.height = this.size*2;
+	var ctx = t.getContext("2d");
+		ctx.translate(t.width/2, t.height/2);
+		ctx.globalAlpha = 1;
+	
+	if (info){
+		ctx.clearRect(-30, -18, 60, 36);
+
+		ctx.fillStyle = "yellow";
+		ctx.font = "24px Arial";
+		ctx.textAlign = "center";
+		ctx.fillText(this.getMaxInterference() + "%", 3, 7)
+	}
+
+	ctx.setTransform(1,0,0,1,0,0);
+	this.img = t;
+}
+
+NebulaCloud.prototype.setTrueImageA = function(info){
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
 		t.height = this.size*2;
@@ -486,13 +551,13 @@ NebulaCloud.prototype.setTrueImage = function(info){
 	var rota = range(0, 360);
 
 		ctx.rotate(rota * (Math.PI/180))
-		ctx.drawImage(
+		//ctx.drawImage(
 			graphics.images.nebula[range(0, graphics.images.nebula.length-1)],
 			-this.size,
 			-this.size,
 			this.size*2, 
 			this.size*2
-		)
+		//)
 		ctx.rotate(-rota * (Math.PI/180))
 	
 	if (info){

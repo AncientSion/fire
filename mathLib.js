@@ -19,7 +19,7 @@ function radianToDegree(radian){
 }
 
 function getAngleFromTo(a, b){
-	return radianToDegree(Math.atan2(b.y-a.y, b.x-a.x));;
+	return radianToDegree(Math.atan2(b.y-a.y, b.x-a.x));
 }
 
 function addAngle(f, a){
@@ -47,7 +47,6 @@ function dot(a, b){
 	return (a.x * b.x) + (a.y * b.y); 
 }
 
-
 /*
 static int AVERAGINGFACTOR = 3; //the higher this is the closer to the average the results will be
 float density = 0;
@@ -58,9 +57,67 @@ for (int x=0; x < AVERAGINGFACTOR; x++)
 density = density/AVERAGINGFACTOR;
 */
 
+function lineRectIntersect(shooter, target, rectPoints){
+	var test;
+
+	//var intersects = [0, 0, 0, 0];
+	var intersectPoints = [];
+	var distances = [];
+
+	for (var i = 0; i < rectPoints.length-1; i++){
+		test = lineLineIntersect(shooter, target, rectPoints[i], rectPoints[i+1]);
+		if (test.onLine){
+			intersectPoints.push(test);
+		}
+	}
+
+	test = lineLineIntersect(shooter, target, rectPoints[3], rectPoints[0]);
+	if (test.onLine){
+		intersectPoints.push(test);
+	}
+
+	for (var i = 0; i < intersectPoints.length; i++){
+		if (!intersectPoints[i].onLine){continue;}
+		intersectPoints[i].dist = getDistance(shooter, {x: intersectPoints[i].x, y: intersectPoints[i].y});
+	}
+
+	return intersectPoints;
+
+}
+
+function lineLineIntersect(a, b, c, d){
+	var ua = (d.x - c.x) * (a.y - c.y) - (d.y - c.y) * (a.x - c.x);
+	var ub = (b.x - a.x) * (a.y - c.y) - (b.y - a.y) * (a.x - c.x);
+	var denom = (d.y - c.y) * (b.x - a.x) - (d.x - c.x) * (b.y - a.y);
+
+	var intersect = {onLine: false, dist: 0, x: 0, y: 0};
+
+	//console.log(denom);
+
+	if  (Math.abs(denom) == 0){
+		if (Math.abs(ua) == 0 && Math.abs(ub) == 0){
+			intersect.onLine = true;
+			intersect.x = (a.x + b.x) / 2;
+			intersect.y = (a.y + b.y) / 2;
+		}
+	}
+	else {
+		ua /= denom;
+		ub /= denom;
+
+		if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1){
+			intersect.onLine = true;
+			intersect.x = a.x + ua * (b.x - a.x);
+			intersect.y = a.y + ua * (b.y - a.y);
+		}
+	}
+
+	return intersect;
+}
+
 function isInPathCircular(a, b, c, size) {
 	// Calculate the euclidean distance between a & b
-	var eDistAtoB = Math.sqrt( Math.pow(b.x-a.x, 2) + Math.pow(b.y-a.y, 2) );
+	var eDistAtoB = Math.sqrt(Math.pow(b.x-a.x, 2) + Math.pow(b.y-a.y, 2));
 
 	// compute the direction vector d from a to b
 	var d = {x: (b.x-a.x)/eDistAtoB, y: (b.y-a.y)/eDistAtoB};
@@ -76,33 +133,32 @@ function isInPathCircular(a, b, c, size) {
 		e.y = (t * d.y) + a.y;
 
 	// Calculate the euclidean distance between c & e
-	var eDistCtoE = Math.sqrt( Math.pow(e.x-c.x, 2) + Math.pow(e.y-c.y, 2) );
+	var eDistCtoE = Math.sqrt(Math.pow(e.x-c.x, 2) + Math.pow(e.y-c.y, 2));
 
 	// test if the line intersects the circle
-	if (eDistCtoE <= size ) {
+	if (eDistCtoE <= size){
 	
 		//console.log("eDistCtoE " + eDistCtoE + " below size " + size);
 		// compute distance from t to circle intersection point
-		var dt = Math.sqrt( Math.pow(size, 2) - Math.pow(eDistCtoE, 2));
+		var dist = Math.sqrt(Math.pow(size, 2) - Math.pow(eDistCtoE, 2));
 
-		var inP = {
-			x: ((t-dt) * d.x) + a.x, 
-			y: ((t-dt) * d.y) + a.y,
+		var entry = {
+			x: ((t - dist) * d.x) + a.x, 
+			y: ((t - dist) * d.y) + a.y,
 			onLine: false
 		};
-		inP.onLine = is_on( a, b, inP);
+		entry.onLine = is_on(a, b, entry);
 
-		var out = {
-			x: ((t+dt) * d.x) + a.x,
-			y: ((t+dt) * d.y) + a.y, 
+		var exit = {
+			x: ((t + dist) * d.x) + a.x,
+			y: ((t + dist) * d.y) + a.y, 
 			onLine: false
 		};
-		out.onLine = is_on(a, b, out);
+		exit.onLine = is_on(a, b, exit);
 
-		//if (inP.onLine || out.onLine){
-			var data = {dist: dt, points: [inP, out]};
-			return data;
-		//}
+		var data = {dist: dist, points: [entry, exit]};
+		return data;
+
 	}
 	return false;
 }

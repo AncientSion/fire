@@ -101,8 +101,8 @@ this.doAnimateMovement = function(){
 			if (!game.ships[i].animatesThisSegment()){game.ships[i].draw(); continue;}
 
 			for (var j = 0; j < game.ships[i].actions.length; j++){
-				if (game.ships[i].actions[j].turn == game.turn && !game.ships[i].actions[j].animated){
-					var action = game.ships[i].actions[j];
+				if (game.ships[i].actions[i].turn == game.turn && !game.ships[i].actions[i].animated){
+					var action = game.ships[i].actions[i];
 
 					if (action.forced && !game.animForcedMoves || action.t[1] == 0){
 						action.animated = 1;
@@ -163,8 +163,8 @@ this.doAnimateMovement = function(){
 		if (!done){break;}
 		else if (game.ships[i].animatesThisSegment()){
 			for (var j = 0; j < game.ships[i].actions.length; j++){
-				if (game.ships[i].actions[j].turn == game.turn){
-					if (!game.ships[i].actions[j].animated){
+				if (game.ships[i].actions[i].turn == game.turn){
+					if (!game.ships[i].actions[i].animated){
 						done = false;
 						break;
 					}
@@ -524,9 +524,9 @@ this.doAnimateMovement = function(){
 			var aPos = this.ships[i].getDrawPos();
 
 			for (var j = 0; j < this.ships.length; j++){
-				if (!this.ships[i].doDraw || this.ships[i].id == this.ships[j].id){continue;}
+				if (!this.ships[i].doDraw || this.ships[i].id == this.ships[i].id){continue;}
 
-				var bPos = this.ships[j].getDrawPos();
+				var bPos = this.ships[i].getDrawPos();
 
 				if (aPos.x == bPos.x && aPos.y == bPos.y){
 					this.ships[i].doRandomOffset(0);
@@ -548,12 +548,12 @@ this.doAnimateMovement = function(){
 			var aPos = this.ships[i].getDrawPos();
 
 			for (var j = i+1; j < this.ships.length; j++){
-				if (!this.ships[j].flight || !this.ships[j].doDraw){continue;}
-				var bPos = this.ships[j].getDrawPos();
+				if (!this.ships[i].flight || !this.ships[i].doDraw){continue;}
+				var bPos = this.ships[i].getDrawPos();
 
 				if (aPos.x == bPos.x && aPos.y == bPos.y){
 					this.ships[i].doRandomOffset(1);
-					this.ships[j].doRandomOffset(-1);
+					this.ships[i].doRandomOffset(-1);
 				}
 			}
 		}
@@ -565,12 +565,12 @@ this.doAnimateMovement = function(){
 			var aPos = this.ships[i].getDrawPos();
 
 			for (var j = 0; j < this.ships.length; j++){
-				if (!this.ships[j].flight || !this.ships[i].doDraw){continue;}
-				if (game.phase != 0 && this.subPhase == 1 && (!(game.phase == -1 && this.ships[j].available == game.turn))){continue;}
-				var bPos = this.ships[j].getDrawPos();
+				if (!this.ships[i].flight || !this.ships[i].doDraw){continue;}
+				if (game.phase != 0 && this.subPhase == 1 && (!(game.phase == -1 && this.ships[i].available == game.turn))){continue;}
+				var bPos = this.ships[i].getDrawPos();
 
 				if (aPos.x == bPos.x && aPos.y == bPos.y){
-					this.ships[j].doRandomOffset(0);
+					this.ships[i].doRandomOffset(0);
 				}
 			}
 		}
@@ -623,8 +623,8 @@ this.doAnimateMovement = function(){
 
 			var sensor = this.ships[i].getSystemByName("Sensor");
 			for (var j = 0; j < sensor.ew.length; j++){
-				if (sensor.ew[j].turn == this.turn){
-					ret.push(sensor.ew[j]);
+				if (sensor.ew[i].turn == this.turn){
+					ret.push(sensor.ew[i]);
 					break;
 				}
 			}
@@ -832,10 +832,10 @@ this.doAnimateMovement = function(){
 			html += "</div>";
 
 			for (var j = 0; j < data[i].data.length; j++){
-				var substring = data[i].data[j].name + " #" + data[i].data[j].id;
-				if (data[i].data[j].value){substring += " (" + data[i].data[j].value + ")";}
+				var substring = data[i].data[i].name + " #" + data[i].data[i].id;
+				if (data[i].data[i].value){substring += " (" + data[i].data[i].value + ")";}
 
-				html += "<input type='button' class='popupEntry' value='" + substring + "' onclick='game.selectFromPopup(" + data[i].data[j].id + ")'>";
+				html += "<input type='button' class='popupEntry' value='" + substring + "' onclick='game.selectFromPopup(" + data[i].data[i].id + ")'>";
 			}
 		}
 		html += "<input type='button' class='popupEntryConfirm' value='Confirm Orders' onclick='game.doConfirmOrders()'>";
@@ -1030,11 +1030,11 @@ this.doAnimateMovement = function(){
 			if (game.turn > 1){
 				var count = 0;
 				for (var j = 0; j < this.ships.length; j++){
-					if (this.ships[j].flight || this.ships[j].salvo || this.ships[j].obstacle){continue;}
-					if (this.ships[j].available > game.turn){continue;}
-					d = Math.max(d, getDistance(this.ships[j], center));
-					center.x += this.ships[j].x;
-					center.y += this.ships[j].y;
+					if (this.ships[i].flight || this.ships[i].salvo || this.ships[i].obstacle){continue;}
+					if (this.ships[i].available > game.turn){continue;}
+					d = Math.max(d, getDistance(this.ships[i], center));
+					center.x += this.ships[i].x;
+					center.y += this.ships[i].y;
 					count++;
 				}
 
@@ -1249,7 +1249,7 @@ this.doAnimateMovement = function(){
 
 		for (var i = 0; i < this.ships.length; i++){
 			for (var j = this.ships[i].actions.length-1; j >= 0; j--){
-				if (this.ships[i].actions[j].type == "roll" || this.ships[i].actions[j].type == "flip"){
+				if (this.ships[i].actions[i].type == "roll" || this.ships[i].actions[i].type == "flip"){
 					this.ships[i].createActionEntry(); break;
 				}
 			}
@@ -1308,7 +1308,7 @@ this.doAnimateMovement = function(){
 			var hostiles = [];
 
 			for (var j = 0; j < this.ships[i].cc.length; j++){
-				var unit = game.getUnit(this.ships[i].cc[j]);
+				var unit = game.getUnit(this.ships[i].cc[i]);
 				if (unit.friendly){continue;}
 				//if (unit.salvo){hostiles += 5; continue;}
 				hostiles.push(unit);
@@ -1320,11 +1320,11 @@ this.doAnimateMovement = function(){
 			var weapons = [];
 
 			for (var j = 0; j < this.ships[i].structures.length; j++){
-				if (this.ships[i].structures[j].destroyed){continue;}
-				for (var k = 0; j < this.ships[i].structures[j].systems[k].length; k++){
-					if (this.ships[i].structures[j].systems[k].reload > 1 || !this.ships[i].structures[j].systems[k].canFire()){continue;}
+				if (this.ships[i].structures[i].destroyed){continue;}
+				for (var k = 0; j < this.ships[i].structures[i].systems[k].length; k++){
+					if (this.ships[i].structures[i].systems[k].reload > 1 || !this.ships[i].structures[i].systems[k].canFire()){continue;}
 				}
-				weapons.push(this.ships[i].structures[j].systems[k]);
+				weapons.push(this.ships[i].structures[i].systems[k]);
 			}
 			//console.log(weapons);
 
@@ -1338,17 +1338,17 @@ this.doAnimateMovement = function(){
 			}
 
 			for (var j = 0; j < weapons.length; j++){
-				var state = weapons[j].getActiveState();
+				var state = weapons[i].getActiveState();
 				if (state != desired){
-					weapons[j].switchMode();
+					weapons[i].switchMode();
 				}
 			}
 			$("#sysDiv").remove();
 
 			for (var j = 0; j < weapons.length; j++){
-				weapons[j].getActiveSystem().odds = 1;
-				weapons[j].getActiveSystem().validTarget = 1;
-				weapons[j].setFireOrder(target, pos);
+				weapons[i].getActiveSystem().odds = 1;
+				weapons[i].getActiveSystem().validTarget = 1;
+				weapons[i].setFireOrder(target, pos);
 			}
 		}
 
@@ -1457,19 +1457,19 @@ this.doAnimateMovement = function(){
 			var html = "";
 
 			for (let j = 0; j < globals.length; j++){ // then by crit rolling
-				if (globals[j].turn != game.turn || globals[j].scope != 2){continue;}
+				if (globals[i].turn != game.turn || globals[i].scope != 2){continue;}
 				entries = 1;
 
-				var type = globals[j].notes[0];
-				var numbers = globals[j].notes.slice(2, globals[j].notes.length).split(";");
+				var type = globals[i].notes[0];
+				var numbers = globals[i].notes.slice(2, globals[i].notes.length).split(";");
 
 				var html = "<td colSpan=9 style='padding: 10px'><span style='font-size: 12px; font-weight: bold'><span class='yellow'>" + this.playerstatus[i].username + "'</span> is subject to a fleetwide morale check.</br>";
 					html += "Chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] + ".</br>"
 
 					html += "<span class='yellow'>" + ((type == "p") ? " Passed ! (-30 on final severity)" : " Failed !") +"</span></br>";
 
-				if (globals[j].type == "Rout" || globals[j].type == "Morale" && globals[j].value != 0){
-					html += "The fleet is subject to <span class='yellow'>" + (globals[j].type == "Rout" ? "a complete rout" : globals[j].value + " % " + globals[j].type) + ".</span>";
+				if (globals[i].type == "Rout" || globals[i].type == "Morale" && globals[i].value != 0){
+					html += "The fleet is subject to <span class='yellow'>" + (globals[i].type == "Rout" ? "a complete rout" : globals[i].value + " % " + globals[i].type) + ".</span>";
 				}
 				else {
 					html += "The fleet suffers no effect.</span>";
@@ -1599,9 +1599,9 @@ this.doAnimateMovement = function(){
 			salvos.push([]);
 
 			for (let j = 0; j < data.length; j++){
-				if (game.playerstatus[i].userid != data[j].userid){continue;}
-				if (data[j].name == "Salvo"){salvos[i].push(data[j]); continue;}
-				units[i].push(data[j]);
+				if (game.playerstatus[i].userid != data[i].userid){continue;}
+				if (data[i].name == "Salvo"){salvos[i].push(data[i]); continue;}
+				units[i].push(data[i]);
 			}
 		}
 
@@ -1618,14 +1618,14 @@ this.doAnimateMovement = function(){
 			wrapper.append(div);
 
 			for (j = 0; j < units[i].length; j++){
-				armourTotal += units[i][j].armourDmg;
-				nonArmourTotal += units[i][j].systemDmg;
-				nonArmourTotal += units[i][j].hullDmg
+				armourTotal += units[i][i].armourDmg;
+				nonArmourTotal += units[i][i].systemDmg;
+				nonArmourTotal += units[i][i].hullDmg
 			}
 			for (j = 0; j < salvos[i].length; j++){
-				salvoArmourTotal += salvos[i][j].armourDmg;
-				salvoSystemTotal += salvos[i][j].systemDmg;
-				salvoHullTotal += salvos[i][j].hullDmg
+				salvoArmourTotal += salvos[i][i].armourDmg;
+				salvoSystemTotal += salvos[i][i].systemDmg;
+				salvoHullTotal += salvos[i][i].hullDmg
 			}
 
 			div.append($("<div>").addClass("totalDmgDiv")
@@ -1664,14 +1664,14 @@ this.doAnimateMovement = function(){
 						.append($("<th>")
 							.addClass("header")
 							.attr("colSpan", 3)
-							.append($("<div>").html(units[i][j].name + " #" + units[i][j].id))
-							.append($("<div>").html(units[i][j].callsign.length ? "'"+units[i][j].callsign+"'" : ""))
-							.append($("<div>").html("("+units[i][j].moraleCost+")"))))
+							.append($("<div>").html(units[i][i].name + " #" + units[i][i].id))
+							.append($("<div>").html(units[i][i].callsign.length ? "'"+units[i][i].callsign+"'" : ""))
+							.append($("<div>").html("("+units[i][i].moraleCost+")"))))
 
-				if (units[i][j].subunits.length){
+				if (units[i][i].subunits.length){
 					var html = "";
-					for (var k = 0; k < units[i][j].subunits.length; k++){
-						html += (units[i][j].subunits[k].amount + "x " + units[i][j].subunits[k].name + ", ");
+					for (var k = 0; k < units[i][i].subunits.length; k++){
+						html += (units[i][i].subunits[k].amount + "x " + units[i][i].subunits[k].name + ", ");
 					}
 					table.append($("<tr>").append($("<th>")	.attr("colSpan", 3)	.html(html.slice(0, html.length -2))))
 				}
@@ -1680,13 +1680,13 @@ this.doAnimateMovement = function(){
 				.append($("<tr>")
 					.append($("<td>")
 						.css("color", "lightBlue")
-						.html(units[i][j].armourDmg))
+						.html(units[i][i].armourDmg))
 					.append($("<td>")
 						.css("color", "yellow")
-						.html(units[i][j].systemDmg))
+						.html(units[i][i].systemDmg))
 					.append($("<td>")
 						.css("color", "red")
-						.html(units[i][j].hullDmg)))
+						.html(units[i][i].hullDmg)))
 
 				div.append(table);
 			}
@@ -1698,7 +1698,7 @@ this.doAnimateMovement = function(){
 	this.setInitialFacing = function(units){
 		for (var i = 0; i < units.length; i++){
 			for (var j = 0; j < this.playerstatus.length; j++){
-				if (this.playerstatus[j].userid == this.userid){
+				if (this.playerstatus[i].userid == this.userid){
 					units[i].drawFacing = 0 + (180 * (j % 2 % 2)); 
 					break;
 				}
@@ -1757,11 +1757,11 @@ this.doAnimateMovement = function(){
 			if ((this.ships[i].ship || this.ships[i].squad) && this.ships[i].movesThisPhase()){continue;}
 
 			for (var j = 0; j < this.ships.length; j++){
-				if (this.ships[j].ship || this.ships[j].squad){continue;}
+				if (this.ships[i].ship || this.ships[i].squad){continue;}
 
-				if (this.ships[j].mission.targetid == this.ships[i].id && this.ships[j].mission.arrived && this.ships[j].mission.arrived < game.turn){
-					this.ships[i].cc.push(this.ships[j].id);
-					this.ships[j].cc.push(this.ships[i].id);
+				if (this.ships[i].mission.targetid == this.ships[i].id && this.ships[i].mission.arrived && this.ships[i].mission.arrived < game.turn){
+					this.ships[i].cc.push(this.ships[i].id);
+					this.ships[i].cc.push(this.ships[i].id);
 				}
 			}
 		}
@@ -1775,7 +1775,7 @@ this.doAnimateMovement = function(){
 				for (var k = 0; k < this.ships.length; k++){
 					if (this.ships[k].ship || this.ships[k].squad){continue;}
 
-					if (this.ships[k].mission.targetid == this.ships[i].cc[j] && this.ships[k].mission.arrived && this.ships[k].mission.arrived < game.turn){
+					if (this.ships[k].mission.targetid == this.ships[i].cc[i] && this.ships[k].mission.arrived && this.ships[k].mission.arrived < game.turn){
 						this.ships[i].cc.push(this.ships[k].id);
 						this.ships[k].cc.push(this.ships[i].id);
 					}
@@ -1788,12 +1788,12 @@ this.doAnimateMovement = function(){
 			if (this.ships[i].cc.length){continue;}
 
 			for (var j = 0; j < this.ships.length; j++){
-				if (this.ships[j].ship || this.ships[j].squad){continue;}
-				if (this.ships[j].cc.length){continue;}
+				if (this.ships[i].ship || this.ships[i].squad){continue;}
+				if (this.ships[i].cc.length){continue;}
 
-				if (this.ships[j].mission.targetid == this.ships[i].id && this.ships[j].mission.arrived && this.ships[j].mission.arrived < game.turn){
-					this.ships[i].cc.push(this.ships[j].id);
-					this.ships[j].cc.push(this.ships[i].id);
+				if (this.ships[i].mission.targetid == this.ships[i].id && this.ships[i].mission.arrived && this.ships[i].mission.arrived < game.turn){
+					this.ships[i].cc.push(this.ships[i].id);
+					this.ships[i].cc.push(this.ships[i].id);
 				}
 			}
 		}
@@ -1809,14 +1809,14 @@ this.doAnimateMovement = function(){
 			if (this.ships[i].status == "jumpOut" && game.phase == -1){continue;}
 			var a = this.ships[i].getGamePos();
 			for (var j = i+1; j < this.ships.length; j++){
-				if (this.ships[j].status == "jumpOut" && game.phase == -1){continue;}
-				var b = this.ships[j].getGamePos();
+				if (this.ships[i].status == "jumpOut" && game.phase == -1){continue;}
+				var b = this.ships[i].getGamePos();
 				if (a.x == b.x && a.y == b.y){
-					if (this.ships[i].flight && this.ships[j].flight && this.ships[i].userid == this.ships[j].userid){
-						if (this.ships[i].mission.targetid != this.ships[j].id && this.ships[j].mission.targetid != this.ships[i].id){continue;}
+					if (this.ships[i].flight && this.ships[i].flight && this.ships[i].userid == this.ships[i].userid){
+						if (this.ships[i].mission.targetid != this.ships[i].id && this.ships[i].mission.targetid != this.ships[i].id){continue;}
 					}
-					this.ships[i].cc.push(this.ships[j].id);
-					this.ships[j].cc.push(this.ships[i].id);
+					this.ships[i].cc.push(this.ships[i].id);
+					this.ships[i].cc.push(this.ships[i].id);
 				}
 			}
 		}
@@ -1837,9 +1837,9 @@ this.doAnimateMovement = function(){
 			for (var j = i+1; j < this.ships.length; j++){
 				if (this.ships[i].cc.length){
 					for (var k = 0; k < this.ships[i].cc.length; k++){
-						if (this.ships[i].cc[k] == this.ships[j].id){
-							this.ships[i].cc = [...new Set([...this.ships[i].cc ,...this.ships[j].cc])]
-							this.ships[j].cc = [...new Set([...this.ships[j].cc ,...this.ships[i].cc])]
+						if (this.ships[i].cc[k] == this.ships[i].id){
+							this.ships[i].cc = [...new Set([...this.ships[i].cc ,...this.ships[i].cc])]
+							this.ships[i].cc = [...new Set([...this.ships[i].cc ,...this.ships[i].cc])]
 							break;
 						}
 					}
@@ -1849,7 +1849,7 @@ this.doAnimateMovement = function(){
 
 		for (var i = 0; i < this.ships.length; i++){
 			for (var j = this.ships[i].cc.length-1; j >= 0; j--){
-				if (this.ships[i].cc[j] == this.ships[i].id){
+				if (this.ships[i].cc[i] == this.ships[i].id){
 					this.ships[i].cc.splice(j, 1);
 				}
 			}
@@ -1869,10 +1869,10 @@ this.doAnimateMovement = function(){
 
 		for (var i = 0; i < stack.length; i++){
 			for (var j = 0; j < this.ships.length; j++){
-				if (this.ships[j].ship || this.ships[j].squad){continue;}
-				if (this.ships[j].mission.type == 2 || this.ships[j].mission.type == 3){
-					if (this.ships[j].mission.targetid == stack[i].id){
-						stack.push(this.ships[j]);
+				if (this.ships[i].ship || this.ships[i].squad){continue;}
+				if (this.ships[i].mission.type == 2 || this.ships[i].mission.type == 3){
+					if (this.ships[i].mission.targetid == stack[i].id){
+						stack.push(this.ships[i]);
 					}
 				}
 			}
@@ -2340,25 +2340,26 @@ Game.prototype.setInterferenceData = function(){
 		var oPos = this.ships[i].getGamePos();
 
 		for (var j = i+1; j < this.ships.length; j++){
-		if (this.ships[j].obstacle){continue;}
-			if (this.ships[i].userid == this.ships[j].userid){continue;}
-			//console.log("versus " + this.ships[j].id);
-			var tPos = this.ships[j].getGamePos();
+		if (this.ships[i].obstacle){continue;}
+			if (this.ships[i].userid == this.ships[i].userid){continue;}
+			//console.log("versus " + this.ships[i].id);
+			var tPos = this.ships[i].getGamePos();
 
 			for (var k = 0; k < this.ships.length; k++){
 				if (!this.ships[k].obstacle){continue;}
+				//if (!this.ships[k].width){continue;}
 				//console.log("obs " + this.ships[k].id);
 
-				//var obstaclePos = game.phase == 3 ? {x: this.ships[k].x, y: this.ships[k].y} : this.ships[k].gePlannedPos();
 				var obstaclePos = this.ships[k].getDrawPos();
-				var result = isInPathCircular(oPos, tPos, obstaclePos, this.ships[k].size/2);
+				//var result = isInPathCircular(oPos, tPos, obstaclePos, this.ships[k].size/2);
+				var resultA = lineRectIntersect(oPos,tPos, obstacle.points);
 
 				if (!result || !result.points[0].onLine && !result.points[1].onLine){continue;}
 
 				var EffInterference = Math.round(this.ships[k].interference / 100 * result.dist*2);
 
-				this.ships[i].blocks.push({id: this.ships[j].id, obstacleId: this.ships[k].id, EffInterference: EffInterference, path: result});
-				this.ships[j].blocks.push({id: this.ships[i].id, obstacleId: this.ships[k].id, EffInterference: EffInterference, path: result});
+				this.ships[i].blocks.push({id: this.ships[i].id, obstacleId: this.ships[k].id, EffInterference: EffInterference, path: result});
+				this.ships[i].blocks.push({id: this.ships[i].id, obstacleId: this.ships[k].id, EffInterference: EffInterference, path: result});
 
 			}
 		}
@@ -2390,7 +2391,7 @@ Game.prototype.setCollisionData = function (unit){
 		}
 
 		for (var j = 0; j < unit.actions.length; j++){
-			var action = unit.actions[j];
+			var action = unit.actions[i];
 			if (action.type != "move"){continue;}
 			var oPos = j == 0 ? unitPos : unit.actions[j-1];
 
@@ -2429,9 +2430,7 @@ Game.prototype.setCollisionData = function (unit){
 
 			totalDist += distInside;
 		}
-
 		//console.log("total travel inside " + totalDist);
-
 		if (!totalDist){continue;}
 		unit.collisions.push({
 			obstacleId: this.ships[i].id,
@@ -2442,29 +2441,19 @@ Game.prototype.setCollisionData = function (unit){
 			realAttacks: this.ships[i].getRealAttacks(totalDist),
 			damage: this.ships[i].getDamageString()
 		})
-
-		/*
-		unit.collisions.push({
-			obstacleId: this.ships[i].id,
-			totalDist: Math.round(totalDist),
-			baseCol: this.ships[i].collision,
-			realCol: Math.round(this.ships[i].collision / 100 * totalDist),
-			baseAttacks: this.ships[i].getBaseAttacks(),
-			realAttacks: this.ships[i].getRealAttacks(unit),
-			damage: this.ships[i].getDamageString()
-		})
-		*/
 	}
 }
 
 Game.prototype.hasObstacleInVector = function(oPos, tPos, unit){
 
 	var inPath = [];
-	for (var j = 0; j < this.ships.length; j++){
-		if (!this.ships[j].obstacle){continue;}
-		//if (this.ships[j].id != 24){continue;}
+	for (var i = 0; i < this.ships.length; i++){
+		if (!this.ships[i].obstacle){continue;}
 
-		var result = isInPathCircular(oPos, tPos, this.ships[j].getGamePos(), this.ships[j].size/2);
+		var result = this.ships[i].testObstruction(oPos, tPos);
+
+		console.log(result);
+		return false;
 		if (!result){continue;}
 
 		var pierceIn = 0;
@@ -2496,13 +2485,63 @@ Game.prototype.hasObstacleInVector = function(oPos, tPos, unit){
 	*/
 		if (!realDist){continue;}
 		inPath.push({
-			type: this.ships[j].display,
-			obstacleId: this.ships[j].id, 
+			type: this.ships[i].display,
+			obstacleId: this.ships[i].id, 
 			dist: Math.round(realDist),
-			size: this.ships[j].size,
-			EffInterference: Math.round(this.ships[j].interference / 100 * realDist),
-			exposure: Math.round(round((1-(result.dist / (this.ships[j].size/2))), 2)*100),
-			interference: this.ships[j].interference,
+			size: this.ships[i].size,
+			EffInterference: Math.round(this.ships[i].interference / 100 * realDist),
+			exposure: Math.round(round((1-(result.dist / (this.ships[i].size/2))), 2)*100),
+			interference: this.ships[i].interference,
+		})
+	}
+	return inPath;
+}
+
+Game.prototype.hasObstacleInVectorO = function(oPos, tPos, unit){
+
+	var inPath = [];
+	for (var i = 0; i < this.ships.length; i++){
+		if (!this.ships[i].obstacle){continue;}
+
+		var result = isInPathCircular(oPos, tPos, this.ships[i].getGamePos(), this.ships[i].size/2);
+		if (!result){continue;}
+
+		var pierceIn = 0;
+		var pierceOut = 0;
+		var realDist = 0;
+
+		if (result.points[0].onLine){
+			var pierceIn = getDistance(tPos, result.points[0]);
+		}
+		if (result.points[1].onLine){
+			var pierceOut = getDistance(tPos, result.points[1]);
+		}
+
+		if (pierceIn){
+			realDist = Math.abs(pierceOut - pierceIn);
+		}
+		else if (pierceOut){
+			realDist = getDistance(oPos, result.points[1]);
+		}
+		else if (!pierceIn && !pierceOut){
+		}
+		else realDist = result.dist;
+
+	/*	console.log("--------")
+		console.log(result);
+		console.log(pierceIn)
+		console.log(pierceOut);
+		console.log(realDist);
+	*/
+		if (!realDist){continue;}
+		inPath.push({
+			type: this.ships[i].display,
+			obstacleId: this.ships[i].id, 
+			dist: Math.round(realDist),
+			size: this.ships[i].size,
+			EffInterference: Math.round(this.ships[i].interference / 100 * realDist),
+			exposure: Math.round(round((1-(result.dist / (this.ships[i].size/2))), 2)*100),
+			interference: this.ships[i].interference,
 		})
 	}
 	return inPath;
@@ -2930,7 +2969,7 @@ Game.prototype.getDistanceFromFocusCentre = function(){
 
 	for (var i = 0; i < this.ships.length; i++){
 		for (var j = i+1; j < this.ships.length; j++){
-			var d = getDistance(cam.o, this.ships[j].getPlannedPos());
+			var d = getDistance(cam.o, this.ships[i].getPlannedPos());
 			max = Math.max(d, max);
 		}
 	}
@@ -3190,7 +3229,7 @@ Game.prototype.showFleetMorale = function(e, userid){
 
 	// scope 0 start, 1 unit loss/gain, 2 morale test, 3 non trigger manual withdrawal
 	for (var j = 1; j < this.playerstatus[i].globals.length; j++){
-		var crit = this.playerstatus[i].globals[j];
+		var crit = this.playerstatus[i].globals[i];
 		var descrip = "";
 		var val = "";
 
@@ -3328,8 +3367,8 @@ Game.prototype.addPlayerInfo = function(){
 	for (let i = 0; i < this.playerstatus.length; i++){
 		var start = this.playerstatus[i].globals[0].value;
 		for (let j = 1; j < this.playerstatus[i].globals.length; j++){
-			if (this.playerstatus[i].globals[j].type == "Morale"){
-				start += this.playerstatus[i].globals[j].value;
+			if (this.playerstatus[i].globals[i].type == "Morale"){
+				start += this.playerstatus[i].globals[i].value;
 			}
 		}
 		//var reduce = this.playerstatus[i].globals.map(x => x.value).reduce((l,r) => l+r, 0)
@@ -3518,15 +3557,15 @@ Game.prototype.setCommandUnits = function(){
 	for  (var i = 0; i < this.playerstatus.length; i++){
 		var units = [];
 		for (var j = 0; j < this.ships.length; j++){
-			if (this.ships[j].userid == this.playerstatus[i].userid){
-				if (this.ships[j].command){
-					units.push(this.ships[j]);
+			if (this.ships[i].userid == this.playerstatus[i].userid){
+				if (this.ships[i].command){
+					units.push(this.ships[i]);
 				}
 			}
 		}
 		units.sort(function(a, b){return b.command - a.command});
 		for (var j = 1; j < units.length; j++){
-			units[j].command = 0;
+			units[i].command = 0;
 		}
 	}
 }
@@ -3621,10 +3660,10 @@ Game.prototype.handleForcedMoves = function(){
 	for (var i = 0; i < this.ships.length; i++){
 		if (!this.ships[i].deployed){continue;}
 		for (var j = 0; j < this.ships[i].actions.length; j++){
-			if (!this.ships[i].actions[j].forced || this.ships[i].actions[j].type == "jumpOut"){continue;}
+			if (!this.ships[i].actions[i].forced || this.ships[i].actions[i].type == "jumpOut"){continue;}
 			need = 1;
 			this.ships[i].toAnimate = 1;
-			this.ships[i].actions[j].animated = 0;
+			this.ships[i].actions[i].animated = 0;
 		}
 	}
 
@@ -3920,7 +3959,7 @@ Game.prototype.getAllResolvingFireOrders = function(){
 		var fires = this.ships[i].unitGetAllResolvingFireOrders();
 		if (fires.length){
 			for (var j = 0; j < fires.length; j++){
-				this.fireOrders = this.fireOrders.concat(fires[j]);
+				this.fireOrders = this.fireOrders.concat(fires[i]);
 			}
 		}
 	}
@@ -3955,7 +3994,7 @@ Game.prototype.getAreaDmgs = function(fire){
 		if (dist < fire.weapon.aoe){
 			var subDmgs = this.ships[i].getDmgsByFire(fire);
 			for (var j = 0; j < subDmgs.length; j++){
-				subDmgs[j].system = this.ships[i].getLogTitleSpan();
+				subDmgs[i].system = this.ships[i].getLogTitleSpan();
 			}
 			dmgs = dmgs.concat(subDmgs);
 		}
@@ -3989,22 +4028,22 @@ Game.prototype.getShotDetails = function(){
 	for (var i = 0; i < this.fireOrders.length; i++){
 		if (this.fireOrders[i].guns){
 			for (var j = i+1; j < this.fireOrders.length; j++){
-				if (this.fireOrders[j].guns){
-					if (this.fireOrders[i].shooterid == this.fireOrders[j].shooterid){
-						if (this.fireOrders[i].targetid == this.fireOrders[j].targetid){
-							if (this.fireOrders[i].weapon.name == this.fireOrders[j].weapon.name){
-								this.fireOrders[i].guns += this.fireOrders[j].guns;
-								this.fireOrders[i].systems.push(this.fireOrders[j].weaponid);
-								for (var k = 0; k < this.fireOrders[j].damages.length; k++){
-									this.fireOrders[i].damages.push(this.fireOrders[j].damages[k])
+				if (this.fireOrders[i].guns){
+					if (this.fireOrders[i].shooterid == this.fireOrders[i].shooterid){
+						if (this.fireOrders[i].targetid == this.fireOrders[i].targetid){
+							if (this.fireOrders[i].weapon.name == this.fireOrders[i].weapon.name){
+								this.fireOrders[i].guns += this.fireOrders[i].guns;
+								this.fireOrders[i].systems.push(this.fireOrders[i].weaponid);
+								for (var k = 0; k < this.fireOrders[i].damages.length; k++){
+									this.fireOrders[i].damages.push(this.fireOrders[i].damages[k])
 								}
-								this.fireOrders[i].hits.push(this.fireOrders[j].hits[0]);
-								this.fireOrders[j].guns = 0;
+								this.fireOrders[i].hits.push(this.fireOrders[i].hits[0]);
+								this.fireOrders[i].guns = 0;
 
-								this.fireOrders[i].req.push(this.fireOrders[j].req[0]);
+								this.fireOrders[i].req.push(this.fireOrders[i].req[0]);
 
-								for (var l = 0; l < this.fireOrders[j].rolls.length; l++){
-									this.fireOrders[i].rolls.push(this.fireOrders[j].rolls[l]);
+								for (var l = 0; l < this.fireOrders[i].rolls.length; l++){
+									this.fireOrders[i].rolls.push(this.fireOrders[i].rolls[l]);
 								}
 							}
 						}
@@ -4044,16 +4083,16 @@ Game.prototype.adjustAreaFires = function(){
 		for (var j = i+1; j < this.fireOrders.length; j++){
 			if (!this.fireOrders[i].weapon.aoe){continue;}
 
-			if (this.fireOrders[i].shooterid != this.fireOrders[j].shooterid){continue;}
-			if (this.fireOrders[i].weaponid != this.fireOrders[j].weaponid){continue;}
+			if (this.fireOrders[i].shooterid != this.fireOrders[i].shooterid){continue;}
+			if (this.fireOrders[i].weaponid != this.fireOrders[i].weaponid){continue;}
 
 			console.log("same !");
-			this.fireOrders[i].numbers = this.fireOrders[i].numbers.concat(this.fireOrders[j].numbers);
+			this.fireOrders[i].numbers = this.fireOrders[i].numbers.concat(this.fireOrders[i].numbers);
 
-			this.fireOrders[j].numbers = [];
-			this.fireOrders[j].anim = [[], []];
-			this.fireOrders[j].animating = 1;
-			this.fireOrders[j].animated = 1;
+			this.fireOrders[i].numbers = [];
+			this.fireOrders[i].anim = [[], []];
+			this.fireOrders[i].animating = 1;
+			this.fireOrders[i].animated = 1;
 		}
 	}
 }
@@ -4115,7 +4154,7 @@ Game.prototype.handleAllFireOrders = function(){
 
 		var doAnim = false;
 		for (var j = 0; j < this.fireOrders[i].anim.length; j++){
-			if (this.fireOrders[i].anim[j].length > 0){
+			if (this.fireOrders[i].anim[i].length > 0){
 				doAnim = true;
 			}
 		}
@@ -4160,85 +4199,85 @@ Game.prototype.animateSingleFireOrder = function(i){
 	fxCtx.scale(cam.z, cam.z);		
 
 	for (var j = 0; j < game.fireOrders[i].anim.length; j++){
-		for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){
-			if (game.fireOrders[i].anim[j][k].done){continue;}
+		for (var k = 0; k < game.fireOrders[i].anim[i].length; k++){
+			if (game.fireOrders[i].anim[i][k].done){continue;}
 
 			if (game.fireOrders[i].weapon.animation[0] == "e"){ // em
-				if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
-					game.fireOrders[i].anim[j][k].n += 1;
-					if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
-						if (game.fireOrders[i].anim[j][k].p == 0){ // still doing proj
-							drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+				if (game.fireOrders[i].anim[i][k].n < game.fireOrders[i].anim[i][k].m){ // still to animate
+					game.fireOrders[i].anim[i][k].n += 1;
+					if (game.fireOrders[i].anim[i][k].n > 0){ // t valid, now animate
+						if (game.fireOrders[i].anim[i][k].p == 0){ // still doing proj
+							drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[i][k]);
 						}
-						else if (game.fireOrders[i].anim[j][k].h){
-							//drawEMSpriteExplo(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
-							drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+						else if (game.fireOrders[i].anim[i][k].h){
+							//drawEMSpriteExplo(game.fireOrders[i].weapon, game.fireOrders[i].anim[i][k]);
+							drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[i][k]);
 						}
 
-						if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
-							game.fireOrders[i].anim[j][k].done = true;
+						if (game.fireOrders[i].anim[i][k].n >= game.fireOrders[i].anim[i][k].m){
+							game.fireOrders[i].anim[i][k].done = true;
 						}
 					}
 				}
 			}
 			else if (game.fireOrders[i].weapon.animation[0] == "p"){ //proj
-				if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
-					game.fireOrders[i].anim[j][k].n += 1;
-					if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
-						if (game.fireOrders[i].anim[j][k].p == 0){ // still doing proj
-							drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+				if (game.fireOrders[i].anim[i][k].n < game.fireOrders[i].anim[i][k].m){ // still to animate
+					game.fireOrders[i].anim[i][k].n += 1;
+					if (game.fireOrders[i].anim[i][k].n > 0){ // t valid, now animate
+						if (game.fireOrders[i].anim[i][k].p == 0){ // still doing proj
+							drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[i][k]);
 						}
-						else if (game.fireOrders[i].anim[j][k].h){
-							//drawEMSpriteExplo(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
-							drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+						else if (game.fireOrders[i].anim[i][k].h){
+							//drawEMSpriteExplo(game.fireOrders[i].weapon, game.fireOrders[i].anim[i][k]);
+							drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[i][k]);
 						}
 
-						if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
-							game.fireOrders[i].anim[j][k].done = true;
+						if (game.fireOrders[i].anim[i][k].n >= game.fireOrders[i].anim[i][k].m){
+							game.fireOrders[i].anim[i][k].done = true;
 						}
 					}
 				}
 			}
 			else if (game.fireOrders[i].weapon.animation[0] == "b"){ //beam
-				if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
-					game.fireOrders[i].anim[j][k].n += 1;
-					if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
-						drawBeam(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
-						//if (game.fireOrders[i].anim[j][k].h){
-						//	drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+				if (game.fireOrders[i].anim[i][k].n < game.fireOrders[i].anim[i][k].m){ // still to animate
+					game.fireOrders[i].anim[i][k].n += 1;
+					if (game.fireOrders[i].anim[i][k].n > 0){ // t valid, now animate
+						drawBeam(game.fireOrders[i].weapon, game.fireOrders[i].anim[i][k]);
+						//if (game.fireOrders[i].anim[i][k].h){
+						//	drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[i][k]);
 						//}
 
-						drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
-						if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
-							game.fireOrders[i].anim[j][k].done = true;
+						drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[i][k]);
+						if (game.fireOrders[i].anim[i][k].n >= game.fireOrders[i].anim[i][k].m){
+							game.fireOrders[i].anim[i][k].done = true;
 						}
 					}
 				}
 			}
 			else if (game.fireOrders[i].weapon.animation[0] == "c"){ //impact
-				if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
-					game.fireOrders[i].anim[j][k].n += 1;
-					if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
-						if (game.fireOrders[i].anim[j][k].h == 0){
-							game.fireOrders[i].anim[j][k].done = true;
+				if (game.fireOrders[i].anim[i][k].n < game.fireOrders[i].anim[i][k].m){ // still to animate
+					game.fireOrders[i].anim[i][k].n += 1;
+					if (game.fireOrders[i].anim[i][k].n > 0){ // t valid, now animate
+						if (game.fireOrders[i].anim[i][k].h == 0){
+							game.fireOrders[i].anim[i][k].done = true;
 						}
 						else {
-							drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]); // EXPLO
-							if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
-								game.fireOrders[i].anim[j][k].done = true;
+							drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[i][k]); // EXPLO
+							if (game.fireOrders[i].anim[i][k].n >= game.fireOrders[i].anim[i][k].m){
+								game.fireOrders[i].anim[i][k].done = true;
 							}
 						}
 					}
 				}
 			}
 			else if (game.fireOrders[i].weapon.animation[0] ==  "a"){ //area
-				if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
-					game.fireOrders[i].anim[j][k].n += 1;
-					if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
-						if (game.fireOrders[i].anim[j][k].p == 0){
-							drawAreaProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]); // projectile
+				if (game.fireOrders[i].anim[i][k].n < game.fireOrders[i].anim[i][k].m){ // still to animate
+					game.fireOrders[i].anim[i][k].n += 1;
+					if (game.fireOrders[i].anim[i][k].n > 0){ // t valid, now animate
+						if (game.fireOrders[i].anim[i][k].p == 0){
+							drawAreaProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[i][k]); // projectile
 						}
-						else drawAreaEffect(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+						else drawAreaEffect(game.fireOrders[i].weapon, game.fireOrders[i].anim[i][k]);
 					}
 				}
 			}
@@ -4248,8 +4287,8 @@ Game.prototype.animateSingleFireOrder = function(i){
 
 	var allAnimated = 1;
 	for (var j = 0; j < game.fireOrders[i].anim.length; j++){
-		for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){
-			if (! game.fireOrders[i].anim[j][k].done){
+		for (var k = 0; k < game.fireOrders[i].anim[i].length; k++){
+			if (! game.fireOrders[i].anim[i][k].done){
 				allAnimated = 0;
 				break;
 			}
@@ -4260,8 +4299,8 @@ Game.prototype.animateSingleFireOrder = function(i){
 	
 	if (allAnimated){
 		for (var j = 0; j < game.fireOrders[i].numbers.length; j++){
-			if (!game.fireOrders[i].numbers[j].done){
-				drawDamageNumbers(game.fireOrders[i].weapon, game.fireOrders[i].numbers[j]);
+			if (!game.fireOrders[i].numbers[i].done){
+				drawDamageNumbers(game.fireOrders[i].weapon, game.fireOrders[i].numbers[i]);
 				allAnimated = 0;
 			}
 		}
@@ -4299,29 +4338,29 @@ Game.prototype.animateSingleUnitExplo = function(i){
 	game.draw();
 
 	for (var j = 0; j < game.unitExploAnims[i].entries.length; j++){
-		for (var k = 0; k < game.unitExploAnims[i].entries[j].anims.length; k++){
-			if (game.unitExploAnims[i].entries[j].anims[k].t[0] > 0){
+		for (var k = 0; k < game.unitExploAnims[i].entries[i].anims.length; k++){
+			if (game.unitExploAnims[i].entries[i].anims[k].t[0] > 0){
 				drawUnitExplo(
-					game.unitExploAnims[i].entries[j].anims[k].x,
-					game.unitExploAnims[i].entries[j].anims[k].y,
-					game.unitExploAnims[i].entries[j].anims[k].s,
-					game.unitExploAnims[i].entries[j].anims[k].t[0],
-					game.unitExploAnims[i].entries[j].anims[k].t[1]
+					game.unitExploAnims[i].entries[i].anims[k].x,
+					game.unitExploAnims[i].entries[i].anims[k].y,
+					game.unitExploAnims[i].entries[i].anims[k].s,
+					game.unitExploAnims[i].entries[i].anims[k].t[0],
+					game.unitExploAnims[i].entries[i].anims[k].t[1]
 				)
 			}
 			
-			if (game.unitExploAnims[i].entries[j].anims[k].t[0] > game.unitExploAnims[i].entries[j].anims[k].t[1] * 0.7){
-				if (game.unitExploAnims[i].entries[j].u.doDraw){
-					game.unitExploAnims[i].entries[j].u.doDestroy();
+			if (game.unitExploAnims[i].entries[i].anims[k].t[0] > game.unitExploAnims[i].entries[i].anims[k].t[1] * 0.7){
+				if (game.unitExploAnims[i].entries[i].u.doDraw){
+					game.unitExploAnims[i].entries[i].u.doDestroy();
 				}
 	/*			ctx.translate(cam.o.x, cam.o.y);
 				ctx.scale(cam.z, cam.z)
 				ctx.globalAlpha = 1;
 				ctx.beginPath();
 				ctx.arc(
-					game.unitExploAnims[i].entries[j].anims[k].x,
-					game.unitExploAnims[i].entries[j].anims[k].y,
-					game.unitExploAnims[i].entries[j].anims[k].s/2, 0, 2*Math.PI, true
+					game.unitExploAnims[i].entries[i].anims[k].x,
+					game.unitExploAnims[i].entries[i].anims[k].y,
+					game.unitExploAnims[i].entries[i].anims[k].s/2, 0, 2*Math.PI, true
 				)
 				ctx.closePath();
 				ctx.globalCompositeOperation = "destination-out";
@@ -4330,8 +4369,8 @@ Game.prototype.animateSingleUnitExplo = function(i){
 				ctx.setTransform(1,0,0,1,0,0);
 	*/		}
 
-			if (game.unitExploAnims[i].entries[j].anims[k].t[0] < game.unitExploAnims[i].entries[j].anims[k].t[1]){
-				game.unitExploAnims[i].entries[j].anims[k].t[0]++;
+			if (game.unitExploAnims[i].entries[i].anims[k].t[0] < game.unitExploAnims[i].entries[i].anims[k].t[1]){
+				game.unitExploAnims[i].entries[i].anims[k].t[0]++;
 				allAnimated = 0;
 			}
 		}

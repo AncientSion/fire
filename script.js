@@ -323,14 +323,6 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 						.html("- Targeting a mixed unit, chance to hit will slightly difer -")));
 		}
 
-	/*
-	var obstacles;
-	if (game.obstacleDataSet){
-		obstacles = target.getSavedObstacles(shooter.id);
-	}
-	else obstacles = game.hasObstacleInVector(shooterPos, pos);
-	*/ 
-
 	var obstacles = game.hasObstacleInVector(shooterPos, pos, target);
 
 	if (obstacles.length){
