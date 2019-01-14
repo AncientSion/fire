@@ -1016,7 +1016,7 @@
 				if ($action->type != "move"){continue;}
 				$oPos = $j == 0 ? $unitPos : $unit->actions[$j-1];
 
-				$result = Math::isInPathCircular($oPos, $action, $tPos, $field->size/2);
+				$result = Math::lineCircleIntersect($oPos, $action, $tPos, $field->size/2);
 				if (!$result){continue;}
 
 				$enter = false;
@@ -1330,7 +1330,7 @@
 					//Debug::log("position #".$this->ships[$j]->id.": ".$blockPos->x."/".$blockPos->y);
 
 
-					$result = Math::isInPathCircular($oPos, $tPos, $blockPos, $this->ships[$k]->size/2);
+					$result = Math::lineCircleIntersect($oPos, $tPos, $blockPos, $this->ships[$k]->size/2);
 
 					//$data[] = $result;
 					//continue;

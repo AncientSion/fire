@@ -2351,7 +2351,7 @@ Game.prototype.setInterferenceData = function(){
 
 				//var obstaclePos = game.phase == 3 ? {x: this.ships[k].x, y: this.ships[k].y} : this.ships[k].gePlannedPos();
 				var obstaclePos = this.ships[k].getDrawPos();
-				var result = isInPathCircular(oPos, tPos, obstaclePos, this.ships[k].size/2);
+				var result = lineRectIntersect(oPos, tPos, obstaclePos, this.ships[k].size/2);
 
 				if (!result || !result.points[0].onLine && !result.points[1].onLine){continue;}
 
@@ -2378,7 +2378,7 @@ Game.prototype.setCollisionData = function (unit){
 
 	for (var i = 0; i < this.ships.length; i++){
 		if (!this.ships[i].obstacle){continue;}
-		if (!this.ships[i].primary.systems.length){continue;}
+	//	if (!this.ships[i].primary.systems.length){continue;}
 
 		var obstacle = this.ships[i];
 		var tPos = obstacle.getGamePos();
@@ -2394,40 +2394,11 @@ Game.prototype.setCollisionData = function (unit){
 			if (action.type != "move"){continue;}
 			var oPos = j == 0 ? unitPos : unit.actions[j-1];
 
-			var result = isInPathCircular(oPos, action, tPos, obstacle.size/2);
-			if (!result){continue;}
+			var dist = this.ships[i].testObstruction(oPos, action);
+			if (!dist){continue;}
+			console.log(dist);
 
-			var enter = false;
-			var leave = false;
-			var distInside = 0;
-
-			if (result.points[0].onLine){
-				enter = true;
-			}
-			if (result.points[1].onLine){
-				leave = true;
-			}
-
-			if (enter && leave){
-				distInside = getDistance(result.points[0], result.points[1]);
-			}
-			else if (enter){
-				distInside = getDistance(result.points[0], action);
-			}
-			else if (leave){
-				distInside = getDistance(oPos, result.points[1]);
-			}
-			else {
-				var start = getDistance(oPos, tPos);
-				var end = getDistance(action, tPos);
-				if (start < obstacle.size/2 && end < obstacle.size/2){
-					//console.log("staying inside!");
-					distInside += action.dist;
-					//distInside += result.dist;
-				}
-			}
-
-			totalDist += distInside;
+			totalDist += dist;
 		}
 
 		//console.log("total travel inside " + totalDist);
@@ -2442,29 +2413,17 @@ Game.prototype.setCollisionData = function (unit){
 			realAttacks: this.ships[i].getRealAttacks(totalDist),
 			damage: this.ships[i].getDamageString()
 		})
-
-		/*
-		unit.collisions.push({
-			obstacleId: this.ships[i].id,
-			totalDist: Math.round(totalDist),
-			baseCol: this.ships[i].collision,
-			realCol: Math.round(this.ships[i].collision / 100 * totalDist),
-			baseAttacks: this.ships[i].getBaseAttacks(),
-			realAttacks: this.ships[i].getRealAttacks(unit),
-			damage: this.ships[i].getDamageString()
-		})
-		*/
 	}
 }
 
-Game.prototype.hasObstacleInVector = function(oPos, tPos, unit){
+Game.prototype.hasObstacleInVectorO = function(oPos, tPos, unit){
 
 	var inPath = [];
 	for (var j = 0; j < this.ships.length; j++){
 		if (!this.ships[j].obstacle){continue;}
 		//if (this.ships[j].id != 24){continue;}
 
-		var result = isInPathCircular(oPos, tPos, this.ships[j].getGamePos(), this.ships[j].size/2);
+		var result = lineRectIntersect(oPos, tPos, this.ships[j].getGamePos(), this.ships[j].size/2);
 		if (!result){continue;}
 
 		var pierceIn = 0;
@@ -2505,6 +2464,38 @@ Game.prototype.hasObstacleInVector = function(oPos, tPos, unit){
 			interference: this.ships[j].interference,
 		})
 	}
+	return inPath;
+}
+
+Game.prototype.hasObstacleInVector = function(oPos, tPos, unit){
+
+	var inPath = [];
+	for (var i = 0; i < this.ships.length; i++){
+		if (!this.ships[i].obstacle){continue;}
+		//if (this.ships[i].id == 17){continue;}
+		//if (this.ships[i].id == 15){continue;}
+
+		var dist = this.ships[i].testObstruction(oPos, tPos);
+
+		//sconsole.log(result);
+		//return false;
+		if (!dist){continue;}
+		//console.log("testing vs " + this.ships[i].display);
+		//console.log(result);
+
+
+		inPath.push({
+			display: this.ships[i].display,
+			obstacleId: this.ships[i].id, 
+			dist: Math.round(dist),
+			size: this.ships[i].size,
+			EffInterference: Math.round(this.ships[i].interference / 100 * dist),
+			exposure: Math.round(round((1-(dist / (this.ships[i].size/2))), 2)*100),
+			interference: this.ships[i].interference,
+		})
+
+	}
+
 	return inPath;
 }
 

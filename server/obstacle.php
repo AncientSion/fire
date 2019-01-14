@@ -152,17 +152,36 @@ class NebulaCloud extends Obstacle {
 	public $name = "NebulaCloud";
 	public $display = "Nebula Cloud";
 
-	function __construct($data = false){
+/*	function __construct($data = false){
 		parent::__construct($data);
         $arr = explode(";", $this->notes);
         $this->size = $arr[0];
         $this->density = $arr[1];
 
       	$this->interference = round($this->density * 1);
+*/
+
+
+	function __construct($data = false){
+		parent::__construct($data);
+        $arr = explode(";", $this->notes);
+        $this->size = $arr[0];
+        $this->density = $arr[1];
+        $this->rockSize = $arr[2];
+        $this->minDmg = $arr[3];
+        $this->maxDmg = round($this->minDmg * 1.3);
 	}
 
 	public function addPrimary(){
+
+        $avgRockSize = 3;
+        $avgDensity = 20;
+
+        $this->collision = round(100 / $avgRockSize * $this->rockSize / $avgDensity * $this->density / 5);
+		$this->interference = round($this->density / 2);
+		
 		$this->primary = new Shared($this->getId());
+		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, $this->minDmg, $this->maxDmg, round($this->density * $avgRockSize / $this->rockSize / 5));
 	}
 }
 ?>

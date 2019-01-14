@@ -325,12 +325,12 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 
 	var obstacles = game.hasObstacleInVector(shooterPos, pos, target);
 
-	if (obstacles.length){
+	if (1 && obstacles.length){
 		var html = "";
 		for (var i = 0; i < obstacles.length; i++){
 			//html += "Obstacle #" + obstacles[i].obstacleId + " - Exposure " + obstacles[i].exposure + "%, ";
 			//html += "<span class='yellow'>" + obstacles[i].effectiveBlock + "% chance to miss</span></br>";
-			html += obstacles[i].type + " #" + obstacles[i].obstacleId + ", penetration depth: " + obstacles[i].dist + " --- ";
+			html += obstacles[i].display + " #" + obstacles[i].obstacleId + ", penetration depth: " + obstacles[i].dist + " --- ";
 			html += "<span class='yellow'>" + obstacles[i].EffInterference + "% chance to miss</span></br>";
 		}
 		ui.targetDataC.html(html)//.show();

@@ -521,11 +521,11 @@ Ship.prototype.drawImpulseUI = function(){
 Ship.prototype.doIssueMove = function(pos, dist){
 	var remDelay = this.getRemDelay();
 
-	if (!remDelay && this.actions.length && this.actions[this.actions.length-1].type == "move" && this.actions[this.actions.length-1].turn == game.turn){
-		this.actions[this.actions.length-1].dist+= dist;	
+/*	if (!remDelay && this.actions.length && this.actions[this.actions.length-1].type == "move" && this.actions[this.actions.length-1].turn == game.turn){
+		this.actions[this.actions.length-1].dist += dist;	
 		this.actions[this.actions.length-1].x = pos.x;
 		this.actions[this.actions.length-1].y = pos.y;
-	} else this.actions.push(new Move(-1, this.id, game.turn, "move", 0, dist, pos.x, pos.y, 0, 0, 0, 0, 1, 1, 0));	
+	} else*/ this.actions.push(new Move(-1, this.id, game.turn, "move", 0, dist, pos.x, pos.y, 0, 0, 0, 0, 1, 1, 0));	
 	
 	this.turnAngles = {}
 	$("#popupWrapper").hide();

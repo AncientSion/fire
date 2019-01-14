@@ -57,28 +57,56 @@ for (int x=0; x < AVERAGINGFACTOR; x++)
 density = density/AVERAGINGFACTOR;
 */
 
-function lineRectIntersect(shooter, target, rectPoints){
-	var test;
+function isWithinCircle(oPos, tPos, arc){
+	var oPosToCenter = getDistance(oPos, arc.getGamePos());
+	var tPosToCenter = getDistance(tPos, arc.getGamePos());
 
-	//var intersects = [0, 0, 0, 0];
+	if (oPosToCenter < arc.size/2 && tPosToCenter < arc.size/2){
+		return getDistance(oPos, tPos);
+	} return false;
+}
+
+function isWithinRect(pos, rectPoints) {
+    var AB = newV(rectPoints[0], rectPoints[2]);
+    var AM = newV(rectPoints[0], pos);
+    var BC = newV(rectPoints[1], rectPoints[2]);
+    var BM = newV(rectPoints[1], pos);
+    var dotABAM = dot(AB, AM);
+    var dotABAB = dot(AB, AB);
+    var dotBCBM = dot(BC, BM);
+    var dotBCBC = dot(BC, BC);
+    return 0 <= dotABAM && dotABAM <= dotABAB && 0 <= dotBCBM && dotBCBM <= dotBCBC;
+}
+
+function newV(p1, p2) {
+    return {
+            x: (p2.x - p1.x),
+            y: (p2.y - p1.y)
+    };
+}
+
+function lineRectIntersect(shooter, target, rectPoints){
+	var testResult;
 	var intersectPoints = [];
-	var distances = [];
 
 	for (var i = 0; i < rectPoints.length-1; i++){
-		test = lineLineIntersect(shooter, target, rectPoints[i], rectPoints[i+1]);
-		if (test.onLine){
-			intersectPoints.push(test);
+		testResult = lineLineIntersect(shooter, target, rectPoints[i], rectPoints[i+1]);
+		if (!testResult){continue;}
+		intersectPoints.push(testResult);
+	}
+
+	testResult = lineLineIntersect(shooter, target, rectPoints[3], rectPoints[0]);
+	if (testResult){intersectPoints.push(testResult);}
+
+	if (intersectPoints.length == 1){
+		var isInside = isWithinRect(shooter, rectPoints);
+		var shooterToIntersect = getDistance(shooter, intersectPoints[0]);
+		var shooterToTarget = getDistance(shooter, target);
+		var targetToIntersect = getDistance(target, intersectPoints[0]);
+		if (isInside || shooterToIntersect > shooterToTarget){
+			intersectPoints[0].type = 1;
 		}
-	}
-
-	test = lineLineIntersect(shooter, target, rectPoints[3], rectPoints[0]);
-	if (test.onLine){
-		intersectPoints.push(test);
-	}
-
-	for (var i = 0; i < intersectPoints.length; i++){
-		if (!intersectPoints[i].onLine){continue;}
-		intersectPoints[i].dist = getDistance(shooter, {x: intersectPoints[i].x, y: intersectPoints[i].y});
+		else intersectPoints[0].type = 0;
 	}
 
 	return intersectPoints;
@@ -90,32 +118,29 @@ function lineLineIntersect(a, b, c, d){
 	var ub = (b.x - a.x) * (a.y - c.y) - (b.y - a.y) * (a.x - c.x);
 	var denom = (d.y - c.y) * (b.x - a.x) - (d.x - c.x) * (b.y - a.y);
 
-	var intersect = {onLine: false, dist: 0, x: 0, y: 0};
-
-	//console.log(denom);
-
-	if  (Math.abs(denom) == 0){
+/*	if  (Math.abs(denom) == 0){
 		if (Math.abs(ua) == 0 && Math.abs(ub) == 0){
-			intersect.onLine = true;
 			intersect.x = (a.x + b.x) / 2;
 			intersect.y = (a.y + b.y) / 2;
 		}
 	}
 	else {
-		ua /= denom;
+*/		ua /= denom;
 		ub /= denom;
 
 		if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1){
-			intersect.onLine = true;
-			intersect.x = a.x + ua * (b.x - a.x);
-			intersect.y = a.y + ua * (b.y - a.y);
+			return {
+					x: a.x + ua * (b.x - a.x),
+					y: a.y + ua * (b.y - a.y),
+					dist: 0,
+			}
 		}
-	}
+//	}
 
-	return intersect;
+	return false;
 }
 
-function isInPathCircular(a, b, c, size) {
+function lineCircleIntersect(a, b, c, size) {
 	// Calculate the euclidean distance between a & b
 	var eDistAtoB = Math.sqrt(Math.pow(b.x-a.x, 2) + Math.pow(b.y-a.y, 2));
 
@@ -128,7 +153,7 @@ function isInPathCircular(a, b, c, size) {
 	var t = (d.x * (c.x-a.x)) + (d.y * (c.y-a.y));
 
 	// compute the coordinates of the point e on line and closest to c
-    var e = {x: 0, y: 0, onLine:false};
+    var e = {x: 0, y: 0};
 		e.x = (t * d.x) + a.x;
 		e.y = (t * d.y) + a.y;
 
@@ -145,18 +170,19 @@ function isInPathCircular(a, b, c, size) {
 		var entry = {
 			x: ((t - dist) * d.x) + a.x, 
 			y: ((t - dist) * d.y) + a.y,
-			onLine: false
+			type: 0
 		};
-		entry.onLine = is_on(a, b, entry);
 
 		var exit = {
 			x: ((t + dist) * d.x) + a.x,
 			y: ((t + dist) * d.y) + a.y, 
-			onLine: false
+			type: 1
 		};
-		exit.onLine = is_on(a, b, exit);
 
-		var data = {dist: dist, points: [entry, exit]};
+		var data = [];
+		if (is_on(a, b, entry)){data.push(entry);}
+		if (is_on(a, b, exit)){data.push(exit);}
+
 		return data;
 
 	}
