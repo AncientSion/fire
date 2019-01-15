@@ -5,6 +5,81 @@ class Math {
 	function __construct(){
 	}
 
+	static function dot($a, $b){
+		return ($a->x * $b->x) + ($a->y * $b->y); 
+	}
+
+	static function isWithinCircle($oPos, $tPos, $arc){
+		$oPosToCenter = static::getDist($oPos, $arc->getCurPos());
+		$tPosToCenter = static::getDist($tPos, $arc->getCurPos());
+
+		if ($oPosToCenter < $arc->size/2 && $tPosToCenter < $arc->size/2){
+			return static::getDist($oPos, $tPos);
+		} return false;
+	}
+
+	static function isWithinRect($pos, $rectPoints){
+		$ab = static::newV($rectPoints[0], $rectPoints[2]);
+		$am = static::newV($rectPoints[0], $pos);
+		$bc = static::newV($rectPoints[1], $rectPoints[2]);
+		$bm = static::newV($rectPoints[1], $pos);
+
+		$dot_abam = static::dot($ab, $am);
+		$dot_abab = static::dot($ab, $ab);
+		$dot_bcbm = static::dot($bc, $bm);
+		$dot_bcbc = static::dot($bc, $bc);
+
+		return 0 <= $dot_abam && $dot_abam <= $dot_abab && 0 <= $dot_bcbm && $dot_bcbm <= $dot_bcbc;
+	}
+
+	static function newV($p1, $p2){
+		return new Point($p2->x - $p1->x, $p2->y - $p1->y);
+	}
+
+	static function lineRectIntersect($shooter, $target, $rectPoints){
+		$testResult;
+		$intersectPoints = array();
+
+		for ($i = 0; $i < sizeof($rectPoints)-1; $i++){
+			$testResult = static::lineLineIntersect($shooter, $target, $rectPoints[$i], $rectPoints[$i+1]);
+			if (!$testResult){continue;}
+			$intersectPoints[] = $testResult;
+		}
+
+		$testResult = static::lineLineIntersect($shooter, $target, $rectPoints[3], $rectPoints[0]);
+		if ($testResult){$intersectPoints[] = $testResult;}
+
+		if (sizeof($intersectPoints) == 1){
+			$isInside = static::isWithinRect($shooter, $rectPoints);
+			$shooterToIntersect = static::getDist($shooter, $intersectPoints[0]);
+			$shooterToTarget = static::getDist($shooter, $target);
+			$targetToIntersect = static::getDist($target, $intersectPoints[0]);
+
+			if ($isInside || $shooterToIntersect > $shooterToTarget){
+				$intersectPoints[0]->type = 1;
+			}
+		}
+
+		return $intersectPoints;
+	}
+
+	static function lineLineIntersect($a, $b, $c, $d) {
+		$ua = ($d->x - $c->x) * ($a->y - $c->y) - ($d->y - $c->y) * ($a->x - $c->x);
+		$ub = ($b->x - $a->x) * ($a->y - $c->y) - ($b->y - $a->y) * ($a->x - $c->x);
+		$denom = ($d->y - $c->y) * ($b->x - $a->x) - ($d->x - $c->x) * ($b->y - $a->y);
+
+		$ua /= $denom;
+		$ub /= $denom;
+
+		if ($ua >= 0 && $ua <= 1 && $ub >= 0 && $ub <= 1){
+			return new Intersector(
+				$a->x + $ua * ($b->x - $a->x),
+				$a->y + $ua * ($b->y - $a->y)
+			);
+		}
+		return false;
+	}
+
 	static function lineCircleIntersect($a, $b, $c, $size) {
 		// Calculate the euclidean distance between a & b
 		$eDistAtoB = sqrt(pow($b->x - $a->x, 2) + pow($b->y - $a->y, 2));
@@ -32,31 +107,34 @@ class Math {
 		if ($eDistCtoE <= $size){
 			//Debug::log("eDistCtoE ".$eDistCtoE." below size ".$size);
 			// compute distance from t to circle intersection point
-			$dt = sqrt( pow($size, 2) - pow($eDistCtoE, 2));
+			$dist = sqrt(pow($size, 2) - pow($eDistCtoE, 2));
 
-			$in = array(
-				new Point(
-					(($t-$dt) * $d->x) + $a->x, 
-					(($t-$dt) * $d->y) + $a->y
-				), 0);
-			$in[1] = static::is_on($a, $b, $in[0]);
-			//Debug::log("x ".$in[0]->x.", y ".$in[0]->y);
+			$entry = new Intersector(
+					(($t - $dist) * $d->x) + $a->x, 
+					(($t - $dist) * $d->y) + $a->y
+					);
 
-			$out = array(
-				new Point(
-					(($t+$dt) * $d->x) + $a->x, 
-					(($t+$dt) * $d->y) + $a->y
-				), 0);
-			$out[1] = static::is_on($a, $b, $out[0]);
-			//Debug::log("x ".$out[0]->x.", y ".$out[0]->y);
+			$exit = new Intersector(
+					(($t + $dist) * $d->x) + $a->x, 
+					(($t + $dist) * $d->y) + $a->y,
+					1);
 
-			return array("dist" => $dt, "points" => array($in, $out));
+			$data = array();
+
+			if (static::is_on($a, $b, $entry)){
+				$data[] = $entry;
+			}
+			if (static::is_on($a, $b, $exit)){
+				$data[] = $exit;
+			}
+
+			return $data;
 		}
-		return false;
+		return array();
 	}
 
 	static function is_on($a, $b, $c) {
-		return (round(static::getDist2($a, $c) + static::getDist2($c, $b)) == round(static::getDist2($a, $b)));
+		return (round(static::getDist($a, $c) + static::getDist($c, $b)) == round(static::getDist($a, $b)));
 	}
 
 	static function getPointInDirection($dist, $a, $oX, $oY){
@@ -65,22 +143,15 @@ class Math {
 		return new Point($x, $y);
 	} 
 
-	static function getDist($ax, $ay, $bx, $by){
-		return ceil(sqrt ( pow($bx - $ax, 2) + pow($by - $ay, 2) ) );
+	static function getDist4($ax, $ay, $bx, $by){
+		return ceil(sqrt(pow($bx - $ax, 2) + pow($by - $ay, 2)));
 	}
 
-	static function getDist2($a, $b){
-		return sqrt ( pow($b->x - $a->x, 2) + pow($b->y - $a->y, 2) );
-	}
-	static function getDist2a($a, $b){
-		return ceil(sqrt ( pow($b->x - $a->x, 2) + pow($b->y - $a->y, 2) ) );
+	static function getDist($a, $b){
+		return sqrt(pow($b->x - $a->x, 2) + pow($b->y - $a->y, 2));
 	}
 
-	static function getAngle($ax, $ay, $bx, $by){
-		return Math::radToDeg(atan2($by - $ay, $bx - $ax));
-	}
-
-	static function getAngle2($a, $b){
+	static function getAngle($a, $b){
 		return Math::addAngle(0, Math::radToDeg(atan2($b->y - $a->y, $b->x - $a->x)));
 	}
 
@@ -119,10 +190,6 @@ class Math {
 		return $angle;
 	}
 
-	static function getVector($a, $b, $s){
-		return new Vector($a, $b, $s);
-	}
-
 	static function canIntercept($origin, $target, $targetVector, $v){
 		$tx = $target->x - $origin->x;
 		$ty = $target->y - $origin->y;
@@ -133,7 +200,7 @@ class Math {
 		$b = 2 * ($tvx * $tx + $tvy * $ty);
 		$c = $tx*$tx + $ty*$ty;
 
-		$ts = Math::solve($a, $b, $c);
+		$ts = Math::solveIntercept($a, $b, $c);
 
 		$sol = false;
 		if ($ts){
@@ -151,7 +218,7 @@ class Math {
 		return $sol;
 	}
 
-	static function solve($a, $b, $c){
+	static function solveIntercept($a, $b, $c){
 		$sol = false;
 		if (abs($a) < 1e-6){
 			if (abs($b) < 1e-6){
@@ -186,33 +253,20 @@ class Math {
 		else return ($system->start + $system->end) / 2;
 	}
 
-	static function getRolledArc($a, $b){
-		$start = 360 - $b;
-		$end = 360 - $a;
-	}
-
 	static function getMirrorAngle($a){
 		return 360 - $a;
 	}
 
 	static function getBaseHitChance($mass){
-		return ceil(pow($mass, 0.4)*1.5) + 35;
+		return ceil(pow($mass, 0.4)*1.5) + 135;
 	}
 
 	static function getBaseTurnDelay($mass){
 		return round(pow($mass, 0.45)/20, 2);
 	}
 
-	static function getBaseTurnCost($mass){
-		return round(pow($mass, 1.25)/200000, 2);
-	}
-
 	static function getEnginePowerNeed($mass){
 		return round(pow($mass, 1.1)/70000, 2);
-	}
-
-	static function getBaseImpulseCost($mass){
-		return round(pow($mass, 1.05)/250, 2);
 	}
 
 /*

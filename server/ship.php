@@ -1215,7 +1215,7 @@ class Ship {
 		
 		$tPos = $this->getCurPos();
 		$sPos = $fire->shooter->getCurPos();
-		return Math::getDist($tPos->x, $tPos->y, $sPos->x, $sPos->y);
+		return Math::getDist($tPos, $sPos);
 	}
 
 	public function getIncomingFireAngle($fire){

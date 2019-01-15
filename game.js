@@ -2301,7 +2301,6 @@ Game.prototype.getUnitByClick = function(pos){
 
 Game.prototype.getCollisionMod = function(traverse){
 	return game.const.collision.baseMulti - (game.const.collision.hitMod * (4 - traverse));
-	return Math.max(0.1, (1+( game.const.collision.hitMod * (traverse-4))));
 }
 
 Game.prototype.getObstructionPoint = function(fire){
@@ -2311,6 +2310,16 @@ Game.prototype.getObstructionPoint = function(fire){
 			valid.push(fire.target.blocks[i]);
 		}
 	}
+
+	var pick = valid[range(0, valid.length-1)];
+	var test = game.getUnit(pick.obstacleId).getObstructionPoint(fire.shooter.getGamePos(), fire.target.getGamePos());
+
+	return test[0];
+
+	console.log(test);
+
+
+
 	var pick = valid[range(0, valid.length-1)].path;
 	var dist;
 	var origin;
@@ -2349,16 +2358,14 @@ Game.prototype.setInterferenceData = function(){
 				if (!this.ships[k].obstacle){continue;}
 				//console.log("obs " + this.ships[k].id);
 
-				//var obstaclePos = game.phase == 3 ? {x: this.ships[k].x, y: this.ships[k].y} : this.ships[k].gePlannedPos();
-				var obstaclePos = this.ships[k].getDrawPos();
-				var result = lineRectIntersect(oPos, tPos, obstaclePos, this.ships[k].size/2);
+				var dist = this.ships[k].testObstruction(oPos, tPos);
 
-				if (!result || !result.points[0].onLine && !result.points[1].onLine){continue;}
+				if (!dist){break;}
 
-				var EffInterference = Math.round(this.ships[k].interference / 100 * result.dist*2);
+				var EffInterference = Math.round(this.ships[k].interference / 100 * dist);
 
-				this.ships[i].blocks.push({id: this.ships[j].id, obstacleId: this.ships[k].id, EffInterference: EffInterference, path: result});
-				this.ships[j].blocks.push({id: this.ships[i].id, obstacleId: this.ships[k].id, EffInterference: EffInterference, path: result});
+				this.ships[i].blocks.push({id: this.ships[j].id, obstacleId: this.ships[k].id, EffInterference: EffInterference});
+				this.ships[j].blocks.push({id: this.ships[i].id, obstacleId: this.ships[k].id, EffInterference: EffInterference});
 
 			}
 		}
@@ -2374,21 +2381,12 @@ Game.prototype.setCollisionData = function (unit){
 
 	unit.collisions = [];
 	var unitPos = unit.getGamePos();
-	var unitSpeed = unit.getCurSpeed();
 
 	for (var i = 0; i < this.ships.length; i++){
 		if (!this.ships[i].obstacle){continue;}
-	//	if (!this.ships[i].primary.systems.length){continue;}
 
-		var obstacle = this.ships[i];
-		var tPos = obstacle.getGamePos();
 		var totalDist = 0;
-		var distBetween = getDistance(unitPos, tPos) - obstacle.size/2 - unitSpeed;		
-		if (distBetween > 200){
-			//console.log("dist ship/field #" + this.ships[i].id+": "+distBetween+", skip");
-			continue;
-		}
-
+		
 		for (var j = 0; j < unit.actions.length; j++){
 			var action = unit.actions[j];
 			if (action.type != "move"){continue;}
@@ -2396,7 +2394,7 @@ Game.prototype.setCollisionData = function (unit){
 
 			var dist = this.ships[i].testObstruction(oPos, action);
 			if (!dist){continue;}
-			console.log(dist);
+			//console.log(dist);
 
 			totalDist += dist;
 		}
@@ -2414,57 +2412,6 @@ Game.prototype.setCollisionData = function (unit){
 			damage: this.ships[i].getDamageString()
 		})
 	}
-}
-
-Game.prototype.hasObstacleInVectorO = function(oPos, tPos, unit){
-
-	var inPath = [];
-	for (var j = 0; j < this.ships.length; j++){
-		if (!this.ships[j].obstacle){continue;}
-		//if (this.ships[j].id != 24){continue;}
-
-		var result = lineRectIntersect(oPos, tPos, this.ships[j].getGamePos(), this.ships[j].size/2);
-		if (!result){continue;}
-
-		var pierceIn = 0;
-		var pierceOut = 0;
-		var realDist = 0;
-
-		if (result.points[0].onLine){
-			var pierceIn = getDistance(tPos, result.points[0]);
-		}
-		if (result.points[1].onLine){
-			var pierceOut = getDistance(tPos, result.points[1]);
-		}
-
-		if (pierceIn){
-			realDist = Math.abs(pierceOut - pierceIn);
-		}
-		else if (pierceOut){
-			realDist = getDistance(oPos, result.points[1]);
-		}
-		else if (!pierceIn && !pierceOut){
-		}
-		else realDist = result.dist;
-
-	/*	console.log("--------")
-		console.log(result);
-		console.log(pierceIn)
-		console.log(pierceOut);
-		console.log(realDist);
-	*/
-		if (!realDist){continue;}
-		inPath.push({
-			type: this.ships[j].display,
-			obstacleId: this.ships[j].id, 
-			dist: Math.round(realDist),
-			size: this.ships[j].size,
-			EffInterference: Math.round(this.ships[j].interference / 100 * realDist),
-			exposure: Math.round(round((1-(result.dist / (this.ships[j].size/2))), 2)*100),
-			interference: this.ships[j].interference,
-		})
-	}
-	return inPath;
 }
 
 Game.prototype.hasObstacleInVector = function(oPos, tPos, unit){

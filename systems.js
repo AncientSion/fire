@@ -2544,7 +2544,7 @@ Particle.prototype.getAnimation = function(fire){
 			var dest;
 			var tx, ty;
 
-			if (fire.rolls[roll] == 999 || fire.rolls[roll] == 0){
+			if (fire.rolls[roll] == 999 || fire.rolls[roll] == 0){ // cancel ?
 				continue;
 			}
 			else if (fire.rolls[roll] < 0){

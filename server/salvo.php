@@ -64,8 +64,8 @@ class Salvo extends Minor {
 
 		//var_export($origin);
 		//var_export($impact);
-		//$angle = round(Math::getAngle2($this->getTurnStartPosition(), $this->actions[sizeof($this->actions)-1]));
-		$angle = round(Math::getAngle2($this->actions[sizeof($this->actions)-1], $this->getTurnStartPosition()));
+		//$angle = round(Math::getAngle($this->getTurnStartPosition(), $this->actions[sizeof($this->actions)-1]));
+		$angle = round(Math::getAngle($this->actions[sizeof($this->actions)-1], $this->getTurnStartPosition()));
 		Debug::log("------- SALVO TRAJECT: ".$angle);
 		return $angle;
 	}
@@ -106,8 +106,8 @@ class Salvo extends Minor {
 		$t = $this->mission->target;
 	
 		$tPos = $t->getCurPos();
-		$dist = Math::getDist2($origin, $tPos);
-		$angle = Math::getAngle2($origin, $tPos);
+		$dist = Math::getDist($origin, $tPos);
+		$angle = Math::getAngle($origin, $tPos);
 
 		if ($speed < $dist){ // on route or drag -> own speed
 			Debug::log("close in");

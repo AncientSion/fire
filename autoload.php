@@ -233,6 +233,7 @@ spl_autoload_register(
                 'section' => '/server/classes.php',
                 'shared' => '/server/classes.php',
                 'point' => '/server/classes.php',
+                'intersector' => '/server/classes.php',
                 'vector' => '/server/classes.php',
                 'move' => '/server/classes.php',
                 'fireorder' => '/server/classes.php',

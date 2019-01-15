@@ -131,8 +131,7 @@ function lineLineIntersect(a, b, c, d){
 		if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1){
 			return {
 					x: a.x + ua * (b.x - a.x),
-					y: a.y + ua * (b.y - a.y),
-					dist: 0,
+					y: a.y + ua * (b.y - a.y)
 			}
 		}
 //	}
@@ -180,8 +179,12 @@ function lineCircleIntersect(a, b, c, size) {
 		};
 
 		var data = [];
-		if (is_on(a, b, entry)){data.push(entry);}
-		if (is_on(a, b, exit)){data.push(exit);}
+		if (is_on(a, b, entry)){
+			data.push(entry);
+		}
+		if (is_on(a, b, exit)){
+			data.push(exit);
+		}
 
 		return data;
 

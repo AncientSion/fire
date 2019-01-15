@@ -96,8 +96,8 @@ class Flight extends Minor {
 				//Debug::log("drag");
 			}
 			else {
-				$dist = Math::getDist2($origin, $this->mission);
-				$angle = Math::getAngle2($origin, $this->mission);
+				$dist = Math::getDist($origin, $this->mission);
+				$angle = Math::getAngle($origin, $this->mission);
 
 				if ($speed < $dist){
 					//Debug::log("close in");
@@ -123,8 +123,8 @@ class Flight extends Minor {
 				}
 
 				$tPos = $t->getCurPos();
-				$dist = Math::getDist2($origin, $tPos);
-				$angle = Math::getAngle2($origin, $tPos);
+				$dist = Math::getDist($origin, $tPos);
+				$angle = Math::getAngle($origin, $tPos);
 
 				if ($dist == 0){
 					Debug::log("dist 0");
@@ -144,8 +144,8 @@ class Flight extends Minor {
 				Debug::log("flight on flight");
 				$tPos = $t->getCurPos();
 				$otherSpeed = $t->getCurSpeed();
-				$dist = Math::getDist2($origin, $tPos);
-				$angle = Math::getAngle2($origin, $tPos);
+				$dist = Math::getDist($origin, $tPos);
+				$angle = Math::getAngle($origin, $tPos);
 
 				if ($dist == 0){
 					Debug::log("dist 0");

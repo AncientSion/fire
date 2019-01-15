@@ -871,7 +871,7 @@
 					$size = mt_rand(100, 175);
 
 					for ($j = 0; $j < sizeof($nebulas); $j++){
-						$dist = Math::getDist($nebulas[$j][1], $nebulas[$j][2], $x, $y);
+						$dist = Math::getDist4($nebulas[$j][1], $nebulas[$j][2], $x, $y);
 						//Debug::log("checking vs nebula ".$j.", dist: ".$dist);
 
 						if ($dist - 75 - $size/2 - $nebulas[$j][3]/2 <= 0){
@@ -883,7 +883,7 @@
 					}
 					if (!$redo){
 						for ($j = 0; $j < sizeof($obstacles); $j++){
-							$dist = Math::getDist($obstacles[$j][1], $obstacles[$j][2], $x, $y);
+							$dist = Math::getDist4($obstacles[$j][1], $obstacles[$j][2], $x, $y);
 							//Debug::log("checking vs field ".$j.", dist: ".$dist);
 
 							if ($dist - 75 - $size/2 - $obstacles[$j][3]/2 <= 0){
@@ -937,7 +937,7 @@
 					$rockSize = mt_rand(1, 5);
 
 					for ($j = 0; $j < sizeof($fields); $j++){
-						$dist = Math::getDist($fields[$j][1], $fields[$j][2], $x, $y);
+						$dist = Math::getDist4($fields[$j][1], $fields[$j][2], $x, $y);
 						//Debug::log("checking vs field ".$j.", dist: ".$dist);
 
 						if ($dist - 75 - $size/2 - $fields[$j][3]/2 <= 0){
@@ -1430,10 +1430,7 @@
 				for ($j = 0; $j < sizeof($units[$i]["actions"]); $j++){
 					if ($units[$i]["actions"][$j]["resolved"]){continue;}
 
-					foreach ($units[$i]["actions"][$j] as $key => $value){
-						Debug::log($key.".".$value);
-					}
-
+					//foreach ($units[$i]["actions"][$j] as $key => $value){Debug::log($key.".".$value;}
 					$stmt->bindParam(":turn", $units[$i]["actions"][$j]["turn"]);
 					$stmt->bindParam(":type", $units[$i]["actions"][$j]["type"]);
 					$stmt->bindParam(":dist", $units[$i]["actions"][$j]["dist"]);

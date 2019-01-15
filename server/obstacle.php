@@ -10,6 +10,7 @@ class Obstacle extends Minor {
 	public $systems = array();
 	public $critEffects = array();
 	public $faction = "Neutral";
+	public $points = array();
 
 	function __construct($data = false){
         parent::__construct($data);
@@ -146,6 +147,27 @@ class AsteroidField extends Obstacle {
 		$this->primary = new Shared($this->getId());
 		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, $this->minDmg, $this->maxDmg, round($this->density * $avgRockSize / $this->rockSize / 5));
 	}
+
+	public function testObstruction($oPos, $tPos){
+		//Debug::log("testObstruction on ".get_class($this)." #".$this->id);
+		$test = Math::lineCircleIntersect($oPos, $tPos, $this->getCurPos(), $this->size/2);
+		$dist = 0;
+
+		if (sizeof($test)){
+			if (sizeof($test) == 2){
+				$dist = Math::getDist($test[0], $test[1]);
+			}
+			else {
+				if ($test[0]->type == 0){ //in
+					$dist = Math::getDist($test[0], $tPos);
+				}
+				else $dist = Math::getDist($oPos, $test[0]);
+			}
+		}
+		else $dist = Math::isWithinCircle($oPos, $tPos, $this);
+		
+		return $dist;
+	}
 }
 
 class NebulaCloud extends Obstacle {	
@@ -170,6 +192,24 @@ class NebulaCloud extends Obstacle {
         $this->rockSize = $arr[2];
         $this->minDmg = $arr[3];
         $this->maxDmg = round($this->minDmg * 1.3);
+
+        $this->points[] = new Point($this->x, $this->y);
+
+        $w = -50;
+        $h = 50;
+
+        $r = 80;
+
+        $b = Math::getPointInDirection($h, $r, $this->x, $this->y);
+        $c = Math::getPointInDirection($w, $r-90, $b->x, $b->y);
+        $d = Math::getPointInDirection($h, $r+180, $c->x, $c->y);
+
+        $this->points[] = $b;
+        $this->points[] = $c;
+        $this->points[] = $d;
+
+        $this->x = ($this->points[0]->x + $this->points[2]->x) / 2;
+        $this->y = ($this->points[0]->y + $this->points[2]->y) / 2;
 	}
 
 	public function addPrimary(){
@@ -182,6 +222,29 @@ class NebulaCloud extends Obstacle {
 		
 		$this->primary = new Shared($this->getId());
 		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, $this->minDmg, $this->maxDmg, round($this->density * $avgRockSize / $this->rockSize / 5));
+	}
+
+	public function testObstruction($oPos, $tPos){
+		//Debug::log("testObstruction on ".get_class($this)." #".$this->id);
+		$test = Math::lineRectIntersect($oPos, $tPos, $this->points);
+		$dist = 0;
+
+		if (sizeof($test)){
+			if (sizeof($test) == 2){
+				$dist = Math::getDist($test[0], $test[1]);
+			}
+			else {
+				if ($test[0]->type == 0){ //in
+					$dist = Math::getDist($test[0], $tPos);
+				}
+				else $dist = Math::getDist($oPos, $test[0]);
+			}
+		}
+		else if (Math::isWithinRect($oPos, $this->points) && Math::isWithinRect($tPos, $this->points)){
+			$dist = Math::getDist($oPos, $tPos);
+		}
+
+		return $dist;
 	}
 }
 ?>

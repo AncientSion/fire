@@ -2,6 +2,7 @@
 function Obstacle(data){
 	Mixed.call(this, data);
 	this.primary = {"systems": []};
+	this.points = data.points;
 	this.size = data.size;
 	this.density = data.density;
 	this.interference = data.interference;
@@ -245,7 +246,7 @@ AsteroidField.prototype.createBaseDiv = function(){
 		table.append($("<tr>")
 			.append($("<td>").attr("colSpan", 2)
 				.append($("<table>").addClass("collisionTable")
-					.append($("<tr>").append($("<td>").attr("colSpan", 7).html("<span class='yellow'>Collision Chance)</span>")))
+					.append($("<tr>").append($("<td>").attr("colSpan", 7).html("<span class='yellow'>Collision Chance</span>")))
 					.append(trA)
 					.append(trB))))
 		.append($("<tr>")
@@ -352,7 +353,7 @@ AsteroidField.prototype.setTrueImage = function(info){
 		ctx.fillStyle = "yellow";
 		ctx.font = "24px Arial";
 		ctx.textAlign = "center";
-		ctx.fillText(this.collision + "%", 0, 12);
+		ctx.fillText(Math.round(this.collision * game.const.collision.baseMulti) + "%", 0, 12);
 		var wpn = this.primary.systems[0];
 		ctx.fillText(wpn.shots + "x " + Math.round((wpn.minDmg + wpn.maxDmg)/2), 0, 37);
 	}
@@ -373,57 +374,27 @@ AsteroidField.prototype.testObstruction = function(oPos, tPos){
 			if (test[0].type == 0){ // in
 				dist = getDistance(test[0], tPos);
 			}
-			else { // out
-				dist = getDistance(oPos, test[0]);
-			}
+			else dist = getDistance(oPos, test[0]);
 		}
 	}
-	else {
-		dist += isWithinCircle(oPos, tPos, this);
-	}
+	else dist = isWithinCircle(oPos, tPos, this);
+	
 	return dist;
 }
 
+AsteroidField.prototype.getObstructionPoint = function(oPos, tPos){
+	return lineCircleIntersect(oPos, tPos, this.getGamePos(), this.size/2);
+}
 
 function NebulaCloud(data){
 	Obstacle.call(this, data);
-
-
-	this.points = [];
-	this.points.push(new Point(this.x, this.y));
-
-	var dimA = range(20, 40);
-	var dimB = dimA * 2.5
-	var w = 0; var h = 0;
-
-	if (dimA % 2){
-		w  = dimA;
-		h = dimB;
-	}
-	else {
-		w = dimB;
-		h = dimA;
-	}
-
-	//var w = 30; var h = 80;
-
-	w = -50;
-	h = 50;
-
-	var rota = range(0, 360);
-	var rota = 80
-	//	r = 0;
-
-
-	var b = getPointInDir(h, rota, this.x, this.y);
-	var c = getPointInDir(w, rota-90, b.x, b.y);
-	var d = getPointInDir(h, rota-180, c.x, c.y);
-
-	this.points.push(b);
-	this.points.push(c);
-	this.points.push(d);
 }
 NebulaCloud.prototype = Object.create(Obstacle.prototype);
+
+
+NebulaCloud.prototype.getObstructionPoint = function(oPos, tPos){
+	return lineRectIntersect(oPos, tPos, this.points);
+}
 
 NebulaCloud.prototype.testObstruction = function(oPos, tPos){
 	var test = lineRectIntersect(oPos, tPos, this.points);
@@ -437,13 +408,11 @@ NebulaCloud.prototype.testObstruction = function(oPos, tPos){
 			if (test[0].type == 0){ // in
 				dist = getDistance(test[0], tPos);
 			}
-			else { // out
-				dist = getDistance(oPos, test[0]);
-			}
+			else dist = getDistance(oPos, test[0]);
 		} 
 	}
 	else if (isWithinRect(oPos, this.points) && isWithinRect(tPos, this.points)){
-		dist += getDistance(oPos, tPos);
+		dist = getDistance(oPos, tPos);
 	}
 	
 	return dist;

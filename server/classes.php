@@ -61,6 +61,19 @@ class Point {
 	}
 }
 
+class Intersector {
+	public $x;
+	public $y;
+	public $type;
+
+	function __construct($x, $y, $type = 0){
+		$this->x = $x;
+		$this->y = $y;
+		$this->type = $type;
+
+	}
+}
+
 class Vector {
 	public $x;
 	public $y;

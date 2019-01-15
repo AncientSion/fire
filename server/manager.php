@@ -40,8 +40,8 @@
 				array("Rout", 150, 0, 0.00)
 			),
 			"collision" => array(
-				"baseMulti" => 1.5,
-				"hitMod" => 0.3
+				"baseMulti" => 3.0,
+				"hitMod" => 0.65
 			)
 		);
 
@@ -668,7 +668,8 @@
 				$aShift = mt_rand(-$aShift, $aShift);
 				$xShift = mt_rand(-$pShift, $pShift);
 				$yShift = mt_rand(-$pShift, $pShift);
-				$dist = Math::getDist($order->x, $order->y, $order->x + $xShift, $order->y + $yShift);
+				$y = new Point($order->x + $xShift, $order->y + $yShift);
+				$dist = Math::getDist($order, $y);
 
 				//Debug::log("--> aShift: ".$aShift."°, psShift: ".$xShift."/".$yShift." (".$dist."px)");
 
@@ -757,7 +758,7 @@
 
 			$sPos = $this->fires[$i]->shooter->getCurPos();
 			$tPos = $this->getUnit($this->fires[$i]->targetid)->getCurPos();
-			$a = Math::getAngle($sPos->x, $sPos->y, $tPos->x, $tPos->y);
+			$a = Math::getAngle($sPos, $tPos);
 			//Debug::log("i = ".$i.", shooterid: ".$shooter->id);
 			//$devi = Math::getPointInDirection($this->fires[$i]->shooter->size/3, $a, $sPos->x + mt_rand(-10, 10), $sPos->y + mt_rand(-10, 10));
 			$mission = array("type" => 2, "turn" => static::$turn, "phase" => -1, "targetid" => $this->fires[$i]->targetid, "x" => $tPos->x, "y" => $tPos->y, "arrived" => 0, "new" => 1);
@@ -973,7 +974,7 @@
 		Debug::log("handleCollisions");
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$this->setCollisionForSingleUnit($this->ships[$i]);
+			$this->setCollisionData($this->ships[$i]);
 		}
 
 		$newFires = array();
@@ -992,79 +993,32 @@
 		}	$this->fires = array_merge($this->fires, $newFires);
 	}
 
-	public function setCollisionForSingleUnit($unit){
+	public function setCollisionData($unit){
 		if ($unit->obstacle){return;}
 		//Debug::log("setCollisionForSingleUnit for unit #".$unit->id);
 		$unitPos = $unit->getTurnStartPosition();
-		$unitSpeed = $unit->getCurSpeed();
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if (!$this->ships[$i]->obstacle || !$this->ships[$i]->collision){continue;}
-			if (!$this->ships[$i]->collision){continue;}
+			if (!$this->ships[$i]->obstacle){continue;}
 
-			$field = $this->ships[$i];
-			$tPos = $field->getCurPos();
 			$totalDist = 0;
-			$distBetween = Math::getDist2($unitPos, $tPos) - $field->size/2 - $unitSpeed;
-
-			//Debug::log("field ".$field->id.", pos: ".$tPos->x."/".$tPos->y.", unitPos ".$unitPos->x."/".$unitPos->y." --- dist between ".$distBetween);
-			if ($distBetween > 200){continue;}
-
 
 			for ($j = 0; $j < sizeof($unit->actions); $j++){
 				$action = $unit->actions[$j];
 				if ($action->type != "move"){continue;}
 				$oPos = $j == 0 ? $unitPos : $unit->actions[$j-1];
 
-				$result = Math::lineCircleIntersect($oPos, $action, $tPos, $field->size/2);
-				if (!$result){continue;}
-
-				$enter = false;
-				$leave = false;
-				$distInside = 0;
-
-				if ($result["points"][0][1]){
-				//	Debug::log("enter!");
-					$enter = true;
-				}
-				if ($result["points"][1][1]){
-				//	Debug::log("leave!");
-					$leave = true;
-				}
-
-				if ($enter && $leave){
-				//	Debug::log("enter & leave");
-					$distInside = Math::getDist2($result["points"][0][0], $result["points"][1][0]);
-				}
-				else if ($enter){
-				//	Debug::log("enter");
-					$distInside = Math::getDist2($result["points"][0][0], $action);
-				}
-				else if ($leave){
-				//	Debug::log("leave");
-					$distInside = Math::getDist2($oPos, $result["points"][1][0]);
-				}
-				else {
-					//Debug::log("4!");
-					$start = Math::getDist2($oPos, $tPos);
-					$end = Math::getDist2($action, $tPos);
-					if ($start < $field->size/2 && $end < $field->size/2){
-					//Debug::log("5!");
-						$distInside += $action->dist;
-					}
-				}
-
-				$totalDist += $distInside;
-				//Debug::log("totalDist ".$totalDist);
+				$dist = $this->ships[$i]->testObstruction($oPos, $action);
+				if (!$dist){continue;}
+				$totalDist += $dist;
 			}
-	
 
-
+			//Debug::log("vs Obstacle #".$this->ships[$i]->id.", totalDist: ".$totalDist);
 			if (!$totalDist){continue;}
+
 
 			$weaponid = 2;
 			$req = $this->ships[$i]->collision * $this->const["collision"]["baseMulti"] - ($this->const["collision"]["hitMod"] * (4 - ($unit->traverse)));
-			//$req = $this->ships[$i]->collision * max(0.1, (1 + ($this->const["collision"]["hitMod"] * ($unit->traverse-4))));
 			$string = (round($totalDist).";".$this->ships[$i]->collision.";".round($req).";");
 			$shots = ceil($this->ships[$i]->getSystem(2)->getShots(static::$turn) / 100 * $totalDist);
 
@@ -1300,83 +1254,44 @@
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$oPos = $this->ships[$i]->getCurPos();
-			//Debug::log("COMPARING ".$this->ships[$i]->id." / " .$this->ships[$i]->display);
-			//Debug::log("position #".$this->ships[$i]->id.": ".$oPos->x."/".$oPos->y);
 			for ($j = $i+1; $j < sizeof($this->ships); $j++){
 				if ($this->ships[$i]->userid == $this->ships[$j]->userid){continue;}
 				$tPos = $this->ships[$j]->getCurPos();
-				$dist = Math::getDist2($oPos, $tPos);
+				$dist = Math::getDist($oPos, $tPos);
 				
 				$this->ships[$i]->distances[] = array($this->ships[$j]->id, $dist);
 				$this->ships[$j]->distances[] = array($this->ships[$i]->id, $dist);
 
-				$this->ships[$i]->angles[] = array($this->ships[$j]->id, round(Math::getAngle2($oPos, $tPos)));
-				$this->ships[$j]->angles[] = array($this->ships[$i]->id, round(Math::getAngle2($tPos, $oPos)));
+				$this->ships[$i]->angles[] = array($this->ships[$j]->id, round(Math::getAngle($oPos, $tPos)));
+				$this->ships[$j]->angles[] = array($this->ships[$i]->id, round(Math::getAngle($tPos, $oPos)));
+			}
+		}
 
-				$obstacles = array();
+		if (static::$phase == 2){
+			for ($i = 0; $i < sizeof($this->ships); $i++){
+				if ($this->ships[$i]->obstacle){continue;}
+				$oPos = $this->ships[$i]->getCurPos();
 
-				if ($this->ships[$i]->obstacle || $this->ships[$j]->obstacle){continue;}
-				if (static::$phase != 2){continue;}
-				if ($oPos->x == $tPos->x && $oPos->y == $tPos->y){continue;}
-				//Debug::log("TO ".$this->ships[$j]->id." / " .$this->ships[$j]->display);
-				//Debug::log("position #".$this->ships[$j]->id.": ".$tPos->x."/".$tPos->y);
+				for ($j = $i+1; $j < sizeof($this->ships); $j++){
+					if ($this->ships[$j]->obstacle){continue;}
+					if ($this->ships[$i]->userid == $this->ships[$j]->userid){continue;}
+					$tPos = $this->ships[$j]->getCurPos();
 
-				for ($k = 0; $k < sizeof($this->ships); $k++){
-					if (!$this->ships[$k]->obstacle){continue;}
-					if (!$this->ships[$k]->interference){continue;}
+					for ($k = 0; $k < sizeof($this->ships); $k++){
+						if (!$this->ships[$k]->obstacle){continue;}
 
-					$blockPos = $this->ships[$k]->getCurPos();
-					//Debug::log("checking if ".$this->ships[$k]->display." / " .$this->ships[$k]->id." is in path");
-					//Debug::log("position #".$this->ships[$j]->id.": ".$blockPos->x."/".$blockPos->y);
+						$dist = $this->ships[$k]->testObstruction($oPos, $tPos);
 
+						if (!$dist){break;}
 
-					$result = Math::lineCircleIntersect($oPos, $tPos, $blockPos, $this->ships[$k]->size/2);
-
-					//$data[] = $result;
-					//continue;
-
-									
-					if ($result){ //return array($dt, $in, $out);
-						$pierceIn = 0;
-						$pierceOut = 0;
-						$realDist = 0;
-
-						if ($result["points"][0][1] == 1){
-							//Debug::log("pierceIn onLine");
-							$pierceIn = Math::getDist2($tPos, $result["points"][0][0]);
-						}
-
-						if ($result["points"][1][1] == 1){
-							//Debug::log("pierceOut onLine");
-							$pierceOut = Math::getDist2($tPos, $result["points"][1][0]);
-						}
-
-						if ($pierceIn){
-							$realDist = abs($pierceOut - $pierceIn);
-						}
-						else if( $pierceOut){
-							$realDist = Math::getDist2($oPos, $result["points"][1][0]);
-						}
-						else if (!$pierceIn && !$pierceOut){
-
-						}
-						else $realDist = $result[0];
-
-						//Debug::log("pierceIn ".$pierceIn); Debug::log("pierceOut ".$pierceOut);	Debug::log("real ".$realDist);
-
-						if (!$realDist){continue;}
-
-						$effInterference = round($this->ships[$k]->interference / 100 * $realDist);
-						//Debug::log("effInterference ".$effInterference);
+						$effInterference = round($this->ships[$k]->interference / 100 * $dist);
+						//Debug::log("dist ".$dist.", int: ".$this->ships[$k]->interference.", effInterference ".$effInterference);
 						$this->ships[$i]->blocks[] = array($this->ships[$j]->id, $effInterference);
 						$this->ships[$j]->blocks[] = array($this->ships[$i]->id, $effInterference);
 					}
 				}
 			}
 		}
-
-		//return $data;
-
 
 		
 	/*	for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1391,8 +1306,6 @@
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$this->setLocks($this->ships[$i]); 
 		}
-		//return;
-
 	}
 
 	public function setLocks($origin){
@@ -1479,7 +1392,7 @@
 										$skip = 1; break;
 									}
 									else if ($this->ships[$i]->salvo){ // salvo, in trajectory ?
-										$angle = Math::getAngle2($origin, $this->ships[$i]->getTurnStartPosition());
+										$angle = Math::getAngle($origin, $this->ships[$i]->getTurnStartPosition());
 										if (Math::isInArc($angle, $start, $end)){
 											//Debug::log("adding CC lock from ship vs salvo");
 											$origin->locks[] = array($this->ships[$i]->id, $origin->getLockEffect($this->ships[$i]));
@@ -1491,7 +1404,7 @@
 						}
 						else if ($ew->type == 1){ // ship MASK in cc, only working against salvo ATM
 							if ($this->ships[$i]->salvo){ // salvo, in trajectory ?
-								$angle = Math::getAngle2($origin, $this->ships[$i]->getTurnStartPosition());
+								$angle = Math::getAngle($origin, $this->ships[$i]->getTurnStartPosition());
 								//Debug::log("emitter: ".$origin->id." vs salvo: ".$this->ships[$i]->id.", angle: ".$angle);
 								if (Math::isInArc($angle, $start, $end)){
 									//Debug::log("adding CC mask from ship vs salvo");
@@ -1505,9 +1418,9 @@
 					if ($skip){continue;}
 
 					$tPos = $this->ships[$i]->getCurPos();
-					$dist = Math::getDist2($oPos, $tPos);
+					$dist = Math::getDist($oPos, $tPos);
 					if ($dist <= $ew->dist){
-						$a = Math::getAngle2($oPos, $tPos);
+						$a = Math::getAngle($oPos, $tPos);
 						//Debug::log("versus #".$this->ships[$i]->id.", angle: ".$a.", dist: ".$dist);
 						if (Math::isInArc($a, $start, $end)){
 							if ($ew->type == 0){ // LOCK
@@ -1521,7 +1434,7 @@
 								}
 							}
 						}// else Debug::log("out of arc");
-					}// else ("out of dist: ".(Math::getDist2($origin, $tPos))." EW: ".$ew->dist);
+					}// else ("out of dist: ".(Math::getDist($origin, $tPos))." EW: ".$ew->dist);
 				}
 			}
 
