@@ -19,37 +19,6 @@ class Obstacle extends Minor {
 	function __construct($data = false){
         parent::__construct($data);
 	}
-
-	public function getDeployState($turn){
-		//Debug::log("getDeployState for ".$this->id.", destroyed: ".$this->destroyed);
-		return $this->getEndState($turn);
-	}
-
-	public function getEndState($turn){
-
-		//Debug::log("getEndState for ".$this->id.", destroyed: ".$this->destroyed);
-
-		$x = sizeof($this->actions) ? $this->actions[sizeof($this->actions)-1]->x : $this->x;
-		$y = sizeof($this->actions) ? $this->actions[sizeof($this->actions)-1]->y : $this->y;
-
-		return array(
-			"id" => $this->id,
-			"destroyed" => 0,
-			"withdraw" =>  0,
-			"manual" =>  0,
-			"x" => $x,
-			"y" => $y,
-			"heading" => 0,
-			"facing" =>  0,
-			"thrust" => 0,
-			"delay" => 0,
-			"rolling" => 0,
-			"rolled" => 0,
-			"flipped" => 0,
-			"status" => $this->status,
-			"notes" => $this->notes,
-		);
-	}
 	
 	public function addAllSystems(){
 		$this->addPrimary();
@@ -134,7 +103,6 @@ class AsteroidField extends Obstacle {
         $this->height = $h;
         $this->width = $w;
 
-
         $b = Math::getPointInDirection($h, $this->rota, $this->x, $this->y);
         $c = Math::getPointInDirection($w, $this->rota-90, $b->x, $b->y);
         $d = Math::getPointInDirection($h, $this->rota+180, $c->x, $c->y);
@@ -155,7 +123,7 @@ class AsteroidField extends Obstacle {
         $avgRockSize = 3;
         $avgDensity = 20;
 
-        $this->collision = round(100 / $avgRockSize * $this->rockSize / $avgDensity * $this->density / 5);
+      	$this->collision = round(100 / $avgRockSize * $this->rockSize / $avgDensity * $this->density / 7);
 		$this->interference = round($this->density / 2);
 		
 		$this->primary = new Shared($this->getId());

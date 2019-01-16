@@ -123,13 +123,14 @@ class Math {
 					1);
 
 			if (static::is_on($a, $b, $entry)){
+				Debug::log("entry!");
 				$data[] = $entry;
 			}
 			if (static::is_on($a, $b, $exit)){
+				Debug::log("exit!");
 				$data[] = $exit;
 			}
 		}
-		if (sizeof($data)){Debug::log("invalid :(");}
 		return $data;
 	}
 

@@ -1036,7 +1036,7 @@
 		//Debug::log("assembleDeployStates");
 		$states = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->available != static::$turn){continue;}// jumpin or field move
+			if ($this->ships[$i]->obstacle || $this->ships[$i]->available > static::$turn){continue;}
 			$states[] = $this->ships[$i]->getDeployState(static::$turn);
 		}
 
@@ -1047,7 +1047,7 @@
 		//Debug::log("assembleEndStates");
 		$states = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->available > static::$turn){continue;}
+			if ($this->ships[$i]->obstacle || $this->ships[$i]->available > static::$turn){continue;}
 			$states[] = $this->ships[$i]->getEndState(static::$turn);
 		}
 

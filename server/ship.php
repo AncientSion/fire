@@ -24,11 +24,11 @@ class Ship {
 
 	public $disabled = false;
 
-	public $baseHitChance;
-	public $remDelay;
-	public $curImp;
-	public $remImp;
-	public $baseImpulse;
+	public $baseHitChance = 0;
+	public $remDelay = 0;
+	public $curImp = 0;
+	public $remImp = 0;
+	public $baseImpulse = 0;
 
 	public $impulseHitMod = 0;
 	public $jamming = 0;

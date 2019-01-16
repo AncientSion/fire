@@ -861,7 +861,7 @@
 
 				$x; $y; $size;
 
-				$imageId = mt_rand(0, 7);
+				$imageId = mt_rand(0, 6);
 
 				while ($attempts){
 					$redo = 0;
@@ -870,7 +870,8 @@
 					
 					$x = mt_rand(-450, 450);
 					$y = mt_rand(-450, 450);
-					$size = mt_rand(80, 120);
+					$size = mt_rand(100, 150);
+					$r = mt_rand(0, 360);
 
 					for ($j = 0; $j < sizeof($nebulas); $j++){
 						$dist = Math::getDist4($nebulas[$j][1], $nebulas[$j][2], $x, $y);
@@ -883,12 +884,12 @@
 
 					if (!$redo){
 						break;
-					} else Debug::log("redoing dist is $dist, attempts left: ".$attempts);
+					}// else Debug::log("redoing dist is $dist, attempts left: ".$attempts);
 				}
 
-				if (!$attempts){Debug::log("pass!"); continue;}
+				if (!$attempts){continue;}
 
-				$density = mt_rand(14, 19);
+				$density = mt_rand(17, 25);
 
 				$nebulas[] = array("NebulaCloud", $x, $y, $size, ($density.";".$r.";".$imageId));
 			}
@@ -896,10 +897,9 @@
 		}
 
 		public function testFieldVsNebula($x, $y, $w, $h, $r, $nebulas){
-			Debug::log("testFieldVsNebula");
+			//Debug::log("testFieldVsNebula, this is FIELD ".$x."/".$y);
 
 			$points = array();
-
 
 	        $b = Math::getPointInDirection($h, $r, $x, $y);
 	        $c = Math::getPointInDirection($w, $r-90, $b->x, $b->y);
@@ -910,26 +910,14 @@
 	        $points[] = $c;
 	        $points[] = $d;
 
-	        $validPlacement = true;
-
 	        for ($i = 0; $i < sizeof($nebulas); $i++){
-	        	//Debug::log("testing versus nebula ".$i);
-	        	$pos = new Point($nebulas[$i][0][1], $nebulas[$i][0][2]);
+	        	$pos = new Point($nebulas[$i][1], $nebulas[$i][2]);
 
 	        	for ($j = 0; $j < sizeof($points)-1; $j++){
-	        		//Debug::log("line ".($j+1));
-	        		$validPlacement = !sizeof(Math::lineCircleInterSect($points[$j], $points[$j+1], $pos, $nebulas[$i][3]));
-
-	        		if (!$validPlacement){return false;}	
+	        		if (sizeof(Math::lineCircleInterSect($points[$j], $points[$j+1], $pos, $nebulas[$i][3]/2))){return false;}
 	        	}
-
-	        	if (!$validPlacement){return false;}
-    			//Debug::log("line 4");	        		
-        		$validPlacement = !sizeof(Math::lineCircleInterSect($points[3], $points[0], $pos, $nebulas[$i][3]));
-	        	if (!$validPlacement){return false;}
+        		if (sizeof(Math::lineCircleInterSect($points[3], $points[0], $pos, $nebulas[$i][3]/2))){return false;}
 	        }
-		
-			Debug::log("VALID PLACEMENT!");
 	        return true;
 		}
 
@@ -943,7 +931,7 @@
 
 			if (!$amount){return $fields;}
 
-			$densities = array(10, 20, 30);
+			$densities = array(15, 20, 25);
 
 			for ($i = 1; $i <= $amount; $i++){
 				//Debug::log("creating field ".$i);
@@ -975,6 +963,7 @@
 
 				$density = $densities[mt_rand(0, sizeof($densities)-1)];
 				$minDmg = round(mt_rand(14, 19) * $rockSize);
+
 
 				$fields[] = array("AsteroidField", $x, $y, 0, ($density.";".$r.";".$w.";".$h.";".$rockSize.";".$minDmg));
 			}

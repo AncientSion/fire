@@ -7,7 +7,6 @@ function Obstacle(data){
 	this.density = data.density;
 	this.interference = data.interference;
 	this.rockSize = data.rockSize;
-	this.scale = data.scale;
 	this.collision = data.collision;
 	this.height = data.height;
 	this.width = data.width;
@@ -42,7 +41,7 @@ Obstacle.prototype.setNextMove = function(){
 }
 
 Obstacle.prototype.getBaseCollisionPct = function(){
-	return this.collision;
+	return this.collision * 3;
 }
 
 Obstacle.prototype.getHeader = function(){
@@ -152,6 +151,10 @@ Obstacle.prototype.getBaseAttacks = function(){
 	return wpn.shots;
 }
 
+Obstacle.prototype.getAvgDmg = function(){
+	return Math.round((this.primary.systems[0].minDmg + this.primary.systems[0].maxDmg)/2);
+}
+
 Obstacle.prototype.getRealAttacks = function(dist){
 	var wpn = this.primary.systems[0];
 	return Math.ceil(wpn.shots / 100 * dist);
@@ -239,7 +242,7 @@ AsteroidField.prototype.createBaseDiv = function(){
 		for (var i = 0; i < units.length; i++){
 			if (units[i] == ""){continue;}
 			trA.append($("<td>").html(units[i]));
-			trB.append($("<td>").html(Math.round(baseCol * game.getCollisionMod(i)) + "%"));
+			trB.append($("<td>").html(Math.round(baseCol/3 * game.getCollisionMod(i)) + "%"));
 		}
 
 		table.append($("<tr>")
@@ -342,7 +345,7 @@ AsteroidField.prototype.drawMarker = function(x, y, c, ctx){
 		ctx.lineTo(this.points[i+1].x, this.points[i+1].y);
 		ctx.closePath();
 
-		//ctx.globalAlpha = 0.25 + (i*0.2);
+		ctx.globalAlpha = 0.25 + (i*0.2);
 		ctx.stroke();
 	}
 
@@ -362,86 +365,67 @@ AsteroidField.prototype.drawMarker = function(x, y, c, ctx){
 
 AsteroidField.prototype.draw = function(){
 	this.drawPositionMarker();
-	ctx.translate(this.drawX, this.drawY);
-	//ctx.rotate(this.rota * Math.PI/180);
+	ctx.translate(this.points[0].x, this.points[0].y);
+	//ctx.translate(-this.img.width/4,- this.img.height/4);
+	ctx.rotate((this.rota-90) * Math.PI/180);
 	this.drawSelf();
-	//ctx.rotate(-this.rota * Math.PI/180);
-	ctx.translate(-this.drawX, -this.drawY);
+	ctx.rotate(-(this.rota-90) * Math.PI/180);
+	//ctx.translate(this.img.width/4, this.img.height/4);
+	ctx.translate(-this.points[0].x, -this.points[0].y);
 }
 
 AsteroidField.prototype.drawSelf = function(){
-	ctx.drawImage(this.img, -this.width/2, -this.height/2, this.width, this.height);
+	ctx.drawImage(this.img, 0, 0, this.img.width/2, this.img.height/2);
+	//ctx.drawImage(this.img, -this.img.width/4, -this.img.height/4, this.img.width, this.img.height);
 }
 
 AsteroidField.prototype.setTrueImage = function(info){
 	var t = document.createElement("canvas");
-		t.width = this.width;
-		t.height = this.height;
+		t.width = this.width*2;
+		t.height = this.height*2;
 
 	var ctx = t.getContext("2d");
-		//ctx.translate(t.width/2, t.height/2);
-		ctx.globalAlpha = 1
 
-	ctx.rotate(this.rota * (Math.PI/180));
+	var size = 10 + Math.min(2, this.rockSize -2)*2;
+	var amount = Math.sqrt(this.width * this.height) / this.density * 3;
+//	console.log(size)
+//	console.log(amount)
 
-	for (i = 0; i < 20; i++){
-		var size = 10;
+	for (i = 0; i < amount; i++){
 		//ctx.translate(range(0, this.width), range(0, this.height));
 		//ctx.rotate(this.rota * (Math.PI/180));
 		ctx.drawImage(
 			graphics.images.rocks[range(0, graphics.images.rocks.length-1)],
-			range(0, this.width) - size,
-			range(0, this.height) - size,
+			range(5, t.width-5) - size,
+			range(5, t.height-5) - size,
 			size*2,
 			size*2,
 		)
-		////ctx.rotate(-this.rota * (Math.PI/180));
 	}
-	ctx.rotate(-this.rota * (Math.PI/180));
 	
-	if (info){
+	//ctx.arc(0, 0, 20, 0, 2*Math.PI); ctx.fillStyle="yellow"; ctx.fill();
+	
+	if (1 && info){
 		ctx.translate(t.width/2, t.height/2);
-		ctx.clearRect(-30, -18, 60, 36);
+		ctx.rotate(-(this.rota-90) * (Math.PI/180))
+
+		ctx.fillStyle = "black";
+		ctx.rect(-25, -40, 54, 40);
+		ctx.rect(-60, -10, 122, 30);
+		ctx.fill();
 
 		ctx.fillStyle = "yellow";
 		ctx.font = "24px Arial";
 		ctx.textAlign = "center";
-		ctx.fillText(this.getBaseCollisionPct() + "%", 0, -10);
-		ctx.fillText(this.getMaxInterference() + "%", 0, +15);
+		ctx.fillText(this.getMaxInterference() + "%", 0, -13);
+		ctx.fillText(this.getBaseCollisionPct() + "% " + this.getBaseAttacks()+"x"+this.getAvgDmg(), 0, +13);
+		//ctx.fillText(this.rota+ " d", 0, +15);
 	}
 
 	ctx.setTransform(1,0,0,1,0,0);
 	this.img = t;
-	console.log(this.img.toDataURL());
+	//console.log(this.img.toDataURL());
 }
-
-
-
-AsteroidField.prototype.sedtTrueImage = function(info){
-	var t = document.createElement("canvas");
-		t.width = this.size*2;
-		t.height = this.size*2;
-	var ctx = t.getContext("2d");
-		ctx.translate(t.width/2, t.height/2);
-		ctx.globalAlpha = 1;
-	
-	if (info){
-		ctx.clearRect(-30, -18, 60, 36);
-
-		ctx.fillStyle = "yellow";
-		ctx.font = "24px Arial";
-		ctx.textAlign = "center";
-		ctx.fillText(this.getBaseCollisionPct() + "%", 0, -10)
-		ctx.fillText(this.getMaxInterference() + "%", 0, +15)
-	}
-
-	ctx.setTransform(1,0,0,1,0,0);
-	this.img = t;
-}
-
-
-
-
 
 function NebulaCloud(data){
 	Obstacle.call(this, data);
