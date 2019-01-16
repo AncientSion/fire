@@ -9,6 +9,10 @@ function Obstacle(data){
 	this.rockSize = data.rockSize;
 	this.scale = data.scale;
 	this.collision = data.collision;
+	this.height = data.height;
+	this.width = data.width;
+	this.rota = data.rota;
+	this.imageId = data.imageId;
 }
 
 Obstacle.prototype = Object.create(Mixed.prototype);
@@ -35,11 +39,6 @@ Obstacle.prototype.drawNextMarker = function(x, y, c, context){
 
 Obstacle.prototype.setNextMove = function(){
 	return;
-}
-
-Obstacle.prototype.getMaxInterference = function(){
-	//return this.interference;
-	return Math.round(this.interference / 100 * this.size);
 }
 
 Obstacle.prototype.getBaseCollisionPct = function(){
@@ -222,7 +221,7 @@ AsteroidField.prototype.createBaseDiv = function(){
 			.append($("<td>").html(this.size)))
 		.append($("<tr>")		
 			.append($("<td>").html("Interference"))
-			.append($("<td>").html(this.getMaxInterference() + "% (" + this.interference + "% per 100px)")))
+			.append($("<td>").html(this.interference + "% per 100px")))
 				.append($("<tr>")
 			.append($("<td>").html("Collision Attacks"))
 			.append($("<td>").html(this.getBaseAttacks() + " per 100px")))
@@ -301,102 +300,17 @@ AsteroidField.prototype.expandDiv = function(div){
 	return div;
 }
 
-AsteroidField.prototype.setTrueImage = function(info){
-
-	var amount = Math.round(Math.pow(this.size, 2) / 2000 * this.density / this.rockSize);
-
-	var t = document.createElement("canvas");
-		t.width = this.size*2;
-		t.height = this.size*2;
-	var ctx = t.getContext("2d");
-		ctx.translate(t.width/2, t.height/2);
-
-	var randoms = 0;
-
-	for (var i = 0; i < amount; i++){
-
-		var rota = range(0, 360);
-		var d = range(30, this.size* 0.9);
-		var loc = getPointInDir(d, range(0, 360), 0, 0);
-
-		var size = range(3, 5) + (this.rockSize*4);
-
-		if (range(0, 100) <= 20){
-			randoms++;
-			size *= range(5, 20)/10
-		}
-
-		ctx.translate(loc.x, loc.y);
-		ctx.rotate(rota * (Math.PI/180))
-		ctx.drawImage(
-			graphics.images.rocks[range(0, graphics.images.rocks.length-1)],
-			-size/2,
-			-size/2,
-			size, 
-			size
-		)
-		ctx.rotate(-rota * (Math.PI/180))
-		ctx.translate(-loc.x, -loc.y);
-	}
-	
-	if (info){
-
-		ctx.clearRect(-40, -60, 80, 105);
-
-		ctx.fillStyle = "yellow";
-		ctx.font = "24px Arial";
-		ctx.textAlign = "center";
-		ctx.fillText(this.getMaxInterference() + "%", 0, 0 - 35)
-
-		//ctx.clearRect(-40, -40, 80, 80);
-		
-		ctx.fillStyle = "yellow";
-		ctx.font = "24px Arial";
-		ctx.textAlign = "center";
-		ctx.fillText(Math.round(this.collision * game.const.collision.baseMulti) + "%", 0, 12);
-		var wpn = this.primary.systems[0];
-		ctx.fillText(wpn.shots + "x " + Math.round((wpn.minDmg + wpn.maxDmg)/2), 0, 37);
-	}
-
-	ctx.setTransform(1,0,0,1,0,0);
-	this.img = t;
-}
-
-AsteroidField.prototype.testObstruction = function(oPos, tPos){
-	var test = lineCircleIntersect(oPos, tPos, this.getGamePos(), this.size/2);
-	var dist = 0;
-
-	if (test.length){
-		if (test.length == 2){
-			dist = getDistance(test[0], test[1]);
-		}
-		else {
-			if (test[0].type == 0){ // in
-				dist = getDistance(test[0], tPos);
-			}
-			else dist = getDistance(oPos, test[0]);
-		}
-	}
-	else dist = isWithinCircle(oPos, tPos, this);
-	
-	return dist;
-}
-
 AsteroidField.prototype.getObstructionPoint = function(oPos, tPos){
-	return lineCircleIntersect(oPos, tPos, this.getGamePos(), this.size/2);
-}
-
-function NebulaCloud(data){
-	Obstacle.call(this, data);
-}
-NebulaCloud.prototype = Object.create(Obstacle.prototype);
-
-
-NebulaCloud.prototype.getObstructionPoint = function(oPos, tPos){
 	return lineRectIntersect(oPos, tPos, this.points);
 }
 
-NebulaCloud.prototype.testObstruction = function(oPos, tPos){
+AsteroidField.prototype.getMaxInterference = function(){
+	return Math.round(this.height > this.width ? this.interference / 100 * this.height : this.interference / 100 * this.width);
+
+	return Math.round(this.interference / 100 * this.size);
+}
+
+AsteroidField.prototype.testObstruction = function(oPos, tPos){
 	var test = lineRectIntersect(oPos, tPos, this.points);
 	var dist = 0;
 
@@ -416,6 +330,126 @@ NebulaCloud.prototype.testObstruction = function(oPos, tPos){
 	}
 	
 	return dist;
+}
+
+AsteroidField.prototype.drawMarker = function(x, y, c, ctx){
+	ctx.globalCompositeOperation = "source-over";
+	ctx.strokeStyle = c;
+
+	for (var i = 0; i < this.points.length-1; i++){
+		ctx.beginPath();
+		ctx.moveTo(this.points[i].x, this.points[i].y);
+		ctx.lineTo(this.points[i+1].x, this.points[i+1].y);
+		ctx.closePath();
+
+		//ctx.globalAlpha = 0.25 + (i*0.2);
+		ctx.stroke();
+	}
+
+	ctx.beginPath();
+	ctx.moveTo(this.points[3].x, this.points[3].y);
+	ctx.lineTo(this.points[0].x, this.points[0].y);
+	ctx.closePath();
+
+	ctx.globalAlpha = 1;
+	ctx.stroke();
+
+	//ctx.rect(x, y, this.width, this.height);
+	ctx.globalAlpha = 1;
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = "black";
+}
+
+AsteroidField.prototype.draw = function(){
+	this.drawPositionMarker();
+	ctx.translate(this.drawX, this.drawY);
+	//ctx.rotate(this.rota * Math.PI/180);
+	this.drawSelf();
+	//ctx.rotate(-this.rota * Math.PI/180);
+	ctx.translate(-this.drawX, -this.drawY);
+}
+
+AsteroidField.prototype.drawSelf = function(){
+	ctx.drawImage(this.img, -this.width/2, -this.height/2, this.width, this.height);
+}
+
+AsteroidField.prototype.setTrueImage = function(info){
+	var t = document.createElement("canvas");
+		t.width = this.width;
+		t.height = this.height;
+
+	var ctx = t.getContext("2d");
+		//ctx.translate(t.width/2, t.height/2);
+		ctx.globalAlpha = 1
+
+	ctx.rotate(this.rota * (Math.PI/180));
+
+	for (i = 0; i < 20; i++){
+		var size = 10;
+		//ctx.translate(range(0, this.width), range(0, this.height));
+		//ctx.rotate(this.rota * (Math.PI/180));
+		ctx.drawImage(
+			graphics.images.rocks[range(0, graphics.images.rocks.length-1)],
+			range(0, this.width) - size,
+			range(0, this.height) - size,
+			size*2,
+			size*2,
+		)
+		////ctx.rotate(-this.rota * (Math.PI/180));
+	}
+	ctx.rotate(-this.rota * (Math.PI/180));
+	
+	if (info){
+		ctx.translate(t.width/2, t.height/2);
+		ctx.clearRect(-30, -18, 60, 36);
+
+		ctx.fillStyle = "yellow";
+		ctx.font = "24px Arial";
+		ctx.textAlign = "center";
+		ctx.fillText(this.getBaseCollisionPct() + "%", 0, -10);
+		ctx.fillText(this.getMaxInterference() + "%", 0, +15);
+	}
+
+	ctx.setTransform(1,0,0,1,0,0);
+	this.img = t;
+	console.log(this.img.toDataURL());
+}
+
+
+
+AsteroidField.prototype.sedtTrueImage = function(info){
+	var t = document.createElement("canvas");
+		t.width = this.size*2;
+		t.height = this.size*2;
+	var ctx = t.getContext("2d");
+		ctx.translate(t.width/2, t.height/2);
+		ctx.globalAlpha = 1;
+	
+	if (info){
+		ctx.clearRect(-30, -18, 60, 36);
+
+		ctx.fillStyle = "yellow";
+		ctx.font = "24px Arial";
+		ctx.textAlign = "center";
+		ctx.fillText(this.getBaseCollisionPct() + "%", 0, -10)
+		ctx.fillText(this.getMaxInterference() + "%", 0, +15)
+	}
+
+	ctx.setTransform(1,0,0,1,0,0);
+	this.img = t;
+}
+
+
+
+
+
+function NebulaCloud(data){
+	Obstacle.call(this, data);
+}
+NebulaCloud.prototype = Object.create(Obstacle.prototype);
+
+NebulaCloud.prototype.getMaxInterference = function(){
+	return Math.round(this.interference / 100 * this.size);
 }
 
 NebulaCloud.prototype.getShortInfo = function(){
@@ -449,7 +483,7 @@ NebulaCloud.prototype.createBaseDiv = function(){
 			.append($("<td>").html(this.size)))
 		.append($("<tr>")
 			.append($("<td>").html("Interference"))
-			.append($("<td>").html(this.getMaxInterference() + "% (" + this.interference + "% per 100px)")))
+			.append($("<td>").html(this.interference + "% per 100px")))
 
 	div.append(table);
 
@@ -500,34 +534,6 @@ NebulaCloud.prototype.expandDiv = function(div){
 	return div;
 }
 
-NebulaCloud.prototype.drawMarker = function(x, y, c, ctx){
-	ctx.globalCompositeOperation = "source-over";
-	ctx.strokeStyle = c;
-
-	for (var i = 0; i < this.points.length-1; i++){
-		ctx.beginPath();
-		ctx.moveTo(this.points[i].x, this.points[i].y);
-		ctx.lineTo(this.points[i+1].x, this.points[i+1].y);
-		ctx.closePath();
-
-		ctx.globalAlpha = 0.25 + (i*0.2);
-		ctx.stroke();
-	}
-
-	ctx.beginPath();
-	ctx.moveTo(this.points[3].x, this.points[3].y);
-	ctx.lineTo(this.points[0].x, this.points[0].y);
-	ctx.closePath();
-
-	ctx.globalAlpha = 1;
-	ctx.stroke();
-
-	//ctx.rect(x, y, this.width, this.height);
-	ctx.globalAlpha = 1;
-	ctx.lineWidth = 1;
-	ctx.strokeStyle = "black";
-}
-
 NebulaCloud.prototype.setTrueImage = function(info){
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
@@ -535,6 +541,16 @@ NebulaCloud.prototype.setTrueImage = function(info){
 	var ctx = t.getContext("2d");
 		ctx.translate(t.width/2, t.height/2);
 		ctx.globalAlpha = 1;
+
+		ctx.rotate(this.rota * (Math.PI/180));
+		ctx.drawImage(
+			graphics.images.nebula[this.imageId],
+			-this.size,
+			-this.size,
+			this.size*2, 
+			this.size*2
+		)
+		ctx.rotate(-this.rota * (Math.PI/180));
 	
 	if (info){
 		ctx.clearRect(-30, -18, 60, 36);
@@ -549,35 +565,26 @@ NebulaCloud.prototype.setTrueImage = function(info){
 	this.img = t;
 }
 
-NebulaCloud.prototype.setTrueImageA = function(info){
-	var t = document.createElement("canvas");
-		t.width = this.size*2;
-		t.height = this.size*2;
-	var ctx = t.getContext("2d");
-		ctx.translate(t.width/2, t.height/2);
-		ctx.globalAlpha = 1;
+NebulaCloud.prototype.testObstruction = function(oPos, tPos){
+	var test = lineCircleIntersect(oPos, tPos, this.getGamePos(), this.size/2);
+	var dist = 0;
 
-	var rota = range(0, 360);
-
-		ctx.rotate(rota * (Math.PI/180))
-		//ctx.drawImage(
-			graphics.images.nebula[range(0, graphics.images.nebula.length-1)],
-			-this.size,
-			-this.size,
-			this.size*2, 
-			this.size*2
-		//)
-		ctx.rotate(-rota * (Math.PI/180))
-	
-	if (info){
-		ctx.clearRect(-30, -18, 60, 36);
-
-		ctx.fillStyle = "yellow";
-		ctx.font = "24px Arial";
-		ctx.textAlign = "center";
-		ctx.fillText(this.getMaxInterference() + "%", 3, 7)
+	if (test.length){
+		if (test.length == 2){
+			dist = getDistance(test[0], test[1]);
+		}
+		else {
+			if (test[0].type == 0){ // in
+				dist = getDistance(test[0], tPos);
+			}
+			else dist = getDistance(oPos, test[0]);
+		}
 	}
+	else dist = isWithinCircle(oPos, tPos, this);
+	
+	return dist;
+}
 
-	ctx.setTransform(1,0,0,1,0,0);
-	this.img = t;
+NebulaCloud.prototype.getObstructionPoint = function(oPos, tPos){
+	return lineCircleIntersect(oPos, tPos, this.getGamePos(), this.size/2);
 }

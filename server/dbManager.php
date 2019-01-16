@@ -840,15 +840,15 @@
 
 		public function createStaticObstacles($gameid, $data){
 			$obstacles = array();
-			$obstacles = array_merge($obstacles, $this->getNewAsteroidFields($data));
-			$obstacles = array_merge($obstacles, $this->getNewNebulas($obstacles, $data));
+			$obstacles = array_merge($obstacles, $this->getNewNebulas($data));
+			$obstacles = array_merge($obstacles, $this->getNewAsteroidFields($obstacles, $data));
 
 			$this->insertObstacles($gameid, $obstacles);
 
 		}
 
-		public function getNewNebulas($obstacles, $data){
-			Debug::log("getNewNebula");
+		public function getNewNebulas($data){
+			//Debug::log("getNewNebula");
 
 			$amount = $data["nebulaAmount"];
 			$min = $data["obstaclesSizeMin"];
@@ -861,37 +861,23 @@
 
 				$x; $y; $size;
 
+				$imageId = mt_rand(0, 7);
+
 				while ($attempts){
 					$redo = 0;
 					$dist;
 					$attempts--;
 					
-					$x = mt_rand(-400, 400);
-					$y = mt_rand(-500, 500);
-					$size = mt_rand(100, 175);
+					$x = mt_rand(-450, 450);
+					$y = mt_rand(-450, 450);
+					$size = mt_rand(80, 120);
 
 					for ($j = 0; $j < sizeof($nebulas); $j++){
 						$dist = Math::getDist4($nebulas[$j][1], $nebulas[$j][2], $x, $y);
-						//Debug::log("checking vs nebula ".$j.", dist: ".$dist);
 
 						if ($dist - 75 - $size/2 - $nebulas[$j][3]/2 <= 0){
-							//Debug::log("----RETRY, dist $dist, sizeA ".round($size/2).", sizeeB ".round($nebulas[$j][3]/2));
-							//Debug::log("----".$x."/".$y." versus ".$nebulas[$j][0]."/".$nebulas[$j][1]);
 							$redo = 1;
 							break;
-						}// else Debug::log("no problem !");
-					}
-					if (!$redo){
-						for ($j = 0; $j < sizeof($obstacles); $j++){
-							$dist = Math::getDist4($obstacles[$j][1], $obstacles[$j][2], $x, $y);
-							//Debug::log("checking vs field ".$j.", dist: ".$dist);
-
-							if ($dist - 75 - $size/2 - $obstacles[$j][3]/2 <= 0){
-								//Debug::log("----RETRY, dist $dist, sizeA ".round($size/2).", sizeeB ".round($nebulas[$j][3]/2));
-								//Debug::log("----".$x."/".$y." versus ".$nebulas[$j][0]."/".$nebulas[$j][1]);
-								$redo = 1;
-								break;
-							}// else Debug::log("no problem !");
 						}
 					}
 
@@ -902,14 +888,52 @@
 
 				if (!$attempts){Debug::log("pass!"); continue;}
 
-				$density = mt_rand(20, 30);
+				$density = mt_rand(14, 19);
 
-				$nebulas[] = array("NebulaCloud", $x, $y, $size, $density);
+				$nebulas[] = array("NebulaCloud", $x, $y, $size, ($density.";".$r.";".$imageId));
 			}
 			return $nebulas;
 		}
 
-		public function getNewAsteroidFields($data){
+		public function testFieldVsNebula($x, $y, $w, $h, $r, $nebulas){
+			Debug::log("testFieldVsNebula");
+
+			$points = array();
+
+
+	        $b = Math::getPointInDirection($h, $r, $x, $y);
+	        $c = Math::getPointInDirection($w, $r-90, $b->x, $b->y);
+	        $d = Math::getPointInDirection($h, $r+180, $c->x, $c->y);
+
+			$points[] = new Point($x, $y);
+	        $points[] = $b;
+	        $points[] = $c;
+	        $points[] = $d;
+
+	        $validPlacement = true;
+
+	        for ($i = 0; $i < sizeof($nebulas); $i++){
+	        	//Debug::log("testing versus nebula ".$i);
+	        	$pos = new Point($nebulas[$i][0][1], $nebulas[$i][0][2]);
+
+	        	for ($j = 0; $j < sizeof($points)-1; $j++){
+	        		//Debug::log("line ".($j+1));
+	        		$validPlacement = !sizeof(Math::lineCircleInterSect($points[$j], $points[$j+1], $pos, $nebulas[$i][3]));
+
+	        		if (!$validPlacement){return false;}	
+	        	}
+
+	        	if (!$validPlacement){return false;}
+    			//Debug::log("line 4");	        		
+        		$validPlacement = !sizeof(Math::lineCircleInterSect($points[3], $points[0], $pos, $nebulas[$i][3]));
+	        	if (!$validPlacement){return false;}
+	        }
+		
+			Debug::log("VALID PLACEMENT!");
+	        return true;
+		}
+
+		public function getNewAsteroidFields($nebulas, $data){
 			Debug::log("getNewAsteroidFields");
 
 			$amount = $data["obstaclesAmount"];
@@ -922,44 +946,37 @@
 			$densities = array(10, 20, 30);
 
 			for ($i = 1; $i <= $amount; $i++){
+				//Debug::log("creating field ".$i);
 				$attempts = 10;
 
-				$x; $y; $size; $rockSize;
+				$x; $y; $rockSize;
 
 				while ($attempts){
-					//Debug::log($attempts);
-					$redo = 0;
+					//Debug::log("attempts left ".$attempts);
+					$validPlacement = true;
 					$attempts--;
 
-					$x = mt_rand(-400, 400);
+					$x = mt_rand(-600, 600);
 					$y = mt_rand(-500, 500);
-					$size = mt_rand(75, 125);
+					$w = mt_rand(40, 70);
+					$h = $w * mt_rand(2, 3);
+					$r = mt_rand(0, 360);
 					$rockSize = mt_rand(1, 5);
 
-					for ($j = 0; $j < sizeof($fields); $j++){
-						$dist = Math::getDist4($fields[$j][1], $fields[$j][2], $x, $y);
-						//Debug::log("checking vs field ".$j.", dist: ".$dist);
+					$validPlacement = $this->testFieldVsNebula($x, $y, $w, $h, $r, $nebulas);
 
-						if ($dist - 75 - $size/2 - $fields[$j][3]/2 <= 0){
-							//Debug::log("----RETRY, dist $dist, sizeA ".round($size/2).", sizeeB ".round($fields[$j][4]/2));
-							//Debug::log("----".$x."/".$y." versus ".$fields[$j][0]."/".$fields[$j][1]);
-							$redo = 1;
-							break;
-						} //else Debug::log("no problem !");
-					}
-
-					if (!$redo){
-						break;
-					} else Debug::log("redoing, attempts left: ".$attempts);
+					if (!$validPlacement){
+						//Debug::log("REDO!");
+						continue;
+					} else break;
 				}
 
 				if (!$attempts){continue;}
 
-
 				$density = $densities[mt_rand(0, sizeof($densities)-1)];
 				$minDmg = round(mt_rand(14, 19) * $rockSize);
 
-				$fields[] = array("AsteroidField", $x, $y, $size, ($density.";".$rockSize.";".$minDmg));
+				$fields[] = array("AsteroidField", $x, $y, 0, ($density.";".$r.";".$w.";".$h.";".$rockSize.";".$minDmg));
 			}
 			return $fields;
 		}
@@ -976,9 +993,7 @@
 
 			for ($i = 0; $i < sizeof($obstacles); $i++){
 
-				//foreach ($obstacles as $obstacle){foreach ($obstacle as $prop){Debug::log($prop);}}
 				$notes = $obstacles[$i][3].";".$obstacles[$i][4];
-
 				$stmt->bindParam(":gameid", $gameid);
 				$stmt->bindParam(":name", $obstacles[$i][0]);
 				$stmt->bindParam(":x", $obstacles[$i][1]);

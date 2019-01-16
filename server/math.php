@@ -81,12 +81,15 @@ class Math {
 	}
 
 	static function lineCircleIntersect($a, $b, $c, $size) {
+		//Debug::log("lineCircleIntersect ".$size);
 		// Calculate the euclidean distance between a & b
+		$data = array();
+
 		$eDistAtoB = sqrt(pow($b->x - $a->x, 2) + pow($b->y - $a->y, 2));
 
 		if (!$eDistAtoB){
-			Debug::log("---------------------------------dieA");
-			Debug::trace();
+			Debug::log("---------------------------------Math LineCircle die");
+			//Debug::trace();
 			die();
 		}
 		// compute the direction vector d from a to b
@@ -119,18 +122,15 @@ class Math {
 					(($t + $dist) * $d->y) + $a->y,
 					1);
 
-			$data = array();
-
 			if (static::is_on($a, $b, $entry)){
 				$data[] = $entry;
 			}
 			if (static::is_on($a, $b, $exit)){
 				$data[] = $exit;
 			}
-
-			return $data;
 		}
-		return array();
+		if (sizeof($data)){Debug::log("invalid :(");}
+		return $data;
 	}
 
 	static function is_on($a, $b, $c) {

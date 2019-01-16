@@ -25,13 +25,13 @@ if (isset($_SESSION["userid"])){
 	}
 	else if (isset($_POST["dump"])){
 		echo $dbManager->dump();
-		//$dbManager->startGame(1);
 		header("Location: lobby.php");
 		return;
 	}
 	else if (isset($_POST["startGame"])){
-		DBManager::app()->startGame(1);
-		header("Location: lobby.php");
+		$gameid = 1;
+		DBManager::app()->startGame($gameid);
+		header("Location: game.php?gameid=".$gameid);
 		return;
 	}
 
@@ -322,7 +322,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 									Total amount of Asteroid fields
 								</td>
 								<td>
-									<input type="number" style="width: 100%; text-align: center" value=4 placeholder="4" name="obstaclesAmount" step="1" min="0" max="10"></input>		
+									<input type="number" style="width: 100%; text-align: center" value=5 placeholder="5" name="obstaclesAmount" step="1" min="0" max="10"></input>		
 								</td>
 							</tr>
 							<tr>
@@ -330,7 +330,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 									Total amount of Nebula
 								</td>
 								<td>
-									<input type="number" style="width: 100%; text-align: center" value=4 placeholder="4" name="nebulaAmount" step="1" min="0" max="5"></input>		
+									<input type="number" style="width: 100%; text-align: center" value=2 placeholder="2" name="nebulaAmount" step="1" min="0" max="5"></input>		
 								</td>
 							</tr>
 							<tr style="height: 10px"><td></td></tr>

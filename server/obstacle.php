@@ -11,20 +11,14 @@ class Obstacle extends Minor {
 	public $critEffects = array();
 	public $faction = "Neutral";
 	public $points = array();
+	public $height = 0;
+	public $width = 0;
+	public $imageId = 0;
+	public $rota= 0;
 
 	function __construct($data = false){
         parent::__construct($data);
 	}
-
-		
-    /*    $this->size = $data["delay"];
-        $this->density = $data["rolling"];
-        $this->rockSize = $data["rolled"];
-        $this->scale = $data["flipped"];
-        $this->interference = round($this->density * 0.8);
-        $this->collision = round($this->density / 30 * ($this->curImp ? $this->curImp : 30));
-	*/
-
 
 	public function getDeployState($turn){
 		//Debug::log("getDeployState for ".$this->id.", destroyed: ".$this->destroyed);
@@ -128,85 +122,29 @@ class AsteroidField extends Obstacle {
 
 	function __construct($data = false){
 		parent::__construct($data);
+
         $arr = explode(";", $this->notes);
-        $this->size = $arr[0];
         $this->density = $arr[1];
-        $this->rockSize = $arr[2];
-        $this->minDmg = $arr[3];
+        $this->rota = $arr[2];
+        $w = $arr[3];
+        $h = $arr[4];
+        $this->rockSize = $arr[5];
+        $this->minDmg = $arr[6];
         $this->maxDmg = round($this->minDmg * 1.3);
-	}
-
-	public function addPrimary(){
-
-        $avgRockSize = 3;
-        $avgDensity = 20;
-
-        $this->collision = round(100 / $avgRockSize * $this->rockSize / $avgDensity * $this->density / 5);
-		$this->interference = round($this->density / 2);
-		
-		$this->primary = new Shared($this->getId());
-		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, $this->minDmg, $this->maxDmg, round($this->density * $avgRockSize / $this->rockSize / 5));
-	}
-
-	public function testObstruction($oPos, $tPos){
-		//Debug::log("testObstruction on ".get_class($this)." #".$this->id);
-		$test = Math::lineCircleIntersect($oPos, $tPos, $this->getCurPos(), $this->size/2);
-		$dist = 0;
-
-		if (sizeof($test)){
-			if (sizeof($test) == 2){
-				$dist = Math::getDist($test[0], $test[1]);
-			}
-			else {
-				if ($test[0]->type == 0){ //in
-					$dist = Math::getDist($test[0], $tPos);
-				}
-				else $dist = Math::getDist($oPos, $test[0]);
-			}
-		}
-		else $dist = Math::isWithinCircle($oPos, $tPos, $this);
-		
-		return $dist;
-	}
-}
-
-class NebulaCloud extends Obstacle {	
-	public $name = "NebulaCloud";
-	public $display = "Nebula Cloud";
-
-/*	function __construct($data = false){
-		parent::__construct($data);
-        $arr = explode(";", $this->notes);
-        $this->size = $arr[0];
-        $this->density = $arr[1];
-
-      	$this->interference = round($this->density * 1);
-*/
+        $this->height = $h;
+        $this->width = $w;
 
 
-	function __construct($data = false){
-		parent::__construct($data);
-        $arr = explode(";", $this->notes);
-        $this->size = $arr[0];
-        $this->density = $arr[1];
-        $this->rockSize = $arr[2];
-        $this->minDmg = $arr[3];
-        $this->maxDmg = round($this->minDmg * 1.3);
+        $b = Math::getPointInDirection($h, $this->rota, $this->x, $this->y);
+        $c = Math::getPointInDirection($w, $this->rota-90, $b->x, $b->y);
+        $d = Math::getPointInDirection($h, $this->rota+180, $c->x, $c->y);
 
-        $this->points[] = new Point($this->x, $this->y);
-
-        $w = -50;
-        $h = 50;
-
-        $r = 80;
-
-        $b = Math::getPointInDirection($h, $r, $this->x, $this->y);
-        $c = Math::getPointInDirection($w, $r-90, $b->x, $b->y);
-        $d = Math::getPointInDirection($h, $r+180, $c->x, $c->y);
-
+		$this->points[] = new Point($this->x, $this->y);
         $this->points[] = $b;
         $this->points[] = $c;
         $this->points[] = $d;
+
+        $this->size = 100;
 
         $this->x = ($this->points[0]->x + $this->points[2]->x) / 2;
         $this->y = ($this->points[0]->y + $this->points[2]->y) / 2;
@@ -244,6 +182,47 @@ class NebulaCloud extends Obstacle {
 			$dist = Math::getDist($oPos, $tPos);
 		}
 
+		return $dist;
+	}
+}
+
+class NebulaCloud extends Obstacle {	
+	public $name = "NebulaCloud";
+	public $display = "Nebula Cloud";
+
+	function __construct($data = false){
+		parent::__construct($data);
+
+        $arr = explode(";", $this->notes);
+        $this->size = $arr[0];
+        $this->density = $arr[1];
+        $this->rota = $arr[2];
+        $this->imageId = $arr[3];
+      	$this->interference = round($this->density * 1);
+	}
+
+	public function addPrimary(){
+		$this->primary = new Shared($this->getId());
+	}
+
+	public function testObstruction($oPos, $tPos){
+		//Debug::log("testObstruction on ".get_class($this)." #".$this->id);
+		$test = Math::lineCircleIntersect($oPos, $tPos, $this->getCurPos(), $this->size/2);
+		$dist = 0;
+
+		if (sizeof($test)){
+			if (sizeof($test) == 2){
+				$dist = Math::getDist($test[0], $test[1]);
+			}
+			else {
+				if ($test[0]->type == 0){ //in
+					$dist = Math::getDist($test[0], $tPos);
+				}
+				else $dist = Math::getDist($oPos, $test[0]);
+			}
+		}
+		else $dist = Math::isWithinCircle($oPos, $tPos, $this);
+		
 		return $dist;
 	}
 }
