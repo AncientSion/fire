@@ -122,12 +122,15 @@ class AsteroidField extends Obstacle {
 
         $avgRockSize = 3;
         $avgDensity = 20;
+      //  $attacks = round($this->density * $avgRockSize / $this->rockSize / 5));
 
-      	$this->collision = round(100 / $avgRockSize * $this->rockSize / $avgDensity * $this->density / 7);
+		$attacks = round(6 / 20 * $this->density * (1 + 0.25 * (3 - $this->rockSize)));
+
+      	$this->collision = round(100 / $avgRockSize * $this->rockSize / $avgDensity * $this->density / 10);
 		$this->interference = round($this->density / 2);
 		
 		$this->primary = new Shared($this->getId());
-		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, $this->minDmg, $this->maxDmg, round($this->density * $avgRockSize / $this->rockSize / 5));
+		$this->primary->systems[] = new AsteroidRam($this->getId(), $this->id, $this->minDmg, $this->maxDmg, $attacks);
 	}
 
 	public function testObstruction($oPos, $tPos){

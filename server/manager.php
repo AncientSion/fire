@@ -40,8 +40,8 @@
 				array("Rout", 150, 0, 0.00)
 			),
 			"collision" => array(
-				"baseMulti" => 3.0,
-				"hitMod" => 0.65
+				"baseMulti" => 3,
+				"hitMod" => 0.6
 			)
 		);
 
@@ -1021,8 +1021,6 @@
 			$req = $this->ships[$i]->collision * $this->const["collision"]["baseMulti"] - ($this->const["collision"]["hitMod"] * (4 - ($unit->traverse)));
 			$string = (round($totalDist).";".$this->ships[$i]->collision.";".round($req).";");
 			$shots = ceil($this->ships[$i]->getSystem(2)->getShots(static::$turn) / 100 * $totalDist);
-
-			//Debug::log($req."/".$string."/".$shots);
 
 			$fire = new FireOrder(
 				//$id, $gameid, $turn, $shooter, $target, $x, $y, $weapon, $shots, $req, $notes, $hits, $res

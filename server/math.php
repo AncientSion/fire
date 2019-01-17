@@ -68,14 +68,24 @@ class Math {
 		$ub = ($b->x - $a->x) * ($a->y - $c->y) - ($b->y - $a->y) * ($a->x - $c->x);
 		$denom = ($d->y - $c->y) * ($b->x - $a->x) - ($d->x - $c->x) * ($b->y - $a->y);
 
-		$ua /= $denom;
-		$ub /= $denom;
+		if ($denom == 0){
+			if (abs($ua) == 0 && abs($ub) == 0){
+				return new Intersector(
+					($a->x + $b->x) / 2,
+					($a->y + $b->y) / 2
+				);
+			}
+		}
+		else {
+			$ua /= $denom;
+			$ub /= $denom;
 
-		if ($ua >= 0 && $ua <= 1 && $ub >= 0 && $ub <= 1){
-			return new Intersector(
-				$a->x + $ua * ($b->x - $a->x),
-				$a->y + $ua * ($b->y - $a->y)
-			);
+			if ($ua >= 0 && $ua <= 1 && $ub >= 0 && $ub <= 1){
+				return new Intersector(
+					$a->x + $ua * ($b->x - $a->x),
+					$a->y + $ua * ($b->y - $a->y)
+				);
+			}
 		}
 		return false;
 	}
@@ -123,11 +133,11 @@ class Math {
 					1);
 
 			if (static::is_on($a, $b, $entry)){
-				Debug::log("entry!");
+				//Debug::log("entry!");
 				$data[] = $entry;
 			}
 			if (static::is_on($a, $b, $exit)){
-				Debug::log("exit!");
+				//Debug::log("exit!");
 				$data[] = $exit;
 			}
 		}

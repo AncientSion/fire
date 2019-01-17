@@ -7,7 +7,7 @@ function Obstacle(data){
 	this.density = data.density;
 	this.interference = data.interference;
 	this.rockSize = data.rockSize;
-	this.collision = data.collision;
+	this.collision = data.collision * game.const.collision.baseMulti;
 	this.height = data.height;
 	this.width = data.width;
 	this.rota = data.rota;
@@ -41,7 +41,7 @@ Obstacle.prototype.setNextMove = function(){
 }
 
 Obstacle.prototype.getBaseCollisionPct = function(){
-	return this.collision * 3;
+	return this.collision;
 }
 
 Obstacle.prototype.getHeader = function(){
@@ -386,13 +386,11 @@ AsteroidField.prototype.setTrueImage = function(info){
 
 	var ctx = t.getContext("2d");
 
-	var size = 10 + Math.min(2, this.rockSize -2)*2;
-	var amount = Math.sqrt(this.width * this.height) / this.density * 3;
-//	console.log(size)
-//	console.log(amount)
+	var size = 10 + Math.min(2, this.rockSize -2)*4;
+	var amount = Math.sqrt(this.width * this.height) / this.density * 5;
 
 	for (i = 0; i < amount; i++){
-		//ctx.translate(range(0, this.width), range(0, this.height));
+		//ctx.translate(range(0, this.width), range(0, this.height));		
 		//ctx.rotate(this.rota * (Math.PI/180));
 		ctx.drawImage(
 			graphics.images.rocks[range(0, graphics.images.rocks.length-1)],
@@ -410,16 +408,15 @@ AsteroidField.prototype.setTrueImage = function(info){
 		ctx.rotate(-(this.rota-90) * (Math.PI/180))
 
 		ctx.fillStyle = "black";
-		ctx.rect(-25, -40, 54, 40);
-		ctx.rect(-60, -10, 122, 30);
+		ctx.rect(-29, -37, 58, 80);
 		ctx.fill();
 
 		ctx.fillStyle = "yellow";
-		ctx.font = "24px Arial";
+		ctx.font = "20px Arial";
 		ctx.textAlign = "center";
-		ctx.fillText(this.getMaxInterference() + "%", 0, -13);
-		ctx.fillText(this.getBaseCollisionPct() + "% " + this.getBaseAttacks()+"x"+this.getAvgDmg(), 0, +13);
-		//ctx.fillText(this.rota+ " d", 0, +15);
+		ctx.fillText(this.getMaxInterference() + "%", 0, -15);
+		ctx.fillText(this.getBaseAttacks()+"x"+this.getAvgDmg(), 0, +14);
+		ctx.fillText(this.getBaseCollisionPct() + "%", 0, +37);
 	}
 
 	ctx.setTransform(1,0,0,1,0,0);
@@ -437,9 +434,8 @@ NebulaCloud.prototype.getMaxInterference = function(){
 }
 
 NebulaCloud.prototype.getShortInfo = function(){
-	var ele = ui.shortInfo.attr("class", "hostile");
-
-	ele
+	ui.shortInfo
+	.attr("class", "hostile")
 	.append($("<div>").html("Size " + this.size))
 	.append($("<div>").html(this.getMaxInterference() + "% Interference"))
 }
@@ -537,7 +533,9 @@ NebulaCloud.prototype.setTrueImage = function(info){
 		ctx.rotate(-this.rota * (Math.PI/180));
 	
 	if (info){
-		ctx.clearRect(-30, -18, 60, 36);
+		ctx.rect(-30, -18, 60, 36);
+		ctx.fillStyle= "black;"
+		ctx.fill();
 
 		ctx.fillStyle = "yellow";
 		ctx.font = "24px Arial";

@@ -839,16 +839,21 @@
 		}
 
 		public function createStaticObstacles($gameid, $data){
+
+			$time = -microtime(true);
+
 			$obstacles = array();
 			$obstacles = array_merge($obstacles, $this->getNewNebulas($data));
 			$obstacles = array_merge($obstacles, $this->getNewAsteroidFields($obstacles, $data));
 
 			$this->insertObstacles($gameid, $obstacles);
 
+			$time += microtime(true); 
+			Debug::log("TIME: ".round($time, 3)." seconds.");
 		}
 
 		public function getNewNebulas($data){
-			//Debug::log("getNewNebula");
+			Debug::log("getNewNebula");
 
 			$amount = $data["nebulaAmount"];
 			$min = $data["obstaclesSizeMin"];
@@ -868,8 +873,8 @@
 					$dist;
 					$attempts--;
 					
-					$x = mt_rand(-450, 450);
-					$y = mt_rand(-450, 450);
+					$x = mt_rand(-500, 500);
+					$y = mt_rand(-500, 500);
 					$size = mt_rand(100, 150);
 					$r = mt_rand(0, 360);
 
@@ -896,9 +901,47 @@
 			return $nebulas;
 		}
 
-		public function testFieldVsNebula($x, $y, $w, $h, $r, $nebulas){
-			//Debug::log("testFieldVsNebula, this is FIELD ".$x."/".$y);
+		public function testFieldVsAllFields($points, $center, $length, $fields){
+			//Debug::log("TESTING FIELD!");
 
+			for ($i = 0; $i < sizeof($fields); $i++){
+				$dist = Math::getDist($center, $fields[$i][6]);
+				if ($dist > $length * 2){continue;}
+				if ($dist <= $length){return false;}
+				//Debug::log("versus existing field ".$i." with dist ".$dist);
+
+				for ($j = 0; $j < sizeof($points)-1; $j++){
+					for ($k = 0; $k < sizeof($fields[$i][5])-1; $k++){
+						if (Math::lineLineIntersect(
+							$points[$j], $points[$j+1],
+							$fields[$i][5][$k], $fields[$i][5][$k+1]
+						))						
+						{return false;}
+					}
+				}
+			}
+			return true;
+		}
+
+		public function testFieldVsAllNebulas($points, $center, $length, $nebulas){
+			//Debug::log("testFieldVsAllNebulas, this is FIELD ".$x."/".$y);
+
+	        for ($i = 0; $i < sizeof($nebulas); $i++){
+
+	        	$pos = new Point($nebulas[$i][1], $nebulas[$i][2]);
+				$dist = Math::getDist($center, $pos);
+
+				if ($dist < $length/2 + $nebulas[$i][3]/2){return false;}
+
+	        	for ($j = 0; $j < sizeof($points)-1; $j++){
+	        		if (sizeof(Math::lineCircleInterSect($points[$j], $points[$j+1], $pos, $nebulas[$i][3]/2))){return false;}
+	        	}
+        		if (sizeof(Math::lineCircleInterSect($points[3], $points[0], $pos, $nebulas[$i][3]/2))){return false;}
+	        }
+	        return true;
+		}
+
+		public function getRectPoints($x, $y, $w, $h, $r){
 			$points = array();
 
 	        $b = Math::getPointInDirection($h, $r, $x, $y);
@@ -910,15 +953,7 @@
 	        $points[] = $c;
 	        $points[] = $d;
 
-	        for ($i = 0; $i < sizeof($nebulas); $i++){
-	        	$pos = new Point($nebulas[$i][1], $nebulas[$i][2]);
-
-	        	for ($j = 0; $j < sizeof($points)-1; $j++){
-	        		if (sizeof(Math::lineCircleInterSect($points[$j], $points[$j+1], $pos, $nebulas[$i][3]/2))){return false;}
-	        	}
-        		if (sizeof(Math::lineCircleInterSect($points[3], $points[0], $pos, $nebulas[$i][3]/2))){return false;}
-	        }
-	        return true;
+	        return $points;
 		}
 
 		public function getNewAsteroidFields($nebulas, $data){
@@ -934,27 +969,24 @@
 			$densities = array(15, 20, 25);
 
 			for ($i = 1; $i <= $amount; $i++){
-				//Debug::log("creating field ".$i);
-				$attempts = 10;
+				$attempts = 25;
 
 				$x; $y; $rockSize;
 
 				while ($attempts){
-					//Debug::log("attempts left ".$attempts);
-					$validPlacement = true;
 					$attempts--;
 
-					$x = mt_rand(-600, 600);
+					$x = mt_rand(-650, 650);
 					$y = mt_rand(-500, 500);
-					$w = mt_rand(40, 70);
-					$h = $w * mt_rand(2, 3);
+					$w = mt_rand(35, 65);
+					$h = $w * mt_rand(4, 5);
 					$r = mt_rand(0, 360);
 					$rockSize = mt_rand(1, 5);
 
-					$validPlacement = $this->testFieldVsNebula($x, $y, $w, $h, $r, $nebulas);
+					$selfPoints = $this->getRectPoints($x, $y, $w, $h, $r);
+					$selfCenter = new Point(($selfPoints[0]->x + $selfPoints[2]->x) / 2, ($selfPoints[0]->y + $selfPoints[2]->y) / 2);
 
-					if (!$validPlacement){
-						//Debug::log("REDO!");
+					if (!$this->testFieldVsAllNebulas($selfPoints, $selfCenter, $w, $nebulas) || !$this->testFieldVsAllFields($selfPoints, $selfCenter, $w, $fields)){
 						continue;
 					} else break;
 				}
@@ -962,10 +994,10 @@
 				if (!$attempts){continue;}
 
 				$density = $densities[mt_rand(0, sizeof($densities)-1)];
-				$minDmg = round(mt_rand(14, 19) * $rockSize);
+				$minDmg = round(15, 20) * (2 + 0.6 * ($rockSize-3));
 
 
-				$fields[] = array("AsteroidField", $x, $y, 0, ($density.";".$r.";".$w.";".$h.";".$rockSize.";".$minDmg));
+				$fields[] = array("AsteroidField", $x, $y, 0, ($density.";".$r.";".$w.";".$h.";".$rockSize.";".$minDmg), $selfPoints, $selfCenter);
 			}
 			return $fields;
 		}
