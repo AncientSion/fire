@@ -165,23 +165,6 @@ class Reactor extends PrimarySystem {
 	}
 }
 
-class Engine extends PrimarySystem {
-	public $name = "Engine";
-	public $display = "Engine & Drive";
-	public $crewEffect = 12;
-	public $hitMod = 2.5;
-
-	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
-        parent::__construct($id, $parentId, $integrity, $output, $width);
-    }
-
-	public function setPowerReq($mass){
-		$this->powerReq = ceil($this->output * Math::getEnginePowerNeed($mass));
-		$this->effiency = floor($this->powerReq/10)+3;
-		$this->boostEffect[] = new Effect("Output", 12);
-	}
-}
-
 class GravitonSupressor extends PrimarySystem {
 	public $name = "GravitonSupressor";
 	public $display = "Graviton Supressor";
@@ -196,6 +179,23 @@ class GravitonSupressor extends PrimarySystem {
     }
 }
 
+class Engine extends PrimarySystem {
+	public $name = "Engine";
+	public $display = "Engine & Drive";
+	public $crewEffect = 12;
+	public $hitMod = 2.5;
+
+	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $integrity, $output, $width);
+    }
+
+	public function setPowerReq($unitSize, $mass = 0){
+		$this->powerReq = ceil($this->output * Math::getEnginePowerNeed($mass));
+		$this->effiency = floor($this->powerReq/5);
+		$this->boostEffect[] = new Effect("Output", 15);
+	}
+}
+
 class Sensor extends PrimarySystem {
 	public $name = "Sensor";
 	public $display = "Sensor & Analyzing";
@@ -207,11 +207,14 @@ class Sensor extends PrimarySystem {
 	public $states = array(0, 0);
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
-		$this->powerReq = floor($output/60);
-		$this->effiency = floor($this->powerReq/4)+1;
-		$this->boostEffect[] = new Effect("Output", 10);
         parent::__construct($id, $parentId, $integrity, $output, $width);
     }
+
+	public function setPowerReq($unitSize, $mass = 0){
+		$this->powerReq = ceil($this->output/50);
+		$this->effiency = floor($this->powerReq/5) + $unitSize-3;
+		$this->boostEffect[] = new Effect("Output", 15);
+	}
 
     public function hideEW($turn){
 		//Debug::log($this->parentId);

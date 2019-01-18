@@ -875,7 +875,7 @@
 					
 					$x = mt_rand(-500, 500);
 					$y = mt_rand(-500, 500);
-					$size = mt_rand(100, 150);
+					$size = mt_rand($min, $max);
 					$r = mt_rand(0, 360);
 
 					for ($j = 0; $j < sizeof($nebulas); $j++){
@@ -902,16 +902,19 @@
 		}
 
 		public function testFieldVsAllFields($points, $center, $length, $fields){
-			//Debug::log("TESTING FIELD!");
+			Debug::log("TESTING FIELD with length ".$length);
 
 			for ($i = 0; $i < sizeof($fields); $i++){
-				$dist = Math::getDist($center, $fields[$i][6]);
-				if ($dist > $length * 2){continue;}
-				if ($dist <= $length){return false;}
+				//$dist = Math::getDist($center, $fields[$i][6]);
+				//if ($dist > $length * 2){continue;}
+				//if ($dist <= $length){return false;}
 				//Debug::log("versus existing field ".$i." with dist ".$dist);
 
 				for ($j = 0; $j < sizeof($points)-1; $j++){
 					for ($k = 0; $k < sizeof($fields[$i][5])-1; $k++){
+						$distEndToEnd = Math::getDist($points[$j], $fields[$i][5][$k]);
+						//Debug::log("dist from points $j to otherPoint $k: ".$distEndToEnd);
+						if ($distEndToEnd < $length){return false;}
 						if (Math::lineLineIntersect(
 							$points[$j], $points[$j+1],
 							$fields[$i][5][$k], $fields[$i][5][$k+1]
@@ -978,15 +981,15 @@
 
 					$x = mt_rand(-650, 650);
 					$y = mt_rand(-500, 500);
-					$w = mt_rand(35, 65);
-					$h = $w * mt_rand(4, 5);
+					$w = mt_rand(40, 70);
+					$h = $w * mt_rand(3, 5);
 					$r = mt_rand(0, 360);
 					$rockSize = mt_rand(1, 5);
 
 					$selfPoints = $this->getRectPoints($x, $y, $w, $h, $r);
 					$selfCenter = new Point(($selfPoints[0]->x + $selfPoints[2]->x) / 2, ($selfPoints[0]->y + $selfPoints[2]->y) / 2);
 
-					if (!$this->testFieldVsAllNebulas($selfPoints, $selfCenter, $w, $nebulas) || !$this->testFieldVsAllFields($selfPoints, $selfCenter, $w, $fields)){
+					if (!$this->testFieldVsAllNebulas($selfPoints, $selfCenter, $h, $nebulas) || !$this->testFieldVsAllFields($selfPoints, $selfCenter, $h, $fields)){
 						continue;
 					} else break;
 				}

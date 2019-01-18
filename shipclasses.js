@@ -3758,81 +3758,21 @@ Ship.prototype.updateNonPowerOutput = function(system){
 }
 
 Ship.prototype.handleCrewDiv = function(command){
+	var div = $("#crewDiv");
 	if (command.selected){
 		game.system = 0;
 		command.selected = false;
-		this.disableCrewPurchase();
+		div.addClass("disabled");
 	}
+	
+	if (game.turn == 0){game.setUnitTotal(this);}
 	else {
 		command.selected = true;
 		game.system = command.id;
+		$(div).data("systemid", this.id).css("left", 750).css("top", 400).removeClass("disabled");
 		this.enableCrewPurchase(command);
 	}
 	command.setSystemBorder();
-}
-
-Ship.prototype.enableCrewPurchase = function(command){
-	var div = $("#crewDiv");
-	var table = div.find("#crewTable");
-
-	table
-		.empty()
-		.append($("<thead>")
-			.append(
-				$($("<tr>")
-					.append($("<th>").html("Type").css("width", "18%"))
-					.append($("<th>").html("Effect / lvl").css("width", "40%"))
-					.append($("<th>").html("Cost").css("width", "8%"))
-					.append($("<th>").attr("colSpan", 3).html("Level").css("width", "15%"))
-					.append($("<th>").html("Total Cost")))))
-	
-	table.append($("<tbody>"));
-
-	for (var i = 0; i < command.loads.length; i++){
-		table
-		.append(
-			$($("<tr>")
-				.append($("<td>").html(command.loads[i].name + "</br>Officer"))
-				.append($("<td>").html(this.getCrewEffect(i)))
-				.append($("<td>").html(this.getCrewAddCost(i)))
-				.append($("<td>")
-					.append($("<img>")
-						.attr("src", "varIcons/plus.png").addClass("size25")
-						.data("type", i)
-						.click(function(){game.getUnit(aUnit).plusCrewLevel($(this).data("type"))})
-					)
-				)
-				.append($("<td>").html(this.getCrewLevel(i)))
-				.append($("<td>")
-					.append($("<img>")
-						.attr("src", "varIcons/minus.png").addClass("size25")
-						.data("type", i)
-						.click(function(){game.getUnit(aUnit).minusCrewLevel($(this).data("type"))})
-					)
-				)
-				.append($("<td>").html(this.getTotalCrewCost(i)))
-			)
-		)
-	}
-
-	if (game.turn == 0){
-			table
-			.append($("<tr>")
-				.css("fontSize", 18).css("height", 30)
-				.append($("<th>"))
-				.append($("<th>").attr("colSpan", 4).html("Grand Total"))
-				.append($("<th>"))
-				.append($("<th>").addClass("systemTotal")))
-
-		this.getSystemByName("Command").setTotalBuyData();
-	}
-	$(div).data("systemid", this.id).css("left", 750).css("top", 400).removeClass("disabled");
-}
-
-
-Ship.prototype.disableCrewPurchase = function(){
-	$("#crewDiv").addClass("disabled");
-	if (game.turn == 0){game.setUnitTotal(this);}
 }
 
 Ship.prototype.plusCrewLevel = function(i){

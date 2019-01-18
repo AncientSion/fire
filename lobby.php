@@ -29,7 +29,7 @@ if (isset($_SESSION["userid"])){
 		return;
 	}
 	else if (isset($_POST["startGame"])){
-		$gameid = 1;
+		$gameid = 2;
 		DBManager::app()->startGame($gameid);
 		header("Location: game.php?gameid=".$gameid);
 		return;
@@ -330,13 +330,13 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 									Total amount of Nebula
 								</td>
 								<td>
-									<input type="number" style="width: 100%; text-align: center" value=2 placeholder="2" name="nebulaAmount" step="1" min="0" max="5"></input>		
+									<input type="number" style="width: 100%; text-align: center" value=3 placeholder="3" name="nebulaAmount" step="1" min="0" max="5"></input>		
 								</td>
 							</tr>
 							<tr style="height: 10px"><td></td></tr>
 							<tr>
 								<td>
-									Minimum size per field / nebula
+									Minimum size per nebula
 								</td>
 								<td>
 									<input type="number" style="width: 100%; text-align: center" value=75 placeholder="75" name="obstaclesSizeMin" step="25" min="50"></input>		
@@ -344,7 +344,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 							</tr>
 							<tr>
 								<td>
-									Maximum size per field / nebula
+									Maximum size per nebula
 								</td>
 								<td>
 									<input type="number" style="width: 100%; text-align: center" value=150 placeholder="175" name="obstaclesSizeMax" step="25" min="100" max="300"></input>		

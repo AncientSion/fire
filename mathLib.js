@@ -212,12 +212,12 @@ function addToDirection(current, add){
 	return ret;
 }
 
-function rotate(cx, cy, v, angle) {
+function rotatePoint(cx, cy, point, angle) {
 	var radians = (Math.PI / 180) * angle;
 		cos = Math.cos(radians);
 		sin = Math.sin(radians);
-		nx = (cos * (v.x - cx)) - (sin * (v.y - cy)) + cx;
-		ny = (cos * (v.y - cy)) + (sin * (v.x - cx)) + cy;
+		nx = (cos * (point.x - cx)) - (sin * (point.y - cy)) + cx;
+		ny = (cos * (point.y - cy)) + (sin * (point.x - cx)) + cy;
 	return {x: nx, y: ny};
 }
 

@@ -153,7 +153,7 @@ class Squadron extends Mixed {
 			$this->primary->systems[$i]->setState($turn, $phase);
 		}
 
-		$this->getSystemByName("Engine")->setPowerReq(0);
+		$this->getSystemByName("Engine")->setPowerReq($this->traverse);
 		$this->setBaseStats($turn, $phase);
 		$this->setFaction();
 		$this->setSpecialAbilities();

@@ -3377,7 +3377,7 @@ Launcher.prototype.setupLauncherLoadout = function(e){
 	if (div.hasClass("disabled")){
 		div.find("#launchRate").html(this.getOutput());
 		div.find("#capacity").html(this.capacity);
-		div.data("systemid", this.id).css("left", 450).css("top", 600).removeClass("disabled");
+		div.data("systemid", this.id).css("left", 375).css("top", 400).removeClass("disabled");
 		this.initLauncherDiv();
 	}
 	else {
@@ -3486,6 +3486,7 @@ Launcher.prototype.initLauncherDiv = function(){
 	for (var i = 0; i < this.loads.length; i++){
 		table
 			.append($("<tr>")
+				.mousemove(function(e){e.stopPropagation()})
 				.append($("<td>")
 					.append($("<div>").addClass("yellow").html(this.loads[i].name))
 					.append($("<div>").addClass("yellow").html(this.loads[i].display))
@@ -4116,6 +4117,7 @@ Hangar.prototype.showHangarLaunchControl = function(){
 	for (var i = 0; i < this.loads.length; i++){
 		table
 			.append($("<tr>")
+				.mousemove(function(e){e.stopPropagation()})
 				.append($("<td>")
 					.append($("<div>").addClass("yellow").html(this.loads[i].name))
 					.append($("<div>").addClass("yellow").html(this.loads[i].display))
@@ -4314,6 +4316,7 @@ Hangar.prototype.initHangarPurchaseDiv = function(){
 	for (var i = 0; i < this.loads.length; i++){
 		table
 			.append($("<tr>")
+				.mousemove(function(e){e.stopPropagation()})
 				.append($("<td>")
 					.append($("<div>").addClass("yellow").html(this.loads[i].name))
 					.append($("<div>").addClass("yellow").html(this.loads[i].role))
@@ -4402,10 +4405,9 @@ Hangar.prototype.updateHangarDiv = function(index){
 }
 
 Hangar.prototype.setupHangarLoadout = function(e){
-	var div = $("#hangarDiv");
 	if (div.hasClass("disabled")){
 		this.setHangarDivContent(div);
-		div.data("systemid", this.id).css("left", 450).css("top", 600).removeClass("disabled");
+		div.data("systemid", this.id).css("left", 375).css("top", 400).removeClass("disabled");
 		this.initHangarPurchaseDiv();
 	}
 	else {

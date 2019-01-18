@@ -256,7 +256,8 @@ class Ship {
 			}
 		}
 
-		$this->getSystemByName("Engine")->setPowerReq($this->mass);
+		$this->getSystemByName("Engine")->setPowerReq($this->traverse, $this->mass);
+		$this->getSystemByName("Sensor")->setPowerReq($this->traverse, $this->mass);
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
@@ -1529,7 +1530,6 @@ class Ship {
 		}
 	}
 }
-
 
 class Medium extends Ship {
 	public $baseImpulse = 165;

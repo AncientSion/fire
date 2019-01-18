@@ -83,7 +83,7 @@ Squadron.prototype.setLayout = function(){
 		//		o.y += range(-8, 8);
 		//	}
 
-			o = rotate(0, 0, o, 90);
+			o = rotatePoint(0, 0, o, 90);
 
 			this.structures[i].layout = {x: o.x, y: o.y};
 
@@ -541,7 +541,7 @@ Squadron.prototype.getWeaponOrigin = function(id){
 					var p = getPointInDir(devi/6, this.structures[i].systems[j].align, 0, 0);
 					var x = this.structures[i].layout.x/4 + p.x;
 					var y = this.structures[i].layout.y/4 + p.y;
-					return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());
+					return rotatePoint(0, 0, {x: x, y: y}, this.getDrawFacing());
 				}
 			}
 		}
@@ -552,7 +552,7 @@ Squadron.prototype.getWeaponOrigin = function(id){
 Squadron.prototype.getUnitPos = function(unit){
 	var x = unit.layout.x * 1 / 2 * 0.5;
 	var y = unit.layout.y * 1 / 2 * 0.5;
-	return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());
+	return rotatePoint(0, 0, {x: x, y: y}, this.getDrawFacing());
 }
 
 Squadron.prototype.getFireDest = function(fire, isHit, num){

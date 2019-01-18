@@ -38,7 +38,13 @@ $(document).ready(function(){
 		targetDataB: $("#aimDiv").find("#targetDataB"),
 		targetDataC: $("#aimDiv").find("#targetDataC"),
 		vector: $("#vectorDiv")
-	}
+	};
+
+
+$("#hangarDiv").find(".header").last().mousemove(function(e){e.stopPropagation()}).end().end().drag();
+$("#weaponDiv").find(".header").last().mousemove(function(e){e.stopPropagation()}).end().end().drag();
+$("#crewDiv").find(".header").last().mousemove(function(e){e.stopPropagation()}).end().end().drag();
+
 })
 
 
@@ -434,13 +440,6 @@ function handleMouseDown(e){
 function handleMouseUp(e){
 	e.preventDefault();
 	e.stopPropagation();
-
-	/*if (e.originalEvent.button == 0){
-		var t = (new Date().getTime() - window.downTime.getTime());
-		if (t < 166){
-			canvasMouseClick(e);
-		}
-	}*/
 	cam.scroll = 0;
 }
 

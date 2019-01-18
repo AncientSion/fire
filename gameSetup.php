@@ -226,10 +226,6 @@ else header("Location: index.php");
 				$(this).hide();
 			});
 
-		$("#hangarDiv").drag();
-		$("#weaponDiv").drag();
-		$("#crewDiv").drag();
-
 		if (window.ready){
 			$("#shipsBoughtTable").hide();
 			$("#game").hide();
@@ -424,10 +420,7 @@ else header("Location: index.php");
 					game.setRemPV()
 					window.shipCtx.clearRect(0, 0, res.x, res.y);
 					window.fxCtx.clearRect(0, 0, res.x, res.y);
-
-					//$("#hangarDiv").addClass("disabled");
-					//$("#weaponDiv").addClass("disabled");
-					//$("#crewDiv").addClass("disabled");
+					
 					$("#hangarTable").html("");
 					game.setReinforceFaction(unit);
 					aUnit = 0;

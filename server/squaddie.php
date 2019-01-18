@@ -103,7 +103,7 @@ class Light extends Squaddie {
 	public $baseImpulseCost = 30;
 	public $baseTurnDelay = 1.3;
 	public $baseHitChance = 60;
-	public $size = 45;
+	public $size = 40;
 	public $space = 4;
 	
 	function __construct($id, $parentId){
@@ -112,7 +112,7 @@ class Light extends Squaddie {
 }
 
 class SuperLight extends Light {
-	public $size = 40;
+	public $size = 35;
 	public $space = 3;
 	public $baseTurnDelay = 1.2;
 	public $baseHitChance = 55;
@@ -123,7 +123,7 @@ class SuperLight extends Light {
 }
 
 class UltraLight extends SuperLight {
-	public $size = 35;
+	public $size = 30;
 	public $space = 2;
 	public $baseTurnDelay = 1.1;
 	public $baseHitChance = 50;

@@ -16,6 +16,10 @@ function Obstacle(data){
 
 Obstacle.prototype = Object.create(Mixed.prototype);
 
+Obstacle.prototype.getInterference = function(){
+	return this.interference;
+}
+
 Obstacle.prototype.setPostMoveFaceHead = function(){
 	return;
 }
@@ -195,8 +199,8 @@ AsteroidField.prototype.getShortInfo = function(){
 
 	ele
 	//.append(this.getHeader())
-	.append($("<div>").html("Size " + this.size))
-	.append($("<div>").html(this.getMaxInterference() + "% Interference"))
+	//.append($("<div>").html("Size " + this.size))
+	.append($("<div>").html(this.getInterference() + "% Interference"))
 	.append($("<div>").html(this.getBaseCollisionPct() + "% Collision"))
 	.append($("<div>").html("(" + this.rockSize + ")  "+ this.getDamageString() + " / " + this.getBaseAttacks() + " Strikes"))
 }
@@ -414,7 +418,7 @@ AsteroidField.prototype.setTrueImage = function(info){
 		ctx.fillStyle = "yellow";
 		ctx.font = "20px Arial";
 		ctx.textAlign = "center";
-		ctx.fillText(this.getMaxInterference() + "%", 0, -15);
+		ctx.fillText(this.getInterference() + "%", 0, -15);
 		ctx.fillText(this.getBaseAttacks()+"x"+this.getAvgDmg(), 0, +14);
 		ctx.fillText(this.getBaseCollisionPct() + "%", 0, +37);
 	}
@@ -437,7 +441,7 @@ NebulaCloud.prototype.getShortInfo = function(){
 	ui.shortInfo
 	.attr("class", "hostile")
 	.append($("<div>").html("Size " + this.size))
-	.append($("<div>").html(this.getMaxInterference() + "% Interference"))
+	.append($("<div>").html(this.getInterference() + "% Interference"))
 }
 
 NebulaCloud.prototype.createBaseDiv = function(){
@@ -540,7 +544,7 @@ NebulaCloud.prototype.setTrueImage = function(info){
 		ctx.fillStyle = "yellow";
 		ctx.font = "24px Arial";
 		ctx.textAlign = "center";
-		ctx.fillText(this.getMaxInterference() + "%", 3, 7)
+		ctx.fillText(this.getInterference() + "%", 3, 7)
 	}
 
 	ctx.setTransform(1,0,0,1,0,0);

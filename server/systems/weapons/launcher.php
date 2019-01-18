@@ -101,5 +101,4 @@ class TorpedoLauncher extends MissileLauncher {
 	function __construct($id, $parentId, $start, $end, $integrity, $loads, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $integrity, $loads, $width);
 	}
-
 }

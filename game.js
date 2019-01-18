@@ -64,8 +64,8 @@ function Game(data){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.phaseDelay = 100;
-	this.animData = {jump: 3};
+	this.phaseDelay = 500;
+	this.animData = {jump: 30};
 	this.commandChange = {old: 0, new: 0, original: 0}
 	this.subPhase = 1;
 	this.animMoves = 0;
@@ -3368,6 +3368,12 @@ Game.prototype.setConfirmInfo = function(){
 	}
 }
 
+Game.prototype.setGameSpeed= function(){
+	if (1){
+		this.animData.jump = 3;
+		this.phaseDelay = 100;
+	}
+}
 
 Game.prototype.create = function(data){
 
@@ -3446,6 +3452,7 @@ Game.prototype.create = function(data){
 	this.initOptionsUI();
 	this.initEvents();
 	this.setAllCollisionData();
+	this.setGameSpeed();
 	cam.z = 0.5;
 	cam.setCamFocus({x: 0, y:0}, true);
 	this.startPhase(this.phase);
@@ -4700,7 +4707,4 @@ Game.prototype.initUI = function(){
 			e.stopPropagation();
 			$(this).hide();
 		});
-
-	$("#hangarDiv").drag()
-	$("#crewDiv").drag()
 }

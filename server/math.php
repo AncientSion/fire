@@ -5,6 +5,17 @@ class Math {
 	function __construct(){
 	}
 
+	static function rotatePoint($shiftX, $shiftY, $point, $angle){
+		$radians = (M_PI / 180) * $angle;
+		$cos = cos($radians);
+		$sin = cos($radians);
+
+		return new Point(
+			($cos * ($point->x - $shiftX)) - ($sin * ($point->y - $shiftY)) + $shiftX,
+			($cos * ($point->y - $shiftY)) + ($sin * ($point->x - $shiftX)) + $shiftY
+		);
+	}
+
 	static function dot($a, $b){
 		return ($a->x * $b->x) + ($a->y * $b->y); 
 	}
@@ -277,7 +288,7 @@ class Math {
 	}
 
 	static function getEnginePowerNeed($mass){
-		return round(pow($mass, 1.1)/70000, 2);
+		return round(pow($mass, 0.5) * 0.004, 2);
 	}
 
 /*
