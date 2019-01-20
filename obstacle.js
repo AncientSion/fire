@@ -384,31 +384,43 @@ AsteroidField.prototype.drawSelf = function(){
 }
 
 AsteroidField.prototype.setTrueImage = function(info){
-	var t = document.createElement("canvas");
-		t.width = this.width*2;
-		t.height = this.height*2;
+	var ctx;
 
-	var ctx = t.getContext("2d");
+	if (this.img == undefined || !this.img){
+		var t = document.createElement("canvas");
+			t.width = this.width*2;
+			t.height = this.height*2;
 
-	var size = 10 + Math.min(2, this.rockSize -2)*4;
-	var amount = Math.sqrt(this.width * this.height) / this.density * 5;
+		ctx = t.getContext("2d");
 
-	for (i = 0; i < amount; i++){
-		//ctx.translate(range(0, this.width), range(0, this.height));		
-		//ctx.rotate(this.rota * (Math.PI/180));
-		ctx.drawImage(
-			graphics.images.rocks[range(0, graphics.images.rocks.length-1)],
-			range(5, t.width-5) - size,
-			range(5, t.height-5) - size,
-			size*2,
-			size*2,
-		)
+		var size = 10 + (this.rockSize -2) * 4;
+		var amount = Math.sqrt(this.width * this.height) / this.density * 10;
+
+		for (i = 0; i < amount; i++){
+			var x = range(5, t.width-5) - size;
+			var y = range(5, t.height-5) - size;
+
+			ctx.translate(x, y);
+			//ctx.rotate(this.rota * (Math.PI/180));
+			ctx.drawImage(
+				graphics.images.rocks[range(0, graphics.images.rocks.length-1)],
+				x,
+				y,
+				size*2,
+				size*2,
+			)
+			//ctx.rotate(-this.rota * (Math.PI/180));
+			ctx.translate(-x, -y);
+		}
+		this.img = t;
 	}
 	
-	//ctx.arc(0, 0, 20, 0, 2*Math.PI); ctx.fillStyle="yellow"; ctx.fill();
-	
-	if (1 && info){
-		ctx.translate(t.width/2, t.height/2);
+	if (info){
+		if (this.img){
+			ctx = this.img.getContext("2d");
+		}
+
+		ctx.translate(this.img.width/2, this.img.height/2);
 		ctx.rotate(-(this.rota-90) * (Math.PI/180))
 
 		ctx.fillStyle = "black";
@@ -421,11 +433,8 @@ AsteroidField.prototype.setTrueImage = function(info){
 		ctx.fillText(this.getInterference() + "%", 0, -15);
 		ctx.fillText(this.getBaseAttacks()+"x"+this.getAvgDmg(), 0, +14);
 		ctx.fillText(this.getBaseCollisionPct() + "%", 0, +37);
+		ctx.setTransform(1,0,0,1,0,0);
 	}
-
-	ctx.setTransform(1,0,0,1,0,0);
-	this.img = t;
-	//console.log(this.img.toDataURL());
 }
 
 function NebulaCloud(data){

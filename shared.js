@@ -41,9 +41,9 @@ $(document).ready(function(){
 	};
 
 
-$("#hangarDiv").find(".header").last().mousemove(function(e){e.stopPropagation()}).end().end().drag();
-$("#weaponDiv").find(".header").last().mousemove(function(e){e.stopPropagation()}).end().end().drag();
-$("#crewDiv").find(".header").last().mousemove(function(e){e.stopPropagation()}).end().end().drag();
+$("#hangarDiv").find("input").mousemove(function(e){e.stopPropagation()}).end().drag();
+$("#weaponDiv").find("input").mousemove(function(e){e.stopPropagation()}).end().drag();
+$("#crewDiv").find("input").mousemove(function(e){e.stopPropagation()}).end().drag();
 
 })
 

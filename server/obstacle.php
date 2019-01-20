@@ -134,7 +134,6 @@ class AsteroidField extends Obstacle {
 	}
 
 	public function testObstruction($oPos, $tPos){
-		//Debug::log("testObstruction on ".get_class($this)." #".$this->id);
 		$test = Math::lineRectIntersect($oPos, $tPos, $this->points);
 		$dist = 0;
 
@@ -153,6 +152,7 @@ class AsteroidField extends Obstacle {
 			$dist = Math::getDist($oPos, $tPos);
 		}
 
+		//Debug::log("testObstruction on ".get_class($this)." #".$this->id.", dist: ".$dist);
 		return $dist;
 	}
 }
@@ -194,6 +194,7 @@ class NebulaCloud extends Obstacle {
 		}
 		else $dist = Math::isWithinCircle($oPos, $tPos, $this);
 		
+		//Debug::log("testObstruction on ".get_class($this)." #".$this->id.", dist: ".$dist);
 		return $dist;
 	}
 }

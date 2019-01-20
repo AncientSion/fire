@@ -2383,7 +2383,7 @@ Game.prototype.setCollisionData = function (unit){
 	var unitPos = unit.getGamePos();
 
 	for (var i = 0; i < this.ships.length; i++){
-		if (!this.ships[i].obstacle){continue;}
+		if (!this.ships[i].obstacle || !this.ships[i].collision){continue;}
 
 		var totalDist = 0;
 		

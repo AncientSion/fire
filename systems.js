@@ -1460,7 +1460,8 @@ Command.prototype.setTotalBuyData = function(){
 		tCost += this.loads[i].cost;
 	}
 
-	table.find("tr").last().children().last().html(tCost);
+	//table.find("tr").last().children().last().html(tCost);
+	table.find(".systemTotal").html(tCost);
 	this.cost = tCost;
 }
 
@@ -1967,7 +1968,7 @@ Weapon.prototype.getUIDmgLoss = function(){
 
 Weapon.prototype.getMaxRange = function(){
 	var range = this.maxRange;
-	var mod = 100 - this.getCritMod("Max Range");
+	var mod = 100 + this.getCritMod("Max Range");
 	return Math.floor(range/100*mod);
 }
 
@@ -4405,6 +4406,7 @@ Hangar.prototype.updateHangarDiv = function(index){
 }
 
 Hangar.prototype.setupHangarLoadout = function(e){
+	var div = $("#hangarDiv");
 	if (div.hasClass("disabled")){
 		this.setHangarDivContent(div);
 		div.data("systemid", this.id).css("left", 375).css("top", 400).removeClass("disabled");

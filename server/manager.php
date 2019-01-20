@@ -995,11 +995,11 @@
 
 	public function setCollisionData($unit){
 		if ($unit->obstacle){return;}
-		//Debug::log("setCollisionForSingleUnit for unit #".$unit->id);
+		Debug::log("setCollisionData for unit #".$unit->id);
 		$unitPos = $unit->getTurnStartPosition();
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if (!$this->ships[$i]->obstacle){continue;}
+			if (!$this->ships[$i]->obstacle || !$this->ships[$i]->collision){continue;}
 
 			$totalDist = 0;
 
@@ -1013,7 +1013,7 @@
 				$totalDist += $dist;
 			}
 
-			//Debug::log("vs Obstacle #".$this->ships[$i]->id.", totalDist: ".$totalDist);
+			Debug::log("vs Obstacle #".$this->ships[$i]->id.", totalDist: ".$totalDist);
 			if (!$totalDist){continue;}
 
 
@@ -1034,7 +1034,7 @@
 		//Debug::log("assembleDeployStates");
 		$states = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->obstacle || $this->ships[$i]->available > static::$turn){continue;}
+			if ($this->ships[$i]->obstacle || $this->ships[$i]->available != static::$turn){continue;}
 			$states[] = $this->ships[$i]->getDeployState(static::$turn);
 		}
 
@@ -1278,9 +1278,11 @@
 					for ($k = 0; $k < sizeof($this->ships); $k++){
 						if (!$this->ships[$k]->obstacle){continue;}
 
+						//Debug::log("testing ".$this->ships[$i]->id." vs ".$this->ships[$j]->id.", obstacle ".$this->ships[$k]->id);
+
 						$dist = $this->ships[$k]->testObstruction($oPos, $tPos);
 
-						if (!$dist){break;}
+						if (!$dist){continue;}
 
 						$effInterference = round($this->ships[$k]->interference / 100 * $dist);
 						//Debug::log("dist ".$dist.", int: ".$this->ships[$k]->interference.", effInterference ".$effInterference);

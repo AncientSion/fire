@@ -47,16 +47,6 @@ function dot(a, b){
 	return (a.x * b.x) + (a.y * b.y); 
 }
 
-/*
-static int AVERAGINGFACTOR = 3; //the higher this is the closer to the average the results will be
-float density = 0;
-for (int x=0; x < AVERAGINGFACTOR; x++)
-{
-    density += (float)Random.Next(1,10);
-}
-density = density/AVERAGINGFACTOR;
-*/
-
 function isWithinCircle(oPos, tPos, arc){
 	var oPosToCenter = getDistance(oPos, arc.getGamePos());
 	var tPosToCenter = getDistance(tPos, arc.getGamePos());

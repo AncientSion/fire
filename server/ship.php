@@ -476,7 +476,7 @@ class Ship {
 	}
 
 	public function getDeployState($turn){
-		//Debug::log("getDeployState for ".$this->id.", destroyed: ".$this->destroyed);
+		Debug::log("getDeployState for ".get_class($this)." #".$this->id.", destroyed: ".$this->destroyed);
 		return array(
 			"id" => $this->id,
 			"withdraw" => $this->withdraw,

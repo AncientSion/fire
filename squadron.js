@@ -760,7 +760,6 @@ Squadron.prototype.recalcCommandUpgrades = function(){
 			this.plusCrewLevel(i);
 		}
 	}
-	//command.updateCrewTotals(); return;
 }
 
 Squadron.prototype.doConfirmSystemLoadout = function(){

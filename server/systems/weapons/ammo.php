@@ -15,7 +15,6 @@ class Missile extends Single {
 	
 	public function setBaseStats($phase, $turn){
 		if ($this->missile){
-			//$this->baseImpulse = ceil(pow($this->mass, -0.75)*400);
 			$this->baseHitChance = ceil(sqrt($this->mass)*5);
 		}
 		else {
@@ -155,7 +154,7 @@ class Hasta extends Missile {
 	public $negation = 1;
 	public static $value = 3;
 	public $tracking = 1;
-	public $baseImpulse = 175;
+	public $baseImpulse = 200;
 	public $size = 15;
 
 	function __construct($id, $parentId){
@@ -176,7 +175,7 @@ class Javelin extends Missile {
 	public $negation = 2;
 	public static $value = 4;
 	public $tracking = 3;
-	public $baseImpulse = 150;
+	public $baseImpulse = 175;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -196,7 +195,7 @@ class Triarii extends Missile {
 	public $negation = 2;
 	public static $value = 6;
 	public $tracking = 3;
-	public $baseImpulse = 150;
+	public $baseImpulse = 175;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -216,7 +215,7 @@ class Myrmidon extends Missile {
 	public $negation = 3;
 	public static $value = 7;
 	public $tracking = 4;
-	public $baseImpulse = 125;
+	public $baseImpulse = 150;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -236,7 +235,7 @@ class Vanguard extends Missile {
 	public $negation = 0;
 	public static $value = 3;
 	public $tracking = 0;
-	public $baseImpulse = 225;
+	public $baseImpulse = 250;
 	public $size = 15;
 
 	function __construct($id, $parentId){
@@ -257,7 +256,7 @@ class Needle extends Missile {
 	public $negation = 0;
 	public static $value = 3;
 	public $tracking = 1;
-	public $baseImpulse = 175;
+	public $baseImpulse = 200;
 	public $size = 15;
 
 	function __construct($id, $parentId){
@@ -278,7 +277,7 @@ class Naga extends Missile {
 	public $negation = 2;
 	public static $value = 4;
 	public $tracking = 3;
-	public $baseImpulse = 150;
+	public $baseImpulse = 175;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -298,7 +297,7 @@ class Cyclops extends Missile {
 	public $negation = 3;
 	public static $value = 6;
 	public $tracking = 4;
-	public $baseImpulse = 125;
+	public $baseImpulse = 150;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -318,7 +317,7 @@ class Titan extends Missile {
 	public $negation = 5;
 	public static $value = 8;
 	public $tracking = 5;
-	public $baseImpulse = 100;
+	public $baseImpulse = 125;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
