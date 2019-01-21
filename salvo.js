@@ -63,7 +63,7 @@ Salvo.prototype.createBaseDiv = function(){
 	var owner = "friendly";
 	if (this.userid != game.userid){owner = "hostile";}
 	var div = $("<div>")
-			.addClass("ammoDiv " + owner + " disabled")
+			.addClass("shipDiv ballistic " + owner + " disabled")
 			.data("shipId", this.id)
 			.contextmenu(function(e){
 				e.stopImmediatePropagation(); e.preventDefault();
@@ -245,24 +245,17 @@ Salvo.prototype.getShortInfo = function(){
 
 Salvo.prototype.doSelect = function(){
 	console.log(this);
-	//aUnit = this.id;
-	//this.selected = true;
-	//game.redraw()
 	this.switchDiv();
 }
 
 Salvo.prototype.doUnselect = function(){
-	//this.unselectSystems();
-	//aUnit = false;
-	//this.selected = false;
 	this.switchDiv();
-	//mouseCtx.clearRect(0, 0, res.x, res.y);
 	$("#vectorDiv").addClass("disabled");
 	game.redraw();
 }
 
 Salvo.prototype.setBaseLayouta = function(){
-	console.log("salvo setBaseLayout");
+	//console.log("salvo setBaseLayout");
 
 	var dist = 15;
 	if (this.structures.length == 2){
@@ -277,7 +270,7 @@ Salvo.prototype.setBaseLayouta = function(){
 }
 
 Salvo.prototype.setBaseLayout = function(){
-	console.log("salvo setBaseLayout");
+	//console.log("salvo setBaseLayout");
 	for (var i = 0; i < this.structures.length; i++){
 		this.structures[i].layout = {x: 0, y: 0};
 	}

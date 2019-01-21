@@ -1209,12 +1209,16 @@ div.integrityFull {
 }
 
 .shipDiv {
-	widdth: 300px;
+	width: 300px;
 	position: absolute;
 	border: 1px solid white;
 	border-radius: 5px;
 	z-index: 10;
 	background-color: black;
+}
+
+.shipDiv.flight .structContainer, .shipDiv.ballistic .structContainer {
+	height: unset;
 }
 
 .shipDiv.disabled {
@@ -1225,11 +1229,11 @@ div.integrityFull {
 	background-color: red;
 }
 
-.shipDiv.selection, .ammoDiv.selection {
+.shipDiv.selection {
 	border: 4px solid #ffeb3e;
 }
 
-.shipdiv .mainDiv {
+.shipDiv .mainDiv {
 	display: inline-block;
 	height: 200px;
 	width: 100%;
@@ -2344,45 +2348,6 @@ body {
 
 .unitStats td {
 	width: 33%;
-}
-
-.ammoDiv {
-	position: absolute;
-	border-radius: 5px;
-	z-index: 10;
-	background-color: black;
-	width: 300px;
-	border-collapse: collapse;
-}
-
-.ammoDiv th {
-	font-size: 16px;
-}
-.ammoDiv td {
-	font-size: 13px;
-}
-
-.ammoDiv .topDiv {
-	width: 100%;
-	height: unset;
-}
-
-.ammoDiv .topDiv .header {
-	width: 100%;
-	height: 100%;
-	margin-top: unset;
-    margin-bottom: unset;
-}
-
-.ammoDiv table {
-	width: 100%;
-	margin: auto;
-	border-collapse: collapse;;
-}
-
-.ammoDiv .structContainer {
-	padding-top: 10px;
-	height: unset;
 }
 
 .turretDiv .sysIcon img {

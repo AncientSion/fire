@@ -254,7 +254,6 @@ Squadron.prototype.expandDiv = function(div){
 
 Squadron.prototype.getDeployImg = function(){
 	return false;
-	return graphics.images[this.name.toLowerCase()].cloneNode(true);
 }
 
 Squadron.prototype.checkSensorHighlight = function(){
@@ -289,6 +288,26 @@ Squadron.prototype.getSystem = function(id){
 				return this.structures[i].systems[j];
 			}
 		}
+	}
+}
+
+Squadron.prototype.selectTurretSystems = function(weaponid){
+	var weapon = this.getSystem(weaponid);
+	var systems = [];
+		//systems.push(weapon);
+
+	for (var i = this.structures.length-1; i >= 0; i--){
+		if (i == this.structures.length-1 || weaponid > this.structures[i].id && weaponid < this.structures[i+1].id){
+			for (var j = 0; j < this.structures[i].systems.length; j++){
+				if (this.structures[i].systems[j].turret == weapon.turret){
+					systems.push(this.structures[i].systems[j]);
+				}
+			}
+		}
+	}
+
+	for (var i = 0; i < systems.length; i++){
+		systems[i].select();
 	}
 }
 

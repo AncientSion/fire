@@ -96,8 +96,9 @@ Flight.prototype.createBaseDiv = function(){
 	var owner = "friendly";
 	if (game.phase > -2 && this.userid != game.userid){owner = "hostile";}
 	var div = document.createElement("div");
-		div.className = "shipDiv " + owner;
-		$(div).data("shipId", this.id);
+		$(div)
+			.data("shipId", this.id)
+			.addClass("shipDiv flight " + owner + " disabled")
 
 	this.element = div;
 
@@ -139,7 +140,7 @@ Flight.prototype.createBaseDiv = function(){
 
 	var maxWidth = 300;
 	$(div).css("width", maxWidth);
-	$(div).find(".header").css("width", "99%");
+	$(div).find(".header").css("width", "100%");
 
 	$(this.expandDiv(div))
 		.addClass("disabled")
@@ -241,7 +242,7 @@ Flight.prototype.expandDiv = function(div){
 		}
 	})
 
-	$(structContainer).css("height", height + 30).css("padding-top", 5).css("padding-bottom", 5);
+	$(structContainer).css("padding-top", 5).css("padding-bottom", 5);
 
 	return div;
 }

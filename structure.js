@@ -127,14 +127,14 @@ Structure.prototype.hover = function(e){
 	if (this.highlight){
 		this.highlight = false;
 		fxCtx.clearRect(0, 0, res.x, res.y);
-		this.hideSysDiv();
+		game.hideSysDiv();
 		this.hideOptions();
 		p.highlightAllSelectedWeapons();
 	}
 	else {
 		this.highlight = true;
 		this.drawStructArc(p.getPlannedFacing(), p.rolled, p.getPlannedPos());
-		this.showSysDiv(e);
+		game.showSysDiv($(this.getSysDiv()), e);
 		this.showOptions();
 	}
 }
@@ -147,18 +147,6 @@ Structure.prototype.showOptions = function(){
 Structure.prototype.hideOptions = function(){
 	if (this.locked || game.phase != -1 || !this.effiency || game.getUnit(this.parentId).userid != game.userid ){return;}
 	$(this.element).find(".boostDiv").hide().end().find(".modeDiv").hide();
-}
-
-Structure.prototype.showSysDiv = function(e){
-	$(document.body).append(
-		$(this.getSysDiv())
-			.css("left", e.clientX - 90)
-			.css("top", e.clientY + 40)
-		)
-}
-
-Structure.prototype.hideSysDiv = function(e){
-	$("#sysDiv").remove();
 }
 
 Structure.prototype.getSysDiv = function(){
@@ -380,16 +368,8 @@ Primary.prototype.hover = function(e){
 	}
 	else {
 		this.highlight = true;
-		this.showSysDiv(e);
+		game.showSysDiv($(this.getSysDiv()), e);
 	}
-}	
-
-Primary.prototype.showSysDiv = function(e){
-	$(document.body).append(
-		$(this.getSysDiv())
-			.css("left", e.clientX - 90)
-			.css("top", e.clientY + 40)
-		)
 }
 
 Primary.prototype.getSysDiv = function(){

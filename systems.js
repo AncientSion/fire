@@ -255,7 +255,7 @@ System.prototype.hover = function(e){
 
 	if (this.highlight){
 		this.highlight = false;
-		this.hideSysDiv(e);
+		game.hideSysDiv(e);
 		this.hideOptions();
 		if (p){p.highlightAllSelectedWeapons();}
 		if (this.hasUnresolvedFireOrder()){
@@ -266,7 +266,7 @@ System.prototype.hover = function(e){
 	}
 	else {
 		this.highlight = true;
-		this.showSysDiv(e);
+		game.showSysDiv($(this.getSysDiv()), e);
 		this.showOptions();
 		if (p && (p.ship || p.squad)){
 			fxCtx.clearRect(0, 0, res.x, res.y);
@@ -813,19 +813,6 @@ System.prototype.hideOptions = function(){
 	return;
 }
 
-System.prototype.showSysDiv = function(e){
-	$(document.body).append(
-		$(this.getSysDiv())
-			.css("left", e.clientX - 90)
-			.css("top", e.clientY + 50)
-		)
-	return;
-}
-
-System.prototype.hideSysDiv = function(){
-	$("#sysDiv").remove();
-}
-
 System.prototype.setFireOrder = function(targetid, pos){
 	if (this.odds <= 0){return;}
 	this.fireOrders.push(
@@ -1217,12 +1204,12 @@ PrimarySystem.prototype.hover = function(e){
 	if (game.flightDeploy){return false;}
 	if (this.highlight){
 		this.highlight = false;
-		this.hideSysDiv(e);
+		game.hideSysDiv(e);
 		this.hideOptions();
 	}
 	else {
 		this.highlight = true;
-		this.showSysDiv(e);
+		game.showSysDiv($(this.getSysDiv()), e);
 		this.showOptions();
 	}
 }
@@ -3233,7 +3220,7 @@ Launcher.prototype.doUndoActions = function(){
 			if (data[j] != this.id){continue;}
 			console.log("im launching!");
 
-			var ele = $(".ammoDiv").each(function(){
+			var ele = $(".shipId").each(function(){
 				if ($(this).data("shipId") == game.ships[i].id){
 					$(this).remove();
 					return false;

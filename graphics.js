@@ -60,7 +60,7 @@ window.graphics = {
 		}
 
 		this.images.nebula = [];
-		for (var i = 1; i <= 7; i++){
+		for (var i = 1; i <= 9; i++){
 			var img = new Image();
 				img.src = "varIcons/nebula/nebula" + i + ".png";
 			this.images.nebula.push(img);

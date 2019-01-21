@@ -7,7 +7,6 @@ $(window).on("load", function(){
 function initCanvas(){
 	sizeCanvas();
 	scopeCanvas()
-
 }
 
 function sizeCanvas(){

@@ -37,24 +37,12 @@ Squaddie.prototype.hover = function(e){
 
 	if (this.highlight){
 		this.highlight = false;
-		this.hideSysDiv(e);
+		game.hideSysDiv(e);
 	}
 	else {
 		this.highlight = true;
-		this.showSysDiv(e);
+		game.showSysDiv($(this.getSysDiv()), e);
 	}
-}
-
-Squaddie.prototype.showSysDiv = function(e){
-	$(document.body).append(
-		$(this.getSysDiv())
-			.css("left", e.clientX - 90)
-			.css("top", e.clientY + 50)
-		)
-}
-
-Squaddie.prototype.hideSysDiv = function(){
-	$("#sysDiv").remove();
 }
 
 Squaddie.prototype.getSysDiv = function(){
@@ -218,7 +206,9 @@ Squaddie.prototype.fillSelfContainer = function(){
 		}
 
 		for (var j = 0; j < toDo[i].length; j++){
-			var ele = this.attachEvent(toDo[i][j].getDiv());
+			var ele = this.attachBaseMouseEvent(toDo[i][j].getDiv());
+				ele = toDo[i][j].turret ? this.attachTurretClickEvent(ele) : this.attachBaseClickEvent(ele);
+
 			if (this.id > 0 && game.phase == -1){
 				var boostDiv = toDo[i][j].getBoostDiv();
 				if (boostDiv){ele.appendChild(boostDiv)};
@@ -243,7 +233,39 @@ Squaddie.prototype.fillSelfContainer = function(){
 	}
 }
 
-Squaddie.prototype.attachEvent = function(ele){
+Squaddie.prototype.attachBaseClickEvent = function(ele){
+	$(ele)
+	.click(
+		function(e){
+			e.stopPropagation();
+			game.getUnit($(this).data("shipId")).getSystem($(this).data("systemId")).select(e);
+		}
+	)
+	.contextmenu(
+		function(e){
+			e.preventDefault();
+			if (!game.sensorMode){game.getUnit($(this).data("shipId")).selectAll(e, $(this).data("systemId"));}
+		}
+	);
+	return ele;
+}
+
+Squaddie.prototype.attachTurretClickEvent = function(ele){
+	$(ele)
+	.click(
+		function(e){
+			e.stopPropagation();
+			game.getUnit($(this).data("shipId")).selectTurretSystems($(this).data("systemId"));
+		}
+	)
+	.contextmenu(
+		function(e){
+			e.preventDefault();
+		})
+	return ele;
+}
+
+Squaddie.prototype.attachBaseMouseEvent = function(ele){
 	$(ele)
 	.data("shipId", this.parentId)
 	.hover(
@@ -251,19 +273,8 @@ Squaddie.prototype.attachEvent = function(ele){
 			e.stopPropagation();
 			game.getUnit($(this).data("shipId")).getSystem($(this).data("systemId")).hover(e);
 		}
-	).click(
-		function(e){
-			e.stopPropagation();
-			game.getUnit($(this).data("shipId")).getSystem($(this).data("systemId")).select(e);
-		}
 	)
 	.mousedown(function(e){e.stopPropagation();})
-	.contextmenu(
-		function(e){
-			e.preventDefault();
-			if (!game.sensorMode){game.getUnit($(this).data("shipId")).selectAll(e, $(this).data("systemId"));}
-		}
-	);
 	return ele;
 }
 
@@ -413,7 +424,7 @@ Squaddie.prototype.armourIn = function(e){
 }
 
 Squaddie.prototype.armourOut = function(e){
-	Structure.prototype.hideSysDiv.call(this, e);
+	Game.prototype.hideSysDiv.call(this);
 	if (game.phase != -1 || !this.effiency || game.getUnit(this.parentId).userid != game.userid){return;}
 	$(this.armourElement).find(".boostDiv").hide();
 }
