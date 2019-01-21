@@ -172,7 +172,9 @@ Squaddie.prototype.fillSelfContainer = function(){
 		.css("top", primPosY)
 
 
-	var toDo = [[this.systems[0]]];	
+	var toDo = [];
+	if (this.systems.length){toDo.push([this.systems[0]]);}
+	else return;
 
 	for (var i = 1; i < this.systems.length; i++){
 		if (this.systems[i].align == toDo[toDo.length-1][toDo[toDo.length-1].length-1].align){

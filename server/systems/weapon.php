@@ -11,6 +11,8 @@ class Weapon extends System {
 	public $projSize = 10;
 	public $projSpeed = 5;
 	public $animation = "projectile";
+	public $animColor = "";
+	public $optRange = 0;
 	public $priority = 0;
 
 	public $particle = 0;

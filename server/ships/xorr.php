@@ -18,8 +18,9 @@ class Xorr extends Light {
 	}
 
 	public function addSystems(){
-		$this->addSubSystem(new AntiMatterCannon($this->getId(), $this->parentId, 270, 90), 0);
-		$this->addSubSystem(new AntiMatterCannon($this->getId(), $this->parentId, 270, 90), 0);
+		$turretId = $this->getId();
+		$this->addTurretSystems(new AntiMatterCannon($this->getId(), $this->parentId, 270, 90), $turretId, 0);
+		$this->addTurretSystems(new AntiMatterCannon($this->getId(), $this->parentId, 270, 90), $turretId, 0);
 	}
 }
 ?>

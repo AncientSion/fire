@@ -3,15 +3,14 @@
 class FighterDual extends Dual {
 	public $tiny = 1;
 
-	function __construct($id, $parentId, $specialId, $linked, $modes){
+	function __construct($id, $parentId, $linked, $modes){
 		$this->linked = $linked;
 		Weapon::__construct($id, $parentId, 0, 0, 0, 0, 0);
 
 		for ($i = 0; $i < sizeof($modes); $i++){
 			$this->states[] = 0;
 			$this->modes[] = $modes[$i];
-			$this->weapons[] = new $modes[$i][0]($i, $parentId, $specialId, $linked, $modes[$i][1], $modes[$i][2], $modes[$i][3]);
-			$this->weapons[$i]->specialId = $id;
+			$this->weapons[] = new $modes[$i][0]($i, $parentId, $linked, $modes[$i][1], $modes[$i][2], $modes[$i][3]);
 			$this->display .= $this->weapons[$i]->display." / ";
 		}
 
@@ -36,7 +35,6 @@ class Dual extends Weapon {
 			$this->states[] = 0;
 			$this->modes[] = $modes[$i];
 			$this->weapons[] = new $modes[$i]($i, $parentId, $start, $end, 0, 0);
-			$this->weapons[sizeof($this->weapons)-1]->specialId = $this->id;
 			$this->powerReq = max($this->powerReq, $this->weapons[$i]->powerReq);
 
 			$this->display .= $this->weapons[$i]->display." / ";

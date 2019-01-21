@@ -43,7 +43,7 @@ class Zorth extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 1, 
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, 1, 
 			array(
 				array("FighterStandard", 1, 10, 14),
 				array("FighterStrafe", 1, 10, 14)
@@ -68,7 +68,7 @@ class Tzymm extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, 2, 
 			array(
 				array("FighterStandard", 1, 12, 16),
 				array("FighterStrafe", 1, 12, 16)
@@ -93,7 +93,7 @@ class Aurora extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, 2, 
 			array(
 				array("FighterStandard", 1, 10, 14),
 				array("FighterStrafe", 1, 10, 14)
@@ -137,7 +137,7 @@ class Sentri extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, 2, 
 			array(
 				array("FighterStandard", 1, 10, 14),
 				array("FighterStrafe", 1, 10, 14)
@@ -181,7 +181,7 @@ class Nial extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 3, 
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, 3, 
 			array(
 				array("FighterStandard", 1, 12, 16),
 				array("FighterStrafe", 1, 12, 16)
@@ -205,7 +205,7 @@ class Tishat extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, 2, 
 			array(
 				array("FighterStandard", 1, 11, 15),
 				array("FighterStrafe", 1, 11, 15)
@@ -229,7 +229,7 @@ class Gorith extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, 2, 
 			array(
 				array("FighterStandard", 1, 10, 14),
 				array("FighterStrafe", 1, 10, 14)
@@ -263,7 +263,7 @@ class Frazi extends Fighter {
 	);
 
 	public function addSystems(){
-		$this->systems[] = new FighterDual($this->getId(), $this->parentId, $this->id, 2, 
+		$this->systems[] = new FighterDual($this->getId(), $this->parentId, 2, 
 			array(
 				array("FighterStandard", 1, 12, 16),
 				array("FighterStrafe", 1, 12, 16)

@@ -6,13 +6,11 @@ class FighterWeapon extends Particle {
 	public $reload = 1;
 	public $tracking = 0;
 	public $tiny = 1;
-	public $specialId = 0;
 	public $accDecay = 6000;
 
-	function __construct($id, $parentId, $specialId, $linked, $shots, $minDmg, $maxDmg){
+	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
 		$this->id = $id;
 		$this->parentId = $parentId;
-		$this->specialId = $specialId;
 		$this->shots = $shots;
 		$this->linked = $linked;
 		$this->minDmg = $minDmg;
@@ -48,8 +46,8 @@ class FighterStandard extends FighterWeapon {
 	public $display = "Particle Gun - Burst Fire";
 	public $animColor = "blue";
 	
-	function __construct($id, $parentId, $specialId, $linked, $shots, $minDmg, $maxDmg){
-		parent::__construct($id, $parentId, $specialId, $linked, $shots, $minDmg, $maxDmg);
+	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
+		parent::__construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg);
 	}
 }
 
@@ -60,8 +58,8 @@ class FighterStrafe extends FighterWeapon {
 	public $tracking = 3;
 	public $shots = 1;
 	
-	function __construct($id, $parentId, $specialId, $linked, $shots, $minDmg, $maxDmg){
-		parent::__construct($id, $parentId, $specialId, $linked, $shots, $minDmg, $maxDmg);
+	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
+		parent::__construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg);
 
 		$this->amBonus = 0.5;
 		$this->amMax = 50;
@@ -76,8 +74,8 @@ class NeutronRepeater extends FighterWeapon {
 	public $display = "Neutron Repeater";
 	public $animColor = "green";
 	
-	function __construct($id, $parentId, $specialId, $linked, $shots, $minDmg, $maxDmg){
-		parent::__construct($id, $parentId, $specialId, $linked, $shots, $minDmg, $maxDmg);
+	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
+		parent::__construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg);
 	}
 }
 
@@ -92,8 +90,8 @@ class ParticleBolt extends FighterWeapon {
 	public $tracking = 3;
 	public $accDecay = 500;
 	
-	function __construct($id, $parentId, $specialId, $linked, $shots, $minDmg, $maxDmg){
-		parent::__construct($id, $parentId, $specialId, $linked, $shots, $minDmg, $maxDmg);
+	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
+		parent::__construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg);
 	}
 }
 
@@ -121,8 +119,8 @@ class ParticlePulsar extends FighterPulse {
 	public $grouping = 20;
 	public $tracking = 0;
 	
-	function __construct($id, $parentId, $specialId, $linked, $shots, $minDmg, $maxDmg){
-		parent::__construct($id, $parentId, $specialId, $linked, $shots, $minDmg, $maxDmg);
+	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
+		parent::__construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg);
 	}
 }
 
@@ -149,8 +147,8 @@ class PlasmaBomb extends FighterPlasma {
 	public $dmgLoss = 0;
 	public $tracking = 1;
 	
-	function __construct($id, $parentId, $specialId, $linked, $shots, $minDmg, $maxDmg){
-		parent::__construct($id, $parentId, $specialId, $linked, $shots, $minDmg, $maxDmg);
+	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
+		parent::__construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg);
 	}
 }
 ?>

@@ -1,6 +1,5 @@
 function System(system){
 	this.id = system.id;
-	this.specialId = system.specialId;
 	this.parentId = system.parentId;
 	this.name = system.name;
 	this.display = system.display;

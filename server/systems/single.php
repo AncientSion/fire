@@ -54,13 +54,14 @@ class Single {
 		$this->cost = static::$value;
 
 		$this->setBaseStats(0, 0);
-		$this->addSystems();
-
-		for ($i = 0; $i < sizeof($this->systems); $i++){
-			$this->systems[$i]->specialId = $this->id;
-		}
-		
+		$this->addSystems();		
 		$this->setPowerOutput();
+	}
+
+	public function addTurretSystems($system, $turretId, $align){
+		$system->turret = $turretId;
+		$system->align = $align;
+		$this->systems[] = $system;
 	}
 
 	public function addSubSystem($system, $align = 0){

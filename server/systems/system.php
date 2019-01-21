@@ -3,7 +3,6 @@
 class System {
 	public $id = 0;
 	public $parentId = 0;
-	public $specialId = 0;
 	public $align = 0;
 	public $weapon = 0;
 	public $utility = 0;
