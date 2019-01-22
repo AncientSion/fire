@@ -1470,12 +1470,14 @@ Ship.prototype.setSubSystemState = function(){
 		this.primary.systems[i].setState();
 	}
 	for (var i = 0; i < this.structures.length; i++){
-		this.structures[i].setState();
+		this.structures[i].setStructState();
 		this.structures[i].setBonusNegation();
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			this.structures[i].systems[j].setState();
 			this.structures[i].systems[j].setBonusNegation(this.structures[i].bonusNegation);
 		}
+
+		if (this.structures[i].turret){this.structures[i].setLayout(this.size);}
 	}
 }
 

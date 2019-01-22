@@ -27,7 +27,7 @@ function Structure(data){
 
 Structure.prototype = Object.create(System.prototype);
 
-Structure.prototype.setState = function(){
+Structure.prototype.setStructState = function(){
 	return;
 }
 

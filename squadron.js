@@ -27,12 +27,7 @@ Squadron.prototype.setSubSystemState = function(){
 		this.primary.systems[i].setState();
 	}
 	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].destroyed){
-			this.structures[i].doDestroy();
-		}
-		for (var j = 0; j < this.structures[i].systems.length; j++){
-			this.structures[i].systems[j].setState()
-		}
+		this.structures[i].setStructState();
 	}
 }
 

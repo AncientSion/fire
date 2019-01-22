@@ -1877,6 +1877,7 @@ function Weapon(system){
 	this.dmgLoss = system.dmgLoss;
 	this.projSize = system.projSize;
 	this.projSpeed = game.phaseDelay == 100 ? system.projSpeed * 4 : system.projSpeed;
+	this.projDelay = system.projDelay;
 	this.amMax =
 	this.loaded;
 	this.mount;
@@ -2343,12 +2344,12 @@ function Warhead(data){
 
 Warhead.prototype = Object.create(Weapon.prototype)
 
+Warhead.prototype.setState = function(){return false;}
 Warhead.prototype.hasEvent = function(){return false;}
 Warhead.prototype.hasOutput = function(){return false;}
 Warhead.prototype.getShots = function(){return 1;}
 Warhead.prototype.getDmgsPerShot = function(fire){return 1;}
 Warhead.prototype.getActiveSystem = function(){return this;}
-
 
 Warhead.prototype.getSysDiv = function(){
 	var div = $("<div>").attr("id", "sysDiv")
@@ -2494,7 +2495,7 @@ Particle.prototype.getAnimation = function(fire){
 	var speed = this.projSpeed;
 	var linked = this.linked -1;
 	var gunDelay = Math.max(20, this.shots * 10);
-	var shotDelay = 8;
+	var shotDelay = this.projDelay;
 	var hits = 0;
 	var fraction = 1;
 	var t = fire.target.getDrawPos();

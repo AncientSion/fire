@@ -90,8 +90,8 @@ class MediumAntiProtonPulsar extends Pulse {
 	public $name = "MediumAntiProtonPulsar";
 	public $display = "Medium Photon Pulsar";
 	public static $prio = 0;
-	public $minDmg = 17;
-	public $maxDmg = 22;
+	public $minDmg = 15;
+	public $maxDmg = 19;
 	public $accDecay = 80;
 	public $shots = 1;
 	public $animColor = "#a1ff00";

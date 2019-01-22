@@ -511,8 +511,13 @@ function Turret(data){
 }
 Turret.prototype = Object.create(Squaddie.prototype);
 
+Turret.prototype.setLayout = function(size){
+	var x = range(size/2*0.2, size/2*0.8) * (1-range(0, 1)*2);
+	var y = range(size/2*0.2, size/2*0.8) * (1-range(0, 1)*2);
+	this.loc = {x: x, y: y};
+}
 
-Turret.prototype.setState = function(){
+Turret.prototype.setStructState = function(){
 	if (this.isDestroyed()){
 		this.doDestroy();
 	}
@@ -532,8 +537,6 @@ Turret.prototype.setState = function(){
 			this.disabled = true;
 		}
 	}
-
-	this.init();
 }
 
 Turret.prototype.copyPowers = function(){
@@ -550,12 +553,8 @@ Turret.prototype.copyPowers = function(){
 	}
 }
 
-Turret.prototype.init = function(){
-	return;
-}
-
 Turret.prototype.getWeaponPosition = function(size, facing){
-	return {x: range(-size/3, size/3), y: range(-size/3, size/3)}
+	return rotatePoint(0, 0, this.loc, facing);
 }
 
 Turret.prototype.setBonusNegation = function(){

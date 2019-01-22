@@ -9,7 +9,7 @@ class AntimatterConverter extends Particle {
 	public $maxDmg = 80;
 	public $accDecay = 140;
 	public $shots = 1;
-	public $animColor = "pink";
+	public $animColor = "#cc33ff";
 	public $projSize = 3.5;
 	public $projSpeed = 6;
 	public $reload = 3;
@@ -60,9 +60,10 @@ class AntimatterCannon extends Particle {
 	public $integrity = 48;
 	public $powerReq = 6;
 	public $tracking = 4;
-	public $animColor = "pink";
+	public $animColor = "#cc33ff";
 	public $projSize = 4;
 	public $projSpeed = 6;
+	public $projDelay = 4;
 
 	public $optRange = 600;
 

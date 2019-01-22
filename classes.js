@@ -283,7 +283,27 @@ Single.prototype.getBaseImage = function(){
 
 Single.prototype.isDestroyed = function(){
 	if (this.destroyed || this.disabled){return true;}
+
+	for (var i = 0; i < this.crits.length; i++){
+		if (this.crits[i].type == "Disabled"){
+			return true;
+		}
+	}
 	return false;
+}
+
+Single.prototype.setStructState = function(){
+	if (this.isDestroyed()){
+		this.doDraw = false;
+		this.destroyed = true;
+		for (var i = 0; i < this.systems.length; i++){
+			this.systems[i].locked = true;
+			this.systems[i].destroyed = true;
+		}
+	}
+	for (var i = 0; i < this.systems.length; i++){
+		this.systems[i].setState();
+	}
 }
 
 Single.prototype.doDestroy = function(){

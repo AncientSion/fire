@@ -10,6 +10,12 @@ function Mixed(data){
 
 Mixed.prototype = Object.create(Ship.prototype);
 
+Mixed.prototype.setSubSystemState = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		this.structures[i].setStructState();
+	}
+}
+
 Mixed.prototype.setSlipAngle = function(){
 	return;
 }
@@ -365,24 +371,6 @@ Mixed.prototype.getMaskEffect = function(shooter, shooterPos, targetPos, dist){
 
 Mixed.prototype.canUndoShortenTurn = function(){
 	return false;
-}
-
-Mixed.prototype.setSubSystemState = function(){
-	//	debug("setStatus")
-	for (var i = 0; i < this.structures.length; i++){
-		for (var j = 0; j < this.structures[i].crits.length; j++){
-			if (this.structures[i].crits[j].type == "Disabled"){
-				this.structures[i].destroyed = true;
-			}
-		}
-
-		if (this.structures[i].destroyed){
-			this.structures[i].doDraw = 0;
-			for (var k = 0; k < this.structures[i].systems.length; k++){
-				this.structures[i].systems[k].destroyed = true;
-			}
-		}
-	}
 }
 
 Mixed.prototype.setDrawData = function(){

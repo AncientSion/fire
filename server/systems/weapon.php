@@ -10,6 +10,7 @@ class Weapon extends System {
 	public $tracking = 0;
 	public $projSize = 10;
 	public $projSpeed = 5;
+	public $projDelay = 8;
 	public $animation = "projectile";
 	public $animColor = "";
 	public $optRange = 0;
