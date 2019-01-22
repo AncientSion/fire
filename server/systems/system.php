@@ -240,18 +240,23 @@ class System {
 
 	public function getRelDmg($turn){
 		//Debug::log("getRelDmg ".get_class($this)." #".$this->id);
-		$old = 0; $new = 0;
+		$old = 0; $new = 0; $hits = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->turn == $turn){
-				$new += $this->damages[$i]->systemDmg;
-				$new += $this->damages[$i]->emDmg*2;
+				$newThisHit = 0;
+				$newThisHit += $this->damages[$i]->systemDmg;
+				$newThisHit += $this->damages[$i]->emDmg*2;
+				if ($newThisHit){
+					$hits++;
+				}
+				$new += $newThisHit;
 			} else $old += $this->damages[$i]->systemDmg;
 		}
 
-		return new RelDmg($new, $old, $this->integrity);
+		return new RelDmg($new, $old, $this->integrity, $hits);
 	}
 
-	public function getCritModMax($relDmg){
+	public function getCritModMax($relDmg, $hits){
 		return (min(25, round($relDmg*100/20) * 10)*-1);
 	}
 
@@ -259,16 +264,13 @@ class System {
 		if ($this->destroyed){return;}
 		if (!$dmg->rel){return;}
 
-		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old.", rel: ".$dmg->rel.", Squad: ".$squad);
+		//Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old.", rel: ".$dmg->rel.", Squad: ".$squad);
 
 		$sumDmg = ($dmg->new + $dmg->old)*100 + $squad*60;
 		$crit = DmgCalc::critProcedure($this->parentId, $this->id, $turn, $dmg->rel, $this->critEffects, $sumDmg, $this->internal);
 
 		if ($crit){
-			$crit->value = $this->getCritModMax($sumDmg);
-			if (!$squad && $crit->type[1] == "e"){
-				$crit->type = "Damage"; 
-			}
+			$crit->value = $this->getCritModMax($sumDmg, $dmg->hits);
 			$this->crits[] = $crit;
 		}
 	}

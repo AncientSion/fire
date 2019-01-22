@@ -59,7 +59,7 @@ Obstacle.prototype.getCurSpeed = function(){
 }
 
 Obstacle.prototype.doSelect = function(){
-	console.log(this);
+	debug(this);
 	this.switchDiv();
 	return;
 	aUnit = this.id;
@@ -139,7 +139,7 @@ Obstacle.prototype.getCodeColor = function(){
 Obstacle.prototype.setImage = function(){
 	var info = true;
 	if ((game.phase == 1 || game.phase == 2) && game.subPhase < 3){
-		//console.log("ding");
+		//debug("ding");
 		info = false;
 	}
 	this.setTrueImage(info);
@@ -294,8 +294,8 @@ AsteroidField.prototype.expandDiv = function(div){
 	var height = structContainer.height();
 	var width = structContainer.width();
 
-	var iconWidth = 100;
-	var iconHeight = 100;
+	var iconWidth = 75;
+	var iconHeight = 75;
 	$(structContainer)
 	.append($("<div>")
 		.addClass("obstacle")
@@ -519,8 +519,8 @@ NebulaCloud.prototype.expandDiv = function(div){
 	$(structContainer)
 	.append($("<div>")
 		.addClass("obstacle")
-		.append(graphics.images.rocks[range(0, graphics.images.rocks.length-1)].cloneNode(true)));	
-		//.append(this.structures[0].getBaseImage().cloneNode(true)))
+		//.append(graphics.images.nebula[this.imageId].cloneNode(true)));	
+		.append($(this.img).addClass("size100")))
 
 
 	$(div).addClass("disabled");

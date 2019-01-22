@@ -4,6 +4,7 @@ class Turret extends Squaddie {
 	public $name = "Turret";
 	public $turret = 1;
 	public $overloads = array();
+	public $armourMultiplier = 1.5;
 	
 	public $critEffects =  array( // type, mag, dura, effect
 		array("Accuracy", 100, 0, 0),
@@ -19,7 +20,7 @@ class Turret extends Squaddie {
 		$this->integrity = $integrity;
 		$this->remaining = $integrity;
 		$this->negation = $negation;
-		$this->baseHitChance = floor($integrity*2.75);
+		$this->baseHitChance = floor($integrity*2);
 	}
 
 	public function addDamage($dmg){
@@ -37,58 +38,37 @@ class Turret extends Squaddie {
 	}
 
 	public function handleStructCrits($turn){
-		Debug::log("handleStructCrits ".get_class($this));
+		//Debug::log("handleStructCrits ".get_class($this));
 		if ($this->isDestroyedThisTurn($turn)){
 			$usage = 0;
 
 			for ($i = 0; $i < sizeof($this->systems); $i++){
 				$usage += $this->systems[$i]->getPowerUsage($turn);
 			}
-
-			Debug::log("isDestroyedThisTurn && usage ".$usage);
 			if (!$usage){return;}
 			$this->overloads[] = $usage;
 			$this->damages[sizeof($this->damages)-1]->notes .= "o".$usage.";";
 		}
 		else {
-			Debug::log("else");
 			$dmg = $this->getRelDmg($turn);
 			for ($i = 0; $i < sizeof($this->systems); $i++){
-				$crit = $this->systems[$i]->determineCrit($dmg, $turn, 0);
+				$this->systems[$i]->determineCrit($dmg, $turn, 0);
 			}
 		}
 	}
 
-	public function determineCrit($dmg, $turn, $squad){ // nt in use
-		if (!$dmg->rel){return;}
-
-		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old.", rel: ".$dmg->rel.", Squad: ".$squad);
-
-		$sumDmg = ($dmg->new + $dmg->old)*100 + $squad*60;
-		$crit = DmgCalc::critProcedure($this->parentId, $this->id, $turn, $dmg->rel, $this->critEffects, $sumDmg);
-
-		if ($crit){
-			$crit->value = $this->getCritModMax($sumDmg);
-			return $crit;
-		}
-		return false;
-	}
-
-	public function getCritModMax($relDmg){
-		return (min(30, round($relDmg*100/20) * 10)*-1);
-	}
-
 	public function getRelDmg($turn){
-		Debug::log("getRelDmg ".get_class($this)." #".$this->id);
-		$old = 0; $new = 0;
+		//Debug::log("getRelDmg ".get_class($this)." #".$this->id);
+		$old = 0; $new = 0; $hits = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->turn == $turn){
 				$new += $this->damages[$i]->systemDmg;
 				$new += $this->damages[$i]->emDmg*2;
+				$hits++;
 			} else $old += $this->damages[$i]->systemDmg;
 		}
 
-		return new RelDmg($new, $old, $this->integrity);
+		return new RelDmg($new, $old, $this->integrity, $this);
 	}
 }
 

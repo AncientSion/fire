@@ -10,7 +10,7 @@ class Xonn extends SuperHeavy {
 	public $mass = 12000;
 
 	public $integrity = 1300;
-	public $vitalHP = 80;
+	public $vitalHP = 145;
 	public $ep = 75;
 	public $ew = 900;
 	public $power = 0;
@@ -81,18 +81,18 @@ class Xonn extends SuperHeavy {
 	public function addTurrets(){
 		$turrets = array();
 
-		$turretA = new Turret($this->getId(), $this->id, "Dorsal Turret #1", 0, 360, 180, 14);
+		$turretA = new Turret($this->getId(), $this->id, "Dorsal Turret #1", 0, 360, 200, 16);
 			$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 			$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 			$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 		$turrets[] = $turretA;
 		
-		$turretC = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 140, 14);
+		$turretC = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 155, 16);
 			$turretC->systems[] = new TorpedoLauncher($this->getId(), $this->id, 0, 360, 0, array(array("Ullt", 20, 5)));
 			$turretC->systems[] = new TorpedoLauncher($this->getId(), $this->id, 0, 360, 0, array(array("Ullt", 20, 5)));
 		$turrets[] = $turretC;
 
-		$turretB = new Turret($this->getId(), $this->id, "Dorsal Turret #2", 0, 360, 180, 14);
+		$turretB = new Turret($this->getId(), $this->id, "Dorsal Turret #2", 0, 360, 200, 16);
 			$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 			$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 			$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);

@@ -466,7 +466,7 @@
 				}
 				else if (e.keyCode == 102){ // f
 					if (game.animating != 1 || !game.animateAllFire){return;}
-					console.log("f!");
+					debug("f!");
 					window.cancelAnimationFrame(anim);
 					cam.stopMove();
 					fxCtx.setTransform(1,0,0,1,0,0)
@@ -484,7 +484,7 @@
 				}
 				else if (e.keyCode == 109){ // m, cancel move animation
 					if (game.animating != 1 || !game.animMoves){return;}
-					console.log("m!");
+					debug("m!");
 					window.cancelAnimationFrame(anim);
 					cam.stopMove();
 

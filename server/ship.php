@@ -1267,7 +1267,7 @@ class Ship {
 
 	public function getRelDmg($turn){
 		//Debug::log("getRelDmg on SHIP #".$this->id."/".get_class($this));
-		return new RelDmg($this->primary->newDmg, $this->primary->integrity-$this->primary->remaining-$this->primary->newDmg, $this->primary->integrity);
+		return new RelDmg($this->primary->newDmg, $this->primary->integrity-$this->primary->remaining-$this->primary->newDmg, $this->primary->integrity, 0);
 	}
 
 	public function doTestMorale($turn){

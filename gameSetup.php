@@ -563,7 +563,7 @@ else header("Location: index.php");
 					for (var i = 0; i < game.shipsBought.length; i++){
 						cost += game.shipsBought[i].totalCost;
 						if (game.refit == game.shipsBought[i].id){
-							console.log("refit");
+							debug("refit");
 							cost -= game.shipsBought[i].totalCost;
 						}
 					}
@@ -740,7 +740,7 @@ else header("Location: index.php");
 	})
 
 	function initFactionAvail(){
-		console.log("initFactionAvail");
+		debug("initFactionAvail");
 		var icons = [graphics.images.earth, graphics.images.centauri, graphics.images.minbari, graphics.images.narn, graphics.images.vree];
 		window.isset = [];
 
@@ -774,7 +774,7 @@ else header("Location: index.php");
 	}
 
 	function requestBaseUnitData(data){
-		//console.log("requestBaseUnitData");
+		//debug("requestBaseUnitData");
 		if (game.refit){$(game.getUnit(game.refit).tr).removeClass("selected");}
 		game.refit = 0;
 		$.ajax({
@@ -917,7 +917,7 @@ else header("Location: index.php");
 	}
 
 	function buildUnitList(i, data){
-		console.log("buildUnitList");
+		debug("buildUnitList");
 		data = JSON.parse(data);
 
 		window.isset[i] = 1;
@@ -939,12 +939,12 @@ else header("Location: index.php");
 
 
 	function joinGame(){
-		console.log("joinGame");
+		debug("joinGame");
 		ajax.joinGame(playerid, gameid, refresh);
 	}
 
 	function leaveGame(){
-		console.log("leaveGame");
+		debug("leaveGame");
 		ajax.leaveGame(playerid, gameid, window.goToLobby);
 	}
 

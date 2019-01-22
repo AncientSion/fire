@@ -54,7 +54,7 @@ class AntimatterCannon extends Particle {
 	public static $prio = 0;
 	public $minDmg = 34;
 	public $maxDmg = 46;
-	public $accDecay = 90;
+	public $accDecay = 100;
 	public $shots = 2;
 	public $reload = 3;
 	public $integrity = 48;

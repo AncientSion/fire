@@ -36,6 +36,7 @@ class Squadron extends Mixed {
 			if ($this->structures[$i]->destroyed){continue;}
 
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				$this->structures[$i]->systems[$j]->critEffects[] = array("Destroyed", 180, 0, 1);
 				$this->structures[$i]->systems[$j]->determineCrit($dmg, $turn, 1);
 			}
 		}

@@ -161,7 +161,7 @@ Salvo.prototype.supplyAttachDiv = function(div){
 	var color = "red";
 	if (this.friendly){color = "green";}
 
-	//console.log(this.getTarget().getMaskEffect(this))
+	//debug(this.getTarget().getMaskEffect(this))
 
 	var alive = 0;
 	for (var j = 0; j < this.structures.length; j++){
@@ -244,7 +244,7 @@ Salvo.prototype.getShortInfo = function(){
 }
 
 Salvo.prototype.doSelect = function(){
-	console.log(this);
+	debug(this);
 	this.switchDiv();
 }
 
@@ -255,7 +255,7 @@ Salvo.prototype.doUnselect = function(){
 }
 
 Salvo.prototype.setBaseLayouta = function(){
-	//console.log("salvo setBaseLayout");
+	//debug("salvo setBaseLayout");
 
 	var dist = 15;
 	if (this.structures.length == 2){
@@ -270,14 +270,14 @@ Salvo.prototype.setBaseLayouta = function(){
 }
 
 Salvo.prototype.setBaseLayout = function(){
-	//console.log("salvo setBaseLayout");
+	//debug("salvo setBaseLayout");
 	for (var i = 0; i < this.structures.length; i++){
 		this.structures[i].layout = {x: 0, y: 0};
 	}
 }
 
 Salvo.prototype.setImage = function(){
-	//console.log("setImage " + this.id);
+	//debug("setImage " + this.id);
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
 		t.height = this.size*2;
@@ -304,7 +304,7 @@ Salvo.prototype.setImage = function(){
 	//ctx.fill();
 	ctx.setTransform(1,0,0,1,0,0);
 	this.img = t;
-	//console.log(this.img.toDataURL());
+	//debug(this.img.toDataURL());
 }
 
 Salvo.prototype.setImages = function(){

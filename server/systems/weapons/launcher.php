@@ -46,7 +46,6 @@ class MissileLauncher extends Launcher {
 	public $loadout = 1;	
 	public $critEffects =  array( // type, mag, dura, effect
 		array("Ammo Amount", 120, 0, 0),
-		array("Destroyed", 170, 0, 1),
 	);
 
 	function __construct($id, $parentId, $start, $end, $integrity, $loads, $width = 1){
@@ -95,7 +94,6 @@ class TorpedoLauncher extends MissileLauncher {
 	public $critEffects =  array( // type, mag, dura, effect
 		array("Max Range", 80, 0, 0),
 		array("Ammo Amount", 120, 0, 0),
-		array("Destroyed", 170, 0, 1),
 	);
 
 	function __construct($id, $parentId, $start, $end, $integrity, $loads, $width = 1){

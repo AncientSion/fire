@@ -28,6 +28,8 @@ class Squaddie extends Single {
 	public $slots = 0;
 	public $squaddie = 1;
 	public $traverse = 3;
+
+	public $armourMultiplier = 1.75;
 	
 	public $critEffects =  array( // type, mag, dura, effect
 		array("Disabled", 140, 0, 0.00),
@@ -55,7 +57,7 @@ class Squaddie extends Single {
 
 	public function setNegation($main, $armourDmg){
 		$p = 1.25;
-		$this->parentIntegrity = round($this->integrity*1.75);
+		$this->parentIntegrity = round($this->integrity * $this->armourMultiplier);
 
 		$this->parentPow = round(pow($this->parentIntegrity, $p));
 		$this->armourDmg += $armourDmg;

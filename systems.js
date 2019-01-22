@@ -266,7 +266,7 @@ System.prototype.hover = function(e){
 	}
 	else {
 		this.highlight = true;
-		game.showSysDiv($(this.getSysDiv()), e);
+		game.appendSysDiv($(this.getSysDiv()), e);
 		this.showOptions();
 		if (p && (p.ship || p.squad)){
 			fxCtx.clearRect(0, 0, res.x, res.y);
@@ -1209,7 +1209,7 @@ PrimarySystem.prototype.hover = function(e){
 	}
 	else {
 		this.highlight = true;
-		game.showSysDiv($(this.getSysDiv()), e);
+		game.appendSysDiv($(this.getSysDiv()), e);
 		this.showOptions();
 	}
 }

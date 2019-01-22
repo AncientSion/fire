@@ -4,13 +4,49 @@ $(window).on("load", function(){
 	ajax.getGameData(window.gameid, window.userid);
 });
 
-function initCanvas(){
+function init(data){
+	if (data.turn == 0){window.location = "lobby.php"; return;}
+
+	console.time("time");
+
+	res.x = window.innerWidth-1;
+	res.y = window.innerHeight-1;
+
+	$(window).on('resize', function(){
+		res.x = window.innerWidth-1;
+		res.y = window.innerHeight-1;
+		sizeCanvas();
+		game.doPositionChat();
+		game.draw();
+	});
+
+	scopeCanvas();
 	sizeCanvas();
-	scopeCanvas()
+
+	$("#mouseCanvas").mousemove(canvasMouseMove);
+	$("#mouseCanvas").bind('wheel', mouseCanvasZoom);
+	$("#mouseCanvas").contextmenu(function(e){e.preventDefault(); e.stopPropagation();});
+
+	$("#mouseCanvas").mousedown(handleMouseDown);
+	$("#mouseCanvas").mouseup(function(e){handleMouseUp(e);});
+	$("#mouseCanvas").mouseout(function(e){handleMouseOut(e);});
+
+	$("#phaseSwitchDiv").css("width", res.x).css("height", res.y);
+	var h = $("#phaseSwitchInnerDiv").height();
+	var w = $("#phaseSwitchInnerDiv").width();
+	$("#phaseSwitchInnerDiv").css("top", res.y/2 - h-400).css("left", res.x/2 - w/2).removeClass("disabled");
+
+	turn = new Turn();
+	game = new Game(data);
+	game.create(data);
+	window.initChat();
+	window.initiateKeyDowns();
+
+	console.timeEnd("time");
 }
 
 function sizeCanvas(){
-	//console.log("sizeCanvas");
+	//debug("sizeCanvas");
 	var canv = document.getElementsByClassName("gameCanvas");
 
 	for (var i = 0; i < canv.length; i++){
@@ -26,7 +62,7 @@ function sizeCanvas(){
 }
 
 function scopeCanvas(){
-	//console.log("scopeCanvas");
+	//debug("scopeCanvas");
 	var canv = document.getElementsByClassName("gameCanvas");
 
 	canvas = canv[0];
@@ -56,59 +92,8 @@ function scopeCanvas(){
 	fxCtx.textAlign = "center";
 }
 
-function init(data){
-	if (data.turn == 0){window.location = "lobby.php"; return;}
-
-	console.time("time");
-
-	res.x = window.innerWidth-1;
-	res.y = window.innerHeight-1;
-
-	$(window).on('resize', function(){
-		res.x = window.innerWidth-1;
-		res.y = window.innerHeight-1;
-		sizeCanvas();
-		game.doPositionChat();
-		game.draw();
-	});
-
-	scopeCanvas();
-	sizeCanvas();
-
-	$("#mouseCanvas").mousemove(canvasMouseMove);
-	$("#mouseCanvas").bind('wheel', mouseCanvasZoom);
-	$("#mouseCanvas").contextmenu(function(e){e.preventDefault(); e.stopPropagation();});
-
-	$("#mouseCanvas").mousedown(handleMouseDown);
-	$("#mouseCanvas").mouseup(function(e){handleMouseUp(e);});
-	$("#mouseCanvas").mouseout(function(e){handleMouseOut(e);});
-
-
-	$("#phaseSwitchDiv").css("width", res.x).css("height", res.y);
-	var h = $("#phaseSwitchInnerDiv").height();
-	var w = $("#phaseSwitchInnerDiv").width();
-	$("#phaseSwitchInnerDiv").css("top", res.y/2 - h-400).css("left", res.x/2 - w/2).removeClass("disabled");
-
-
-
-	turn = new Turn();
-	game = new Game(data);
-	game.create(data);
-	window.initChat();
-	window.initiateKeyDowns();
-
-
-	console.timeEnd("time");
-}
-
-function log(val){
+function debug(val){
 	console.log(val);
-}
-
-function executeAll(){
-	if (game){
-		game.executeAll();
-	}
 }
 
 function mouseCanvasZoom(e){
@@ -124,7 +109,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	}
 	
 	//var shooterPos = (shooter.flight ? shooter.getGamePos() : shooter.getPlannedPos());
-	var shooterPos = (game.phase == 2 ? shooter.getGamePos() : shooter.getPlannedPos())
+	var shooterPos = (game.phase == 2 ? shooter.getGamePos() : shooter.getPlannedPos());
 	var facing = shooter.getPlannedFacing();
 	var targetDataA = ui.aimDiv.find("#targetDataA");
 	var targetDataB = ui.aimDiv.find("#targetDataB");
@@ -135,16 +120,6 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	var cc = game.isCloseCombat(shooter, target);
 	var pos;
 	var final = 0;
-
-	/*
-	if (shooter.flight){
-		drop = 0;
-		if (target && !cc){
-			drop = 1;
-		} else if (!target){
-			drop = 1;
-		}
-	}*/
 	
 	if (target && !drop && !target.obstacle){
 		var multi = 1;
@@ -248,10 +223,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 
 			var jamming = target.hasPassiveJamming();
 		
-			if (jamming){
-				//ui.targetDataC.html("fuck").show();
-				ui.targetDataC.html(target.getJammingString())//.show();
-			}// else ui.targetDataC.empty();
+			if (jamming){ui.targetDataC.html(target.getJammingString());}
 		}
 	}
 	else {
@@ -322,19 +294,16 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 						.html("- Targeting a mixed unit, chance to hit will slightly difer -")));
 		}
 
-	var obstacles = game.hasObstacleInVector(shooterPos, pos, target);
+		var obstacles = game.hasObstacleInVector(shooterPos, pos, target);
 
-	if (1 && obstacles.length){
-		var html = "";
-		for (var i = 0; i < obstacles.length; i++){
-			//html += "Obstacle #" + obstacles[i].obstacleId + " - Exposure " + obstacles[i].exposure + "%, ";
-			//html += "<span class='yellow'>" + obstacles[i].effectiveBlock + "% chance to miss</span></br>";
-			html += obstacles[i].display + " #" + obstacles[i].obstacleId + ", penetration depth: " + obstacles[i].dist + " --- ";
-			html += "<span class='yellow'>" + obstacles[i].EffInterference + "% chance to miss</span></br>";
+		if (1 && obstacles.length){
+			var html = "";
+			for (var i = 0; i < obstacles.length; i++){
+				html += obstacles[i].display + " #" + obstacles[i].obstacleId + ", penetration depth: " + obstacles[i].dist + " --- ";
+				html += "<span class='yellow'>" + obstacles[i].EffInterference + "% chance to miss</span></br>";
+			}
+			ui.targetDataC.html(html)
 		}
-		ui.targetDataC.html(html)//.show();
-	}// else ui.targetDataC.empty();
-			
 
 		for (var i = 0; i < active.length; i++){
 			var system = active[i].getSystem();
@@ -365,12 +334,6 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 					} else inArc = 0;
 				}	
 			}
-		/*	else if (shooter.flight){
-				if (!cc){
-					legalTarget = 0;
-				}
-			}
-		*/
 			if (inArc && legalTarget){
 				system.getAimData(target, final, dist, row);
 			}
@@ -384,10 +347,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	}		
 
 	drawAimVector(shooterPos, targetPos || pos);
-	var w = $(ui.aimDiv).width()/2;
-	var top = (e.clientY) + 100;
-	var left = (e.clientX) - w;
-	$(ui.aimDiv).css("top", top).css("left", left).show();
+	game.showHoverElement($(ui.aimDiv), e);
 }
 
 function handleScroll(e){
@@ -484,7 +444,6 @@ function handleTurnShortening(unit, e, pos){
 	var multi = 0;
 }
 
-
 function sensorize(ship, pos){
 	var facing = ship.getPlannedHeading();
 	var shipLoc = ship.getPlannedPos();
@@ -542,26 +501,6 @@ function planPhase(e, pos, unit){
 	}
 }
 
-function movePhase(e, pos, unit){
-	if (unit){
-		if (game.mode == 1){ //no active weapon but ship active -> MOVE MODE
-			if (game.turnMode){
-				unit.handleTurnAttempt(pos);
-			}
-			else if (isInArc(getCompassHeadingOfPoint(unit.getPlannedPos(), pos, 0), unit.moveAngles.start, unit.moveAngles.end)){ //check if clicked to move in movement arc
-				var dist = Math.floor(getDistance(unit.getPlannedPos(), pos));
-				if (dist < unit.getRemSpeed()){
-					unit.doIssueMove(pos, dist);
-				}
-			}
-		}
-	}
-	else {
-		unit = game.getUnitByClick(pos);	
-		if (unit){unit.select();}
-	}
-}
-
 function firePhase(pos, unit, targetid){
 	if (unit){
 		game.handleFireClick(pos, unit, targetid);
@@ -585,18 +524,5 @@ function dmgPhase(e, pos, unit){
 	else {
 		unit = game.getUnitByClick(pos);	
 		if (unit){unit.select();}
-	}
-}
-
-function checkWeaponHighlight(ele, weaponid){
-	if (ele.className == "weapon"){
-		for (var i = 0; i < game.ships.length; i++){
-			for (var j = 0; j < game.ships[i].weapons.length; j++){
-				if (game.ships[i].weapons[j].id == weaponid){
-					game.ships[i].weaponHighlight(game.ships[i].weapons[j]);
-					return;
-				}
-			}
-		}
 	}
 }

@@ -182,16 +182,16 @@ function Game(data){
 	this.hasSnapCenterline = function(shooter, shooterAngle, target){
 		if (game.phase > 0){
 			if (shooter.focus && target && !target.focus && !shooter.getRemSpeed()){
-				//console.log("angle to target: " + shooterAngle);
+				//debug("angle to target: " + shooterAngle);
 				if (shooterAngle == 0 || shooterAngle == 360 || (shooterAngle > 0 && shooterAngle < 0.2)|| (shooterAngle < 360 && shooterAngle > 359.8)){
-					//console.log("snap!");
+					//debug("snap!");
 					return true;
 				}
 			}
 		}
 		else if (game.phase == -1){
 			if (Math.round(shooterAngle) == 360 || Math.round(shooterAngle) == 0){
-				//console.log("snap!");
+				//debug("snap!");
 					return true;
 			}
 		}
@@ -535,7 +535,7 @@ function Game(data){
 	}
 
 	this.checkUnitOffsetting = function(){
-		//console.log("checkUnitOffsetting");
+		//debug("checkUnitOffsetting");
 		this.offsetFlightFlight();
 		this.offsetFlightShip();
 		this.offsetAllSalvo();
@@ -843,7 +843,7 @@ function Game(data){
 	}
 
 	this.doConfirmOrders = function(){
-		//console.log("doConfirmOrders"); return;
+		//debug("doConfirmOrders"); return;
 		if (!this.canConfirm){return;}
 		this.canConfirm = 0;
 		switch (this.phase){
@@ -1014,7 +1014,7 @@ function Game(data){
 			var userid;
 			var color;
 
-			//console.log(center);
+			//debug(center);
 
 
 			if (this.playerstatus[i].userid == this.userid){
@@ -1039,7 +1039,7 @@ function Game(data){
 
 				center.x /= count;
 				center.y /= count;
-				//console.log(center);
+				//debug(center);
 
 				center.x = Math.round(center.x);
 				center.y = Math.round(center.y);
@@ -1108,7 +1108,7 @@ function Game(data){
 
 	//	this.deployImage = new Image();
 	//	this.deployImage.src = drawCanvas.toDataURL();
-	//	console.log(drawCanvas.toDataURL());
+	//	debug(drawCanvas.toDataURL());
 	//	return;
 
 		planCtx.clearRect(0, 0, res.x, res.y);
@@ -1163,21 +1163,21 @@ function Game(data){
 	}
 
 	this.setAllObstaclesNextMoves = function(){
-		console.log("setAllObstaclesNextMoves");
+		debug("setAllObstaclesNextMoves");
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].obstacle){this.ships[i].setNextMove();}
 		}
 	}
 
 	this.setAllObstaclesImages = function(){
-		console.log("setAllObstaclesImages");
+		debug("setAllObstaclesImages");
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].obstacle){this.ships[i].setTrueImage(true);}
 		}
 	}
 
 	this.endMoveSubPhase = function(){
-		//console.log("endMoveSubPhase")
+		//debug("endMoveSubPhase")
 		for (var i = 0; i < this.ships.length; i++){
 			if (!this.ships[i].toAnimate){continue;}
 
@@ -1207,7 +1207,7 @@ function Game(data){
 
 
 	this.moveResolved = function(){
-		console.log("moveResolved");
+		debug("moveResolved");
 
 		this.subPhase = 2;
 		this.animating = 0;
@@ -1298,7 +1298,7 @@ function Game(data){
 	}
 
 	this.autoIssueFireOrders = function(){
-		console.log("autoIssueFireOrders");
+		debug("autoIssueFireOrders");
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (!this.ships[i].friendly || !this.ships[i].flight){continue;}
@@ -1325,7 +1325,7 @@ function Game(data){
 				}
 				weapons.push(this.ships[i].structures[j].systems[k]);
 			}
-			//console.log(weapons);
+			//debug(weapons);
 
 			var target = hostiles[0].id;
 			var pos = hostiles[0].getPlannedPos();
@@ -1359,7 +1359,7 @@ function Game(data){
 	}
 
 	this.fireResolved = function(){
-		console.log("fireResolved");
+		debug("fireResolved");
 
 		this.animating = 0;
 		this.animateAllFire = 0;
@@ -1515,7 +1515,7 @@ function Game(data){
 			$("#phaseSwitchDiv").click(function(){
 				game.initMovement();
 				//window.timeout = setTimeout(function(){
-				//	console.log("hide");
+				//	debug("hide");
 					$("#phaseSwitchDiv").hide()
 				///}, 250);
 			});
@@ -1727,7 +1727,7 @@ function Game(data){
 	}
 
 	this.setCC = function(){
-		//console.log("setCC");
+		//debug("setCC");
 		if (this.turn == 1 && this.phase == -1){return;}
 		if (this.phase == 1 && game.phase == 2){return;}
 
@@ -1799,7 +1799,7 @@ function Game(data){
 	}
 
 	this.setPostMoveCC = function(){
-		//console.log("setPostMoveCC");
+		//debug("setPostMoveCC");
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].cc = [];
 		}
@@ -1977,7 +1977,7 @@ function Game(data){
 	}
 
 	this.redraw = function(){
-		//console.log("redraw");
+		//debug("redraw");
 		planCtx.clearRect(0, 0, res.x, res.y);
 		moveCtx.clearRect(0, 0, res.x, res.y)
 		salvoCtx.clearRect(0, 0, res.x, res.y)
@@ -2058,8 +2058,7 @@ function Game(data){
 	}
 }
 
-Game.prototype.showSysDiv = function($element, e){
-	$(document.body).append($element);
+Game.prototype.showHoverElement = function($element, e){
 	var h = $element.height();
 	var pY = $element.position().top;
 
@@ -2069,11 +2068,15 @@ Game.prototype.showSysDiv = function($element, e){
 	if (y + h + 10 > res.y){
 		x += 150;
 		y = res.y - 20 - h;
-		console.log($element.closest(".shipDiv"));
+		//debug($element.closest(".shipDiv"));
 	}
-//	console.log(h);
-//	console.log(pY);
-	$element.css("left", x).css("top", y)
+	$element.css("left", x).css("top", y).show();
+
+}
+
+Game.prototype.appendSysDiv = function($element, e){
+	$(document.body).append($element);
+	this.showHoverElement($element, e);
 }
 
 Game.prototype.hideSysDiv = function(){
@@ -2337,7 +2340,7 @@ Game.prototype.getObstructionPoint = function(fire){
 
 	return test[0];
 
-	console.log(test);
+	debug(test);
 
 
 
@@ -2363,21 +2366,21 @@ Game.prototype.getObstructionPoint = function(fire){
 }
 
 Game.prototype.setInterferenceData = function(){
-	console.log("setInterferenceData");
+	debug("setInterferenceData");
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].obstacle){continue;}
-		//console.log("check " + this.ships[i].id);
+		//debug("check " + this.ships[i].id);
 		var oPos = this.ships[i].getGamePos();
 
 		for (var j = i+1; j < this.ships.length; j++){
 		if (this.ships[j].obstacle){continue;}
 			if (this.ships[i].userid == this.ships[j].userid){continue;}
-			//console.log("versus " + this.ships[j].id);
+			//debug("versus " + this.ships[j].id);
 			var tPos = this.ships[j].getGamePos();
 
 			for (var k = 0; k < this.ships.length; k++){
 				if (!this.ships[k].obstacle){continue;}
-				//console.log("obs " + this.ships[k].id);
+				//debug("obs " + this.ships[k].id);
 
 				var dist = this.ships[k].testObstruction(oPos, tPos);
 
@@ -2397,8 +2400,8 @@ Game.prototype.setInterferenceData = function(){
 
 Game.prototype.setCollisionData = function (unit){
 	if (unit.obstacle){return;}
-	//if (unit.flight || unit.salvo){console.log("ding");}
-	//console.log("___setCollisionData for unit " + unit.id);
+	//if (unit.flight || unit.salvo){debug("ding");}
+	//debug("___setCollisionData for unit " + unit.id);
 
 	unit.collisions = [];
 	var unitPos = unit.getGamePos();
@@ -2415,12 +2418,12 @@ Game.prototype.setCollisionData = function (unit){
 
 			var dist = this.ships[i].testObstruction(oPos, action);
 			if (!dist){continue;}
-			//console.log(dist);
+			//debug(dist);
 
 			totalDist += dist;
 		}
 
-		//console.log("total travel inside " + totalDist);
+		//debug("total travel inside " + totalDist);
 
 		if (!totalDist){continue;}
 		unit.collisions.push({
@@ -2445,11 +2448,11 @@ Game.prototype.hasObstacleInVector = function(oPos, tPos, unit){
 
 		var dist = this.ships[i].testObstruction(oPos, tPos);
 
-		//sconsole.log(result);
+		//sdebug(result);
 		//return false;
 		if (!dist){continue;}
-		//console.log("testing vs " + this.ships[i].display);
-		//console.log(result);
+		//debug("testing vs " + this.ships[i].display);
+		//debug(result);
 
 
 		inPath.push({
@@ -2503,8 +2506,8 @@ Game.prototype.setShipDivs = function(val){
 		x += 25;
 		y += 25;
 
-		//console.log(this.ships[i].id);
-		//console.log(x, y);
+		//debug(this.ships[i].id);
+		//debug(x, y);
 
 		if (y + 600 > res.y){
 			y = 200;
@@ -2728,13 +2731,13 @@ Game.prototype.getRemainingReinforcePoints = function(){
 }
 
 Game.prototype.initMovement = function(){
-	console.log("initMovement");
+	debug("initMovement");
 	this.setCallback("resolveDeploy");
 	this.setGlobalCam();
 }
 
 Game.prototype.resolveDeploy = function(){
-	console.log("resolveDeploy");
+	debug("resolveDeploy");
 	var show = 0;
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].deployed = true;
@@ -2756,7 +2759,7 @@ Game.prototype.resolveDeploy = function(){
 }
 
 Game.prototype.initDeployIn = function(){
-	console.log("initDeployIn");
+	debug("initDeployIn");
 	this.hideUI();
 	setFPS(30);
 	window.then = Date.now();
@@ -2854,7 +2857,7 @@ Game.prototype.resolveTurnStartMoves = function(){
 }
 
 Game.prototype.handleTurnStartMoves = function(){
-	console.log("handleTurnStartMoves");
+	debug("handleTurnStartMoves");
 
 	this.prepResolveMovement();
 	game.timeout = setTimeout(function(){
@@ -2902,7 +2905,7 @@ Game.prototype.animateDeployIn = function(){
 	window.elapsed = window.now - window.then;
 
 	if (elapsed > window.fpsTicks){
-		//console.log("animateDeployIn");
+		//debug("animateDeployIn");
 
 		var done = 1;
 		var doing = 0;
@@ -2939,14 +2942,14 @@ Game.prototype.animateDeployIn = function(){
 }
 
 Game.prototype.setAllCollisionData = function(){
-	console.log("setAllCollisionData");
+	debug("setAllCollisionData");
 	for (var i = 0; i < this.ships.length; i++){
 		this.setCollisionData(this.ships[i]);
 	}
 }
 
 Game.prototype.initialPhaseResolutionDone = function(){
-	console.log("initialPhaseResolutionDone");
+	debug("initialPhaseResolutionDone");
 	var newUnit = 0;
 	var newMission = 0;
 
@@ -3033,14 +3036,14 @@ Game.prototype.doResolveMovement = function(){
 }
 
 Game.prototype.setCallback = function(name, args){
-	console.log("SET " + name);
+	debug("SET " + name);
 	this.callback = [name, args];
 }
 
 Game.prototype.getCallback = function(){
-	console.log("GET " + this.callback[0]);
+	debug("GET " + this.callback[0]);
 	if (this.callback[0] == ""){
-		console.log("no callback set!"); return;
+		debug("no callback set!"); return;
 	}
 
 	var name = this.callback[0];
@@ -3558,10 +3561,10 @@ Game.prototype.setUnitMoveDetails = function(){
 }
 
 Game.prototype.handleAllUnitExplos = function(){
-	console.log("handleAllUnitExplos");
+	debug("handleAllUnitExplos");
 	for (var i = 0; i < this.unitExploAnims.length; i++){
 		if (!game.unitExploAnims[i].animated){
-			console.log(this.unitExploAnims[i]);
+			debug(this.unitExploAnims[i]);
 			this.handleSingleUnitExplos(i);
 			return;
 		}
@@ -3572,7 +3575,7 @@ Game.prototype.handleAllUnitExplos = function(){
 }
 
 Game.prototype.handleSingleUnitExplos = function(i){
-	console.log("handleSingleUnitExplos");
+	debug("handleSingleUnitExplos");
 	this.unitExploAnims[i].animating = 1;
 	this.setCallback("animateSingleUnitExplo", i);
 	cam.z = 2;
@@ -3580,7 +3583,7 @@ Game.prototype.handleSingleUnitExplos = function(i){
 }
 
 Game.prototype.handleForcedMoves = function(){
-	console.log("handleForcedMoves");
+	debug("handleForcedMoves");
 
 	var need = 0;
 
@@ -3672,7 +3675,7 @@ Game.prototype.resolveDamageControl = function(){
 }
 
 Game.prototype.handleAllDeployOut = function(){
-	console.log("handleAllDeployOut");
+	debug("handleAllDeployOut");
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].deployAnim[1] && this.ships[i].deployAnim[0] != this.ships[i].deployAnim[1]){
 			this.handleSingleDeployOut(i);
@@ -3684,7 +3687,7 @@ Game.prototype.handleAllDeployOut = function(){
 }
 
 Game.prototype.handleSingleDeployOut = function(i){
-	console.log("handleSingleDeployOut");
+	debug("handleSingleDeployOut");
 	//this.unitExploAnims[i].animating = 1;
 	this.setCallback("initAnimateSingleDeployOut", i);
 	cam.z = 1.5;
@@ -3736,7 +3739,7 @@ Game.prototype.animateSingleDeployOut = function(j){
 }
 
 Game.prototype.DamageControlResolved = function(){
-	console.log("DamageControlResolved");
+	debug("DamageControlResolved");
 
 	var show = 0;
 	for (var i = 0; i < this.ships.length; i++){
@@ -3767,7 +3770,7 @@ Game.prototype.DamageControlResolved = function(){
 }
 
 Game.prototype.resolvePostMoveFires = function(){
-	console.log("resolvePostMoveFires");
+	debug("resolvePostMoveFires");
 	this.doResolveFire();
 }
 
@@ -3814,7 +3817,7 @@ Game.prototype.showUI = function(width){
 }
 
 Game.prototype.doSizeLog = function(width){
-	//console.log("doSizeLog")
+	//debug("doSizeLog")
 
 	var header = "";
 	if (game.phase == -1){header = "Damage Control Resolution Log";}
@@ -3870,7 +3873,7 @@ Game.prototype.setFireGlobals = function(){
 
 Game.prototype.resetImageData = function(){
 	if (this.phase == -1){return;}
-	//console.log("resetImageData");
+	//debug("resetImageData");
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].setPreFireImage();
 	}
@@ -3890,7 +3893,7 @@ Game.prototype.getAllResolvingFireOrders = function(){
 			}
 		}
 	}
-	console.log(this.fireOrders);
+	debug(this.fireOrders);
 }
 
 Game.prototype.getAreaShotDetails = function(){
@@ -3980,7 +3983,7 @@ Game.prototype.getShotDetails = function(){
 		}
 	}
 
-	//console.log(this.fireOrders);
+	//debug(this.fireOrders);
 	for (var i = this.fireOrders.length-1; i >= 0; i--){
 			this.fireOrders[i].type = "Reg."// + this.fireOrders[i].id;
 		if (!this.fireOrders[i].guns){
@@ -3999,7 +4002,7 @@ Game.prototype.getFireAnimationDetails = function(){
 		this.fireOrders[i].anim = this.fireOrders[i].weapon.getAnimation(this.fireOrders[i]);
 		this.fireOrders[i].createCombatLogEntry();
 		this.fireOrders[i].setNumberAnim();
-		//console.log(this.fireOrders[i].weapon.priority);
+		//debug(this.fireOrders[i].weapon.priority);
 	}
 }
 
@@ -4013,7 +4016,7 @@ Game.prototype.adjustAreaFires = function(){
 			if (this.fireOrders[i].shooterid != this.fireOrders[j].shooterid){continue;}
 			if (this.fireOrders[i].weaponid != this.fireOrders[j].weaponid){continue;}
 
-			console.log("same !");
+			debug("same !");
 			this.fireOrders[i].numbers = this.fireOrders[i].numbers.concat(this.fireOrders[j].numbers);
 
 			this.fireOrders[j].numbers = [];
@@ -4053,7 +4056,7 @@ Game.prototype.getRandomExplo = function(){
 }
 
 Game.prototype.getAllUnitExplos = function(){
-	console.log("getAllUnitExplos");
+	debug("getAllUnitExplos");
 
 	for (var i = 0; i < this.ships.length; i++){
 		if (!this.ships[i].deployed){continue;}
@@ -4075,7 +4078,7 @@ Game.prototype.handlePostFireMoves = function(){
 }
 
 Game.prototype.handleAllFireOrders = function(){
-	console.log(this.fireOrders);
+	debug(this.fireOrders);
 	for (var i = 0; i < this.fireOrders.length; i++){
 		this.fireOrders[i].tr.show();
 
@@ -4092,7 +4095,7 @@ Game.prototype.handleAllFireOrders = function(){
 
 
 		if (!this.fireOrders[i].animated){
-			console.log(game.fireOrders[i]);
+			debug(game.fireOrders[i]);
 			this.handleSingleFireOrder(i);
 			return;
 		}
@@ -4476,7 +4479,7 @@ Game.prototype.createReinforcementsTable = function(){
 }
 
 Game.prototype.initReinforceTable = function(){
-	//console.log("initReinforceTable");
+	//debug("initReinforceTable");
 	$("#leftUnitWrapper").find("#reinforceBody").find(".requestReinforcements").each(function(i){
 		$(this)
 		.data("id", game.reinforcements[i]["id"])
@@ -4602,22 +4605,22 @@ Game.prototype.initSelectionWrapper = function(){
 
 	if (!l){return;}
 
-	//console.log("l " + l);
+	//debug("l " + l);
 
 	var widthNeed = (l)*(s+6) + 2;
 	var widthAvail = res.x - 245 - 40 - $(".chatWrapper").width();
 
-	//console.log("need " + widthNeed);
-	//console.log("avail " + widthAvail);
+	//debug("need " + widthNeed);
+	//debug("avail " + widthAvail);
 
 	if (widthNeed < widthAvail){
-		//console.log("need < avail");
+		//debug("need < avail");
 		ui.unitSelector.width(widthNeed).removeClass("disabled");
 	} 
 	else {
-		//console.log("need > avail");
+		//debug("need > avail");
 		widthNeed = Math.floor(widthAvail / (s+6)) * (s+6)+2;
-		//console.log("need " + widthNeed);
+		//debug("need " + widthNeed);
 		ui.unitSelector.width(widthNeed).removeClass("disabled");
 	}
 
@@ -4691,19 +4694,19 @@ Game.prototype.initUI = function(){
 
 	$("#maxCutVector")
 	.click(function(){
-		//console.log("maxVector")
+		//debug("maxVector")
 		game.getActiveUnit().moveInVector();
 		//game.getUnit($(this).data("unitid")).moveInVector($(this).data("dist"));
 	})	
 	$("#maxTurnVector")
 	.click(function(){
-		//console.log("maxVector")
+		//debug("maxVector")
 		game.getActiveUnit().moveToMaxTurnVector();
 		//game.getUnit($(this).data("unitid")).moveToMaxTurnVector();
 	})	
 	$("#maxVector")
 	.click(function(){
-		//console.log("maxVector")
+		//debug("maxVector")
 		game.getActiveUnit().moveToMaxVector();
 		//game.getUnit($(this).data("unitid")).moveToMaxVector();
 	})

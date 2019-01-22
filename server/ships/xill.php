@@ -10,7 +10,7 @@ class Xill extends Heavy {
 	public $mass = 6000;
 
 	public $integrity = 850;
-	public $vitalHP = 80;
+	public $vitalHP = 95;
 	public $ep = 80;
 	public $ew = 775;
 	public $power = 0;
@@ -61,12 +61,12 @@ class Xill extends Heavy {
 	public function addTurrets(){
 		$turrets = array();
 		
-		$turretA = new Turret($this->getId(), $this->id, "Dorsal Main Turret", 0, 360, 160, 12);
+		$turretA = new Turret($this->getId(), $this->id, "Dorsal Main Turret", 0, 360, 160, 14);
 		$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 		$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 		$turrets[] = $turretA;
 		
-		$turretB = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 160, 12);
+		$turretB = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 160, 14);
 		$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 		$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
 		$turrets[] = $turretB;

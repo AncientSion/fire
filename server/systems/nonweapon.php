@@ -14,8 +14,10 @@ class PrimarySystem extends System {
 		array("Output", 40, 0, 0)
 	);
 
-	public function getCritModMax($relDmg){
-		return (min(15, round($relDmg*100/5) * 5)*-1);
+	public function getCritModMax($relDmg, $hits){
+		//Debug::log("PrimarySystem getCritModMax hits: ".$hits);
+		//return (min(15, round($relDmg*100/5) * 5)*-1);
+		return (min(15, round($relDmg*100/5) * 5)*-1) * (1 + (($hits-1) * 0.5));
 	}
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
@@ -139,7 +141,7 @@ class Reactor extends PrimarySystem {
     	$this->output = $this->output + $use + $add;
     }
 
-	public function getCritModMax($relDmg){
+	public function getCritModMax($relDmg, $hits){
 		return (min(10, round($relDmg*100/5) * 5)*-1);
 	}
 

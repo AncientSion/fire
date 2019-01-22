@@ -37,7 +37,6 @@ class Weapon extends System {
 	public $critEffects =  array( // type, mag, dura, effect
 		array("Accuracy", 100, 0, 0),
 		array("Damage", 120, 0, 0),
-		array("Destroyed", 180, 0, 1),
 	);
 
 	function __construct($id, $parentId, $start, $end, $output, $width){

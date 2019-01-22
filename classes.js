@@ -382,7 +382,7 @@ Single.prototype.getSysDiv = function(){
 			.append($("<tr>").append($("<td>").html("Armour").css("width", "70%")).append($("<td>").html(this.negation)))
 			.append($("<tr>").append($("<td>").html("Acceleration")).append($("<td>").html(this.baseImpulse)))
 			.append($("<tr>").append($("<td>").html("Recent EM Damage")).append($("<td>").html(this.getEMDmg())))
-			//.append($("<tr>").append($("<td>").html("Recent Stock Damage")).append($($("<td>").html((this.recentDmg + " / " + this.getRecentDmgInt() + " %")))))
+			//.append($("<tr>").append($("<td>").html("Recent Damagemage")).append($($("<td>").html((this.recentDmg + " / " + this.getRecentDmgInt() + " %")))))
 			.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
 		)
 
@@ -463,7 +463,7 @@ Single.prototype.addMainDivEvents = function(div, alive, isPreview){
 			e.stopPropagation();
 			var shipId = $(this).parent().parent().parent().data("shipId");
 			var systemId = $(this).parent().data("systemId");
-			console.log(game.getUnit(shipId).getSystem(systemId));
+			debug(game.getUnit(shipId).getSystem(systemId));
 		});
 	}
 	else {
@@ -480,7 +480,7 @@ Single.prototype.addMainDivEvents = function(div, alive, isPreview){
 			e.stopPropagation();
 			var shipId = $(this).parent().parent().parent().data("shipId");
 			var systemId = $(this).parent().data("systemId");
-			console.log(game.getUnit(shipId).getSystem(systemId));
+			debug(game.getUnit(shipId).getSystem(systemId));
 		})
 	}
 }
@@ -738,7 +738,7 @@ FireOrder.prototype.setNumberAnim = function(){
 			}
 		);
 
-		//console.log(this.numbers[0].n + " / " +this.numbers[0].m);
+		//debug(this.numbers[0].n + " / " +this.numbers[0].m);
 	}
 }
 
@@ -1059,7 +1059,7 @@ FireOrder.prototype.getReqString = function(){
 		req = req.filter(e => e != 0);
 		req.sort(function(a, b){return a-b});
 
-	//console.log(req);
+	//debug(req);
 	var string = "";
 	if (req.length == 0){
 		string = "0";

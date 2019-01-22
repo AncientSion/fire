@@ -53,11 +53,11 @@ class Zaatrr extends Medium {
 	public function addTurrets(){
 		$turrets = array();
 		
-		$turretA = new Turret($this->getId(), $this->id, "Large Turret A", 0, 360, 90, 10);
+		$turretA = new Turret($this->getId(), $this->id, "Large Turret A", 0, 360, 90, 12);
 		$turretA->systems[] = new AntimatterConverter($this->getId(), $this->id, 0, 360);
 		$turrets[] = $turretA;
 
-		$turretA = new Turret($this->getId(), $this->id, "Large Turret B", 0, 360, 90, 10);
+		$turretA = new Turret($this->getId(), $this->id, "Large Turret B", 0, 360, 90, 12);
 		$turretA->systems[] = new AntimatterConverter($this->getId(), $this->id, 0, 360);
 		$turrets[] = $turretA;
 		

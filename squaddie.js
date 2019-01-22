@@ -41,7 +41,7 @@ Squaddie.prototype.hover = function(e){
 	}
 	else {
 		this.highlight = true;
-		game.showSysDiv($(this.getSysDiv()), e);
+		game.appendSysDiv($(this.getSysDiv()), e);
 	}
 }
 
@@ -66,7 +66,7 @@ Squaddie.prototype.getSysDiv = function(){
 				.append($("<td>").html("Recent EM Damage"))
 				.append($("<td>").html(this.getEMDmg())))
 			.append($("<tr>")
-				.append($("<td>").html("Recent Stock Damage"))
+				.append($("<td>").html("Recent Damagemage"))
 				.append($("<td>").html(this.recentDmg + " / " + this.getRecentDmgInt() + " %")))
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
@@ -87,7 +87,7 @@ Squaddie.prototype.fillSelfContainer = function(){
 		img
 		.click(function(){
 			var data = $(this).closest(".unitContainer").data();
-			console.log(game.getUnit(data.shipId).getSystem(data.systemId));
+			debug(game.getUnit(data.shipId).getSystem(data.systemId));
 		})
 		.contextmenu(function(e){
 			e.preventDefault();
@@ -563,7 +563,7 @@ Turret.prototype.setBonusNegation = function(){
 }
 
 Turret.prototype.select = function(){
-	console.log(this);
+	debug(this);
 	if (this.destroyed || !this.isPowered()){return;}
 	
 	for (var i = 0; i < this.systems.length; i++){
@@ -588,7 +588,7 @@ Turret.prototype.getCoreData = function(){
 			var shipId = $(this).data("shipId");
 			var systemId = $(this).data("systemId");
 			//game.getUnit(shipId).getSystem(systemId).select(e);
-			console.log(game.getUnit(shipId).getSystem(systemId));
+			debug(game.getUnit(shipId).getSystem(systemId));
 		})
 		.append($("<div>")
 			.addClass("integrityAmount")

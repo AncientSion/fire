@@ -253,21 +253,21 @@ Mixed.prototype.setNextMove = function(){
 					d = Math.ceil(getDistance(p, target.getGamePos()));
 
 					if (s + otherSpeed >= d){
-						console.log("_________________")
-						console.log("flight vs flight")
-						console.log("this id " + this.id + ", friendly " + this.friendly);
-						console.log("selfSpeed is " + s);
-						console.log("otherSpeed is " + otherSpeed);
-						console.log("dist is " + d);
+						debug("_________________")
+						debug("flight vs flight")
+						debug("this id " + this.id + ", friendly " + this.friendly);
+						debug("selfSpeed is " + s);
+						debug("otherSpeed is " + otherSpeed);
+						debug("dist is " + d);
 
 						var ownDist = d / (s + otherSpeed) * s;
 						//var otherDist = d - ownDist;
 
-						console.log("own will be " + ownDist);
-						//console.log("other will be " + otherDist);
+						debug("own will be " + ownDist);
+						//debug("other will be " + otherDist);
 
 						next = getPointInDir(ownDist, this.heading, p.x, p.y);
-						console.log("_________________");
+						debug("_________________");
 					}
 					else {
 						next = getPointInDir(s, this.heading, p.x, p.y);
@@ -301,8 +301,8 @@ Mixed.prototype.setNextMove = function(){
 }
 
 Mixed.prototype.setPreMoveFaceHead = function(){
-	//console.log("setPreMoveFaceHead");
-	//if (this.salvo){console.log("setPreMoveFaceHead");}
+	//debug("setPreMoveFaceHead");
+	//if (this.salvo){debug("setPreMoveFaceHead");}
 	if (this.mission.turn == game.turn){
 		if (game.phase == 2){
 			this.heading = getAngleFromTo({x: this.x, y: this.y}, this.getTargetPos());
@@ -368,7 +368,7 @@ Mixed.prototype.canUndoShortenTurn = function(){
 }
 
 Mixed.prototype.setSubSystemState = function(){
-	//	console.log("setStatus")
+	//	debug("setStatus")
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].crits.length; j++){
 			if (this.structures[i].crits[j].type == "Disabled"){
@@ -386,7 +386,7 @@ Mixed.prototype.setSubSystemState = function(){
 }
 
 Mixed.prototype.setDrawData = function(){
-	//console.log("MIXED setDrawData");
+	//debug("MIXED setDrawData");
 	if (this.available > game.turn || !this.available || game.turn == 1 && game.phase == -1){
 		if (this.friendly && this.isReady){
 			this.setPostMovePosition();
@@ -447,7 +447,7 @@ Mixed.prototype.getParent = function(){
 }
 
 Mixed.prototype.setPreFireImage = function(){
-	//console.log("Mixed setPreFireImage");
+	//debug("Mixed setPreFireImage");
 	for (var i = 0; i < this.structures.length; i++){
 		if (!this.structures[i].doDraw){
 			if (this.structures[i].isDestroyedThisTurn()){
@@ -464,7 +464,7 @@ Mixed.prototype.setPreFireSize = function(){
 }
 
 Mixed.prototype.hasPatrolLayout = function(){
-	//console.log("Mixed hasPatrolLayout");
+	//debug("Mixed hasPatrolLayout");
 	if (this.patrolLayout){return true;}
 
 	if (this.mission.arrived && this.mission.type == 1){
@@ -507,7 +507,7 @@ Mixed.prototype.hasPatrolLayout = function(){
 }
 
 Mixed.prototype.setLayout = function(){
-	//console.log("setLayout: "+this.id);
+	//debug("setLayout: "+this.id);
 	
 	if (this.hasPatrolLayout()){
 		this.setPatrolLayout();
@@ -516,7 +516,7 @@ Mixed.prototype.setLayout = function(){
 }
 
 Mixed.prototype.setPatrolLayout = function(){
-	//console.log("setPatrolLayout " + this.id);
+	//debug("setPatrolLayout " + this.id);
 	for (var i = 0; i < this.structures.length; i++){
 		var p = getPointInDir(range(0, this.size*0.9), range(0, 360), 0, 0);
 		this.structures[i].layout.x = p.x;
@@ -647,7 +647,7 @@ Mixed.prototype.attachDivClickFunction = function(){
 }
 
 Mixed.prototype.getSelfExplo = function(){
-	//console.log(this.id);
+	//debug(this.id);
 
 	var base = this.getDrawPos();
 
@@ -673,7 +673,7 @@ Mixed.prototype.getSelfExplo = function(){
 
 		counter++;
 		var real = this.getUnitPos(j);
-		//console.log(real);
+		//debug(real);
 		for (var k = 0; k < 1; k++){
 			explo.anims.push({
 				t: [0 - k*6 - counter*20, 50],

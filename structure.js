@@ -87,7 +87,7 @@ Structure.prototype.getTableData = function(){
 }
 
 Structure.prototype.select = function(){
-	console.log(this);
+	debug(this);
 	var unit;
 
 	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || this.parentId < 0 || game.turnMode){return;}
@@ -134,7 +134,7 @@ Structure.prototype.hover = function(e){
 	else {
 		this.highlight = true;
 		this.drawStructArc(p.getPlannedFacing(), p.rolled, p.getPlannedPos());
-		game.showSysDiv($(this.getSysDiv()), e);
+		game.appendSysDiv($(this.getSysDiv()), e);
 		this.showOptions();
 	}
 }
@@ -348,7 +348,7 @@ Primary.prototype.getTableData = function(){
 		.click(function(e){
 			var shipId = $(this).data("shipId");
 			var systemId = $(this).data("systemId");
-			console.log(game.getUnit(shipId).primary);
+			debug(game.getUnit(shipId).primary);
 		})
 
 	tr.appendChild(td);
@@ -368,7 +368,7 @@ Primary.prototype.hover = function(e){
 	}
 	else {
 		this.highlight = true;
-		game.showSysDiv($(this.getSysDiv()), e);
+		game.appendSysDiv($(this.getSysDiv()), e);
 	}
 }
 
@@ -387,7 +387,7 @@ Primary.prototype.getSysDiv = function(){
 				.append($("<td>").html("Recent EM Damage"))
 				.append($("<td>").html(this.getEMDmg())))
 			.append($("<tr>")
-				.append($("<td>").html("Recent Stock Damage"))
+				.append($("<td>").html("Recent Damagemage"))
 				.append($("<td>").html(this.recentDmg + " / " + this.getRecentDmgInt() + " %"))));
 }
 
@@ -404,7 +404,7 @@ Primary.prototype.getRemIntegrity = function(){
 	for (var i = 0; i < this.damages.length; i++){
 		integrity -= this.damages[i].systemDmg;
 		if (this.damages[i].hullDmg){
-			console.log("ERROR");
+			debug("ERROR");
 		}
 	}
 	return integrity;

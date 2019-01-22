@@ -22,6 +22,7 @@
 		}
 
 	    public function dump(){
+	    	Debug::log("dumping DB");
 	    	$os = PHP_OS;
 			$access = Debug::access();
 
