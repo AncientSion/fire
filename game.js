@@ -3393,7 +3393,7 @@ Game.prototype.setConfirmInfo = function(){
 }
 
 Game.prototype.setGameSpeed = function(){
-	if (0){
+	if (1){
 		this.animData.jump = 3;
 		this.phaseDelay = 100;
 	}
