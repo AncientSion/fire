@@ -394,23 +394,25 @@ AsteroidField.prototype.setTrueImage = function(info){
 		ctx = t.getContext("2d");
 
 		var size = 10 + (this.rockSize -2) * 4;
-		var amount = Math.sqrt(this.width * this.height) / this.density * 10;
+		var amount = Math.sqrt(this.width * this.height) / this.density * 3;
 
 		for (i = 0; i < amount; i++){
-			var x = range(5, t.width-5) - size;
-			var y = range(5, t.height-5) - size;
+			var x = range(0+size, t.width-size);
+			var y = range(0+size, t.height-size);
+			var rota = range(0, 360);
 
 			ctx.translate(x, y);
-			//ctx.rotate(this.rota * (Math.PI/180));
+			ctx.rotate(rota * (Math.PI/180));
 			ctx.drawImage(
 				graphics.images.rocks[range(0, graphics.images.rocks.length-1)],
-				x,
-				y,
+				0 - size,
+				0 - size,
 				size*2,
 				size*2,
 			)
-			//ctx.rotate(-this.rota * (Math.PI/180));
-			ctx.translate(-x, -y);
+		ctx.setTransform(1,0,0,1,0,0);
+			//ctx.rotate(-rota * (Math.PI/180));
+			//ctx.translate(-x, -y);
 		}
 		this.img = t;
 	}
