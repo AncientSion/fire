@@ -99,8 +99,8 @@ function Ship(data){
 
 Ship.prototype.doRefit = function(){
 	//if (!this.ship){return;}
-	//debug("doRefit");
-	debug(this);
+	//console.log("doRefit");
+	console.log(this);
 	if (game.refit){$(game.getUnit(game.refit).tr).removeClass("selected");}
 	game.refit = this.id;
 	$(this.tr).addClass("selected");
@@ -163,11 +163,11 @@ Ship.prototype.canDeployHere = function(e, pos){
 	var hex = game.rgbToHex(p[0], p[1], p[2])//.slice(-6);
 	if (hex == 8100){return true;}
 	return false;
-	debug(hex);
+	console.log(hex);
 	var valid = false;	
 
 	var deploy = game.getDeployArea();
-	//debug(deploy);
+	//console.log(deploy);
 
 	var xDist = Math.abs(pos.x - deploy.x);
 	if (xDist < deploy.deleteW/2){
@@ -180,10 +180,10 @@ Ship.prototype.canDeployHere = function(e, pos){
 	}
 
 	var a = getCompassHeadingOfPoint(deploy, pos, 0);
-	//debug(a);
+	//console.log(a);
 	if (isInArc(a, deploy.start, deploy.end)){
 		var d = getDistance(pos, deploy);
-		//debug(d);
+		//console.log(d);
 		if (d > deploy.b && d < deploy.s){
 			return true;
 		}
@@ -192,7 +192,7 @@ Ship.prototype.canDeployHere = function(e, pos){
 }
 
 Ship.prototype.doDeploy = function(pos){
-	debug(this);
+	console.log(this);
 	if (this.actions.length){
 		this.actions[0].x = pos.x;
 		this.actions[0].y = pos.y;
@@ -236,7 +236,7 @@ Ship.prototype.doDeploy = function(pos){
 }
 
 Ship.prototype.setHitTable = function(){
-	//debug("id: " + this.id);
+	//console.log("id: " + this.id);
 	//this.primary.setRemainingIntegrity();
 	var fraction = this.primary.remaining / this.primary.integrity;
 
@@ -584,7 +584,7 @@ Ship.prototype.doAutoShorten = function(){
 Ship.prototype.canShortenOldTurn = function(move){
 	if (!this.getRemDelay()){return;}
 	if (move.costmod < 2 && this.getRemEP() >= this.getShortenOldTurnCost(move)){
-		//debug("can shorten")
+		//console.log("can shorten")
 		return true;
 	}
 
@@ -734,7 +734,7 @@ Ship.prototype.handleTurning = function(e, o, f, pos){
 	var t;
 
 	if (this.focus == 1 && unit && !unit.focus){
-		//debug("snap");
+		//console.log("snap");
 		a = getAngleFromTo(this.getPlannedPos(), unit.getPlannedPos());
 		a = addAngle(f, a);
 		t = unit.getDrawPos();
@@ -743,7 +743,7 @@ Ship.prototype.handleTurning = function(e, o, f, pos){
 		game.snapTurn = unit.id;
 	}
 	else {
-		//debug("free");
+		//console.log("free");
 		t = {x: e.clientX, y: e.clientY};
 		a = getAngleFromTo(o, pos);
 		a = addAngle(f, a);
@@ -768,7 +768,7 @@ Ship.prototype.handleTurning = function(e, o, f, pos){
 		salvoCtx.setTransform(1,0,0,1,0,0);
 	}
 
-	//debug(a)
+	//console.log(a)
 	$("#epButton").css("top", t.y + 25).css("left", t.x - 200).find("#impulseCost").html(round(a, 2))
 	a = Math.min(Math.abs(a), max);
 	turn.h = a;
@@ -838,7 +838,7 @@ Ship.prototype.canTurnFreely = function(){
 
 Ship.prototype.issueTurn = function(a){
 	a = round(a, 2);
-	//debug(a)
+	//console.log(a)
 	if (this.canTurnFreely()){
 		//this.actions[0].h += Math.round(a);
 		this.actions[0].h += a;
@@ -951,7 +951,7 @@ Ship.prototype.setMoveMode = function(){
 	if (this.salvo || this.flight || this.obstacle){return;}
 	else if (this.focus> game.phase && game.phase > -1){instruct("Focus Unit!");}
 	else if (this.focus== 0 && game.phase == 1){return;}
-	//debug("ding!");
+	//console.log("ding!");
 	game.mode = 1;
 	turn.set(this);
 	this.setTurnData();
@@ -1095,7 +1095,7 @@ Ship.prototype.toggleDivSize = function(){
 }
 
 Ship.prototype.setPreMoveFaceHead = function(){
-	//debug("setPreMoveFaceHead #"+this.id);
+	//console.log("setPreMoveFaceHead #"+this.id);
 	this.drawFacing = this.facing;
 
 	if (game.phase == -1){return;}
@@ -1117,8 +1117,8 @@ Ship.prototype.setPreMoveFaceHead = function(){
 }
 
 Ship.prototype.setPostMoveFaceHead = function(){
-	//debug("setPostMoveFaceHead #"+this.id);
-	//if (this.faction[0] == "V"){debug("ding");}
+	//console.log("setPostMoveFaceHead #"+this.id);
+	//if (this.faction[0] == "V"){console.log("ding");}
 	this.drawFacing = this.facing;
 	for (var i = 0; i < this.actions.length; i++){
 		this.drawFacing += this.actions[i].f;
@@ -1126,7 +1126,7 @@ Ship.prototype.setPostMoveFaceHead = function(){
 }
 
 Ship.prototype.setPreMovePosition = function(){
-	//debug("setPreMovePosition #"+this.id);
+	//console.log("setPreMovePosition #"+this.id);
 
 	if (this.available == game.turn){
 		if ((this.flight || this.salvo) && game.phase <= 2){
@@ -1143,7 +1143,7 @@ Ship.prototype.setPreMovePosition = function(){
 }
 
 Ship.prototype.setPostMovePosition = function(){
-	//debug("setPostMovePosition #"+this.id);
+	//console.log("setPostMovePosition #"+this.id);
 	if (!this.actions.length){return;}
 
 	for (var i = this.actions.length-1; i >= 0; i--){
@@ -1179,7 +1179,7 @@ Ship.prototype.hasMoved = function(){
 }
 
 Ship.prototype.setDrawData = function(){
-	//debug("SHIP setDrawData");
+	//console.log("SHIP setDrawData");
 	if (this.available > game.turn || !this.available || game.turn == 1 && game.phase == -1){
 		if (this.friendly && this.isReady){
 			this.setPostMovePosition();
@@ -1261,7 +1261,7 @@ Ship.prototype.getColor = function(){
 }
 
 Ship.prototype.drawMovePlan = function(){
-	//debug("draw moves for #" + this.id);
+	//console.log("draw moves for #" + this.id);
 	if (!this.selected && (!this.actions.length || !this.deployed)){return;}
 
 	var color = this.getColor();
@@ -1353,7 +1353,7 @@ Ship.prototype.getParent = function(){
 }
 
 Ship.prototype.setUnitState = function(){
-	//debug("setUnitState " + this.id)
+	//console.log("setUnitState " + this.id)
 	if (this.userid == game.userid){
 		this.friendly = 1;
 	}
@@ -1391,7 +1391,7 @@ Ship.prototype.select = function(){
 }
 
 Ship.prototype.doSelect = function(){
-	debug(this);
+	console.log(this);
 	aUnit = this.id;
 	this.selected = true;
 	this.setUnitSelector();
@@ -1461,7 +1461,7 @@ Ship.prototype.setShipSystemMods = function(){
 }
 
 Ship.prototype.create = function(){
-	//debug("create "+this.id);
+	//console.log("create "+this.id);
 	this.setUnitState();
 	this.setSubSystemState();
 	this.setStringHitChance();
@@ -1493,7 +1493,7 @@ Ship.prototype.setStringHitChance = function(){
 }
 
 Ship.prototype.getStringHitChance = function(){
-	//debug("getStringHitChance #" + this.id);
+	//console.log("getStringHitChance #" + this.id);
 	return this.stringHitChance;
 }
 
@@ -1713,7 +1713,7 @@ Ship.prototype.animateDeployOut = function(){
 	var sin = Math.sin(Math.PI*fraction);
 	var s = this.size*2.5*sin;
 
-	//debug(fraction)
+	//console.log(fraction)
 
 	ctx.globalAlpha = sin;
 	ctx.drawImage(graphics.images.redVortex, this.drawX-s/2, this.drawY-s/2, s, s);
@@ -1790,7 +1790,7 @@ Ship.prototype.highlightJumpShift = function(){
 	ctx.fill();
 
 	var p = getPointInDir(100, this.actions[0].h, 0, 0);
-	//debug(p);
+	//console.log(p);
 	ctx.beginPath();
 	ctx.moveTo(0, 0)
 	ctx.lineTo(p.x, p.y);
@@ -1876,7 +1876,7 @@ Ship.prototype.getBaseHitChance = function(){
 }
 
 Ship.prototype.getAngledHitChance = function(angle){
-	//debug(angle);
+	//console.log(angle);
 	var a, b, c, base;
 	
 	while (angle > 90){
@@ -1895,7 +1895,7 @@ Ship.prototype.getAngledHitChance = function(angle){
 }
 
 Ship.prototype.getDmgsByFire = function(fire){
-	//debug(fire.hits);
+	//console.log(fire.hits);
 	var dmgs = [];
 	var lookup = 0;
 
@@ -2007,7 +2007,7 @@ Ship.prototype.getWeaponOrigin = function(id){
 			return this.structures[i].getWeaponPosition(this.size, this.getDrawFacing());
 		}
 	}
-	debug("lacking gun origin");
+	console.log("lacking gun origin");
 	return this.getSystem(id);
 }
 
@@ -2082,9 +2082,9 @@ Ship.prototype.setMoveAngles = function(){
 }
 
 Ship.prototype.drawMoveArea = function(){
-	//debug("drawMoveArea");
+	//console.log("drawMoveArea");
 	if (game.moveArea == this.id){return;}
-	//debug("IN!");
+	//console.log("IN!");
 	this.setMoveAngles();
 	moveCtx.clearRect(0, 0, res.x, res.y);
 	game.moveArea = this.id;
@@ -2578,7 +2578,7 @@ Ship.prototype.trySetCommand = function(){
 }
 
 Ship.prototype.doSetCommand = function(){
-	//debug("setCommand");
+	//console.log("setCommand");
 
 	for (var i = 0; i < game.ships.length; i++){
 		if (!game.ships[i].friendly || game.ships[i].flight || game.ships[i].salvo || !game.ships[i].command){continue;}
@@ -2594,7 +2594,7 @@ Ship.prototype.doSetCommand = function(){
 
 	for (var i = 0; i < game.ships.length; i++){
 		if (!game.ships[i].friendly || game.ships[i].flight || game.ships[i].salvo || !game.ships[i].focus){continue;}
-		debug("focus for #" + game.ships[i].id);
+		console.log("focus for #" + game.ships[i].id);
 		game.ships[i].unsetUnitFocus();
 	}
 
@@ -2915,7 +2915,7 @@ Ship.prototype.expandDiv = function(div){
 			.css("top", pos.y + offsetY)
 
 		if (a >= 120 && a <= 240){
-			//debug("dign");
+			//console.log("dign");
 			let armour = $($(structTable).children().children()[0]);
 			structTable.children().append(armour);
 		}
@@ -3083,13 +3083,13 @@ Ship.prototype.setNotes = function(){
 }
 
 Ship.prototype.needsWithdrawClickEvent = function(){
-	//debug("needsWithdrawClickEvent");
+	//console.log("needsWithdrawClickEvent");
 	if (!this.destroyed && game.turn && game.phase == 3 && this.friendly && this.actions[this.actions.length-1].type != "jumpOut"){return true;}
 	return false;
 }
 
 Ship.prototype.isJumpingOut = function(){
-	//debug("isJumpingOut");
+	//console.log("isJumpingOut");
 	if (this.actions.length && this.actions[this.actions.length-1].type == "jumpOut" || this.withdraw){return true;}
 	return false;
 }
@@ -3150,7 +3150,7 @@ Ship.prototype.doRandomOffset = function(shift){
 	if (this.ship || this.squad){return;}
 	if (!this.doDraw){return;}
 	if (this.mission.arrived){return;}
-	//debug("doOffset #" + this.id);
+	//console.log("doOffset #" + this.id);
 	var o = this.getGamePos();
 	var t = this.getTarget();
 	var tPos;
@@ -3165,7 +3165,7 @@ Ship.prototype.doRandomOffset = function(shift){
 	//} else a = range(0, 360);
 	
 	var p = getPointInDir(25 + range(-5, 5), a, o.x, o.y);
-	//debug(p);
+	//console.log(p);
 
 	this.drawX = p.x;
 	this.drawY = p.y;
@@ -3202,7 +3202,7 @@ Ship.prototype.getAttachDivs = function(){
 			});
 
 			var pWidth = $(this.element).width();
-			//debug(pWidth);
+			//console.log(pWidth);
 
 			for (var i = 0; i < attach.length; i++){
 				if (attach[i].ship || attach[i].squad){continue;}
@@ -3305,7 +3305,7 @@ Ship.prototype.setPreFireImage = function(){
 }
 
 Ship.prototype.setSupportImage = function(){
-	//debug("setSupportImage #" + this.id);
+	//console.log("setSupportImage #" + this.id);
 	if (!this.doDraw){return;}
 	var friendlies = [];
 	var hostiles = [];
@@ -3349,7 +3349,7 @@ Ship.prototype.setSupportImage = function(){
 }
 
 Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles){
-	//debug("setEscortImage #" + this.id);
+	//console.log("setEscortImage #" + this.id);
 	var size = this.size;
 	var fSize = 26;
 	var tresh = fSize-2;
@@ -3395,8 +3395,8 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 			var a = split*i + drawFacing;
 			var drawPos = getPointInDir(size+tresh - fSize/2, a, 0, 0);
 			//var aPos = getPointInDir(size/2+tresh - fSize/2, a, 0, 0);
-			//debug(a); 
-			//debug("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
+			//console.log(a); 
+			//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
 			friendly[i].layout = drawPos;
 			ctx.translate(drawPos.x, drawPos.y);
 			ctx.rotate((a)*(Math.PI/180));
@@ -3442,12 +3442,12 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 			var a = split*i + drawFacing;
 			var drawPos = getPointInDir(size+tresh - fSize/2, a, 0, 0);
 			//var aPos = getPointInDir(size/2+tresh - fSize/2, a, 0, 0);
-			//debug(a); 
-			//debug("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
+			//console.log(a); 
+			//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
 			hostile[i].layout = drawPos;
 		//	if (hostile[i].isDestroyedThisTurn()){
-			//	debug(hostile[i].id)
-		//		debug(hostile[i].layout);
+			//	console.log(hostile[i].id)
+		//		console.log(hostile[i].layout);
 		//	}
 			ctx.translate(drawPos.x, drawPos.y);
 			ctx.rotate((a-180)*(Math.PI/180));
@@ -3514,7 +3514,7 @@ Ship.prototype.readyForAnim = function(){
 			//t = [0, this.actions[i].dist * frameMod];
 			t = [0, this.actions[i].dist * frameMod];
 		}
-		//if (this.actions[i].type == "turn"){debug(t);}
+		//if (this.actions[i].type == "turn"){console.log(t);}
 		this.actions[i].t = t;
 		this.actions[i].v = v;
 	}
@@ -3887,7 +3887,7 @@ Ship.prototype.getCrewAddCost = function(i){
 	var type = this.getSystemByName("Command").loads[i];
 	var name = type.name;
 
-	//debug("getCrewAddCost " + name);
+	//console.log("getCrewAddCost " + name);
 	if (game.phase > -2){return "";}
 	var baseCost = this.getCrewBaseCost(i);
 	var level = this.getCrewLevel(i);
@@ -4322,7 +4322,7 @@ Ship.prototype.drawMoveUI = function(){
 
 Ship.prototype.drawShortenTurnUI = function(){
 	return;
-	//debug("drawShortenTurnUI");
+	//console.log("drawShortenTurnUI");
 	var remDelay = this.getRemDelay();
 	var remSpeed = this.getRemSpeed();
 	var center = this.getPlannedPos();
@@ -4369,7 +4369,7 @@ Ship.prototype.doShortenTurn = function(){
 		this.unsetMoveMode();
 		this.setMoveMode();
 		game.redraw();
-		debug(this.getLastTurn());
+		console.log(this.getLastTurn());
 	}
 }
 
@@ -4390,7 +4390,7 @@ Ship.prototype.getShortenTurnCost = function(delay){
 	//var multi = round((Math.ceil(((turn.delay - delay) / turn.delay) * 100)/100), 2);
 	//var multi = round(Math.ceil(delay / turn.delay*2*100)/100, 2)
 	var multi = round(Math.ceil(delay / turn.delay *100)/100, 2)*2
-	debug(multi);
+	console.log(multi);
 	return multi;
 	//var multi = (turn.delay - delay) / turn.delay;
 	return 1-multi;

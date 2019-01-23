@@ -12,7 +12,7 @@ window.ajax = {
 					},
 			success: function(data){
 				if (!JSON.parse(data)){window.location = "lobby.php"; return;}
-				//debug("success");
+				//console.log("success");
 				init(JSON.parse(data));
 			},
 			error: ajax.error,
@@ -79,7 +79,7 @@ window.ajax = {
 					time: Math.round(Date.now()/1000),
 					},
 			//success: function(ret){
-			//	debug(ret);
+			//	console.log(ret);
 			//},
 			//error: ajax.error,
 		});
@@ -166,10 +166,10 @@ window.ajax = {
 					data: window.check
 					},
 			success: function(ret){
-				//debug("return");
+				//console.log("return");
 				var data = JSON.parse(ret);
 				if (!data.length){
-					//debug("no change")
+					//console.log("no change")
 				}
 				else {
 					for (var i = 0; i < window.check.length; i++){
@@ -212,7 +212,7 @@ window.ajax = {
 					}
 				}
 			},
-			error: function(){debug("error checkGameState")},
+			error: function(){console.log("error checkGameState")},
 		});
 	},
 
@@ -232,7 +232,7 @@ window.ajax = {
 					faction: game.faction
 				},
 			success: callback,
-			//success: function(data){debug(data)},
+			//success: function(data){console.log(data)},
 			error: ajax.error,
 		});
 	},
@@ -284,7 +284,7 @@ window.ajax = {
 			powers = powers.concat(game.ships[i].getAllPowerOrders());
 		}
 
-		//debug(missions);
+		//console.log(missions);
 		//return;
 
 		$.ajax({
@@ -307,7 +307,7 @@ window.ajax = {
 					ew: ew
 					},
 			success: callback,
-			//success: debug,
+			//success: console.log,
 			error: ajax.error,
 		});
 	},
@@ -348,13 +348,13 @@ window.ajax = {
 					missions: missions
 				},
 			success: callback,
-			//success: function(echo){debug(echo)},
+			//success: function(echo){console.log(echo)},
 			error: ajax.error,
 		});
 	},
 
 	confirmFiringOrders: function(callback){
-		//debug("ding"); return;
+		//console.log("ding"); return;
 		var fireOrders = [];
 		var powers = [];
 		for (var i = 0; i < game.ships.length; i++){
@@ -438,27 +438,27 @@ window.ajax = {
 	},
 	
 	createGameSuccess: function(){
-		debug("createGameSuccess");
+		console.log("createGameSuccess");
 	},
 	
 	getGamesSuccess: function(){
-		debug("getGamesSuccess");
+		console.log("getGamesSuccess");
 	},
 	
 	success: function(){
-		debug("success");
+		console.log("success");
 	},
 	
 	error: function(data){
-		debug("error");
+		console.log("error");
 	},
 	
 	echoReturn: function (data){
 		if (data){
-			debug(data);
+			console.log(data);
 		}
 		else {
-			debug("no data");
+			console.log("no data");
 		}
 	}
 	

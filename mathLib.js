@@ -30,7 +30,7 @@ function addAngle(f, a){
 	while (ret < 0){
 		ret += 360;
 	}
-	//debug(ret);
+	//console.log(ret);
 	return ret;
 }
 
@@ -152,7 +152,7 @@ function lineCircleIntersect(a, b, c, size) {
 	// test if the line intersects the circle
 	if (eDistCtoE <= size){
 	
-		//debug("eDistCtoE " + eDistCtoE + " below size " + size);
+		//console.log("eDistCtoE " + eDistCtoE + " below size " + size);
 		// compute distance from t to circle intersection point
 		var dist = Math.sqrt(Math.pow(size, 2) - Math.pow(eDistCtoE, 2));
 
@@ -296,7 +296,7 @@ function getIntercept(src, dst, vector, mod){
 	// Find smallest positive solution
 	var sol = null;
 
-	//if (src instanceof Ship){debug(ts);}
+	//if (src instanceof Ship){console.log(ts);}
 
 	if (ts) {
 		var t0 = ts[0], t1 = ts[1];
@@ -347,7 +347,7 @@ function getProjIntercept(src, dst, vector, mod){
 		var t0 = ts[0], t1 = ts[1];
 		//var t = Math.min(t0, t1);
 		var t = Math.min(t0, t1);
-		//debug(ts);
+		//console.log(ts);
 		if (t < 0) t = Math.max(t0, t1);  
 		//t = range(1, t);
 
@@ -358,7 +358,7 @@ function getProjIntercept(src, dst, vector, mod){
 			};
 		}
 	}
-	//debug(t);
+	//console.log(t);
 	return sol;
 }
 
@@ -394,7 +394,7 @@ function getBeamIntercept(src, dst, vector){
 			};
 		}
 	}
-	//debug(t);
+	//console.log(t);
 	return sol;
 }
 

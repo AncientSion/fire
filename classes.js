@@ -483,7 +483,7 @@ Single.prototype.addMainDivEvents = function(div, alive, isPreview){
 			e.stopPropagation();
 			var shipId = $(this).parent().parent().parent().data("shipId");
 			var systemId = $(this).parent().data("systemId");
-			debug(game.getUnit(shipId).getSystem(systemId));
+			console.log(game.getUnit(shipId).getSystem(systemId));
 		});
 	}
 	else {
@@ -500,7 +500,7 @@ Single.prototype.addMainDivEvents = function(div, alive, isPreview){
 			e.stopPropagation();
 			var shipId = $(this).parent().parent().parent().data("shipId");
 			var systemId = $(this).parent().data("systemId");
-			debug(game.getUnit(shipId).getSystem(systemId));
+			console.log(game.getUnit(shipId).getSystem(systemId));
 		})
 	}
 }
@@ -758,7 +758,7 @@ FireOrder.prototype.setNumberAnim = function(){
 			}
 		);
 
-		//debug(this.numbers[0].n + " / " +this.numbers[0].m);
+		//console.log(this.numbers[0].n + " / " +this.numbers[0].m);
 	}
 }
 
@@ -985,7 +985,7 @@ FireOrder.prototype.addCollisionEntry = function(log, rolls){
 		.append($("<td>"))
 		.append($("<td>")
 			.attr("colSpan", 5)
-			.html("SERVER DEBUG - Distance "+rolls[0]+"px, base collision "+rolls[1]+"%, adjusted by unit size to " + rolls[2]+"%")
+			.html("SERVER console.log - Distance "+rolls[0]+"px, base collision "+rolls[1]+"%, adjusted by unit size to " + rolls[2]+"%")
 			//.html("Distance "+rolls[0]+"px / " + this.shooter.collision + "% per 100px"
 		)
 		.append($("<td>"))
@@ -1079,7 +1079,7 @@ FireOrder.prototype.getReqString = function(){
 		req = req.filter(e => e != 0);
 		req.sort(function(a, b){return a-b});
 
-	//debug(req);
+	//console.log(req);
 	var string = "";
 	if (req.length == 0){
 		string = "0";

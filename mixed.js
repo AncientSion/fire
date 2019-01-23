@@ -259,21 +259,21 @@ Mixed.prototype.setNextMove = function(){
 					d = Math.ceil(getDistance(p, target.getGamePos()));
 
 					if (s + otherSpeed >= d){
-						debug("_________________")
-						debug("flight vs flight")
-						debug("this id " + this.id + ", friendly " + this.friendly);
-						debug("selfSpeed is " + s);
-						debug("otherSpeed is " + otherSpeed);
-						debug("dist is " + d);
+						console.log("_________________")
+						console.log("flight vs flight")
+						console.log("this id " + this.id + ", friendly " + this.friendly);
+						console.log("selfSpeed is " + s);
+						console.log("otherSpeed is " + otherSpeed);
+						console.log("dist is " + d);
 
 						var ownDist = d / (s + otherSpeed) * s;
 						//var otherDist = d - ownDist;
 
-						debug("own will be " + ownDist);
-						//debug("other will be " + otherDist);
+						console.log("own will be " + ownDist);
+						//console.log("other will be " + otherDist);
 
 						next = getPointInDir(ownDist, this.heading, p.x, p.y);
-						debug("_________________");
+						console.log("_________________");
 					}
 					else {
 						next = getPointInDir(s, this.heading, p.x, p.y);
@@ -307,8 +307,8 @@ Mixed.prototype.setNextMove = function(){
 }
 
 Mixed.prototype.setPreMoveFaceHead = function(){
-	//debug("setPreMoveFaceHead");
-	//if (this.salvo){debug("setPreMoveFaceHead");}
+	//console.log("setPreMoveFaceHead");
+	//if (this.salvo){console.log("setPreMoveFaceHead");}
 	if (this.mission.turn == game.turn){
 		if (game.phase == 2){
 			this.heading = getAngleFromTo({x: this.x, y: this.y}, this.getTargetPos());
@@ -374,7 +374,7 @@ Mixed.prototype.canUndoShortenTurn = function(){
 }
 
 Mixed.prototype.setDrawData = function(){
-	//debug("MIXED setDrawData");
+	//console.log("MIXED setDrawData");
 	if (this.available > game.turn || !this.available || game.turn == 1 && game.phase == -1){
 		if (this.friendly && this.isReady){
 			this.setPostMovePosition();
@@ -435,7 +435,7 @@ Mixed.prototype.getParent = function(){
 }
 
 Mixed.prototype.setPreFireImage = function(){
-	//debug("Mixed setPreFireImage");
+	//console.log("Mixed setPreFireImage");
 	for (var i = 0; i < this.structures.length; i++){
 		if (!this.structures[i].doDraw){
 			if (this.structures[i].isDestroyedThisTurn()){
@@ -452,7 +452,7 @@ Mixed.prototype.setPreFireSize = function(){
 }
 
 Mixed.prototype.hasPatrolLayout = function(){
-	//debug("Mixed hasPatrolLayout");
+	//console.log("Mixed hasPatrolLayout");
 	if (this.patrolLayout){return true;}
 
 	if (this.mission.arrived && this.mission.type == 1){
@@ -495,7 +495,7 @@ Mixed.prototype.hasPatrolLayout = function(){
 }
 
 Mixed.prototype.setLayout = function(){
-	//debug("setLayout: "+this.id);
+	//console.log("setLayout: "+this.id);
 	
 	if (this.hasPatrolLayout()){
 		this.setPatrolLayout();
@@ -504,7 +504,7 @@ Mixed.prototype.setLayout = function(){
 }
 
 Mixed.prototype.setPatrolLayout = function(){
-	//debug("setPatrolLayout " + this.id);
+	//console.log("setPatrolLayout " + this.id);
 	for (var i = 0; i < this.structures.length; i++){
 		var p = getPointInDir(range(0, this.size*0.9), range(0, 360), 0, 0);
 		this.structures[i].layout.x = p.x;
@@ -635,7 +635,7 @@ Mixed.prototype.attachDivClickFunction = function(){
 }
 
 Mixed.prototype.getSelfExplo = function(){
-	//debug(this.id);
+	//console.log(this.id);
 
 	var base = this.getDrawPos();
 
@@ -661,7 +661,7 @@ Mixed.prototype.getSelfExplo = function(){
 
 		counter++;
 		var real = this.getUnitPos(j);
-		//debug(real);
+		//console.log(real);
 		for (var k = 0; k < 1; k++){
 			explo.anims.push({
 				t: [0 - k*6 - counter*20, 50],

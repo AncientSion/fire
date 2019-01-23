@@ -87,7 +87,7 @@ Squaddie.prototype.fillSelfContainer = function(){
 		img
 		.click(function(){
 			var data = $(this).closest(".unitContainer").data();
-			debug(game.getUnit(data.shipId).getSystem(data.systemId));
+			console.log(game.getUnit(data.shipId).getSystem(data.systemId));
 		})
 		.contextmenu(function(e){
 			e.preventDefault();
@@ -562,7 +562,7 @@ Turret.prototype.setBonusNegation = function(){
 }
 
 Turret.prototype.select = function(){
-	debug(this);
+	console.log(this);
 	if (this.destroyed || !this.isPowered()){return;}
 	
 	for (var i = 0; i < this.systems.length; i++){
@@ -587,7 +587,7 @@ Turret.prototype.getCoreData = function(){
 			var shipId = $(this).data("shipId");
 			var systemId = $(this).data("systemId");
 			//game.getUnit(shipId).getSystem(systemId).select(e);
-			debug(game.getUnit(shipId).getSystem(systemId));
+			console.log(game.getUnit(shipId).getSystem(systemId));
 		})
 		.append($("<div>")
 			.addClass("integrityAmount")

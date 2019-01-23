@@ -119,7 +119,7 @@ window.startTime, window.now, window.then, window.elapsed;
 window.iterator = 0;
 
 function setFPS(fps){
-	debug("setting fps to: " + fps);
+	console.log("setting fps to: " + fps);
 	window.fpsTicks = 1000 / fps;
 }
 
@@ -257,15 +257,15 @@ function getId(){
 }
 
 function refresh(data){
-	debug("refresh");
-	debug(data);
+	console.log("refresh");
+	console.log(data);
 	setTimeout(function(){
 		window.location.reload(true);
 	}, 300);
 }
 
 function goToLobby(data){
-    //debug(data);
+    //console.log(data);
     //return;
     setTimeout(function(){
         window.location = "lobby.php";
@@ -273,8 +273,8 @@ function goToLobby(data){
 }
 
 function processEcho(echo){
-	debug("echo");
-	debug(echo);
+	console.log("echo");
+	console.log(echo);
 
 	if (echo == "PlayerReady"){
 		refresh();
@@ -287,7 +287,7 @@ function processEcho(echo){
 }
 
 function redirect(url){
-	debug("redirect");
+	console.log("redirect");
 	setTimeout(function(){
 		window.location = "lobby.php"
 	}, 300);
@@ -352,7 +352,7 @@ function instruct(text){
         $handle
             .css('cursor', options.cursor)
             .on("mousedown", function(e){
-    			//debug("drag");
+    			//console.log("drag");
             	if (e.button == 2){return;}
                 e.preventDefault();
                 e.stopPropagation();
@@ -381,12 +381,12 @@ function instruct(text){
 
 
 function handleMouseDown(e){
-	//debug("handleMouseDown");
+	//console.log("handleMouseDown");
 	e.preventDefault();
 	e.stopPropagation();
 	var rect = this.getBoundingClientRect();
 	var pos = new Point(e.clientX, e.clientY).getOffset();
-	if (e.button != 2){debug("game pos " + pos.x	+ " / " + pos.y);}
+	if (e.button != 2){console.log("game pos " + pos.x	+ " / " + pos.y);}
 
 	var unit;	
 	if (aUnit){unit = game.getUnit(aUnit);}
@@ -461,12 +461,12 @@ function sensorEvent(isClick, ship, loc, heading, d, a){
 		d = str/Math.pow(w/game.const.ew.len, 1/game.const.ew.p);
 	}
 
-	//debug(w);
-	//debug(Math.floor(d));
-	//debug("angle from heading: " + a + ", dist: " + dist + ", strength: "+str + ", FINAL: " + newidth);
+	//console.log(w);
+	//console.log(Math.floor(d));
+	//console.log("angle from heading: " + a + ", dist: " + dist + ", strength: "+str + ", FINAL: " + newidth);
 
 	if (isClick && ship.canSetSensor(sensor)){
-		//debug("setting sensor to w: "+w*2+", dist: "+d+", angle: "+a);
+		//console.log("setting sensor to w: "+w*2+", dist: "+d+", angle: "+a);
 		sensor.setEW({
 			angle: a,
 			dist: Math.floor(d),

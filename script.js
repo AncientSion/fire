@@ -46,7 +46,7 @@ function init(data){
 }
 
 function sizeCanvas(){
-	//debug("sizeCanvas");
+	//console.log("sizeCanvas");
 	var canv = document.getElementsByClassName("gameCanvas");
 
 	for (var i = 0; i < canv.length; i++){
@@ -62,7 +62,7 @@ function sizeCanvas(){
 }
 
 function scopeCanvas(){
-	//debug("scopeCanvas");
+	//console.log("scopeCanvas");
 	var canv = document.getElementsByClassName("gameCanvas");
 
 	canvas = canv[0];
@@ -90,10 +90,6 @@ function scopeCanvas(){
 
 	fxCtx.font = "18px Arial";
 	fxCtx.textAlign = "center";
-}
-
-function debug(val){
-	console.log(val);
 }
 
 function mouseCanvasZoom(e){

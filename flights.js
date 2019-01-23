@@ -35,19 +35,19 @@ function Flight(data){
 Flight.prototype = Object.create(Mixed.prototype);
 
 Flight.prototype.setSize = function(){
-	//debug("setSize #" + this.id);
+	//console.log("setSize #" + this.id);
 	var max = 0;
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].destroyed){continue;}
 		max = Math.max(max, Math.abs(this.structures[i].layout.x));
 		max = Math.max(max, Math.abs(this.structures[i].layout.y));
 	}
-	//debug("setSize #" + this.id + ", size " + this.size);
+	//console.log("setSize #" + this.id + ", size " + this.size);
 	this.size = max + 20;
 }
 
 Flight.prototype.setPreFireSize = function(){
-	//debug("setPreFireSize #" + this.id);
+	//console.log("setPreFireSize #" + this.id);
 	var max = 0;
 	for (var i = 0; i < this.structures.length; i++){
 		if (!this.structures[i].doDraw){continue;}
@@ -311,7 +311,7 @@ Flight.prototype.confirmMissionMode = function(){
 	var value = Math.floor(checked.val());
 	game.mission = value;
 	if (!game.mission){return;}
-	//debug(value);
+	//console.log(value);
 	ui.deployOverlay.show().find("#deployType").html( game.getMissionType(value)).end();
 }
 
@@ -456,7 +456,7 @@ Flight.prototype.hasAbortedMission = function(){
 
 Flight.prototype.setImage = function(){
 	if (this.hasPatrolLayout()){this.setPatrolImage(); return;}
-	//debug("setImage " + this.id);
+	//console.log("setImage " + this.id);
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
 		t.height = this.size*2;
@@ -482,11 +482,11 @@ Flight.prototype.setImage = function(){
 	ctx.fill();
 	ctx.setTransform(1,0,0,1,0,0);
 	this.img = t;
-	//debug(this.img.toDataURL());
+	//console.log(this.img.toDataURL());
 }
 
 Flight.prototype.setPatrolImage = function(){
-	//debug("setPatrolImage " + this.id);
+	//console.log("setPatrolImage " + this.id);
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
 		t.height = this.size*2;
@@ -510,7 +510,7 @@ Flight.prototype.setPatrolImage = function(){
 	}
 	ctx.setTransform(1,0,0,1,0,0);
 	this.img = t;
-	//debug(this.drawImg.toDataURL());
+	//console.log(this.drawImg.toDataURL());
 }
 
 Flight.prototype.setBaseLayout = function(){

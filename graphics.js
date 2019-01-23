@@ -411,7 +411,7 @@ function drawAreaEffect(weapon, anim){
 	//fxCtx.scale(cam.z, cam.z)
 
 	//var cos = 0.5 + Math.cos(2*Math.PI*fraction);
-	//debug(cos);
+	//console.log(cos);
 
 	if (fraction > 0.7){
 		fxCtx.globalAlpha = 1 - (fraction-0.7)*3
@@ -535,7 +535,7 @@ function drawDamageNumbers(weapon, anim){
 
 
 	var fraction = anim.n/anim.m;
-	//debug(fraction)
+	//console.log(fraction)
 
 	fxCtx.globalAlpha = Math.min(1, 1.4 - fraction);
 
@@ -697,7 +697,7 @@ function getRadialGradient(x, y, s){
 }	
 
 function drawSensorArc(w, d, str, loc, heading, a, sensor){
-	//debug("drawSensorArc");
+	//console.log("drawSensorArc");
 	if (game.sensorMode){salvoCtx.clearRect(0, 0, res.x, res.y);}
 	salvoCtx.translate(cam.o.x, cam.o.y);
 	salvoCtx.scale(cam.z, cam.z);
@@ -715,7 +715,7 @@ function drawSensorArc(w, d, str, loc, heading, a, sensor){
 	//salvoCtx.scale(cam.z, cam.z);
 
 	//w = Math.ceil(w);	
-	//debug(w);
+	//console.log(w);
 	if (w == 180){
 		salvoCtx.beginPath();
 		salvoCtx.arc(loc.x, loc.y, d, 0, 2*Math.PI, false);

@@ -87,7 +87,7 @@ Structure.prototype.getTableData = function(){
 }
 
 Structure.prototype.select = function(){
-	debug(this);
+	console.log(this);
 	var unit;
 
 	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || this.parentId < 0 || game.turnMode){return;}
@@ -348,7 +348,7 @@ Primary.prototype.getTableData = function(){
 		.click(function(e){
 			var shipId = $(this).data("shipId");
 			var systemId = $(this).data("systemId");
-			debug(game.getUnit(shipId).primary);
+			console.log(game.getUnit(shipId).primary);
 		})
 
 	tr.appendChild(td);
@@ -404,7 +404,7 @@ Primary.prototype.getRemIntegrity = function(){
 	for (var i = 0; i < this.damages.length; i++){
 		integrity -= this.damages[i].systemDmg;
 		if (this.damages[i].hullDmg){
-			debug("ERROR");
+			console.log("ERROR");
 		}
 	}
 	return integrity;

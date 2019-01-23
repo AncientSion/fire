@@ -13,7 +13,7 @@ Squadron.prototype = Object.create(Ship.prototype);
 
 
 Squadron.prototype.create = function(){
-	//debug("create "+this.id);
+	//console.log("create "+this.id);
 	if (!this.structures.length){
 		//this.curImp = 0;
 		this.primary.systems[0].output = 0;
@@ -32,7 +32,7 @@ Squadron.prototype.setSubSystemState = function(){
 }
 
 Squadron.prototype.setPreFireImage = function(){
-	//debug("Squadron setPreFireImage");
+	//console.log("Squadron setPreFireImage");
 	for (var i = 0; i < this.structures.length; i++){
 		if (!this.structures[i].doDraw){
 			if (this.structures[i].isDestroyedThisTurn()){
@@ -93,7 +93,7 @@ Squadron.prototype.setLayout = function(){
 }
 
 Squadron.prototype.setStringHitChance = function(){
-	//debug("setStringHitChance #" + this.id);
+	//console.log("setStringHitChance #" + this.id);
 	var string = "";
 	var chances = [];
 	var shared = 1;
@@ -172,7 +172,7 @@ Squadron.prototype.addSubContainers = function(){
 	var contW = 160;
 
 	var w = this.structures.length == 4 ? 390 : Math.max(390, Math.min(3, Math.max(2, this.structures.length))*contW);
-	//debug(w);
+	//console.log(w);
 
 	$(this.element).css("width", w);
 
@@ -252,7 +252,7 @@ Squadron.prototype.getDeployImg = function(){
 }
 
 Squadron.prototype.checkSensorHighlight = function(){
-	//debug("checkSensorHighlight")
+	//console.log("checkSensorHighlight")
 	return Ship.prototype.checkSensorHighlight.call(this);
 }
 
@@ -511,11 +511,11 @@ Squadron.prototype.unitGetAllResolvingFireOrders = function(){
 }
 
 Squadron.prototype.setImage = function(){
-	//debug("Squad setImage");
+	//console.log("Squad setImage");
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
 		t.height = this.size*2;
-		//debug("s: " +this.size);
+		//console.log("s: " +this.size);
 	var ctx = t.getContext("2d");
 		ctx.translate(t.width/2, t.height/2);
 		//ctx.scale(0.8, 0.8)
@@ -610,7 +610,7 @@ Squadron.prototype.getDmgsByFire = function(fire){
 			}
 		}
 	}
-	debug("ERROR getDmgsByFire");
+	console.log("ERROR getDmgsByFire");
 	return dmgs;
 }
 
@@ -695,7 +695,7 @@ Squadron.prototype.canBoost = function(system){
 			return this.structures[i].canBoost(system);
 		}
 	}
-	debug("squad boost error");
+	console.log("squad boost error");
 	return false;
 }
 
