@@ -545,13 +545,16 @@ Ship.prototype.alertCollisions = function(){
 		return;
 	}
 	var html = "Collision Alert for " + this.name + " #" + this.id + "</br>";
-		html += "<div>" + getUnitType(this.traverse) + ", size " + this.traverse + " - collision multiplier " + game.getCollisionMod(this.traverse) + "</div>";
+		//html += "<div>" + getUnitType(this.traverse) + ", size " + this.traverse + " - collision multiplier " + game.getCollisionMod(this.traverse) + "</div>";
+		//html += "<div>" + getUnitType(this.traverse) + ", size " + this.traverse + " - collision multiplier " + game.getCollisionMod(this.traverse) + "</div>";
 
 	for (var i = 0; i < this.collisions.length; i++){
 		var col = this.collisions[i];
-		html += "</br><div>#" + col.obstacleId + "</br>Nominal risk " + col.baseCol + "% and " + col.baseAttacks + " attacks per 100px</br>";
-		html += "<span class='obstacleWarn yellow'>" + col.totalDist + "</span> distance: ";
-		html += "<span class='obstacleWarn yellow'>" + col.realAttacks + "</span> attacks @ <span class='obstacleWarn yellow'>" + col.realCol + "%</span> for <span class='obstacleWarn yellow'>" + col.damage + "</span> Damage</br>";
+		html += "</br><div>Asteroid Field #" + col.obstacleId + "</br>";
+		html += "<span class='obstacleWarn yellow'>" + col.totalDist + "</span>px distance: ";
+		html += "<span class='obstacleWarn yellow'>" + col.realAttacks + " </span>attacks @ ";
+		html += "<span class='obstacleWarn yellow'>" + col.realCol + "%</span> ";
+		html += "for <span class='obstacleWarn yellow'>" + col.damage + "</span> Damage</br>";
 	}
 	collide(html);
 }

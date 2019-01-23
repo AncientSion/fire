@@ -1162,13 +1162,6 @@ function Game(data){
 		}
 	}
 
-	this.setAllObstaclesNextMoves = function(){
-		debug("setAllObstaclesNextMoves");
-		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].obstacle){this.ships[i].setNextMove();}
-		}
-	}
-
 	this.setAllObstaclesImages = function(){
 		debug("setAllObstaclesImages");
 		for (var i = 0; i < this.ships.length; i++){
@@ -1278,6 +1271,7 @@ function Game(data){
 			}
 			else if (this.phase == 1){
 				this.showUI(500);
+				this.setAllObstaclesImages();
 				this.drawingEvents = 1;
 			}
 			else if (this.phase == 2){ // player control now, setup fire
@@ -2323,10 +2317,6 @@ Game.prototype.getUnitByClick = function(pos){
 	return this.getUnit(pick).getParent();
 }
 
-Game.prototype.getCollisionMod = function(traverse){
-	return game.const.collision.baseMulti - (game.const.collision.hitMod * (4 - traverse));
-}
-
 Game.prototype.getObstructionPoint = function(fire){
 	var valid = [];
 	for (var i = 0; i < fire.target.blocks.length; i++){
@@ -2430,7 +2420,7 @@ Game.prototype.setCollisionData = function (unit){
 			obstacleId: this.ships[i].id,
 			totalDist: Math.round(totalDist),
 			baseCol: this.ships[i].collision,
-			realCol: this.ships[i].getRealCollisionPct(unit.traverse),
+			realCol: this.ships[i].getCollisionPctVsUnit(unit.traverse),
 			baseAttacks: this.ships[i].getBaseAttacks(),
 			realAttacks: this.ships[i].getRealAttacks(totalDist),
 			damage: this.ships[i].getDamageString()
@@ -3087,7 +3077,7 @@ Game.prototype.setFocusInfo = function(){
 				.data("userid", this.playerstatus[i].userid)
 			.end()
 			.find(".focusSpend")
-				.html("(0)");
+				.html("(0 used)");
 
 	}
 }
@@ -3272,7 +3262,7 @@ Game.prototype.getTotalFocusSpending = function(){
 }
 
 Game.prototype.setFocusSpendingInfo = function(userid){
-	$("#upperGUI .playerInfo .focusInfo" + userid + " .focusSpend").html("(" + this.getTotalFocusSpending() + ")");
+	$("#upperGUI .playerInfo .focusInfo" + userid + " .focusSpend").html("(" + this.getTotalFocusSpending() + " used)");
 }
 
 Game.prototype.getPlayerStatus = function(userid){
@@ -4070,6 +4060,12 @@ Game.prototype.getAllUnitExplos = function(){
 }
 
 Game.prototype.handlePostFireMoves = function(){
+	game.fires++;
+	console.log("handlePostFireMoves");
+	if (game.fires == 2){
+		console.log("ERR");
+	}
+
 	this.createLogEntry("-- Fireorder animation completed --");
 
 	if (this.phase == 2){

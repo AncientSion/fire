@@ -466,7 +466,6 @@
 				}
 				else if (e.keyCode == 102){ // f
 					if (game.animating != 1 || !game.animateAllFire){return;}
-					debug("f!");
 					window.cancelAnimationFrame(anim);
 					cam.stopMove();
 					fxCtx.setTransform(1,0,0,1,0,0)

@@ -61,7 +61,7 @@ class TriParticleInterdictor extends Particle {
 	public $projSpeed = 8;
 	public $reload = 2;
 	public $integrity = 28;
-	public $powerReq = 3;
+	public $powerReq = 2;
 	public $tracking = 1;
 	//public $linked = 3;
 	

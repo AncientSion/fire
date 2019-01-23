@@ -44,6 +44,10 @@ Obstacle.prototype.setNextMove = function(){
 	return;
 }
 
+Obstacle.prototype.getCollisionPctVsUnit = function(unitSize){
+	return Math.round(this.getBaseCollisionPct() / game.const.collision.baseMulti * (game.const.collision.baseMulti - (game.const.collision.hitMod * (4 - unitSize))));
+}
+
 Obstacle.prototype.getBaseCollisionPct = function(){
 	return this.collision;
 }
@@ -246,7 +250,7 @@ AsteroidField.prototype.createBaseDiv = function(){
 		for (var i = 0; i < units.length; i++){
 			if (units[i] == ""){continue;}
 			trA.append($("<td>").html(units[i]));
-			trB.append($("<td>").html(Math.round(baseCol/3 * game.getCollisionMod(i)) + "%"));
+			trB.append($("<td>").html(this.getCollisionPctVsUnit(i) + "%"));
 		}
 
 		table.append($("<tr>")
@@ -341,15 +345,15 @@ AsteroidField.prototype.testObstruction = function(oPos, tPos){
 
 AsteroidField.prototype.drawMarker = function(x, y, c, ctx){
 	ctx.globalCompositeOperation = "source-over";
-	ctx.strokeStyle = c;
-
+	ctx.strokeStyle = c
+	ctx.globalAlpha = 0.25;
 	for (var i = 0; i < this.points.length-1; i++){
 		ctx.beginPath();
 		ctx.moveTo(this.points[i].x, this.points[i].y);
 		ctx.lineTo(this.points[i+1].x, this.points[i+1].y);
 		ctx.closePath();
 
-		ctx.globalAlpha = 0.25 + (i*0.2);
+		//ctx.globalAlpha = 0.25 + (i*0.2);
 		ctx.stroke();
 	}
 
@@ -394,25 +398,23 @@ AsteroidField.prototype.setTrueImage = function(info){
 		ctx = t.getContext("2d");
 
 		var size = 10 + (this.rockSize -2) * 4;
-		var amount = Math.sqrt(this.width * this.height) / this.density * 3;
+		var amount = Math.sqrt(this.width * this.height) / this.density * 10;
 
 		for (i = 0; i < amount; i++){
-			var x = range(0+size, t.width-size);
-			var y = range(0+size, t.height-size);
-			var rota = range(0, 360);
+			var x = range(10, t.width-5) - size;
+			var y = range(10, t.height-5) - size;
 
 			ctx.translate(x, y);
-			ctx.rotate(rota * (Math.PI/180));
+			//ctx.rotate(this.rota * (Math.PI/180));
 			ctx.drawImage(
 				graphics.images.rocks[range(0, graphics.images.rocks.length-1)],
-				0 - size,
-				0 - size,
+				x,
+				y,
 				size*2,
 				size*2,
 			)
-		ctx.setTransform(1,0,0,1,0,0);
-			//ctx.rotate(-rota * (Math.PI/180));
-			//ctx.translate(-x, -y);
+			//ctx.rotate(-this.rota * (Math.PI/180));
+			ctx.translate(-x, -y);
 		}
 		this.img = t;
 	}

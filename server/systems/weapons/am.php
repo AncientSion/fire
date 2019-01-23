@@ -74,7 +74,7 @@ class AntimatterCannon extends Particle {
 		$this->effiency = ceil($this->powerReq/1.5);
 		$this->maxBoost = 1;
 		$this->boostEffect[] = new Effect("Damage", 40);
-		$this->boostEffect[] = new Effect("Top Range", -40);
+		$this->boostEffect[] = new Effect("Top Range", -60);
 	}
 }
 

@@ -19,6 +19,8 @@ window.hold = 0;
 window.translate = 0;
 window.ticks = 0;
 
+window.fires = 0;
+
 
 $(document).ready(function(){
 	window.ui = {
