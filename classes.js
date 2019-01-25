@@ -398,7 +398,7 @@ Single.prototype.getSysDiv = function(){
 			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.name + " #" + this.id)))
 			.append($("<tr>").append($("<td>").attr("colSpan", 2).html(this.role)))
 			.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
-			.append($("<tr>").append($("<td>").html("Profile").css("width", "70%")).append($("<td>").html(this.baseHitChance + "%")))
+			.append($("<tr>").append($("<td>").html("Base to-Hit").css("width", "70%")).append($("<td>").html(this.baseHitChance + "%")))
 			.append($("<tr>").append($("<td>").html("Armour").css("width", "70%")).append($("<td>").html(this.negation)))
 			.append($("<tr>").append($("<td>").html("Acceleration")).append($("<td>").html(this.baseImpulse)))
 			.append($("<tr>").append($("<td>").html("Recent EM Damage")).append($("<td>").html(this.getEMDmg())))

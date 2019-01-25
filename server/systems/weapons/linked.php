@@ -6,7 +6,7 @@ class FighterWeapon extends Particle {
 	public $reload = 1;
 	public $tracking = 0;
 	public $tiny = 1;
-	public $accDecay = 600;
+	public $critEffects = array();
 
 	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
 		$this->id = $id;
@@ -24,7 +24,7 @@ class SuperLightAntimatterCannon extends Particle {
 	public static $prio = 0;
 	public $minDmg = 28;
 	public $maxDmg = 36;
-	public $accDecay = 3000;
+	public $accDecay = 300;
 	public $shots = 1;
 	public $reload = 3;
 	public $tracking = 3;
@@ -45,6 +45,7 @@ class FighterStandard extends FighterWeapon {
 	public $name = "FighterStandard";
 	public $display = "Particle Gun - Burst Fire";
 	public $animColor = "blue";
+	public $accDecay = 600;
 	
 	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
 		parent::__construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg);
@@ -57,6 +58,7 @@ class FighterStrafe extends FighterWeapon {
 	public $animColor = "blue";
 	public $tracking = 3;
 	public $shots = 1;
+	public $accDecay = 1200;
 	
 	function __construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg){
 		parent::__construct($id, $parentId, $linked, $shots, $minDmg, $maxDmg);

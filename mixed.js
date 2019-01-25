@@ -524,7 +524,7 @@ Mixed.prototype.getWeaponOrigin = function(id){
 Mixed.prototype.getUnitPos = function(j){
 	var x = this.structures[j].layout.x * 0.5;
 	var y = this.structures[j].layout.y * 0.5;
-	return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
+	return rotatePoint(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
 }
 
 Mixed.prototype.getFireDest = function(fire, isHit, num){
@@ -536,7 +536,7 @@ Mixed.prototype.getFireDest = function(fire, isHit, num){
 	var base = this.getPlannedPos();
 	var x = t.x * 0.5;
 	var y = t.y * 0.5;
-	return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
+	return rotatePoint(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
 }
 
 Mixed.prototype.getTrajectory = function(){

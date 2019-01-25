@@ -1269,7 +1269,7 @@ div.integrityFull {
 	display: inline-block;
 	position: relative;
 	top: -20px;
-	left: 4px;
+	left: 6px;
 }
 
 .shipDiv .header {
@@ -1277,6 +1277,10 @@ div.integrityFull {
 	width: 205px;
 	margin: auto;
 	padding: 0 0 0 0;
+}
+
+.shipDiv.ballistic .header {
+	width: 100%;
 }
 
 .shipDiv .coreContainer {

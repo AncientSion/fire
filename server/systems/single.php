@@ -193,7 +193,15 @@ class Single {
 			$this->recentDmg += $dmg->hullDmg;
 		}
 		if ($dmg->destroyed){
-			$this->destroyed = true;
+			$this->doDestroy();
+		}
+	}
+
+	public function doDestroy(){
+		//Debug::log("doDestroy!");
+		$this->destroyed = true;
+		for ($i = 0; $i < sizeof($this->systems); $i++){
+			$this->systems[$i]->destroyed = true;
 		}
 	}
 

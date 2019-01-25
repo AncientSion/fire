@@ -19,8 +19,8 @@ class Launcher extends Weapon {
 	function __construct($id, $parentId, $start, $end, $integrity, $width){
         parent::__construct($id, $parentId, $start, $end, 0, $width);
         $this->integrity = $integrity;
-		$this->notes = array("Unaffected by Offensive EW", "80% base 
-			chance to hit target", "Ballistics follow weapon-level tracking rules", "Ballistics are subject to target DEW (*0.5)");
+		$this->notes = array("Completely unaffected by EW", "70% base 
+			chance to hit target", "Ballistics follow weapon-level tracking rules");
 	}
 
 	public function getAmmo(){

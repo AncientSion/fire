@@ -426,7 +426,7 @@
 
 
 	public function doAdvance(){
-		DBManager::app()->dump();
+		//DBManager::app()->dump();
 		Debug::log("********************* doAdvance for game".$this->gameid." from phase ".static::$phase." to phase ".(static::$phase+1));
 		//return;
 		$time = -microtime(true);
@@ -1278,15 +1278,17 @@
 
 					for ($k = 0; $k < sizeof($this->ships); $k++){
 						if (!$this->ships[$k]->obstacle){continue;}
-
-						//Debug::log("testing ".$this->ships[$i]->id." vs ".$this->ships[$j]->id.", obstacle ".$this->ships[$k]->id);
-
-						$dist = $this->ships[$k]->testObstruction($oPos, $tPos);
-
+						$dist = Math::getDist($oPos, $tPos);
 						if (!$dist){continue;}
 
-						$effInterference = round($this->ships[$k]->interference / 100 * $dist);
-						//Debug::log("dist ".$dist.", int: ".$this->ships[$k]->interference.", effInterference ".$effInterference);
+						//Debug::log("testing ".get_class($this->ships[$i])." #".$this->ships[$i]->id." vs #".$this->ships[$j]->id.", obstacle ".$this->ships[$k]->id.",dist ".$dist);
+
+						$pen = $this->ships[$k]->testObstruction($oPos, $tPos);
+
+						if (!$pen){continue;}
+
+						$effInterference = round($this->ships[$k]->interference / 100 * $pen);
+						//Debug::log("pen: ".$pen.", block%: ".$this->ships[$k]->interference.", effBlock%: ".$effInterference);
 						$this->ships[$i]->blocks[] = array($this->ships[$j]->id, $effInterference);
 						$this->ships[$j]->blocks[] = array($this->ships[$i]->id, $effInterference);
 					}
@@ -1494,39 +1496,24 @@
 	}
 
 	public function resolveFighterFireOrders(){
+		Debug::log("resolveFighterFireOrders");
 		// splice and delete fireorders from destroyed fighters
 
 		for ($i = sizeof($this->fires)-1; $i >= 0; $i--){
 			if ($this->fires[$i]->resolved){continue;}
 			if (!$this->fires[$i]->shooter->flight){continue;}
-			if ($this->fires[$i]->shooter->getStruct($this->fires[$i]->weapon->parentId)->destroyed){
+		/*	foreach ($this->fires[$i]->weapon as $key => $value){
+				echo $key; echo "</br>";
+				var_dump($value); echo "</br>"; echo "</br>";
+			}
+			die();
+			echo ("fighter fireorder, id ".$this->fires[$i]->id) . "</br>";
+			echo ("weapon ".get_class($this->fires[$i]->weapon)) . "</br>";
+		*/	if ($this->fires[$i]->weapon->destroyed){
 				//Debug::log("SKIPPING firorder, SINGLE (shooter) is destroyed");
 				$this->fires[$i]->resolved = 2;
 			}
 		}
-
-		/*
-		for ($i = 0; $i < sizeof($this->fires); $i++){
-			if ($this->fires[$i]->resolved || !$this->fires[$i]->shooter->flight){continue;}
-			//Debug::log("comparing :".$this->fires[$i]->id);
-			for ($j = $i+1; $j < sizeof($this->fires); $j++){
-				if ($this->fires[$j]->resolved || !$this->fires[$j]->shooter->flight){continue;}
-				//Debug::log("to :".$this->fires[$j]->id);
-				if ($this->fires[$j]->shooterid == $this->fires[$i]->shooterid){
-					if ($this->fires[$j]->targetid == $this->fires[$i]->targetid){
-						if ($this->fires[$j]->weapon->name == $this->fires[$i]->weapon->name){
-							//Debug::log("could add fire: ".$this->fires[$j]->id." to fire ".$this->fires[$i]->id);
-							$this->fires[$i]->shots++;
-							$this->fires[$j]->shots--;
-							$this->fires[$j]->resolved = 1;
-							//$this->fires[$j]->notes = "+";
-						}
-					}
-				}
-			}
-		}
-		*/
-
 
 		// fighter vs fighter
 		for ($i = 0; $i < sizeof($this->fires); $i++){ // non-dogfights
@@ -1542,7 +1529,7 @@
 			if ($this->fires[$i]->resolved){continue;}
 
 			if ($this->fires[$i]->shooter->flight == true && $this->fires[$i]->target->flight == false){
-				if ($this->fires[$i]->shooter->getStruct($this->fires[$i]->weapon->parentId)->destroyed){
+				if ($this->fires[$i]->weapon->destroyed){
 					//Debug::log("SKIPPING firorder, SINGLE (shooter) is destroyed");
 					$this->fires[$i]->resolved = 2;
 					continue;

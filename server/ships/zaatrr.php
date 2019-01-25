@@ -7,7 +7,7 @@ class Zaatrr extends Medium {
 	public $size =  45;
 	public static $value = 420;
 	public $profile = array(1, 1);
-	public $mass = 3200;
+	public $mass = 3250;
 
 	public $integrity = 500;
 	public $vitalHP = 60;

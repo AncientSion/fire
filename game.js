@@ -561,11 +561,13 @@ function Game(data){
 	this.offsetFlightShip = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			if (!this.ships[i].ship || !this.ships[i].doDraw){continue;}
+			//console.log("ship " + this.ships[i].id);
 			var aPos = this.ships[i].getDrawPos();
 
 			for (var j = 0; j < this.ships.length; j++){
-				if (!this.ships[j].flight || !this.ships[i].doDraw){continue;}
-				if (game.phase != 0 && this.subPhase == 1 && (!(game.phase == -1 && this.ships[j].available == game.turn))){continue;}
+				if (!this.ships[j].flight || !this.ships[j].doDraw){continue;}
+				//console.log("flight " + this.ships[j].id);
+				//if (game.phase != 0 && this.subPhase == 1 && (!(game.phase == -1 && this.ships[j].available == game.turn))){continue;}
 				var bPos = this.ships[j].getDrawPos();
 
 				if (aPos.x == bPos.x && aPos.y == bPos.y){

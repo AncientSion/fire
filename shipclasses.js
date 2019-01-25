@@ -2412,12 +2412,27 @@ Ship.prototype.createBaseDiv = function(){
 			.append($("<td>").html("Type / Size").css("width", "50%"))
 			.append($("<td>").html(getUnitType(this.traverse) + " / " + this.traverse)))
 		.append($("<tr>")
-			.append($("<td>").html("Targeting Profile"))
+			.append($("<td>").html("Base to-Hit"))
 			.append($("<td>").html(this.getStringHitChance()).addClass("profile")))
 		//.append($("<tr>")
 		//	.append($("<td>").html("Focus Gain"))
 		//	.append($("<td>").addClass("focusGain").html((this.getFocusString()))))
 		//.append(this.getMoraleDiv())
+		.append($("<tr>")
+			.append($("<td>").html("Current Speed"))
+			.append($("<td>").html(this.getCurSpeed()).addClass("speed")))
+		.append($("<tr>")
+			.append($("<td>").html("Maneuverability"))
+			.append($("<td>").html(this.getRemEP() + " / " + this.getEffEP()).addClass("ep")))
+		.append($("<tr>")
+			.append($("<td>").html("Accel, Roll, Flip"))
+			.append($("<td>").html(this.getImpulseChangeCost() + ", " + this.getActionCost(0) + ", " + this.getActionCost(1)).addClass("change")))
+		//.append($("<tr>")
+		//	.append($("<td>").html("Delay / 1\xB0"))
+		//	.append($("<td>").html(round(this.getTurnDelay(), 2) + " px")))
+	//	.append($("<tr>")
+	//		.append($("<td>").html("Active Turn Delay"))
+	//		.append($("<td>").html(this.getRemDelay()).addClass("delay")))
 		.append($("<tr>")
 			.append($("<td>").html("Current Morale"))
 			.append(
@@ -2432,21 +2447,6 @@ Ship.prototype.createBaseDiv = function(){
 							game.getUnit($(this).parent().parent().parent().parent().parent().data("shipId")).hideMoraleDiv(e);
 						})
 					)
-		.append($("<tr>")
-			.append($("<td>").html("Speed"))
-			.append($("<td>").html(this.getRemSpeed() + " / " + this.getCurSpeed()).addClass("speed")))
-		.append($("<tr>")
-			.append($("<td>").html("Maneuverability"))
-			.append($("<td>").html(this.getRemEP() + " / " + this.getEffEP()).addClass("ep")))
-		.append($("<tr>")
-			.append($("<td>").html("Accel, Roll, Flip"))
-			.append($("<td>").html(this.getImpulseChangeCost() + ", " + this.getActionCost(0) + ", " + this.getActionCost(1)).addClass("change")))
-		//.append($("<tr>")
-		//	.append($("<td>").html("Delay / 1\xB0"))
-		//	.append($("<td>").html(round(this.getTurnDelay(), 2) + " px")))
-		.append($("<tr>")
-			.append($("<td>").html("Active Turn Delay"))
-			.append($("<td>").html(this.getRemDelay()).addClass("delay")))
 
 	subDiv.append(table);
 	topDiv.append(subDiv)
@@ -3572,6 +3572,7 @@ Ship.prototype.getMaskEffect = function(shooter, shooterPos, targetPos, dist){
 		return 0;
 	}
 	else if (shooter.salvo){
+		return 0;
 		multi = 0.5;
 	}
 
@@ -4291,7 +4292,7 @@ Ship.prototype.doAccel = function(){
 		var action = new Move(-1, this.id, game.turn, "speed", 0, 1, shipPos.x, shipPos.y, 0, 0, 0, this.getImpulseChangeCost(), 1, 1, 0);
 		this.actions.push(action);
 	}
-	$(this.element).find(".speed").html(this.getRemSpeed() + " / " + this.getCurSpeed());
+	$(this.element).find(".speed").html(this.getCurSpeed());
 	this.resetMoveMode();
 	game.redraw();
 }
@@ -4305,7 +4306,7 @@ Ship.prototype.doDeccel = function(){
 		var action = new Move(-1, this.id, game.turn, "speed", 0, -1, shipPos.x, shipPos.y, 0, 0, 0, this.getImpulseChangeCost(), 1, 1, 0);
 		this.actions.push(action);
 	}
-	$(this.element).find(".speed").html(this.getRemSpeed() + " / " + this.getCurSpeed());
+	$(this.element).find(".speed").html(this.getCurSpeed());
 	this.resetMoveMode();
 	game.redraw();
 }

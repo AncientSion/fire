@@ -60,7 +60,7 @@ Squaddie.prototype.getSysDiv = function(){
 				.append($("<td>").html("Engine Output"))
 				.append($("<td>").html(this.ep)))
 			.append($("<tr>")
-				.append($("<td>").html("Base Hit Chance"))
+				.append($("<td>").html("Base to-Hit"))
 				.append($("<td>").html(this.baseHitChance + "%")))
 			.append($("<tr>")
 				.append($("<td>").html("Recent EM Damage"))

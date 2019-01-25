@@ -177,7 +177,6 @@ class NebulaCloud extends Obstacle {
 	}
 
 	public function testObstruction($oPos, $tPos){
-		//Debug::log("testObstruction on ".get_class($this)." #".$this->id);
 		$test = Math::lineCircleIntersect($oPos, $tPos, $this->getCurPos(), $this->size/2);
 		$dist = 0;
 

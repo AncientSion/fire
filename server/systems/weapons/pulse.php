@@ -99,7 +99,7 @@ class MediumAntiProtonPulsar extends Pulse {
 	public $projSpeed = 8;
 	public $reload = 3;
 	public $integrity = 38;
-	public $powerReq = 4;
+	public $powerReq = 3;
 	public $tracking = 3;
 //	public $basePulses = 3;
 //	public $extraPulses = 2;

@@ -151,7 +151,7 @@ Squadron.prototype.createBaseDiv = function(){
 
 		if (i == 0){
 			x = 8;
-			y += 80;
+			y += 60;
 		} else x += 50;
 
 	}

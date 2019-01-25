@@ -14,13 +14,7 @@ class Missile extends Single {
 	}
 	
 	public function setBaseStats($phase, $turn){
-		if ($this->missile){
-			$this->baseHitChance = ceil(sqrt($this->mass)*5);
-		}
-		else {
-			$this->baseImpulse = $this->maxRange;
-			$this->baseHitChance = 5;
-		}
+		$this->baseHitChance = ceil(sqrt($this->mass)*5);
 	}
 }
 
@@ -29,13 +23,10 @@ class Torpedo extends Missile {
 	public $torpedo = 1;
 
 	function __construct($id, $parentId){
+		$this->baseImpulse = $this->maxRange;
+		$this->mass = 4;
 		parent::__construct($id, $parentId);
 	}
-
-	//public function setBaseStats($phase, $turn){
-	//	$this->baseHitChance = ceil(sqrt($this->mass)*5);
-	//	$this->baseImpulse = $this->maxRange;
-	//}
 }
 
 class Warhead extends Weapon {

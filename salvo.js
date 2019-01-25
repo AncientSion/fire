@@ -35,7 +35,7 @@ function Salvo(data){
 	}
 
 	this.getTrackingString = function(){
-		var base = 80;
+		var base = 70;
 		var trackStep = 20;
 		var target = this.getTarget();
 		//var spoof = target.getMaskEffect(this);
@@ -95,7 +95,7 @@ Salvo.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			.append($("<td>").html(this.structures[0].role).addClass("yellow").css("font-size", 14).attr("colSpan", 2)))
 		.append($("<tr>")
-			.append($("<td>").html("Type / Size").css("width", "50%"))
+			.append($("<td>").html("Type / Size").css("width", "60%"))
 			.append($("<td>").html(getUnitType(this.traverse) + " / " + this.traverse)))
 		.append($("<tr>")
 			.append($("<td>").html("Base To-Hit"))
@@ -107,7 +107,7 @@ Salvo.prototype.createBaseDiv = function(){
 			.append($("<td>").html("Acceleration"))
 			.append($("<td>").html(accel)))
 		.append($("<tr>")
-    		.append($("<td>").html("Tracking"))
+    		.append($("<td>").html("Tracking up to "))
 			.append($("<td>").html(getUnitType(this.structures[0].systems[0].tracking) + " / " + this.structures[0].systems[0].tracking)))
 		//.append($("<tr>").append($("<td>").attr("colSpan", 4).css("height", 15)))
 		.append($("<tr>")
@@ -122,7 +122,7 @@ Salvo.prototype.createBaseDiv = function(){
 		}
 
 		table.append($("<tr>")
-    		.append($("<td>").html("Hit Chance (w/o EW)"))
+    		.append($("<td>").html("Chance to-Hit target"))
 			.append($("<td>").html(this.getTrackingString())))
 		//.append($("<tr>")
     	//	.append($("<td>").html("Damage"))

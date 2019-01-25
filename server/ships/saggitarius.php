@@ -7,9 +7,9 @@ class Saggitarius extends Medium {
 	public $size =  60;
 	public static $value = 400;
 	public $profile = array(0.9, 1.1);
-	public $mass = 4500;
+	public $mass = 4000;
 
-	public $integrity = 800;
+	public $integrity = 725;
 	public $vitalHP = 95;
 	public $ep = 65;
 	public $ew = 650;
@@ -34,8 +34,8 @@ class Saggitarius extends Medium {
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 325, 13);
-		$aft->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulseCannon", "LightParticleBeam"));
-		$aft->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$aft->systems[] = new Dual($this->getId(), $this->id, 270, 90, 28, array("LightPulseCannon", "LightParticleBeam"));
+		$aft->systems[] = new Dual($this->getId(), $this->id, 270, 90, 28, array("LightPulseCannon", "LightParticleBeam"));
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 450, 15, 1);

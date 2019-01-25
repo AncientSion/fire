@@ -1110,6 +1110,7 @@ class Ship {
 			return 0;
 		}
 		else if ($target->salvo){
+			return 0;
 			return 0.5;
 		}
 	}

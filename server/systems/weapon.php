@@ -26,7 +26,6 @@ class Weapon extends System {
 	public $melt = 0;
 	public $armourSkip = 0;
 	public $dmgLoss = 0;
-	public $flashDiv;
 
 	public $amBonus = 0;
 	public $amMax = 0;
