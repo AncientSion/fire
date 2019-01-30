@@ -71,7 +71,7 @@ class Salvo extends Minor {
 	}
 
 	public function calculateToHit($fire){
-		$base = 80;
+		$base = 70;
 		//$base = 120;
 		$mask = $fire->target->getDefensiveBonus($this->id);
 		$tracking = $fire->weapon->getTrackingMod($fire)*0.2;
