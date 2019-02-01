@@ -48,30 +48,6 @@ class TwinParticleBolter extends Particle {
 	}
 }
 
-class TriParticleInterdictor extends Particle {
-	public $name = "TriParticleInterdictor";
-	public $display = " Tri Particle Interdictor";
-	public static $prio = 0;
-	public $minDmg = 13;
-	public $maxDmg = 17;
-	public $accDecay = 180;
-	public $shots = 3;
-	public $animColor = "orange";
-	public $projSize = 1;
-	public $projSpeed = 8;
-	public $reload = 2;
-	public $integrity = 28;
-	public $powerReq = 2;
-	public $tracking = 1;
-	//public $linked = 3;
-	
-	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
-        parent::__construct($id, $parentId, $start, $end, $output, $width);
-       // $this->boostEffect[] = new Effect("Reload", -1);
-	}
-}
-
-
 class LightParticle extends Particle {
 	public $name = "LightParticle";
 	public $display = "Light Particle Bolter Array";

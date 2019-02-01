@@ -9,10 +9,10 @@ class Xill extends Heavy {
 	public $profile = array(1, 1);
 	public $mass = 6000;
 
-	public $integrity = 850;
+	public $integrity = 775;
 	public $vitalHP = 95;
 	public $ep = 80;
-	public $ew = 775;
+	public $ew = 725;
 	public $power = 0;
 
 	function __construct($data = false){
@@ -27,28 +27,28 @@ class Xill extends Heavy {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 315, 45, 625, 16, 4);
-		$front->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 270, 90);
-		$front->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new AntimatterBlaster($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new TwinParticleBolter($this->getId(), $this->id, 270, 90);
+		$front->systems[] = new AntimatterBlaster($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 45, 135, 800, 16, 1);
-		$right->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 30, 150);
-		$right->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 0, 180);
-		$right->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 30, 150);
+		$right->systems[] = new AntimatterBlaster($this->getId(), $this->id, 30, 150);
+		$right->systems[] = new TwinParticleBolter($this->getId(), $this->id, 0, 180);
+		$right->systems[] = new AntimatterBlaster($this->getId(), $this->id, 30, 150);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 135, 225, 550, 14, 3);
-		$aft->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 120, 240);
-		$aft->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 90, 270);
+		$aft->systems[] = new AntimatterBlaster($this->getId(), $this->id, 120, 240);
+		$aft->systems[] = new TwinParticleBolter($this->getId(), $this->id, 90, 270);
 		//$aft->systems[] = new Hangar($this->getId(), $this->id, 12, array("Zorth"), 12, 1);
-		$aft->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 120, 240);
+		$aft->systems[] = new AntimatterBlaster($this->getId(), $this->id, 120, 240);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 225, 315, 800, 16, 1);
-		$left->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 210, 330);
-		$left->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 180, 360);
-		$left->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 210, 330);
+		$left->systems[] = new AntimatterBlaster($this->getId(), $this->id, 210, 330);
+		$left->systems[] = new TwinParticleBolter($this->getId(), $this->id, 180, 360);
+		$left->systems[] = new AntimatterBlaster($this->getId(), $this->id, 210, 330);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -61,14 +61,14 @@ class Xill extends Heavy {
 	public function addTurrets(){
 		$turrets = array();
 		
-		$turretA = new Turret($this->getId(), $this->id, "Dorsal Main Turret", 0, 360, 160, 14);
-		$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
-		$turretA->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
+		$turretA = new Turret($this->getId(), $this->id, "Dorsal Main Turret", 0, 360, 180, 14);
+		$turretA->systems[] = new HeavyAntimatterCannon($this->getId(), $this->id, 0, 360);
+		$turretA->systems[] = new HeavyAntimatterCannon($this->getId(), $this->id, 0, 360);
 		$turrets[] = $turretA;
 		
-		$turretB = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 160, 14);
-		$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
-		$turretB->systems[] = new AntimatterCannon($this->getId(), $this->id, 0, 360);
+		$turretB = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 180, 14);
+		$turretB->systems[] = new HeavyAntimatterCannon($this->getId(), $this->id, 0, 360);
+		$turretB->systems[] = new HeavyAntimatterCannon($this->getId(), $this->id, 0, 360);
 		$turrets[] = $turretB;
 
 		for ($i = 0; $i < sizeof($turrets); $i++){

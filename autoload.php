@@ -189,10 +189,10 @@ spl_autoload_register(
                 'fusioncannon' => '/server/systems/weapons/particle.php',
                 'heavyfusioncannon' => '/server/systems/weapons/particle.php',
 
-                'antimattercannon' => '/server/systems/weapons/am.php',
+                'antimatterblaster' => '/server/systems/weapons/am.php',
+                'heavyantimattercannon' => '/server/systems/weapons/am.php',
                 'antimatterconverter' => '/server/systems/weapons/am.php',
                 'heavyantimatterconverter' => '/server/systems/weapons/am.php',
-                'triparticleinterdictor' => '/server/systems/weapons/am.php',
                 'heavyantiprotonpulsar' => '/server/systems/weapons/am.php',
                 'mediumantiprotonpulsar' => '/server/systems/weapons/am.php',
 

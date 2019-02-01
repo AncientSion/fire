@@ -29,7 +29,7 @@ if (isset($_SESSION["userid"])){
 		return;
 	}
 	else if (isset($_POST["startGame"])){
-		$gameid = 2;
+		$gameid = 1;
 		DBManager::app()->startGame($gameid);
 		header("Location: game.php?gameid=".$gameid);
 		return;

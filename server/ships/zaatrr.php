@@ -9,7 +9,7 @@ class Zaatrr extends Medium {
 	public $profile = array(1, 1);
 	public $mass = 3250;
 
-	public $integrity = 500;
+	public $integrity = 475;
 	public $vitalHP = 60;
 	public $ep = 95;
 	public $ew = 650;
@@ -26,23 +26,20 @@ class Zaatrr extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 625, 14, 4);
-		//$front->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 270, 90);
-		$front->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 270, 90);
-		$front->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 300, 60);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 625, 13, 4);
+		$front->systems[] = new AntimatterBlaster($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new TwinParticleBolter($this->getId(), $this->id, 270, 90);
+		$front->systems[] = new AntimatterBlaster($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 400, 14, 1);
-		//$right->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 30, 210);
-		$right->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 60, 180);
-		$right->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 30, 210);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 400, 13, 1);
+		$right->systems[] = new AntimatterBlaster($this->getId(), $this->id, 60, 180);
+		$right->systems[] = new TwinParticleBolter($this->getId(), $this->id, 30, 210);
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 475, 14, 1);
-		//$left->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 150, 330);
-		$left->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 180, 300);
-		$left->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 150, 330);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 475, 13, 1);
+		$left->systems[] = new AntimatterBlaster($this->getId(), $this->id, 180, 300);
+		$left->systems[] = new TwinParticleBolter($this->getId(), $this->id, 150, 330);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -53,17 +50,13 @@ class Zaatrr extends Medium {
 	public function addTurrets(){
 		$turrets = array();
 		
-		$turretA = new Turret($this->getId(), $this->id, "Large Turret A", 0, 360, 90, 12);
+		$turretA = new Turret($this->getId(), $this->id, "Large Turret A", 0, 360, 90, 11);
 		$turretA->systems[] = new AntimatterConverter($this->getId(), $this->id, 0, 360);
 		$turrets[] = $turretA;
 
-		$turretA = new Turret($this->getId(), $this->id, "Large Turret B", 0, 360, 90, 12);
+		$turretA = new Turret($this->getId(), $this->id, "Large Turret B", 0, 360, 90, 11);
 		$turretA->systems[] = new AntimatterConverter($this->getId(), $this->id, 0, 360);
 		$turrets[] = $turretA;
-		
-		//$turretB = new Turret($this->getId(), $this->id, "Ventral Main Turret", 0, 360, 160, 12);
-		//$turretA->systems[] = new HeavyAntiProtonPulsar($this->getId(), $this->id, 0, 360);
-		//$turrets[] = $turretB;
 
 		for ($i = 0; $i < sizeof($turrets); $i++){
 			$this->structures[] = $turrets[$i];

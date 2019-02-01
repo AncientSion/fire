@@ -107,7 +107,7 @@ class DmgCalc {
 			"LightPulseCannon", "MediumPulseCannon", "HeavyPulseCannon", "NeutronPulsar",
 			"LightPlasmaPulse", "MediumPlasmaPulse", "HeavyPlasmaPulse",
 			"MediumRailGun", "HeavyRailGun",
-			"AntiMatterCannon", "MediumAntiProtonPulsar"
+			"HeavyAntiMatterCannon", "AntimatterBlaster"
 		);
 
 		$weapons = array();

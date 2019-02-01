@@ -10,7 +10,7 @@ class Ximm extends Light {
 
 	public $integrity = 350;
 	public $ep = 90;
-	public $ew = 525;
+	public $ew = 425;
 	public $negation = 9;
 
 	function __construct($id, $parentId){
@@ -18,10 +18,10 @@ class Ximm extends Light {
 	}
 
 	public function addSystems(){
-		$this->addSubSystem(new TriParticleInterdictor($this->getId(), $this->parentId, 270, 90), 120);
-		$this->addSubSystem(new TriParticleInterdictor($this->getId(), $this->parentId, 0, 360), 120);
-		$this->addSubSystem(new TriParticleInterdictor($this->getId(), $this->parentId, 0, 360), 240);
-		$this->addSubSystem(new TriParticleInterdictor($this->getId(), $this->parentId, 0, 360), 240);
+		$this->addSubSystem(new TwinParticleBolter($this->getId(), $this->parentId, 270, 90), 120);
+		$this->addSubSystem(new TwinParticleBolter($this->getId(), $this->parentId, 0, 360), 120);
+		$this->addSubSystem(new TwinParticleBolter($this->getId(), $this->parentId, 0, 360), 240);
+		$this->addSubSystem(new TwinParticleBolter($this->getId(), $this->parentId, 0, 360), 240);
 	}
 }
 

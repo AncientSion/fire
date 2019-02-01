@@ -2067,7 +2067,6 @@ Game.prototype.showHoverElement = function($element, e){
 		//console.log($element.closest(".shipDiv"));
 	}
 	$element.css("left", x).css("top", y).show();
-
 }
 
 Game.prototype.appendSysDiv = function($element, e){

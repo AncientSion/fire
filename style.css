@@ -1279,6 +1279,10 @@ div.integrityFull {
 	padding: 0 0 0 0;
 }
 
+.shipDiv.squad {
+	width: 400px;
+}
+
 .shipDiv.ballistic .header {
 	width: 100%;
 }

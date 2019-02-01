@@ -29,27 +29,27 @@ class Zitomm extends Heavy {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 315, 45, 625, 16, 4);
-		$front->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new AntimatterBlaster($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new AntimatterBlaster($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new AntimatterBlaster($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 45, 135, 800, 16, 1);
-		$right->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 0, 180);
+		$right->systems[] = new TwinParticleBolter($this->getId(), $this->id, 0, 180);
 		$right->systems[] = new Hangar($this->getId(), $this->id, 160, 900, 300, array("Zorth", "Tzymm"));
-		$right->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 0, 180);
+		$right->systems[] = new TwinParticleBolter($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 135, 225, 550, 14, 3);
-		$aft->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 120, 240);
-		$aft->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 120, 240);
-		$aft->systems[] = new MediumAntiProtonPulsar($this->getId(), $this->id, 120, 240);
+		$aft->systems[] = new AntimatterBlaster($this->getId(), $this->id, 120, 240);
+		$aft->systems[] = new AntimatterBlaster($this->getId(), $this->id, 120, 240);
+		$aft->systems[] = new AntimatterBlaster($this->getId(), $this->id, 120, 240);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 225, 315, 800, 16, 1);
-		$left->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 180, 360);
+		$left->systems[] = new TwinParticleBolter($this->getId(), $this->id, 180, 360);
 		$left->systems[] = new Hangar($this->getId(), $this->id, 160, 900, 300, array("Zorth", "Tzymm"));
-		$left->systems[] = new TriParticleInterdictor($this->getId(), $this->id, 180, 360);
+		$left->systems[] = new TwinParticleBolter($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

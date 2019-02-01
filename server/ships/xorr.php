@@ -10,7 +10,7 @@ class Xorr extends Light {
 
 	public $integrity = 350;
 	public $ep = 90;
-	public $ew = 525;
+	public $ew = 475;
 	public $negation = 9;
 
 	function __construct($id, $parentId){
@@ -19,8 +19,8 @@ class Xorr extends Light {
 
 	public function addSystems(){
 		$turretId = $this->getId();
-		$this->addTurretSystems(new AntiMatterCannon($this->getId(), $this->parentId, 270, 90), $turretId, 0);
-		$this->addTurretSystems(new AntiMatterCannon($this->getId(), $this->parentId, 270, 90), $turretId, 0);
+		$this->addTurretSystems(new HeavyAntimatterCannon($this->getId(), $this->parentId, 270, 90), $turretId, 0);
+		$this->addTurretSystems(new HeavyAntimatterCannon($this->getId(), $this->parentId, 270, 90), $turretId, 0);
 	}
 }
 ?>
