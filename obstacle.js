@@ -397,29 +397,38 @@ AsteroidField.prototype.setTrueImage = function(info){
 
 		ctx = t.getContext("2d");
 
-		var size = 10 + (this.rockSize -2) * 4;
-		var amount = Math.sqrt(this.width * this.height) / this.density * 10;
+	/*	ctx.beginPath();
+		ctx.rect(0, 0, t.width, t.height);
+		ctx.strokeStyle = "yellow";
+		ctx.stroke();
+		ctx.closePath();
+	*/
+		var size = 11 + (this.rockSize -2) * 2;
+		var amount = Math.round(Math.sqrt(this.width * this.height) / this.density * 6);
 
 		for (i = 0; i < amount; i++){
-			var x = range(10, t.width-5) - size;
-			var y = range(10, t.height-5) - size;
+			var x = range(size*2, t.width-size*2);
+			var y = range(size*2, t.height-size*2);
+			var r = range(0, 360);
 
 			ctx.translate(x, y);
-			//ctx.rotate(this.rota * (Math.PI/180));
+			ctx.rotate(r * Math.PI/180);
 			ctx.drawImage(
 				graphics.images.rocks[range(0, graphics.images.rocks.length-1)],
-				x,
-				y,
+				0,
+				0,
 				size*2,
 				size*2,
 			)
-			//ctx.rotate(-this.rota * (Math.PI/180));
-			ctx.translate(-x, -y);
+			ctx.setTransform(1,0,0,1,0,0);
+			//ctx.rotate(-r * Math.PI/180);
+			//ctx.translate(-x, -y);
 		}
 		this.img = t;
+		//console.log(this.img.toDataURL());
 	}
 	
-	if (info){
+	if (info && 1){
 		if (this.img){
 			ctx = this.img.getContext("2d");
 		}
@@ -432,11 +441,12 @@ AsteroidField.prototype.setTrueImage = function(info){
 		ctx.fill();
 
 		ctx.fillStyle = "yellow";
-		ctx.font = "20px Arial";
+		ctx.font = "18px Arial";
 		ctx.textAlign = "center";
 		ctx.fillText(this.getInterference() + "%", 0, -15);
 		ctx.fillText(this.getBaseAttacks()+"x"+this.getAvgDmg(), 0, +14);
 		ctx.fillText(this.getBaseCollisionPct() + "%", 0, +37);
+		//ctx.fillText(this.density + "/" + amount, 0, +55);
 		ctx.setTransform(1,0,0,1,0,0);
 	}
 }
