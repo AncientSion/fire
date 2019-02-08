@@ -627,7 +627,7 @@ Mixed.prototype.attachDivClickFunction = function(){
 		} 
 		else {
 			shooter.doUnselect();
-			shooter.switchDiv();
+			shooter.switchDiv(e);
 			game.getUnit($(this).data("id")).select();
 		}
 	}

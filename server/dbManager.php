@@ -970,7 +970,7 @@
 
 			if (!$amount){return $fields;}
 
-			$densities = array(15, 20, 25);
+			$densities = array(16, 25, 34);
 
 			for ($i = 1; $i <= $amount; $i++){
 				$attempts = 25;
@@ -985,7 +985,7 @@
 					$w = mt_rand(40, 70);
 					$h = $w * mt_rand(3, 5);
 					$r = mt_rand(0, 360);
-					$rockSize = mt_rand(1, 5);
+					$rockSize = mt_rand(1, 3);
 
 					$selfPoints = $this->getRectPoints($x, $y, $w, $h, $r);
 					$selfCenter = new Point(($selfPoints[0]->x + $selfPoints[2]->x) / 2, ($selfPoints[0]->y + $selfPoints[2]->y) / 2);
@@ -998,8 +998,7 @@
 				if (!$attempts){continue;}
 
 				$density = $densities[mt_rand(0, sizeof($densities)-1)];
-				$minDmg = round(15, 20) * (2 + 0.6 * ($rockSize-3));
-
+				$minDmg = round(26, 34);
 
 				$fields[] = array("AsteroidField", $x, $y, 0, ($density.";".$r.";".$w.";".$h.";".$rockSize.";".$minDmg), $selfPoints, $selfCenter);
 			}

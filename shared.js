@@ -429,7 +429,7 @@ function handleMouseDown(e){
 			if (unit && unit.id == clickUnit.id){
 				game.getUnit(aUnit).doUnselect(e);
 			}
-			else clickUnit.switchDiv();
+			else clickUnit.switchDiv(e);
 		}
 		else if (unit){
 			if (game.turnMode){

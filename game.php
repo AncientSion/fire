@@ -51,8 +51,8 @@
 		</div>
 		<div id="game">
 		</div>
-		<div id="phaseSwitchDiv" style="width: 100%; height: 100%">
-			<div id="phaseSwitchInnerDiv">
+		<div id="phaseInfoDiv" style="width: 100%; height: 100%">
+			<div id="phaseInfoInnerDiv">
 			</div>
 		</div>
 

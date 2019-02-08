@@ -1406,7 +1406,7 @@ div.integrityFull {
 	text-align: center;
 }
 
-#phaseSwitchInnerDiv {
+#phaseInfoInnerDiv {
 	padding: 20px;
 	display: inline-block;
 	position: relative;
@@ -1419,13 +1419,13 @@ div.integrityFull {
 	display: none;
 }
 
-#phaseSwitchInnerDiv div {
+#phaseInfoInnerDiv div {
 	font-size: 30px;
 	text-align: center;
 	margin: auto;
 }
 
-#phaseSwitchDiv {
+#phaseInfoDiv {
 	position: absolute;
 	z-index: 20;
 	background: black;
@@ -1434,15 +1434,15 @@ div.integrityFull {
 	height: 100%;
 }
 
-#phaseSwitchDiv.disabled {
+#phaseInfoDiv.disabled {
 	display: none;
 }
 
-#phaseSwitchInnerDiv.disabled {
+#phaseInfoInnerDiv.disabled {
 	display: none;
 }
 
-#phaseSwitchInnerDiv .hintDiv {
+#phaseInfoInnerDiv .hintDiv {
 	width: 550px;
 	height: auto;
 	font-size: 15px;

@@ -31,10 +31,10 @@ function init(data){
 	$("#mouseCanvas").mouseup(function(e){handleMouseUp(e);});
 	$("#mouseCanvas").mouseout(function(e){handleMouseOut(e);});
 
-	$("#phaseSwitchDiv").css("width", res.x).css("height", res.y);
-	var h = $("#phaseSwitchInnerDiv").height();
-	var w = $("#phaseSwitchInnerDiv").width();
-	$("#phaseSwitchInnerDiv").css("top", res.y/2 - h-400).css("left", res.x/2 - w/2).removeClass("disabled");
+	$("#phaseInfoDiv").css("width", res.x).css("height", res.y);
+	var h = $("#phaseInfoInnerDiv").height();
+	var w = $("#phaseInfoInnerDiv").width();
+	$("#phaseInfoInnerDiv").css("top", res.y/2 - h-400).css("left", res.x/2 - w/2).removeClass("disabled");
 
 	turn = new Turn();
 	game = new Game(data);
@@ -514,7 +514,7 @@ function dmgPhase(e, pos, unit){
 		if (unit == clickShip){
 			unit.select();
 		} else if (clickShip){
-			clickShip.switchDiv();
+			clickShip.switchDiv(e);
 		}
 	}
 	else {

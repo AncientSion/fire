@@ -1073,19 +1073,32 @@ Ship.prototype.getAllPowerOrders = function(){
 	return powers;
 }
 
-Ship.prototype.switchDiv = function(){
+Ship.prototype.switchDiv = function(e){
+	var	checkPos = false;
+	var $element = $(this.element);
+
 	if (this.selected){
 		game.zIndex++;
-		$(this.element).removeClass("disabled").css("zIndex", game.zIndex);
+		$element.removeClass("disabled").css("zIndex", game.zIndex);
+		checkPos = true;
 	}
 	else if ($(this.element).hasClass("disabled")){
 		game.zIndex++;
-		$(this.element).removeClass("disabled").css("zIndex", game.zIndex);
+		$element.removeClass("disabled").css("zIndex", game.zIndex);
+		checkPos = true;
 	}
 	else {
 		game.zIndex--;
-		$(this.element).addClass("disabled").css("zIndex", 10);
+		$element.addClass("disabled").css("zIndex", 10);
 	}
+
+	if (checkPos){
+		var pos = $element.position();
+		var click = {x: e.clientX, y: e.client.Y}
+		console.log(pos);
+		console.log(click);
+	}
+
 }
 
 Ship.prototype.toggleDivSize = function(){
@@ -1387,7 +1400,7 @@ Ship.prototype.setNextMove = function(){
 Ship.prototype.select = function(){
 	if (!this.selected){
 		this.doSelect();
-	} else this.switchDiv();
+	} else this.switchDiv(e);
 }
 
 Ship.prototype.doSelect = function(){
@@ -1396,7 +1409,7 @@ Ship.prototype.doSelect = function(){
 	this.selected = true;
 	this.setUnitSelector();
 	game.redraw()
-	this.switchDiv();
+	this.switchDiv(e);
 	this.setMoveMode();
 }
 
@@ -1408,7 +1421,7 @@ Ship.prototype.doUnselect = function(){
 	if (game.deploying){game.disableDeployment();}
 	else if (game.flightDeploy){game.flightDeploy = false;}
 	else if (game.mission){this.disableMissionMode()}
-	this.switchDiv();
+	this.switchDiv(e);
 	this.unsetMoveMode();
 	$("#hangarDiv").addClass("disabled");
 	$("#popupWrapper").hide();

@@ -245,11 +245,11 @@ Salvo.prototype.getShortInfo = function(){
 
 Salvo.prototype.doSelect = function(){
 	console.log(this);
-	this.switchDiv();
+	this.switchDiv(e);
 }
 
 Salvo.prototype.doUnselect = function(){
-	this.switchDiv();
+	this.switchDiv(e);
 	$("#vectorDiv").addClass("disabled");
 	game.redraw();
 }

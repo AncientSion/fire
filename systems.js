@@ -2058,6 +2058,8 @@ Weapon.prototype.select = function(e){
 
 			if (this.selected){
 				this.selected = false;
+				mouseCtx.clearRect(0, 0, res.x, res.y);
+
 				this.validTarget = 0;
 			}
 			else if(!game.exclusiveSystem){

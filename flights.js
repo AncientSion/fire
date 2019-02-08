@@ -369,7 +369,7 @@ Flight.prototype.setPostMoveSize = function(){
 	else this.size = this.baseSize + this.unitSize * this.getIntactElements();
 }
 
-Flight.prototype.switchDiv = function(){
+Flight.prototype.switchDiv = function(e){
 	if (this.selected){
 		$(this.element).find(".header").find(".general").find(".missionEntry").removeClass("disabled");
 	} else $(this.element).find(".header").find(".general").find(".missionEntry").addClass("disabled");

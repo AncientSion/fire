@@ -92,39 +92,40 @@ class AsteroidField extends Obstacle {
 	function __construct($data = false){
 		parent::__construct($data);
 
-        $arr = explode(";", $this->notes);
-        $this->density = $arr[1];
-        $this->rota = $arr[2];
-        $w = $arr[3];
-        $h = $arr[4];
-        $this->rockSize = $arr[5];
-        $this->minDmg = $arr[6];
-        $this->maxDmg = round($this->minDmg * 1.3);
-        $this->height = $h;
-        $this->width = $w;
+		$arr = explode(";", $this->notes);
+		$this->density = $arr[1];
+		$this->rota = $arr[2];
+		$w = $arr[3];
+		$h = $arr[4];
+		$this->rockSize = $arr[5];
+		$dmg = $arr[6];
+		$this->minDmg = round($dmg * (1 + 0.5 * ($this->rockSize-1)));
+		$this->maxDmg = round($this->minDmg * 1.3);
+		$this->height = $h;
+		$this->width = $w;
 
-        $b = Math::getPointInDirection($h, $this->rota, $this->x, $this->y);
-        $c = Math::getPointInDirection($w, $this->rota-90, $b->x, $b->y);
-        $d = Math::getPointInDirection($h, $this->rota+180, $c->x, $c->y);
+		$b = Math::getPointInDirection($h, $this->rota, $this->x, $this->y);
+		$c = Math::getPointInDirection($w, $this->rota-90, $b->x, $b->y);
+		$d = Math::getPointInDirection($h, $this->rota+180, $c->x, $c->y);
 
 		$this->points[] = new Point($this->x, $this->y);
-        $this->points[] = $b;
-        $this->points[] = $c;
-        $this->points[] = $d;
+		$this->points[] = $b;
+		$this->points[] = $c;
+		$this->points[] = $d;
 
-        $this->size = 100;
+		$this->size = 100;
 
-        $this->x = ($this->points[0]->x + $this->points[2]->x) / 2;
-        $this->y = ($this->points[0]->y + $this->points[2]->y) / 2;
+		$this->x = ($this->points[0]->x + $this->points[2]->x) / 2;
+		$this->y = ($this->points[0]->y + $this->points[2]->y) / 2;
 	}
 
 	public function addPrimary(){
 
-        $avgRockSize = 3;
+        $avgRockSize = 2;
         $avgDensity = 20;
       //  $attacks = round($this->density * $avgRockSize / $this->rockSize / 5));
 
-		$attacks = round(6 / 20 * $this->density * (1 + 0.25 * (3 - $this->rockSize)));
+		$attacks = round($this->density / 4 * (1 + 0.5 * ($avgRockSize - $this->rockSize)));
 
       	$this->collision = round(100 / $avgRockSize * $this->rockSize / $avgDensity * $this->density / 10);
 		$this->interference = round($this->density / 2);

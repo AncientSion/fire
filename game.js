@@ -1499,7 +1499,7 @@ function Game(data){
 		game.redraw();
 
 		if (this.phase == -1){
-			$("#phaseSwitchDiv").click(function(){
+			$("#phaseInfoDiv").click(function(){
 				$(this).hide();
 				game.timeout = setTimeout(function(){
 					game.initDeploy();
@@ -1508,16 +1508,16 @@ function Game(data){
 		}
 		else if (this.phase == 0){
 			ctx.clearRect(0, 0, res.x, res.y);
-			$("#phaseSwitchDiv").click(function(){
+			$("#phaseInfoDiv").click(function(){
 				game.initMovement();
 				//window.timeout = setTimeout(function(){
 				//	console.log("hide");
-					$("#phaseSwitchDiv").hide()
+					$("#phaseInfoDiv").hide()
 				///}, 250);
 			});
 		}
 		else if (this.phase == 1){
-			$("#phaseSwitchDiv").click(function(){
+			$("#phaseInfoDiv").click(function(){
 				$(this).hide();
 				game.prepResolveMovement();
 				game.timeout = setTimeout(function(){
@@ -1527,7 +1527,7 @@ function Game(data){
 			});
 		}
 		else if (this.phase == 2){
-			$("#phaseSwitchDiv").click(function(){
+			$("#phaseInfoDiv").click(function(){
 				$(this).hide();
 				game.prepResolveMovement();
 				game.timeout = setTimeout(function(){
@@ -1537,7 +1537,7 @@ function Game(data){
 			});
 		}
 		else if (this.phase == 3){
-			$("#phaseSwitchDiv").click(function(){
+			$("#phaseInfoDiv").click(function(){
 				game.draw();
 				$(this).hide();
 				ui.upperGUI.find(".playerInfoWrapper").hide();
@@ -3018,8 +3018,8 @@ Game.prototype.getCallback = function(){
 	window.game[name](arg);
 }
 
-Game.prototype.setPhaseSwitchDiv = function(){
-	$("#phaseSwitchDiv").find("#phaseSwitchInnerDiv")
+Game.prototype.setPhaseInfoDiv = function(){
+	$("#phaseInfoDiv").find("#phaseInfoInnerDiv")
 		.append($("<div>").html("Turn: " + this.turn))
 		.append($("<div>").html(getPhaseString(this.phase)))
 		.show();
@@ -3369,7 +3369,7 @@ Game.prototype.create = function(data){
 
 	this.initUI();
 	setFPS(90);
-	this.setPhaseSwitchDiv();
+	this.setPhaseInfoDiv();
 	this.setGameInfo();
 	this.setConfirmInfo();
 	window.username = this.getPlayerStatus().username;
@@ -4538,7 +4538,7 @@ Game.prototype.initSelectionWrapper = function(){
 			.contextmenu(function(e){
 				e.preventDefault(); e.stopPropagation();
 				var unit = game.getUnit($(this).data("id"));
-				if (aUnit != unit.id){unit.switchDiv();}
+				if (aUnit != unit.id){unit.switchDiv(e);}
 			})
 			.hover(
 				function(e){

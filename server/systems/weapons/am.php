@@ -70,11 +70,6 @@ class AntimatterBlaster extends Particle {
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $start, $end, $output, $width);
         $this->setAntimatterData();
-
-		$this->effiency = ceil($this->powerReq/1.5);
-		$this->maxBoost = 1;
-		$this->boostEffect[] = new Effect("Damage", 40);
-		$this->boostEffect[] = new Effect("Top Range", -60);
 	}
 }
 
@@ -94,10 +89,15 @@ class HeavyAntimatterCannon extends AntimatterBlaster {
 	public $projSpeed = 6;
 	public $projDelay = 4;
 
-	public $optRange = 600;
+	public $optRange = 700;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $start, $end, $output, $width);
+
+		$this->effiency = ceil($this->powerReq/1.5);
+		$this->maxBoost = 1;
+		$this->boostEffect[] = new Effect("Damage", 40);
+		$this->boostEffect[] = new Effect("Top Range", -60);
 	}
 }
 

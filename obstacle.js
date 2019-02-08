@@ -64,22 +64,22 @@ Obstacle.prototype.getCurSpeed = function(){
 
 Obstacle.prototype.doSelect = function(){
 	console.log(this);
-	this.switchDiv();
+	this.switchDiv(e);
 	return;
 	aUnit = this.id;
 	this.selected = true;
 	this.setUnitSelector();
-	this.switchDiv();
+	this.switchDiv(e);
 	game.redraw()
 }
 
 Obstacle.prototype.doUnselect = function(){
-	this.switchDiv();
+	this.switchDiv(e);
 	return;
 	aUnit = false;
 	this.selected = false;
 	this.setUnitSelector();
-	this.switchDiv();
+	this.switchDiv(e);
 }
 
 Obstacle.prototype.unitGetAllResolvingFireOrders = function(){
