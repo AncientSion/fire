@@ -62,7 +62,6 @@ function sizeCanvas(){
 }
 
 function scopeCanvas(){
-	//console.log("scopeCanvas");
 	var canv = document.getElementsByClassName("gameCanvas");
 
 	canvas = canv[0];
@@ -87,19 +86,18 @@ function scopeCanvas(){
 	drawCanvas.style.zIndex = 0;
 	drawCtx = drawCanvas.getContext("2d");
 
-
 	fxCtx.font = "18px Arial";
 	fxCtx.textAlign = "center";
 }
 
 function mouseCanvasZoom(e){
-	e.preventDefault();		
-	if (game){cam.adjustZoom(e);}	
+	e.preventDefault();
+	if (game){cam.adjustZoom(e);}
 }
 
 function handleWeaponAimEvent(shooter, target, e, pos){
 
-	if (shooter.userid == target.userid || target && (target.isDestroyed())){
+	if (shooter.userid == target.userid || shooter.userid == target.userid || target && target.isDestroyed()){
 		ui.aimDiv.hide();
 		return;
 	}
@@ -107,10 +105,6 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	//var shooterPos = (shooter.flight ? shooter.getGamePos() : shooter.getPlannedPos());
 	var shooterPos = (game.phase == 2 ? shooter.getGamePos() : shooter.getPlannedPos());
 	var facing = shooter.getPlannedFacing();
-	var targetDataA = ui.aimDiv.find("#targetDataA");
-	var targetDataB = ui.aimDiv.find("#targetDataB");
-	var targetDataC = ui.aimDiv.find("#targetDataC");
-	var weaponInfo = ui.aimDiv.find("#weaponInfo");
 	var dist;
 	var drop = 0;
 	var cc = game.isCloseCombat(shooter, target);
@@ -219,7 +213,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 
 			var jamming = target.hasPassiveJamming();
 		
-			if (jamming){ui.targetDataC.html(target.getJammingString());}
+			if (jamming){ui.targetDatatC.html(target.getJammingString());}
 		}
 	}
 	else {
@@ -247,7 +241,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 		ui.targetDataC.empty();
 	}
 
-	weaponInfo.children().children().each(function(i){
+	ui.weaponInfo.children().children().each(function(i){
 		if (i >= 1){
 			$(this).remove();
 		}
@@ -281,7 +275,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 		if (target){snap = game.hasSnapCenterline(shooter, shooterAngle, target);}
 
 		if ((target.squad || target.flight) && target.getStringHitChance().length > 5){
-			weaponInfo.append(
+			ui.weaponInfo.append(
 				$("<tr>").append(
 					$("<td>")
 						.attr("colSpan", 5)
@@ -338,7 +332,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 				system.validTarget = 0;
 			}
 
-			weaponInfo.append(row);
+			ui.weaponInfo.append(row);
 		}
 	}		
 
@@ -483,7 +477,7 @@ function planPhase(e, pos, unit){
 			else if (unit.canDeploy()){
 				game.enableDeployment(unit.id);
 			}
-			else firePhase(pos, unit, 0);
+			else firePhase(e, pos, unit, 0);
 		}
 		else {
 			unit = game.getUnitByClick(pos);
@@ -497,12 +491,12 @@ function planPhase(e, pos, unit){
 	}
 }
 
-function firePhase(pos, unit, targetid){
+function firePhase(e, pos, unit, targetid){
 	if (unit){
 		game.handleFireClick(pos, unit, targetid);
 	}
 	else unit = game.getUnitByClick(pos);
-	if (unit){unit.select();}
+	if (unit){unit.select(e);}
 }
 
 function dmgPhase(e, pos, unit){
@@ -519,6 +513,6 @@ function dmgPhase(e, pos, unit){
 	}
 	else {
 		unit = game.getUnitByClick(pos);	
-		if (unit){unit.select();}
+		if (unit){unit.select(e);}
 	}
 }

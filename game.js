@@ -4518,7 +4518,7 @@ Game.prototype.initSelectionWrapper = function(){
 			.click(function(e){
 				e.preventDefault(); e.stopPropagation();						
 				if (!aUnit && !game.getUnit($(this).data("id")).selected){ // selecting
-					game.getUnit($(this).data("id")).doSelect();
+					game.getUnit($(this).data("id")).doSelect(e);
 				} else if (aUnit == $(this).data("id")){ // unselecting
 					game.getUnit($(this).data("id")).doUnselect();
 				} else if (aUnit != $(this).data("id")){ // fireing
@@ -4531,7 +4531,7 @@ Game.prototype.initSelectionWrapper = function(){
 						else if (game.flightDeploy){
 							game.doDeployFlight(vessel.getPlannedPos());
 						}
-						else firePhase({x: 0, y: 0}, ship, vessel.id);
+						else firePhase(e, {x: 0, y: 0}, ship, vessel.id);
 					}
 				}
 			})
@@ -4557,9 +4557,7 @@ Game.prototype.initSelectionWrapper = function(){
 						var shipLoc = ship.getPlannedPos();
 						var facing = ship.getPlannedFacing();
 						if (ship.hasWeaponsSelected()){
-							if (ship.id != vessel.id){
-								handleWeaponAimEvent(ship, vessel, e);
-							}// else $("#aimDiv").hide();
+							handleWeaponAimEvent(ship, vessel, e);
 						}
 					} else {
 						game.target = 0;
@@ -4602,19 +4600,19 @@ Game.prototype.initSelectionWrapper = function(){
 Game.prototype.initUI = function(){
 	$("#mouseCanvas").on("mouseleave", function(){
 		$("#aimDiv").hide();
-	})
+	});
 
 	$(".missionOption").mousedown(function(e){
 		e.stopPropagation();
-	})
+	});
 
 	$("input[type=button").mousedown(function(e){
 		e.stopPropagation();
-	})
+	});
 
 	$("input[type=radio").mousedown(function(e){
 		e.stopPropagation();
-	})
+	});
 
 	ui.combatLogWrapper
 		.find("#combatLog")
@@ -4666,21 +4664,15 @@ Game.prototype.initUI = function(){
 
 	$("#maxCutVector")
 	.click(function(){
-		//console.log("maxVector")
 		game.getActiveUnit().moveInVector();
-		//game.getUnit($(this).data("unitid")).moveInVector($(this).data("dist"));
 	})	
 	$("#maxTurnVector")
 	.click(function(){
-		//console.log("maxVector")
 		game.getActiveUnit().moveToMaxTurnVector();
-		//game.getUnit($(this).data("unitid")).moveToMaxTurnVector();
 	})	
 	$("#maxVector")
 	.click(function(){
-		//console.log("maxVector")
 		game.getActiveUnit().moveToMaxVector();
-		//game.getUnit($(this).data("unitid")).moveToMaxVector();
 	})
 
 	$("#popupWrapper")

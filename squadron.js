@@ -216,25 +216,10 @@ Squadron.prototype.expandDiv = function(div){
 				)
 				.append($("<div>")
 					.addClass("notes")
-						//.hide()
 				)
-				.data("shipId", this.id)
-				.hover(function(e){
-					if (aUnit){
-						var shooter = game.getUnit(aUnit);
-						var target = game.getUnit($(this).parent().parent().data("shipId"));
-						if (shooter.id != target.id && shooter.hasWeaponsSelected()){
-							handleWeaponAimEvent(shooter, target, e);
-						}
-					}
-				}).
-				click(function(e){
-					var shooter = game.getUnit(aUnit);
-					var target = game.getUnit($(this).parent().parent().data("shipId"));
-					if (shooter && target){
-						firePhase({x: 0, y: 0}, shooter, target.id);
-					}
-				}));
+				.data("shipId", this.id));
+
+	this.addQuickFireEvents(div);
 		
 
 	$(document.body).append(div);

@@ -1073,7 +1073,7 @@ Ship.prototype.getAllPowerOrders = function(){
 	return powers;
 }
 
-Ship.prototype.switchDiv = function(e){
+Ship.prototype.switchDiv = function(e = false){
 	var	checkPos = false;
 	var $element = $(this.element);
 
@@ -1094,9 +1094,20 @@ Ship.prototype.switchDiv = function(e){
 
 	if (checkPos){
 		var pos = $element.position();
-		var click = {x: e.clientX, y: e.client.Y}
-		console.log(pos);
-		console.log(click);
+		var click = {x: e.clientX, y: e.clientY};
+		var w = $element.width();
+		var h = $element.height();
+
+		if (click.x > pos.left && click.x < pos.left + w &&
+			click.y > pos.top && click.y < pos.top + h){
+			console.log("d");
+
+			if (click.x > w){
+				$element.css("left", Math.max(10, click.x - w - 400));
+			} else if (click.x < w){
+				$element.css("left", Math.min(click.x + 400, res.y - 20 - w));
+			}
+		}
 	}
 
 }
@@ -1397,13 +1408,13 @@ Ship.prototype.setNextMove = function(){
 	return;
 }
 
-Ship.prototype.select = function(){
+Ship.prototype.select = function(e){
 	if (!this.selected){
-		this.doSelect();
+		this.doSelect(e);
 	} else this.switchDiv(e);
 }
 
-Ship.prototype.doSelect = function(){
+Ship.prototype.doSelect = function(e){
 	console.log(this);
 	aUnit = this.id;
 	this.selected = true;
@@ -1413,7 +1424,7 @@ Ship.prototype.doSelect = function(){
 	this.setMoveMode();
 }
 
-Ship.prototype.doUnselect = function(){
+Ship.prototype.doUnselect = function(e){
 	this.unselectSystems();
 	aUnit = false;
 	this.selected = false;
@@ -2700,31 +2711,37 @@ Ship.prototype.getJumpDiv = function(){
 	return jumpDiv
 }
 
+Ship.prototype.addQuickFireEvents = function(div){
+	if (!game.turn){return;}
+
+	div.find(".iconContainer")
+		.hover(function(e){
+			if (aUnit){
+				var shooter = game.getUnit(aUnit);
+				if (!shooter.hasWeaponsSelected()){return;}
+				var target = game.getUnit($(this).parent().parent().data("shipId"));
+				if (shooter.id == target.id || shooter.userid == target.userid){return;}
+				handleWeaponAimEvent(shooter, target, e);
+			}
+		})
+		.click(function(e){
+			if (!game.turn){return;}
+			var shooter = game.getUnit(aUnit);
+			if (!shooter.hasWeaponsSelected()){return;}
+			var target = game.getUnit($(this).parent().parent().data("shipId"));
+			if (shooter.id == target.id || shooter.userid == target.userid){return;}
+				firePhase(e, {x: 0, y: 0}, shooter, target.id);
+		})
+}
+
 Ship.prototype.expandDiv = function(div){
 
 	div
 	.find(".topDiv")
 	.append($("<div>")
-		.addClass("iconContainer")
-			.hover(function(e){
-				if (!game.turn){return;}
-				if (aUnit){
-					var shooter = game.getUnit(aUnit);
-					var target = game.getUnit($(this).parent().parent().data("shipId"));
-					if (shooter.id != target.id && shooter.hasWeaponsSelected()){
-						handleWeaponAimEvent(shooter, target, e);
-					}
-				}
-			})
-			.click(function(e){
-				if (!game.turn){return;}
-				var shooter = game.getUnit(aUnit);
-				var target = game.getUnit($(this).parent().parent().data("shipId"));
-				if (shooter && target){
-					firePhase({x: 0, y: 0}, shooter, target.id);
-				}
-			}))
+		.addClass("iconContainer"));
 
+	this.addQuickFireEvents(div);
 
 	$(document.body).append(div);
 	

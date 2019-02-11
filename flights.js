@@ -254,29 +254,8 @@ Flight.prototype.supplyAttachDiv = function(div){
 	var attachDiv = $("<div>").addClass("attachDiv")
 		.append($("<div>").css("display", "block").addClass("center15 " + color).html(this.getAttachDivTargetString()))
 		.data("id", this.id)
-		.click(Mixed.prototype.attachDivClickFunction)
-		.hover(
-			function(e){
-				var vessel = game.getUnit($(this).data("id"));
-				vessel.doHighlight();
-				if (aUnit && aUnit != vessel.id){
-					var	ship = game.getUnit(aUnit);
-					if (ship.salvo){return;}
-					else if (ship.hasWeaponsSelected() && ship.id != vessel.id){
-						handleWeaponAimEvent(ship, vessel, e);
-					}
-					else {
-						game.target = 0;
-						$("#aimDiv").hide()
-					}
-				}
-			},
-			function(e){
-				var vessel = game.getUnit($(this).data("id"));
-					vessel.highlight = 0;
-				game.redraw();
-			}
-		)
+
+		this.addAttachDivEvents(attachDiv);
 
 	for (var j = 0; j < this.structures.length; j++){
 		if (this.structures[j].destroyed || this.structures[j].disabled){continue;}

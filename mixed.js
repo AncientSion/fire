@@ -618,24 +618,7 @@ Mixed.prototype.animateSelfDeployIn = function(){
 	}
 }
 
-Mixed.prototype.attachDivClickFunction = function(){
-	if (aUnit){
-		var shooter = game.getUnit(aUnit);
-		if (shooter.hasWeaponsSelected()){
-			var target = game.getUnit($(this).data("id"));
-			firePhase({x: 0, y: 0}, shooter, target.id);
-		} 
-		else {
-			shooter.doUnselect();
-			shooter.switchDiv(e);
-			game.getUnit($(this).data("id")).select();
-		}
-	}
-	else game.getUnit($(this).data("id")).select();
-}
-
 Mixed.prototype.getSelfExplo = function(){
-	//console.log(this.id);
 
 	var base = this.getDrawPos();
 
@@ -737,4 +720,45 @@ Mixed.prototype.hasFlipped = function(){
 
 Mixed.prototype.doesContinueRolling = function(){
 	return false;
+}
+
+Mixed.prototype.addAttachDivEvents = function(div){
+	div.click(function(e){
+		if (aUnit){
+			var shooter = game.getUnit(aUnit);
+			if (shooter.hasWeaponsSelected()){
+				var target = game.getUnit($(this).data("id"));
+				firePhase(e, {x: 0, y: 0}, shooter, target.id);
+			} 
+			else {
+				shooter.doUnselect();
+				shooter.switchDiv(e);
+				game.getUnit($(this).data("id")).select();
+			}
+		}
+		else game.getUnit($(this).data("id")).select();
+	})
+	.hover(
+		function(e){
+			var vessel = game.getUnit($(this).data("id"));
+				vessel.doHighlight();
+			if (vessel.salvo){vessel.drawTrajectory();}
+
+			if (aUnit && aUnit != vessel.id){
+				var	ship = game.getUnit(aUnit);
+				if (ship.salvo){return;}
+				else if (ship.hasWeaponsSelected() && ship.id != vessel.id){
+					handleWeaponAimEvent(ship, vessel, e);
+				}
+				else {
+					game.target = 0;
+					$("#aimDiv").hide()
+				}
+			}
+		},
+		function(e){
+			var vessel = game.getUnit($(this).data("id"));
+				vessel.highlight = 0;
+			game.redraw();
+		})
 }

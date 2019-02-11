@@ -39,6 +39,7 @@ $(document).ready(function(){
 		targetDataA: $("#aimDiv").find("#targetDataA"),
 		targetDataB: $("#aimDiv").find("#targetDataB"),
 		targetDataC: $("#aimDiv").find("#targetDataC"),
+		weaponInfo: $("#aimDiv").find("#weaponInfo"),
 		vector: $("#vectorDiv")
 	};
 
@@ -408,7 +409,7 @@ function handleMouseDown(e){
 			case 1: 
 				planPhase(e, pos, unit); break;
 			case 2: 
-				firePhase(pos, unit, 0); break;
+				firePhase(e, pos, unit, 0); break;
 			case 3: 
 				dmgPhase(e, pos, unit); break;
 		}
