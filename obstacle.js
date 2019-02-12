@@ -62,23 +62,12 @@ Obstacle.prototype.getCurSpeed = function(){
 	return false;
 }
 
-Obstacle.prototype.doSelect = function(){
+Obstacle.prototype.doSelect = function(e){
 	console.log(this);
 	this.switchDiv(e);
-	return;
-	aUnit = this.id;
-	this.selected = true;
-	this.setUnitSelector();
-	this.switchDiv(e);
-	game.redraw()
 }
 
-Obstacle.prototype.doUnselect = function(){
-	this.switchDiv(e);
-	return;
-	aUnit = false;
-	this.selected = false;
-	this.setUnitSelector();
+Obstacle.prototype.doUnselect = function(e){
 	this.switchDiv(e);
 }
 

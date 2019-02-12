@@ -959,15 +959,15 @@ Ship.prototype.setMoveMode = function(){
 
 	if ((this.available == game.turn && game.turn == 1 || this.id < 0) && game.phase == -1){
 		this.drawTurnUI();
-		this.drawMoveArea();
-		this.drawTurnArcs();
+		//this.drawMoveArea();
+		//this.drawTurnArcs();
 	}
 	else if (game.phase == -1){
-		this.drawMoveArea();
+		//this.drawMoveArea();
 		this.drawMoveUI();
 	}
 	else if (game.phase == 0 || game.phase == 1){
-		this.drawMoveArea();
+		//this.drawMoveArea();
 		this.drawMoveUI();
 	}
 	else if (game.phase == 2){ // FIRE
@@ -985,17 +985,8 @@ Ship.prototype.unsetMoveMode = function(){
 	$("#vectorDiv").addClass("disabled");
 	$("#impulseGUI").addClass("disabled");
 	$(".turnEle").addClass("disabled");
-
-	/*$("#maxVector").addClass("disabled");
-	$("#maxTurnVector").addClass("disabled");
-	$("#maxCutVector").addClass("disabled");
-	$("#plusImpulse").addClass("disabled");
-	$("#minusImpulse").addClass("disabled");
-	$("#doUndoLastAction").addClass("disabled");
-	*/
 	$(".ui").addClass("disabled");
 	if (game.turnMode){this.switchTurnMode();}
-	game.moveArea = 0;
 	moveCtx.clearRect(0, 0, res.x, res.y);
 	planCtx.clearRect(0, 0, res.x, res.y);
 	salvoCtx.clearRect(0, 0, res.x, res.y);
@@ -1313,7 +1304,7 @@ Ship.prototype.drawMovePlan = function(){
 		}
 	}
 
-	if (!this.hasMoved() && this.actions.length){this.drawMarker(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y, planCtx.strokeStyle, planCtx);}
+	//if (!this.hasMoved() && this.actions.length){this.drawMarker(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y, planCtx.strokeStyle, planCtx);}
 
 	planCtx.closePath();
 	planCtx.globalAlpha = 1;
@@ -2107,11 +2098,9 @@ Ship.prototype.setMoveAngles = function(){
 
 Ship.prototype.drawMoveArea = function(){
 	//console.log("drawMoveArea");
-	if (game.moveArea == this.id){return;}
-	//console.log("IN!");
+
 	this.setMoveAngles();
-	moveCtx.clearRect(0, 0, res.x, res.y);
-	game.moveArea = this.id;
+	//moveCtx.clearRect(0, 0, res.x, res.y);
 
 	var center = this.getPlannedPos();	
 	var rem = this.getRemSpeed();
@@ -2120,7 +2109,6 @@ Ship.prototype.drawMoveArea = function(){
 	var rad1 = degreeToRadian(this.moveAngles.start);
 	var rad2 = degreeToRadian(this.moveAngles.end);
 	var delay = this.getRemDelay();
-
 	
 	if (delay > 0){
 		var delayRad1 = degreeToRadian(this.moveAngles.start-45);
@@ -2708,7 +2696,7 @@ Ship.prototype.getJumpDiv = function(){
 	else if (this.isJumpingOut()){
 		jumpDiv.find("img").toggleClass("selected");
 	}
-	return jumpDiv
+	return jumpDiv.hide();
 }
 
 Ship.prototype.addQuickFireEvents = function(div){

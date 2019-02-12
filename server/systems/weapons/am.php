@@ -56,7 +56,7 @@ class AntimatterBlaster extends Particle {
 	public $maxDmg = 33;
 	public $accDecay = 100;
 	public $shots = 1;
-	public $reload = 1;
+	public $reload = 2;
 	public $integrity = 32;
 	public $powerReq = 4;
 	public $tracking = 3;

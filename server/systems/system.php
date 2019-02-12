@@ -263,10 +263,12 @@ class System {
 		if ($this->destroyed){return;}
 		if (!$dmg->rel){return;}
 
-		//Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old.", rel: ".$dmg->rel.", Squad: ".$squad);
+		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old.", rel: ".$dmg->rel.", Squad: ".$squad);
 
 		$sumDmg = ($dmg->new + $dmg->old)*100 + $squad*60;
 		$crit = DmgCalc::critProcedure($this->parentId, $this->id, $turn, $dmg->rel, $this->critEffects, $sumDmg, $this->internal);
+
+		Debug::log("determineCrit ".get_class($this)." #".$this->id.", new: ".$dmg->new.", old: ".$dmg->old.", rel: ".$dmg->rel.", Squad: ".$squad + "crit = " . ($crit ? $crit->type : " none"));
 
 		if ($crit){
 			$crit->value = $this->getCritModMax($sumDmg, $dmg->hits);

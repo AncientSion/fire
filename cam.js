@@ -75,7 +75,7 @@ window.cam = {
 	},
 
 	setZoom: function(fire){
-		var a = fire.anim[0].length ? Math.abs(fire.anim[0][0].f) : 0;
+		var a = Math.round(fire.anim[0].length ? Math.abs(fire.anim[0][0].f) : 0);
 
 		if (fire.dist == 0){
 			this.z = 2.5
@@ -90,6 +90,8 @@ window.cam = {
 			this.z = Math.min(2, Math.floor( (res.y / 1.4) / fire.dist * 10)/10);
 		}
 		else this.z = 1.5;
+		console.log(a);
+		console.log(this.z);
 	},
 
 	stopMove: function(){

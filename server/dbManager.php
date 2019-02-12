@@ -903,7 +903,7 @@
 		}
 
 		public function testFieldVsAllFields($points, $center, $length, $fields){
-			Debug::log("TESTING FIELD with length ".$length);
+			//Debug::log("TESTING FIELD with length ".$length);
 
 			for ($i = 0; $i < sizeof($fields); $i++){
 				//$dist = Math::getDist($center, $fields[$i][6]);

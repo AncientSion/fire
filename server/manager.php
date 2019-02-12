@@ -996,7 +996,7 @@
 
 	public function setCollisionData($unit){
 		if ($unit->obstacle){return;}
-		Debug::log("setCollisionData for unit #".$unit->id);
+		//Debug::log("setCollisionData for unit #".$unit->id);
 		$unitPos = $unit->getTurnStartPosition();
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1014,7 +1014,7 @@
 				$totalDist += $dist;
 			}
 
-			Debug::log("vs Obstacle #".$this->ships[$i]->id.", totalDist: ".$totalDist);
+			//Debug::log("vs Obstacle #".$this->ships[$i]->id.", totalDist: ".$totalDist);
 			if (!$totalDist){continue;}
 
 

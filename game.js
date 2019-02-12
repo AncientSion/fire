@@ -33,7 +33,6 @@ function Game(data){
 	this.unitExploAnims = [];
 	this.shortInfo = false;
 	this.turnMode = 0;
-	this.moveArea = 0;
 	this.zIndex = 10;
 	this.sensorMode = 0;
 	this.target = 0;
@@ -1944,7 +1943,9 @@ function Game(data){
 
 		$(ui.shortInfo).css("left", left).css("top", top).show();
 
-		if (unit.id != aUnit){unit.handleHovering();}
+		if (unit.id != aUnit){
+			unit.handleHovering();
+		}
 	}
 
 	this.resetHover = function(){
@@ -3753,7 +3754,8 @@ Game.prototype.doResolveFire = function(){
 }
 
 Game.prototype.hideUI = function(){
-	ui.upperGUI.find(".playerInfoWrapper").hide();
+
+	ui.upperGUI.hide();
 	ui.combatLogWrapper.hide();
 	ui.unitSelector.hide();
 	$(".chatWrapper").hide();
@@ -3764,7 +3766,7 @@ Game.prototype.hideUI = function(){
 
 Game.prototype.showUI = function(width){
 
-	ui.upperGUI.find(".playerInfoWrapper").show();
+	ui.upperGUI.show();
 	ui.unitSelector.show();
 	ui.combatLogWrapper.show();
 	this.setLeftWrapperVisibility();
