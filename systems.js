@@ -1520,7 +1520,7 @@ GravitonSupressor.prototype = Object.create(PrimarySystem.prototype);
 				
 GravitonSupressor.prototype.doBoost = function(){
 	System.prototype.doBoost.call(this);
-	game.getUnit(this.parentId).setSlipAngle();
+	game.getUnit(this.parentId).setMoveSlipAngles();
 	if (this.parentId == aUnit){
 		game.getUnit(this.parentId).resetMoveMode();
 		game.redraw();
@@ -1529,7 +1529,7 @@ GravitonSupressor.prototype.doBoost = function(){
 
 GravitonSupressor.prototype.doUnboost = function(){
 	Engine.prototype.doUnboost.call(this);
-	game.getUnit(this.parentId).setSlipAngle();
+	game.getUnit(this.parentId).setMoveSlipAngles();
 	if (this.parentId == aUnit){
 		game.getUnit(this.parentId).resetMoveMode();
 		game.redraw();
@@ -1538,7 +1538,7 @@ GravitonSupressor.prototype.doUnboost = function(){
 
 GravitonSupressor.prototype.doPower = function(){
 	System.prototype.doPower.call(this);
-	game.getUnit(this.parentId).setSlipAngle();
+	game.getUnit(this.parentId).setMoveSlipAngles();
 	if (this.parentId == aUnit){
 		game.getUnit(this.parentId).resetMoveMode();
 		game.redraw();
@@ -1547,7 +1547,7 @@ GravitonSupressor.prototype.doPower = function(){
 
 GravitonSupressor.prototype.doUnpower = function(){
 	System.prototype.doUnpower.call(this);
-	game.getUnit(this.parentId).setSlipAngle();
+	game.getUnit(this.parentId).setMoveSlipAngles();
 	if (this.parentId == aUnit){
 		game.getUnit(this.parentId).resetMoveMode();
 		game.redraw();

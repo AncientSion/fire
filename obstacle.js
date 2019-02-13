@@ -430,7 +430,7 @@ AsteroidField.prototype.setTrueImage = function(info){
 		ctx.fill();
 
 		ctx.fillStyle = "yellow";
-		ctx.font = "18px Arial";
+		ctx.font = "20px Arial";
 		ctx.textAlign = "center";
 		ctx.fillText(this.getInterference() + "%", 0, -15);
 		ctx.fillText(this.getBaseAttacks()+"x"+this.getAvgDmg(), 0, +14);
@@ -549,12 +549,12 @@ NebulaCloud.prototype.setTrueImage = function(info){
 		ctx.rotate(-this.rota * (Math.PI/180));
 	
 	if (info){
-		ctx.rect(-30, -18, 60, 36);
+		ctx.rect(-30, -20, 60, 36);
 		ctx.fillStyle= "black;"
 		ctx.fill();
 
 		ctx.fillStyle = "yellow";
-		ctx.font = "24px Arial";
+		ctx.font = "28px Arial";
 		ctx.textAlign = "center";
 		ctx.fillText(this.getInterference() + "%", 3, 7)
 	}

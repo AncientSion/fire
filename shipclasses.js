@@ -405,8 +405,6 @@ Ship.prototype.drawSystemArcIndicator = function(){
 	moveCtx.stroke();
 }
 
-
-
 Ship.prototype.setSlipAngle = function(){
 	if (this.faction[0] == "V"){
 		if (this.ship){
@@ -520,17 +518,13 @@ Ship.prototype.drawImpulseUI = function(){
 Ship.prototype.doIssueMove = function(pos, dist){
 	var remDelay = this.getRemDelay();
 
-/*	if (!remDelay && this.actions.length && this.actions[this.actions.length-1].type == "move" && this.actions[this.actions.length-1].turn == game.turn){
-		this.actions[this.actions.length-1].dist += dist;	
-		this.actions[this.actions.length-1].x = pos.x;
-		this.actions[this.actions.length-1].y = pos.y;
-	} else*/ this.actions.push(new Move(-1, this.id, game.turn, "move", 0, dist, pos.x, pos.y, 0, 0, 0, 0, 1, 1, 0));	
+	this.actions.push(new Move(-1, this.id, game.turn, "move", 0, dist, pos.x, pos.y, 0, 0, 0, 0, 1, 1, 0));	
 	
-	this.turnAngles = {}
 	$("#popupWrapper").hide();
 	this.unsetMoveMode();
 	this.setMoveMode();
 	this.doAutoShorten();
+	this.setMoveAngles();
 	game.updateIntercepts(this.id);
 	game.redraw();
 	if (this.actions[this.actions.length-1].type == "move"){
@@ -649,7 +643,7 @@ Ship.prototype.doUndoLastAction = function(pos){
 	if (update){game.updateIntercepts(this.id);}
 	if (setEW){this.getSystemByName("Sensor").setTempEW();}
 	if (game.turnMode){this.switchTurnMode();}
-	this.turnAngles = {};
+	this.setMoveSlipAngles();
 	game.redraw();
 	ui.popupWrapper.hide();
 	game.setCollisionData(this);
@@ -863,6 +857,7 @@ Ship.prototype.issueTurn = function(a){
 	if (!this.getRemSpeed() && this.getRemEP()){this.doAutoShorten();}
 	this.getSystemByName("Sensor").setTempEW();
 	if (!this.getRemSpeed()){this.switchTurnMode();}
+	this.setMoveAngles();
 	game.redraw();
 }
 
@@ -953,6 +948,7 @@ Ship.prototype.setMoveMode = function(){
 	else if (this.focus== 0 && game.phase == 1){return;}
 	//console.log("ding!");
 	game.mode = 1;
+
 	turn.set(this);
 	this.setTurnData();
 	this.setMoveTranslation();
@@ -981,6 +977,7 @@ Ship.prototype.setMoveMode = function(){
 }
 
 Ship.prototype.unsetMoveMode = function(){
+	//console.log("unsetMoveMode");
 	game.mode = 0;
 	$("#vectorDiv").addClass("disabled");
 	$("#impulseGUI").addClass("disabled");
@@ -1471,8 +1468,9 @@ Ship.prototype.drawTrajectory = function(){
 	planCtx.setTransform(1,0,0,1,0,0);
 }
 
-Ship.prototype.setShipSystemMods = function(){
+Ship.prototype.setMoveSlipAngles = function(){
 	this.setSlipAngle();
+	this.setMoveAngles();
 }
 
 Ship.prototype.create = function(){
@@ -1480,7 +1478,7 @@ Ship.prototype.create = function(){
 	this.setUnitState();
 	this.setSubSystemState();
 	this.setStringHitChance();
-	this.setShipSystemMods();
+	this.setMoveSlipAngles();
 }
 
 Ship.prototype.setSubSystemState = function(){
@@ -2091,6 +2089,7 @@ Ship.prototype.getExploSize = function(i){
 }
 
 Ship.prototype.setMoveAngles = function(){
+	//console.log("setMoveAngles");
 	var angle = this.getPlannedHeading();
 	var slipAngle = this.getSlipAngle();	
 	this.moveAngles = {start: addAngle(0 + slipAngle, angle), end: addAngle(360 - slipAngle, angle)};
@@ -2098,9 +2097,6 @@ Ship.prototype.setMoveAngles = function(){
 
 Ship.prototype.drawMoveArea = function(){
 	//console.log("drawMoveArea");
-
-	this.setMoveAngles();
-	//moveCtx.clearRect(0, 0, res.x, res.y);
 
 	var center = this.getPlannedPos();	
 	var rem = this.getRemSpeed();

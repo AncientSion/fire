@@ -1136,7 +1136,7 @@ function Game(data){
 
 	this.initDeploy = function(){
 		this.setCallback("resolveDamageControl");
-		this.setObstacleCam();
+		this.setGlobalCam();
 	}
 
 	this.createCommandTransferEntries = function(){
@@ -1495,7 +1495,7 @@ function Game(data){
 	this.startPhase = function(n){
 		this.setShipDivs();
 		this.phase = n;
-		game.redraw();
+		//game.redraw();
 
 		if (this.phase == -1){
 			$("#phaseInfoDiv").click(function(){
@@ -2733,34 +2733,6 @@ Game.prototype.initDeployIn = function(){
 	window.startTime = then;
 	this.animating = 1;
 	this.animateDeployIn();
-}
-
-Game.prototype.setObstacleCam = function(){
-
-	var data = this.getObstacleMaxPos();
-
-	var endX = (data.minX + data.maxX) / 2;
-	var endY = (data.minY + data.maxY) / 2;
-
-	var min = 0;
-	var maxD = 0;
-	var center = {x: endX, y: endY}
-
-	for (var i = 0; i < this.ships.length; i++){
-		if (!this.ships[i].obstacle){continue;}
-		var d = getDistance(center, this.ships[i].getCameraStartPos());
-		maxD = Math.max(d, maxD);
-	}
-
-	cam.z = Math.max(0.5, 1.5 - (Math.ceil(maxD / 100)/10));
-
-	var shiftX = 0;
-
-	if (ui.reinforceWrapper.is(":visible")){
-		shiftX = 200;
-	}
-
-	cam.setCamFocus({x: endX - shiftX, y: endY}, false);
 }
 
 Game.prototype.setGlobalCam = function(){

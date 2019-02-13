@@ -58,7 +58,7 @@ class AntimatterBlaster extends Particle {
 	public $shots = 1;
 	public $reload = 2;
 	public $integrity = 32;
-	public $powerReq = 4;
+	public $powerReq = 2;
 	public $tracking = 3;
 	public $animColor = "#cc33ff";
 	public $projSize = 4;

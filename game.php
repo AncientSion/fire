@@ -84,19 +84,19 @@
 			<div class="options drawHostileEW">
 				<img src=sysIcons/Sensor.png style="background-color: red">
 			</div>
-			<div class="options drawObstaclesMoves">
+	<!--		<div class="options drawObstaclesMoves">
 				<img src=varIcons/oMoves.png style="background-color: red">
 			</div>
-			<div class="options drawPlans">
+	-->		<div class="options drawPlans">
 				<img src=varIcons/plan.png>
 			</div>
 			<div class="options distMeter">
 				<img src=varIcons/dist.png>
 			</div>
-			<div class="options cheatSheet">
+	<!--		<div class="options cheatSheet">
 				<img src=varIcons/dist.png>
 			</div>
-		</div>
+	-->	</div>
 		<div id="plusImpulse" class="ui disabled">
 			<img src="varIcons/plus.png" style="width: 25px; height: 25px">
 		</div>
