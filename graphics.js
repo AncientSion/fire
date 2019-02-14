@@ -361,7 +361,7 @@ function drawProjectile(weapon, anim){
 	if (anim.n >= anim.m && anim.h){
 		anim.p = 1;
 		anim.n = 0;
-		anim.m = 42;
+		anim.m = game.phaseDelay == 100 ? 10 : 42;
 	}
 }
 

@@ -90,8 +90,8 @@ window.cam = {
 			this.z = Math.min(2, Math.floor( (res.y / 1.4) / fire.dist * 10)/10);
 		}
 		else this.z = 1.5;
-		console.log(a);
-		console.log(this.z);
+		//console.log(a);
+		//console.log(this.z);
 	},
 
 	stopMove: function(){

@@ -28,7 +28,7 @@ function Move(id, unitid, turn, type, forced, dist, x, y, h, f, delay, cost, cos
 	this.t = [0, 0]
 }
 
-function ShotVector(a, b, s, h){
+function ShotVector(o, t, velo, isHit){
 	this.x;
 	this.y;
 	this.nx;
@@ -37,23 +37,23 @@ function ShotVector(a, b, s, h){
 	this.m;
 	this.done = 0;
 	this.f;
-	this.h = h;
+	this.h = isHit;
 	this.p = 0;
 
 	this.setup = function(){
-		this.ox = a.x;
-		this.oy = a.y;
-		this.tx = b.x;
-		this.ty = b.y;
-		this.x = b.x - a.x;
-		this.y = b.y - a.y;
+		this.ox = o.x;
+		this.oy = o.y;
+		this.tx = t.x;
+		this.ty = t.y;
+		this.x = t.x - o.x;
+		this.y = t.y - o.y;
 
-		this.f = getAngleFromTo(a, b);
+		this.f = getAngleFromTo(o, t);
 		
 		this.m = Math.sqrt((Math.pow(this.x, 2) + Math.pow(this.y, 2)));
-		this.nx = this.x/this.m*s;
-		this.ny = this.y/this.m*s;
-		this.m /= s;
+		this.nx = this.x/this.m*velo;
+		this.ny = this.y/this.m*velo;
+		this.m /= velo;
 	}
 	
 	this.setup();

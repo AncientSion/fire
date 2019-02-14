@@ -3341,6 +3341,7 @@ Game.prototype.setGameSpeed = function(){
 Game.prototype.create = function(data){
 
 	this.initUI();
+	this.setGameSpeed();
 	setFPS(90);
 	this.setPhaseInfoDiv();
 	this.setGameInfo();
@@ -3415,7 +3416,6 @@ Game.prototype.create = function(data){
 	this.initOptionsUI();
 	this.initEvents();
 	this.setAllCollisionData();
-	this.setGameSpeed();
 	cam.z = 0.5;
 	cam.setCamFocus({x: 0, y:0}, true);
 	this.startPhase(this.phase);
@@ -4024,7 +4024,7 @@ Game.prototype.handlePostFireMoves = function(){
 }
 
 Game.prototype.handleAllFireOrders = function(){
-	console.log(this.fireOrders);
+	//console.log(this.fireOrders);
 	for (var i = 0; i < this.fireOrders.length; i++){
 		this.fireOrders[i].tr.show();
 

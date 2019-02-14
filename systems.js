@@ -1876,7 +1876,7 @@ function Weapon(system){
 	this.optRange = system.optRange;
 	this.dmgLoss = system.dmgLoss;
 	this.projSize = system.projSize;
-	this.projSpeed = game.phaseDelay == 100 ? system.projSpeed * 4 : system.projSpeed;
+	this.projSpeed = game.phaseDelay == 100 ? system.projSpeed * 3 : system.projSpeed;
 	this.projDelay = system.projDelay;
 	this.amMax =
 	this.loaded;
@@ -2489,7 +2489,6 @@ function Particle(system){
 Particle.prototype = Object.create(Weapon.prototype);
 
 Particle.prototype.getAnimation = function(fire){
-	//if (this.fireMode == "Flash"){return Flash.prototype.getAnimation.call(this, fire);}
 	if (this.fireMode == "ShockWave" && fire.target.ship){return Flash.prototype.getAnimation.call(this, fire);}
 
 	var allAnims = [];
@@ -2708,7 +2707,7 @@ Pulse.prototype.getAnimation = function(fire){
 
 function Beam(system){
 	Weapon.call(this, system);
-	this.rakeTime = system.rakeTime;
+	this.rakeTime = game.phaseDelay == 100 ? system.rakeTime  / 3 : system.rakeTime;
 	this.output = system.rakes;
 	this.beamWidth = system.beamWidth || (this.minDmg+this.maxDmg)/system.rakes/35;
 	this.exploSize = (this.minDmg+this.maxDmg)/system.rakes/30;
