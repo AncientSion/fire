@@ -1539,7 +1539,7 @@ function Game(data){
 			$("#phaseInfoDiv").click(function(){
 				game.draw();
 				$(this).hide();
-				ui.upperGUI.find(".playerInfoWrapper").hide();
+				//ui.upperGUI.find(".playerInfoWrapper").hide();
 				game.resetImageData();
 				game.redraw();
 				game.timeout = setTimeout(function(){
