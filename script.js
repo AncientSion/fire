@@ -345,7 +345,7 @@ function handleScroll(e){
 	var mouseX = e.clientX;
 	var mouseY = e.clientY;
 	// dx & dy are the distance the mouse has moved since
-	// the last mousemove event
+	// the last moumove event
 	var dx = mouseX - cam.sx;
 	var dy = mouseY - cam.sy;
 
@@ -368,16 +368,16 @@ function canvasMouseMove(e){
 
 	window.iterator++;
 	if (window.iterator < 2){return;}
-	else window.iterator = 0;
+	if (cam.scroll){handleScroll(e); return;}
+	window.iterator = 0;
+	game.movePos = false;
 
-	if (cam.scroll){handleScroll(e);}
-
-	var pos = new Point(e.clientX, e.clientY).getOffset();
+	var mousePos = new Point(e.clientX, e.clientY).getOffset();
 	//$("#currentPos").html(pos.x + " / " + pos.y + "____" + cam.o.x + " / " + cam.o.y+ "___" + (pos.x-cam.o.x) + " / " + (pos.y-cam.o.y));
-	var unit = game.getUnitByClick(pos);
+	var unit = game.getUnitByClick(mousePos);
 
 	if (game.flightDeploy && game.mission){
-		game.handleFlightDeployMouseMove(e, game.getUnit(aUnit).getGamePos(), pos, game.getUnit(aUnit).getColor(), game.deploySpeed);
+		game.handleFlightDeployMouseMove(e, game.getUnit(aUnit).getGamePos(), mousePos, game.getUnit(aUnit).getColor(), game.deploySpeed);
 	}
 	else {
 		if (aUnit){
@@ -388,28 +388,28 @@ function canvasMouseMove(e){
 			var	heading = ship.getPlannedHeading();
 
 			if (game.vector){
-				var dist = Math.floor(getDistance(shipLoc, pos));
-				var a = getAngleFromTo(shipLoc, pos);
+				var dist = Math.floor(getDistance(shipLoc, mousePos));
+				var a = getAngleFromTo(shipLoc, mousePos);
 					a = addAngle(heading, a);
 				drawVector(ship, shipLoc, {x: e.clientX, y: e.clientY}, dist, a);
 			}
 
 			if (ship.salvo){}
 			else if (game.sensorMode){
-				sensorEvent(false, ship, shipLoc, heading, Math.floor(getDistance(shipLoc, pos)), addAngle(heading, getAngleFromTo(shipLoc, pos)));
+				sensorEvent(false, ship, shipLoc, heading, Math.floor(getDistance(shipLoc, mousePos)), addAngle(heading, getAngleFromTo(shipLoc, pos)));
 			}
-			else if (game.turnMode){
-				ship.handleTurning(e, shipLoc, heading, pos);
+			else if (game.mode == 2){
+				ship.handleTurning(e, shipLoc, heading, mousePos);
 			}
-			else if (ship.hasWeaponsSelected()){
-				handleWeaponAimEvent(ship, unit, e, pos);
+			else if (game.mode == 3){
+				handleWeaponAimEvent(ship, unit, e, mousePos);
 			}
-			else if (game.phase == 0 || game.phase == 1){
-				handleTurnShortening(ship, e, pos);
+			else if (game.mode == 1 && game.phase < 2){
+				handleMouseMoveVector(ship, shipLoc, heading, e, mousePos);
 			}
 		}
 		else if (game.deploying){
-			game.handleShipDeployMouseMove(e, pos);
+			game.handleShipDeployMouseMove(e, mousePos);
 		}
 		else if (!game.deploying){
 			ui.deployOverlay.hide();
@@ -420,18 +420,77 @@ function canvasMouseMove(e){
 	} else if (game.shortInfo){game.resetHover()}
 }
 
-function handleTurnShortening(unit, e, pos){
-	var remDelay = unit.getRemDelay();
-	if (!remDelay){return;}
+function handleMouseMoveVector(unit, unitLoc, heading, e, mousePos){
+	var c = moveCtx.getImageData(e.clientX, e.clientY, 1, 1).data[3];
+	if (!c){
+		mouseCtx.clearRect(0, 0, res.x, res.y);
+		return;
+	}
+	
+	console.log("d");
 
-	var o = unit.getGamePos()
-	var p = getPointInDir(100, unit.getPlannedFacing()-180, o.x, o.y);
-	var left;
-	var top;
-	var last = unit.getLastTurn();
-	var reset = false;
-	var dist = Math.floor(getDistance(unit.getPlannedPos(), pos));
-	var multi = 0;
+	var dist = getDistance(unitLoc, mousePos);
+	var vector = getPointInDir(dist, heading, unitLoc.x, unitLoc.y);
+
+	mouseCtx.clearRect(0, 0, res.x, res.y);
+	mouseCtx.translate(cam.o.x, cam.o.y);
+	mouseCtx.scale(cam.z, cam.z);
+
+	mouseCtx.lineWidth = 2;
+	mouseCtx.strokeStyle = "yellow";
+
+	mouseCtx.beginPath();
+	mouseCtx.arc(vector.x, vector.y, 10, 0, 2*Math.PI, false);
+	mouseCtx.closePath();
+	mouseCtx.stroke();
+
+	mouseCtx.setTransform(1,0,0,1,0,0);
+
+	game.movePos = vector;
+}
+
+function ahandleMouseMoveVector(unit, unitLoc, heading, e, mousePos){
+	//console.log("handleMouseMoveVector");
+	var a = addAngle(heading, getAngleFromTo(unit.getPlannedPos(), mousePos));
+	var dist = getDistance(unit.getPlannedPos(), mousePos);
+
+	if (dist > unit.getRemSpeed()){return;}
+	if (a < 10 || a > 350){
+		//console.log(a);
+
+		var vector = getPointInDir(dist, heading, unitLoc.x, unitLoc.y);
+
+
+	//	var left = getPointInDir(heading-45, 50, vector.x, vector.y);
+	//	var right = getPointInDir(heading+45, 50, vector.x, vector.y);
+
+		mouseCtx.clearRect(0, 0, res.x, res.y);
+		mouseCtx.translate(cam.o.x, cam.o.y);
+		mouseCtx.scale(cam.z, cam.z);
+
+		mouseCtx.lineWidth = 3;
+		mouseCtx.strokeStyle = "yellow";
+
+		mouseCtx.beginPath();
+		mouseCtx.arc(vector.x, vector.y, 12, 0, 2*Math.PI, false);
+		mouseCtx.closePath();
+		mouseCtx.stroke();
+	/*
+		mouseCtx.beginPath();
+		mouseCtx.arc(left.x, left.y, 10, 0, 2*Math.PI, false);
+		mouseCtx.closePath();
+		mouseCtx.stroke();
+
+		mouseCtx.beginPath();
+		mouseCtx.arc(right.x, right.y, 10, 0, 2*Math.PI, false);
+		mouseCtx.closePath();
+		mouseCtx.stroke();
+	*/
+		mouseCtx.setTransform(1,0,0,1,0,0);
+
+		game.movePos = vector;
+
+	}
 }
 
 function sensorize(ship, pos){
@@ -443,7 +502,6 @@ function sensorize(ship, pos){
 
 function planPhase(e, pos, unit){
 	if (game.deploying){
-		//unit = game.getUnit(); // ship deploy
 		if (game.sensorMode){
 			sensorize(game.deploying, pos);
 		}
@@ -460,20 +518,23 @@ function planPhase(e, pos, unit){
 	}
 	else if (!game.deploying){
 		if (unit){
-			if (game.mode == 1){ //no active weapon but ship active -> MOVE MODE
+			if (game.mode == 2){ // turn mode
+				unit.handleTurnAttempt(pos);
+			}
+			else if (game.mode == 1){ //  PLAN MOVE MODE
 				if (game.sensorMode){
 					sensorize(unit, pos);
 				}
-				else if (game.turnMode){
-					unit.handleTurnAttempt(pos);
+				else {
+					unit.handleMoveAttempt(e, pos);
 				}
-				else if (isInArc(getCompassHeadingOfPoint(unit.getPlannedPos(), pos, 0), unit.moveAngles.start, unit.moveAngles.end)){ //check if clicked to move in movement arc
+			/*	else if (isInArc(getCompassHeadingOfPoint(unit.getPlannedPos(), pos, 0), unit.moveAngles.start, unit.moveAngles.end)){ //check if clicked to move in movement arc
 					var dist = Math.floor(getDistance(unit.getPlannedPos(), pos));
 					if (dist < unit.getRemSpeed()){
 						unit.doIssueMove(pos, dist);
 					}
 				}
-			}
+			*/}
 			else if (unit.canDeploy()){
 				game.enableDeployment(unit.id);
 			}

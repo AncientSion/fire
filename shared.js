@@ -415,7 +415,7 @@ function handleMouseDown(e){
 		}
 	}
 	else if (e.originalEvent.button == 2){
-		if (game.deploying && !game.turnMode){
+		if (game.deploying && !game.mode == 2){
 			ui.reinforceWrapper.find("#reinforceBody").find(".selected").each(function(){
 				if ($(this).data("id") == game.deploying.id){
 					$(this).removeClass("selected");
@@ -433,7 +433,7 @@ function handleMouseDown(e){
 			else clickUnit.switchDiv(e);
 		}
 		else if (unit){
-			if (game.turnMode){
+			if (game.mode == 2){
 				unit.switchTurnMode();
 			} else unit.doUnselect(e);
 		}

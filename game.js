@@ -32,12 +32,12 @@ function Game(data){
 	this.fighters = [];
 	this.unitExploAnims = [];
 	this.shortInfo = false;
-	this.turnMode = 0;
 	this.zIndex = 10;
 	this.sensorMode = 0;
 	this.target = 0;
 	this.deploys = data.deploys;
 	this.callback = ["", 0];
+	this.movePos = false;
 
 	this.animShip = 0;
 	this.animFlight = 0;
@@ -61,7 +61,6 @@ function Game(data){
 
 	this.snapTurn = 0;
 	this.events = [];
-	this.wave = data.wave;
 	this.arcRange = 1200;
 	this.phaseDelay = 500;
 	this.animData = {jump: 30};
@@ -1951,7 +1950,6 @@ function Game(data){
 	this.resetHover = function(){
 		ui.shortInfo.html("").hide();
 		this.shortInfo = false;
-		game.moveArea = 0;
 		game.redraw();
 	}
 
@@ -1994,7 +1992,7 @@ function Game(data){
 
 				if (unit.hasWeaponsSelected()){
 					unit.highlightAllSelectedWeapons();
-					game.mode = 2;
+					game.mode = 3;
 				}
 
 				if (unit.ship || unit.squad){

@@ -90,7 +90,7 @@ Structure.prototype.select = function(){
 	console.log(this);
 	var unit;
 
-	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || this.parentId < 0 || game.turnMode){return;}
+	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || this.parentId < 0 || game.mode == 2){return;}
 	else if (game.turn == 0 || game.turn == 1 && game.phase == -1){return;}
 
 	unit = game.getUnit(this.parentId);
@@ -110,7 +110,7 @@ Structure.prototype.select = function(){
 	this.setSystemBorder();
 
 	if ((unit.ship || unit.squad) && unit.hasWeaponsSelected()){
-		game.mode = 2;
+		game.mode = 3;
 		unit.highlightAllSelectedWeapons();
 	}
 	else {

@@ -1792,7 +1792,7 @@ Sensor.prototype.select = function(e){
 	var selected = false;
 	var unit;
 
-	if (game.turn == 0 || this.destroyed || this.disabled || this.locked || this.parentId != aUnit || aUnit < 0 || game.turnMode){
+	if (game.turn == 0 || this.destroyed || this.disabled || this.locked || this.parentId != aUnit || aUnit < 0 || game.mode == 2){
 		return false;
 	}
 	else if (game.system && game.system != this.id && !this.selected){return false;}
@@ -2045,7 +2045,7 @@ Weapon.prototype.select = function(e){
 	}
 	else if (game.turn == 0){return;}
 	//else if (game.turn == 1 && game.phase == -1){return;}
-	else if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || this.parentId < 0 || game.turnMode){
+	else if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || this.parentId < 0 || game.mode == 2){
 		return false;
 	}
 	else {
@@ -2071,7 +2071,7 @@ Weapon.prototype.select = function(e){
 	this.setSystemBorder();
 
 	if ((unit.ship || unit.squad) && unit.hasWeaponsSelected()){
-		game.mode = 2;
+		game.mode = 3;
 		unit.highlightAllSelectedWeapons();
 	}
 	else {
@@ -3291,7 +3291,7 @@ Launcher.prototype.getEffiency = function(){
 Launcher.prototype.select = function(e){
 	console.log(this);
 
-	if (this.destroyed || this.disabled || this.locked || game.turnMode){return false;}
+	if (this.destroyed || this.disabled || this.locked || game.mode == 2){return false;}
 
 	if (game.turn == 0){
 		if (!this.loadout || game.system && game.system != this.id){return;}
@@ -3332,7 +3332,7 @@ Launcher.prototype.select = function(e){
 	var ship = game.getUnit(parentId);
 
 	if (ship.hasWeaponsSelected()){
-		game.mode = 2;
+		game.mode = 3;
 		ship.highlightAllSelectedWeapons();
 	}
 	else {
@@ -3984,7 +3984,7 @@ Hangar.prototype.select = function(e){
 	var selected = false;
 	var ship = game.getUnit(parentId);
 
-	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || game.turnMode){
+	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || game.mode == 2){
 		return false;
 	}
 	else if (game.turn == 0){

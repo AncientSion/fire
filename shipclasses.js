@@ -43,7 +43,6 @@ function Ship(data){
 	this.slipAngle = data.slipAngle;
 	this.turnAngle = data.turnAngle;
 	this.turnStep = data.turnStep;
-	this.turnMod = 1;
 	this.baseTurnDelay = data.baseTurnDelay;
 	this.baseImpulseCost = data.baseImpulseCost;
 	this.curImp = data.curImp;
@@ -375,15 +374,11 @@ Ship.prototype.getTurnCost = function(){
 	return round(1*this.getImpulseMod(), 2);
 }
 
-Ship.prototype.getTurnMod = function(){
-	return turn.mod || 1;
-}
-
 Ship.prototype.getTurnDelay = function(){
 	if (this.canTurnFreely()){
 		return 0;
 	}
-	return round(this.baseTurnDelay*this.getImpulseMod() / (1+((this.getTurnMod()-1)*3)), 2);
+	return round(this.baseTurnDelay*this.getImpulseMod() / (1+(((turn.mod || 1)-1)*3)), 2);
 }
 
 Ship.prototype.drawSystemArcIndicator = function(){
@@ -515,6 +510,15 @@ Ship.prototype.drawImpulseUI = function(){
 	} else $("#minusImpulse").addClass("disabled");
 }
 
+
+
+Ship.prototype.handleMoveAttempt = function(e, pos){
+	if (!game.movePos){return;}	
+	var dist = Math.floor(getDistance(this.getPlannedPos(), game.movePos));
+	this.doIssueMove(game.movePos, dist);
+}
+
+
 Ship.prototype.doIssueMove = function(pos, dist){
 	var remDelay = this.getRemDelay();
 
@@ -642,7 +646,7 @@ Ship.prototype.doUndoLastAction = function(pos){
 	this.actions.splice(this.actions.length-1, 1);
 	if (update){game.updateIntercepts(this.id);}
 	if (setEW){this.getSystemByName("Sensor").setTempEW();}
-	if (game.turnMode){this.switchTurnMode();}
+	if (game.mode == 2){this.switchTurnMode();}
 	this.setMoveSlipAngles();
 	game.redraw();
 	ui.popupWrapper.hide();
@@ -700,17 +704,16 @@ Ship.prototype.lastActionWasTurn = function(){
 }
 	
 Ship.prototype.switchTurnMode = function(){
-	this.turnMod = 1;
-	if (game.turnMode){
+	if (game.mode == 2){
 		turn.reset();
-		game.turnMode = 0;
+		game.mode = 0;
 		salvoCtx.clearRect(0, 0, res.x, res.y);
 		this.drawEW();
 		mouseCtx.clearRect(0, 0, res.x, res.y);
 		$("#epButton").addClass("disabled");
 	}	
 	else if (!this.hasSystemsSelected()){
-		game.turnMode = 1;
+		game.mode = 2;
 		turn.set(this);
 		$("#epButton").removeClass("disabled");
 	}
@@ -983,7 +986,7 @@ Ship.prototype.unsetMoveMode = function(){
 	$("#impulseGUI").addClass("disabled");
 	$(".turnEle").addClass("disabled");
 	$(".ui").addClass("disabled");
-	if (game.turnMode){this.switchTurnMode();}
+	if (game.mode == 2){this.switchTurnMode();}
 	moveCtx.clearRect(0, 0, res.x, res.y);
 	planCtx.clearRect(0, 0, res.x, res.y);
 	salvoCtx.clearRect(0, 0, res.x, res.y);
@@ -2037,7 +2040,7 @@ Ship.prototype.isPreparingJump = function(){
 }
 
 Ship.prototype.resetMoveMode = function(){
-	var turnMode = game.turnMode;
+	var turnMode = game.mode == 2;
 
 	this.unsetMoveMode();
 	this.setMoveMode();
@@ -2098,6 +2101,9 @@ Ship.prototype.setMoveAngles = function(){
 Ship.prototype.drawMoveArea = function(){
 	//console.log("drawMoveArea");
 
+	this.drawTurnDelayIndicator();
+	return;
+
 	var center = this.getPlannedPos();	
 	var rem = this.getRemSpeed();
 	var p1 = getPointInDir(rem, this.moveAngles.start, center.x, center.y);
@@ -2132,6 +2138,32 @@ Ship.prototype.drawMoveArea = function(){
 	moveCtx.fill();
 	moveCtx.globalAlpha = 1;
 }
+
+
+Ship.prototype.drawMoveArea = function(){
+	var delay = this.getRemDelay();
+	if (!delay){return;}
+
+	var center = this.getPlannedPos();	
+	var rem = this.getRemSpeed();
+	var p1 = getPointInDir(rem, this.moveAngles.start, center.x, center.y);
+	var dist = getDistance( {x: center.x, y: center.y}, p1);
+	
+	var delayRad1 = degreeToRadian(this.moveAngles.start-45);
+	var delayRad2 = degreeToRadian(this.moveAngles.end+45);
+	moveCtx.beginPath();			
+	moveCtx.arc(center.x, center.y, delay, delayRad1, delayRad2, false);
+	moveCtx.closePath();
+	moveCtx.strokeStyle = "yellow";
+	moveCtx.lineWidth = 2
+	moveCtx.stroke();
+	moveCtx.strokeStyle = "black";	
+	moveCtx.arc(center.x, center.y, Math.max(0,delay-3), 0, 2*Math.PI, false);
+	moveCtx.globalCompositeOperation = "destination-out";
+	moveCtx.fill();
+	moveCtx.globalCompositeOperation = "source-over";
+}
+
 
 Ship.prototype.getEngineOutput = function(){
 	var ep = 0;
@@ -4162,7 +4194,7 @@ Ship.prototype.setTurnData = function(){
 		//.find("#turnDelay").html(this.getTurnDelay() + " px").end()
 		.find("#turnMod").html(turn.mod).end()
 
-	if (game.turnMode){
+	if (game.mode == 2){
 		$(ui.turnButton)
 			$("#epButton")
 			.find("#remEP").html(this.getRemEP() + " / " + this.getEffEP()).addClass("green").end()
@@ -4450,18 +4482,28 @@ Ship.prototype.drawDirectionIndicator = function(){
 	var center = this.getPlannedPos();
 	var heading = this.getPlannedHeading();
 	var facing = this.getPlannedFacing();
-	var p = getPointInDir(this.getCurSpeed(), heading, center.x, center.y);
+	var pA = getPointInDir(this.getRemSpeed(), heading, center.x, center.y);
+	var pB = getPointInDir(200, heading, pA.x, pA.y);
 	
+	moveCtx.globalAlpha = 0.25;
+
 	moveCtx.beginPath();			
 	moveCtx.moveTo(center.x, center.y);
-	moveCtx.lineTo(p.x, p.y);
+	moveCtx.lineTo(pA.x, pA.y);
+	moveCtx.closePath();
+	moveCtx.lineWidth = 15;
+	moveCtx.strokeStyle = "white";
+	moveCtx.stroke();
+
+	moveCtx.globalAlpha = 0.5;
+
+	moveCtx.beginPath();		
+	moveCtx.moveTo(pA.x, pA.y);	
+	moveCtx.lineTo(pB.x, pB.y);
 	moveCtx.closePath();
 	moveCtx.lineWidth = 1;
 	moveCtx.strokeStyle = "yellow";
-	moveCtx.globalAlpha = 0.5;
 	moveCtx.stroke();
-	moveCtx.globalAlpha = 1;
-	moveCtx.strokeStyle = "black";
 
 	if (facing != heading){
 		var p = getPointInDir(100, facing, center.x, center.y);
@@ -4471,12 +4513,12 @@ Ship.prototype.drawDirectionIndicator = function(){
 		moveCtx.lineTo(p.x, p.y);
 		moveCtx.closePath();
 		moveCtx.lineWidth = 2;
-		moveCtx.strokeStyle = "white";
-		moveCtx.globalAlpha = 0.5;
+		moveCtx.strokeStyle = "yellow";
 		moveCtx.stroke();
-		moveCtx.globalAlpha = 1;
-		moveCtx.strokeStyle = "black";
 	}
+
+	moveCtx.globalAlpha = 1;
+	moveCtx.strokeStyle = "black";
 }
 
 Ship.prototype.getTurnAngle = function(){
@@ -4503,6 +4545,7 @@ Ship.prototype.getMaxTurnAngle = function(){
 
 Ship.prototype.drawTurnArcs = function(){
 	var turnAngle = this.hasMoved() ? this.getTurnAngle() : this.getMaxTurnAngle();
+	if (!turnAngle){return;}
 	var angle = this.getPlannedHeading();
 	
 	this.turnAngles = {start: addAngle(0 + turnAngle, angle), end: addAngle(360 - turnAngle, angle)};
@@ -4550,7 +4593,7 @@ Ship.prototype.drawDelay = function(){
 		mouseCtx.arc(center.x, center.y, delay, delayRad1, delayRad2, false);
 		mouseCtx.closePath();
 		mouseCtx.strokeStyle = "red";
-		mouseCtx.lineWidth = 3
+		mouseCtx.lineWidth = 3;
 		mouseCtx.stroke();
 		mouseCtx.arc(center.x, center.y, delay, 0, 2*Math.PI, false);
 		mouseCtx.globalCompositeOperation = "destination-out";

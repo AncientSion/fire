@@ -1,7 +1,7 @@
 
-function getPointInDir(dis, angle, oX, oY){
-	var x = Math.round(oX + dis * Math.cos(angle* Math.PI / 180));
-	var y = Math.round(oY + dis * Math.sin(angle* Math.PI / 180));
+function getPointInDir(dist, angle, oX, oY){
+	var x = Math.round(oX + dist * Math.cos(angle* Math.PI / 180));
+	var y = Math.round(oY + dist * Math.sin(angle* Math.PI / 180));
 	return {x:Math.round(x), y:Math.round(y)}; 
 } 
  
