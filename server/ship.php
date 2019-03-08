@@ -218,6 +218,8 @@ class Ship {
 			}
 		}
 		else if ($this->faction == "Vree Conglomerate"){
+			$this->turnAngle = 45;
+			return;
 			//if ($this->ship){
 			//	$this->slipAngle = 20;
 			//}

@@ -396,7 +396,7 @@ function canvasMouseMove(e){
 
 			if (ship.salvo){}
 			else if (game.sensorMode){
-				sensorEvent(false, ship, shipLoc, heading, Math.floor(getDistance(shipLoc, mousePos)), addAngle(heading, getAngleFromTo(shipLoc, pos)));
+				sensorEvent(false, ship, shipLoc, heading, Math.floor(getDistance(shipLoc, mousePos)), addAngle(heading, getAngleFromTo(shipLoc, mousePos)));
 			}
 			else if (game.mode == 2){
 				ship.handleTurning(e, shipLoc, heading, mousePos);
@@ -404,7 +404,7 @@ function canvasMouseMove(e){
 			else if (game.mode == 3){
 				handleWeaponAimEvent(ship, unit, e, mousePos);
 			}
-			else if (game.mode == 1 && game.phase < 2){
+			else if (game.mode == 1 && game.phase < 2 && !game.shortInfo){
 				handleMouseMoveVector(ship, shipLoc, heading, e, mousePos);
 			}
 		}
@@ -421,7 +421,7 @@ function canvasMouseMove(e){
 }
 
 function handleMouseMoveVector(unit, unitLoc, heading, e, mousePos){
-	var c = moveCtx.getImageData(e.clientX, e.clientY, 1, 1).data[3];
+	var c = moveCtx.getImageData(e.clientX, e.clientY, 1, 1).data[3] == 64;
 	if (!c){
 		mouseCtx.clearRect(0, 0, res.x, res.y);
 		return;

@@ -426,7 +426,6 @@
 
 
 	public function doAdvance(){
-		//DBManager::app()->dump();
 		Debug::log("********************* doAdvance for game".$this->gameid." from phase ".static::$phase." to phase ".(static::$phase+1));
 		//return;
 		$time = -microtime(true);
@@ -454,6 +453,7 @@
 			$this->startFiringPhase();
 		}
 		else if (static::$phase == 2){
+			dbManager::app()->dump();
 			$this->handleFiringPhase();
 			$this->startDamageControlPhase();
 		}

@@ -2365,6 +2365,7 @@ Game.prototype.setInterferenceData = function(){
 
 Game.prototype.setCollisionData = function (unit){
 	if (unit.obstacle){return;}
+	if (game.phase == 3){return;}
 	//if (unit.flight || unit.salvo){console.log("ding");}
 	//console.log("___setCollisionData for unit " + unit.id);
 
@@ -4008,11 +4009,7 @@ Game.prototype.getAllUnitExplos = function(){
 }
 
 Game.prototype.handlePostFireMoves = function(){
-	game.fires++;
 	console.log("handlePostFireMoves");
-	if (game.fires == 2){
-		console.log("ERR");
-	}
 
 	this.createLogEntry("-- Fireorder animation completed --");
 
