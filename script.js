@@ -1,4 +1,5 @@
 graphics.preload();
+window.isError = 0;
 
 $(window).on("load", function(){
 	ajax.getGameData(window.gameid, window.userid);
@@ -404,9 +405,9 @@ function canvasMouseMove(e){
 			else if (game.mode == 3){
 				handleWeaponAimEvent(ship, unit, e, mousePos);
 			}
-			else if (game.mode == 1 && game.phase < 2 && !game.shortInfo){
+			else if (game.mode == 1 && game.phase < 2 && !game.shortInfo && (game.available < game.turn || game.available == game.turn && game.phase >= -1)){
 				handleMouseMoveVector(ship, shipLoc, heading, e, mousePos);
-			}
+			}			
 		}
 		else if (game.deploying){
 			game.handleShipDeployMouseMove(e, mousePos);
@@ -426,8 +427,6 @@ function handleMouseMoveVector(unit, unitLoc, heading, e, mousePos){
 		mouseCtx.clearRect(0, 0, res.x, res.y);
 		return;
 	}
-	
-	console.log("d");
 
 	var dist = getDistance(unitLoc, mousePos);
 	var vector = getPointInDir(dist, heading, unitLoc.x, unitLoc.y);
@@ -505,11 +504,11 @@ function planPhase(e, pos, unit){
 		if (game.sensorMode){
 			sensorize(game.deploying, pos);
 		}
-		else if (game.turnMode){
+		else if (game.mode == 2){
 			game.deploying.handleTurnAttempt(pos);
 		}
 		else if (game.deploying.canDeployHere(e, pos)){
-			game.doDeployShip(e, game.deploying, pos);
+			game.doDeployShip(pos);
 		}
 	}
 	else if (game.flightDeploy && game.mission){

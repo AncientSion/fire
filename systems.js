@@ -1738,8 +1738,6 @@ Sensor.prototype.setTempEW = function(){
 	if (ew.angle == -1){w = 180;}
 	else w = Math.min(180, game.const.ew.len * Math.pow(str/ew.dist, game.const.ew.p));
 
-	//drawSensorArc(w, ew.dist, str, loc, facing, ew.angle, this);
-
 	var t = document.createElement("canvas");
 		t.width = ew.dist*2;
 		t.height = ew.dist*2;		
@@ -1827,14 +1825,11 @@ Sensor.prototype.doBoost = function(){
 	if (game.turn == 0){return;}
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	if (this.ew[this.ew.length-1].angle == -1){
-		this.ew[this.ew.length-1].dist = Math.floor(this.ew[this.ew.length-1].dist * 1.1);
+		this.ew[this.ew.length-1].dist = Math.floor(this.ew[this.ew.length-1].dist * 1.15);
 	}
-	//game.sensorMode = 1;
 	this.setTempEW();
 	salvoCtx.clearRect(0, 0, res.x, res.y);
 	this.drawEW();
-	//game.sensorMode = 1;
-
 }
 
 Sensor.prototype.doUnboost = function(){
@@ -1843,13 +1838,11 @@ Sensor.prototype.doUnboost = function(){
 	if (game.turn == 0){return;}
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	if (this.ew[this.ew.length-1].angle == -1){
-		this.ew[this.ew.length-1].dist = Math.floor(this.ew[this.ew.length-1].dist / 1.1);
+		this.ew[this.ew.length-1].dist = Math.floor(this.ew[this.ew.length-1].dist / 1.15);
 	}
-	game.sensorMode = 1;
 	this.setTempEW();
 	salvoCtx.clearRect(0, 0, res.x, res.y);
 	this.drawEW();
-	game.sensorMode = 0;
 }
 
 function Weapon(system){

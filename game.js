@@ -497,16 +497,8 @@ function Game(data){
 		game.checkSalvoOffset(salvo.id);
 	}
 
-	this.doDeployShip = function(e, ship, pos){
-		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].id == ship.id){
-				this.ships[i].doDeploy(pos);
-				return;
-			}
-		}
-
-		this.ships.push(ship);
-		this.ships[this.ships.length-1].doDeploy(pos);
+	this.doDeployShip = function(pos){
+		game.deploying.doDeploy(pos);
 	}
 
 	this.offsetAllSalvo = function(){
@@ -946,7 +938,9 @@ function Game(data){
 
 		for (var i = 0; i < this.reinforcements.length; i++){
 			if (this.reinforcements[i].id == id){
-				this.deploying = this.reinforcements[i];
+				this.ships.push(this.reinforcements[i]);
+
+				this.deploying = this.ships[this.ships.length-1];
 				ui.deployOverlay.css("top", res.y - 100).css("left", 10).show().find("#deployType").html("Deploy unit here");
 				this.setupDeployZone();
 				this.drawDeployZone();
@@ -2546,7 +2540,8 @@ Game.prototype.toggleShowNextObstacleMoves = function(){
 Game.prototype.drawAllEW = function(){
 	if (this.animating || this.sensorMode){return;}
 	for (var i = 0; i < this.ships.length; i++){
-		if (this.ships[i].flight || this.ships[i].salvo || !this.ships[i].deployed){continue;}
+		if (!this.ships[i].userid || this.ships[i].flight || this.ships[i].salvo || !this.ships[i].deployed){continue;}
+		//console.log("dign i " + i);
 		this.ships[i].drawEW();
 	}
 }
@@ -2974,6 +2969,7 @@ Game.prototype.doResolveMovement = function(){
 }
 
 Game.prototype.setCallback = function(name, args){
+	if (name == ""){console.log("setting no name");}
 	console.log("SET " + name);
 	this.callback = [name, args];
 }
@@ -3725,14 +3721,12 @@ Game.prototype.doResolveFire = function(){
 }
 
 Game.prototype.hideUI = function(){
-
 	ui.upperGUI.hide();
 	ui.combatLogWrapper.hide();
 	ui.unitSelector.hide();
 	$(".chatWrapper").hide();
 	$("#leftUnitWrapper").hide();
-	$(".optionsWrapper").hide();
-
+	$(".optionsWrapper").hide
 }
 
 Game.prototype.showUI = function(width){
@@ -4010,6 +4004,13 @@ Game.prototype.getAllUnitExplos = function(){
 
 Game.prototype.handlePostFireMoves = function(){
 	console.log("handlePostFireMoves");
+
+	if (window.isError){
+		throw new Error("double phase end");
+	} else {
+		window.isError = 1;
+		console.log("isError= 1");
+	}
 
 	this.createLogEntry("-- Fireorder animation completed --");
 

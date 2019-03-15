@@ -77,8 +77,8 @@ class HeavyAntimatterCannon extends AntimatterBlaster {
 	public $name = "HeavyAntimatterCannon";
 	public $display = "Heavy Anti-Matter Cannon";
 	public static $prio = 0;
-	public $minDmg = 42;
-	public $maxDmg = 56;
+	public $minDmg = 38;
+	public $maxDmg = 50;
 	public $accDecay = 100;
 	public $shots = 2;
 	public $reload = 3;

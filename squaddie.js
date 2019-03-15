@@ -481,17 +481,6 @@ Squaddie.prototype.getBoostEffect = function(val){
 	return System.prototype.getBoostEffect.call(this, val);
 }
 
-Squaddie.prototype.previewSetup = function(){
-	for (var i = 0; i < this.systems.length; i++){
-		if (this.systems[i].loadout){
-			$(this.systems[i].element).addClass("hasOptions");
-		}
-	}
-}
-
-
-
-
 
 
 

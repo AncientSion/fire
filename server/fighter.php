@@ -168,9 +168,9 @@ class Sitara extends Fighter {
 
 class Nial extends Fighter {
 	public $name = "Nial";
-	public $role = "Advanced Superiority Fighter";
+	public $role = "Adv Superiority Fighter";
 	public $faction = "Minbari Federation";
-	public static $value =  40;
+	public static $value =  50;
 	public $integrity = 30;
 	public $negation = 7;
 	public $baseImpulse = 150;
@@ -194,7 +194,7 @@ class Tishat extends Fighter {
 	public $name = "Tishat";
 	public $role = "Medium Fighter";
 	public $faction = "Minbari Federation";
-	public static $value =  34;
+	public static $value =  36;
 	public $integrity = 28;
 	public $negation = 6;
 	public $baseImpulse = 150;

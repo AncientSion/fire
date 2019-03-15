@@ -211,13 +211,13 @@ class FusionCannon extends Particle {
 	public $name = "FusionCannon";
 	public $display = "Medium Fusion Cannon";
 	public static $prio = 0;
-	public $minDmg = 134;
-	public $maxDmg = 143;
+	public $minDmg = 28;
+	public $maxDmg = 36;
 	public $accDecay = 120;
 	public $shots = 1;
 	public $reload = 2;
 	public $integrity = 40;
-	public $powerReq = 3;
+	public $powerReq = 2;
 	public $tracking = 3;
 
 	public $animColor = "green";

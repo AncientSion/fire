@@ -43,46 +43,46 @@ class DmgCalc {
 		return false;
 	}
 
-	static function moraleCritProcedure($unitid, $systemid, $turn, $new, $effects, $magAdd){
-		Debug::log("moraleCritProcedure $unitid / $systemid, $turn, $new, $magAdd");
-		//Debug::log("moraleCritProcedure $unitid, $systemid, $turn, $new, $magAdd");
+	static function moraleCritProcedure($unitid, $systemid, $turn, $newDmg, $effects, $startMag){
+		Debug::log("moraleCritProcedure $unitid / $systemid, $turn, $newDmg, $startMag");
+		//Debug::log("moraleCritProcedure $unitid, $systemid, $turn, $newDmg, $magAdd");
 
-		if (!sizeof($effects) || !$new || ($new < 0.15 && $unitid)){return;}
-		$failChance = round((1-((1-$new)*(1-$new)))*100);
+		if (!sizeof($effects) || !$newDmg || ($newDmg < 0.1 && $unitid)){return;}
+		$failChance = round((1-((1-$newDmg)*(1-$newDmg)))*100);
 		$chanceRoll = mt_rand(1, 100);
 		$crit = new Crit(0, $unitid, $systemid, $turn, "", 0, 0, 1);
 
+		//Debug::log("failChance $failChance, rolled $chanceRoll");
 		if ($chanceRoll <= $failChance){
 			$crit->notes = "f;";
 			//Debug::log("___opening test FAIL, failChance: ".$failChance.", rolled: ".$chanceRoll);
 		}
 		else {
 			$crit->notes = "p;";
-			$magAdd -= 30;
+			//Debug::log("passed!");
+			return $crit;
+			//$startMag -= 30;
 			//Debug::log("___opening test SUCESS, failChance: ".$failChance.", rolled: ".$chanceRoll);
 		}
 
 		$crit->notes .= $failChance.";".$chanceRoll;
 
-		$magRoll = mt_rand(1, 100);
-		$totalMag = $magRoll + $magAdd;
+		$magRoll = mt_rand(1, 30);
+		$totalMag = $startMag - $magRoll - ($newDmg*100);
 		$crit->notes .= ";".$magRoll.";".$totalMag;
 
-		Debug::log("chance to fail: $failChance, rolled $chanceRoll, magRoll $magRoll, magAdd $magAdd, totalMag $totalMag");
-		if ($totalMag >= $effects[0][1]){
+		Debug::log("chance to fail: $failChance, rolled $chanceRoll --- startMag $startMag, magRoll $magRoll, newDmg $newDmg,totalMag $totalMag");
 
-			for ($i = sizeof($effects)-1; $i >= 0; $i--){
-				if ($totalMag < $effects[$i][1]){continue;}
-		
-				//Debug::log("crit: ".$effects[$i][0]);
+		//if ($totalMag >= $effects[0][1]){return $crit;}
 
-				//($id, $unitid, $systemid, $turn, $type, $duration, $value, $new){
-				$crit->type = $effects[$i][0];
-				$crit->duration = $effects[$i][2];
-				$crit->value = $effects[$i][3];
+		for ($i = sizeof($effects)-1; $i >= 0; $i--){
+			if ($totalMag > $effects[$i][1]){continue;}
 
-				break;
-			}
+			//($id, $unitid, $systemid, $turn, $type, $duration, $value, $newDmg){
+			$crit->type = $effects[$i][0];
+			$crit->duration = $effects[$i][2];
+			$crit->value = $effects[$i][3];
+			break;
 		}
 
 		return $crit;

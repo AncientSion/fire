@@ -322,8 +322,8 @@ else header("Location: index.php");
 					squadron.setStats();
 					squadron.setSubSystemState();
 					squadron.updateImage();
+					squadron.previewSetup();
 					squaddie.fillSelfContainer();
-					squaddie.previewSetup();
 					drawShipPreview();
 
 					squadron.recalcCommandUpgrades();

@@ -107,7 +107,6 @@ Ship.prototype.doRefit = function(){
 	if (this.squad){
 		for (var i = 0; i < this.structures.length; i++){
 			this.structures[i].create();
-			this.structures[i].previewSetup();
 		}
 	}
 	this.createBaseDiv();
@@ -1578,11 +1577,9 @@ Ship.prototype.createMoraleLogEntry = function(){
 		//html += "CLIENT: " + this.getRecentMoraleCheckDamage() + " %</br>";
 	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>";
 		html += this.getLogTitleSpan() + " lost " + this.getRecentMoraleCheckDamage() + "% of its remaining health, causing a morale check.</br>";
-	//	html += "Initial chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] + " - ";
-
-	//	html += "<span class='yellow'>" + ((type == "p") ? " Passed ! (-30 on final severity)" : " Failed !") +"</span></br>";
-
-	//	html +=	"The unit rolled <span class='yellow'>" + numbers[2] + "</span> for effect, in addition to its existing total penalties of <span class='yellow'>" + (numbers[3]-numbers[2]) + "</span> for a total of <span class='yellow'> " + numbers[3] +".</span></br>";
+	//html += "Initial chance to fail: " + numbers[0] + "%, rolled: " + numbers[1] + " - ";
+	//html += "<span class='yellow'>" + ((type == "p") ? " Passed ! (-30 on final severity)" : " Failed !") +"</span></br>";
+	//html +=	"The unit rolled <span class='yellow'>" + numbers[2] + "</span> for effect, in addition to its existing total penalties of <span class='yellow'>" + (numbers[3]-numbers[2]) + "</span> for a total of <span class='yellow'> " + numbers[3] +".</span></br>";
 
 	var effect = 0;
 	if (this.actions.length && this.actions[this.actions.length-1].type == "jumpOut"){
@@ -2328,7 +2325,8 @@ Ship.prototype.showUnitMoraleDiv = function(e){
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 12)))
 			.append($("<tr>")
-				.append($("<td>").attr("colSpan", 2).html("Morale test triggered if damaged for more than 15% of remaining HP.</br>Rolls D100, adds 100, subtracts morale.")))
+			//	.append($("<td>").attr("colSpan", 2).html("Morale test triggered if damaged for more than 15% of remaining HP.</br>Rolls D100, adds 100, subtracts morale.")))
+				.append($("<td>").attr("colSpan", 2).html("Morale test if damaged > 10 % in a turn.</br>Current Morale - D30 - damage suffered.")))
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
 			.append($("<tr>")
@@ -3268,7 +3266,6 @@ Ship.prototype.previewSetup = function(){
 		}
 	}
 
-	if (!this.ship){return;}
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (this.structures[i].systems[j].loadout){
@@ -3276,6 +3273,10 @@ Ship.prototype.previewSetup = function(){
 			}
 		}
 	}
+	
+	if (this.squad && !this.structures.length){
+		$(this.element).find(".coreContainer .system .outputMask").hide();
+	} else $(this.element).find(".coreContainer .system .outputMask").show();
 }
 
 Ship.prototype.updateDiv = function(){

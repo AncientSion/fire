@@ -83,10 +83,10 @@ class Ship {
 
 	public $critEffects = array( // type, min%, dura, effect
 	//	array("Rout", 10, -2, 0.00),
-		array("Morale", 30, -2, -5.00),
-		array("Morale", 60, -2, -15.00),
-		array("Morale", 100, -2, -25.00),
-		array("Rout", 150, -2, 0.00),
+		array("Morale", 70, -2, -5.00),
+		array("Morale", 45, -2, -10.00),
+		array("Morale", 15, -2, -15.00),
+		array("Rout", -30, -2, 0.00),
 	);
 
 	function __construct($data){
@@ -819,7 +819,7 @@ class Ship {
 		$multi = 0;
 
 		if ($this->destroyed){
-			$multi = -100;
+			$multi = -125;
 		}
 		else if ($this->isReinforcing($turn, $phase)){
 			$multi = 50;
@@ -1275,7 +1275,7 @@ class Ship {
 		//Debug::log("doTestMorale ".get_class($this)."# ".$this->id." remMorale: ".$this->morale->rem." #".$this->id.", newRel: ".$dmg->rel);
 
 		if (!$dmg->rel){return;}
-		$crit = DmgCalc::moraleCritProcedure($this->id, 2, $turn, $dmg->rel, $this->critEffects, 100 - $this->morale->rem);
+		$crit = DmgCalc::moraleCritProcedure($this->id, 2, $turn, $dmg->rel, $this->critEffects, $this->morale->rem);
 		if (!$crit){return;}
 
 		$this->notes = $crit->notes;
