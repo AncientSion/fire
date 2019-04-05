@@ -4099,7 +4099,7 @@ Hangar.prototype.showHangarLaunchControl = function(){
 	for (var i = 0; i < this.loads.length; i++){
 		table
 			.append($("<tr>")
-				.mousemove(function(e){e.stopPropagation()})
+				//.mousemove(function(e){e.stopPropagation()})
 				.append($("<td>")
 					.append($("<div>").addClass("yellow").html(this.loads[i].name))
 					.append($("<div>").addClass("yellow").html(this.loads[i].display))
@@ -4117,6 +4117,7 @@ Hangar.prototype.showHangarLaunchControl = function(){
 						e.preventDefault(); e.stopPropagation();
 						game.getUnit(aUnit).getSystem(id).alterFlight(this, true);
 					})
+					.mousemove(function(e){e.stopPropagation();})
 				))
 				.append($("<td>")
 					.append($("<img>").addClass("size30").attr("src", "varIcons/minus.png").data("name", this.loads[i].name).data("val", -1)
@@ -4128,6 +4129,7 @@ Hangar.prototype.showHangarLaunchControl = function(){
 						e.preventDefault(); e.stopPropagation();
 						game.getUnit(aUnit).getSystem(id).alterFlight(this, true);
 					})
+					.mousemove(function(e){e.stopPropagation();})
 				))
 				.append($("<td>").html(this.loads[i].launch).attr("id", this.loads[i].name + "Amount")));
 	}
@@ -4177,7 +4179,7 @@ Hangar.prototype.getMission = function(){
 }
 
 Hangar.prototype.alterFlight = function(ele, max){
-	if (game.phase >= 0 || !this.canFire()){return false}
+	if (game.phase >= 0 || game.turn == 1 && !this.canFire()){return false}
 	var name = $(ele).data("name");
 	var value = $(ele).data("val");
 	var maxLaunchMass = this.getOutput();
@@ -4203,7 +4205,7 @@ Hangar.prototype.alterFlight = function(ele, max){
 			this.loads[i].launch += Math.max(0, Math.min(this.loads[index].amount - this.loads[index].launch, Math.floor(capacityMass / this.loads[index].mass)));
 		}
 		else {
-			this.loads[i].launch += Math.max(0, Math.min(1, Math.floor(capacityMass / this.loads[index].mass)));
+			this.loads[i].launch += Math.max(0, Math.min(Math.min(this.loads[index].amount, 1), Math.floor(capacityMass / this.loads[index].mass)));
 		}
 	}
 

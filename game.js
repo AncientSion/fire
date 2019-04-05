@@ -1532,7 +1532,6 @@ function Game(data){
 			$("#phaseInfoDiv").click(function(){
 				game.draw();
 				$(this).hide();
-				//ui.upperGUI.find(".playerInfoWrapper").hide();
 				game.resetImageData();
 				game.redraw();
 				game.timeout = setTimeout(function(){
@@ -2994,7 +2993,7 @@ Game.prototype.setPhaseInfoDiv = function(){
 }
 
 Game.prototype.setGameInfo = function(){
-	$("#upperGUI").find(".overview").find("tbody")
+	$("#gameOverview").find(".overview").find("tbody")
 		.append($("<tr>")
 			.append($("<td>").html(this.turn))
 			.append($("<td>").html(getPhaseString(this.phase)))
@@ -3003,22 +3002,17 @@ Game.prototype.setGameInfo = function(){
 
 Game.prototype.setFocusInfo = function(){
 	for (let i = 0; i < this.playerstatus.length; i++){
-		var ele = $("#upperGUI .playerInfo .focusInfo" + this.playerstatus[i].userid);
+		var ele = $(".playerInfo.userId" + this.playerstatus[i].userid);
 
 		if (game.turn == 1 && game.phase == -1 && this.playerstatus[i].userid != this.userid){
-			ele.find(".focusIncome").html("Unknown"); continue;
+			ele.find(".focusIncome").html("Unknown").end().find(".focusSpend").html(0); continue;
 		}
 
 		var html = "<span class='yellow'>" + this.getUserCurFocus(i) + "</span> + " + this.getUserFocusGain(i) + " / turn";
 
 		ele
-			.hover(
-				function(e){game.showFocusInfo(e, $(this).parent().data("userid"));},
-				function(){game.hideFocusInfo();}
-			)
 			.find(".focusIncome")
 				.html(html)
-				.data("userid", this.playerstatus[i].userid)
 			.end()
 			.find(".focusSpend")
 				.html("(0 used)");
@@ -3071,6 +3065,8 @@ Game.prototype.getUserMaxFocus = function(i){
 
 Game.prototype.showFleetMorale = function(e, userid){
 
+	if (game.turn == 1 && game.phase == -1 && userid != this.userid){return;}
+
 	var i;
 	for (i = 0; i < this.playerstatus.length; i++){
 		if (this.playerstatus[i].userid == userid){break;}
@@ -3080,7 +3076,7 @@ Game.prototype.showFleetMorale = function(e, userid){
 		.append($("<tr>").append($("<th>").html("Fleet Morale Overview - " + this.playerstatus[i].username).attr("colSpan", 2)))
 		.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 10)))
 		.append($("<tr>")
-			.append($("<td>").html("Initial Morale / " + this.playerstatus[i].morale))
+			.append($("<td>").html("Initial Morale (" + this.playerstatus[i].morale + ") "))
 			.append($("<td>").css("width", 40).html(this.playerstatus[i].globals[0].value))
 		)
 
@@ -3109,7 +3105,7 @@ Game.prototype.showFleetMorale = function(e, userid){
 	.append($("<tr>")
 		.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 10))))
 	.append($("<tr>")
-		.append($("<td>").html("Remaining Morale"))
+		.append($("<td>").html("Current Morale"))
 		.append($("<td>").addClass("yellow").html(this.playerstatus[i].globals.map(x => x.value).reduce((l,r) => l+r, 0))))
 	.append($("<tr>")
 		.append($("<td>").attr("colSpan", 2).css("height", 12)))
@@ -3138,6 +3134,9 @@ Game.prototype.hideFleetMorale = function(){
 }
 
 Game.prototype.showFocusInfo = function(e, userid){
+
+	if (game.turn == 1 && game.phase == -1 && userid != this.userid){return;}
+
 	var i;
 	for (i = 0; i < this.playerstatus.length; i++){
 		if (this.playerstatus[i].userid == userid){break;}
@@ -3206,7 +3205,7 @@ Game.prototype.getTotalFocusSpending = function(){
 }
 
 Game.prototype.setFocusSpendingInfo = function(userid){
-	$("#upperGUI .playerInfo .focusInfo" + userid + " .focusSpend").html("(" + this.getTotalFocusSpending() + " used)");
+	$(".playerInfo.userId" + userid + " .focusSpend").html("(" + this.getTotalFocusSpending() + " used)");
 }
 
 Game.prototype.getPlayerStatus = function(userid){
@@ -3221,35 +3220,56 @@ Game.prototype.getPlayerStatus = function(userid){
 }
 
 Game.prototype.addPlayerInfo = function(){
-	for (let i = 0; i < this.playerstatus.length; i++){
-		var start = this.playerstatus[i].globals[0].value;
-		for (let j = 1; j < this.playerstatus[i].globals.length; j++){
-			if (this.playerstatus[i].globals[j].type == "Morale"){
-				start += this.playerstatus[i].globals[j].value;
-			}
-		}
-		//var reduce = this.playerstatus[i].globals.map(x => x.value).reduce((l,r) => l+r, 0)
 
+	var tables = [];
 
-		var playerInfo = $("<div>").addClass("playerInfo").data("userid", this.playerstatus[i].userid)
-			playerInfo.append($("<div>").addClass("name").html(this.playerstatus[i].username).addClass((this.playerstatus[i].userid == game.userid) ? "green" : "red")) //header
-			playerInfo.append($("<div>") // morale
-				.addClass("fleetMorale")
-				.append($("<div>").addClass("fleetMorale" + this.playerstatus[i].userid).html(round(start)))
-				.hover(
-					function(e){game.showFleetMorale(e, $(this).parent().data("userid"))},
-					function(){game.hideFleetMorale()}
+	for (var i = 0; i < this.playerstatus.length; i++){
+		var ele = $("<div>")
+			.addClass("playerInfo").addClass("userId" + this.playerstatus[i].userid)
+			.data("userid", this.playerstatus[i].userid)
+			.append($("<table>")
+				.append($("<tr>")
+					.append($("<td>").html(this.playerstatus[i].username).addClass(this.playerstatus[i].userid == this.userid ? "friendly" : "hostile"))
+				)
+				.append($("<tr>")
+					.append($("<td>")
+						.html(game.turn == 1 && game.phase == -1 && this.playerstatus[i].userid != this.userid ? "Unknown" : this.playerstatus[i].globals[0].value)
+						.hover(
+							function(e){game.showFleetMorale(e, $(this).closest("div").data("userid"))},
+							function(){game.hideFleetMorale();}
+						)
+					)
+				)
+				.append($("<tr>")
+					.append($("<td>").addClass("focusIncome"))
+					.hover(
+						function(e){game.showFocusInfo(e, $(this).closest("div").data("userid"))},
+						function(){game.hideFocusInfo();}
+					)
+				)
+				.append($("<tr>")
+					.append($("<td>").addClass("focusSpend"))
 				)
 			)
 
-			playerInfo.append($("<div>")
-				.addClass("focusInfo" + this.playerstatus[i].userid)
-				.append($("<div>")
-					.addClass("focusIncome"))
-				.append($("<div>")
-					.addClass("focusSpend")))
-			$(".playerInfoWrapper").append(playerInfo);
+			tables.push(ele);
 	}
+
+	$("#playerStats").append(tables[0]);
+
+	var ele = $("<div>")
+		.addClass("playerInfo")
+		.append($("<table>")
+			.append($("<tr>").append($("<td>").css("color", "black").html("-")))
+			.append($("<tr>").append($("<td>").html("Morale")))
+			.append($("<tr>").append($("<td>").html("Focus")))
+			.append($("<tr>").append($("<td>").css("color", "black").html("-")))
+		)
+
+	$("#playerStats").append(ele);
+
+	$("#playerStats").append(tables[1]);
+
 
 	this.setFocusInfo();
 }
@@ -3304,11 +3324,11 @@ Game.prototype.setConfirmInfo = function(){
 	}
 
 	
-	$("#upperGUI").find(".overview").find("tbody")
+	$("#gameOverview").find(".overview").find("tbody")
 	.append($("<tr>").append(td));
 
 	if (this.phase == 3 && this.getPlayerStatus().status == "waiting"){
-		$("#upperGUI").find(".overview").find("tbody")
+		$("#gameOverview").find(".overview").find("tbody")
 		.append($("<tr>").append($("<td>").css("height", 5)))
 		.append($("<tr>")
 			.append($("<td>").attr("colSpan", 3)
@@ -3721,9 +3741,10 @@ Game.prototype.doResolveFire = function(){
 }
 
 Game.prototype.hideUI = function(){
-	ui.upperGUI.hide();
+	ui.gameOverview.hide();
 	ui.combatLogWrapper.hide();
 	ui.unitSelector.hide();
+	$("#playerStats").hide();
 	$(".chatWrapper").hide();
 	$("#leftUnitWrapper").hide();
 	$(".optionsWrapper").hide
@@ -3731,10 +3752,11 @@ Game.prototype.hideUI = function(){
 
 Game.prototype.showUI = function(width){
 
-	ui.upperGUI.show();
+	ui.gameOverview.show();
 	ui.unitSelector.show();
 	ui.combatLogWrapper.show();
 	this.setLeftWrapperVisibility();
+	$("#playerStats").show();
 	$(".chatWrapper").show();
 	$(".optionsWrapper").show();
 
@@ -4596,7 +4618,8 @@ Game.prototype.initUI = function(){
 
 	ui.combatLogWrapper.drag();
 
-	$("#upperGUI").removeClass("disabled")
+	$("#gameOverview").removeClass("disabled")
+	$("#playerStats").removeClass("disabled")
 	$("#canvasDiv").removeClass("disabled")
 
 	ui.deployOverlay.hide();

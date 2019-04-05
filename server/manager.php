@@ -439,6 +439,7 @@
 			$this->startMovementPhase();
 		}
 		else if (static::$phase == 0){
+			DBManager::app()->dump();
 			$this->handleBaseMovePhase();
 			if ($this->hasFocusUnits()){
 				$this->startFocusMovePhase();
@@ -453,7 +454,7 @@
 			$this->startFiringPhase();
 		}
 		else if (static::$phase == 2){
-			dbManager::app()->dump();
+			DBManager::app()->dump();
 			$this->handleFiringPhase();
 			$this->startDamageControlPhase();
 		}

@@ -211,7 +211,7 @@
 		<div id="doShorten" class="ui disabled">
 			<div></div>
 		</div>
-		<div id="upperGUI" class="disabled">
+		<div id="gameOverview" class="disabled">
 			<table class="overview">
 				<thead>
 					<tr>
@@ -228,9 +228,11 @@
 				</thead>
 				<tbody></tbody>
 			</table>
-			<div class="playerInfoWrapper">
-			</div>
 		</div>
+
+		<div id="playerStats" class="disabled">
+		</div>
+
 
 		<div id="unitSelector" class="disabled">
 		</div>

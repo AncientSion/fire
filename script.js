@@ -214,7 +214,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 
 			var jamming = target.hasPassiveJamming();
 		
-			if (jamming){ui.targetDatatC.html(target.getJammingString());}
+			if (jamming){ui.targetDataC.html(target.getJammingString());}
 		}
 	}
 	else {
@@ -405,7 +405,7 @@ function canvasMouseMove(e){
 			else if (game.mode == 3){
 				handleWeaponAimEvent(ship, unit, e, mousePos);
 			}
-			else if (game.mode == 1 && game.phase < 2 && !game.shortInfo && (game.available < game.turn || game.available == game.turn && game.phase >= -1)){
+			else if (game.mode == 1 && game.phase < 2 && !game.shortInfo && (ship.available < game.turn || ship.available == game.turn && game.phase >= -1)){
 				handleMouseMoveVector(ship, shipLoc, heading, e, mousePos);
 			}			
 		}

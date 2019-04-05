@@ -1558,7 +1558,7 @@ tr.rowBorderBottom {
 	position: absolute;
 }
 
-#upperGUI {
+#gameOverview, #playerStats {
 	display: inline-block;
 	position: absolute;
 	z-index: 8;
@@ -1570,7 +1570,7 @@ tr.rowBorderBottom {
 	border-radius: 5px;
 }
 
-#upperGUI.disabled{
+#gameOverview.disabled{
 	display: none;
 }
 
@@ -1656,30 +1656,34 @@ tr.rowBorderBottom {
 	font-size: 15px;
 }
 
-.playerInfoWrapper {
-	width: 100%;
-	display: inline-block;
-}
-
-.playerInfo div {
-	text-align: center;
-	width: 100%;
-}
-
-.playerInfo .name {
-	font-size: 16px;
+#playerStats {
+	width: auto;
+	top: 81px;
 }
 
 .playerInfo {
-	width: 48%;
+	width: 100px;
+	display: inline-block;
 }
 
-.playerInfo:first-child {
-	float: left;
+.playerInfo:nth-child(2){
+	width: unset;
+	display: inline-block;
 }
 
-.playerInfo:last-child {
-	float: right;
+.playerInfo:nth-child(2) table {
+	width: unset;
+	border-left: 1px solid white;
+	border-right: 1px solid white;
+}
+
+.playerInfo table {
+	width: 95px;
+	margin: auto;
+}
+
+.playerInfo table tr:nth-child(1) td {
+	font-size: 14px;
 }
 
 .overview td {

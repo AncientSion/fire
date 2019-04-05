@@ -38,7 +38,7 @@ CREATE TABLE `actions` (
   `costmod` float DEFAULT NULL,
   `resolved` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,7 +47,7 @@ CREATE TABLE `actions` (
 
 LOCK TABLES `actions` WRITE;
 /*!40000 ALTER TABLE `actions` DISABLE KEYS */;
-INSERT INTO `actions` VALUES (1,2,1,'deploy',0,0,-516,-247,6.34,6.34,0,0,1,0),(2,1,1,'deploy',0,0,-553,133,5.97,5.97,0,0,1,0),(3,4,1,'deploy',0,0,-497,-607,0.00,0.00,0,0,1,0),(4,3,1,'deploy',0,0,-437,516,0.00,0.00,0,0,1,0);
+INSERT INTO `actions` VALUES (1,2,1,'deploy',0,0,-516,-247,6.34,6.34,0,0,1,1),(2,1,1,'deploy',0,0,-553,133,5.97,5.97,0,0,1,1),(3,4,1,'deploy',0,0,-497,-607,0.00,0.00,0,0,1,1),(4,3,1,'deploy',0,0,-437,516,0.00,0.00,0,0,1,1),(5,5,1,'deploy',0,0,496,313,197.23,197.23,0,0,1,1),(6,7,1,'deploy',0,0,573,-31,180.00,180.00,0,0,1,1),(7,6,1,'deploy',0,0,437,426,180.00,180.00,0,0,1,1),(8,4,1,'jumpIn',0,22,-487,-587,7.00,7.00,0,0,0,1),(9,3,1,'jumpIn',0,105,-459,619,12.00,12.00,0,0,0,1),(10,2,1,'jumpIn',0,55,-466,-223,-18.00,-18.00,0,0,0,1),(11,1,1,'jumpIn',0,81,-505,198,-18.00,-18.00,0,0,0,1),(12,7,1,'jumpIn',0,87,518,-99,3.00,3.00,0,0,0,1),(13,6,1,'jumpIn',0,31,443,456,-27.00,-27.00,0,0,0,1),(14,5,1,'jumpIn',0,13,495,300,-10.00,-10.00,0,0,0,1),(15,2,1,'turn',0,0,-466,-223,45.00,45.00,45,113,1,1),(16,2,1,'move',0,155,-317,-182,0.00,0.00,0,0,1,1),(17,2,1,'turn',0,0,-317,-182,18.35,18.35,38,0,1,1),(18,1,1,'turn',0,0,-505,198,34.32,34.32,35,86,1,1),(19,1,1,'move',0,155,-350,210,0.00,0.00,0,0,1,1),(20,4,1,'turn',0,0,-487,-587,-13.65,-13.65,14,37,1,1),(21,4,1,'move',0,155,-332,-586,0.00,0.00,0,0,1,1),(22,3,1,'turn',0,0,-459,619,-45.00,-45.00,45,54,1,1),(23,3,1,'move',0,185,-286,553,0.00,0.00,0,0,1,1),(24,5,1,'speed',0,-1,495,300,0.00,0.00,30,0,1,1),(25,5,1,'turn',0,0,495,300,16.76,16.76,15,54,1,1),(26,5,1,'move',0,123,376,270,0.00,0.00,0,0,1,1),(27,7,1,'turn',0,0,518,-99,-32.31,-32.31,33,39,1,1),(28,7,1,'move',0,185,352,-17,0.00,0.00,0,0,1,1),(29,6,1,'turn',0,0,443,456,43.65,43.65,44,53,1,1),(30,6,1,'move',0,185,261,489,0.00,0.00,0,0,1,1);
 /*!40000 ALTER TABLE `actions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -139,7 +139,7 @@ CREATE TABLE `fireorders` (
   `hits` int(3) NOT NULL DEFAULT '0',
   `resolved` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,6 +148,7 @@ CREATE TABLE `fireorders` (
 
 LOCK TABLES `fireorders` WRITE;
 /*!40000 ALTER TABLE `fireorders` DISABLE KEYS */;
+INSERT INTO `fireorders` VALUES (1,1,1,5,2,-317,-179,9,0,0,'',0,0),(2,1,1,5,2,-312,-176,16,0,0,'',0,0),(3,1,1,5,2,-312,-176,17,0,0,'',0,0),(4,1,1,5,2,-312,-176,33,0,0,'',0,0),(5,1,1,5,2,-312,-176,34,0,0,'',0,0);
 /*!40000 ALTER TABLE `fireorders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -184,7 +185,7 @@ CREATE TABLE `games` (
 
 LOCK TABLES `games` WRITE;
 /*!40000 ALTER TABLE `games` DISABLE KEYS */;
-INSERT INTO `games` VALUES (1,'myGame','active',1,-1,3500,1500,11,3,10,10,5,3,75,150);
+INSERT INTO `games` VALUES (1,'myGame','active',1,2,3500,1500,11,3,10,10,5,3,75,150);
 /*!40000 ALTER TABLE `games` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -306,7 +307,7 @@ CREATE TABLE `playerstatus` (
 
 LOCK TABLES `playerstatus` WRITE;
 /*!40000 ALTER TABLE `playerstatus` DISABLE KEYS */;
-INSERT INTO `playerstatus` VALUES (1,1,1,1,-1,'Vree Conglomerate',2923,1513,1616,404,404,'ready'),(2,2,1,1,-1,'Minbari Federation',3119,1521,2292,573,573,'waiting');
+INSERT INTO `playerstatus` VALUES (1,1,1,1,2,'Vree Conglomerate',2923,1513,1616,404,404,'ready'),(2,2,1,1,2,'Minbari Federation',3119,1521,2292,573,573,'ready');
 /*!40000 ALTER TABLE `playerstatus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -325,7 +326,7 @@ CREATE TABLE `powers` (
   `type` varchar(10) DEFAULT NULL,
   `cost` int(3) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -334,7 +335,7 @@ CREATE TABLE `powers` (
 
 LOCK TABLES `powers` WRITE;
 /*!40000 ALTER TABLE `powers` DISABLE KEYS */;
-INSERT INTO `powers` VALUES (1,2,9,1,'0',0),(2,2,13,1,'0',0),(3,2,17,1,'0',0),(4,2,21,1,'0',0),(5,2,4,1,'1',5),(6,1,9,1,'0',0),(7,1,13,1,'0',0),(8,1,17,1,'0',0),(9,1,21,1,'0',0),(10,1,4,1,'1',5);
+INSERT INTO `powers` VALUES (1,2,9,1,'0',0),(2,2,13,1,'0',0),(3,2,17,1,'0',0),(4,2,21,1,'0',0),(5,2,4,1,'1',5),(6,1,9,1,'0',0),(7,1,13,1,'0',0),(8,1,17,1,'0',0),(9,1,21,1,'0',0),(10,1,4,1,'1',5),(11,5,8,1,'0',0),(12,5,10,1,'0',0),(13,5,11,1,'0',0),(14,5,12,1,'0',0),(15,5,13,1,'0',0),(16,5,14,1,'0',0),(17,5,17,1,'1',3),(18,5,18,1,'0',0),(19,5,19,1,'0',0),(20,5,20,1,'0',0),(21,5,21,1,'0',0),(22,5,22,1,'0',0),(23,5,23,1,'0',0),(24,5,25,1,'0',0),(25,5,26,1,'0',0),(26,5,27,1,'0',0),(27,5,28,1,'0',0),(28,5,33,1,'1',3),(29,5,35,1,'0',0),(30,5,36,1,'0',0),(31,5,37,1,'0',0),(32,5,38,1,'0',0),(33,5,39,1,'0',0),(34,5,40,1,'0',0),(35,5,4,1,'1',7),(36,5,4,1,'1',10),(37,5,4,1,'1',12),(38,5,4,1,'1',14);
 /*!40000 ALTER TABLE `powers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -354,7 +355,7 @@ CREATE TABLE `sensors` (
   `dist` int(4) DEFAULT NULL,
   `type` int(3) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -363,7 +364,7 @@ CREATE TABLE `sensors` (
 
 LOCK TABLES `sensors` WRITE;
 /*!40000 ALTER TABLE `sensors` DISABLE KEYS */;
-INSERT INTO `sensors` VALUES (1,2,4,1,0.47,792,1),(2,1,4,1,0.73,831,1),(3,4,4,1,-1.00,102,0),(4,3,3,1,-1.00,66,1);
+INSERT INTO `sensors` VALUES (1,2,4,1,0.47,792,1),(2,1,4,1,0.73,831,1),(3,4,4,1,-1.00,102,0),(4,3,3,1,-1.00,66,1),(5,5,4,1,0.14,991,0),(6,7,3,1,-1.00,88,0),(7,6,3,1,-1.00,90,0);
 /*!40000 ALTER TABLE `sensors` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -466,7 +467,7 @@ CREATE TABLE `units` (
 
 LOCK TABLES `units` WRITE;
 /*!40000 ALTER TABLE `units` DISABLE KEYS */;
-INSERT INTO `units` VALUES (1,1,1,4,'Xill','A',775,775,'bought',0,1,0,0,0,0,0,0.00,0.00,0,0,0,0,0,0,0,0,''),(2,1,1,4,'Xill','B',903,903,'bought',1,1,0,0,0,0,0,0.00,0.00,0,0,0,0,0,0,0,0,''),(3,1,1,3,'Squadron','C',645,645,'bought',0,1,0,0,0,0,0,0.00,0.00,0,0,0,0,0,0,0,0,''),(4,1,1,4,'Zitomm','Carrier',1164,600,'bought',0,1,0,0,0,0,0,0.00,0.00,0,0,0,0,0,0,0,0,''),(5,1,2,4,'Sharlin','',2036,1676,'bought',1,1,0,0,0,0,0,0.00,0.00,0,0,0,0,0,0,0,0,''),(6,1,2,3,'Squadron','',623,623,'bought',0,1,0,0,0,0,0,0.00,0.00,0,0,0,0,0,0,0,0,''),(7,1,2,3,'Squadron','',820,820,'bought',0,1,0,0,0,0,0,0.00,0.00,0,0,0,0,0,0,0,0,''),(8,1,0,0,'NebulaCloud','',0,0,'deployed',0,0,0,0,0,412,57,0.00,0.00,0,0,0,0,0,1,-1,0,'145;24;221;1'),(9,1,0,0,'NebulaCloud','',0,0,'deployed',0,0,0,0,0,202,-26,0.00,0.00,0,0,0,0,0,1,-1,0,'105;24;135;6'),(10,1,0,0,'NebulaCloud','',0,0,'deployed',0,0,0,0,0,-143,351,0.00,0.00,0,0,0,0,0,1,-1,0,'82;21;66;3'),(11,1,0,0,'AsteroidField','',0,0,'deployed',0,0,0,0,0,-634,186,0.00,0.00,0,0,0,0,0,1,-1,0,'0;34;53;53;265;1;26'),(12,1,0,0,'AsteroidField','',0,0,'deployed',0,0,0,0,0,131,294,0.00,0.00,0,0,0,0,0,1,-1,0,'0;34;108;46;184;1;26'),(13,1,0,0,'AsteroidField','',0,0,'deployed',0,0,0,0,0,-345,-281,0.00,0.00,0,0,0,0,0,1,-1,0,'0;25;253;40;160;1;26'),(14,1,0,0,'AsteroidField','',0,0,'deployed',0,0,0,0,0,388,-192,0.00,0.00,0,0,0,0,0,1,-1,0,'0;25;341;40;200;1;26'),(15,1,0,0,'AsteroidField','',0,0,'deployed',0,0,0,0,0,-212,-378,0.00,0.00,0,0,0,0,0,1,-1,0,'0;34;66;40;120;2;26');
+INSERT INTO `units` VALUES (1,1,1,4,'Xill','A',775,775,'bought',0,1,0,0,0,-505,198,-18.00,-18.00,0,155,0,0,0,1,-1,0,''),(2,1,1,4,'Xill','B',903,903,'bought',1,1,0,0,0,-466,-223,-18.00,-18.00,0,155,0,0,0,1,-1,0,''),(3,1,1,3,'Squadron','C',645,645,'bought',0,1,0,0,0,-459,619,12.00,12.00,0,185,0,0,0,1,-1,0,''),(4,1,1,4,'Zitomm','Carrier',1164,600,'bought',0,1,0,0,0,-487,-587,7.00,7.00,0,155,0,0,0,1,-1,0,''),(5,1,2,4,'Sharlin','',2036,1676,'bought',1,1,0,0,0,495,300,-10.00,-10.00,0,140,0,0,0,1,-1,0,''),(6,1,2,3,'Squadron','',623,623,'bought',0,1,0,0,0,443,456,-27.00,-27.00,0,185,0,0,0,1,-1,0,''),(7,1,2,3,'Squadron','',820,820,'bought',0,1,0,0,0,518,-99,3.00,3.00,0,185,0,0,0,1,-1,0,''),(8,1,0,0,'NebulaCloud','',0,0,'deployed',0,0,0,0,0,412,57,0.00,0.00,0,0,0,0,0,1,-1,0,'145;24;221;1'),(9,1,0,0,'NebulaCloud','',0,0,'deployed',0,0,0,0,0,202,-26,0.00,0.00,0,0,0,0,0,1,-1,0,'105;24;135;6'),(10,1,0,0,'NebulaCloud','',0,0,'deployed',0,0,0,0,0,-143,351,0.00,0.00,0,0,0,0,0,1,-1,0,'82;21;66;3'),(11,1,0,0,'AsteroidField','',0,0,'deployed',0,0,0,0,0,-634,186,0.00,0.00,0,0,0,0,0,1,-1,0,'0;34;53;53;265;1;26'),(12,1,0,0,'AsteroidField','',0,0,'deployed',0,0,0,0,0,131,294,0.00,0.00,0,0,0,0,0,1,-1,0,'0;34;108;46;184;1;26'),(13,1,0,0,'AsteroidField','',0,0,'deployed',0,0,0,0,0,-345,-281,0.00,0.00,0,0,0,0,0,1,-1,0,'0;25;253;40;160;1;26'),(14,1,0,0,'AsteroidField','',0,0,'deployed',0,0,0,0,0,388,-192,0.00,0.00,0,0,0,0,0,1,-1,0,'0;25;341;40;200;1;26'),(15,1,0,0,'AsteroidField','',0,0,'deployed',0,0,0,0,0,-212,-378,0.00,0.00,0,0,0,0,0,1,-1,0,'0;34;66;40;120;2;26');
 /*!40000 ALTER TABLE `units` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -505,4 +506,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-15 16:54:35
+-- Dump completed on 2019-04-05 15:32:50

@@ -509,8 +509,6 @@ Ship.prototype.drawImpulseUI = function(){
 	} else $("#minusImpulse").addClass("disabled");
 }
 
-
-
 Ship.prototype.handleMoveAttempt = function(e, pos){
 	if (!game.movePos){return;}	
 	var dist = Math.floor(getDistance(this.getPlannedPos(), game.movePos));
@@ -703,6 +701,10 @@ Ship.prototype.lastActionWasTurn = function(){
 }
 	
 Ship.prototype.switchTurnMode = function(){
+	if (game.sensorMode){
+		game.getUnit(aUnit).getSystemByName("Sensor").select();
+	}
+
 	if (game.mode == 2){
 		turn.reset();
 		game.mode = 0;
@@ -2320,7 +2322,8 @@ Ship.prototype.showUnitMoraleDiv = function(e){
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
 			.append($("<tr>")
-				.append($("<td>").html("Remaining Morale"))
+				.append($("<td>").html("Current Morale"))
+				//.append($("<td>").html("Current Morale"))
 				.append($("<td>").html("<span class='yellow'>"+this.getSumMoraleModifers()+"</span>")))
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 12)))
@@ -2532,8 +2535,9 @@ Ship.prototype.addFocusDiv = function(shipDiv){
 		.addClass("focusContainer")
 		.append(
 			$("<input>")
+			.mousemove(function(e){e.preventDefault(); e.stopPropagation();})
 			.attr("type", "button")
-			.attr("value", "Assign Focus (" + this.getFocusCost() + " FP)")
+			.attr("value", "Assign Focus (" + this.getFocusCost() + " Focus)")
 			.hide()
 			.click(function(){
 				game.getUnit($(this).parent().parent().data("shipId")).toggleFocus();
@@ -2562,6 +2566,7 @@ Ship.prototype.addCommandDiv = function(shipDiv){
 		.addClass("commandContainer")
 			.append(
 				$("<input>")
+				.mousemove(function(e){e.preventDefault(); e.stopPropagation();})
 				.attr("type", "button")
 				.attr("value", "Assign Fleet Command (+" + this.getFocusIfCommand() + " / turn)")
 				.hide()
@@ -2607,9 +2612,14 @@ Ship.prototype.getUnitName = function(){
 Ship.prototype.trySetCommand = function(){
 	if (!this.friendly){return false;}
 	else if (this.isJumpingOut()){popup("This unit is jumping to hyperspace.");}
+	else if (this.id == game.commandChange.original){
+		this.doSetCommand();
+	}
 	else {
-		var html = "Transfering Fleet Commands will void Focus generation for this turn as well as blocking any Focus setups. </br>";
-			html += "Please confirm your order.</br></br><input type='button' class='popupEntryConfirm' value='Confirm Transfer' onclick='game.getUnit(aUnit).doSetCommand()'>";
+		var html = "Transfering Fleet Command will incur the following penalties:</br></br>";
+			html += "- No Focus income at end of this turn</br>";
+			html += "- Focus cant be spend until the beginning of next turn</br></br>";
+			html += "<input type='button' class='popupEntryConfirm' value='Confirm Transfer' onclick='game.getUnit(aUnit).doSetCommand()'>";
 			popup(html);
 			//popup("Relocating Fleet Command will set saved Focus Points to 0 at end of turn</br>(after Focus is spend, before Focus is gained).</br></br>Please confirm your order.</br><input type='button' class='popupEntryConfirm' value='Confirm Transfer' onclick='game.getUnit(aUnit).doSetCommand()'>");
 	}
@@ -2622,17 +2632,22 @@ Ship.prototype.doSetCommand = function(){
 		if (!game.ships[i].friendly || game.ships[i].flight || game.ships[i].salvo || !game.ships[i].command){continue;}
 		game.ships[i].command = 0;
 		game.commandChange.old = game.ships[i].id;
-		if (!game.commandChange.original){game.commandChange.original = game.ships[i].id;}
+
 		$(game.ships[i].element)
 			.find(".name").html(this.getHeader()).end()
 			.find(".commandContainer")
 			.find("input").show().end()
 			.find(".commandEntry").hide().end();
+
+		if (!game.commandChange.original){
+			game.commandChange.original = game.ships[i].id;
+			$(game.ships[i].element).find(".commandContainer input").attr("value", "Retain Fleet Command");
+		}
 	}
 
 	for (var i = 0; i < game.ships.length; i++){
 		if (!game.ships[i].friendly || game.ships[i].flight || game.ships[i].salvo || !game.ships[i].focus){continue;}
-		console.log("focus for #" + game.ships[i].id);
+		//console.log("focus for #" + game.ships[i].id);
 		game.ships[i].unsetUnitFocus();
 	}
 
@@ -2652,7 +2667,8 @@ Ship.prototype.doSetCommand = function(){
 
 	for (let i = 0; i < game.playerstatus.length; i++){
 		if (game.playerstatus[i].userid == game.userid){
-			game.playerstatus[i].gainFocus = Math.floor(game.settings.pv / 100 * game.settings.focusMod / 10 * (this.baseFocusRate + this.modFocusRate) * (game.playerstatus[i].faction == "Minbari Federation" ? 1.3 : 1));
+			game.playerstatus[i].gainFocus = this.getFocusIfCommand();
+			//game.playerstatus[i].gainFocus = Math.floor(game.settings.pv / 100 * game.settings.focusMod / 10 * (this.baseFocusRate + this.modFocusRate) * (game.playerstatus[i].faction == "Minbari Federation" ? 1.3 : 1));
 			game.playerstatus[i].maxFocus = game.playerstatus[i].gainFocus * 4;
 			break;
 		}
@@ -2678,10 +2694,10 @@ Ship.prototype.setUnitFocus = function(){
 	if (game.phase != 3){popup("Focus can only be issued in Phase 3 - Damage Control"); return;}
 	if (game.userHasTransferedCommand()){popup("Ongoing Fleet Command transfer prohibits Focus"); return;}
 	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace."); return;}
-	if (!this.canAffordFocus()){popup("You are lacking focus ressources for this action.</br>Have: " + game.getRemFocus() + "</br>Spending: " + game.getTotalFocusSpending() + "</br>Need: " + this.getFocusCost()); return;}
+	if (!this.canAffordFocus()){popup("Insufficient Focus this action.</br>Have: " + game.getRemFocus() + "</br>Spending: " + game.getTotalFocusSpending() + "</br>Need: " + this.getFocusCost()); return;}
 	if (!this.focus){
 		this.focus = 1;
-		$(this.element).find(".focusContainer").find("input").attr("value", "Has Focus (" + this.getFocusCost() + " FP)");
+		$(this.element).find(".focusContainer").find("input").attr("value", "Has Focus (" + this.getFocusCost() + " Focus)");
 		$(this.element).find(".name").html(this.getHeader());
 		game.setFocusSpendingInfo(this.userid);
 	}
@@ -2690,7 +2706,7 @@ Ship.prototype.setUnitFocus = function(){
 Ship.prototype.unsetUnitFocus = function(){
 	if (this.focus){
 		this.focus = 0;
-		$(this.element).find(".focusContainer").find("input").attr("value", "Assign Focus (" + this.getFocusCost() + " FP)");
+		$(this.element).find(".focusContainer").find("input").attr("value", "Assign Focus (" + this.getFocusCost() + " Focus)");
 		$(this.element).find(".name").html(this.getHeader());
 		game.setFocusSpendingInfo(this.userid);
 	}
