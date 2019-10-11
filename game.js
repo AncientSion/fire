@@ -3180,13 +3180,13 @@ Game.prototype.showFocusInfo = function(e, userid){
 				.append($("<td>").attr("colSpan", 2).css("height", 10))
 			)
 			.append($("<tr>")
-				.append($("<th>").html("Final Focus Gain"))
+				.append($("<th>").html("Focus Gain / Turn"))
 				.append($("<th>").html(this.playerstatus[i].gainFocus))
 			)
-			.append($("<tr>")
-				.append($("<td>").html("Max Focus"))
-				.append($("<td>").html(this.playerstatus[i].maxFocus))
-			)
+		//	.append($("<tr>")
+		//		.append($("<td>").html("Max Focus"))
+		//		.append($("<td>").html(this.playerstatus[i].maxFocus))
+		//	)
 		))
 	return;
 }
@@ -3233,11 +3233,11 @@ Game.prototype.addPlayerInfo = function(){
 				)
 				.append($("<tr>")
 					.append($("<td>")
-						.html(game.turn == 1 && game.phase == -1 && this.playerstatus[i].userid != this.userid ? "Unknown" : this.playerstatus[i].globals[0].value)
-						.hover(
-							function(e){game.showFleetMorale(e, $(this).closest("div").data("userid"))},
-							function(){game.hideFleetMorale();}
-						)
+					//	.html(game.turn == 1 && game.phase == -1 && this.playerstatus[i].userid != this.userid ? "Unknown" : this.playerstatus[i].globals[0].value)
+					//	.hover(
+					//		function(e){game.showFleetMorale(e, $(this).closest("div").data("userid"))},
+					//		function(){game.hideFleetMorale();}
+					//	)
 					)
 				)
 				.append($("<tr>")
@@ -3261,7 +3261,7 @@ Game.prototype.addPlayerInfo = function(){
 		.addClass("playerInfo")
 		.append($("<table>")
 			.append($("<tr>").append($("<td>").css("color", "black").html("-")))
-			.append($("<tr>").append($("<td>").html("Morale")))
+			//.append($("<tr>").append($("<td>").html("Morale")))
 			.append($("<tr>").append($("<td>").html("Focus")))
 			.append($("<tr>").append($("<td>").css("color", "black").html("-")))
 		)
@@ -3347,7 +3347,7 @@ Game.prototype.setConfirmInfo = function(){
 }
 
 Game.prototype.setGameSpeed = function(){
-	if (1){
+	if (game.userid == 1 && 1){
 		this.animData.jump = 3;
 		this.phaseDelay = 100;
 	}

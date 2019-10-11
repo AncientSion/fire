@@ -535,23 +535,22 @@ function drawDamageNumbers(weapon, anim){
 
 
 	var fraction = anim.n/anim.m;
-	//console.log(fraction)
 
 	fxCtx.globalAlpha = Math.min(1, 1.4 - fraction);
 
-	fxCtx.font = "18px Arial";
+	fxCtx.font = Math.ceil(18/cam.z) + "px Arial";
 	fxCtx.textAlign = "center";
 	fxCtx.fillStyle = "white";
-	fxCtx.fillText(anim.odds, anim.x, anim.y -70 - (30 * fraction));
-	fxCtx.fillText(anim.shots, anim.x, anim.y -50 - (30 * fraction));
+	fxCtx.fillText(anim.odds, anim.x, anim.y -70/cam.z - (30 * fraction));
+	fxCtx.fillText(anim.shots, anim.x, anim.y -50/cam.z - (30 * fraction));
 
 
 	fxCtx.fillStyle = "lightBlue";
-	fxCtx.fillText(anim.armour, anim.x -35, anim.y -25 - (30 * fraction));
+	fxCtx.fillText(anim.armour, anim.x -40/cam.z, anim.y -25/cam.z - (30 * fraction));
 	fxCtx.fillStyle = "yellow";
-	fxCtx.fillText(anim.system, anim.x, anim.y -15 - (30 * fraction));
+	fxCtx.fillText(anim.system, anim.x, anim.y -15/cam.z - (30 * fraction));
 	fxCtx.fillStyle = "red";
-	fxCtx.fillText(anim.hull, anim.x +35, anim.y -5 - (30 * fraction));
+	fxCtx.fillText(anim.hull, anim.x +40/cam.z, anim.y -5/cam.z - (30 * fraction));
 
 	fxCtx.globalAlpha = 1;
 

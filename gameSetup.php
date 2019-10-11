@@ -241,7 +241,7 @@ else header("Location: index.php");
 			 	purchases: 1,
 			 	openRequest: 0,
 			 	canConfirm: 1,
-			 	refit: 0,
+			 	retrofit: 0,
 				ships: [],				
 				shipsBought: [],
 				userid: window.userid,
@@ -270,6 +270,7 @@ else header("Location: index.php");
 							squadron.index++;
 							copy.systems[i].id = squadron.index;
 							copy.systems[i].setTotalBuyData();
+							//$(copy.systems[i].element).find(".outputMask").hide();
 						}
 
 					this.finishExpandSquadron(squadron, copy);
@@ -285,7 +286,7 @@ else header("Location: index.php");
 
 					var purchase = game.purchases;
 
-					if (game.refit){purchase = unit.purchaseId;}
+					if (game.retrofit){purchase = unit.purchaseId;}
 
 					game.openRequest = 1;
 					$.ajax({
@@ -322,8 +323,8 @@ else header("Location: index.php");
 					squadron.setStats();
 					squadron.setSubSystemState();
 					squadron.updateImage();
-					squadron.previewSetup();
 					squaddie.fillSelfContainer();
+					squadron.previewSetup();
 					drawShipPreview();
 
 					squadron.recalcCommandUpgrades();
@@ -355,14 +356,9 @@ else header("Location: index.php");
 						game.getUnit(aUnit).doConfirmSystemLoadout();
 						game.setUnitTotal(game.getUnit(aUnit));
 					}
-						
 
-					if (this.refit){
-						$(unit.tr).removeClass("selected").find("td").each(function(i){
-							if (i == 2){$(this).html(unit.getPurchaseHeader())}
-							else if (i == 3){$(this).html(unit.totalCost)}
-						})
-						this.refit = 0;
+					if (this.retrofit){
+						unit.endRetrofitMode();
 					}
 					else {
 						unit.purchaseId = game.purchases;
@@ -383,10 +379,10 @@ else header("Location: index.php");
 									.addClass("size20").attr("src", "varIcons/cmd.png").hide()))
 							.append($("<td>")
 								.append($("<img>")
-									.addClass("size20").attr("src", "varIcons/refit.png")
+									.addClass("size20").attr("src", "varIcons/retrofit.png")
 									.click(function(e){
 										e.preventDefault(); e.stopPropagation();
-										game.getPurchasedUnit($(this).parent().parent().data("purchaseId")).doRefit();
+										game.getPurchasedUnit($(this).parent().parent().data("purchaseId")).doretrofit();
 									}))
 									.hover(function(){
 										$(this).toggleClass("hover")
@@ -413,8 +409,6 @@ else header("Location: index.php");
 						$("#shipsBoughtTable tr").eq(-4).before(tr);
 					}
 
-
-
 					$("#remPoints").html()
 					$(".shipDiv").remove();
 					game.setRemPV()
@@ -426,7 +420,7 @@ else header("Location: index.php");
 					aUnit = 0;
 					game.ships[0] = undefined;
 				},
-
+				
 				getPurchasedUnit: function(purchaseId){
 					for (var i = 0; i < game.shipsBought.length; i++){
 						if (game.shipsBought[i].purchaseId == purchaseId){
@@ -436,8 +430,8 @@ else header("Location: index.php");
 				},
 
 				removeUnit: function(purchaseId){
-					if (game.refit == purchaseId){
-						game.refit = 0;
+					if (game.retrofit == purchaseId){
+						game.retrofit = 0;
 					}
 					for (let i = game.shipsBought.length-1; i >= 0; i--){
 						if (game.shipsBought[i].purchaseId == purchaseId){
@@ -577,8 +571,8 @@ else header("Location: index.php");
 					var cost = 0;
 					for (var i = 0; i < game.shipsBought.length; i++){
 						cost += game.shipsBought[i].totalCost;
-						if (game.refit == game.shipsBought[i].id){
-							console.log("refit");
+						if (game.retrofit == game.shipsBought[i].id){
+							console.log("retrofit");
 							cost -= game.shipsBought[i].totalCost;
 						}
 					}
@@ -790,8 +784,8 @@ else header("Location: index.php");
 
 	function requestBaseUnitData(data){
 		//console.log("requestBaseUnitData");
-		if (game.refit){$(game.getUnit(game.refit).tr).removeClass("selected");}
-		game.refit = 0;
+		if (game.retrofit){$(game.getUnit(game.retrofit).tr).removeClass("selected");}
+		game.retrofit = 0;
 		$.ajax({
 			type: "GET",
 			url: "getGameData.php",

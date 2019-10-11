@@ -1658,9 +1658,8 @@
 	}
 
 	public function testFleetMorale(){
-		//this->turn = 1;
 
-		$do = 1;
+		$do = 0;
 
 		while ($do){
 			Debug::log("-----------------testFleetMorale turn/phase ".static::$turn." / ".static::$phase);

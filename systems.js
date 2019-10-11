@@ -2726,6 +2726,7 @@ Beam.prototype.getAnimation = function(fire){
 
 	if (fire.guns > 2){
 		grouping = 2;
+		grouping = fire.guns % 2 == 0 ? 2 : fire.guns;
 	}
 	
 	for (var i = 0; i < fire.guns; i++){

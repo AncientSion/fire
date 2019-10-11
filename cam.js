@@ -105,7 +105,7 @@ window.cam = {
 	},
 	
 	adjustZoom: function(e){
-		var step = 0.2;
+		var step = 0.1;
 		if (e.originalEvent.wheelDelta == 120 || e.originalEvent.deltaY < 0){
 			this.z = Math.min(3, this.z + step);
 		}

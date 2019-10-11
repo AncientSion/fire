@@ -485,7 +485,7 @@
 				}
 				else if (e.keyCode == 109){ // m, cancel move animation
 					if (game.animating != 1 || !game.animMoves){return;}
-					debug("m!");
+					//debug("m!");
 					window.cancelAnimationFrame(anim);
 					cam.stopMove();
 

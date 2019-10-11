@@ -845,10 +845,12 @@ FireOrder.prototype.addLogStartEntry = function(log){
 	.data("fireid", this.id)
 	.hide()
 	.contextmenu(function(){
+		window.cancelAnimationFrame(anim);
 		var fireid = $(this).data("fireid");
 		for (var i = 0; i < game.fireOrders.length; i++){
+			game.fireOrders[i].animating = 0;
 			if (game.fireOrders[i].id == fireid){
-				game.fireOrders[i].animating = 0;
+				game.fireOrders[i].animated = 0;
 				break;
 			}
 		}

@@ -96,12 +96,13 @@ function Ship(data){
 	}
 }
 
-Ship.prototype.doRefit = function(){
-	//if (!this.ship){return;}
-	//console.log("doRefit");
+Ship.prototype.doretrofit = function(){
 	console.log(this);
-	if (game.refit){$(game.getUnit(game.refit).tr).removeClass("selected");}
-	game.refit = this.id;
+	if (game.retrofit){
+		game.getUnit(game.retrofit).endRetrofitMode();
+	}
+
+	game.retrofit = this.id;
 	$(this.tr).addClass("selected");
 	$(".shipDiv").remove();
 	if (this.squad){
@@ -113,6 +114,22 @@ Ship.prototype.doRefit = function(){
 	this.previewSetup();
 	doShowShipDiv(this);
 }
+
+Ship.prototype.endRetrofitMode = function(){
+	$(this.tr).removeClass("selected");
+
+	if (game.system){
+		this.doConfirmSystemLoadout();
+	}
+
+	var unit = this;
+	$(unit.tr).removeClass("selected").find("td").each(function(i){
+		if (i == 2){$(this).html(unit.getPurchaseHeader());}
+		else if (i == 3){$(this).html(unit.totalCost);}
+	})
+
+	game.retrofit = 0;
+},
 
 Ship.prototype.getFiringPosition = function(){
 	return new Point(
@@ -2323,13 +2340,11 @@ Ship.prototype.showUnitMoraleDiv = function(e){
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
 			.append($("<tr>")
 				.append($("<td>").html("Current Morale"))
-				//.append($("<td>").html("Current Morale"))
 				.append($("<td>").html("<span class='yellow'>"+this.getSumMoraleModifers()+"</span>")))
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 12)))
 			.append($("<tr>")
-			//	.append($("<td>").attr("colSpan", 2).html("Morale test triggered if damaged for more than 15% of remaining HP.</br>Rolls D100, adds 100, subtracts morale.")))
-				.append($("<td>").attr("colSpan", 2).html("Morale test if damaged > 10 % in a turn.</br>Current Morale - D30 - damage suffered.")))
+				.append($("<td>").attr("colSpan", 2).html("Morale test is required if unit is damaged for more than 10 % in a given turn.</br>Formula:</br></br>Current Morale - D30 - damage% suffered.")))
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
 			.append($("<tr>")
@@ -2339,7 +2354,7 @@ Ship.prototype.showUnitMoraleDiv = function(e){
 		for (var i = 0; i < this.critEffects.length; i++){
 			div.find("table")			
 			.append($("<tr>")
-				.append($("<td>").html(">= " + this.critEffects[i][1]))
+				.append($("<td>").html("<= " + this.critEffects[i][1]))
 				.append($("<td>").html(this.critEffects[i][0] + " " + (this.critEffects[i][3] ? this.critEffects[i][3] : ""))))
 		}
 
@@ -3293,6 +3308,15 @@ Ship.prototype.previewSetup = function(){
 	if (this.squad && !this.structures.length){
 		$(this.element).find(".coreContainer .system .outputMask").hide();
 	} else $(this.element).find(".coreContainer .system .outputMask").show();
+
+
+	//if (this.squad){
+		for (var i = 0; i < this.structures.length; i++){
+			for (var j = 0; j < this.structures[i].systems.length; j++){
+				$(this.structures[i].systems[j].element).find(".outputMask").hide();
+			}
+		}
+	//}
 }
 
 Ship.prototype.updateDiv = function(){
@@ -3932,7 +3956,11 @@ Ship.prototype.updateCrewDiv = function(i){
 	$(tr.children()[6]).html(this.getTotalCrewCost(i));
 
 	this.getSystemByName("Command").setTotalBuyData();
-	//this.updateCrewTotals();
+	if (this.command){
+		$(this.element).find(".commandContainer .commandEntry")
+			.html("Active Fleet Command (+" + this.getFocusIfCommand() + " / turn)")
+		game.setFocusGain();
+	}
 }
 
 Ship.prototype.getCrewEffect = function(i){
